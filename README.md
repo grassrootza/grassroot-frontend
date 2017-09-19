@@ -1,6 +1,18 @@
 # GrassrootFrontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.4.
+To install Angular 4 dev environment follow these steps :
+
+- install nodejs 6.9.0 or higher  
+  if using ubuntu, run terminal command: **_sudo apt-get install -y nodejs_**  
+  by installing nodejs you get node package manager (npm)
+  
+- check npm version: run terminal command **_npm -v_**  
+it should be 3.0.0 or higher
+
+- install typescript: run terminal command _**sudo npm install -g typescript**_ 
+
+- install angular CLI: run terminal command **_sudo npm install -g @angular/cli@1.0.0-rc.4_**
+ 
 
 ## Development server
 
