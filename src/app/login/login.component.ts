@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {AuthService} from "../auth.service";
+import {Component} from '@angular/core';
 import {Router} from "@angular/router";
+import {UserService} from "../user/user.service";
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,7 @@ export class LoginComponent {
 
   message: string;
 
-  constructor(public authService: AuthService, private router: Router) {
+  constructor(public userService: UserService, private router: Router) {
     this.message = '';
   }
 
@@ -21,7 +21,7 @@ export class LoginComponent {
 
     this.message = '';
 
-    this.authService.login(username, password).subscribe(
+    this.userService.login(username, password).subscribe(
       data => {
         let jsonData = data.json();
         console.log("Login response: " , jsonData);
@@ -34,20 +34,15 @@ export class LoginComponent {
       },
       err => {
         console.log(err);
-        this.message = "Invalid username / password"
+        this.message = "Invalid username / password";
+        setTimeout(() => {
+          this.message = "";
+        }, 2000)
       },
       () => console.log('Request Complete')
     );
 
-
     return false;
   }
-
-
-  logout(): boolean {
-    this.authService.logout();
-    return false;
-  }
-
 
 }
