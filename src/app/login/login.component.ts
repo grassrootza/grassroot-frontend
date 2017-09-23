@@ -22,19 +22,12 @@ export class LoginComponent {
     this.message = '';
 
     this.userService.login(username, password).subscribe(
-      data => {
-        let jsonData = data.json();
-        console.log("Login response: " , jsonData);
-        const token = jsonData.data.token;
-        const msisdn = jsonData.data.msisdn;
-        console.log("jwt-token: ", token);
-        localStorage.setItem("token", token);
-        localStorage.setItem("msisdn", msisdn);
-        this.router.navigate(['']);
+      userData => {
+        this.router.navigate(['groups']);
       },
       err => {
         console.log(err);
-        this.message = "Invalid username / password";
+        this.message = "Login failed. Try again.";
         setTimeout(() => {
           this.message = "";
         }, 2000)

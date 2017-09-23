@@ -1,5 +1,7 @@
 import {Component} from '@angular/core';
 import {UserService} from "./user/user.service";
+import {NavigationEnd, Router} from "@angular/router";
+import {User} from "./user/user.model";
 
 
 @Component({
@@ -12,8 +14,19 @@ import {UserService} from "./user/user.service";
 
 export class AppComponent {
 
+  loggedInUser: User = null;
+  currentUrl = "";
 
-  constructor(public userService: UserService) {
+  constructor(private router: Router, private userService: UserService) {
+
+    this.router.events.subscribe(ev => {
+      console.log("Router event: ", ev);
+      if (ev instanceof NavigationEnd)
+        this.currentUrl = ev.url;
+    });
+
+    this.userService.loggedInUser.subscribe(user => this.loggedInUser = user);
+
   }
 
 

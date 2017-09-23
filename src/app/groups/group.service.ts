@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {Response} from "@angular/http";
 import {AuthHttp} from "angular2-jwt";
 import {environment} from "../../environments/environment.prod";
+import "rxjs/add/operator/map";
+import {Group} from "./group.model";
 
 @Injectable()
 export class GroupService {
@@ -11,12 +12,20 @@ export class GroupService {
 
   constructor(private authHttp:AuthHttp) { }
 
-  loadGroups() : Observable<Response> {
+
+  loadGroups(): Observable<Group[]> {
 
     const phoneNumber = localStorage.getItem("msisdn");
 
     const fullUrl = this.groupListUrl + phoneNumber + "/hgh";
-    return this.authHttp.get(fullUrl);
+
+    return this.authHttp.get(fullUrl)
+      .map(resp => resp.json())
+      .map(json => {
+          console.log("groups json: ", json.addedAndUpdated);
+          return json.addedAndUpdated.map(grJson => Group.fromJson(grJson));
+        }
+      );
 
   }
 

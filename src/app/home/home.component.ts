@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {GroupService} from "../groups/group.service";
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -8,17 +7,7 @@ import {GroupService} from "../groups/group.service";
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private groupService:GroupService) {
-
-    groupService.loadGroups().subscribe(
-      data => {
-        console.log("Login response: " , data.json());
-      },
-      err => {
-        console.log(err);
-      },
-      () => console.log('Request Complete')
-    );
+  constructor() {
   }
 
   ngOnInit() {
