@@ -4,18 +4,20 @@ import {AuthHttp} from "angular2-jwt";
 import {environment} from "../../environments/environment.prod";
 import "rxjs/add/operator/map";
 import {Group} from "./group.model";
+import {UserService} from "../user/user.service";
 
 @Injectable()
 export class GroupService {
 
   groupListUrl = environment.backendAppUrl + "/api/group/list/";
 
-  constructor(private authHttp:AuthHttp) { }
+  constructor(private authHttp: AuthHttp, private userService: UserService) {
+  }
 
 
   loadGroups(): Observable<Group[]> {
 
-    const phoneNumber = localStorage.getItem("msisdn");
+    const phoneNumber = this.userService.getLoggedInUser().phoneNumber;
 
     const fullUrl = this.groupListUrl + phoneNumber + "/hgh";
 
@@ -26,7 +28,6 @@ export class GroupService {
           return json.addedAndUpdated.map(grJson => Group.fromJson(grJson));
         }
       );
-
   }
 
 }

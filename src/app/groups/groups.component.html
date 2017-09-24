@@ -1,0 +1,36 @@
+<h2>Groups</h2>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Group Name</th>
+    <th>Up next</th>
+    <th>Members</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let gr of groups | async">
+
+    <td>{{gr.name}}</td>
+    <td></td>
+    <td>{{gr.memberCount}}</td>
+    <td>
+      <div class="dropdown">
+        <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+          Actions
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">Call
+            meeting</a>
+          <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">Take vote
+            action</a>
+          <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled">Create
+            action</a>
+        </div>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>

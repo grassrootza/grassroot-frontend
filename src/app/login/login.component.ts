@@ -23,6 +23,7 @@ export class LoginComponent {
 
     this.userService.login(username, password).subscribe(
       userData => {
+
         this.router.navigate(['groups']);
       },
       err => {

@@ -18,6 +18,10 @@ export class Group {
               public role: string) {
   }
 
+  public hasPermission(permission: string) {
+    return this.permissions.indexOf(permission) >= 0;
+  }
+
   static fromJson(json): Group {
 
     let members: User[] = [];

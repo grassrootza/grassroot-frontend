@@ -15,9 +15,15 @@ import {User} from "./user/user.model";
 export class AppComponent {
 
   loggedInUser: User = null;
+
   currentUrl = "";
 
   constructor(private router: Router, private userService: UserService) {
+
+    this.loggedInUser = this.userService.getLoggedInUser();
+
+    if (this.loggedInUser == null)
+      this.router.navigate(['/login']);
 
     this.router.events.subscribe(ev => {
       console.log("Router event: ", ev);
@@ -27,6 +33,11 @@ export class AppComponent {
 
     this.userService.loggedInUser.subscribe(user => this.loggedInUser = user);
 
+  }
+
+  logout() {
+    this.userService.logout();
+    this.router.navigate(['/login']);
   }
 
 

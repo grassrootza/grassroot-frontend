@@ -15,6 +15,11 @@ export class UserService {
   public loggedInUser: EventEmitter<User> = new EventEmitter(null);
 
   constructor(private http: Http) {
+
+    console.log("Initializing user service");
+    if (tokenNotExpired() && localStorage.getItem("loggedInUser") != null) {
+      this._loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"))
+    }
   }
 
   register(username: string, phoneNumber: string, password: string): Observable<Response> {
@@ -47,8 +52,10 @@ export class UserService {
         const displayName = json.data.displayName;
         localStorage.setItem("token", token);
 
+
         this._loggedInUser = new User(displayName, msisdn);
         this.loggedInUser.emit(this._loggedInUser);
+        localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
         return this._loggedInUser;
       })
   }
@@ -62,7 +69,10 @@ export class UserService {
 
 
   isLoggedIn(): boolean {
-    return tokenNotExpired()
+    return this._loggedInUser != null;
   }
 
+  getLoggedInUser() {
+    return this._loggedInUser;
+  }
 }
