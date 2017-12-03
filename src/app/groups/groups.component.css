@@ -11,3 +11,41 @@ td {
 td.group-name {
   font-size: 16px;
 }
+
+.table thead th {
+  border-top: none;
+  border-bottom: none;
+  background-color: #F5F6FA;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.table td {
+  border-top: none;
+  border-bottom: none;
+  vertical-align: middle;
+}
+
+h2 img, .table td img {
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.table td img.pin {
+  cursor: pointer;
+}
+
+.card-body {
+  padding: 0.3rem;
+}
+
+.btn.dropdown-toggle {
+  padding: 0.5rem;
+  font-size: 14px;
+  background-color: white;
+  border: solid 1px #cccccc;
+}
+
+.pinned-groups {
+  margin-bottom: 3rem;
+}

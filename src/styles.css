@@ -1,10 +1,21 @@
 /* You can add global styles to this file, and also import other style files */
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+
 body {
-  padding-top: 0rem;
+  padding: 0;
   background-color: #F5F6FA;
   color: #4A4A4A;
   font-family: 'Nunito', sans-serif;
+  /* Margin bottom by footer height */
+  margin: 0 0 60px;
 }
+
+
 
 h1 {
   color: #4A4A4A;
@@ -25,3 +36,10 @@ h2 {
 .main-title {
   margin-bottom: 2rem;
 }
+
+.container-fluid {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+

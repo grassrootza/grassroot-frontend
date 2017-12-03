@@ -2,53 +2,118 @@
 
 <h2>
   <img src="assets/star_black.png"/>
-  Pinned groups</h2>
+  Pinned groups
+</h2>
 
-<table class="table">
-  <thead>
-  <tr>
-    <th>Group Name</th>
-    <th>Role</th>
-    <th>Up next</th>
-    <th>Members</th>
-    <th></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let gr of groups">
+<div class="card pinned-groups">
+  <div class="card-body">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Group Name</th>
+        <th>Role</th>
+        <th>Up next</th>
+        <th>Members</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let gr of pinnedGroups">
 
-    <td class="group-name">
-      <img *ngIf="!gr.pinned" src="assets/star_empty.png" (click)="pinGroup(gr)"/>
-      <img *ngIf="gr.pinned" src="assets/star_full.png" (click)="unpinGroup(gr)"/>
-      {{gr.name}}
-    </td>
-    <td>
+        <td class="group-name">
+          <img *ngIf="!gr.pinned" class="pin" src="assets/star_empty.png" (click)="pinGroup(gr)"/>
+          <img *ngIf="gr.pinned" class="pin" src="assets/star_full.png" (click)="unpinGroup(gr)"/>
+          {{gr.name}}
+        </td>
+        <td>
       <span class="badge badge-success">
         {{gr.getFormattedRoleName()}}
       </span>
-    </td>
+        </td>
 
-    <td>
-      <img *ngIf="gr.nextEventType" src="assets/{{gr.getEventIconName()}}"/>
-      {{gr.getFormattedEventTime()}}
-    </td>
-    <td>{{gr.memberCount}}</td>
-    <td>
-      <div class="dropdown">
-        <button class="btn  dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-          Actions
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">Call
-            meeting</a>
-          <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">Take vote
-            action</a>
-          <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled">Create
-            action</a>
-        </div>
-      </div>
-    </td>
-  </tr>
-  </tbody>
-</table>
+        <td>
+          <img *ngIf="gr.nextEventType" src="assets/{{gr.getEventIconName()}}"/>
+          {{gr.getFormattedEventTime()}}
+        </td>
+        <td>{{gr.memberCount}}</td>
+        <td>
+          <div class="dropdown">
+            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+              Actions
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">Call
+                meeting</a>
+              <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">Take vote
+                action</a>
+              <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled">Create
+                action</a>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<h2>
+  <img src="assets/star_black.png"/>
+  All groups
+</h2>
+
+<div class="card">
+  <div class="card-body">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Group Name</th>
+        <th>Role</th>
+        <th>Up next</th>
+        <th>Members</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let gr of groups">
+
+        <td class="group-name">
+          <img *ngIf="!gr.pinned" class="pin" src="assets/star_empty.png" (click)="pinGroup(gr)"/>
+          <img *ngIf="gr.pinned" class="pin" src="assets/star_full.png" (click)="unpinGroup(gr)"/>
+          {{gr.name}}
+        </td>
+        <td>
+      <span class="badge badge-success">
+        {{gr.getFormattedRoleName()}}
+      </span>
+        </td>
+
+        <td>
+          <img *ngIf="gr.nextEventType" src="assets/{{gr.getEventIconName()}}"/>
+          {{gr.getFormattedEventTime()}}
+        </td>
+        <td>{{gr.memberCount}}</td>
+        <td>
+          <div class="dropdown">
+            <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+              Actions
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">Call
+                meeting</a>
+              <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">Take vote
+                action</a>
+              <a *ngIf="gr.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled">Create
+                action</a>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+

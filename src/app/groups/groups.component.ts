@@ -11,6 +11,7 @@ export class GroupsComponent implements OnInit {
 
 
   protected groups: GroupInfo[] = [];
+  protected pinnedGroups: GroupInfo[] = [];
 
   constructor(private groupService: GroupService) {
     this.loadGroups()
@@ -24,6 +25,7 @@ export class GroupsComponent implements OnInit {
       groupList => {
         console.log("Login response: ", groupList);
         this.groups = groupList;
+        this.resolvePinnedGroups()
       },
       err => {
         console.log(err);
@@ -33,12 +35,16 @@ export class GroupsComponent implements OnInit {
     );
   }
 
+  private resolvePinnedGroups() {
+    this.pinnedGroups = this.groups.filter(gr => gr.pinned)
+  }
 
   pinGroup(gr: GroupInfo) {
     this.groupService.pinGroup(gr.uid).subscribe(
       success => {
         console.log("pin group success: ", success);
         gr.pinned = true;
+        this.resolvePinnedGroups()
       });
   }
 
@@ -47,6 +53,7 @@ export class GroupsComponent implements OnInit {
       success => {
         console.log("unpin group success: ", success);
         gr.pinned = false;
+        this.resolvePinnedGroups()
       });
   }
 
