@@ -49,11 +49,12 @@ export class UserService {
 
         const token = json.data.token;
         const msisdn = json.data.msisdn;
+        const userUid = json.data.userUid;
         const displayName = json.data.displayName;
         localStorage.setItem("token", token);
 
 
-        this._loggedInUser = new User(displayName, msisdn);
+        this._loggedInUser = new User(userUid, displayName, msisdn);
         this.loggedInUser.emit(this._loggedInUser);
         localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
         return this._loggedInUser;

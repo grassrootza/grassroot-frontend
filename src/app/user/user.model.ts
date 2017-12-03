@@ -1,11 +1,12 @@
 export class User {
 
-  constructor(public displayName: string,
+  constructor(public uid: String,
+              public displayName: string,
               public phoneNumber: string,) {
   }
 
 
   public static fromJson(json) {
-    return new User(json.displayName, json.phoneNumber)
+    return new User(json.uid, json.displayName, json.phoneNumber)
   }
 }

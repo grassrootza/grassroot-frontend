@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {UserService} from "./user/user.service";
 import {NavigationEnd, Router} from "@angular/router";
 import {User} from "./user/user.model";
+import {environment} from "../environments/environment";
 
 
 @Component({
@@ -17,6 +18,8 @@ export class AppComponent {
   loggedInUser: User = null;
 
   currentUrl = "";
+
+  public loggedInUserImageUrl = environment.backendAppUrl + "/api/user/profile/image/view";
 
   constructor(private router: Router, private userService: UserService) {
 
