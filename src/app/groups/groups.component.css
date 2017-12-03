@@ -1,0 +1,13 @@
+th {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+td {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+td.group-name {
+  font-size: 16px;
+}

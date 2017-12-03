@@ -1,19 +1,37 @@
-<h2>Groups</h2>
+<h1 class="main-title">Groups</h1>
+
+<h2>
+  <img src="assets/star_black.png"/>
+  Pinned groups</h2>
 
 <table class="table">
   <thead>
   <tr>
     <th>Group Name</th>
+    <th>Role</th>
     <th>Up next</th>
     <th>Members</th>
     <th></th>
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let gr of groups | async">
+  <tr *ngFor="let gr of groups">
 
-    <td>{{gr.name}}</td>
-    <td></td>
+    <td class="group-name">
+      <img *ngIf="!gr.pinned" src="assets/star_empty.png" (click)="pinGroup(gr)"/>
+      <img *ngIf="gr.pinned" src="assets/star_full.png" (click)="unpinGroup(gr)"/>
+      {{gr.name}}
+    </td>
+    <td>
+      <span class="badge badge-success">
+        {{gr.getFormattedRoleName()}}
+      </span>
+    </td>
+
+    <td>
+      <img *ngIf="gr.nextEventType" src="assets/{{gr.getEventIconName()}}"/>
+      {{gr.getFormattedEventTime()}}
+    </td>
     <td>{{gr.memberCount}}</td>
     <td>
       <div class="dropdown">

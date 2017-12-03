@@ -1,5 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
 body {
-  padding-top: 5rem;
+  padding-top: 0rem;
+  background-color: #F5F6FA;
+  color: #4A4A4A;
+  font-family: 'Nunito', sans-serif;
 }
 
+h1 {
+  color: #4A4A4A;
+  font-family: 'Nunito', sans-serif;
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 41px;
+}
+
+h2 {
+  color: #4A4A4A;
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 30px;
+}
+
+.main-title {
+  margin-bottom: 2rem;
+}

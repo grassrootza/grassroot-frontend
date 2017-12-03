@@ -9,7 +9,7 @@ import {User} from "./user.model";
 export class UserService {
 
   private registerUrl = environment.backendAppUrl + "/api/user/web/register";
-  private loginUrl: string = environment.backendAppUrl + "/api/auth/web-login";
+  private loginUrl: string = environment.backendAppUrl + "/api/auth/login-password";
 
   private _loggedInUser: User = null;
   public loggedInUser: EventEmitter<User> = new EventEmitter(null);

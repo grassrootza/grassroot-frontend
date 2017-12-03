@@ -1,62 +1,61 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" *ngIf="loggedInUser">
+<div class="container-fluid">
 
-  <a class="navbar-brand" href="#">Grassroot</a>
+  <div class="container col-9 bg-white">
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <div class="container">
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
+      <nav class="navbar navbar-expand-lg navbar-light " *ngIf="loggedInUser">
 
-        <li class="nav-item" [ngClass]="{active: currentUrl === '/home'}">
-          <a class="nav-link" [routerLink]="['/home']"> Home <span class="sr-only">(current)</span> </a>
-        </li>
+        <a class="navbar-brand" href="#">
+          <img src="assets/grassroot-01.png"/>
+        </a>
 
-        <li class="nav-item" [ngClass]="{active: currentUrl === '/groups'}">
-          <a class="nav-link" [routerLink]="['/groups']"> Groups <span class="sr-only">(current)</span> </a>
-        </li>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <li class="nav-item" [ngClass]="{active: currentUrl === '/campaigns'}">
-          <a class="nav-link disabled" [routerLink]="['/campaigns']"> Campaigns <span class="sr-only">(current)</span>
-          </a>
-        </li>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+          <ul class="navbar-nav mr-auto">
 
-        <li class="nav-item" [ngClass]="{active: currentUrl === '/meetings'}">
-          <a class="nav-link disabled" [routerLink]="['/meetings']"> Meetings <span class="sr-only">(current)</span>
-          </a>
-        </li>
+            <li class="nav-item" [ngClass]="{active: currentUrl === '/home'}">
+              <a class="nav-link" [routerLink]="['/home']"> HOME <span class="sr-only">(current)</span> </a>
+            </li>
 
-        <li class="nav-item" [ngClass]="{active: currentUrl === '/votes'}">
-          <a class="nav-link disabled" [routerLink]="['/votes']"> Votes <span class="sr-only">(current)</span> </a>
-        </li>
+            <li class="nav-item" [ngClass]="{active: currentUrl === '/groups'}">
+              <a class="nav-link" [routerLink]="['/groups']"> GROUPS <span class="sr-only">(current)</span> </a>
+            </li>
 
-        <li class="nav-item" [ngClass]="{active: currentUrl === '/actions'}">
-          <a class="nav-link disabled" [routerLink]="['/actions']"> Actions <span class="sr-only">(current)</span> </a>
-        </li>
+            <li class="nav-item" [ngClass]="{active: currentUrl === '/campaigns'}">
+              <a class="nav-link disabled" [routerLink]="['/campaigns']"> CAMPAIGNS <span
+                class="sr-only">(current)</span>
+              </a>
+            </li>
 
+          </ul>
 
-      </ul>
+          <div class=" my-2 my-lg-0">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">{{loggedInUser.displayName}}</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                  <a class="dropdown-item" href="#" (click)="logout();">Logout</a>
 
-      <div class=" my-2 my-lg-0">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">{{loggedInUser.displayName}}</a>
-            <div class="dropdown-menu" aria-labelledby="dropdown01">
-              <a class="dropdown-item" href="#" (click)="logout();">Logout</a>
-
-            </div>
-          </li>
-        </ul>
-      </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </div>
-</nav>
 
-<div class="container">
-
-  <div class="main-content">
-    <router-outlet></router-outlet>
   </div>
 
-</div><!-- /.container -->
+  <div class="container col-7">
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>

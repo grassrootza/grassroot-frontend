@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {GroupService} from "./group.service";
-import {Observable} from "rxjs/Observable";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {Group} from "./group.model";
+import {GroupInfo} from "./group-info.model";
 
 @Component({
   selector: 'app-groups',
@@ -11,8 +9,8 @@ import {Group} from "./group.model";
 })
 export class GroupsComponent implements OnInit {
 
-  private groups_: BehaviorSubject<Group[]> = new BehaviorSubject([]);
-  protected groups: Observable<Group[]> = this.groups_.asObservable();
+
+  protected groups: GroupInfo[] = [];
 
   constructor(private groupService: GroupService) {
     this.loadGroups()
@@ -21,11 +19,11 @@ export class GroupsComponent implements OnInit {
 
   loadGroups() {
 
-    this.groups_.next([]);
+    this.groups = [];
     this.groupService.loadGroups().subscribe(
       groupList => {
         console.log("Login response: ", groupList);
-        this.groups_.next(groupList);
+        this.groups = groupList;
       },
       err => {
         console.log(err);
@@ -34,6 +32,26 @@ export class GroupsComponent implements OnInit {
       () => console.log('Request Complete')
     );
   }
+
+
+  pinGroup(gr: GroupInfo) {
+    this.groupService.pinGroup(gr.uid).subscribe(
+      success => {
+        console.log("pin group success: ", success);
+        gr.pinned = true;
+      });
+  }
+
+  unpinGroup(gr: GroupInfo) {
+    this.groupService.unpinGroup(gr.uid).subscribe(
+      success => {
+        console.log("unpin group success: ", success);
+        gr.pinned = false;
+      });
+  }
+
+
+
 
   ngOnInit() {
   }

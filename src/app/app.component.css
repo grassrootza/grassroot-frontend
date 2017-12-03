@@ -1,8 +1,29 @@
-body {
-  padding-top: 5rem;
+.main-content {
+  padding-top: 3rem;
 }
 
-.starter-template {
-  padding: 3rem 1.5rem;
-  text-align: center;
+.navbar {
+  padding-bottom: 0 !important;
 }
+
+.navbar-brand {
+  margin-right: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.navbar-light .navbar-nav .nav-link {
+  margin-left: 2rem !important;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  border-bottom: solid #ffffff 2px !important;
+}
+
+.navbar-light .navbar-nav .active > .nav-link {
+
+  color: #2CBC4C !important;
+  border-bottom: solid #2CBC4C 2px !important;
+}
+
+
+
+
