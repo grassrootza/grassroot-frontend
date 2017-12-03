@@ -1,11 +1,12 @@
+<button type="button" class="btn btn-success float-right">Create Group</button>
 <h1 class="main-title">Groups</h1>
 
-<h2>
+<h2 *ngIf="pinnedGroups.length > 0">
   <img src="assets/star_black.png"/>
   Pinned groups
 </h2>
 
-<div class="card pinned-groups">
+<div *ngIf="pinnedGroups.length > 0" class="card pinned-groups">
   <div class="card-body">
     <table class="table">
       <thead>
@@ -35,7 +36,10 @@
           <img *ngIf="gr.nextEventType" src="assets/{{gr.getEventIconName()}}"/>
           {{gr.getFormattedEventTime()}}
         </td>
-        <td>{{gr.memberCount}}</td>
+        <td>
+          <img src="assets/members.png"/>
+          {{gr.memberCount}}
+        </td>
         <td>
           <div class="dropdown">
             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
@@ -94,7 +98,10 @@
           <img *ngIf="gr.nextEventType" src="assets/{{gr.getEventIconName()}}"/>
           {{gr.getFormattedEventTime()}}
         </td>
-        <td>{{gr.memberCount}}</td>
+        <td>
+          <img src="assets/members.png"/>
+          {{gr.memberCount}}
+        </td>
         <td>
           <div class="dropdown">
             <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
