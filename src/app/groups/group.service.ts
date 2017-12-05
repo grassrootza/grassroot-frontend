@@ -4,6 +4,7 @@ import {AuthHttp} from "angular2-jwt";
 import {environment} from "../../environments/environment.prod";
 import "rxjs/add/operator/map";
 import {GroupInfo} from "./group-info.model";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class GroupService {
@@ -12,10 +13,13 @@ export class GroupService {
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
 
+  private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
+  public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
+
   constructor(private authHttp: AuthHttp) {
   }
 
-  loadGroups(): Observable<GroupInfo[]> {
+  loadGroups() {
 
     const fullUrl = this.groupListUrl;
 
@@ -25,7 +29,13 @@ export class GroupService {
           console.log("groups json: ", json);
           return json.map(grJson => GroupInfo.fromJson(grJson));
         }
-      );
+      ).subscribe(
+        groups => {
+          this.groupInfoList_.next(groups);
+        },
+        error => {
+          console.log("Error loading groups", error)
+        });
   }
 
 

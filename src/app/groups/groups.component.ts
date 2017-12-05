@@ -14,29 +14,29 @@ export class GroupsComponent implements OnInit {
   protected pinnedGroups: GroupInfo[] = [];
 
   constructor(private groupService: GroupService) {
-    this.loadGroups()
 
-  }
-
-  loadGroups() {
-
-    this.groups = [];
-    this.groupService.loadGroups().subscribe(
+    this.groupService.groupInfoList.subscribe(
       groupList => {
-        console.log("Login response: ", groupList);
+        console.log("Groups loaded: ", groupList);
         this.groups = groupList;
         this.resolvePinnedGroups()
-      },
-      err => {
-        console.log(err);
-        alert("Could not load groups!");
-      },
-      () => console.log('Request Complete')
+      }
     );
+
+    this.groupService.loadGroups()
   }
+
 
   private resolvePinnedGroups() {
     this.pinnedGroups = this.groups.filter(gr => gr.pinned)
+  }
+
+
+  toggleGroupPin(gr: GroupInfo) {
+    if (gr.pinned)
+      this.unpinGroup(gr);
+    else
+      this.pinGroup(gr);
   }
 
   pinGroup(gr: GroupInfo) {
