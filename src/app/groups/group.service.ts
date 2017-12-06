@@ -5,6 +5,7 @@ import {environment} from "../../environments/environment.prod";
 import "rxjs/add/operator/map";
 import {GroupInfo} from "./group-info.model";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {UserService} from "../user/user.service";
 
 @Injectable()
 export class GroupService {
@@ -16,7 +17,7 @@ export class GroupService {
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
 
-  constructor(private authHttp: AuthHttp) {
+  constructor(private authHttp: AuthHttp, private userService: UserService) {
   }
 
   loadGroups() {
@@ -34,7 +35,9 @@ export class GroupService {
           this.groupInfoList_.next(groups);
         },
         error => {
-          console.log("Error loading groups", error)
+          if (error.status = 401)
+            this.userService.logout();
+          console.log("Error loading groups", error.status)
         });
   }
 

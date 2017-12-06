@@ -39,22 +39,38 @@
 
 
 <div *ngIf="extendedInfoVisible" class="container group-info-details">
+
   <div class="row">
     <div class="col-5">
       <h5>Coming Up:</h5>
-      <div class="container">
-        <div class="row" *ngFor="let task of group.tasks">
-          <div class="col-6">
+      <div class="container ">
+        <div class="row task-row" *ngFor="let task of group.tasks">
+          <div class="col-4 no-padding-horizontal">
             <img src="assets/{{task.getEventIconName()}}"/>
-            <span>{{task.type}}</span>
+            <span class="task-type">{{task.type.toLowerCase()}}</span>
           </div>
-          <div class="col-6">
-            {{task.deadlineDate.toLocaleString()}}
+          <div class="col-8">
+            {{task.deadlineDate | date:'dd MMMM, y'}}
           </div>
         </div>
       </div>
-
     </div>
+
+    <div class="col-5">
+      <h5>Task Teams:</h5>
+      <div class="container ">
+        <div class="row" *ngFor="let subGroup of group.subGroups">
+          <div class="col-12 no-padding-horizontal">
+            <div class="btn-group" role="group">
+              <button type="button" class="btn subgroup-link">{{subGroup.name}}</button>
+              <span class="input-group-addon" id="btnGroupAddon">{{subGroup.memberCount}}</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 

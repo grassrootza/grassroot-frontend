@@ -1,5 +1,6 @@
 import {DateTimeUtils} from "../DateTimeUtils";
 import {TaskInfo} from "../task/task.model";
+import {GroupRef} from "./group-ref.model";
 
 export class GroupInfo {
 
@@ -12,7 +13,8 @@ export class GroupInfo {
               public nextEventTime: any,
               public nextEventType: string,
               public pinned: boolean,
-              public tasks: TaskInfo[]) {
+              public tasks: TaskInfo[],
+              public subGroups: GroupRef[]) {
   }
 
   public hasPermission(permission: string) {
@@ -46,7 +48,6 @@ export class GroupInfo {
   static fromJson(json): GroupInfo {
 
     let permissions: string[] = [];
-
     for (let i in json.userPermissions) {
       let permissionJson = json.userPermissions[i];
       permissions.push(permissionJson);
@@ -56,6 +57,12 @@ export class GroupInfo {
     for (let j in json.comingUpEvents) {
       let taskJson = json.comingUpEvents[j];
       taskList.push(TaskInfo.fromJson(taskJson));
+    }
+
+    let subGroupList: GroupRef[] = [];
+    for (let j in json.subGroups) {
+      let sgJson = json.subGroups[j];
+      subGroupList.push(GroupRef.fromJson(sgJson));
     }
 
     return new GroupInfo(
@@ -68,7 +75,8 @@ export class GroupInfo {
       json.nextEventTime ? DateTimeUtils.getDateFromJavaInstant(json.nextEventTime) : null,
       json.nextEventType,
       json.pinned,
-      taskList
+      taskList,
+      subGroupList
     );
   }
 

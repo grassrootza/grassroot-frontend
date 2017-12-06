@@ -50,4 +50,9 @@ h5 {
   padding-left: 0 !important;
 }
 
+.no-padding-horizontal {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
 

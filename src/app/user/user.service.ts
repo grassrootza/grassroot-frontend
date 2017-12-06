@@ -4,6 +4,7 @@ import {Http, RequestOptions, Response, URLSearchParams} from "@angular/http";
 import {environment} from "../../environments/environment";
 import {tokenNotExpired} from "angular2-jwt";
 import {User} from "./user.model";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class UserService {
@@ -14,7 +15,7 @@ export class UserService {
   private _loggedInUser: User = null;
   public loggedInUser: EventEmitter<User> = new EventEmitter(null);
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private router: Router) {
 
     console.log("Initializing user service");
     if (tokenNotExpired() && localStorage.getItem("loggedInUser") != null) {
@@ -66,6 +67,7 @@ export class UserService {
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
     localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 
 

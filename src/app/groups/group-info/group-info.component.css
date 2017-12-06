@@ -2,6 +2,7 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
   vertical-align: middle;
+  border-bottom: solid #ECEEF1 1px;
 }
 
 .btn.dropdown-toggle {
@@ -18,6 +19,7 @@
 .group-info-row img {
   margin-right: 0.5rem;
   margin-bottom: 0.2rem;
+
 }
 
 img.pin {
@@ -26,7 +28,42 @@ img.pin {
 
 .group-info-details {
   font-size: 14px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
+.task-row {
+  padding-top: 0.5rem;
+}
+
+.group-info-details .task-type {
+  color: #7A7D8C;
+  font-size: 14px;
+  line-height: 19px;
+  text-transform: capitalize;
+}
+
+.group-info-details img {
+  margin-bottom: 0.2rem;
+  margin-right: 0.6rem;
+}
+
+.group-info-details .col-6 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.input-group-addon {
+  background-color: #949DB0;
+  color: white;
+  font-size: 13px;
+  border: none;
+}
+
+.subgroup-link {
+  background-color: #F5F6FA;
+  color: #7A7D8C;
+  font-size: 14px;
+}
 
 
