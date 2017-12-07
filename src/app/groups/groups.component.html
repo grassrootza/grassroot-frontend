@@ -1,4 +1,6 @@
-<button type="button" class="btn btn-success float-right">Create Group</button>
+<button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#create-group-modal">Create
+  Group
+</button>
 <h1 class="main-title">Groups</h1>
 
 <h2 *ngIf="pinnedGroups.length > 0">
@@ -53,5 +55,96 @@
   </div>
 </div>
 
+
+<div class="modal fade" tabindex="-1" role="dialog" id="create-group-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create new group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Group name</label>
+              <input type="text" class="form-control" placeholder="Group name">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Network</label>
+              <select class="form-control">
+                <option>-</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description (optional)</label>
+            <textarea class="form-control"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <label>Group privacy</label>
+            </div>
+
+            <div class="form-group col-md-4">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" name="groupPrivacy" checked value="option2"> Public
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group col-md-4">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" name="groupPrivacy" value="option2"> Private
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>When will reminders be sent?</label>
+            </div>
+            <div class="form-group col-md-4">
+              <select class="form-control">
+                <option>Two days ahead</option>
+                <option>One day ahead</option>
+                <option>Half a day ahead</option>
+                <option>An hour before</option>
+                <option selected>No reminders</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Who will be able to call meetings, votes, etc?</label>
+            </div>
+            <div class="form-group col-md-4">
+              <select class="form-control">
+                <option>Ordinary members</option>
+                <option>Committee members</option>
+                <option>Group organisers</option>
+              </select>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 

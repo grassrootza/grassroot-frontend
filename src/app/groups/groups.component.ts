@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {GroupService} from "./group.service";
-import {GroupInfo} from "./group-info.model";
+import {GroupInfo} from "./model/group-info.model";
 
 @Component({
   selector: 'app-groups',
@@ -12,6 +12,8 @@ export class GroupsComponent implements OnInit {
 
   protected groups: GroupInfo[] = [];
   protected pinnedGroups: GroupInfo[] = [];
+
+  public groupToCreate
 
   constructor(private groupService: GroupService) {
 

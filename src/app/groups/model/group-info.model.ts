@@ -1,5 +1,5 @@
-import {DateTimeUtils} from "../DateTimeUtils";
-import {TaskInfo} from "../task/task.model";
+import {DateTimeUtils} from "../../DateTimeUtils";
+import {TaskInfo} from "../../task/task.model";
 import {GroupRef} from "./group-ref.model";
 
 export class GroupInfo {

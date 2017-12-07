@@ -3,14 +3,16 @@ import {Observable} from "rxjs/Observable";
 import {AuthHttp} from "angular2-jwt";
 import {environment} from "../../environments/environment.prod";
 import "rxjs/add/operator/map";
-import {GroupInfo} from "./group-info.model";
+import {GroupInfo} from "./model/group-info.model";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {UserService} from "../user/user.service";
+import {RequestOptions, URLSearchParams} from "@angular/http";
 
 @Injectable()
 export class GroupService {
 
   groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
+  groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
 
@@ -41,6 +43,25 @@ export class GroupService {
         });
   }
 
+  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number): Observable<string> {
+
+    var rop = new RequestOptions();
+    const params = new URLSearchParams();
+    params.append("name", name);
+    params.append("description", description);
+    params.append("permissionTemplate", permissionTemplate);
+    params.append("reminderMinutes", reminderMinutes.toString());
+    rop.params = params;
+
+    const fullUrl = this.groupCreateUrl;
+    return this.authHttp.get(fullUrl)
+      .map(resp => resp.text())
+      .map(groupId => {
+          console.log("group created, uid: ", groupId);
+          return groupId;
+        }
+      );
+  }
 
   pinGroup(groupUid: string): Observable<boolean> {
 

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroupInfo} from "../group-info.model";
+import {GroupInfo} from "../model/group-info.model";
 
 @Component({
   selector: 'app-group-info',
