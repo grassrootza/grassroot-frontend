@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {GroupService} from "./group.service";
 import {GroupInfo} from "./model/group-info.model";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+
+declare var jquery: any;
+declare var $: any;
 
 @Component({
   selector: 'app-groups',
@@ -13,10 +17,19 @@ export class GroupsComponent implements OnInit {
   protected groups: GroupInfo[] = [];
   protected pinnedGroups: GroupInfo[] = [];
 
-  public groupToCreate
+  public createGroupForm: FormGroup;
 
-  constructor(private groupService: GroupService) {
+  constructor(private groupService: GroupService, private formBuilder: FormBuilder) {
 
+    this.createGroupForm = formBuilder.group({
+      'name': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
+      'description': '',
+      'permissionTemplate': 'DEFAULT_GROUP',
+      'reminderMinutes': [0, Validators.pattern("[0-9]+")]
+    });
+  }
+
+  ngOnInit() {
     this.groupService.groupInfoList.subscribe(
       groupList => {
         console.log("Groups loaded: ", groupList);
@@ -59,10 +72,33 @@ export class GroupsComponent implements OnInit {
       });
   }
 
+  createGroup() {
 
-
-
-  ngOnInit() {
+    $('#create-group-modal').modal("hide");
+    if (this.createGroupForm.valid) {
+      let groupName: string = this.createGroupForm.get("name").value;
+      let groupDescription: string = this.createGroupForm.get("description").value;
+      let groupPermission: string = this.createGroupForm.get("permissionTemplate").value;
+      let reminderMinutes: number = this.createGroupForm.get("reminderMinutes").value;
+      this.groupService.createGroup(groupName, groupDescription, groupPermission, reminderMinutes)
+        .subscribe(
+          groupUid => {
+            console.log("Group successfully created, uid: ", groupUid);
+            this.groupService.loadGroups();
+          },
+          error => {
+            console.log("Error creating group: ", error);
+          }
+        )
+    }
+    else {
+      console.log("Create group form invalid!");
+    }
   }
+
+
+
+
+
 
 }

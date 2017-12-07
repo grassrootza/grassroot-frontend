@@ -2,7 +2,7 @@
   padding-top: 1rem;
   padding-bottom: 1rem;
   vertical-align: middle;
-  border-bottom: solid #ECEEF1 1px;
+  border-top: solid #ECEEF1 1px;
 }
 
 .btn.dropdown-toggle {
@@ -30,6 +30,7 @@ img.pin {
   font-size: 14px;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  border-top: solid #ECEEF1 1px;
 }
 
 .task-row {

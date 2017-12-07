@@ -6,7 +6,7 @@ import "rxjs/add/operator/map";
 import {GroupInfo} from "./model/group-info.model";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {UserService} from "../user/user.service";
-import {RequestOptions, URLSearchParams} from "@angular/http";
+import {Headers, RequestOptions, URLSearchParams} from "@angular/http";
 
 @Injectable()
 export class GroupService {
@@ -45,16 +45,19 @@ export class GroupService {
 
   createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number): Observable<string> {
 
-    var rop = new RequestOptions();
-    const params = new URLSearchParams();
-    params.append("name", name);
-    params.append("description", description);
-    params.append("permissionTemplate", permissionTemplate);
-    params.append("reminderMinutes", reminderMinutes.toString());
-    rop.params = params;
+
 
     const fullUrl = this.groupCreateUrl;
-    return this.authHttp.get(fullUrl)
+
+    const headers = new Headers({'Content-Type': 'application/x-www-form-urlencoded'});
+    const options = new RequestOptions({headers: headers});
+    const params = new URLSearchParams();
+    params.append('name', name);
+    params.append('description', description);
+    params.append('permissionTemplate', permissionTemplate);
+    params.append('reminderMinutes', reminderMinutes.toString());
+
+    return this.authHttp.post(fullUrl, params, options)
       .map(resp => resp.text())
       .map(groupId => {
           console.log("group created, uid: ", groupId);
