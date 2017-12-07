@@ -97,8 +97,8 @@
             <div class="form-group col-md-4">
               <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="radio" checked value="DEFAULT_GROUP"
-                         name="permissionTemplate" [formControl]="createGroupForm.controls['permissionTemplate']">
+                  <input class="form-check-input" type="radio" checked value="true"
+                         name="discoverable" [formControl]="createGroupForm.controls['discoverable']">
                   Public
                 </label>
               </div>
@@ -107,8 +107,8 @@
             <div class="form-group col-md-4">
               <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                  <input class="form-check-input" type="radio" value="CLOSED_GROUP"
-                         name="permissionTemplate" [formControl]="createGroupForm.controls['permissionTemplate']">
+                  <input class="form-check-input" type="radio" value="false"
+                         name="discoverable" [formControl]="createGroupForm.controls['discoverable']">
                   Private
                 </label>
               </div>
@@ -137,10 +137,10 @@
               <label>Who will be able to call meetings, votes, etc?</label>
             </div>
             <div class="form-group col-md-4">
-              <select class="form-control">
-                <option>Ordinary members</option>
-                <option>Committee members</option>
-                <option>Group organisers</option>
+              <select class="form-control" name="permissionTemplate"
+                      [formControl]="createGroupForm.controls['permissionTemplate']">
+                <option value="DEFAULT_GROUP">Any member</option>
+                <option value="CLOSED_GROUP">Group organisers</option>
               </select>
             </div>
           </div>

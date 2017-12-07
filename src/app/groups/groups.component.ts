@@ -3,7 +3,6 @@ import {GroupService} from "./group.service";
 import {GroupInfo} from "./model/group-info.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
-declare var jquery: any;
 declare var $: any;
 
 @Component({
@@ -24,6 +23,7 @@ export class GroupsComponent implements OnInit {
     this.createGroupForm = formBuilder.group({
       'name': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': '',
+      'discoverable': 'true',
       'permissionTemplate': 'DEFAULT_GROUP',
       'reminderMinutes': [0, Validators.pattern("[0-9]+")]
     });
@@ -80,7 +80,8 @@ export class GroupsComponent implements OnInit {
       let groupDescription: string = this.createGroupForm.get("description").value;
       let groupPermission: string = this.createGroupForm.get("permissionTemplate").value;
       let reminderMinutes: number = this.createGroupForm.get("reminderMinutes").value;
-      this.groupService.createGroup(groupName, groupDescription, groupPermission, reminderMinutes)
+      let discoverable: string = this.createGroupForm.get("discoverable").value;
+      this.groupService.createGroup(groupName, groupDescription, groupPermission, reminderMinutes, discoverable)
         .subscribe(
           groupUid => {
             console.log("Group successfully created, uid: ", groupUid);

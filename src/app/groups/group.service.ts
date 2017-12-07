@@ -43,7 +43,7 @@ export class GroupService {
         });
   }
 
-  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number): Observable<string> {
+  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string): Observable<string> {
 
 
 
@@ -56,6 +56,7 @@ export class GroupService {
     params.append('description', description);
     params.append('permissionTemplate', permissionTemplate);
     params.append('reminderMinutes', reminderMinutes.toString());
+    params.append('discoverable', discoverable);
 
     return this.authHttp.post(fullUrl, params, options)
       .map(resp => resp.text())
