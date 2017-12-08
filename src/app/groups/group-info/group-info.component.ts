@@ -27,4 +27,8 @@ export class GroupInfoComponent implements OnInit {
     this.pinToggled.emit(this.group);
   }
 
+  hadleChevronPicked(){
+    this.extendedInfoVisible = !this.extendedInfoVisible;
+  }
+
 }
