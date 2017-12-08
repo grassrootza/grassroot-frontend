@@ -97,9 +97,4 @@ export class GroupsComponent implements OnInit {
     }
   }
 
-
-
-
-
-
 }
