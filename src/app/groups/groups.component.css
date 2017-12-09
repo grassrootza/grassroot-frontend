@@ -26,3 +26,46 @@
 .pinned-groups {
   margin-bottom: 3rem;
 }
+
+.btn.dropdown-toggle {
+  padding: 0.5rem;
+  font-size: 14px;
+  background-color: white;
+  border: solid 1px #cccccc;
+}
+
+.filter{
+  margin-bottom: 0.9rem;
+}
+
+.filter .dropdown{
+  margin-right: 1rem
+}
+
+.page-indicator{
+  position: relative;
+  display: block;
+  padding: .5rem .75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+}
+
+.page-indicator:hover{
+  cursor: pointer;
+
+}
+
+.page-selected{
+  background-color: #929BAF;
+  border-radius: 50%;
+  color: #ffffff !important;
+}
+
+.page-item{
+  margin-right: 0.5rem;
+}
+
+.pagination{
+  margin-top:35px;
+  font-size:12px;
+}

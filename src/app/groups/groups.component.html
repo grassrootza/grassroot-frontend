@@ -37,6 +37,25 @@
   All groups
 </h2>
 
+<div class="form-inline filter">
+    <label class="mr-sm-2" for="inlineRolePick">Role</label>
+    <div class="dropdown" id="inlineRolePick">
+      <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+        Select role
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" (click)="filterGroupsByRole('COMMITEE')">Commitee</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('MEMBER')">Member</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ORGANIZER')">Organizer</a>
+      </div>
+    </div>
+
+    <label class="mr-sm-2" for="inlineKeywordPick">Keyword: </label>
+    <input type="text" class="form-control" id="inlineKeywordPick" placeholder="Type keyword to filter" name="name" (keyup)="filterByKeyword()">
+</div>
+
+
 <div *ngIf="groups.length > 0" class="card">
   <div class="card-body">
 
@@ -50,10 +69,28 @@
       </div>
     </div>
 
-    <app-group-info *ngFor="let gr of groups" [group]="gr" (pinToggled)="toggleGroupPin($event)"></app-group-info>
+    <app-group-info *ngFor="let gr of filteredGroupsPage" [group]="gr" (pinToggled)="toggleGroupPin($event)"></app-group-info>
 
   </div>
 </div>
+
+<nav aria-label="Page navigation example" *ngIf="pagesList.length > 0">
+  <ul class="pagination justify-content-end">
+    <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
+      <a class="page-indicator " (click)="previousPage()">
+        <img src="../../assets/arrow-left.png">Prev
+      </a>
+    </li>
+    <li class="page-item" *ngFor="let page of pagesList">
+      <a class="page-indicator " [ngClass]="(page==currentPage)?'page-selected':''" (click)="goToPage(page)">{{page}}</a>
+    </li>
+    <li class="page-item" [ngClass]="(currentPage==pagesList.length)?'disabled':''">
+      <a class="page-indicator " (click)="nextPage()">
+        Next <img src="../../assets/arrow-right.png">
+      </a>
+    </li>
+  </ul>
+</nav>
 
 
 <div class="modal fade" tabindex="-1" role="dialog" id="create-group-modal" aria-hidden="true">

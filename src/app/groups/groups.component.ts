@@ -16,6 +16,15 @@ export class GroupsComponent implements OnInit {
   protected groups: GroupInfo[] = [];
   protected pinnedGroups: GroupInfo[] = [];
 
+  protected currentPage: number = 1;
+  protected totalCount: number = 0;
+  protected pageSize: number = 10;
+  protected numberOfPages: number = 1;
+  protected filteredGroups: GroupInfo[] = [];
+  protected filteredGroupsPage: GroupInfo[] = [];
+  protected pagesList: number[] = [];
+
+
   public createGroupForm: FormGroup;
 
   constructor(private groupService: GroupService, private formBuilder: FormBuilder) {
@@ -34,10 +43,21 @@ export class GroupsComponent implements OnInit {
       groupList => {
         console.log("Groups loaded: ", groupList);
         this.groups = groupList;
-        this.resolvePinnedGroups()
+        this.resolvePinnedGroups();
+        if(this.groups.length < this.pageSize){
+          this.filteredGroups = this.groups;
+        }else{
+          this.filteredGroups = this.groups;
+          this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
+          this.totalCount = this.groups.length;
+          this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+          this.currentPage = 1;
+        }
+
+        this.generatePageList(this.numberOfPages);
+
       }
     );
-
     this.groupService.loadGroups()
   }
 
@@ -95,6 +115,58 @@ export class GroupsComponent implements OnInit {
     else {
       console.log("Create group form invalid!");
     }
+  }
+
+  generatePageList(numberOfPages: number){
+    this.pagesList = [];
+    for(let i=1;i<=numberOfPages;i++){
+      this.pagesList.push(i);
+    }
+  }
+
+  filterGroupsByRole(role: String): void{
+    this.filteredGroups = this.groups.filter(group =>  group.getFormattedRoleName() === role );
+    this.totalCount = this.filteredGroups.length;
+    this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
+    this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+    this.currentPage = 1;
+
+    this.generatePageList(this.numberOfPages);
+  }
+
+  filterByKeyword(): void{
+    let keyword = $('#inlineKeywordPick').val();
+    this.filteredGroups = this.groups.filter(group =>
+      group.name.indexOf(keyword) !== -1 || group.description.indexOf(keyword) !== -1
+    );
+    this.totalCount = this.filteredGroups.length;
+    this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
+    this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+    this.currentPage = 1;
+
+    this.generatePageList(this.numberOfPages);
+
+  }
+
+  goToPage(page: number){
+    this.currentPage = page;
+    this.filteredGroupsPage = this.filteredGroups.slice(this.pageSize*(page-1), this.pageSize*page);
+  }
+
+  previousPage(){
+    if(this.currentPage != 1){
+      this.currentPage = this.currentPage-1;
+      this.goToPage(this.currentPage);
+    }
+
+  }
+
+  nextPage(){
+    if(this.currentPage != this.numberOfPages){
+      this.currentPage = this.currentPage+1;
+      this.goToPage(this.currentPage);
+    }
+
   }
 
 }
