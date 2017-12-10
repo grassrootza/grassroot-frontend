@@ -39,7 +39,7 @@ Before running the tests make sure you are serving the app via `ng serve`.
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-##Internationalization
+## Internationalization
 All translated strings are stored in assets/i18n folder. For structure of json file use en.json as reference. <br />
 After you have created new translation, you should add your language to the list of supported languages. See app.component.ts line that looks like this `translateService.addLangs(['en']);`. 
 <br />

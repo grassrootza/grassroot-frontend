@@ -86,12 +86,32 @@
     }
 
   },
+  "login": {
+    "title": "Login",
+    "username": "Username",
+    "usernamePlaceholder": "Enter username",
+    "password": "Password",
+    "passwordPlaceholder": "Password",
+    "newUser": "New user? Register here "
+  },
+  "registration":{
+    "title": "Register",
+    "username": "YOUR NAME (WHAT PEOPLE KNOW YOU BY):",
+    "usernamePlaceholder": "Enter username",
+    "phoneNumber": "YOUR MOBILE NUMBER:",
+    "phoneNumberPlaceholder": "Enter phone number",
+    "password": "SET A PASSWORD:",
+    "passwordPlaceholder": "Password",
+    "haveAccount": "Already have an account? Click here to Login"
+  },
   "pagination":{
     "previous": "Prev",
     "next": "Next"
   },
   "action":{
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "signUp": "Sign up"
   }
 }
