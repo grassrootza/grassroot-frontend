@@ -138,7 +138,7 @@ export class GroupsComponent implements OnInit {
     let keyword = $('#inlineKeywordPick').val();
     if(keyword !== ''){
       this.filteredGroups = this.groups.filter(group =>
-        group.name.indexOf(keyword) !== -1 || group.description.indexOf(keyword) !== -1
+        group.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1 || group.description.toLowerCase().indexOf(keyword.toLowerCase()) !== -1
       );
     }else{
       this.filteredGroups = this.groups;
