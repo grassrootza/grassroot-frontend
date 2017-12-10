@@ -51,10 +51,10 @@
               <li class="nav-item dropdown help">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                  <img src="assets/icon-help.png"/> Help
+                  <img src="assets/icon-help.png"/> {{ 'menu.help' | translate }}
                 </a>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" href="#">Show help</a>
+                  <a class="dropdown-item" href="#">{{ 'menu.showHelp' | translate }}</a>
                 </div>
               </li>
 
@@ -65,7 +65,7 @@
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">{{loggedInUser.displayName}}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
-                  <a class="dropdown-item" href="#" (click)="logout();">Logout</a>
+                  <a class="dropdown-item" href="#" (click)="logout();">{{ 'menu.logout' | translate }}</a>
 
                 </div>
               </li>
@@ -90,17 +90,15 @@
         <div class="row">
           <div class="col-6">
             <img class="footer-logo" src="assets/grassroot-02.png"/> <br/>
-            <a href="#">About Us</a>
-            <a href="#">News</a>
-            <a href="#">Contribute</a>
-            <a href="#">Contact Us</a>
+            <a href="#">{{ 'footer.aboutUs' | translate }}</a>
+            <a href="#">{{ 'footer.news' | translate }}</a>
+            <a href="#">{{ 'footer.contribute' | translate }}</a>
+            <a href="#">{{ 'footer.contactUs' | translate }}</a>
           </div>
 
           <div class="col-6">
             <div class="float-right text-right">
-            <span class="info">
-            info@company.com<br/>
-            Call us: (+27) 21 453 26 16
+            <span class="info" [innerHTML]="'footer.info' | translate ">
             </span>
               <div class="social-icons">
                 <img src="assets/icon-twitter.png"/>
@@ -119,13 +117,13 @@
         <div class="row">
 
           <div class="col-6 copyright">
-            Copyright © 2017 Grassroots. All Rights Reserved
+            {{ 'footer.copyright' | translate }}
           </div>
 
           <div class="col-6">
             <div class="float-right text-right">
-              <a href="#">LICENCE AGREEMENT</a> | &nbsp;
-              <a href="#">TERMS AND CONDITIONS</a>
+              <a href="#">{{ 'footer.licenceAgreement' | translate }}</a> | &nbsp;
+              <a href="#">{{ 'footer.termsAndConditions' | translate }}</a>
             </div>
           </div>
         </div>

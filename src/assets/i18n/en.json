@@ -3,12 +3,24 @@
     "home": "HOME",
     "groups": "GROUPS",
     "campaign": "CAMPAIGNS",
-    "noNotifications": "No notifications"
+    "noNotifications": "No notifications",
+    "showHelp": "Show help",
+    "help": "Help",
+    "logout": "Logout"
+  },
+  "footer": {
+    "aboutUs": "About Us",
+    "news": "News",
+    "contribute": "Contribute",
+    "contactUs": "Contact Us",
+    "info": "info@company.com<br/>Call us: (+27) 21 453 26 16",
+    "copyright": "Copyright © 2017 Grassroots. All Rights Reserved",
+    "licenceAgreement": "LICENCE AGREEMENT",
+    "termsAndConditions": "TERMS AND CONDITIONS"
   },
   "groups": {
     "title": "Groups",
     "create": "Create Group",
-    "pinned": "Pinned groups",
     "filter": {
       "selectRole": "Select role",
       "commitee": "Commitee",
@@ -24,11 +36,47 @@
       "role": "Role",
       "upNext": "Up Next",
       "members": "Members"
+    },
+    "pinnedGroups": {
+      "title": "Pinned groups",
+      "name": "Group name",
+      "role": "Role",
+      "upNext": "Up Next",
+      "members": "Members"
+    },
+    "createNewModal": {
+      "title": "Create new group",
+      "groupName": "Group Name",
+      "network": "Network",
+      "description": "Description (optional)",
+
+      "groupPrivacy": {
+        "title": "Group privacy",
+        "public": "Public",
+        "private": "Private"
+      },
+      "reminders": {
+        "title": "When will reminders be sent?",
+        "twoDays":"Two days ahead",
+        "oneDay": "One day ahead",
+        "halfDay": "Half a day ahead",
+        "oneHour": "An hour before",
+        "noReminders":"No reminders"
+      },
+      "permission": {
+        "title":"Who will be able to call meetings, votes, etc?",
+        "any": "Any member",
+        "organizer": "Group organisers"
+      }
     }
 
   },
   "pagination":{
     "previous": "Prev",
     "next": "Next"
+  },
+  "action":{
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }
