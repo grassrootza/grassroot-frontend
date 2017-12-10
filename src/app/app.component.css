@@ -11,9 +11,6 @@
   margin-bottom: 0.5rem;
 }
 
-.nav-link{
-  text-transform: uppercase;
-}
 
 .navbar-light .navbar-nav.main-nav .nav-link {
   margin-left: 2rem !important;

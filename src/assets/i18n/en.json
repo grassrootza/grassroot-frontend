@@ -1,8 +1,9 @@
 {
   "menu": {
-    "home": "Home",
-    "groups": "Groups",
-    "campaign": "Campaigns"
+    "home": "HOME",
+    "groups": "GROUPS",
+    "campaign": "CAMPAIGNS",
+    "noNotifications": "No notifications"
   },
   "groups": {
     "title": "Groups",

@@ -39,11 +39,6 @@ export class AppComponent {
 
     this.userService.loggedInUser.subscribe(user => this.loggedInUser = user);
 
-    /*translateService.addLangs(['en', 'hr']);
-    translateService.setDefaultLang('en');
-    let browserLang = translateService.getBrowserLang();
-    translateService.use(browserLang.match(/en|hr/) ? browserLang : 'en');*/
-
     translateService.addLangs(['en']);
     translateService.setDefaultLang('en');
     let browserLang = translateService.getBrowserLang();
