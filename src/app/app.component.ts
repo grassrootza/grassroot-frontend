@@ -3,6 +3,7 @@ import {UserService} from "./user/user.service";
 import {NavigationEnd, Router} from "@angular/router";
 import {User} from "./user/user.model";
 import {environment} from "../environments/environment";
+import {TranslateService} from '@ngx-translate/core';
 
 
 @Component({
@@ -21,7 +22,10 @@ export class AppComponent {
 
   public loggedInUserImageUrl = environment.backendAppUrl + "/api/user/profile/image/view";
 
-  constructor(private router: Router, private userService: UserService) {
+  constructor(private router: Router,
+              private userService: UserService,
+              private translateService: TranslateService
+  ) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
 
@@ -35,6 +39,15 @@ export class AppComponent {
 
     this.userService.loggedInUser.subscribe(user => this.loggedInUser = user);
 
+    /*translateService.addLangs(['en', 'hr']);
+    translateService.setDefaultLang('en');
+    let browserLang = translateService.getBrowserLang();
+    translateService.use(browserLang.match(/en|hr/) ? browserLang : 'en');*/
+
+    translateService.addLangs(['en']);
+    translateService.setDefaultLang('en');
+    let browserLang = translateService.getBrowserLang();
+    translateService.use(browserLang.match(/en/) ? browserLang : 'en');
   }
 
   logout() {

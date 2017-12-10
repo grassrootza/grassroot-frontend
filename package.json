@@ -24,6 +24,8 @@
     "@angular/platform-browser-dynamic": "^5.1.0",
     "@angular/platform-server": "^5.1.0",
     "@angular/router": "^5.1.0",
+    "@ngx-translate/core": "^9.0.1",
+    "@ngx-translate/http-loader": "^2.0.0",
     "angular2-jwt": "^0.2.3",
     "bootstrap": "^4.0.0-beta",
     "core-js": "^2.4.1",
@@ -50,6 +52,7 @@
     "protractor": "~5.1.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "^2.4.2"
+    "typescript": "^2.4.2",
+    "webpack": "^3.10.0"
   }
 }

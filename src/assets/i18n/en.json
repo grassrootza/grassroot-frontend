@@ -1,0 +1,33 @@
+{
+  "menu": {
+    "home": "Home1",
+    "groups": "Groups",
+    "campaign": "Campaigns"
+  },
+  "groups": {
+    "title": "Groups",
+    "create": "Create Group",
+    "pinned": "Pinned groups",
+    "filter": {
+      "selectRole": "Select role",
+      "commitee": "Commitee",
+      "member": "Member",
+      "organizer": "Organizer",
+      "keyword": "Keyword: ",
+      "keywordPlaceholder": "Type keyword to filter",
+      "clear": "Clear filters"
+    },
+    "allGroups": {
+      "title": "All groups",
+      "name": "Group name",
+      "role": "Role",
+      "upNext": "Up Next",
+      "members": "Members"
+    }
+
+  },
+  "pagination":{
+    "previous": "Prev",
+    "next": "Next"
+  }
+}

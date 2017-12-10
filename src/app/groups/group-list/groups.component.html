@@ -1,11 +1,11 @@
-<button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#create-group-modal">Create
-  Group
+<button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#create-group-modal">
+  {{ 'groups.create' | translate }}
 </button>
-<h1 class="main-title">Groups</h1>
+<h1 class="main-title">{{ 'groups.title' | translate }}</h1>
 
 <h2 *ngIf="pinnedGroups.length > 0">
   <img src="assets/star_black.png"/>
-  Pinned groups
+  {{ 'groups.pinned' | translate }}
 </h2>
 
 <div *ngIf="pinnedGroups.length > 0" class="card pinned-groups">
@@ -34,7 +34,7 @@
 
 <h2>
   <img src="assets/star_black.png"/>
-  All groups
+  {{ 'groups.allGroups.title' | translate }}
 </h2>
 
 <div class="form-inline filter">
@@ -42,19 +42,20 @@
     <div class="dropdown" id="inlineRolePick">
       <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
-        Select role
+        {{ 'groups.filter.selectRole' | translate }}
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_COMMITTEE_MEMBER','Commitee')">Commitee</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_ORDINARY_MEMBER', 'Member')">Member</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_GROUP_ORGANIZER', 'Organizer')">Organizer</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_COMMITTEE_MEMBER','Commitee')">{{ 'groups.filter.commitee' | translate }}</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_ORDINARY_MEMBER', 'Member')">{{ 'groups.filter.member' | translate }}</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_GROUP_ORGANIZER', 'Organizer')">{{ 'groups.filter.organizer' | translate }}</a>
       </div>
     </div>
 
-    <label class="mr-sm-2" for="inlineKeywordPick">Keyword: </label>
-    <input type="text" class="form-control" id="inlineKeywordPick" placeholder="Type keyword to filter" name="name" (keyup)="filterByKeyword()">
+    <label class="mr-sm-2" for="inlineKeywordPick">{{ 'groups.filter.keyword' | translate }} </label>
+    <input type="text" class="form-control" id="inlineKeywordPick" placeholder="{{ 'groups.filter.keywordPlaceholder' | translate }}"
+           name="name" (keyup)="filterByKeyword()">
 
-    <button type="button" class="btn btn-success clear-filters" (click)="clearAllFilters()">Clear filters</button>
+    <button type="button" class="btn btn-success clear-filters" (click)="clearAllFilters()">{{ 'groups.filter.clear' | translate }}</button>
 </div>
 
 
@@ -63,10 +64,10 @@
 
     <div class="container group-info-header">
       <div class="row">
-        <div class="col-3">Group Name</div>
-        <div class="col-2">Role</div>
-        <div class="col-3">Up Next</div>
-        <div class="col-2">Members</div>
+        <div class="col-3">{{ 'groups.allGroups.name' | translate }}</div>
+        <div class="col-2">{{ 'groups.allGroups.role' | translate }}</div>
+        <div class="col-3">{{ 'groups.allGroups.upNext' | translate }}</div>
+        <div class="col-2">{{ 'groups.allGroups.members' | translate }}</div>
         <div class="col-2"></div>
       </div>
     </div>
@@ -80,7 +81,7 @@
   <ul class="pagination justify-content-end">
     <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
       <a class="page-indicator " (click)="previousPage()">
-        <img src="../../../assets/arrow-left.png">Prev
+        <img src="../../../assets/arrow-left.png">{{ 'pagination.previous' | translate }}
       </a>
     </li>
     <li class="page-item" *ngFor="let page of pagesList">
@@ -88,7 +89,7 @@
     </li>
     <li class="page-item" [ngClass]="(currentPage==pagesList.length)?'disabled':''">
       <a class="page-indicator " (click)="nextPage()">
-        Next <img src="../../../assets/arrow-right.png">
+        {{ 'pagination.next' | translate }} <img src="../../../assets/arrow-right.png">
       </a>
     </li>
   </ul>
