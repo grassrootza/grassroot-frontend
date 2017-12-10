@@ -5,7 +5,7 @@ import {Http, HttpModule, RequestOptions} from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
 
 import {AppComponent} from './app.component';
-import {GroupsComponent} from './groups/groups.component';
+import {GroupsComponent} from './groups/group-list/groups.component';
 import {LoginComponent} from './login/login.component';
 import {LoggedInGuard} from './logged-in.guard';
 import {AuthConfig, AuthHttp} from "angular2-jwt";

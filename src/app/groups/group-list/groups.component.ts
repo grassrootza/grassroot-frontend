@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {GroupService} from "./group.service";
-import {GroupInfo} from "./model/group-info.model";
+import {GroupService} from "../group.service";
+import {GroupInfo} from "../model/group-info.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 declare var $: any;
