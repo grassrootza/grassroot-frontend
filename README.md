@@ -38,3 +38,14 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+##Internationalization
+All translated strings are stored in assets/i18n folder. For structure of json file use en.json as reference. <br />
+After you have created new translation, you should add your language to the list of supported languages. See app.component.ts line that looks like this `translateService.addLangs(['en']);`. 
+<br />
+Ex. You want to add croatian language translation to site, these are the steps you should follow:
+- add hr.json file to assets/i18n
+- edit line in app.component.ts `translateService.addLangs(['en']);` so it would look like this `translateService.addLangs(['en', 'hr']);`
+- edit line in app.component.ts `translateService.use(browserLang.match(/en/) ? browserLang : 'en');` so it would look like this `translateService.use(browserLang.match(/en|hr/) ? browserLang : 'en');`
+<br/><br/>
+For using translated string in html you can use `translate pipe` (ex. {{ 'groups.row.action.meeting' | translate }}). For other ways of using translation see [Official guide](https://github.com/ngx-translate/core).

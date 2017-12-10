@@ -49,7 +49,6 @@
       "groupName": "Group Name",
       "network": "Network",
       "description": "Description (optional)",
-
       "groupPrivacy": {
         "title": "Group privacy",
         "public": "Public",
@@ -68,6 +67,22 @@
         "any": "Any member",
         "organizer": "Group organisers"
       }
+    },
+    "row":{
+      "action": {
+        "title": "Actions",
+        "meeting": "Call meeting",
+        "vote": "Take vote action",
+        "create": "Create action"
+      },
+      "taskTeam":{
+        "title": "Task Teams",
+        "view": "View All Task Teams "
+      },
+      "comingUp":{
+        "title": "Coming Up:"
+      },
+      "viewGroup": "View Group"
     }
 
   },

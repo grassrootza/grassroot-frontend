@@ -22,15 +22,12 @@
       <div class="dropdown">
         <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-          Actions
+          {{ 'groups.row.action.title' | translate }}
         </button>
         <div class="dropdown-menu">
-          <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">Call
-            meeting</a>
-          <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">Take vote
-            action</a>
-          <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled">Create
-            action</a>
+          <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">{{ 'groups.row.action.meeting' | translate }}</a>
+          <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">{{ 'groups.row.action.vote' | translate }}</a>
+          <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled">{{ 'groups.row.action.create' | translate }}</a>
         </div>
       </div>
     </div>
@@ -45,7 +42,7 @@
 
   <div class="row">
     <div class="col-5">
-      <h5>Coming Up:</h5>
+      <h5>{{ 'groups.row.comingUp.title' | translate }}</h5>
       <div class="container ">
         <div class="row task-row" *ngFor="let task of group.tasks">
           <div class="col-4 no-padding-horizontal">
@@ -60,7 +57,7 @@
     </div>
 
     <div class="col-3">
-      <h5>Task Teams:</h5>
+      <h5>{{ 'groups.row.taskTeam.title' | translate }}</h5>
       <div class="container ">
         <div class="row" *ngFor="let subGroup of group.subGroups">
           <div class="col-12 no-padding-horizontal">
@@ -75,9 +72,9 @@
     </div>
 
     <div class="col-4">
-      <a href="#">View All Task Teams </a>
+      <a href="#">{{ 'groups.row.taskTeam.view' | translate }}</a>
       <a href="#/group/{{group.uid}}">
-        <button class="btn btn-outline-secondary view-group-btn float-right"> View Group</button>
+        <button class="btn btn-outline-secondary view-group-btn float-right">{{ 'groups.row.viewGroup' | translate }}</button>
       </a>
     </div>
 
