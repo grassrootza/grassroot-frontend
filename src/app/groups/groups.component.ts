@@ -23,6 +23,7 @@ export class GroupsComponent implements OnInit {
   protected filteredGroups: GroupInfo[] = [];
   protected filteredGroupsPage: GroupInfo[] = [];
   protected pagesList: number[] = [];
+  protected pickedRoleFilter: String = '';
 
 
   public createGroupForm: FormGroup;
@@ -44,17 +45,14 @@ export class GroupsComponent implements OnInit {
         console.log("Groups loaded: ", groupList);
         this.groups = groupList;
         this.resolvePinnedGroups();
-        if(this.groups.length < this.pageSize){
-          this.filteredGroups = this.groups;
-        }else{
-          this.filteredGroups = this.groups;
-          this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
-          this.totalCount = this.groups.length;
-          this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
-          this.currentPage = 1;
-        }
 
+        this.filteredGroups = this.groups;
+        this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
+        this.totalCount = this.filteredGroups.length;
+        this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+        this.currentPage = 1;
         this.generatePageList(this.numberOfPages);
+
 
       }
     );
@@ -124,8 +122,31 @@ export class GroupsComponent implements OnInit {
     }
   }
 
-  filterGroupsByRole(role: String): void{
-    this.filteredGroups = this.groups.filter(group =>  group.getFormattedRoleName() === role );
+  filterGroupsByRole(role: String, roleDisplayName: String): void{
+    this.filteredGroups = this.groups.filter(group =>  group.role === role );
+    this.totalCount = this.filteredGroups.length;
+    this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
+    this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+    this.currentPage = 1;
+    this.pickedRoleFilter = role;
+
+    this.generatePageList(this.numberOfPages);
+    $("#dropdownMenuButton").html(roleDisplayName);
+  }
+
+  filterByKeyword(): void{
+    let keyword = $('#inlineKeywordPick').val();
+    if(keyword !== ''){
+      this.filteredGroups = this.groups.filter(group =>
+        group.name.indexOf(keyword) !== -1 || group.description.indexOf(keyword) !== -1
+      );
+    }else{
+      this.filteredGroups = this.groups;
+    }
+
+    if(this.pickedRoleFilter !== ''){
+      this.filteredGroups = this.filteredGroups.filter(group =>  group.role === this.pickedRoleFilter );
+    }
     this.totalCount = this.filteredGroups.length;
     this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
     this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
@@ -134,17 +155,16 @@ export class GroupsComponent implements OnInit {
     this.generatePageList(this.numberOfPages);
   }
 
-  filterByKeyword(): void{
-    let keyword = $('#inlineKeywordPick').val();
-    this.filteredGroups = this.groups.filter(group =>
-      group.name.indexOf(keyword) !== -1 || group.description.indexOf(keyword) !== -1
-    );
-    this.totalCount = this.filteredGroups.length;
+  clearAllFilters(): void {
+    this.filteredGroups = this.groups;
     this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
+    this.totalCount = this.filteredGroups.length;
     this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
     this.currentPage = 1;
-
+    this.pickedRoleFilter = '';
     this.generatePageList(this.numberOfPages);
+    $("#dropdownMenuButton").html('Select role');
+    $("#inlineKeywordPick").val("");
 
   }
 
@@ -158,7 +178,6 @@ export class GroupsComponent implements OnInit {
       this.currentPage = this.currentPage-1;
       this.goToPage(this.currentPage);
     }
-
   }
 
   nextPage(){
@@ -166,7 +185,6 @@ export class GroupsComponent implements OnInit {
       this.currentPage = this.currentPage+1;
       this.goToPage(this.currentPage);
     }
-
   }
 
 }

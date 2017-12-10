@@ -45,14 +45,16 @@
         Select role
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" (click)="filterGroupsByRole('COMMITEE')">Commitee</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('MEMBER')">Member</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('ORGANIZER')">Organizer</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_COMMITTEE_MEMBER','Commitee')">Commitee</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_ORDINARY_MEMBER', 'Member')">Member</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_GROUP_ORGANIZER', 'Organizer')">Organizer</a>
       </div>
     </div>
 
     <label class="mr-sm-2" for="inlineKeywordPick">Keyword: </label>
     <input type="text" class="form-control" id="inlineKeywordPick" placeholder="Type keyword to filter" name="name" (keyup)="filterByKeyword()">
+
+    <button type="button" class="btn btn-success clear-filters" (click)="clearAllFilters()">Clear filters</button>
 </div>
 
 

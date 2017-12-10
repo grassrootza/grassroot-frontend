@@ -22,8 +22,20 @@ export class GroupInfo {
   }
 
   public getFormattedRoleName(): string {
-    if (this.role != null)
-      return this.role.substring(11);
+    if (this.role != null){
+      if(this.role === 'ROLE_ORDINARY_MEMBER')
+        return 'MEMBER';
+      else if(this.role === 'ROLE_COMMITTEE_MEMBER')
+        return 'COMMITTEE';
+      else if(this.role === 'ROLE_GROUP_ORGANIZER')
+        return 'ORGANIZER';
+
+      /*
+        So, for 'member' it is 'ROLE_ORDINARY_MEMBER'
+        for committee it is 'ROLE_COMMITTEE_MEMBER'
+        for organizer it is 'ROLE_GROUP_ORGANIZER'
+        */
+    }
     else return this.role;
   }
 
