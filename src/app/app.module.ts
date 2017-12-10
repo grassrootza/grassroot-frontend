@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Http, HttpModule, RequestOptions} from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 
 import {AppComponent} from './app.component';
 import {GroupsComponent} from './groups/group-list/groups.component';
@@ -15,10 +14,13 @@ import {RegistrationComponent} from './registration/registration.component';
 import {UserService} from "./user/user.service";
 import {HomeComponent} from './home/home.component';
 import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/common";
-import {GroupInfoComponent} from './groups/group-info/group-info.component';
+import {GroupInfoComponent} from './groups/group-list-row/group-info.component';
 import {GroupDetailsComponent} from './groups/group-details/group-details.component';
+import {GroupMembersComponent} from "./groups/group-details/group-members/group-members.component";
+import {GroupDashboardComponent} from "./groups/group-details/group-dashboard/group-dashboard.component";
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 
 
 const routes: Routes = [
@@ -27,7 +29,17 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {path: 'register', component: RegistrationComponent},
   {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
-  {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]}
+  {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},
+  {
+    path: 'group/:id',
+    component: GroupDetailsComponent,
+    canActivate: [LoggedInGuard],
+    children: [
+      {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      {path: 'dashboard', component: GroupDashboardComponent},
+      {path: 'members', component: GroupMembersComponent}
+    ]
+  }
 ];
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -46,7 +58,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     RegistrationComponent,
     HomeComponent,
     GroupInfoComponent,
-    GroupDetailsComponent
+    GroupDetailsComponent,
+    GroupDashboardComponent,
+    GroupMembersComponent
   ],
   imports: [
     BrowserModule,
