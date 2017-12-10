@@ -36,8 +36,8 @@ const routes: Routes = [
     canActivate: [LoggedInGuard],
     children: [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
-      {path: 'dashboard', component: GroupDashboardComponent},
-      {path: 'members', component: GroupMembersComponent}
+      {path: 'dashboard', component: GroupDashboardComponent, canActivate: [LoggedInGuard]},
+      {path: 'members', component: GroupMembersComponent, canActivate: [LoggedInGuard]}
     ]
   }
 ];

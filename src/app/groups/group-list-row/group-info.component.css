@@ -22,6 +22,10 @@
 
 }
 
+.group-info-row a {
+  color: #4A4A4A;
+}
+
 img.pin {
   cursor: pointer;
 }

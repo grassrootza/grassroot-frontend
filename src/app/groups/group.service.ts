@@ -22,25 +22,27 @@ export class GroupService {
   constructor(private authHttp: AuthHttp, private userService: UserService) {
   }
 
-  loadGroups() {
+  loadGroups(clearCache: boolean) {
 
-    const fullUrl = this.groupListUrl;
+    if (this.groupInfoList_.getValue().length == 0 || clearCache) {
+      const fullUrl = this.groupListUrl;
 
-    return this.authHttp.get(fullUrl)
-      .map(resp => resp.json())
-      .map(json => {
-          console.log("groups json: ", json);
-          return json.map(grJson => GroupInfo.fromJson(grJson));
-        }
-      ).subscribe(
-        groups => {
-          this.groupInfoList_.next(groups);
-        },
-        error => {
-          if (error.status = 401)
-            this.userService.logout();
-          console.log("Error loading groups", error.status)
-        });
+      return this.authHttp.get(fullUrl)
+        .map(resp => resp.json())
+        .map(json => {
+            console.log("groups json: ", json);
+            return json.map(grJson => GroupInfo.fromJson(grJson));
+          }
+        ).subscribe(
+          groups => {
+            this.groupInfoList_.next(groups);
+          },
+          error => {
+            if (error.status = 401)
+              this.userService.logout();
+            console.log("Error loading groups", error.status)
+          });
+    }
   }
 
   createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string): Observable<string> {

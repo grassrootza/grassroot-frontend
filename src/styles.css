@@ -11,6 +11,7 @@ body {
   background-color: #F5F6FA;
   color: #4A4A4A;
   font-family: 'Nunito', sans-serif;
+  font-weight: 300;
   /* Margin bottom by footer height */
   margin: 0 0 15rem;
 }
@@ -19,26 +20,38 @@ body {
 
 h1 {
   color: #4A4A4A;
-  font-family: 'Nunito', sans-serif;
   font-size: 30px;
-  font-weight: 300;
-  line-height: 41px;
+  line-height: 40px;
 }
 
 h2 {
   color: #4A4A4A;
-  font-family: 'Nunito', sans-serif;
+  font-size: 25px;
+  line-height: 36px;
+}
+
+h3 {
+  color: #4A4A4A;
   font-size: 22px;
-  font-weight: 300;
-  line-height: 30px;
+  line-height: 32px;
+}
+
+h4 {
+  color: #4A4A4A;
+  font-size: 20px;
+  line-height: 28px;
 }
 
 h5 {
   color: #4A4A4A;
-  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+h6 {
+  color: #4A4A4A;
   font-size: 16px;
-  font-weight: 300;
-  line-height: 30px;
+  line-height: 24px;
 }
 
 .main-title {

@@ -52,11 +52,9 @@ export class GroupsComponent implements OnInit {
         this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
         this.currentPage = 1;
         this.generatePageList(this.numberOfPages);
-
-
       }
     );
-    this.groupService.loadGroups()
+    this.groupService.loadGroups(true)
   }
 
 
@@ -103,7 +101,7 @@ export class GroupsComponent implements OnInit {
         .subscribe(
           groupUid => {
             console.log("Group successfully created, uid: ", groupUid);
-            this.groupService.loadGroups();
+            this.groupService.loadGroups(true);
           },
           error => {
             console.log("Error creating group: ", error);

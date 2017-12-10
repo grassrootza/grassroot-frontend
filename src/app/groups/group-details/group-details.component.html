@@ -1,40 +1,52 @@
 <div class="card group-summary">
 
   <div class="card-body">
-    <h1>Group name</h1>
-    <p>Here goes group summary</p>
+
+    <h2>{{group.name}}</h2>
+    <div class="container">
+      <div class="row">
+        <div class="col-4">
+          <img class="img-fluid" src="assets/grassroot-02.png"/>
+        </div>
+
+        <div class="col-8">
+          <p>{{group.description}}</p>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>
 
 
 <nav class="navbar navbar-expand-lg navbar-light">
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-          aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#groupNavbars"
+          aria-controls="groupNavbars" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
-  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+  <div class="collapse navbar-collapse" id="groupNavbars">
     <ul class="main-nav navbar-nav mr-auto">
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'dashboard'}">
-        <a class="nav-link" [routerLink]="['dashboard']"> Group Dashboard </a>
+        <a class="nav-link" href="#" [routerLink]="['dashboard']"> Group Dashboard </a>
       </li>
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'activity'}">
-        <a class="nav-link" [routerLink]="['activity']"> Activity </a>
+        <a class="nav-link" href="#" [routerLink]="['activity']"> Activity </a>
       </li>
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'broadcast'}">
-        <a class="nav-link" [routerLink]="['broadcast']"> Broadcast </a>
+        <a class="nav-link" href="#" [routerLink]="['broadcast']"> Broadcast </a>
       </li>
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'members'}">
-        <a class="nav-link" [routerLink]="['members']"> Members </a>
+        <a class="nav-link" href="#" [routerLink]="['members']"> Members </a>
       </li>
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'settings'}">
-        <a class="nav-link" [routerLink]="['settings']"> Settings </a>
+        <a class="nav-link" href="#" [routerLink]="['settings']"> Settings </a>
       </li>
 
     </ul>
