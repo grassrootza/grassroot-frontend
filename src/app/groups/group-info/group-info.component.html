@@ -20,11 +20,11 @@
     </div>
     <div class="col-1">
       <div class="dropdown">
-        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
           Actions
         </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div class="dropdown-menu">
           <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">Call
             meeting</a>
           <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">Take vote

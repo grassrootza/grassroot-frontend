@@ -15,6 +15,7 @@ import {UserService} from "./user/user.service";
 import {HomeComponent} from './home/home.component';
 import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/common";
 import {GroupInfoComponent} from './groups/group-info/group-info.component';
+import {GroupDetailsComponent} from './groups/group-details/group-details.component';
 
 
 const routes: Routes = [
@@ -39,7 +40,8 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     LoginComponent,
     RegistrationComponent,
     HomeComponent,
-    GroupInfoComponent
+    GroupInfoComponent,
+    GroupDetailsComponent
   ],
   imports: [
     BrowserModule,
