@@ -18,11 +18,11 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <ul class="main-nav navbar-nav mr-auto">
 
-            <li class="nav-item" [ngClass]="{active: currentUrl === '/home'}">
+            <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/home')}">
               <a class="nav-link" [routerLink]="['/home']"> HOME <span class="sr-only">(current)</span> </a>
             </li>
 
-            <li class="nav-item" [ngClass]="{active: currentUrl === '/groups'}">
+            <li class="nav-item" [ngClass]="{active: currentUrl === '/groups' || currentUrl.startsWith('/group/')}">
               <a class="nav-link" [routerLink]="['/groups']"> GROUPS <span class="sr-only">(current)</span> </a>
             </li>
 
@@ -39,7 +39,7 @@
             <ul class="nav-item" class="navbar-nav mr-auto">
 
               <li class="nav-item dropdown notifications">
-                <a class="nav-link dropdown-toggle" href="http://example.com" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                   <img src="assets/icon-bell.png"/>
                 </a>
@@ -60,14 +60,16 @@
 
               <li><img height="50" class="image rounded-circle profile-image"
                        src="{{loggedInUserImageUrl}}/{{loggedInUser.uid}}"/></li>
+
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">{{loggedInUser.displayName}}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                   <a class="dropdown-item" href="#" (click)="logout();">Logout</a>
 
                 </div>
               </li>
+
             </ul>
           </div>
         </div>

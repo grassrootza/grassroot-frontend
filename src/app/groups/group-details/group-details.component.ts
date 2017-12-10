@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-group-details',
@@ -7,7 +8,15 @@ import {Component, OnInit} from '@angular/core';
 })
 export class GroupDetailsComponent implements OnInit {
 
-  constructor() {
+
+  public currentTab: string = "dashboard";
+
+  constructor(private router: Router, ar: ActivatedRoute) {
+    this.router.events.subscribe(ev => {
+      if (ev instanceof NavigationEnd) {
+        this.currentTab = ev.urlAfterRedirects.substring(ev.urlAfterRedirects.lastIndexOf("/") + 1);
+      }
+    });
   }
 
   ngOnInit() {

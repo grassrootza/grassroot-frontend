@@ -29,7 +29,6 @@ export class AppComponent {
       this.router.navigate(['/login']);
 
     this.router.events.subscribe(ev => {
-      console.log("Router event: ", ev);
       if (ev instanceof NavigationEnd)
         this.currentUrl = ev.url;
     });

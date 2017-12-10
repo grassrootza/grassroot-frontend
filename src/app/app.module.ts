@@ -14,8 +14,10 @@ import {RegistrationComponent} from './registration/registration.component';
 import {UserService} from "./user/user.service";
 import {HomeComponent} from './home/home.component';
 import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/common";
-import {GroupInfoComponent} from './groups/group-info/group-info.component';
+import {GroupInfoComponent} from './groups/group-list-row/group-info.component';
 import {GroupDetailsComponent} from './groups/group-details/group-details.component';
+import {GroupMembersComponent} from "./groups/group-details/group-members/group-members.component";
+import {GroupDashboardComponent} from "./groups/group-details/group-dashboard/group-dashboard.component";
 
 
 const routes: Routes = [
@@ -24,14 +26,22 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {path: 'register', component: RegistrationComponent},
   {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
-  {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]}
+  {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},
+  {
+    path: 'group/:id',
+    component: GroupDetailsComponent,
+    canActivate: [LoggedInGuard],
+    children: [
+      {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+      {path: 'dashboard', component: GroupDashboardComponent},
+      {path: 'members', component: GroupMembersComponent}
+    ]
+  }
 ];
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig(), http, options);
 }
-
-
 
 @NgModule({
   declarations: [
@@ -41,7 +51,9 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     RegistrationComponent,
     HomeComponent,
     GroupInfoComponent,
-    GroupDetailsComponent
+    GroupDetailsComponent,
+    GroupDashboardComponent,
+    GroupMembersComponent
   ],
   imports: [
     BrowserModule,

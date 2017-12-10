@@ -1,3 +1,48 @@
-<p>
-  group-details works!
-</p>
+<div class="card group-summary">
+
+  <div class="card-body">
+    <h1>Group name</h1>
+    <p>Here goes group summary</p>
+  </div>
+</div>
+
+
+<nav class="navbar navbar-expand-lg navbar-light">
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+          aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="main-nav navbar-nav mr-auto">
+
+      <li class="nav-item" [ngClass]="{active: currentTab === 'dashboard'}">
+        <a class="nav-link" [routerLink]="['dashboard']"> Group Dashboard </a>
+      </li>
+
+      <li class="nav-item" [ngClass]="{active: currentTab === 'activity'}">
+        <a class="nav-link" [routerLink]="['activity']"> Activity </a>
+      </li>
+
+      <li class="nav-item" [ngClass]="{active: currentTab === 'broadcast'}">
+        <a class="nav-link" [routerLink]="['broadcast']"> Broadcast </a>
+      </li>
+
+      <li class="nav-item" [ngClass]="{active: currentTab === 'members'}">
+        <a class="nav-link" [routerLink]="['members']"> Members </a>
+      </li>
+
+      <li class="nav-item" [ngClass]="{active: currentTab === 'settings'}">
+        <a class="nav-link" [routerLink]="['settings']"> Settings </a>
+      </li>
+
+    </ul>
+
+  </div>
+</nav>
+
+
+<div class="tab-area">
+  <router-outlet></router-outlet>
+</div>
