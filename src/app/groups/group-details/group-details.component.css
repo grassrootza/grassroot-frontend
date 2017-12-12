@@ -19,3 +19,41 @@
   color: #2CBC4C !important;
   border-bottom: solid #2CBC4C 2px !important;
 }
+
+.group-description {
+  color: #7A7D8C;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+strong {
+  font-weight: bold;
+}
+
+.group-title {
+  margin-bottom: 1rem;
+}
+
+.group-info {
+  margin-top: 1rem;
+}
+
+.group-info img {
+  margin-right: 0.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.my-role {
+  font-size: 0.8rem;
+  padding: 0.4rem;
+  margin-left: 0.5rem;
+}
+
+.broadcast-btn {
+  width: 100%;
+}
+
+.join-code {
+  font-size: 1.3rem;
+  line-height: 2rem;
+}

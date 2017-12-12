@@ -7,11 +7,13 @@ import {GroupInfo} from "./model/group-info.model";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {UserService} from "../user/user.service";
 import {Headers, RequestOptions, URLSearchParams} from "@angular/http";
+import {Group} from "./model/group.model";
 
 @Injectable()
 export class GroupService {
 
   groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
+  groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
@@ -45,9 +47,19 @@ export class GroupService {
     }
   }
 
+  loadGroupDetails(groupUid: string): Observable<Group> {
+
+    const fullUrl = this.groupDetailsUrl + "/" + groupUid;
+    return this.authHttp.get(fullUrl)
+      .map(resp => resp.json())
+      .map(grJson => {
+        console.log("Groupo details json: ", grJson);
+        return Group.fromJson(grJson);
+      });
+
+  }
+
   createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string): Observable<string> {
-
-
 
     const fullUrl = this.groupCreateUrl;
 

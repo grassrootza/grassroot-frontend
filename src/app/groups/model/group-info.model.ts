@@ -1,6 +1,7 @@
 import {DateTimeUtils} from "../../DateTimeUtils";
 import {TaskInfo} from "../../task/task.model";
 import {GroupRef} from "./group-ref.model";
+import {GroupRole} from "./group-role";
 
 export class GroupInfo {
 
@@ -22,21 +23,7 @@ export class GroupInfo {
   }
 
   public getFormattedRoleName(): string {
-    if (this.role != null){
-      if(this.role === 'ROLE_ORDINARY_MEMBER')
-        return 'MEMBER';
-      else if(this.role === 'ROLE_COMMITTEE_MEMBER')
-        return 'COMMITTEE';
-      else if(this.role === 'ROLE_GROUP_ORGANIZER')
-        return 'ORGANIZER';
-
-      /*
-        So, for 'member' it is 'ROLE_ORDINARY_MEMBER'
-        for committee it is 'ROLE_COMMITTEE_MEMBER'
-        for organizer it is 'ROLE_GROUP_ORGANIZER'
-        */
-    }
-    else return this.role;
+    return GroupRole[this.role];
   }
 
   public getFormattedEventTime(): string {

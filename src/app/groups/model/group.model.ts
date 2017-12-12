@@ -1,12 +1,19 @@
 import {User} from "../../user/user.model";
+import {GroupRole} from "./group-role";
+import {DatePipe} from "@angular/common";
 
 export class Group {
 
-  constructor(public name: string,
+  public formattedCreationTime: string = "";
+
+  constructor(public uid: string,
+              public name: string,
               public description: string,
-              public creator: string,
+              public creatorUid: string,
+              public creatorName: string,
+              public creationTime: Date,
+              public discoverable: boolean,
               public memberCount: number,
-              public uid: string,
               public hasTasks: boolean,
               public joinCode: string,
               public lastChangeDescription: string,
@@ -16,6 +23,7 @@ export class Group {
               public paidFor: boolean,
               public permissions: string[],
               public role: string) {
+    this.formattedCreationTime = new DatePipe("en").transform(this.creationTime, "dd MMM, y");
   }
 
   public hasPermission(permission: string) {
@@ -38,11 +46,14 @@ export class Group {
     }
 
     return new Group(
-      json.groupName,
-      json.description,
-      json.groupCreator,
-      json.groupMemberCount,
       json.groupUid,
+      json.name,
+      json.description,
+      json.groupCreatorUid,
+      json.groupCreatorName,
+      new Date(json.groupCreationTimeMillis),
+      json.discoverable,
+      json.groupMemberCount,
       json.hasTasks,
       json.joinCode,
       json.lastChangeDescription,
@@ -51,8 +62,12 @@ export class Group {
       members,
       json.paidFor,
       permissions,
-      json.role
+      json.userRole
     );
+  }
+
+  public getFormattedRoleName(): string {
+    return GroupRole[this.role];
   }
 
 }

@@ -8,6 +8,7 @@
     "help": "Help",
     "logout": "Logout"
   },
+
   "footer": {
     "aboutUs": "About Us",
     "news": "News",
@@ -86,6 +87,23 @@
     }
 
   },
+  "group": {
+    "creationLabel": "Created by ",
+    "creationInfo": "{{creatorName}} at {{formattedCreationTime}}",
+    "public": "Public group",
+    "private": "Private group",
+    "myRole": "My role:",
+    "sendBroadcast": "Send new broadcast",
+    "joinCode": "Join code",
+    "nav": {
+      "dashboard": "Group Dashboard",
+      "activity": "Activity",
+      "broadcast": "Broadcast",
+      "members": "Members",
+      "settings": "Settings"
+    }
+  },
+
   "login": {
     "title": "Login",
     "username": "Username",

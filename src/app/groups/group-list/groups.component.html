@@ -24,7 +24,7 @@
 
     <app-group-info *ngFor="let gr of pinnedGroups"
                     [group]="gr"
-                    [extendedInfoVisible]="true"
+                    [extendedInfoVisible]="pinnedGroups.length == 1"
                     (pinToggled)="toggleGroupPin($event)">
     </app-group-info>
 

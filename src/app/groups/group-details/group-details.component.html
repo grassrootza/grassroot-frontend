@@ -1,60 +1,107 @@
-<div class="card group-summary">
+<div *ngIf="group != null">
 
-  <div class="card-body">
+  <div class="card group-summary">
 
-    <h2>{{group.name}}</h2>
-    <div class="container">
+    <div class="card-body">
+
+      <h2 class="group-title">{{group.name}}</h2>
+
       <div class="row">
-        <div class="col-4">
-          <img class="img-fluid" src="assets/grassroot-02.png"/>
+        <div class="col-md-4">
+          <img class="img-fluid"
+               src="{{baseUrl}}/api/group/fetch/flyer?typeOfFile=JPEG&groupUid={{group.uid}}&color=true&language=en"/>
         </div>
 
-        <div class="col-8">
+        <div class="col-md-8 group-description">
           <p>{{group.description}}</p>
-        </div>
+          <div class="row">
+            <div class="col-md-7">
+              <div class="group-info creation-info">
+                <strong>{{'group.creationLabel' | translate}}</strong>
+                <span>{{'group.creationInfo' | translate:group}}</span>
+              </div>
 
+              <div *ngIf="group.discoverable" class="group-info">
+                <img src="assets/icon_lock_open.png"/> <strong>{{'group.public' | translate}}</strong>
+              </div>
+              <div *ngIf="!group.discoverable" class="group-info"> {{'group.private' | translate}}</div>
+
+              <div class="group-info">
+                <strong>{{'group.myRole' | translate}} </strong>
+                <span class="my-role badge badge-success">
+                    {{group.getFormattedRoleName()}}
+                  </span>
+              </div>
+
+            </div>
+            <div class="col-md-5 text-right">
+
+              <div class="group-info">
+                <a href="#" class="btn btn-success broadcast-btn">
+                  <img src="assets/icon_megaphone.png"/>
+                  {{'group.sendBroadcast' | translate}}
+                </a>
+              </div>
+
+              <div class="group-info">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <strong>{{'group.joinCode' | translate}}</strong>
+                    <div class="join-code">
+                      {{group.joinCode}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
-</div>
 
 
-<nav class="navbar navbar-expand-lg navbar-light">
+  <nav class="navbar navbar-expand-lg navbar-light">
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#groupNavbars"
-          aria-controls="groupNavbars" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#groupNavbars"
+            aria-controls="groupNavbars" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div class="collapse navbar-collapse" id="groupNavbars">
-    <ul class="main-nav navbar-nav mr-auto">
+    <div class="collapse navbar-collapse" id="groupNavbars">
+      <ul class="main-nav navbar-nav mr-auto">
 
-      <li class="nav-item" [ngClass]="{active: currentTab === 'dashboard'}">
-        <a class="nav-link" href="#" [routerLink]="['dashboard']"> Group Dashboard </a>
-      </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'dashboard'}">
+          <a class="nav-link" href="#" [routerLink]="['dashboard']" [translate]="'group.nav.dashboard'"> Group
+            Dashboard </a>
+        </li>
 
-      <li class="nav-item" [ngClass]="{active: currentTab === 'activity'}">
-        <a class="nav-link" href="#" [routerLink]="['activity']"> Activity </a>
-      </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'activity'}">
+          <a class="nav-link" href="#" [routerLink]="['activity']" [translate]="'group.nav.activity'"> Activity </a>
+        </li>
 
-      <li class="nav-item" [ngClass]="{active: currentTab === 'broadcast'}">
-        <a class="nav-link" href="#" [routerLink]="['broadcast']"> Broadcast </a>
-      </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'broadcast'}">
+          <a class="nav-link" href="#" [routerLink]="['broadcast']" [translate]="'group.nav.broadcast'"> Broadcast </a>
+        </li>
 
-      <li class="nav-item" [ngClass]="{active: currentTab === 'members'}">
-        <a class="nav-link" href="#" [routerLink]="['members']"> Members </a>
-      </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'members'}">
+          <a class="nav-link" href="#" [routerLink]="['members']" [translate]="'group.nav.members'"> Members </a>
+        </li>
 
-      <li class="nav-item" [ngClass]="{active: currentTab === 'settings'}">
-        <a class="nav-link" href="#" [routerLink]="['settings']"> Settings </a>
-      </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'settings'}">
+          <a class="nav-link" href="#" [routerLink]="['settings']" [translate]="'group.nav.settings'"> Settings </a>
+        </li>
 
-    </ul>
+      </ul>
 
+    </div>
+  </nav>
+
+
+  <div class="tab-area">
+    <router-outlet></router-outlet>
   </div>
-</nav>
 
-
-<div class="tab-area">
-  <router-outlet></router-outlet>
 </div>
