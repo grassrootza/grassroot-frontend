@@ -21,6 +21,9 @@ import {GroupDashboardComponent} from "./groups/group-details/group-dashboard/gr
 import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {GroupActivityComponent} from './groups/group-details/group-activity/group-activity.component';
+import {GroupBroadcastComponent} from './groups/group-details/group-broadcast/group-broadcast.component';
+import {GroupSettingsComponent} from './groups/group-details/group-settings/group-settings.component';
 
 
 const routes: Routes = [
@@ -37,7 +40,10 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       {path: 'dashboard', component: GroupDashboardComponent, canActivate: [LoggedInGuard]},
-      {path: 'members', component: GroupMembersComponent, canActivate: [LoggedInGuard]}
+      {path: 'activity', component: GroupActivityComponent, canActivate: [LoggedInGuard]},
+      {path: 'broadcast', component: GroupBroadcastComponent, canActivate: [LoggedInGuard]},
+      {path: 'members', component: GroupMembersComponent, canActivate: [LoggedInGuard]},
+      {path: 'settings', component: GroupSettingsComponent, canActivate: [LoggedInGuard]}
     ]
   }
 ];
@@ -60,7 +66,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupInfoComponent,
     GroupDetailsComponent,
     GroupDashboardComponent,
-    GroupMembersComponent
+    GroupMembersComponent,
+    GroupActivityComponent,
+    GroupBroadcastComponent,
+    GroupSettingsComponent
   ],
   imports: [
     BrowserModule,
