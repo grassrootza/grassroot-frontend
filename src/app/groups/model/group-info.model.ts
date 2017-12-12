@@ -1,7 +1,8 @@
 import {DateTimeUtils} from "../../DateTimeUtils";
-import {TaskInfo} from "../../task/task.model";
+import {TaskInfo} from "../../task/task-info.model";
 import {GroupRef} from "./group-ref.model";
 import {GroupRole} from "./group-role";
+import {TaskType} from "../../task/task-type";
 
 export class GroupInfo {
 
@@ -10,9 +11,9 @@ export class GroupInfo {
               public memberCount: number,
               public uid: string,
               public permissions: string[],
-              public role: string,
+              public role: GroupRole,
               public nextEventTime: any,
-              public nextEventType: string,
+              public nextEventType: TaskType,
               public pinned: boolean,
               public tasks: TaskInfo[],
               public subGroups: GroupRef[]) {
@@ -34,11 +35,11 @@ export class GroupInfo {
 
   public getEventIconName() {
     if (this.nextEventType != null) {
-      if (this.nextEventType == "MEETING")
+      if (this.nextEventType == TaskType.MEETING)
         return "icon_meeting.png";
-      else if (this.nextEventType == "VOTE")
+      else if (this.nextEventType == TaskType.VOTE)
         return "icon_vote.png";
-      else if (this.nextEventType == "TODO")
+      else if (this.nextEventType == TaskType.TODO)
         return "icon_todo.png";
     }
     return "";
@@ -70,9 +71,9 @@ export class GroupInfo {
       json.memberCount,
       json.groupUid,
       permissions,
-      json.userRole,
+      GroupRole[<string>json.userRole],
       json.nextEventTime ? DateTimeUtils.getDateFromJavaInstant(json.nextEventTime) : null,
-      json.nextEventType,
+      TaskType[<string>json.nextEventType],
       json.pinned,
       taskList,
       subGroupList
