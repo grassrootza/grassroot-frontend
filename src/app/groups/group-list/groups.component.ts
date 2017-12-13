@@ -120,13 +120,14 @@ export class GroupsComponent implements OnInit {
     }
   }
 
-  filterGroupsByRole(role: String, roleDisplayName: String): void{
-    this.filteredGroups = this.groups.filter(group =>  group.role === role );
+  filterGroupsByRole(roleDisplayName: String): void{
+    console.log("filter");
+    this.filteredGroups = this.groups.filter(group =>  group.role === roleDisplayName );
     this.totalCount = this.filteredGroups.length;
     this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
     this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
     this.currentPage = 1;
-    this.pickedRoleFilter = role;
+    this.pickedRoleFilter = roleDisplayName;
 
     this.generatePageList(this.numberOfPages);
     $("#dropdownMenuButton").html(roleDisplayName);

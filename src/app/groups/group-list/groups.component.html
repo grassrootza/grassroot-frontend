@@ -14,11 +14,11 @@
 
     <div class="container group-info-header">
       <div class="row">
-        <div class="col-3">{{ 'groups.pinnedGroups.name' | translate }}</div>
-        <div class="col-2">{{ 'groups.pinnedGroups.role' | translate }}</div>
-        <div class="col-3">{{ 'groups.pinnedGroups.upNext' | translate }}</div>
-        <div class="col-2">{{ 'groups.pinnedGroups.members' | translate }}</div>
-        <div class="col-2"></div>
+        <div class="col-sm-3  d-block">{{ 'groups.pinnedGroups.name' | translate }}</div>
+        <div class="col-sm-2 d-none d-md-block">{{ 'groups.pinnedGroups.role' | translate }}</div>
+        <div class="col-sm-3 d-none d-md-block">{{ 'groups.pinnedGroups.upNext' | translate }}</div>
+        <div class="col-sm-2 d-none d-md-block">{{ 'groups.pinnedGroups.members' | translate }}</div>
+        <div class="col-sm-2 d-none d-md-block"></div>
       </div>
     </div>
 
@@ -38,24 +38,35 @@
 </h2>
 
 <div class="form-inline filter">
-    <label class="mr-sm-2" for="inlineRolePick">Role</label>
-    <div class="dropdown" id="inlineRolePick">
+    <label class="mr-md-2 " for="inlineRolePick">Role</label>
+
+  <div class="w-100 d-sm-block d-md-none"></div>
+
+  <div class="dropdown " id="inlineRolePick">
       <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
         {{ 'groups.filter.selectRole' | translate }}
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_COMMITTEE_MEMBER','Commitee')">{{ 'groups.filter.commitee' | translate }}</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_ORDINARY_MEMBER', 'Member')">{{ 'groups.filter.member' | translate }}</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_GROUP_ORGANIZER', 'Organizer')">{{ 'groups.filter.organizer' | translate }}</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('Commitee')">{{ 'groups.filter.commitee' | translate }}</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('Member')">{{ 'groups.filter.member' | translate }}</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('Organizer')">{{ 'groups.filter.organizer' | translate }}</a>
       </div>
     </div>
 
-    <label class="mr-sm-2" for="inlineKeywordPick">{{ 'groups.filter.keyword' | translate }} </label>
-    <input type="text" class="form-control" id="inlineKeywordPick" placeholder="{{ 'groups.filter.keywordPlaceholder' | translate }}"
+  <div class="w-100 d-sm-block d-md-none"></div>
+
+
+  <label class="mr-md-2 " for="inlineKeywordPick">{{ 'groups.filter.keyword' | translate }} </label>
+
+  <div class="w-100 d-sm-block d-md-none"></div>
+
+  <input type="text" class="form-control " id="inlineKeywordPick" placeholder="{{ 'groups.filter.keywordPlaceholder' | translate }}"
            name="name" (keyup)="filterByKeyword()">
 
-    <button type="button" class="btn btn-success clear-filters" (click)="clearAllFilters()">{{ 'groups.filter.clear' | translate }}</button>
+  <div class="w-100 d-sm-block d-md-none"></div>
+
+  <button type="button" class="btn btn-success clear-filters mt-sm-1" (click)="clearAllFilters()">{{ 'groups.filter.clear' | translate }}</button>
 </div>
 
 
@@ -64,11 +75,12 @@
 
     <div class="container group-info-header">
       <div class="row">
-        <div class="col-3">{{ 'groups.allGroups.name' | translate }}</div>
-        <div class="col-2">{{ 'groups.allGroups.role' | translate }}</div>
-        <div class="col-3">{{ 'groups.allGroups.upNext' | translate }}</div>
-        <div class="col-2">{{ 'groups.allGroups.members' | translate }}</div>
-        <div class="col-2"></div>
+        <div class="col-md-2 col-lg-3 d-block">{{ 'groups.allGroups.name' | translate }}</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">{{ 'groups.allGroups.role' | translate }}</div>
+        <div class="col-md-3 col-lg-3 d-none d-md-block">{{ 'groups.allGroups.upNext' | translate }}</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">{{ 'groups.allGroups.members' | translate }}</div>
+        <div class="col-md-2 col-lg-1 d-none d-md-block"></div>
+        <div class="col-md-1 col-lg-1 d-none d-md-block"></div>
       </div>
     </div>
 
@@ -111,12 +123,12 @@
               (ngSubmit)="createGroup()">
 
           <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-sm-6">
               <label>{{ 'groups.createNewModal.groupName' | translate }}</label>
               <input type="text" class="form-control" placeholder="{{ 'groups.createNewModal.groupName' | translate }}"
                      name="name" [formControl]="createGroupForm.controls['name']">
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-sm-4">
               <label>{{ 'groups.createNewModal.network' | translate }}</label>
               <select class="form-control">
                 <option>-</option>
@@ -130,11 +142,11 @@
           </div>
 
           <div class="form-row">
-            <div class="form-group col-md-2">
+            <div class="form-group col-sm-2">
               <label>{{ 'groups.createNewModal.groupPrivacy.title' | translate }}</label>
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-sm-4">
               <div class="form-check form-check-inline">
                 <label class="form-check-label">
                   <input class="form-check-input" type="radio" checked value="true"
@@ -144,7 +156,7 @@
               </div>
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-sm-4">
               <div class="form-check form-check-inline">
                 <label class="form-check-label">
                   <input class="form-check-input" type="radio" value="false"
@@ -157,10 +169,10 @@
           </div>
 
           <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-sm-6">
               <label>{{ 'groups.createNewModal.reminders.title' | translate }}</label>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-sm-4">
               <select class="form-control" name="reminderMinutes"
                       [formControl]="createGroupForm.controls['reminderMinutes']">
                 <option value="2880">{{ 'groups.createNewModal.reminders.twoDays' | translate }}</option>
@@ -173,10 +185,10 @@
           </div>
 
           <div class="form-row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-sm-6">
               <label>{{ 'groups.createNewModal.permission.title' | translate }}</label>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-sm-4">
               <select class="form-control" name="permissionTemplate"
                       [formControl]="createGroupForm.controls['permissionTemplate']">
                 <option value="DEFAULT_GROUP">{{ 'groups.createNewModal.permission.any' | translate }}</option>
