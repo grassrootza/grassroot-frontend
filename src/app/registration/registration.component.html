@@ -1,45 +1,50 @@
-<div class="card" style="width: 50rem;">
+<div class="row">
+  <div class="col-12 col-lg-8">
+    <div class="card">
 
-  <div class="card-header">
-    {{ 'registration.title' | translate }}
-  </div>
-
-  <div class="card-body">
-
-    <form>
-
-      <div class="form-group">
-        <label for="username">{{ 'registration.username' | translate }}</label>
-        <input type="text" class="form-control" name="username" id="username" placeholder="{{ 'registration.usernamePlaceholder' | translate }}" #username>
+      <div class="card-header">
+        {{ 'registration.title' | translate }}
       </div>
 
-      <div class="form-group">
-        <label for="phoneNumber">{{ 'registration.phoneNumber' | translate }}</label>
-        <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="{{ 'registration.phoneNumberPlaceholder' | translate }}"
-               #phoneNumber>
+      <div class="card-body">
+
+        <form>
+
+          <div class="form-group">
+            <label for="username">{{ 'registration.username' | translate }}</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="{{ 'registration.usernamePlaceholder' | translate }}" #username>
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNumber">{{ 'registration.phoneNumber' | translate }}</label>
+            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="{{ 'registration.phoneNumberPlaceholder' | translate }}"
+                   #phoneNumber>
+          </div>
+
+
+          <div class="form-group">
+            <label for="password">{{ 'registration.password' | translate }}</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="{{ 'registration.passwordPlaceholder' | translate }}" #password>
+          </div>
+
+          <button type="submit" class="btn btn-primary"
+                  (click)="register(username.value, phoneNumber.value, password.value)"> {{ 'action.signUp' | translate }}
+          </button>
+
+        </form>
+
+
+        <div class="alert alert-danger my-lg-3" role="alert" *ngIf="message">
+          {{ message }}
+        </div>
+
       </div>
 
-
-      <div class="form-group">
-        <label for="password">{{ 'registration.password' | translate }}</label>
-        <input type="password" class="form-control" name="password" id="password" placeholder="{{ 'registration.passwordPlaceholder' | translate }}" #password>
-      </div>
-
-      <button type="submit" class="btn btn-primary"
-              (click)="register(username.value, phoneNumber.value, password.value)"> {{ 'action.signUp' | translate }}
-      </button>
-
-    </form>
-
-
-    <div class="alert alert-danger my-lg-3" role="alert" *ngIf="message">
-      {{ message }}
     </div>
 
+    <a class="nav-link" [routerLink]="['/login']">{{ 'registration.haveAccount' | translate }}</a>
   </div>
-
 </div>
 
-<a class="nav-link" [routerLink]="['/login']">{{ 'registration.haveAccount' | translate }}</a>
 
 
