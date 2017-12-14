@@ -56,11 +56,13 @@ export class GroupsComponent implements OnInit {
         this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
         this.currentPage = 1;
         this.generatePageList(this.numberOfPages);
+
+        setTimeout(function() {
+          this.spinnerService.hide();
+        }.bind(this), 1000);
       }
     );
-    setTimeout(function() {
-      this.spinnerService.hide();
-    }.bind(this), 1000);
+
     this.groupService.loadGroups(true);
   }
 
