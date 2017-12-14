@@ -25,6 +25,7 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {GroupActivityComponent} from './groups/group-details/group-activity/group-activity.component';
 import {GroupBroadcastComponent} from './groups/group-details/group-broadcast/group-broadcast.component';
 import {GroupSettingsComponent} from './groups/group-details/group-settings/group-settings.component';
+import {TaskService} from "./task/task.service";
 
 
 const routes: Routes = [
@@ -98,7 +99,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       deps: [Http, RequestOptions]
     },
     GroupService,
-    UserService
+    UserService,
+    TaskService
   ],
   bootstrap: [AppComponent]
 })

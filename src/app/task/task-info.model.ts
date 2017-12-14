@@ -1,6 +1,7 @@
+import {DateTimeUtils} from "../DateTimeUtils";
 import {TaskType} from "./task-type";
 
-export class Task {
+export class TaskInfo {
 
   constructor(public uid: string,
               public name: string,
@@ -9,6 +10,7 @@ export class Task {
   }
 
   public getEventIconName(): string {
+
 
     if (this.type == TaskType.MEETING)
       return "icon_meeting.png";
@@ -21,11 +23,11 @@ export class Task {
   }
 
   public static fromJson(json) {
-    return new Task(
+    return new TaskInfo(
       json.taskUid,
       json.title,
-      TaskType[<string>json.type],
-      new Date(json.deadlineMillis)
+      TaskType[<string>json.taskType],
+      DateTimeUtils.getDateFromJavaInstant(json.deadlineTime)
     )
   }
 

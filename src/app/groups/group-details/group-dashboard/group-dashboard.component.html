@@ -1,3 +1,22 @@
-<h2>
-  Dashboard content goes here
-</h2>
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5>
+            <img src="assets/icon_meeting.png"/>
+            Meetings
+          </h5>
+          <ul>
+            <li *ngFor="let meeting of meetings">
+              {{meeting.name}}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
