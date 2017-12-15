@@ -79,7 +79,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     HttpModule,
     HttpClientModule,
-    Ng4LoadingSpinnerModule.forRoot(),
+    Ng4LoadingSpinnerModule,
     RouterModule.forRoot(routes), // <-- routes
     TranslateModule.forRoot({
       loader: {

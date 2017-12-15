@@ -57,9 +57,10 @@ export class GroupsComponent implements OnInit {
         this.currentPage = 1;
         this.generatePageList(this.numberOfPages);
 
+        // todo: make this not appear at all if already retrieved groups (i.e., once cached)
         setTimeout(function() {
           this.spinnerService.hide();
-        }.bind(this), 1000);
+        }.bind(this), 700);
       }
     );
 
