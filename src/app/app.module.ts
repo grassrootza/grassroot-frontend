@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Http, HttpModule, RequestOptions} from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 
 import {AppComponent} from './app.component';
 import {GroupsComponent} from './groups/group-list/groups.component';
@@ -78,6 +79,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReactiveFormsModule,
     HttpModule,
     HttpClientModule,
+    Ng4LoadingSpinnerModule,
     RouterModule.forRoot(routes), // <-- routes
     TranslateModule.forRoot({
       loader: {

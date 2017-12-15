@@ -22,6 +22,7 @@
   "groups": {
     "title": "Groups",
     "create": "Create Group",
+    "loading": "Loading groups",
     "filter": {
       "selectRole": "Select role",
       "commitee": "Commitee",

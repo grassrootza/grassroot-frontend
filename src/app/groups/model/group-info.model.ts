@@ -3,6 +3,7 @@ import {TaskInfo} from "../../task/task-info.model";
 import {GroupRef} from "./group-ref.model";
 import {GroupRole} from "./group-role";
 import {TaskType} from "../../task/task-type";
+import {DatePipe} from "@angular/common";
 
 export class GroupInfo {
 
@@ -29,7 +30,7 @@ export class GroupInfo {
 
   public getFormattedEventTime(): string {
     if (this.nextEventTime != null)
-      return this.nextEventTime.toLocaleString();
+      return new DatePipe("en").transform(this.nextEventTime,"d MMM y, hh:MM a");
     else return "";
   }
 

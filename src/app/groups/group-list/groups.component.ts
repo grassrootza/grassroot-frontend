@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {GroupService} from "../group.service";
 import {GroupInfo} from "../model/group-info.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 
 declare var $: any;
 
@@ -28,7 +29,8 @@ export class GroupsComponent implements OnInit {
 
   public createGroupForm: FormGroup;
 
-  constructor(private groupService: GroupService, private formBuilder: FormBuilder) {
+  constructor(private groupService: GroupService, private formBuilder: FormBuilder,
+    private spinnerService: Ng4LoadingSpinnerService) {
 
     this.createGroupForm = formBuilder.group({
       'name': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
@@ -40,9 +42,11 @@ export class GroupsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.spinnerService.show();
     this.groupService.groupInfoList.subscribe(
       groupList => {
         console.log("Groups loaded: ", groupList);
+        
         this.groups = groupList;
         this.resolvePinnedGroups();
 
@@ -52,9 +56,15 @@ export class GroupsComponent implements OnInit {
         this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
         this.currentPage = 1;
         this.generatePageList(this.numberOfPages);
+
+        // todo: make this not appear at all if already retrieved groups (i.e., once cached)
+        setTimeout(function() {
+          this.spinnerService.hide();
+        }.bind(this), 700);
       }
     );
-    this.groupService.loadGroups(true)
+
+    this.groupService.loadGroups(true);
   }
 
 
