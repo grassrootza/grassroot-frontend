@@ -1,12 +1,14 @@
 export class User {
-
   constructor(public uid: String,
               public displayName: string,
-              public phoneNumber: string,) {
+              public phoneNumber: string,
+              public token: string) {
   }
+}
 
 
-  public static fromJson(json) {
-    return new User(json.uid, json.displayName, json.phoneNumber)
+export class AuthorizationResponse {
+
+  constructor(public user: User, public errorCode: string) {
   }
 }

@@ -1,65 +1,58 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {Http, RequestOptions, Response, URLSearchParams} from "@angular/http";
 import {environment} from "../../environments/environment";
-import {tokenNotExpired} from "angular2-jwt";
-import {User} from "./user.model";
+import {AuthorizationResponse, User} from "./user.model";
 import {Router} from "@angular/router";
+import {HttpClient, HttpParams} from "@angular/common/http";
 
 @Injectable()
 export class UserService {
 
-  private registerUrl = environment.backendAppUrl + "/api/user/web/register";
+  private registerUrl = environment.backendAppUrl + "/api/auth/web/register";
   private loginUrl: string = environment.backendAppUrl + "/api/auth/login-password";
 
   private _loggedInUser: User = null;
   public loggedInUser: EventEmitter<User> = new EventEmitter(null);
 
-  constructor(private http: Http, private router: Router) {
+  constructor(private httpClient: HttpClient, private router: Router) {
 
     console.log("Initializing user service");
-    if (tokenNotExpired() && localStorage.getItem("loggedInUser") != null) {
+    if (localStorage.getItem("loggedInUser") != null) {
       this._loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"))
     }
   }
 
-  register(username: string, phoneNumber: string, password: string): Observable<Response> {
+  register(username: string, phoneNumber: string, password: string): Observable<AuthorizationResponse> {
 
-    var rop = new RequestOptions();
-    const params = new URLSearchParams();
+    const params = new HttpParams();
     params.append("username", username);
     params.append("phoneNumber", phoneNumber);
     params.append("password", password);
-    rop.params = params;
-
-    return this.http.get(this.registerUrl, rop);
+    return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params});
   }
 
 
-  login(user: string, password: string): Observable<User> {
+  login(user: string, password: string): Observable<AuthorizationResponse> {
 
-    var rop = new RequestOptions();
-    const params = new URLSearchParams();
-    params.append("phoneNumber", user);
-    params.append("password", password);
-    rop.params = params;
+    let params = new HttpParams()
+      .set('phoneNumber', user)
+      .set('password', password);
 
-    return this.http.get(this.loginUrl, rop)
-      .map(resp => resp.json())
-      .map(json => {
+    return this.httpClient.get<AuthorizationResponse>(this.loginUrl, {params: params})
+      .map(
+        authResponse => {
+          console.log("AuthResponse: ", authResponse);
+          if (authResponse.errorCode == null) {
 
-        const token = json.data.token;
-        const msisdn = json.data.msisdn;
-        const userUid = json.data.userUid;
-        const displayName = json.data.displayName;
-        localStorage.setItem("token", token);
-
-
-        this._loggedInUser = new User(userUid, displayName, msisdn);
-        this.loggedInUser.emit(this._loggedInUser);
-        localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
-        return this._loggedInUser;
-      })
+            const token = authResponse.user.token;
+            localStorage.setItem("token", token);
+            this._loggedInUser = authResponse.user;
+            this.loggedInUser.emit(this._loggedInUser);
+            localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
+          }
+          return authResponse;
+        }
+      );
   }
 
 

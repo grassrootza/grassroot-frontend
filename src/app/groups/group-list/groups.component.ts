@@ -46,7 +46,7 @@ export class GroupsComponent implements OnInit {
     this.groupService.groupInfoList.subscribe(
       groupList => {
         console.log("Groups loaded: ", groupList);
-        
+
         this.groups = groupList;
         this.resolvePinnedGroups();
 
@@ -81,7 +81,7 @@ export class GroupsComponent implements OnInit {
   }
 
   pinGroup(gr: GroupInfo) {
-    this.groupService.pinGroup(gr.uid).subscribe(
+    this.groupService.pinGroup(gr.groupUid).subscribe(
       success => {
         console.log("pin group success: ", success);
         gr.pinned = true;
@@ -90,7 +90,7 @@ export class GroupsComponent implements OnInit {
   }
 
   unpinGroup(gr: GroupInfo) {
-    this.groupService.unpinGroup(gr.uid).subscribe(
+    this.groupService.unpinGroup(gr.groupUid).subscribe(
       success => {
         console.log("unpin group success: ", success);
         gr.pinned = false;
@@ -110,7 +110,7 @@ export class GroupsComponent implements OnInit {
       this.groupService.createGroup(groupName, groupDescription, groupPermission, reminderMinutes, discoverable)
         .subscribe(
           groupUid => {
-            console.log("Group successfully created, uid: ", groupUid);
+            console.log("Group successfully created, groupUid: ", groupUid);
             this.groupService.loadGroups(true);
           },
           error => {
@@ -132,7 +132,7 @@ export class GroupsComponent implements OnInit {
 
   filterGroupsByRole(roleDisplayName: String): void{
     console.log("filter");
-    this.filteredGroups = this.groups.filter(group =>  group.role === roleDisplayName );
+    this.filteredGroups = this.groups.filter(group => group.userRole === roleDisplayName);
     this.totalCount = this.filteredGroups.length;
     this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
     this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
@@ -154,7 +154,7 @@ export class GroupsComponent implements OnInit {
     }
 
     if(this.pickedRoleFilter !== ''){
-      this.filteredGroups = this.filteredGroups.filter(group =>  group.role === this.pickedRoleFilter );
+      this.filteredGroups = this.filteredGroups.filter(group => group.userRole === this.pickedRoleFilter);
     }
     this.totalCount = this.filteredGroups.length;
     this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);

@@ -1,15 +1,13 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {Http, HttpModule, RequestOptions} from '@angular/http';
 import {RouterModule, Routes} from '@angular/router';
-import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
+import {Ng4LoadingSpinnerModule} from 'ng4-loading-spinner';
 
 import {AppComponent} from './app.component';
 import {GroupsComponent} from './groups/group-list/groups.component';
 import {LoginComponent} from './login/login.component';
 import {LoggedInGuard} from './logged-in.guard';
-import {AuthConfig, AuthHttp} from "angular2-jwt";
 import {GroupService} from "./groups/group.service";
 import {RegistrationComponent} from './registration/registration.component';
 import {UserService} from "./user/user.service";
@@ -26,6 +24,7 @@ import {GroupActivityComponent} from './groups/group-details/group-activity/grou
 import {GroupBroadcastComponent} from './groups/group-details/group-broadcast/group-broadcast.component';
 import {GroupSettingsComponent} from './groups/group-details/group-settings/group-settings.component';
 import {TaskService} from "./task/task.service";
+import {JwtModule} from "@auth0/angular-jwt";
 
 
 const routes: Routes = [
@@ -50,9 +49,7 @@ const routes: Routes = [
   }
 ];
 
-export function authHttpServiceFactory(http: Http, options: RequestOptions) {
-  return new AuthHttp(new AuthConfig(), http, options);
-}
+
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
@@ -77,7 +74,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
     HttpClientModule,
     Ng4LoadingSpinnerModule,
     RouterModule.forRoot(routes), // <-- routes
@@ -87,17 +83,20 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
+    }),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: () => {
+          return localStorage.getItem('token');
+        },
+        whitelistedDomains: ['localhost:8080']
+      }
     })
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     {provide: APP_BASE_HREF, useValue: '/'},
     LoggedInGuard,
-    {
-      provide: AuthHttp,
-      useFactory: authHttpServiceFactory,
-      deps: [Http, RequestOptions]
-    },
     GroupService,
     UserService,
     TaskService

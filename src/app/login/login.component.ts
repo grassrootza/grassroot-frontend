@@ -16,27 +16,32 @@ export class LoginComponent {
     this.message = '';
   }
 
-
   login(username: string, password: string): boolean {
 
     this.message = '';
 
     this.userService.login(username, password).subscribe(
-      userData => {
-
-        this.router.navigate(['groups']);
+      authResponse => {
+        console.log("Auth response: ", authResponse);
+        if (authResponse.errorCode == null)
+          this.router.navigate(['groups']);
+        else {
+          this.handleLoginError(authResponse.errorCode);
+        }
       },
       err => {
-        console.log(err);
-        this.message = "Login failed. Try again.";
-        setTimeout(() => {
-          this.message = "";
-        }, 2000)
-      },
-      () => console.log('Request Complete')
+        this.handleLoginError(err.toString());
+      }
     );
 
     return false;
   }
 
+  private handleLoginError(error: string) {
+    console.log("Login failed", error);
+    this.message = "Login failed. Try again.";
+    setTimeout(() => {
+      this.message = "";
+    }, 2000)
+  }
 }
