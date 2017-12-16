@@ -2,3 +2,55 @@ h5 img {
   margin-bottom: 0.3rem;
   margin-right: 0.3rem;
 }
+
+.events-box {
+  min-height: 20rem;
+}
+
+.events-box h5 {
+  margin-bottom: 1.5rem;
+}
+
+.event {
+  vertical-align: middle;
+}
+
+.event-date {
+  width: 3rem;
+  height: 3rem;
+  padding-top: 0.35rem;
+  background-color: #F5F6FA;
+  text-align: center;
+  text-transform: uppercase;
+  margin-right: 0.8rem;
+}
+
+.event-date .day {
+  padding: 0;
+  display: block;
+  font-size: 1.4rem;
+  line-height: 1.4rem;
+  font-weight: 200;
+}
+
+.event-date .month {
+  padding: 0;
+  display: block;
+  font-weight: 400;
+  font-size: 0.7rem;
+  line-height: 0.7rem;
+}
+
+.event-text {
+  height: 3rem;
+  display: table;
+}
+
+.event-text span {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.card-footer {
+  background-color: white;
+}

@@ -102,6 +102,14 @@
       "broadcast": "Broadcast",
       "members": "Members",
       "settings": "Settings"
+    },
+    "dashboard": {
+      "meetings": "Meetings",
+      "votes": "Votes",
+      "todos": "Action items",
+      "add-meeting": "Schedule a new meeting",
+      "add-vote": "Create a new vote",
+      "add-todo": "Add a new action item"
     }
   },
 

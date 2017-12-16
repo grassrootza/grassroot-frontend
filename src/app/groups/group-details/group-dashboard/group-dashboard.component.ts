@@ -37,9 +37,9 @@ export class GroupDashboardComponent implements OnInit {
       .subscribe(
         result => {
           console.log("Tasks loaded: ", result);
-          this.meetings = result.filter(task => task.taskType == TaskType.MEETING);
-          this.votes = result.filter(task => task.taskType == TaskType.VOTE);
-          this.todos = result.filter(task => task.taskType == TaskType.TODO);
+          this.meetings = result.filter(task => task.type == TaskType.MEETING);
+          this.votes = result.filter(task => task.type == TaskType.VOTE);
+          this.todos = result.filter(task => task.type == TaskType.TODO);
         },
         error => {
           console.log("Failed to fetch upcoming tasks for group", error);

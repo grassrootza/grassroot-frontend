@@ -4,19 +4,77 @@
 
     <div class="col-md-4">
       <div class="card">
-        <div class="card-body">
+        <div class="card-body events-box">
           <h5>
             <img src="assets/icon_meeting.png"/>
-            Meetings
+            <span [translate]="'group.dashboard.meetings'">Meetings</span>
           </h5>
-          <ul>
-            <li *ngFor="let meeting of meetings">
-              {{meeting.name}}
-            </li>
-          </ul>
+          <div *ngFor="let meeting of meetings" class="event">
+            <div class="float-left event-date">
+              <span class="day">{{meeting.deadlineDate | date:'dd'}}</span>
+              <span class="month">{{meeting.deadlineDate | date:'MMM'}}</span>
+            </div>
+            <div class="event-text">
+              <span>{{meeting.title}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <img src="assets/icon-plus.png" class="float-right"/>
+          <span [translate]="'group.dashboard.add-meeting'">Schedule a new meeting</span>
         </div>
       </div>
     </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body events-box">
+          <h5>
+            <img src="assets/icon_vote.png"/>
+            <span [translate]="'group.dashboard.votes'">Votes</span>
+          </h5>
+          <div *ngFor="let vote of votes" class="event">
+            <div class="float-left event-date">
+              <span class="day">{{vote.deadlineDate | date:'dd'}}</span>
+              <span class="month">{{vote.deadlineDate | date:'MMM'}}</span>
+            </div>
+            <div class="event-text">
+              <span>{{vote.title}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <img src="assets/icon-plus.png" class="float-right"/>
+          <span [translate]="'group.dashboard.add-vote'">Create a new vote</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body events-box">
+          <h5>
+            <img src="assets/icon_todo.png"/>
+            <span [translate]="'group.dashboard.todos'">Action items</span>
+          </h5>
+          <div *ngFor="let todo of todos" class="event">
+            <div class="float-left event-date">
+              <span class="day">{{todo.deadlineDate | date:'dd'}}</span>
+              <span class="month">{{todo.deadlineDate | date:'MMM'}}</span>
+            </div>
+            <div class="event-text">
+              <span>{{todo.title}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <img src="assets/icon-plus.png" class="float-right"/>
+          <span [translate]="'group.dashboard.add-todo'">Add an action item</span>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 
 </div>

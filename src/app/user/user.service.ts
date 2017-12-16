@@ -24,10 +24,10 @@ export class UserService {
 
   register(username: string, phoneNumber: string, password: string): Observable<AuthorizationResponse> {
 
-    const params = new HttpParams();
-    params.append("username", username);
-    params.append("phoneNumber", phoneNumber);
-    params.append("password", password);
+    const params = new HttpParams()
+      .set("username", username)
+      .set("phoneNumber", phoneNumber)
+      .set("password", password);
     return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params});
   }
 

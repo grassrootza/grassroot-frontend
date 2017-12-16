@@ -4,6 +4,7 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {Task} from "./task.model";
 import {HttpClient} from "@angular/common/http";
+import {TaskType} from "./task-type";
 
 @Injectable()
 export class TaskService {
@@ -15,6 +16,10 @@ export class TaskService {
 
   public loadUpcomingGroupTasks(groupId: string): Observable<Task[]> {
     let fullUrl = this.upcomingGroupTasksUrl + "/" + groupId;
-    return this.httpClient.get<Task[]>(fullUrl);
+    return this.httpClient.get<Task[]>(fullUrl)
+      .map(
+        data =>
+          data.map(task => new Task(task.taskUid, task.title, TaskType[task.type], task.deadlineMillis, new Date(task.deadlineMillis), task.description, task.location))
+      );
   }
 }
