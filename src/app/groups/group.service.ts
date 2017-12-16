@@ -67,7 +67,32 @@ export class GroupService {
 
   loadGroupDetails(groupUid: string): Observable<Group> {
     const fullUrl = this.groupDetailsUrl + "/" + groupUid;
-    return this.httpClient.get<Group>(fullUrl);
+
+    return this.httpClient.get<Group>(fullUrl)
+      .map(
+        gr => {
+          console.log("Group details loaded : ", gr);
+          return new Group(
+            gr.groupUid,
+            gr.name,
+            gr.description,
+            gr.groupCreatorUid,
+            gr.groupCreatorName,
+            gr.groupCreationTimeMillis,
+            new Date(gr.groupCreationTimeMillis),
+            gr.discoverable,
+            gr.memberCount,
+            gr.joinCode,
+            gr.lastChangeDescription,
+            gr.lastChangeType,
+            gr.lastMajorChangeMillis,
+            gr.members,
+            gr.paidFor,
+            gr.userPermissions,
+            gr.userRole
+          );
+        }
+      );
   }
 
 

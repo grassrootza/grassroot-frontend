@@ -6,15 +6,15 @@ export class Group {
 
   public formattedCreationTime: string = "";
 
-  constructor(public uid: string,
+  constructor(public groupUid: string,
               public name: string,
               public description: string,
-              public creatorUid: string,
-              public creatorName: string,
-              public creationTime: Date,
+              public groupCreatorUid: string,
+              public groupCreatorName: string,
+              public groupCreationTimeMillis: number,
+              public groupCreationTime: Date,
               public discoverable: boolean,
               public memberCount: number,
-              public hasTasks: boolean,
               public joinCode: string,
               public lastChangeDescription: string,
               public lastChangeType: string,
@@ -23,7 +23,7 @@ export class Group {
               public paidFor: boolean,
               public userPermissions: string[],
               public userRole: string) {
-    this.formattedCreationTime = new DatePipe("en").transform(this.creationTime, "dd MMM, y");
+    this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 
   public hasPermission(permission: string) {

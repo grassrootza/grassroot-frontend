@@ -90,7 +90,7 @@
   },
   "group": {
     "creationLabel": "Created by ",
-    "creationInfo": "{{creatorName}} at {{formattedCreationTime}}",
+    "creationInfo": "{{groupCreatorName}} at {{formattedCreationTime}}",
     "public": "Public group",
     "private": "Private group",
     "myRole": "My role:",
