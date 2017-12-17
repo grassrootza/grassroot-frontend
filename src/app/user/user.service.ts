@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {environment} from "../../environments/environment";
-import {AuthorizationResponse, User} from "./user.model";
+import {AuthenticatedUser, AuthorizationResponse} from "./user.model";
 import {Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
 
@@ -11,8 +11,8 @@ export class UserService {
   private registerUrl = environment.backendAppUrl + "/api/auth/web/register";
   private loginUrl: string = environment.backendAppUrl + "/api/auth/login-password";
 
-  private _loggedInUser: User = null;
-  public loggedInUser: EventEmitter<User> = new EventEmitter(null);
+  private _loggedInUser: AuthenticatedUser = null;
+  public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
 
   constructor(private httpClient: HttpClient, private router: Router) {
 

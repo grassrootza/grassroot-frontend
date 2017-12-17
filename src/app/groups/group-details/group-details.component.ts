@@ -45,6 +45,7 @@ export class GroupDetailsComponent implements OnInit {
       );
     });
 
+
   }
 
 }

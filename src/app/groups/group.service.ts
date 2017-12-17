@@ -6,17 +6,19 @@ import {GroupInfo} from "./model/group-info.model";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {UserService} from "../user/user.service";
 import {Group} from "./model/group.model";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {GroupRole} from "./model/group-role";
 import {DateTimeUtils} from "../DateTimeUtils";
 import {TaskType} from "../task/task-type";
 import {TaskInfo} from "../task/task-info.model";
+import {MembersPage} from "./model/membership.model";
 
 @Injectable()
 export class GroupService {
 
   groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
   groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
+  groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
@@ -109,6 +111,16 @@ export class GroupService {
     return this.httpClient.post<string>(fullUrl, params);
   }
 
+
+  fetchGroupMembers(groupUid: string, pageNo: number, pageSize: number): Observable<MembersPage> {
+    let params = new HttpParams()
+      .set('groupUid', groupUid)
+      .set('page', pageNo.toString())
+      .set('size', pageSize.toString());
+
+    return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params});
+  }
+
   pinGroup(groupUid: string): Observable<boolean> {
     const fullUrl = this.groupPinUrl + "/" + groupUid;
     return this.httpClient.get<boolean>(fullUrl);
@@ -119,5 +131,6 @@ export class GroupService {
     const fullUrl = this.groupUnpinUrl + "/" + groupUid;
     return this.httpClient.get<boolean>(fullUrl);
   }
+
 
 }

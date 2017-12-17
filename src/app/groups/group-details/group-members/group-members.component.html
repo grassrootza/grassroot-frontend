@@ -11,10 +11,17 @@
       </div>
 
       <div>
-        <a class="btn" [ngClass]="{'btn-success': currentTab == 'all'}" [routerLink]="['all']">All members</a>
-        <a class="btn" [ngClass]="{'btn-success': currentTab == 'task-teams'}" [routerLink]="['task-teams']">Task
-          teams</a>
-        <a class="btn" [ngClass]="{'btn-success': currentTab == 'filter'}" [routerLink]="['filter']">Custom filter</a>
+        <a class="btn" [ngClass]="{'btn-success': currentTab == 'all', 'btn-outline-success': currentTab != 'all'}"
+           [routerLink]="['all']">All members</a>
+
+        <a class="btn"
+           [ngClass]="{'btn-success': currentTab == 'task-teams', 'btn-outline-success': currentTab != 'task-teams'}"
+           [routerLink]="['task-teams']">Task teams</a>
+
+        <a class="btn"
+           [ngClass]="{'btn-success': currentTab == 'filter', 'btn-outline-success': currentTab != 'filter'}"
+           [routerLink]="['filter']">Custom filter</a>
+
       </div>
 
     </div>

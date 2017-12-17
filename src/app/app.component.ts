@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {UserService} from "./user/user.service";
 import {NavigationEnd, Router} from "@angular/router";
-import {User} from "./user/user.model";
+import {AuthenticatedUser} from "./user/user.model";
 import {environment} from "../environments/environment";
 import {TranslateService} from '@ngx-translate/core';
 
@@ -16,7 +16,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 export class AppComponent {
 
-  loggedInUser: User = null;
+  loggedInUser: AuthenticatedUser = null;
 
   currentUrl = "";
 

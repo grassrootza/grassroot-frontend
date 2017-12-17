@@ -1,6 +1,6 @@
 import {GroupRole} from "./group-role";
 import {DatePipe} from "@angular/common";
-import {Membership} from "./membership.model";
+import {MembershipInfo} from "./membership.model";
 
 export class Group {
 
@@ -19,7 +19,7 @@ export class Group {
               public lastChangeDescription: string,
               public lastChangeType: string,
               public lastMajorChangeMillis: number,
-              public members: Membership[],
+              public members: MembershipInfo[],
               public paidFor: boolean,
               public userPermissions: string[],
               public userRole: string) {
