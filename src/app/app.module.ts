@@ -25,12 +25,15 @@ import {GroupBroadcastComponent} from './groups/group-details/group-broadcast/gr
 import {GroupSettingsComponent} from './groups/group-details/group-settings/group-settings.component';
 import {TaskService} from "./task/task.service";
 import {JwtModule} from "@auth0/angular-jwt";
+import {GroupAllMembersComponent} from './groups/group-details/group-members/group-all-members/group-all-members.component';
+import {GroupTaskTeamsComponent} from './groups/group-details/group-members/group-task-teams/group-task-teams.component';
+import {GroupCustomFilterComponent} from './groups/group-details/group-members/group-custom-filter/group-custom-filter.component';
 
 
 const routes: Routes = [
 
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
   {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},
@@ -43,7 +46,17 @@ const routes: Routes = [
       {path: 'dashboard', component: GroupDashboardComponent, canActivate: [LoggedInGuard]},
       {path: 'activity', component: GroupActivityComponent, canActivate: [LoggedInGuard]},
       {path: 'broadcast', component: GroupBroadcastComponent, canActivate: [LoggedInGuard]},
-      {path: 'members', component: GroupMembersComponent, canActivate: [LoggedInGuard]},
+      {
+        path: 'members',
+        component: GroupMembersComponent,
+        canActivate: [LoggedInGuard],
+        children: [
+          {path: '', redirectTo: 'all', pathMatch: 'full'},
+          {path: 'all', component: GroupAllMembersComponent, canActivate: [LoggedInGuard]},
+          {path: 'task-teams', component: GroupTaskTeamsComponent, canActivate: [LoggedInGuard]},
+          {path: 'filter', component: GroupCustomFilterComponent, canActivate: [LoggedInGuard]},
+        ]
+      },
       {path: 'settings', component: GroupSettingsComponent, canActivate: [LoggedInGuard]}
     ]
   }
@@ -68,7 +81,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupMembersComponent,
     GroupActivityComponent,
     GroupBroadcastComponent,
-    GroupSettingsComponent
+    GroupSettingsComponent,
+    GroupAllMembersComponent,
+    GroupTaskTeamsComponent,
+    GroupCustomFilterComponent
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,30 @@
-<h2>
-  Members content goes here
-</h2>
+<div *ngIf="group">
+  <div class="card">
+    <div class="card-body events-box">
+      <h2>
+        Member management
+      </h2>
+
+      <div class="float-right">
+        <button class="btn btn-outline-secondary">Add a member</button>
+        <button class="btn btn-outline-secondary">Import list</button>
+      </div>
+
+      <div>
+        <a class="btn" [ngClass]="{'btn-success': currentTab == 'all'}" [routerLink]="['all']">All members</a>
+        <a class="btn" [ngClass]="{'btn-success': currentTab == 'task-teams'}" [routerLink]="['task-teams']">Task
+          teams</a>
+        <a class="btn" [ngClass]="{'btn-success': currentTab == 'filter'}" [routerLink]="['filter']">Custom filter</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div>
+    <router-outlet>
+
+    </router-outlet>
+  </div>
+
+</div>
