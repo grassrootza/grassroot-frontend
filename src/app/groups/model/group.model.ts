@@ -1,6 +1,7 @@
 import {GroupRole} from "./group-role";
 import {DatePipe} from "@angular/common";
 import {MembershipInfo} from "./membership.model";
+import {GroupRef} from "./group-ref.model";
 
 export class Group {
 
@@ -22,7 +23,8 @@ export class Group {
               public members: MembershipInfo[],
               public paidFor: boolean,
               public userPermissions: string[],
-              public userRole: string) {
+              public userRole: string,
+              public subGroups: GroupRef[]) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 

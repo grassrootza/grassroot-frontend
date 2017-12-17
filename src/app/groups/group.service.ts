@@ -11,7 +11,7 @@ import {GroupRole} from "./model/group-role";
 import {DateTimeUtils} from "../DateTimeUtils";
 import {TaskType} from "../task/task-type";
 import {TaskInfo} from "../task/task-info.model";
-import {MembersPage} from "./model/membership.model";
+import {Membership, MembersPage} from "./model/membership.model";
 
 @Injectable()
 export class GroupService {
@@ -91,7 +91,8 @@ export class GroupService {
             gr.members,
             gr.paidFor,
             gr.userPermissions,
-            gr.userRole
+            gr.userRole,
+            gr.subGroups
           );
         }
       );
@@ -118,7 +119,20 @@ export class GroupService {
       .set('page', pageNo.toString())
       .set('size', pageSize.toString());
 
-    return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params});
+    return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
+      .map(
+        result => {
+          let transformedContent = result.content.map(m => new Membership(m.user, m.group, GroupRole[m.roleName]));
+          return new MembersPage(
+            result.number,
+            result.totalPages,
+            result.size,
+            result.first,
+            result.last,
+            transformedContent
+          )
+        }
+      );
   }
 
   pinGroup(groupUid: string): Observable<boolean> {

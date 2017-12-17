@@ -1,0 +1,23 @@
+.subgroup-link {
+  background-color: #F5F6FA;
+  color: #7A7D8C;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.task-team-header {
+  background-color: white;
+}
+
+.task-team-count {
+  color: #2CBC4C;
+  font-size: 1rem;
+  padding: 0.5rem;
+}
+
+.task-team-label {
+  font-size: 1rem;
+  background-color: #F5F6FA;
+  border: solid 0.1rem #EFF1F7;
+  padding: 0.5rem;
+}

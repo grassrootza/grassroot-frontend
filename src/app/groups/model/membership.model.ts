@@ -1,5 +1,6 @@
 import {User} from "../../user/user.model";
 import {GroupInfo} from "./group-info.model";
+import {GroupRole} from "./group-role";
 
 export class MembershipInfo {
 
@@ -7,7 +8,7 @@ export class MembershipInfo {
               public phoneNumber: string,
               public nationalFormattedNumber: string,
               public displayName: string,
-              public roleName: string) {
+              public roleName: GroupRole) {
   }
 }
 
@@ -30,4 +31,6 @@ export class MembersPage {
               public last: boolean,
               public content: Membership[]) {
   }
+
 }
+

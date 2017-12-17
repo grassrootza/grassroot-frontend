@@ -1,3 +1,34 @@
-<p>
-  group-task-teams works!
-</p>
+<div *ngIf="group">
+
+
+  <div class="card">
+    <div class="card-body">
+      <div class="btn-group" role="group" *ngFor="let subGroup of group.subGroups">
+        <a class="btn subgroup-link" (click)="loadMembers(subGroup)">{{subGroup.name}}</a>
+        <span class="input-group-addon" id="btnGroupAddon">{{subGroup.memberCount}}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="selectedSubGroup">
+    <div class="card-header task-team-header">
+      <h3 class="d-inline-block">Task Team</h3>
+      <div class="task-team-count d-inline-block">/// {{selectedSubGroup.memberCount}}</div>
+      <div class="task-team-label d-inline-block">{{selectedSubGroup.name}}</div>
+    </div>
+    <div class="card-body" *ngIf="currentPage">
+      <div class="row" *ngFor="let member of currentPage.content">
+        <div class="col-md-2">{{member.user.displayName}}</div>
+        <div class="col-md-2">{{member.roleName}}</div>
+        <div class="col-md-1">-</div>
+        <div class="col-md-2">{{member.user.phoneNumber}}</div>
+        <div class="col-md-3">{{member.user.email}}</div>
+        <div class="col-md-2">
+          -
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

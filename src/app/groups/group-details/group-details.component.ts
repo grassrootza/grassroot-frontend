@@ -23,7 +23,14 @@ export class GroupDetailsComponent implements OnInit {
 
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
-        this.currentTab = ev.urlAfterRedirects.substring(ev.urlAfterRedirects.lastIndexOf("/") + 1);
+        if (this.group != null) {
+
+          let uri = ev.urlAfterRedirects;
+          let startIndex = uri.indexOf(this.group.groupUid) + this.group.groupUid.length + 1;
+          this.currentTab = uri.substring(startIndex);
+          if (this.currentTab.indexOf("/") >= 0)
+            this.currentTab = this.currentTab.substring(0, this.currentTab.indexOf("/"));
+        }
       }
     });
   }
