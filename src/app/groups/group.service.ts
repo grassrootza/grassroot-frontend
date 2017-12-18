@@ -122,10 +122,11 @@ export class GroupService {
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
       .map(
         result => {
-          let transformedContent = result.content.map(m => new Membership(m.user, m.group, GroupRole[m.roleName]));
+          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName]));
           return new MembersPage(
             result.number,
             result.totalPages,
+            result.totalElements,
             result.size,
             result.first,
             result.last,

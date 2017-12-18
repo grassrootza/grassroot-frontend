@@ -15,9 +15,10 @@ export class MembershipInfo {
 
 export class Membership {
 
-  constructor(public user: User,
+  constructor(public selected: boolean,
+              public user: User,
               public group: GroupInfo,
-              public roleName: string) {
+              public roleName: GroupRole) {
   }
 }
 
@@ -26,6 +27,7 @@ export class MembersPage {
 
   constructor(public number: number,
               public totalPages: number,
+              public totalElements: number,
               public size: number,
               public first: boolean,
               public last: boolean,

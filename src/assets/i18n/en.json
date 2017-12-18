@@ -110,6 +110,33 @@
       "add-meeting": "Schedule a new meeting",
       "add-vote": "Create a new vote",
       "add-todo": "Add a new action item"
+    },
+    "allMembers": {
+      "title": "All members ",
+      "table":{
+        "name": "Name",
+        "role": "Role",
+        "province": "Province",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "bulkManage":{
+        "bulkManage": "Bulk manage",
+        "meeting": "Call a meeting",
+        "broadcast": "Send a broadcast",
+        "topics": "Assign topics",
+        "taskTeam": "Add to task team",
+        "role": "Change role",
+        "remove": "Remove"
+      },
+      "manage":{
+        "manage": "Manage",
+        "view": "View",
+        "edit": "Edit",
+        "topics" : "Assign topic(s)",
+        "taskTeam": "Add to task team",
+        "remove": "Remove"
+      }
     }
   },
 
