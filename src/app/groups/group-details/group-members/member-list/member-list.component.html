@@ -1,47 +1,47 @@
-<div class="container group-info-header">
+<div class="container group-info-header d-none d-md-block">
   <div class="row">
     <div class="col-1">
       <input type="checkbox" class="checkbox-shape" (click)="selectAllOnPage($event)"/>
     </div>
 
     <div class="col-2" [translate]="'group.allMembers.table.name'">Name</div>
-    <div class="col-1" [translate]="'group.allMembers.table.role'">Role</div>
-    <div class="col-1" [translate]="'group.allMembers.table.province'">Province</div>
+    <div class="col-2" [translate]="'group.allMembers.table.role'">Role</div>
+    <div class="col-2" [translate]="'group.allMembers.table.province'">Province</div>
     <div class="col-2" [translate]="'group.allMembers.table.phone'">Phone</div>
-    <div class="col-3" [translate]="'group.allMembers.table.email'">email</div>
-    <div class="col-2"></div>
+    <div class="col-2" [translate]="'group.allMembers.table.email'">email</div>
+    <div class="col-1"></div>
   </div>
 </div>
 <div *ngFor="let member of currentPage.content">
   <div class="container group-info-row">
     <div class="row flex flex-wrap">
-      <div class="col-1">
+      <div class="col-md-1">
         <input type="checkbox" [checked]="member.selected" (click)="selectMember(member)" class="checkbox-shape">
       </div>
 
-      <div class="col-2">
+      <div class="col-md-2">
         {{member.user.displayName}}
       </div>
 
-      <div class="col-1">
+      <div class="col-md-2">
           <span class="badge badge-success">
             {{member.roleName}}
           </span>
       </div>
 
-      <div class="col-1">
+      <div class="col-md-2">
         province
       </div>
 
-      <div class="col-2">
+      <div class="col-md-2">
         {{member.user.phoneNumber}}
       </div>
 
-      <div class="col-3">
+      <div class="col-md-2">
         {{member.user.email}}
       </div>
 
-      <div class="col-2">
+      <div class="col-md-1">
         <div class="float-right">
           <div class="dropdown">
             <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
