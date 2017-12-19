@@ -16,19 +16,9 @@
       <div class="task-team-count d-inline-block">/// {{selectedSubGroup.memberCount}}</div>
       <div class="task-team-label d-inline-block">{{selectedSubGroup.name}}</div>
     </div>
-    <div class="card-body" *ngIf="currentPage">
-      <div class="row" *ngFor="let member of currentPage.content">
-        <div class="col-md-2">{{member.user.displayName}}</div>
-        <div class="col-md-2">{{member.roleName}}</div>
-        <div class="col-md-1">-</div>
-        <div class="col-md-2">{{member.user.phoneNumber}}</div>
-        <div class="col-md-3">{{member.user.email}}</div>
-        <div class="col-md-2">
-          -
-        </div>
-      </div>
 
-    </div>
+    <app-member-list [currentPage]="currentPage"></app-member-list>
+
   </div>
 
 </div>

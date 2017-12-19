@@ -28,6 +28,7 @@ import {JwtModule} from "@auth0/angular-jwt";
 import {GroupAllMembersComponent} from './groups/group-details/group-members/group-all-members/group-all-members.component';
 import {GroupTaskTeamsComponent} from './groups/group-details/group-members/group-task-teams/group-task-teams.component';
 import {GroupCustomFilterComponent} from './groups/group-details/group-members/group-custom-filter/group-custom-filter.component';
+import {MemberListComponent} from './groups/group-details/group-members/member-list/member-list.component';
 
 
 const routes: Routes = [
@@ -84,7 +85,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupSettingsComponent,
     GroupAllMembersComponent,
     GroupTaskTeamsComponent,
-    GroupCustomFilterComponent
+    GroupCustomFilterComponent,
+    MemberListComponent
   ],
   imports: [
     BrowserModule,

@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Group} from '../../../model/group.model';
 import {ActivatedRoute, Params} from '@angular/router';
 import {UserService} from '../../../../user/user.service';
 import {GroupService} from '../../../group.service';
-import {GroupInfo} from '../../../model/group-info.model';
 import {Membership, MembersPage} from '../../../model/membership.model';
 
 @Component({
@@ -34,12 +32,6 @@ export class GroupAllMembersComponent implements OnInit {
     });
   }
 
-  public selectAllOnPage(event):void{
-    let target = event.target || event.srcElement || event.currentTarget;
-    let shouldSelectAll = target.checked;
-
-    this.currentPage.content.forEach(m => m.selected = shouldSelectAll);
-  }
 
   selectMember(member: Membership) {
     member.selected = true;

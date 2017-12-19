@@ -25,70 +25,8 @@
     </div>
 
 
+    <app-member-list [currentPage]="currentPage"></app-member-list>
 
-    <div class="container group-info-header">
-      <div class="row">
-        <div class="col-1">
-          <input type="checkbox" class="checkbox-shape"  (click)="selectAllOnPage($event)"/>
-        </div>
-
-        <div class="col-2" [translate]="'group.allMembers.table.name'">Name</div>
-        <div class="col-1" [translate]="'group.allMembers.table.role'">Role</div>
-        <div class="col-1" [translate]="'group.allMembers.table.province'">Province</div>
-        <div class="col-2" [translate]="'group.allMembers.table.phone'">Phone</div>
-        <div class="col-3" [translate]="'group.allMembers.table.email'">email</div>
-        <div class="col-2"></div>
-      </div>
-    </div>
-    <div *ngFor="let member of currentPage.content">
-      <div class="container group-info-row">
-        <div class="row flex flex-wrap">
-          <div class="col-1">
-            <input type="checkbox" [checked]="member.selected" (click)="selectMember(member)" class="checkbox-shape">
-          </div>
-
-          <div class="col-2">
-            {{member.user.displayName}}
-          </div>
-
-          <div class="col-1">
-          <span class="badge badge-success">
-            {{member.roleName}}
-          </span>
-          </div>
-
-          <div class="col-1">
-            province
-          </div>
-
-          <div class="col-2">
-            {{member.user.phoneNumber}}
-          </div>
-
-          <div class="col-3">
-            {{member.user.email}}
-          </div>
-
-          <div class="col-2">
-            <div class="float-right">
-              <div class="dropdown">
-                <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" [translate]="'group.allMembers.manage.manage'">
-                  Manage
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.view'">View</a>
-                  <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.edit'">Edit</a>
-                  <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.topics'">Assign topic</a>
-                  <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.taskTeam'">Add to task team</a>
-                  <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'">Remove</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <nav aria-label="Group members pagination" *ngIf="currentPage.totalPages > 1">
