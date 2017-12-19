@@ -1,0 +1,25 @@
+<nav aria-label="Group members pagination" *ngIf="totalPages > 1">
+  <ul class="pagination justify-content-end">
+    <li class="page-item " [ngClass]="(selectedPage > 0)?'disabled':''">
+      <a class="page-indicator " (click)="prevPageClicked()">
+        <img src="../../../assets/arrow-left.png">{{ 'pagination.previous' | translate }}
+      </a>
+    </li>
+    <li class="page-item more-pages-indicator" *ngIf="selectedPage > 2">
+      ...
+    </li>
+    <li class="page-item" *ngFor="let page of pagesList">
+      <a class="page-indicator " [ngClass]="(selectedPage == page)?'page-selected':''" (click)="pageClicked(page)">{{page
+        + 1}}</a>
+    </li>
+
+    <li class="page-item more-pages-indicator" *ngIf="pagesList[pagesList.length -1] < totalPages -1 ">
+      ...
+    </li>
+    <li class="page-item" [ngClass]="(selectedPage == totalPages - 1)?'disabled':''">
+      <a class="page-indicator " (click)="nextPageClicked()">
+        {{ 'pagination.next' | translate }} <img src="../../../assets/arrow-right.png">
+      </a>
+    </li>
+  </ul>
+</nav>

@@ -29,28 +29,7 @@
 
   </div>
 
-  <nav aria-label="Group members pagination" *ngIf="currentPage.totalPages > 1">
-    <ul class="pagination justify-content-end">
-      <li class="page-item " [ngClass]="(currentPage.first)?'disabled':''">
-        <a class="page-indicator " (click)="previousPage()">
-          <img src="../../../assets/arrow-left.png">{{ 'pagination.previous' | translate }}
-        </a>
-      </li>
-      <li class="page-item more-pages-indicator" *ngIf="(currentPage.totalPages > 3) && (currentSectionToDisplay > 0)">
-        ...
-      </li>
-      <li class="page-item" *ngFor="let page of pagesList">
-        <a class="page-indicator " [ngClass]="(currentPage.number == page)?'page-selected':''" (click)="goToPage(page)">{{page + 1}}</a>
-      </li>
-      <li class="page-item more-pages-indicator" *ngIf="(currentPage.totalPages > 3) && (currentSectionToDisplay + 1 < numberOfSections)">
-        ...
-      </li>
-      <li class="page-item" [ngClass]="(currentPage.last)?'disabled':''">
-        <a class="page-indicator " (click)="nextPage()">
-          {{ 'pagination.next' | translate }} <img src="../../../assets/arrow-right.png">
-        </a>
-      </li>
-    </ul>
-  </nav>
+  <app-pagination [totalPages]="currentPage.totalPages" [shownPages]="3"
+                  (onPageSelected)="goToPage($event)"></app-pagination>
 
 </div>

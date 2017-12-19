@@ -1,6 +1,5 @@
 <div *ngIf="group">
 
-
   <div class="card">
     <div class="card-body">
       <div class="btn-group" role="group" *ngFor="let subGroup of group.subGroups">
@@ -17,7 +16,11 @@
       <div class="task-team-label d-inline-block">{{selectedSubGroup.name}}</div>
     </div>
 
-    <app-member-list [currentPage]="currentPage"></app-member-list>
+    <div *ngIf="currentPage">
+      <app-member-list [currentPage]="currentPage"></app-member-list>
+
+      <app-pagination [totalPages]="currentPage.totalPages" (onPageSelected)="loadMembersPage($event)"></app-pagination>
+    </div>
 
   </div>
 

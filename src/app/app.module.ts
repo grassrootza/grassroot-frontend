@@ -29,6 +29,7 @@ import {GroupAllMembersComponent} from './groups/group-details/group-members/gro
 import {GroupTaskTeamsComponent} from './groups/group-details/group-members/group-task-teams/group-task-teams.component';
 import {GroupCustomFilterComponent} from './groups/group-details/group-members/group-custom-filter/group-custom-filter.component';
 import {MemberListComponent} from './groups/group-details/group-members/member-list/member-list.component';
+import {PaginationComponent} from './pagination/pagination.component';
 
 
 const routes: Routes = [
@@ -86,7 +87,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupAllMembersComponent,
     GroupTaskTeamsComponent,
     GroupCustomFilterComponent,
-    MemberListComponent
+    MemberListComponent,
+    PaginationComponent
   ],
   imports: [
     BrowserModule,

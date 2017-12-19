@@ -13,10 +13,6 @@ export class GroupAllMembersComponent implements OnInit {
 
 
   public currentPage:MembersPage = new MembersPage(0,0, 0,0, true, false, []);
-  public pagesList: number[] = [];
-  public currentSectionToDisplay: number;
-  public numberOfSections: number;
-
   private groupUid: string = '';
 
   constructor(private route: ActivatedRoute,
@@ -42,7 +38,6 @@ export class GroupAllMembersComponent implements OnInit {
       .subscribe(
         membersPage => {
           this.currentPage = membersPage;
-          this.generatePagesList();
         },
         error => {
           if (error.status = 401)
@@ -52,35 +47,7 @@ export class GroupAllMembersComponent implements OnInit {
       )
   }
 
-  previousPage(){
-    if(!this.currentPage.first)
-      this.goToPage(this.currentPage.number - 1);
 
-  }
-
-  nextPage(){
-    if(!this.currentPage.last)
-      this.goToPage(this.currentPage.number + 1);
-  }
-
-  generatePagesList(){
-    this.pagesList = [];
-
-    if(this.currentPage.totalPages <= 3){
-      for(let i=0; i < this.currentPage.totalPages; i++) {
-        this.pagesList.push(i);
-      }
-    }else{
-      this.numberOfSections = this.currentPage.totalPages / 3;
-      this.currentSectionToDisplay = Math.floor(this.currentPage.number / 3);
-      let sectionStart = this.currentSectionToDisplay * 3;
-      let sectionEnd = sectionStart + 2;
-      for(let i = sectionStart; i <= sectionEnd; i++){
-        this.pagesList.push(i);
-      }
-     }
-
-  }
 
 
 }

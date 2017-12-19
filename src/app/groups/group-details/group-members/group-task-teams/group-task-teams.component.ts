@@ -42,11 +42,12 @@ export class GroupTaskTeamsComponent implements OnInit {
 
   loadMembers(group: GroupRef) {
     this.selectedSubGroup = group;
-    this.loadMembersPage(group.groupUid, 0, 10);
+    this.loadMembersPage(0);
   }
 
-  loadMembersPage(groupId: string, pageNo: number, pageSize: number) {
-    this.groupService.fetchGroupMembers(groupId, pageNo, pageSize)
+
+  loadMembersPage(pageNo: number) {
+    this.groupService.fetchGroupMembers(this.selectedSubGroup.groupUid, pageNo, 10)
       .subscribe(
         result => this.currentPage = result,
         error => console.log("Failed to load group members: ", error)
