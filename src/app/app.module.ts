@@ -30,6 +30,11 @@ import {GroupTaskTeamsComponent} from './groups/group-details/group-members/grou
 import {GroupCustomFilterComponent} from './groups/group-details/group-members/group-custom-filter/group-custom-filter.component';
 import {MemberListComponent} from './groups/group-details/group-members/member-list/member-list.component';
 import {PaginationComponent} from './pagination/pagination.component';
+import { GroupMembersImportComponent } from './groups/group-details/group-members/group-members-import/group-members-import.component';
+import { FileImportComponent } from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
+import { GoogleImportComponent } from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
+import { TwitterImportComponent } from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
+import { FacebookImportComponent } from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
 
 
 const routes: Routes = [
@@ -61,6 +66,15 @@ const routes: Routes = [
       },
       {path: 'settings', component: GroupSettingsComponent, canActivate: [LoggedInGuard]}
     ]
+  },{
+    path: 'group/import/:id', component: GroupMembersImportComponent, canActivate: [LoggedInGuard],
+    children:[
+      {path: '', redirectTo: 'file', pathMatch: 'full'},
+      {path: 'file', component: FileImportComponent, canActivate: [LoggedInGuard]},
+      {path: 'google', component: GoogleImportComponent, canActivate: [LoggedInGuard]},
+      {path: 'twitter', component: TwitterImportComponent, canActivate: [LoggedInGuard]},
+      {path: 'facebook', component: GoogleImportComponent, canActivate: [LoggedInGuard]},
+    ]
   }
 ];
 
@@ -88,7 +102,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupTaskTeamsComponent,
     GroupCustomFilterComponent,
     MemberListComponent,
-    PaginationComponent
+    PaginationComponent,
+    GroupMembersImportComponent,
+    FileImportComponent,
+    GoogleImportComponent,
+    TwitterImportComponent,
+    FacebookImportComponent
   ],
   imports: [
     BrowserModule,

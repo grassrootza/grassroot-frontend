@@ -1,28 +1,53 @@
 <div *ngIf="group">
   <div class="card">
     <div class="card-body events-box">
-      <h2>
-        Member management
-      </h2>
+      <div class="row">
+        <div class="col-6">
+          <h2>
+            Member management
+          </h2>
+        </div>
+        <div class="col-6">
+          <div class="float-right text-right">
+            <button class="btn btn-outline-secondary rectangle">
+              <img src="assets/add-user.png"/>
+              Add a member</button>
+            <button class="btn btn-outline-secondary rectangle" [routerLink]="['/group/import/', group.groupUid]">
+              <img src="assets/import.png"/>
+              Import list</button>
+          </div>
+        </div>
 
-      <div class="float-right">
-        <button class="btn btn-outline-secondary">Add a member</button>
-        <button class="btn btn-outline-secondary">Import list</button>
-      </div>
 
-      <div>
-        <a class="btn" [ngClass]="{'btn-success': currentTab == 'all', 'btn-outline-success': currentTab != 'all'}"
-           [routerLink]="['all']">All members</a>
-
-        <a class="btn"
-           [ngClass]="{'btn-success': currentTab == 'task-teams', 'btn-outline-success': currentTab != 'task-teams'}"
-           [routerLink]="['task-teams']">Task teams</a>
-
-        <a class="btn"
-           [ngClass]="{'btn-success': currentTab == 'filter', 'btn-outline-success': currentTab != 'filter'}"
-           [routerLink]="['filter']">Custom filter</a>
 
       </div>
+
+      <div class="row">
+        <div>
+          <a class="btn rectangle-23" [ngClass]="{'btn-success': currentTab == 'all', 'btn-outline-success': currentTab != 'all'}"
+             [routerLink]="['all']">
+            <img *ngIf="currentTab == 'all'" src="assets/members-white.png"/>
+            <img *ngIf="currentTab != 'all'" src="assets/members.png"/>
+            <br/>
+            All members
+          </a>
+
+          <a class="btn rectangle-23"
+             [ngClass]="{'btn-success': currentTab == 'task-teams', 'btn-outline-success': currentTab != 'task-teams'}"
+             [routerLink]="['task-teams']">
+            <img src="assets/shared-folder.png"><br/>
+            Task teams</a>
+
+          <a class="btn rectangle-23"
+             [ngClass]="{'btn-success': currentTab == 'filter', 'btn-outline-success': currentTab != 'filter'}"
+             [routerLink]="['filter']">
+            <img src="assets/filter-white.png"><br/>
+            Custom filter</a>
+
+        </div>
+      </div>
+
+
 
     </div>
 

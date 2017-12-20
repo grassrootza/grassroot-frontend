@@ -137,6 +137,18 @@
         "taskTeam": "Add to task team",
         "remove": "Remove"
       }
+    },
+    "import": {
+      "nav": {
+        "file": "Upload file",
+        "google": "Google",
+        "twitter": "Twitter",
+        "facebook": "Facebook"
+      },
+      "file": {
+        "browseFile": "Click to browse",
+        "dragAndDrop": "Or Drag & Drop to upload your files"
+      }
     }
   },
 

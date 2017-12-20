@@ -1,0 +1,11 @@
+.rectangle-23 {
+  height: 70px;
+  width: 175px;
+  border-radius: 2px;
+}
+
+.rectangle {
+  height: 50px;
+  border: 1px solid #929BAF;
+  border-radius: 100px;
+}

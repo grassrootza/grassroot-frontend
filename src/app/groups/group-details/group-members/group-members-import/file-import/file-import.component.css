@@ -1,0 +1,28 @@
+.error{ color: #f00; }
+
+.dragarea{
+  font-size: 24px;
+  border: 3px dashed #bbb;
+  padding: 20px ;
+  background-color: #fff;
+  color: #bbb;
+}
+.droparea{
+  font-size: 24px;
+  border: 3px dashed #bbb;
+  padding: 20px ;
+  background-color: #eff;
+  color: #aaa;
+}
+
+.row{
+  height: 100% !important;
+}
+
+a {
+  color: #2CBC4C !important;
+}
+
+a:hover {
+  cursor: pointer;
+}

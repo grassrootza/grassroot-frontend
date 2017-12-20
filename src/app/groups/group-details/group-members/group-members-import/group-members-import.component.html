@@ -1,0 +1,61 @@
+<div class="card group-summary" *ngIf="group">
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1">
+        <div class="d-flex justify-content-center">
+          <h1>Import lists into master group</h1>
+        </div>
+        <div class="d-flex justify-content-center">
+          <h3>{{group.name}}</h3>
+        </div>
+      </div>
+
+      <div class="col-12 d-flex justify-content-center">
+        <nav class="navbar navbar-expand-lg navbar-light">
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#groupMembersImportNavbars"
+                  aria-controls="groupMembersImportNavbars" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="groupMembersImportNavbars">
+            <ul class="main-nav navbar-nav mr-auto">
+
+              <li class="nav-item" [ngClass]="{active: currentTab === 'file'}">
+                <a class="nav-link" href="#" [routerLink]="['file']" [translate]="'group.import.nav.file'"> Upload file </a>
+              </li>
+
+              <li class="nav-item" [ngClass]="{active: currentTab === 'google'}">
+                <a class="nav-link" href="#" [routerLink]="['google']" [translate]="'group.import.nav.google'"> Google </a>
+              </li>
+
+              <li class="nav-item" [ngClass]="{active: currentTab === 'twitter'}">
+                <a class="nav-link" href="#" [routerLink]="['twitter']" [translate]="'group.import.nav.twitter'"> Twitter </a>
+              </li>
+
+              <li class="nav-item" [ngClass]="{active: currentTab === 'facebook'}">
+                <a class="nav-link" href="#" [routerLink]="['facebook']" [translate]="'group.import.nav.facebook'"> Facebook </a>
+              </li>
+
+            </ul>
+
+          </div>
+        </nav>
+      </div>
+
+      <div class="col-12 d-flex justify-content-center">
+        <div class="tab-area">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+
+    </div>
+
+
+
+
+
+
+  </div>
+</div>
