@@ -35,6 +35,10 @@ import { FileImportComponent } from './groups/group-details/group-members/group-
 import { GoogleImportComponent } from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
 import { TwitterImportComponent } from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
 import { FacebookImportComponent } from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
+import { CampaignsComponent } from './campaigns/campaign-list/campaigns.component';
+import {CampaignService} from "./campaigns/campaign.service";
+import { CampaignInfoComponent } from './campaigns/campaign-list-row/campaign-info.component';
+import { CampaignCreateComponent } from './campaigns/campaign-create/campaign-create.component';
 
 
 const routes: Routes = [
@@ -75,7 +79,9 @@ const routes: Routes = [
       {path: 'twitter', component: TwitterImportComponent, canActivate: [LoggedInGuard]},
       {path: 'facebook', component: GoogleImportComponent, canActivate: [LoggedInGuard]},
     ]
-  }
+  },
+  {path: 'campaigns', component: CampaignsComponent, canActivate: [LoggedInGuard]},
+  {path: 'campaigns/create', component: CampaignCreateComponent, canActivate: [LoggedInGuard]}
 ];
 
 
@@ -107,7 +113,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     FileImportComponent,
     GoogleImportComponent,
     TwitterImportComponent,
-    FacebookImportComponent
+    FacebookImportComponent,
+    CampaignsComponent,
+    CampaignInfoComponent,
+    CampaignCreateComponent
   ],
   imports: [
     BrowserModule,
@@ -138,7 +147,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoggedInGuard,
     GroupService,
     UserService,
-    TaskService
+    TaskService,
+    CampaignService
   ],
   bootstrap: [AppComponent]
 })

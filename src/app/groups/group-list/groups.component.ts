@@ -13,7 +13,6 @@ declare var $: any;
 })
 export class GroupsComponent implements OnInit {
 
-
   protected groups: GroupInfo[] = [];
   protected pinnedGroups: GroupInfo[] = [];
 
@@ -42,10 +41,10 @@ export class GroupsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.spinnerService.show();
     this.groupService.groupInfoList.subscribe(
       groupList => {
         console.log("Groups loaded: ", groupList);
+        this.spinnerService.hide();
 
         this.groups = groupList;
         this.resolvePinnedGroups();
@@ -56,14 +55,10 @@ export class GroupsComponent implements OnInit {
         this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
         this.currentPage = 1;
         this.generatePageList(this.numberOfPages);
-
-        // todo: make this not appear at all if already retrieved groups (i.e., once cached)
-        setTimeout(function() {
-          this.spinnerService.hide();
-        }.bind(this), 700);
       }
     );
 
+    this.spinnerService.show(); // todo: possibly only show if cache is empty
     this.groupService.loadGroups(true);
   }
 

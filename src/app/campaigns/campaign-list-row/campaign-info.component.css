@@ -1,0 +1,29 @@
+.campaign-info-row {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  vertical-align: middle;
+  border-top: solid #ECEEF1 1px;
+}
+
+.campaign-name {
+  font-size: 20px;
+}
+
+.campaign-details {
+  font-size: 15px;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  border-top: none;
+}
+
+.campaign-details .master-group-name {
+  font-weight: bold;
+}
+
+.campaign-details .campaign-description {
+  padding-top: 0.3rem
+}
+
+.campaign-details .view-campaign-btn {
+  margin-top: 1rem;
+}

@@ -2,7 +2,8 @@
   "menu": {
     "home": "HOME",
     "groups": "GROUPS",
-    "campaign": "CAMPAIGNS",
+    "campaigns": "CAMPAIGNS",
+    "networks": "NETWORKS",
     "noNotifications": "No notifications",
     "showHelp": "Show help",
     "help": "Help",
@@ -14,8 +15,8 @@
     "news": "News",
     "contribute": "Contribute",
     "contactUs": "Contact Us",
-    "info": "info@company.com<br/>Call us: (+27) 21 453 26 16",
-    "copyright": "Copyright © 2017 Grassroots. All Rights Reserved",
+    "info": "contact@grassroot.org.za<br/>Call us: (+27) 11 339 13 13",
+    "copyright": "Copyright © 2018 Grassroot. All Rights Reserved",
     "licenceAgreement": "LICENCE AGREEMENT",
     "termsAndConditions": "TERMS AND CONDITIONS"
   },
@@ -149,6 +150,20 @@
         "browseFile": "Click to browse",
         "dragAndDrop": "Or Drag & Drop to upload your files"
       }
+    }
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "create": "Create Campaign",
+    "loading": "Loading campaigns",
+    "activeTitle": "Active campaigns",
+    "pastTitle": "Past campaigns",
+    "row": {
+      "ends": "Ends:",
+      "masterGroup": "Master Group: ",
+      "engaged": "engaged with this campaign",
+      "joined": "joined group",
+      "viewCampaign": "View"
     }
   },
 

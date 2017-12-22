@@ -1,0 +1,35 @@
+<div class="container campaign-info-row">
+  <div class="row flex flex-wrap">
+    <div class="order-1 col-8 col-md-8 order-md-1 col-lg-8 campaign-name">
+      {{ campaign.name }}
+    </div>
+    <div class="order-2 col-4 col-md-4 order-md-2 col-lg-4">
+      {{ 'campaigns.row.ends' | translate }} {{ campaign.campaignEndDate | date: 'dd MMM yyyy' }}
+    </div>
+  </div>
+  <div class="row flex flex-wrap campaign-details">
+    <div class="order-1 col-8 col-md-8 order-md-1 col-lg-8">
+      <div class="row master-group-name">
+        <div class="col">
+          {{ 'campaigns.row.masterGroup' | translate }} {{ campaign.masterGroupName }}
+        </div>
+      </div>
+      <div *ngIf="campaign.description" class="row campaign-description">
+        <div class="col">
+          {{ campaign.description }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <a href="#/campaign/{{campaign.campaignUid}}">
+            <button class="btn btn-success view-campaign-btn float-left">{{ 'campaigns.row.viewCampaign' | translate }}</button>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="order-2 col-4 col-md-4 order-md-4 col-lg-4">
+      {{ campaign.totalEngaged  != null ? campaign.totalEngaged : "0" }} {{ 'campaigns.row.engaged' | translate }},
+      {{ campaign.totalJoined != null ? campaign.totalJoined : "0" }} {{ 'campaigns.row.joined' | translate }}
+    </div>
+  </div>
+</div>

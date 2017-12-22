@@ -1,5 +1,6 @@
 <ng4-loading-spinner
   [loadingText]="'groups.loading' | translate"
+  [threshold]="500"
 > </ng4-loading-spinner>
 <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#create-group-modal">
   {{ 'groups.create' | translate }}
@@ -92,7 +93,7 @@
   </div>
 </div>
 
-<nav aria-label="Page navigation example" *ngIf="pagesList.length > 0">
+<nav aria-label="Group list navigation" *ngIf="pagesList.length > 0">
   <ul class="pagination justify-content-end">
     <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
       <a class="page-indicator " (click)="previousPage()">

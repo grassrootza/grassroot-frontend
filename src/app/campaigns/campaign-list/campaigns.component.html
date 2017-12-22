@@ -1,0 +1,20 @@
+<a href="#/campaigns/create" type="button" class="btn btn-success float-right">
+  {{ 'campaigns.create' | translate }}
+</a>
+<h1 class="main-title">{{ 'campaigns.title' | translate }}</h1>
+
+<h2 *ngIf="activeCampaigns.length > 0">
+  {{ 'campaigns.activeTitle' | translate }}
+</h2>
+
+<div *ngIf="activeCampaigns.length > 0" class="card">
+  <div class="card-body">
+    <app-campaign-info *ngFor="let cp of activeCampaigns"
+                    [campaign]="cp">
+    </app-campaign-info>
+  </div>
+</div>
+
+<h2 *ngIf="pastCampaigns.length > 0">
+  {{ 'campaigns.pastTitle' | translate }}
+</h2>

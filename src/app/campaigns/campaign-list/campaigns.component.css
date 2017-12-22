@@ -1,0 +1,14 @@
+.card-body {
+  padding: 0.3rem;
+}
+
+.campaign-info-header {
+  border-top: none;
+  border-bottom: none;
+  background-color: #F5F6FA;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 12px;
+  line-height: 16px;
+}
+
