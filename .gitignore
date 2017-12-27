@@ -41,3 +41,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Package log and tslint, included idiosyncratically
+tslint.json
+package-lock.json
