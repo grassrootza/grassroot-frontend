@@ -166,6 +166,33 @@
       "viewCampaign": "View"
     }
   },
+  "broadcasts": {
+    "create": {
+      "title": "Send a new broadcast message",
+      "nav": {
+        "types": "Message types",
+        "content": "Message content",
+        "members": "Select members",
+        "schedule": "When to send"
+      },
+      "types": {
+        "title": "How would you like to broadcast this message?",
+        "smsLabel": "SMS",
+        "emailLabel": "Email",
+        "fbLabel": "Facebook",
+        "twitterLabel": "Twitter"
+      },
+      "content": {
+        "pageTitle": "What would you like to say?",
+        "titleSection": "Title",
+        "titleLabel": "Give this message a title for easy reference later:",
+        "smsSection": "Short message (SMS, notification, etc)",
+        "emailSection": "Email",
+        "fbSection": "Facebook post",
+        "twitterSection": "Tweet"
+      }
+    }
+  },
 
   "login": {
     "title": "Login",
@@ -193,6 +220,9 @@
     "save": "Save",
     "cancel": "Cancel",
     "submit": "Submit",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "continue": "Continue",
+    "next": "Next",
+    "back": "Back"
   }
 }

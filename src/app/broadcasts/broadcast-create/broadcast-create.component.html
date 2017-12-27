@@ -1,0 +1,36 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1">
+        <div class="d-flex justify-content-center">
+          <h1>{{ 'broadcasts.create.title' | translate }}</h1>
+        </div>
+      </div>
+      <div class="col-12 d-flex justify-content-center">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="collapse navbar-collapse" id="broadcastCreateWizardNavbar">
+            <ul class="nav nav-tabs" id="wizardTabs">
+              <li class="nav-item">
+                <a class="nav-link" href="#" [routerLink]="['types']" [translate]="'broadcasts.create.nav.types'">Message types</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" [routerLink]="['content']" [translate]="'broadcasts.create.nav.content'">Message content</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" [routerLink]="['members']" [translate]="'broadcasts.create.nav.members'">Select members</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" [routerLink]="['schedule']" [translate]="'broadcasts.create.nav.schedule'">When to Send</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+      <div class="col-12 d-flex justify-content-center">
+        <div class="tab-area">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

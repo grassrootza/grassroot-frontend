@@ -39,6 +39,13 @@ import { CampaignsComponent } from './campaigns/campaign-list/campaigns.componen
 import {CampaignService} from "./campaigns/campaign.service";
 import { CampaignInfoComponent } from './campaigns/campaign-list-row/campaign-info.component';
 import { CampaignCreateComponent } from './campaigns/campaign-create/campaign-create.component';
+import { BroadcastsComponent } from './broadcasts/broadcast-list/broadcasts.component';
+import {BroadcastCreateComponent} from "./broadcasts/broadcast-create/broadcast-create.component";
+import { BroadcastTypeComponent } from './broadcasts/broadcast-create/broadcast-type/broadcast-type.component';
+import { BroadcastContentComponent } from './broadcasts/broadcast-create/broadcast-content/broadcast-content.component';
+import { BroadcastMembersComponent } from './broadcasts/broadcast-create/broadcast-members/broadcast-members.component';
+import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcast-schedule/broadcast-schedule.component";
+import {BroadcastService} from "./broadcasts/broadcast.service";
 
 
 const routes: Routes = [
@@ -81,7 +88,17 @@ const routes: Routes = [
     ]
   },
   {path: 'campaigns', component: CampaignsComponent, canActivate: [LoggedInGuard]},
-  {path: 'campaigns/create', component: CampaignCreateComponent, canActivate: [LoggedInGuard]}
+  {path: 'campaign/create', component: CampaignCreateComponent, canActivate: [LoggedInGuard]},
+  {
+    path: 'broadcast/create/:type/:parentId', component: BroadcastCreateComponent, canActivate: [LoggedInGuard],
+    children: [
+      {path: '', redirectTo: 'types', pathMatch: 'full'},
+      {path: 'types', component: BroadcastTypeComponent, canActivate: [LoggedInGuard]},
+      {path: 'content', component: BroadcastContentComponent, canActivate: [LoggedInGuard]},
+      {path: 'members', component: BroadcastMembersComponent, canActivate: [LoggedInGuard]},
+      {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard]}
+    ]
+  }
 ];
 
 
@@ -116,7 +133,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     FacebookImportComponent,
     CampaignsComponent,
     CampaignInfoComponent,
-    CampaignCreateComponent
+    CampaignCreateComponent,
+    BroadcastsComponent,
+    BroadcastCreateComponent,
+    BroadcastTypeComponent,
+    BroadcastContentComponent,
+    BroadcastMembersComponent,
+    BroadcastScheduleComponent,
   ],
   imports: [
     BrowserModule,
@@ -148,7 +171,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupService,
     UserService,
     TaskService,
-    CampaignService
+    CampaignService,
+    BroadcastService
   ],
   bootstrap: [AppComponent]
 })
