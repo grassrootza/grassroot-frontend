@@ -127,7 +127,24 @@
         "topics": "Assign topics",
         "taskTeam": "Add to task team",
         "role": "Change role",
-        "remove": "Remove"
+        "remove": "Remove",
+        "noMembersSelectedModal": {
+          "title": "No members selected",
+          "body": "You should select at least one member to manage."
+        },
+        "bulkRemoveModal":{
+          "title": "Bulk remove members",
+          "question": "Are you sure you want to remove the following members ?",
+          "questionAdditionalInfo": "All of their contact details will be deleted and they will no longer be a part of this group",
+          "noButton": "No, Cancal",
+          "yesButton": "Yes, Remove members",
+          "table":{
+            "name": "Name",
+            "role": "Role",
+            "phone": "Phone",
+            "email": "Email"
+          }
+        }
       },
       "manage":{
         "manage": "Manage",
@@ -136,6 +153,21 @@
         "topics" : "Assign topic(s)",
         "taskTeam": "Add to task team",
         "remove": "Remove"
+      },
+      "addToTaskTeam":{
+        "modalTitle": "Add member to task team",
+        "table":{
+          "name": "Name",
+          "role": "Role",
+          "phone": "Phone",
+          "email": "Email"
+        },
+        "addToTaskTeamLabel": "Add to task team:",
+        "pickTaskTeam": "Pick task team to add member to",
+        "noTaskTeamsForGroup":{
+          "title": "No task teams",
+          "body": "This group does not have any task team"
+        }
       }
     },
     "import": {
@@ -147,7 +179,23 @@
       },
       "file": {
         "browseFile": "Click to browse",
-        "dragAndDrop": "Or Drag & Drop to upload your files"
+        "dragAndDrop": "Or Drag & Drop to upload your files",
+        "changeFile": "Change file to upload",
+        "hasHeader": "Sheet has header row",
+        "noHeader": "No header row",
+        "memberNames": "Column with member names",
+        "phoneNumbers": "Column with phone numbers",
+        "email": "Column with emails (optional)",
+        "province": "Column with provinces (optional)",
+        "role": "Column with roles (optional)",
+        "none": "None",
+        "memberTable":{
+          "name": "Name",
+          "phone": "Phone",
+          "email": "Email",
+          "province": "Province",
+          "role": "Role"
+        }
       }
     }
   },
@@ -175,6 +223,7 @@
     "next": "Next"
   },
   "action":{
+    "ok": "OK",
     "save": "Save",
     "cancel": "Cancel",
     "submit": "Submit",
