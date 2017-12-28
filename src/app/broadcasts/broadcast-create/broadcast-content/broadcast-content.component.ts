@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BroadcastContent, BroadcastTypes} from "../../model/broadcast-request";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 
@@ -17,12 +17,20 @@ export class BroadcastContentComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService) {
     this.contentForm = formBuilder.group(new BroadcastContent());
-    this.types = broadcastService.getTypes();
-    console.log("created content component, types set as = ", this.types);
   }
 
   ngOnInit() {
+    this.types = this.broadcastService.getTypes();
     this.contentForm.setValue(this.broadcastService.getContent());
+    this.setUpValidation();
+  }
+
+  setUpValidation() {
+    this.contentForm.controls['title'].setValidators([Validators.required]);
+    if (this.types.shortMessage) { this.contentForm.controls['shortMessage'].setValidators([Validators.required]); }
+    if (this.types.email) { this.contentForm.controls['emailContent'].setValidators([Validators.required]); }
+    if (this.types.facebook) { this.contentForm.controls['facebookPost'].setValidators([Validators.required]); }
+    if (this.types.twitter) { this.contentForm.controls['twitterPost'].setValidators([Validators.required]); }
   }
 
   // todo : probably want some form of caching / save draft

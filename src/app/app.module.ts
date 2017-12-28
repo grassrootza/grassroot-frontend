@@ -48,6 +48,7 @@ import { BroadcastMembersComponent } from './broadcasts/broadcast-create/broadca
 import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcast-schedule/broadcast-schedule.component";
 import {BroadcastService} from "./broadcasts/broadcast.service";
 import { BroadcastConfirmComponent } from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
+import {BroadcastWorkflowGuard} from "./broadcasts/broadcast-create/create-workflow-guard.guard";
 
 
 const routes: Routes = [
@@ -95,10 +96,10 @@ const routes: Routes = [
     path: 'broadcast/create/:type/:parentId', component: BroadcastCreateComponent, canActivate: [LoggedInGuard],
     children: [
       {path: '', redirectTo: 'types', pathMatch: 'full'},
-      {path: 'types', component: BroadcastTypeComponent, canActivate: [LoggedInGuard]},
-      {path: 'content', component: BroadcastContentComponent, canActivate: [LoggedInGuard]},
-      {path: 'members', component: BroadcastMembersComponent, canActivate: [LoggedInGuard]},
-      {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard]}
+      {path: 'types', component: BroadcastTypeComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
+      {path: 'content', component: BroadcastContentComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
+      {path: 'members', component: BroadcastMembersComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
+      {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]}
     ]
   }
 ];
@@ -179,7 +180,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserService,
     TaskService,
     CampaignService,
-    BroadcastService
+    BroadcastService,
+    BroadcastWorkflowGuard
   ],
   bootstrap: [AppComponent]
 })

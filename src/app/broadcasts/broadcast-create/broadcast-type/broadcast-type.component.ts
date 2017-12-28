@@ -1,5 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 import {BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup} from "@angular/forms";
@@ -13,16 +13,14 @@ export class BroadcastTypeComponent implements OnInit {
 
   public typesForm: FormGroup;
 
-  // todo : validate at least one type is selected, and load various page details via service
   constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService) {
-    this.typesForm = formBuilder.group(new BroadcastTypes());
+    this.typesForm = this.formBuilder.group(new BroadcastTypes(), {validator: oneItemSelected});
   }
 
   ngOnInit() {
     this.typesForm.setValue(this.broadcastService.getTypes());
   }
 
-  // todo: probably better to do this using Rx, but given time pressure, doing this way for now
   saveTypes(): boolean {
     if (!this.typesForm.valid) {
       return false;
@@ -31,7 +29,7 @@ export class BroadcastTypeComponent implements OnInit {
     return true;
   }
 
-  goToNext() {
+  next() {
     if (this.saveTypes()) {
       this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(),
         this.broadcastService.parentId(), 'content'])
@@ -43,3 +41,16 @@ export class BroadcastTypeComponent implements OnInit {
   }
 
 }
+
+export const oneItemSelected = (form: FormGroup) => {
+  let countSelected = 0;
+  Object.keys(form.controls).forEach(key => {
+    if (form.get(key).value == true) {
+      countSelected++;
+    }
+  });
+  if (countSelected == 0) {
+    return { valid : false};
+  }
+  return null;
+};

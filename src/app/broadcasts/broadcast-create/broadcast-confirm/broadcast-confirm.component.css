@@ -1,0 +1,9 @@
+.section-title {
+  font-weight: bold;
+}
+
+.content-tabset {
+  /* todo : make this non-terrible */
+  padding-left: 100px;
+  padding-right: 100px;
+}

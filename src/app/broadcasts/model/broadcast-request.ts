@@ -21,11 +21,12 @@ export class BroadcastRequest {
   twitterContent: String = "";
   twitterLink: String = "";
 
-  selectionType: String = "allMembers";
+  selectionType: String = "ALL_MEMBERS";
   subgroups: String[] = [];
   provinces: String[] = [];
   topics: String[] = [];
 
+  sendType: String = "SEND_NOW";
   sendNow: boolean = true;
   sendOnJoin: boolean = false;
   sendAtTime: boolean = false;
@@ -46,6 +47,17 @@ export class BroadcastRequest {
     this.twitterContent = "";
     this.provinces = [];
     this.topics = [];
+  }
+
+  checkTypesSet() {
+    return this.sendShortMessages || this.sendEmail || this.postToFacebook || this.postToTwitter;
+  }
+
+  checkContentSet() {
+    return (this.sendShortMessages && this.shortMessageString != "") ||
+      (this.sendEmail && this.emailContent != "") ||
+      (this.postToFacebook && this.facebookContent != "") ||
+      (this.postToTwitter && this.twitterContent != "");
   }
 
 }
@@ -76,7 +88,7 @@ export class BroadcastContent {
 
 export class BroadcastMembers {
 
-  selectionType: String = "allMembers";
+  selectionType: String = "ALL_MEMBERS";
   taskTeams: String[] = [];
   provinces: String[] = [];
   topics: String[] = [];
@@ -85,6 +97,7 @@ export class BroadcastMembers {
 
 export class BroadcastSchedule {
 
+  sendType: String = "SEND_NOW";
   sendNow: boolean = true;
   sendOnJoin: boolean = false;
   sendAtTime: boolean = false;
@@ -97,6 +110,7 @@ export class BroadcastConfirmation {
   sendShortMessage: boolean;
   sendShortMessageCount: number;
   sendEmail: boolean;
+  sendEmailCount: number;
   postFacebook: boolean;
   facebookPage: String;
   postTwitter: boolean;
@@ -107,5 +121,6 @@ export class BroadcastConfirmation {
   provinces: String[];
 
   sendTime: String;
+  sendTimeDescription: String;
 
 }

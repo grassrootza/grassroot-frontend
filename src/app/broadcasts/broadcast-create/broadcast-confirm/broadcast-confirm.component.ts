@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import {BroadcastService} from "../../broadcast.service";
 import {Router} from "@angular/router";
-import {BroadcastConfirmation} from "../../model/broadcast-request";
+import {BroadcastConfirmation, BroadcastContent} from "../../model/broadcast-request";
 
 @Component({
   selector: 'app-broadcast-confirm',
@@ -11,14 +11,15 @@ import {BroadcastConfirmation} from "../../model/broadcast-request";
 })
 export class BroadcastConfirmComponent implements OnInit {
 
-  private confirmFields: BroadcastConfirmation;
+  public confirmFields: BroadcastConfirmation;
+  public contentFields: BroadcastContent;
 
   constructor(public activeModal: NgbActiveModal, private broadcastService: BroadcastService,
               private router: Router) { }
 
   ngOnInit() {
-    let confirmFields = this.broadcastService.getConfirmationFields()
-
+    this.confirmFields = this.broadcastService.getConfirmationFields();
+    this.contentFields = this.broadcastService.getContent();
   }
 
   edit() {

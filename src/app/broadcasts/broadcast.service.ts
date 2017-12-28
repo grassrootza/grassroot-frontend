@@ -91,6 +91,7 @@ export class BroadcastService {
 
   getSchedule(): BroadcastSchedule {
     return  {
+      sendType: this.createRequest.sendType,
       sendNow: this.createRequest.sendNow,
       sendOnJoin: this.createRequest.sendOnJoin,
       sendAtTime: this.createRequest.sendAtTime,
@@ -108,18 +109,21 @@ export class BroadcastService {
   getConfirmationFields(): BroadcastConfirmation {
     let cn = new BroadcastConfirmation();
     cn.sendShortMessage = this.createRequest.sendShortMessages;
-    cn.sendShortMessageCount = 100;
     cn.sendEmail = this.createRequest.sendEmail;
     cn.postFacebook = this.createRequest.postToFacebook;
     cn.facebookPage = this.createRequest.facebookPage;
     cn.postTwitter = this.createRequest.postToTwitter;
     cn.twitterAccount = this.createRequest.twitterAccount;
 
-    cn.totalMemberCount = 100;
+    cn.sendShortMessageCount = 100;
+    cn.sendEmailCount = 50;
+    cn.totalMemberCount = 150;
+
     cn.provinces = this.createRequest.provinces;
     cn.topics = this.createRequest.topics;
 
     cn.sendTime = this.createRequest.sendDate; // todo: slightly more complex logic
+    cn.sendTimeDescription = "Sending now"; // todo : make real
 
     return cn;
   }
@@ -139,6 +143,21 @@ export class BroadcastService {
 
   parentId(): String {
     return this.createRequest.parentId;
+  }
+
+  routeUrl(child: String) {
+    return '/broadcast/create/' + this.currentType() + '/' + this.parentId() + '/' + child;
+  }
+
+  firstInvalidPath(): String {
+    if (!this.createRequest.checkTypesSet()) {
+      return "types";
+    }
+    if (!this.createRequest.checkContentSet()) {
+      return "content";
+    }
+    // todo : think about other steps (e.g., depending on type selected)
+    return "";
   }
 
 }

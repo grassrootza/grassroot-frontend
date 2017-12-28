@@ -10,15 +10,22 @@
             (ngSubmit)="next()">
         <div class="form-row">
           <div class="form-group col-sm-12">
-            <label>{{ 'broadcasts.create.content.titleLabel' | translate }}</label>
-            <input type="text" formControlName="title" class="form-control" >
+            <label for="title">{{ 'broadcasts.create.content.titleLabel' | translate }}</label>
+            <input id="title" type="text" formControlName="title" class="form-control" >
           </div>
+        </div>
+        <div class="error" [hidden]="contentForm.controls['title'].valid || contentForm.controls['title'].untouched">
+          {{ 'broadcasts.create.content.errors.title' | translate }}
         </div>
         <div class="form-row">
           <div class="form-group col-sm-12" *ngIf="types.shortMessage">
             <label>{{ 'broadcasts.create.content.smsSection' | translate }}</label>
-            <textarea formControlName="shortMessage" class="form-control"></textarea>
+            <textarea formControlName="shortMessage" class="form-control" maxlength="160"></textarea>
           </div>
+          <!-- todo : add character count -->
+        </div>
+        <div class="error" [hidden]="contentForm.controls['shortMessage'].valid || contentForm.controls['shortMessage'].untouched">
+          {{ 'broadcasts.create.content.errors.shortMessage' | translate }}
         </div>
         <div class="form-row">
           <div class="form-group col-sm-12" *ngIf="types.email">
@@ -26,17 +33,26 @@
             <textarea formControlName="emailContent" class="form-control"></textarea>
           </div>
         </div>
+        <div class="error" [hidden]="contentForm.controls['emailContent'].valid || contentForm.controls['emailContent'].untouched">
+          {{ 'broadcasts.create.content.errors.email' | translate }}
+        </div>
         <div class="form-row">
           <div class="form-group col-sm-12" *ngIf="types.facebook">
             <label>{{ 'broadcasts.create.content.fbSection' | translate }}</label>
             <textarea formControlName="facebookPost" class="form-control"></textarea>
           </div>
         </div>
+        <div class="error" [hidden]="contentForm.controls['facebookPost'].valid || contentForm.controls['facebookPost'].untouched">
+          {{ 'broadcasts.create.content.errors.facebook' | translate }}
+        </div>
         <div class="form-row">
           <div class="form-group col-sm-12" *ngIf="types.twitter">
             <label>{{ 'broadcasts.create.content.twitterSection' | translate }}</label>
             <textarea formControlName="twitterPost" class="form-control"></textarea>
           </div>
+        </div>
+        <div class="error" [hidden]="contentForm.controls['twitterPost'].valid || contentForm.controls['twitterPost'].untouched">
+          {{ 'broadcasts.create.content.errors.twitterPost' | translate }}
         </div>
         <div class="form-row">
           <div class="col-sm-4 pull-left">
@@ -48,7 +64,7 @@
               {{ 'action.back' | translate }}</button>
           </div>
           <div class="col-sm-4 pull-right">
-            <button type="submit" class="btn btn-primary"> {{ 'action.next' | translate }}
+            <button [disabled]="!contentForm.valid" type="submit" class="btn btn-primary"> {{ 'action.next' | translate }}
             </button>
           </div>
         </div>
