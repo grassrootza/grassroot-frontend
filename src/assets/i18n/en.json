@@ -190,6 +190,34 @@
         "emailSection": "Email",
         "fbSection": "Facebook post",
         "twitterSection": "Tweet"
+      },
+      "members": {
+        "title": "Who would you like to send it to?",
+        "allMembers": "All members ({{memberCount}})",
+        "taskTeams": "Selected task teams",
+        "customSelection": "Custom selection"
+      },
+      "schedule": {
+        "title": "When would you like to send it?",
+        "now": "Now",
+        "join_group": "When someone joins the group",
+        "join_campaign": "When someone signs up to campaign",
+        "time": "At a specific time"
+      },
+      "confirm": {
+        "title": "Review & Confirm Broadcast Message",
+        "types": "Broadcast via:",
+        "content": "Preview messages:",
+        "titleLabel": "Title: ",
+        "memberCount": "Send to ({{memberCount}} members))",
+        "schedule": "When: ",
+        "send": "Send now",
+        "edit": "Edit"
+      },
+      "costs": {
+        "costsTitle": "Review costs",
+        "smsCount": "SMS's: ",
+        "costsEstimate": "Estimated cost: R{{costEstimate}}"
       }
     }
   },
@@ -223,6 +251,8 @@
     "signUp": "Sign up",
     "continue": "Continue",
     "next": "Next",
-    "back": "Back"
+    "back": "Back",
+    "date": "Date",
+    "time": "Time"
   }
 }

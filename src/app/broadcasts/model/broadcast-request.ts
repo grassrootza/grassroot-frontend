@@ -21,11 +21,17 @@ export class BroadcastRequest {
   twitterContent: String = "";
   twitterLink: String = "";
 
-  allMembers: boolean = true;
-  subgroups: String[];
-  provinces: String[];
-  topics: String[];
+  selectionType: String = "allMembers";
+  subgroups: String[] = [];
+  provinces: String[] = [];
+  topics: String[] = [];
 
+  sendNow: boolean = true;
+  sendOnJoin: boolean = false;
+  sendAtTime: boolean = false;
+  sendDate: String = Date();
+
+  // todo : probably reuse this instead of recreating if we cancel and re-enter
   clear() {
     this.title = "";
     this.sendShortMessages = false;
@@ -70,10 +76,36 @@ export class BroadcastContent {
 
 export class BroadcastMembers {
 
-  // todo : think of best way to handle possible complexity
-  allMembers: boolean = false;
-  taskTeams: String[];
-  provinces: String[];
+  selectionType: String = "allMembers";
+  taskTeams: String[] = [];
+  provinces: String[] = [];
+  topics: String[] = [];
+
+}
+
+export class BroadcastSchedule {
+
+  sendNow: boolean = true;
+  sendOnJoin: boolean = false;
+  sendAtTime: boolean = false;
+  sendDate: String = Date();
+
+}
+
+export class BroadcastConfirmation {
+
+  sendShortMessage: boolean;
+  sendShortMessageCount: number;
+  sendEmail: boolean;
+  postFacebook: boolean;
+  facebookPage: String;
+  postTwitter: boolean;
+  twitterAccount: String;
+
+  totalMemberCount: number;
   topics: String[];
+  provinces: String[];
+
+  sendTime: String;
 
 }

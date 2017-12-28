@@ -27,11 +27,12 @@ export class BroadcastMembersComponent implements OnInit {
     }
     this.broadcastService.setMembers(this.memberForm.value);
     console.log("stored member selection, looks like: ", this.broadcastService.getMembers());
+    return true;
   }
 
   next() {
     if (this.saveMemberSelection()) {
-      this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(), this.broadcastService.parentId(), 'schedlue']);
+      this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(), this.broadcastService.parentId(), 'schedule']);
     }
   }
 

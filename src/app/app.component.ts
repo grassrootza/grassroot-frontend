@@ -13,7 +13,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 
 
-
+// todo : general - make use of upper case letters in titles consistent throughout
 export class AppComponent {
 
   loggedInUser: AuthenticatedUser = null;

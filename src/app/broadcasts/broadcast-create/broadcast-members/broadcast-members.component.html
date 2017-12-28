@@ -1,3 +1,64 @@
-<p>
-  broadcast-members works!
-</p>
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-12 text-center" >
+      <h3>{{ 'broadcasts.create.members.title' | translate }}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-left">
+      <form [formGroup]="memberForm"
+            (ngSubmit)="next()">
+
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" checked value="allMembers" formControlName="selectionType">
+                {{ 'broadcasts.create.members.allMembers' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" value="taskTeams" formControlName="selectionType">
+                {{ 'broadcasts.create.members.taskTeams' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="radio" value="customSelection" formControlName="selectionType">
+                {{ 'broadcasts.create.members.customSelection' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col-sm-4 pull-left">
+            <button type="button" (click)="cancel()" class="btn btn-secondary">
+              {{ 'action.cancel' | translate }}</button>
+          </div>
+          <div class="col-sm-4">
+            <button type="button" (click)="back()" class="btn btn-secondary">
+              {{ 'action.back' | translate }}</button>
+          </div>
+          <div class="col-sm-4 pull-right">
+            <button type="submit" class="btn btn-primary"> {{ 'action.next' | translate }}
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+</div>

@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {Ng4LoadingSpinnerModule} from 'ng4-loading-spinner';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {AppComponent} from './app.component';
 import {GroupsComponent} from './groups/group-list/groups.component';
@@ -46,6 +47,7 @@ import { BroadcastContentComponent } from './broadcasts/broadcast-create/broadca
 import { BroadcastMembersComponent } from './broadcasts/broadcast-create/broadcast-members/broadcast-members.component';
 import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcast-schedule/broadcast-schedule.component";
 import {BroadcastService} from "./broadcasts/broadcast.service";
+import { BroadcastConfirmComponent } from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
 
 
 const routes: Routes = [
@@ -140,6 +142,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     BroadcastContentComponent,
     BroadcastMembersComponent,
     BroadcastScheduleComponent,
+    BroadcastConfirmComponent,
+  ],
+  entryComponents: [
+    BroadcastConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -162,7 +168,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         },
         whitelistedDomains: ['localhost:8080']
       }
-    })
+    }),
+    NgbModule.forRoot()
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},

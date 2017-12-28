@@ -2,7 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {UserService} from "../user/user.service";
 import {environment} from "../../environments/environment.prod";
-import {BroadcastContent, BroadcastMembers, BroadcastRequest, BroadcastTypes} from "./model/broadcast-request";
+import {
+  BroadcastConfirmation, BroadcastContent, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
+  BroadcastTypes
+} from "./model/broadcast-request";
 
 @Injectable()
 export class BroadcastService {
@@ -72,7 +75,7 @@ export class BroadcastService {
 
   getMembers(): BroadcastMembers {
     return {
-      allMembers: this.createRequest.allMembers,
+      selectionType: this.createRequest.selectionType,
       taskTeams: this.createRequest.subgroups,
       provinces: this.createRequest.provinces,
       topics: this.createRequest.topics
@@ -80,10 +83,49 @@ export class BroadcastService {
   }
 
   setMembers(members: BroadcastMembers) {
-    this.createRequest.allMembers = members.allMembers;
+    this.createRequest.selectionType = members.selectionType;
     this.createRequest.subgroups = members.taskTeams;
     this.createRequest.provinces = members.provinces;
     this.createRequest.topics = members.topics;
+  }
+
+  getSchedule(): BroadcastSchedule {
+    return  {
+      sendNow: this.createRequest.sendNow,
+      sendOnJoin: this.createRequest.sendOnJoin,
+      sendAtTime: this.createRequest.sendAtTime,
+      sendDate: this.createRequest.sendDate
+    }
+  }
+
+  setSchedule(schedule: BroadcastSchedule) {
+    this.createRequest.sendNow = schedule.sendNow;
+    this.createRequest.sendOnJoin = schedule.sendOnJoin;
+    this.createRequest.sendAtTime = schedule.sendAtTime;
+  }
+
+  // todo : populate fields like number messages etc by querying back end
+  getConfirmationFields(): BroadcastConfirmation {
+    let cn = new BroadcastConfirmation();
+    cn.sendShortMessage = this.createRequest.sendShortMessages;
+    cn.sendShortMessageCount = 100;
+    cn.sendEmail = this.createRequest.sendEmail;
+    cn.postFacebook = this.createRequest.postToFacebook;
+    cn.facebookPage = this.createRequest.facebookPage;
+    cn.postTwitter = this.createRequest.postToTwitter;
+    cn.twitterAccount = this.createRequest.twitterAccount;
+
+    cn.totalMemberCount = 100;
+    cn.provinces = this.createRequest.provinces;
+    cn.topics = this.createRequest.topics;
+
+    cn.sendTime = this.createRequest.sendDate; // todo: slightly more complex logic
+
+    return cn;
+  }
+
+  confirmAndSend(confirmFields: BroadcastConfirmation) {
+    // invoke http client
   }
 
   cancelRoute(): String {
