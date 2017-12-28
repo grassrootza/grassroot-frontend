@@ -3,6 +3,9 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {GroupService} from '../../../../group.service';
 import {GroupMembersImportExcelSheetAnalysis} from '../../../../model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from '../../../../model/group-add-member-info.model';
+import {GroupModifiedResponse} from '../../../../model/group-modified-response.model';
+
+declare var $: any;
 
 @Component({
   selector: 'app-file-import',
@@ -31,6 +34,7 @@ export class FileImportComponent implements OnInit {
 
   groupMembersImportExcelSheetAnalysis: GroupMembersImportExcelSheetAnalysis = null;
   groupAddMembersInfo: GroupAddMemberInfo[] = [];
+  groupModifiedResponse: GroupModifiedResponse = null;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -59,9 +63,36 @@ export class FileImportComponent implements OnInit {
       roleColumn: this.roleColumn,
       header: this.sheetHasHeader
     };
-    this.groupService.confirmImportMembers(params).subscribe(resp => {
+    this.groupService.importAnalyzeMembers(params).subscribe(resp => {
       this.groupAddMembersInfo = resp;
     })
+  }
+
+  backToExcelAnalysis(){
+    this.groupAddMembersInfo = [];
+  }
+
+  cancelImport(){
+    this.groupMembersImportExcelSheetAnalysis = null;
+    this.groupAddMembersInfo = [];
+    this.sheetHasHeader = true;
+    this.nameColumn = 0;
+    this.phoneColumn = 0;
+    this.emailColumn = -1;
+    this.provinceColumn = -1;
+    this.roleColumn = -1;
+  }
+
+  confirmImport(){
+    this.groupService.confirmImport(this.groupUid, this.groupAddMembersInfo).subscribe(resp => {
+      this.groupModifiedResponse = resp;
+      $('#group-modified-response-modal').modal('show');
+    })
+  }
+
+  closeResponseModal(){
+    $('#group-modified-response-modal').modal('hide');
+    this.router.navigate(['group/' + this.groupUid + '/members']);
   }
 
   onFileChange(event){
@@ -113,7 +144,7 @@ export class FileImportComponent implements OnInit {
         groupUid: this.groupUid
       };
 
-      this.groupService.importMembersAnalyze(formData, params).
+      this.groupService.importHeaderAnalyze(formData, params).
         subscribe(response => {
           this.groupMembersImportExcelSheetAnalysis = response;
       },

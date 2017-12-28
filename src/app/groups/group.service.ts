@@ -14,6 +14,7 @@ import {TaskInfo} from "../task/task-info.model";
 import {Membership, MembersPage} from "./model/membership.model";
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from './model/group-add-member-info.model';
+import {GroupModifiedResponse} from './model/group-modified-response.model';
 
 @Injectable()
 export class GroupService {
@@ -21,6 +22,7 @@ export class GroupService {
   groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
   groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
   groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
+  groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
@@ -177,7 +179,7 @@ export class GroupService {
       });
   }
 
-  importMembersAnalyze(file, params):Observable<GroupMembersImportExcelSheetAnalysis>{
+  importHeaderAnalyze(file, params):Observable<GroupMembersImportExcelSheetAnalysis>{
     return  this.httpClient.post<GroupMembersImportExcelSheetAnalysis>(this.groupImportMembersAnalyzeUrl, file, {params: params})
       .map(response => {
         return response;
@@ -185,7 +187,7 @@ export class GroupService {
       );
   }
 
-  confirmImportMembers(params): Observable<GroupAddMemberInfo[]>{
+  importAnalyzeMembers(params): Observable<GroupAddMemberInfo[]>{
     return this.httpClient.post<GroupAddMemberInfo[]>(this.groupImportMembersConfirmUrl, null, {params: params})
       .map(
         data => {
@@ -193,13 +195,22 @@ export class GroupService {
             gami => new GroupAddMemberInfo(
               gami.memberMsisdn,
               gami.displayName,
-              GroupRole[gami.roleName],
+              gami.roleName,
               gami.alernateNumbers,
               gami.emailAddress
             )
           )
         }
       )
+  }
+
+  confirmImport(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[]):Observable<GroupModifiedResponse>{
+    const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
+    return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd)
+      .map(resp => {
+        return resp;
+      })
+
   }
 
 

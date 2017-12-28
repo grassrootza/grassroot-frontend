@@ -195,6 +195,11 @@
           "email": "Email",
           "province": "Province",
           "role": "Role"
+        },
+        "responseModal": {
+          "title": "Members added to group",
+          "success": "Successfully imported {{value}} members",
+          "error": "Error importing {{value}} members, following numbers were not imported"
         }
       }
     }
@@ -227,6 +232,8 @@
     "save": "Save",
     "cancel": "Cancel",
     "submit": "Submit",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "back": "Back",
+    "confirm": "Confirm"
   }
 }

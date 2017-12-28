@@ -12,7 +12,7 @@
             <button class="btn btn-outline-secondary rectangle">
               <img src="assets/add-user.png"/>
               Add a member</button>
-            <button class="btn btn-outline-secondary rectangle" [routerLink]="['/group/import/', group.groupUid]">
+            <button class="btn btn-outline-secondary rectangle" [routerLink]="['/group/import/', group.groupUid]" [disabled]="!group.paidFor">
               <img src="assets/import.png"/>
               Import list</button>
           </div>
