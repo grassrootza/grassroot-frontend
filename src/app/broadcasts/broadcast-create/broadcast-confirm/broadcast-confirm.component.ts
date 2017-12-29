@@ -29,7 +29,13 @@ export class BroadcastConfirmComponent implements OnInit {
   }
 
   confirm() {
-    // submit it and exit
+    console.log("okay, here goes ...");
+    this.broadcastService.sendBroadcast().subscribe(result => {
+      console.log("it worked! result: ", result);
+      // do something
+    }, error => {
+      console.log("it failed! result: ", error);
+    })
   }
 
 }

@@ -26,11 +26,13 @@ export class BroadcastRequest {
   provinces: String[] = [];
   topics: String[] = [];
 
-  sendType: String = "SEND_NOW";
+  sendType: String = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
   sendNow: boolean = true;
   sendOnJoin: boolean = false;
   sendAtTime: boolean = false;
-  sendDate: String = Date();
+  sendDate: string = Date();
+
+  sendDateTimeMillis: number;
 
   // todo : probably reuse this instead of recreating if we cancel and re-enter
   clear() {
@@ -97,11 +99,8 @@ export class BroadcastMembers {
 
 export class BroadcastSchedule {
 
-  sendType: String = "SEND_NOW";
-  sendNow: boolean = true;
-  sendOnJoin: boolean = false;
-  sendAtTime: boolean = false;
-  sendDate: String = Date();
+  sendType: String = "IMMEDIATE";
+  sendDate: string = Date();
 
 }
 

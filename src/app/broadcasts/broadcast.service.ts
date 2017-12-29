@@ -6,11 +6,13 @@ import {
   BroadcastConfirmation, BroadcastContent, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
   BroadcastTypes
 } from "./model/broadcast-request";
+import {DateTimeUtils} from "../DateTimeUtils";
 
 @Injectable()
 export class BroadcastService {
 
   fetchUrlBase = environment.backendAppUrl + "/api/broadcast/fetch/";
+  createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
 
   private createRequest: BroadcastRequest = new BroadcastRequest();
 
@@ -25,10 +27,6 @@ export class BroadcastService {
     this.createRequest = new BroadcastRequest();
     this.createRequest.type = type;
     this.createRequest.parentId = parentId;
-  }
-
-  sendBroadcast() {
-
   }
 
   getTypes(): BroadcastTypes {
@@ -92,17 +90,13 @@ export class BroadcastService {
   getSchedule(): BroadcastSchedule {
     return  {
       sendType: this.createRequest.sendType,
-      sendNow: this.createRequest.sendNow,
-      sendOnJoin: this.createRequest.sendOnJoin,
-      sendAtTime: this.createRequest.sendAtTime,
       sendDate: this.createRequest.sendDate
     }
   }
 
   setSchedule(schedule: BroadcastSchedule) {
-    this.createRequest.sendNow = schedule.sendNow;
-    this.createRequest.sendOnJoin = schedule.sendOnJoin;
-    this.createRequest.sendAtTime = schedule.sendAtTime;
+    this.createRequest.sendType = schedule.sendType;
+    this.createRequest.sendDate = schedule.sendDate;
   }
 
   // todo : populate fields like number messages etc by querying back end
@@ -128,7 +122,15 @@ export class BroadcastService {
     return cn;
   }
 
-  confirmAndSend(confirmFields: BroadcastConfirmation) {
+  sendBroadcast() {
+    if (this.createRequest.sendType == "FUTURE") {
+      console.log("converting future date time : ", this.createRequest.sendDate);
+      this.createRequest.sendDateTimeMillis = DateTimeUtils.convertDateStringToEpochMilli(this.createRequest.sendDate);
+      console.log("converted epoch millis : ", this.createRequest.sendDateTimeMillis);
+    }
+
+    const fullUrl = this.createUrlBase + this.createRequest.type + "/" + this.createRequest.parentId;
+    return this.httpClient.post(fullUrl, this.createRequest);
     // invoke http client
   }
 
