@@ -24,7 +24,8 @@ export class Group {
               public paidFor: boolean,
               public userPermissions: string[],
               public userRole: string,
-              public subGroups: GroupRef[]) {
+              public subGroups: GroupRef[],
+              public topics: string[]) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 

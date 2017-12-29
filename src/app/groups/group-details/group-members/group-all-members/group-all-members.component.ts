@@ -21,7 +21,7 @@ export class GroupAllMembersComponent implements OnInit {
   private groupUid: string = '';
   public group: Group = null;
   selectedTaskTeam: GroupRef = null;
-
+  selectedTopics: string[] = [];
 
   bulkManageMembers: Membership[] = [];
 
@@ -64,11 +64,22 @@ export class GroupAllMembersComponent implements OnInit {
       )
   }
 
+  showBulkAssignTopicsModal(){
+    if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
+      $('#bulk-manage-no-members-selected').modal('show');
+    }else if(this.group.topics.length == 0){
+      $('#no-task-teams-for-group').modal('show');
+    }else{
+      $('#bulk-member-assign-topics').modal('show');
+    }
+  }
+
+
   showBulkAddToTaskTeamModal(){
     if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
       $('#bulk-manage-no-members-selected').modal('show');
     }else if(this.group.subGroups.length == 0){
-      $('#no-task-teams-for-group').modal('show');
+      $('#no-topics-for-group').modal('show');
     }else{
       $('#bulk-add-members-to-task-team-modal').modal('show');
     }
@@ -86,8 +97,21 @@ export class GroupAllMembersComponent implements OnInit {
     });
     this.groupService.addMembersToTaskTeam(this.group.groupUid, this.selectedTaskTeam.groupUid, memberUids).subscribe(response => {
       $('#bulk-add-members-to-task-team-modal').modal('hide');
+      this.goToPage(0);
     })
   }
+
+  bulkSaveAssignTopicToMember(){
+    let memberUids: string[] = [];
+    this.bulkManageMembers.forEach(m => {
+      memberUids.push(m.user.uid.toString());
+    });
+    this.groupService.assignTopicToMember(this.group.groupUid, memberUids, this.selectedTopics).subscribe(response => {
+      $('#bulk-member-assign-topics').modal('hide');
+      this.goToPage(0);
+    })
+  }
+
 
   showBulkRemoveModal(){
     if(this.bulkManageCheckNumberOfSelectedMembers() > 0){

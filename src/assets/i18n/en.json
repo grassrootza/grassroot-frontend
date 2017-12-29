@@ -168,6 +168,22 @@
           "title": "No task teams",
           "body": "This group does not have any task team"
         }
+      },
+      "assignTopic":{
+        "modalTitle": "Assign topic to member",
+        "table":{
+          "name": "Name",
+          "role": "Role",
+          "phone": "Phone",
+          "email": "Email"
+        },
+        "assignTopicLabel": "Assign topic:",
+        "pickTopic": "Pick topic to assign to member",
+        "noTopicsForGroup":{
+          "title": "No topics",
+          "body": "This group does not have any topics"
+        }
+
       }
     },
     "import": {

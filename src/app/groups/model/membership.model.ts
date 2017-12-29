@@ -18,7 +18,8 @@ export class Membership {
   constructor(public selected: boolean,
               public user: User,
               public group: GroupInfo,
-              public roleName: GroupRole) {
+              public roleName: GroupRole,
+              public topics: string[]) {
   }
 }
 

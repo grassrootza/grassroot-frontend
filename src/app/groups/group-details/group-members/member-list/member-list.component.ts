@@ -22,8 +22,9 @@ export class MemberListComponent implements OnInit {
   @Output()
   memberRemoved: EventEmitter<any>;
 
-  addMemberToTaskTeam: Membership = null;
+  singleMemberManage: Membership = null;
   selectedTaskTeam: GroupRef = null;
+  selectedTopics: string[] = [];
 
   constructor(private groupService: GroupService) {
     this.memberRemoved = new EventEmitter<any>();
@@ -54,10 +55,23 @@ export class MemberListComponent implements OnInit {
 
   showAddMemberToTaskTeamModal(member: Membership){
     if(this.group.subGroups.length > 0){
-      this.addMemberToTaskTeam = member;
+      this.singleMemberManage = member;
       $('#add-member-to-task-team').modal('show');
     }else{
       $('#no-task-teams-for-group').modal('show');
+    }
+  }
+
+  showAssignTopicToMemberModal(member: Membership){
+    if(this.group.topics.length > 0){
+      this.singleMemberManage = member;
+      this.selectedTopics = [];
+      for(let i=0;i<member.topics.length;i++){
+        this.selectedTopics.push(member.topics[i]);
+      }
+      $('#member-assign-topics').modal('show');
+    }else{
+      $('#no-topics-for-group').modal('show');
     }
   }
 
@@ -68,9 +82,17 @@ export class MemberListComponent implements OnInit {
 
   saveAddMemberToTaskTeam(){
     let memberUids: string[] = [];
-    memberUids.push(this.addMemberToTaskTeam.user.uid.toString());
+    memberUids.push(this.singleMemberManage.user.uid.toString());
     this.groupService.addMembersToTaskTeam(this.group.groupUid, this.selectedTaskTeam.groupUid, memberUids).subscribe(response => {
       $('#add-member-to-task-team').modal('hide');
+    })
+  }
+
+  saveAssignTopicToMember(){
+    let memberUids: string[] = [];
+    memberUids.push(this.singleMemberManage.user.uid.toString());
+    this.groupService.assignTopicToMember(this.group.groupUid, memberUids, this.selectedTopics).subscribe(response => {
+      $('#member-assign-topics').modal('hide');
     })
   }
 

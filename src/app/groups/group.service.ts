@@ -28,6 +28,7 @@ export class GroupService {
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
   groupRemoveMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove";
   groupAddMembersToTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/members/add/taskteam";
+  groupAssignTopicsToMemebersUrl = environment.backendAppUrl + "/api/group/modify/members/add/topics";
   groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
   groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
 
@@ -100,7 +101,8 @@ export class GroupService {
             gr.paidFor,
             gr.userPermissions,
             gr.userRole,
-            gr.subGroups
+            gr.subGroups,
+            gr.topics
           );
         }
       );
@@ -130,7 +132,7 @@ export class GroupService {
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
       .map(
         result => {
-          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName]));
+          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -177,6 +179,20 @@ export class GroupService {
       .map(response => {
         return true;
       });
+  }
+
+  assignTopicToMember(groupUid: string, membersUids: string[], topics: string[]): Observable<boolean> {
+    const fullUrl = this.groupAssignTopicsToMemebersUrl + "/" + groupUid;
+    const params = {
+      'memberUids': membersUids,
+      'topics': topics
+    };
+
+    return this.httpClient.post(fullUrl, null, {params: params})
+      .map(response => {
+        console.log(response);
+        return true;
+      })
   }
 
   importHeaderAnalyze(file, params):Observable<GroupMembersImportExcelSheetAnalysis>{

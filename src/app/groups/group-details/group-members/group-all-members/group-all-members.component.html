@@ -14,7 +14,7 @@
             <div class="dropdown-menu">
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.meeting'">Call a meeting</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.broadcast'">Send broadcast</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.topics'">Assign topic</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.topics'" (click)="showBulkAssignTopicsModal()">Assign topic</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.taskTeam'" (click)="showBulkAddToTaskTeamModal()">Add to task team</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.role'">Change role</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showBulkRemoveModal()">Remove</a>
@@ -183,6 +183,87 @@
       </div>
       <div class="modal-body">
         <h3>{{ 'group.allMembers.addToTaskTeam.noTaskTeamsForGroup.body' | translate}}</h3>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          {{ 'action.ok' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="bulk-member-assign-topics" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.allMembers.assignTopic.modalTitle' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"  *ngIf="group">
+        <div class="container group-info-header d-none d-md-block">
+          <div class="row">
+            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.name'">Name</div>
+            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.role'">Role</div>
+            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.phone'">Phone</div>
+            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.email'">email</div>
+          </div>
+        </div>
+        <div *ngFor="let member of bulkManageMembers">
+          <div class="container group-info-row">
+            <div class="row flex flex-wrap">
+              <div class="col-3">
+                {{member.user.displayName}}
+              </div>
+              <div class="col-3">
+                {{member.roleName}}
+              </div>
+              <div class="col-3">
+                {{member.user.phoneNumber}}
+              </div>
+              <div class="col-3">
+                {{member.user.email}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="container">
+          <span [translate]="'group.allMembers.assignTopic.assignTopicLabel'">Assign topics:</span>
+          <select class="form-control" id="names-select" [(ngModel)]="selectedTopics" name="name-select" multiple>
+            <option *ngFor="let topic of group.topics" [ngValue]="topic">
+              {{topic}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="bulkSaveAssignTopicToMember()" [disabled]="selectedTopics.length == 0">
+          {{ 'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'action.cancel' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="no-topics-for-group" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.allMembers.assignTopic.noTopicsForGroup.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>{{ 'group.allMembers.assignTopic.noTopicsForGroup.body' | translate}}</h3>
 
       </div>
       <div class="modal-footer">
