@@ -12,6 +12,9 @@ import {DateTimeUtils} from "../DateTimeUtils";
 import {TaskType} from "../task/task-type";
 import {TaskInfo} from "../task/task-info.model";
 import {Membership, MembersPage} from "./model/membership.model";
+import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
+import {GroupAddMemberInfo} from './model/group-add-member-info.model';
+import {GroupModifiedResponse} from './model/group-modified-response.model';
 
 @Injectable()
 export class GroupService {
@@ -19,9 +22,14 @@ export class GroupService {
   groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
   groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
   groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
+  groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
+  groupRemoveMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove";
+  groupAddMembersToTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/members/add/taskteam";
+  groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
+  groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -146,6 +154,65 @@ export class GroupService {
     const fullUrl = this.groupUnpinUrl + "/" + groupUid;
     return this.httpClient.get<boolean>(fullUrl);
   }
+
+  removeMembers(groupUid: string, membersUids: string[]):Observable<boolean> {
+    const fullUrl = this.groupRemoveMembersUrl + "/" + groupUid;
+    const params = {
+      'memberUids': membersUids
+    };
+    return this.httpClient.post<boolean>(fullUrl, null, {params: params})
+      .map(response => {
+        return response;
+      })
+  }
+
+  addMembersToTaskTeam(parentGroupUid: string, childGroupUid: string, membersUids: string[]): Observable<boolean> {
+    const fullUrl = this.groupAddMembersToTaskTeamUrl + "/" + parentGroupUid;
+    const params = {
+      'childGroupUid': childGroupUid,
+      'memberUids': membersUids
+    };
+
+    return this.httpClient.post(fullUrl, null, {params: params})
+      .map(response => {
+        return true;
+      });
+  }
+
+  importHeaderAnalyze(file, params):Observable<GroupMembersImportExcelSheetAnalysis>{
+    return  this.httpClient.post<GroupMembersImportExcelSheetAnalysis>(this.groupImportMembersAnalyzeUrl, file, {params: params})
+      .map(response => {
+        return response;
+        }
+      );
+  }
+
+  importAnalyzeMembers(params): Observable<GroupAddMemberInfo[]>{
+    return this.httpClient.post<GroupAddMemberInfo[]>(this.groupImportMembersConfirmUrl, null, {params: params})
+      .map(
+        data => {
+          return data.map(
+            gami => new GroupAddMemberInfo(
+              gami.memberMsisdn,
+              gami.displayName,
+              gami.roleName,
+              gami.alernateNumbers,
+              gami.emailAddress
+            )
+          )
+        }
+      )
+  }
+
+  confirmImport(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[]):Observable<GroupModifiedResponse>{
+    const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
+    return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd)
+      .map(resp => {
+        return resp;
+      })
+
+  }
+
 
 
 }

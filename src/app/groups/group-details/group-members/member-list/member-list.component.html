@@ -52,11 +52,96 @@
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.view'">View</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.edit'">Edit</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.topics'">Assign topic</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.taskTeam'">Add to task team</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'">Remove</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.taskTeam'"
+                 (click)="showAddMemberToTaskTeamModal(member)">Add to task team</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="removeMember(member.user.uid)">Remove</a>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--modals-->
+<div class="modal fade" tabindex="-1" role="dialog" id="add-member-to-task-team" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.allMembers.addToTaskTeam.modalTitle' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="addMemberToTaskTeam">
+        <div class="container group-info-header d-none d-md-block">
+          <div class="row">
+            <div class="col-3" [translate]="'group.allMembers.addToTaskTeam.table.name'">Name</div>
+            <div class="col-3" [translate]="'group.allMembers.addToTaskTeam.table.role'">Role</div>
+            <div class="col-3" [translate]="'group.allMembers.addToTaskTeam.table.phone'">Phone</div>
+            <div class="col-3" [translate]="'group.allMembers.addToTaskTeam.table.email'">email</div>
+          </div>
+        </div>
+        <div class="container group-info-row">
+          <div class="row flex flex-wrap">
+            <div class="col-3">
+              {{addMemberToTaskTeam.user.displayName}}
+            </div>
+            <div class="col-3">
+              {{addMemberToTaskTeam.roleName}}
+            </div>
+            <div class="col-3">
+              {{addMemberToTaskTeam.user.phoneNumber}}
+            </div>
+            <div class="col-3">
+              {{addMemberToTaskTeam.user.email}}
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <span [translate]="'group.allMembers.addToTaskTeam.addToTaskTeamLabel'">Add to task team:</span>
+          <div class="dropdown">
+            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="add-member-to-task-team-dropdown-button"
+                    aria-haspopup="true" aria-expanded="false" >
+              {{'group.allMembers.addToTaskTeam.pickTaskTeam' | translate}}
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item disabled" *ngFor="let taskTeam of group.subGroups" (click)="selectTaskTeam(taskTeam)">{{taskTeam.name}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="saveAddMemberToTaskTeam()" [disabled]="!selectedTaskTeam">
+          {{ 'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'action.cancel' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="no-task-teams-for-group" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.allMembers.addToTaskTeam.noTaskTeamsForGroup.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>{{ 'group.allMembers.addToTaskTeam.noTaskTeamsForGroup.body' | translate}}</h3>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">
+          {{ 'action.ok' | translate }}
+        </button>
       </div>
     </div>
   </div>
