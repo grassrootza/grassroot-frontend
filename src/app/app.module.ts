@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {Ng4LoadingSpinnerModule} from 'ng4-loading-spinner';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {AppComponent} from './app.component';
 import {GroupsComponent} from './groups/group-list/groups.component';
@@ -35,6 +36,19 @@ import { FileImportComponent } from './groups/group-details/group-members/group-
 import { GoogleImportComponent } from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
 import { TwitterImportComponent } from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
 import { FacebookImportComponent } from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
+import { CampaignsComponent } from './campaigns/campaign-list/campaigns.component';
+import {CampaignService} from "./campaigns/campaign.service";
+import { CampaignInfoComponent } from './campaigns/campaign-list-row/campaign-info.component';
+import { CampaignCreateComponent } from './campaigns/campaign-create/campaign-create.component';
+import { BroadcastsComponent } from './broadcasts/broadcast-list/broadcasts.component';
+import {BroadcastCreateComponent} from "./broadcasts/broadcast-create/broadcast-create.component";
+import { BroadcastTypeComponent } from './broadcasts/broadcast-create/broadcast-type/broadcast-type.component';
+import { BroadcastContentComponent } from './broadcasts/broadcast-create/broadcast-content/broadcast-content.component';
+import { BroadcastMembersComponent } from './broadcasts/broadcast-create/broadcast-members/broadcast-members.component';
+import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcast-schedule/broadcast-schedule.component";
+import {BroadcastService} from "./broadcasts/broadcast.service";
+import { BroadcastConfirmComponent } from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
+import {BroadcastWorkflowGuard} from "./broadcasts/broadcast-create/create-workflow-guard.guard";
 
 
 const routes: Routes = [
@@ -75,6 +89,18 @@ const routes: Routes = [
       {path: 'twitter', component: TwitterImportComponent, canActivate: [LoggedInGuard]},
       {path: 'facebook', component: GoogleImportComponent, canActivate: [LoggedInGuard]},
     ]
+  },
+  {path: 'campaigns', component: CampaignsComponent, canActivate: [LoggedInGuard]},
+  {path: 'campaign/create', component: CampaignCreateComponent, canActivate: [LoggedInGuard]},
+  {
+    path: 'broadcast/create/:type/:parentId', component: BroadcastCreateComponent, canActivate: [LoggedInGuard],
+    children: [
+      {path: '', redirectTo: 'types', pathMatch: 'full'},
+      {path: 'types', component: BroadcastTypeComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
+      {path: 'content', component: BroadcastContentComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
+      {path: 'members', component: BroadcastMembersComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
+      {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]}
+    ]
   }
 ];
 
@@ -107,7 +133,20 @@ export function HttpLoaderFactory(http: HttpClient) {
     FileImportComponent,
     GoogleImportComponent,
     TwitterImportComponent,
-    FacebookImportComponent
+    FacebookImportComponent,
+    CampaignsComponent,
+    CampaignInfoComponent,
+    CampaignCreateComponent,
+    BroadcastsComponent,
+    BroadcastCreateComponent,
+    BroadcastTypeComponent,
+    BroadcastContentComponent,
+    BroadcastMembersComponent,
+    BroadcastScheduleComponent,
+    BroadcastConfirmComponent,
+  ],
+  entryComponents: [
+    BroadcastConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -130,7 +169,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         },
         whitelistedDomains: ['localhost:8080']
       }
-    })
+    }),
+    NgbModule.forRoot()
   ],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
@@ -138,7 +178,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoggedInGuard,
     GroupService,
     UserService,
-    TaskService
+    TaskService,
+    CampaignService,
+    BroadcastService,
+    BroadcastWorkflowGuard
   ],
   bootstrap: [AppComponent]
 })

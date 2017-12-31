@@ -1,0 +1,72 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ 'broadcasts.create.confirm.title' | translate }}</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-12">
+      <p class="section-title">
+        {{ 'broadcasts.create.confirm.types' | translate }}
+      </p>
+      <ul>
+        <li *ngIf="confirmFields.sendShortMessage">{{ 'broadcasts.create.confirm.shortMessageLabel' | translate:confirmFields }}</li>
+        <li *ngIf="confirmFields.sendEmail">{{ 'broadcasts.create.confirm.emailLabel' | translate:confirmFields }}</li>
+        <li *ngIf="confirmFields.postFacebook">{{ 'broadcasts.create.types.fbLabel' | translate }}</li>
+        <li *ngIf="confirmFields.postTwitter">{{ 'broadcasts.create.types.twitterLabel' | translate }}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <p class="section-title">
+        {{ 'broadcasts.create.confirm.content' | translate }}
+      </p>
+      <ul>
+        <li>{{ 'broadcasts.create.confirm.titleLabel' | translate:contentFields }}</li>
+      </ul>
+      <ngb-tabset *ngIf="confirmFields.sendShortMessage" class="content-tabset">
+        <ngb-tab title="{{ 'broadcasts.create.types.smsLabel' | translate }}">
+          <ng-template ngbTabContent>
+            {{ contentFields.shortMessage }}
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab *ngIf="confirmFields.sendEmail" title="{{ 'broadcasts.create.types.emailLabel' | translate }}">
+          <ng-template ngbTabContent>
+            {{ contentFields.emailContent }}
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab *ngIf="confirmFields.postFacebook" title="{{ 'broadcasts.create.types.fbLabel' | translate }}">
+          <ng-template ngbTabContent>
+            {{ contentFields.facebookPost }}
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab *ngIf="confirmFields.postTwitter" title="{{ 'broadcasts.create.types.twitterLabel' | translate }}">
+          <ng-template ngbTabContent>
+            {{ contentFields.twitterPost }}
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <p class="section-title">
+        {{ 'broadcasts.create.confirm.memberCount' | translate:confirmFields }}
+        <!-- todo : add topic list, etc -->
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <p class="section-title">
+        {{ 'broadcasts.create.confirm.schedule' | translate:confirmFields }}
+      </p>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="confirm()">{{ 'broadcasts.create.confirm.send' | translate }}</button>
+  <button type="button" class="btn btn-secondary" (click)="edit()">{{ 'broadcasts.create.confirm.edit' | translate }}</button>
+</div>

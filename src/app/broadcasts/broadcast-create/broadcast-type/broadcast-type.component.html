@@ -1,0 +1,75 @@
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-12 text-center" >
+      <h3>{{ 'broadcasts.create.types.title' | translate }}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 text-left">
+      <form [formGroup]="typesForm"
+            (ngSubmit)="next()">
+
+        <div class="form-row">
+          <div class="form-group col-sm-4">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="false"
+                       formControlName="shortMessage">
+                {{ 'broadcasts.create.types.smsLabel' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-sm-4">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="false"
+                       formControlName="email">
+                {{ 'broadcasts.create.types.emailLabel' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-sm-4">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="false"
+                       formControlName="facebook">
+                {{ 'broadcasts.create.types.fbLabel' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-sm-4">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="false"
+                       formControlName="twitter">
+                {{ 'broadcasts.create.types.twitterLabel' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col-sm-4 pull-left">
+            <button type="button" (click)="cancel()" class="btn btn-secondary">
+                    {{ 'action.cancel' | translate }}
+            </button>
+          </div>
+          <div class="col-sm-8 pull-right">
+            <button [disabled]="!typesForm.valid" type="submit" class="btn btn-primary"> {{ 'action.next' | translate }}
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

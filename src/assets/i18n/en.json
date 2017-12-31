@@ -2,7 +2,8 @@
   "menu": {
     "home": "HOME",
     "groups": "GROUPS",
-    "campaign": "CAMPAIGNS",
+    "campaigns": "CAMPAIGNS",
+    "networks": "NETWORKS",
     "noNotifications": "No notifications",
     "showHelp": "Show help",
     "help": "Help",
@@ -14,8 +15,8 @@
     "news": "News",
     "contribute": "Contribute",
     "contactUs": "Contact Us",
-    "info": "info@company.com<br/>Call us: (+27) 21 453 26 16",
-    "copyright": "Copyright © 2017 Grassroots. All Rights Reserved",
+    "info": "contact@grassroot.org.za<br/>Call us: (+27) 11 339 13 13",
+    "copyright": "Copyright © 2018 Grassroot. All Rights Reserved",
     "licenceAgreement": "LICENCE AGREEMENT",
     "termsAndConditions": "TERMS AND CONDITIONS"
   },
@@ -220,6 +221,84 @@
       }
     }
   },
+  "campaigns": {
+    "title": "Campaigns",
+    "create": "Create Campaign",
+    "loading": "Loading campaigns",
+    "activeTitle": "Active campaigns",
+    "pastTitle": "Past campaigns",
+    "row": {
+      "ends": "Ends:",
+      "masterGroup": "Master Group: ",
+      "engaged": "engaged with this campaign",
+      "joined": "joined group",
+      "viewCampaign": "View"
+    }
+  },
+  "broadcasts": {
+    "create": {
+      "title": "Send a new broadcast message",
+      "nav": {
+        "types": "Message types",
+        "content": "Message content",
+        "members": "Select members",
+        "schedule": "When to send"
+      },
+      "types": {
+        "title": "How would you like to broadcast this message?",
+        "smsLabel": "SMS",
+        "emailLabel": "Email",
+        "fbLabel": "Facebook",
+        "twitterLabel": "Twitter"
+      },
+      "content": {
+        "pageTitle": "What would you like to say?",
+        "titleSection": "Title",
+        "titleLabel": "Give this message a title for easy reference later:",
+        "smsSection": "Short message (SMS, notification, etc)",
+        "emailSection": "Email",
+        "fbSection": "Facebook post",
+        "twitterSection": "Tweet",
+        "errors": {
+          "title": "Please enter a title for this broadcast",
+          "shortMessage": "Please enter a short message - if you want to leave it blank, please go back and unselect it",
+          "email": "Please enter an email. If you want to skip email, please go back and unselect it",
+          "facebook": "Please enter a Facebook post, or go back and unselect Facebook",
+          "twitter": "Please enter a Twitter post, or go back and unselect Twitter"
+        }
+      },
+      "members": {
+        "title": "Who would you like to send it to?",
+        "allMembers": "All members ({{memberCount}})",
+        "taskTeams": "Selected task teams",
+        "customSelection": "Custom selection"
+      },
+      "schedule": {
+        "title": "When would you like to send it?",
+        "now": "Now",
+        "join_group": "When someone joins the group",
+        "join_campaign": "When someone signs up to campaign",
+        "time": "At a specific time"
+      },
+      "confirm": {
+        "title": "Review & Confirm Broadcast Message",
+        "types": "Broadcast via:",
+        "shortMessageLabel": "Short message ({{sendShortMessageCount}})",
+        "emailLabel": "Email ({{sendEmailCount}})",
+        "content": "Preview messages:",
+        "titleLabel": "Title: {{title}} ",
+        "memberCount": "Send to ({{totalMemberCount}} members)",
+        "schedule": "When: {{sendTimeDescription}}",
+        "send": "Send now",
+        "edit": "Edit"
+      },
+      "costs": {
+        "costsTitle": "Review costs",
+        "smsCount": "SMSs: ",
+        "costsEstimate": "Estimated cost: R{{costEstimate}}"
+      }
+    }
+  },
 
   "login": {
     "title": "Login",
@@ -249,7 +328,11 @@
     "cancel": "Cancel",
     "submit": "Submit",
     "signUp": "Sign up",
+    "continue": "Continue",
+    "next": "Next",
     "back": "Back",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "date": "Date",
+    "time": "Time"
   }
 }
