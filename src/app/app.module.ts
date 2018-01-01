@@ -31,24 +31,27 @@ import {GroupTaskTeamsComponent} from './groups/group-details/group-members/grou
 import {GroupCustomFilterComponent} from './groups/group-details/group-members/group-custom-filter/group-custom-filter.component';
 import {MemberListComponent} from './groups/group-details/group-members/member-list/member-list.component';
 import {PaginationComponent} from './pagination/pagination.component';
-import { GroupMembersImportComponent } from './groups/group-details/group-members/group-members-import/group-members-import.component';
-import { FileImportComponent } from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
-import { GoogleImportComponent } from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
-import { TwitterImportComponent } from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
-import { FacebookImportComponent } from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
-import { CampaignsComponent } from './campaigns/campaign-list/campaigns.component';
+import {GroupMembersImportComponent} from './groups/group-details/group-members/group-members-import/group-members-import.component';
+import {FileImportComponent} from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
+import {GoogleImportComponent} from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
+import {TwitterImportComponent} from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
+import {FacebookImportComponent} from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
+import {CampaignsComponent} from './campaigns/campaign-list/campaigns.component';
 import {CampaignService} from "./campaigns/campaign.service";
-import { CampaignInfoComponent } from './campaigns/campaign-list-row/campaign-info.component';
-import { CampaignCreateComponent } from './campaigns/campaign-create/campaign-create.component';
-import { BroadcastsComponent } from './broadcasts/broadcast-list/broadcasts.component';
+import {CampaignInfoComponent} from './campaigns/campaign-list-row/campaign-info.component';
+import {CampaignCreateComponent} from './campaigns/campaign-create/campaign-create.component';
+import {BroadcastsComponent} from './broadcasts/broadcast-list/broadcasts.component';
 import {BroadcastCreateComponent} from "./broadcasts/broadcast-create/broadcast-create.component";
-import { BroadcastTypeComponent } from './broadcasts/broadcast-create/broadcast-type/broadcast-type.component';
-import { BroadcastContentComponent } from './broadcasts/broadcast-create/broadcast-content/broadcast-content.component';
-import { BroadcastMembersComponent } from './broadcasts/broadcast-create/broadcast-members/broadcast-members.component';
+import {BroadcastTypeComponent} from './broadcasts/broadcast-create/broadcast-type/broadcast-type.component';
+import {BroadcastContentComponent} from './broadcasts/broadcast-create/broadcast-content/broadcast-content.component';
+import {BroadcastMembersComponent} from './broadcasts/broadcast-create/broadcast-members/broadcast-members.component';
 import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcast-schedule/broadcast-schedule.component";
 import {BroadcastService} from "./broadcasts/broadcast.service";
-import { BroadcastConfirmComponent } from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
+import {BroadcastConfirmComponent} from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
 import {BroadcastWorkflowGuard} from "./broadcasts/broadcast-create/create-workflow-guard.guard";
+import {IntegrationsComponent} from './user/integrations/integrations.component';
+import {IntegrationsService} from "./user/integrations/integrations.service";
+import {IntegrationConnectComponent} from './user/integrations/integration-connect/integration-connect.component';
 
 
 const routes: Routes = [
@@ -101,10 +104,12 @@ const routes: Routes = [
       {path: 'members', component: BroadcastMembersComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
       {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]}
     ]
-  }
+  },
+  {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard], },
+  {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]}
 ];
 
-
+// http://localhost:4200/integrations/connect/facebook
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
@@ -144,6 +149,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     BroadcastMembersComponent,
     BroadcastScheduleComponent,
     BroadcastConfirmComponent,
+    IntegrationsComponent,
+    IntegrationConnectComponent,
   ],
   entryComponents: [
     BroadcastConfirmComponent
@@ -178,6 +185,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoggedInGuard,
     GroupService,
     UserService,
+    IntegrationsService,
     TaskService,
     CampaignService,
     BroadcastService,

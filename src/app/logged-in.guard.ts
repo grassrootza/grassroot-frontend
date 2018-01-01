@@ -15,8 +15,16 @@ export class LoggedInGuard implements CanActivate {
     const isLoggedIn = this.userService.isLoggedIn();
     console.log('canActivate', isLoggedIn);
 
+    // todo: figure out how to preserve params, because we need them on incoming requests. major.
+    // note absolutely nothing below is having any effect whatsoever. can't find a way to do this. giving up.
+    console.log("query params: ", next.parent.queryParams);
+
     if(!isLoggedIn)
-      this.router.navigate(['login']);
+      this.router.navigate(['login'], {
+        queryParams: next.parent.queryParams,
+        preserveQueryParams: true,
+        queryParamsHandling: "merge"
+      });
 
     return isLoggedIn;
 
