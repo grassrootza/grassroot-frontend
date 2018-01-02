@@ -26,6 +26,7 @@ export class GroupTaskTeamsComponent implements OnInit {
 
     this.route.parent.parent.params.subscribe((params: Params) => {
       let groupUid = params['id'];
+
       this.groupService.loadGroupDetails(groupUid)
         .subscribe(
           groupDetails => {
