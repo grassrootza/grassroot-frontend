@@ -22,7 +22,8 @@
               <a class="nav-link" [routerLink]="['/home']"> {{ 'menu.home' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
 
-            <li class="nav-item" [ngClass]="{active: currentUrl === '/groups' || currentUrl.startsWith('/group/')}">
+            <li class="nav-item"
+                [ngClass]="{active: currentUrl === '/groups' || currentUrl.startsWith('/group/') || currentUrl.startsWith('/broadcast/create/')}">
               <a class="nav-link" [routerLink]="['/groups']"> {{ 'menu.groups' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
 

@@ -13,7 +13,7 @@ import {GroupService} from "./groups/group.service";
 import {RegistrationComponent} from './registration/registration.component';
 import {UserService} from "./user/user.service";
 import {HomeComponent} from './home/home.component';
-import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/common";
+import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from "@angular/common";
 import {GroupInfoComponent} from './groups/group-list-row/group-info.component';
 import {GroupDetailsComponent} from './groups/group-details/group-details.component';
 import {GroupMembersComponent} from "./groups/group-details/group-members/group-members.component";
@@ -31,23 +31,23 @@ import {GroupTaskTeamsComponent} from './groups/group-details/group-members/grou
 import {GroupCustomFilterComponent} from './groups/group-details/group-members/group-custom-filter/group-custom-filter.component';
 import {MemberListComponent} from './groups/group-details/group-members/member-list/member-list.component';
 import {PaginationComponent} from './pagination/pagination.component';
-import { GroupMembersImportComponent } from './groups/group-details/group-members/group-members-import/group-members-import.component';
-import { FileImportComponent } from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
-import { GoogleImportComponent } from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
-import { TwitterImportComponent } from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
-import { FacebookImportComponent } from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
-import { CampaignsComponent } from './campaigns/campaign-list/campaigns.component';
+import {GroupMembersImportComponent} from './groups/group-details/group-members/group-members-import/group-members-import.component';
+import {FileImportComponent} from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
+import {GoogleImportComponent} from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
+import {TwitterImportComponent} from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
+import {FacebookImportComponent} from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
+import {CampaignsComponent} from './campaigns/campaign-list/campaigns.component';
 import {CampaignService} from "./campaigns/campaign.service";
-import { CampaignInfoComponent } from './campaigns/campaign-list-row/campaign-info.component';
-import { CampaignCreateComponent } from './campaigns/campaign-create/campaign-create.component';
-import { BroadcastsComponent } from './broadcasts/broadcast-list/broadcasts.component';
+import {CampaignInfoComponent} from './campaigns/campaign-list-row/campaign-info.component';
+import {CampaignCreateComponent} from './campaigns/campaign-create/campaign-create.component';
+import {BroadcastsComponent} from './broadcasts/broadcast-list/broadcasts.component';
 import {BroadcastCreateComponent} from "./broadcasts/broadcast-create/broadcast-create.component";
-import { BroadcastTypeComponent } from './broadcasts/broadcast-create/broadcast-type/broadcast-type.component';
-import { BroadcastContentComponent } from './broadcasts/broadcast-create/broadcast-content/broadcast-content.component';
-import { BroadcastMembersComponent } from './broadcasts/broadcast-create/broadcast-members/broadcast-members.component';
+import {BroadcastTypeComponent} from './broadcasts/broadcast-create/broadcast-type/broadcast-type.component';
+import {BroadcastContentComponent} from './broadcasts/broadcast-create/broadcast-content/broadcast-content.component';
+import {BroadcastMembersComponent} from './broadcasts/broadcast-create/broadcast-members/broadcast-members.component';
 import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcast-schedule/broadcast-schedule.component";
 import {BroadcastService} from "./broadcasts/broadcast.service";
-import { BroadcastConfirmComponent } from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
+import {BroadcastConfirmComponent} from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
 import {BroadcastWorkflowGuard} from "./broadcasts/broadcast-create/create-workflow-guard.guard";
 
 
@@ -173,7 +173,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgbModule.forRoot()
   ],
   providers: [
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    {provide: LocationStrategy, useClass: PathLocationStrategy},
     {provide: APP_BASE_HREF, useValue: '/'},
     LoggedInGuard,
     GroupService,
