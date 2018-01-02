@@ -16,9 +16,9 @@ export class IntegrationConnectComponent implements OnInit {
   ngOnInit() {
 
     // todo : note this is not currently working because can't figure out how to preserve params, so need to get it to work first
-    this.route.params.subscribe((params: Params) => {
+    this.route.queryParams.subscribe((params: Params) => {
       console.log("params: ", params);
-
+      
       let provider = params['providerId'];
       let code = params['code'];
       let status = params['status'];

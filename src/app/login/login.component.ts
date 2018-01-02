@@ -24,11 +24,19 @@ export class LoginComponent {
       authResponse => {
         console.log("Auth response: ", authResponse);
         if (authResponse.errorCode == null) {
-          let afterLoginUrl = localStorage.getItem("beforeLoginUrl");
+          let afterLoginUrl = localStorage.getItem("afterLoginUrl");
           if (!afterLoginUrl)
             afterLoginUrl = "groups";
-          localStorage.removeItem("beforeLoginUrl");
-          this.router.navigate([afterLoginUrl]);
+
+
+          let afterLoginParams = localStorage.getItem("afterLoginParams");
+          localStorage.removeItem("afterLoginUrl");
+          localStorage.removeItem("afterLoginParams");
+
+          if (afterLoginParams)
+            this.router.navigate([afterLoginUrl], {queryParams: JSON.parse(afterLoginParams)});
+          else
+            this.router.navigate([afterLoginUrl]);
         }
         else {
           this.handleLoginError(authResponse.errorCode);
