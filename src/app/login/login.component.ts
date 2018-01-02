@@ -23,8 +23,13 @@ export class LoginComponent {
     this.userService.login(username, password).subscribe(
       authResponse => {
         console.log("Auth response: ", authResponse);
-        if (authResponse.errorCode == null)
-          this.router.navigate(['groups']);
+        if (authResponse.errorCode == null) {
+          let afterLoginUrl = localStorage.getItem("beforeLoginUrl");
+          if (!afterLoginUrl)
+            afterLoginUrl = "groups";
+
+          this.router.navigate([afterLoginUrl]);
+        }
         else {
           this.handleLoginError(authResponse.errorCode);
         }

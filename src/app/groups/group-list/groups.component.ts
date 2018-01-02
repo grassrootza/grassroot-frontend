@@ -104,8 +104,8 @@ export class GroupsComponent implements OnInit {
       let discoverable: string = this.createGroupForm.get("discoverable").value;
       this.groupService.createGroup(groupName, groupDescription, groupPermission, reminderMinutes, discoverable)
         .subscribe(
-          groupUid => {
-            console.log("Group successfully created, groupUid: ", groupUid);
+          groupRef => {
+            console.log("Group successfully created, groupUid: ", groupRef.groupUid);
             this.groupService.loadGroups(true);
           },
           error => {
