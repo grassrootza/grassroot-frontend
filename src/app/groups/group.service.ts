@@ -15,6 +15,7 @@ import {Membership, MembersPage} from "./model/membership.model";
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
+import {GroupRef} from "./model/group-ref.model";
 
 @Injectable()
 export class GroupService {
@@ -109,17 +110,18 @@ export class GroupService {
   }
 
 
-  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string): Observable<string> {
+  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string): Observable<GroupRef> {
 
     const fullUrl = this.groupCreateUrl;
-    const params = {
-      'name': name,
-      'description': description,
-      'permissionTemplate': permissionTemplate,
-      'reminderMinutes': reminderMinutes.toString(),
-      'discoverable': discoverable
-    };
-    return this.httpClient.post<string>(fullUrl, params);
+
+    let params = new HttpParams()
+      .set('name', name)
+      .set('description', description)
+      .set('permissionTemplate', permissionTemplate)
+      .set('reminderMinutes', reminderMinutes.toString())
+      .set('discoverable', discoverable);
+
+    return this.httpClient.post<GroupRef>(fullUrl, null, {params: params});
   }
 
 

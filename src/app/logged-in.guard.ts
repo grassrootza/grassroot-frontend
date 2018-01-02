@@ -12,8 +12,10 @@ export class LoggedInGuard implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot,
               state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
 
+
     const isLoggedIn = this.userService.isLoggedIn();
-    console.log('canActivate', isLoggedIn);
+    console.log('canActivate', isLoggedIn, "state: ", state);
+    localStorage.setItem("beforeLoginUrl", state.url);
 
     // todo: figure out how to preserve params, because we need them on incoming requests. major.
     // note absolutely nothing below is having any effect whatsoever. can't find a way to do this. giving up.
