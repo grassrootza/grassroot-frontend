@@ -27,7 +27,7 @@ export class LoginComponent {
           let afterLoginUrl = localStorage.getItem("beforeLoginUrl");
           if (!afterLoginUrl)
             afterLoginUrl = "groups";
-
+          localStorage.removeItem("beforeLoginUrl");
           this.router.navigate([afterLoginUrl]);
         }
         else {
