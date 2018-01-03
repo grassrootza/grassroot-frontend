@@ -36,7 +36,7 @@
             </div>
             <div class="col-md-5 text-right">
               <div class="group-info">
-                <a href="/broadcast/create/group/{{group.groupUid}}" class="btn btn-success broadcast-btn">
+                <a [routerLink]="['/broadcast/create/group', group.groupUid]" class="btn btn-success broadcast-btn">
                   <img src="assets/icon_megaphone.png"/>
                   {{'group.sendBroadcast' | translate}}
                 </a>

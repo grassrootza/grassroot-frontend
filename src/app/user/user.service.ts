@@ -60,6 +60,7 @@ export class UserService {
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
     localStorage.removeItem('token');
+    console.log("routing to login");
     this.router.navigate(['/login']);
   }
 

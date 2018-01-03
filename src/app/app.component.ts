@@ -47,7 +47,9 @@ export class AppComponent {
 
   logout() {
     this.userService.logout();
-
+    // note: with path based routing for some reason need to call this
+    // todo: fix up so doesn't remove top navbar etc
+    return false;
   }
 
 
