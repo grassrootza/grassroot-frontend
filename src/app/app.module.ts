@@ -13,7 +13,7 @@ import {GroupService} from "./groups/group.service";
 import {RegistrationComponent} from './registration/registration.component';
 import {UserService} from "./user/user.service";
 import {HomeComponent} from './home/home.component';
-import {APP_BASE_HREF, HashLocationStrategy, LocationStrategy} from "@angular/common";
+import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from "@angular/common";
 import {GroupInfoComponent} from './groups/group-list-row/group-info.component';
 import {GroupDetailsComponent} from './groups/group-details/group-details.component';
 import {GroupMembersComponent} from "./groups/group-details/group-members/group-members.component";
@@ -180,7 +180,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgbModule.forRoot()
   ],
   providers: [
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
+    {provide: LocationStrategy, useClass: PathLocationStrategy},
     {provide: APP_BASE_HREF, useValue: '/'},
     LoggedInGuard,
     GroupService,

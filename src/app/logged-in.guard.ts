@@ -14,14 +14,11 @@ export class LoggedInGuard implements CanActivate {
 
 
     const isLoggedIn = this.userService.isLoggedIn();
-    console.log('canActivate', isLoggedIn, "state: ", state, "next:", next);
 
     let afterLoginUrl = state.url;
     if (afterLoginUrl.indexOf('?') > -1)
       afterLoginUrl = afterLoginUrl.substring(0, afterLoginUrl.indexOf('?'));
 
-    console.log("afterLoginUrl", afterLoginUrl);
-    console.log("afterLoginParams", next.queryParams.toString());
     localStorage.setItem("afterLoginUrl", afterLoginUrl);
     localStorage.setItem("afterLoginParams", JSON.stringify(next.queryParams));
 
