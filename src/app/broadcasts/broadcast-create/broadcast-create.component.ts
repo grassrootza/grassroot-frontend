@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BroadcastService} from "../broadcast.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 
 @Component({
   selector: 'app-broadcast-create',
@@ -9,7 +9,12 @@ import {ActivatedRoute} from "@angular/router";
 })
 export class BroadcastCreateComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private broadcastService: BroadcastService) { }
+  constructor(private router: Router,
+              private route: ActivatedRoute,
+              private broadcastService: BroadcastService) {
+  }
+
+  private currentTab: string = "types";
 
   ngOnInit() {
     console.log("Initiating new subscribe flow");
@@ -17,6 +22,28 @@ export class BroadcastCreateComponent implements OnInit {
       console.log("got the parameters: ", params);
       this.broadcastService.initCreate(params["type"], params["parentId"]);
     })
+
+
+    this.router.events.subscribe(ev => {
+      if (ev instanceof NavigationEnd) {
+        let uri = ev.urlAfterRedirects;
+        this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
+        switch (this.currentTab) {
+          case 'types':
+            this.broadcastService.currentStep = 1;
+            break;
+          case 'content':
+            this.broadcastService.currentStep = 2;
+            break;
+          case 'members':
+            this.broadcastService.currentStep = 3;
+            break;
+          case 'schedule':
+            this.broadcastService.currentStep = 4;
+            break;
+        }
+      }
+    });
   }
 
 }

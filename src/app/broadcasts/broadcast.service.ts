@@ -3,7 +3,11 @@ import {HttpClient} from "@angular/common/http";
 import {UserService} from "../user/user.service";
 import {environment} from "../../environments/environment.prod";
 import {
-  BroadcastConfirmation, BroadcastContent, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
+  BroadcastConfirmation,
+  BroadcastContent,
+  BroadcastMembers,
+  BroadcastRequest,
+  BroadcastSchedule,
   BroadcastTypes
 } from "./model/broadcast-request";
 import {DateTimeUtils} from "../DateTimeUtils";
@@ -16,17 +20,21 @@ export class BroadcastService {
 
   private createRequest: BroadcastRequest = new BroadcastRequest();
 
+  public currentStep: number = 1;
+
   constructor(private httpClient: HttpClient, private userService: UserService) { }
 
   fetchBroadcasts(type: String, entityUid: String, clearCache: boolean) {
     const fullUrl = this.fetchUrlBase + type + "/" + entityUid;
   }
 
+
   // todo : watch this if have some complex user path (e.g., group -> create broadcast -> campaigns (via nav) -> campaign -> create)
   initCreate(type: String, parentId: String) {
     this.createRequest = new BroadcastRequest();
     this.createRequest.type = type;
     this.createRequest.parentId = parentId;
+    this.currentStep = 1
   }
 
   getTypes(): BroadcastTypes {
@@ -47,6 +55,7 @@ export class BroadcastService {
     this.createRequest.facebookPage = types.facebookPage;
     this.createRequest.postToTwitter = types.twitter;
     this.createRequest.twitterAccount = types.twitterAccount;
+    this.currentStep = 2;
   }
 
   getContent(): BroadcastContent {
@@ -69,6 +78,7 @@ export class BroadcastService {
     this.createRequest.facebookLink = content.facebookLink;
     this.createRequest.twitterContent = content.twitterPost;
     this.createRequest.twitterLink = content.twitterLink;
+    this.currentStep = 3;
   }
 
   getMembers(): BroadcastMembers {
@@ -151,15 +161,5 @@ export class BroadcastService {
     return '/broadcast/create/' + this.currentType() + '/' + this.parentId() + '/' + child;
   }
 
-  firstInvalidPath(): String {
-    if (!this.createRequest.checkTypesSet()) {
-      return "types";
-    }
-    if (!this.createRequest.checkContentSet()) {
-      return "content";
-    }
-    // todo : think about other steps (e.g., depending on type selected)
-    return "";
-  }
 
 }

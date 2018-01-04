@@ -51,16 +51,6 @@ export class BroadcastRequest {
     this.topics = [];
   }
 
-  checkTypesSet() {
-    return this.sendShortMessages || this.sendEmail || this.postToFacebook || this.postToTwitter;
-  }
-
-  checkContentSet() {
-    return (this.sendShortMessages && this.shortMessageString != "") ||
-      (this.sendEmail && this.emailContent != "") ||
-      (this.postToFacebook && this.facebookContent != "") ||
-      (this.postToTwitter && this.twitterContent != "");
-  }
 
 }
 
