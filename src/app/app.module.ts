@@ -80,7 +80,8 @@ const routes: Routes = [
       },
       {path: 'settings', component: GroupSettingsComponent, canActivate: [LoggedInGuard]}
     ]
-  },{
+  },
+  {
     path: 'group/import/:id', component: GroupMembersImportComponent, canActivate: [LoggedInGuard],
     children:[
       {path: '', redirectTo: 'file', pathMatch: 'full'},
@@ -96,7 +97,7 @@ const routes: Routes = [
     path: 'broadcast/create/:type/:parentId', component: BroadcastCreateComponent, canActivate: [LoggedInGuard],
     children: [
       {path: '', redirectTo: 'types', pathMatch: 'full'},
-      {path: 'types', component: BroadcastTypeComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
+      {path: 'types', component: BroadcastTypeComponent, canActivate: [LoggedInGuard]},
       {path: 'content', component: BroadcastContentComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
       {path: 'members', component: BroadcastMembersComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
       {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]}
