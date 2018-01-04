@@ -1,3 +1,7 @@
 .error {
   color: #ff0000;
 }
+
+.btn-primary {
+  margin-left: 2rem;
+}

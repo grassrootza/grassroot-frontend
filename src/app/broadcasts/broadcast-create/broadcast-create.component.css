@@ -1,3 +1,12 @@
-.navbar-light .navbar-nav .active > .nav-link {
+.navbar-light .navbar-nav .active.enabled > .nav-link {
   color: #2CBC4C !important;
+}
+
+.navbar-light .navbar-nav .enabled > .nav-link {
+  color: #2CBC4C !important;
+}
+
+.navbar-nav .nav-item {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }

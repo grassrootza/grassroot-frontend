@@ -21,7 +21,7 @@ export class BroadcastCreateComponent implements OnInit {
     this.route.params.subscribe(params => {
       console.log("got the parameters: ", params);
       this.broadcastService.initCreate(params["type"], params["parentId"]);
-    })
+    });
 
 
     this.router.events.subscribe(ev => {
@@ -44,6 +44,10 @@ export class BroadcastCreateComponent implements OnInit {
         }
       }
     });
+  }
+
+  getCurrentStep(): number {
+    return this.broadcastService.currentStep;
   }
 
 }
