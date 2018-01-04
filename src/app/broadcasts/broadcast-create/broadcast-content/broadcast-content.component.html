@@ -55,17 +55,21 @@
           {{ 'broadcasts.create.content.errors.twitterPost' | translate }}
         </div>
         <div class="form-row">
-          <div class="col-sm-4 pull-left">
+          <div class="col-sm-4">
             <button type="button" (click)="cancel()" class="btn btn-secondary">
               {{ 'action.cancel' | translate }}</button>
           </div>
-          <div class="col-sm-4">
-            <button type="button" (click)="back()" class="btn btn-secondary">
-              {{ 'action.back' | translate }}</button>
-          </div>
-          <div class="col-sm-4 pull-right">
-            <button [disabled]="!contentForm.valid" type="submit" class="btn btn-primary"> {{ 'action.next' | translate }}
+
+          <div class="col-sm-8">
+
+            <button [disabled]="!contentForm.valid" type="submit" class="btn btn-primary float-right">
+              {{ 'action.next' | translate }}
             </button>
+
+            <button type="button" (click)="back()" class="btn btn-secondary float-right">
+              {{ 'action.back' | translate }}</button>
+
+
           </div>
         </div>
       </form>

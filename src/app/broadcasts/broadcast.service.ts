@@ -95,6 +95,7 @@ export class BroadcastService {
     this.createRequest.subgroups = members.taskTeams;
     this.createRequest.provinces = members.provinces;
     this.createRequest.topics = members.topics;
+    this.currentStep = 4;
   }
 
   getSchedule(): BroadcastSchedule {
