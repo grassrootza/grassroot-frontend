@@ -6,7 +6,7 @@
 
       <nav class="navbar navbar-expand-lg navbar-light " *ngIf="loggedInUser">
 
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" [routerLink]="['/groups']"> <!-- will alter to home page when that is built -->
           <img src="assets/grassroot-01.png"/>
         </a>
 
@@ -63,14 +63,21 @@
                 </div>
               </li>
 
-              <li><img height="50" class="image rounded-circle profile-image"
-                       src="{{loggedInUserImageUrl}}/{{loggedInUser.uid}}"/></li>
+              <li class="nav-item">
+                <!-- todo : decent default user icon, and fetch image if it exists -->
+                <!--<img height="50" class="image rounded-circle profile-image"-->
+                       <!--src="{{loggedInUserImageUrl}}/{{loggedInUser.uid}}"/>-->
+              </li>
 
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">{{loggedInUser.displayName}}</a>
+                   aria-haspopup="true" aria-expanded="false"><i class="far fa-user"></i>
+                  {{loggedInUser.displayName}}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
-                  <a class="dropdown-item" [routerLink]="['/integrations']">{{ 'menu.integrations' | translate }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user']">{{ 'menu.profile' | translate }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user/password']">{{ 'menu.password' | translate }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user/account']">{{ 'menu.account' | translate }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user/integrations']">{{ 'menu.integrations' | translate }}</a>
                   <a class="dropdown-item" href="/" (click)="logout();">{{ 'menu.logout' | translate }}</a>
                 </div>
               </li>

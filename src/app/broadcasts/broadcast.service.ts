@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {UserService} from "../user/user.service";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 import {
   BroadcastConfirmation,
   BroadcastContent,
@@ -10,7 +10,7 @@ import {
   BroadcastSchedule,
   BroadcastTypes
 } from "./model/broadcast-request";
-import {DateTimeUtils} from "../DateTimeUtils";
+import {DateTimeUtils} from "../utils/DateTimeUtils";
 
 @Injectable()
 export class BroadcastService {

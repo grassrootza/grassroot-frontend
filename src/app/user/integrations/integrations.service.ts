@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import {environment} from "../../../environments/environment.prod";
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {Injectable} from '@angular/core';
+import {environment} from "../../../environments/environment";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable()
 export class IntegrationsService {
@@ -14,6 +14,7 @@ export class IntegrationsService {
   }
 
   storeFbConnectResult(returnedParams: any) {
+    console.log("params: ", returnedParams);
     this.httpClient.get(this.settingsUrlBase + "/connect/facebook/complete", { params: returnedParams })
       .subscribe(response => {
         console.log("received response: ", response);

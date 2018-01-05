@@ -13,7 +13,7 @@ import {TranslateService} from '@ngx-translate/core';
 })
 
 
-// todo : general - make use of upper case letters in titles consistent throughout
+// todo : general - UI - make use of upper case letters in titles consistent throughout
 export class AppComponent {
 
   loggedInUser: AuthenticatedUser = null;
@@ -37,7 +37,10 @@ export class AppComponent {
         this.currentUrl = ev.url;
     });
 
-    this.userService.loggedInUser.subscribe(user => this.loggedInUser = user);
+    this.userService.loggedInUser.subscribe(user => {
+      console.log("user emitted!");
+      this.loggedInUser = user
+    });
 
     translateService.addLangs(['en']);
     translateService.setDefaultLang('en');
@@ -48,7 +51,6 @@ export class AppComponent {
   logout() {
     this.userService.logout();
     // note: with path based routing for some reason need to call this
-    // todo: fix up so doesn't remove top navbar etc
     return false;
   }
 

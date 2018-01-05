@@ -52,13 +52,18 @@ import {BroadcastWorkflowGuard} from "./broadcasts/broadcast-create/create-workf
 import {IntegrationsComponent} from './user/integrations/integrations.component';
 import {IntegrationsService} from "./user/integrations/integrations.service";
 import {IntegrationConnectComponent} from './user/integrations/integration-connect/integration-connect.component';
-
+import {JoinComponent} from './join/join.component';
+import {JoinService} from "./join/join.service";
+import {UserProfileComponent} from './user/profile-container/user-profile.component';
+import {ProfileFormComponent} from './user/profile-form/profile-form.component';
+import {PasswordComponent} from './user/password/password.component';
 
 const routes: Routes = [
 
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
+  {path: 'join', component: JoinComponent},
   {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
   {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},
   {
@@ -106,7 +111,13 @@ const routes: Routes = [
       {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]}
     ]
   },
-  {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard], },
+  {path: 'user', component: UserProfileComponent, canActivate: [LoggedInGuard],
+    children: [
+      {path: '', redirectTo: 'profile', pathMatch: 'full'},
+      {path: 'profile', component: ProfileFormComponent, canActivate: [LoggedInGuard]},
+      {path: 'password', component: PasswordComponent, canActivate: [LoggedInGuard]},
+      {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard]},
+  ]},
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]}
 ];
 
@@ -152,6 +163,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     BroadcastConfirmComponent,
     IntegrationsComponent,
     IntegrationConnectComponent,
+    UserProfileComponent,
+    ProfileFormComponent,
+    JoinComponent,
+    PasswordComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent
@@ -186,6 +201,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoggedInGuard,
     GroupService,
     UserService,
+    JoinService,
     IntegrationsService,
     TaskService,
     CampaignService,

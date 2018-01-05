@@ -7,6 +7,9 @@
     "noNotifications": "No notifications",
     "showHelp": "Show help",
     "help": "Help",
+    "profile": "My profile",
+    "password": "Change password",
+    "account": "Account settings",
     "integrations": "Integration settings",
     "logout": "Logout"
   },
@@ -77,7 +80,8 @@
         "title": "Actions",
         "meeting": "Call meeting",
         "vote": "Take vote action",
-        "create": "Create action"
+        "create": "Create action",
+        "broadcast": "Send broadcast"
       },
       "taskTeam":{
         "title": "Task Teams",
@@ -300,7 +304,38 @@
       }
     }
   },
-
+  "user": {
+    "profile": {
+      "title": "My profile",
+      "name": "Your name",
+      "phone": "* Mobile number",
+      "email": "* Email address",
+      "province": "Your province",
+      "language": "Your SMS and USSD language",
+      "otp-note": "* We will send you an OTP to confirm your changes",
+      "otp-title": "Enter pin",
+      "otp-label": "We sent a pin to your phone or email. Please enter it below:"
+    },
+    "password": {
+      "title": "Change password",
+      "old": "Old password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "change": "Change password"
+    },
+    "account": {
+      "title": "Under construction"
+    },
+    "integrations": {
+      "title": "Integration settings",
+      "facebook": "Facebook",
+      "fb-link": "Link new account / page",
+      "twitter": "Twitter",
+      "tw-link": "Link new account",
+      "Google": "Google",
+      "g-link": "Link new account"
+    }
+  },
   "login": {
     "title": "Login",
     "username": "Username",

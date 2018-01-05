@@ -20,7 +20,8 @@ export class IntegrationsComponent implements OnInit {
       window.location.href = redirectUrl;
     }, error2 => {
       console.log("error initiating FB call: ", error2);
-    })
+    });
+    return false;
   }
 
 }

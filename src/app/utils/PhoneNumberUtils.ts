@@ -1,0 +1,26 @@
+import {CountryCode, format, parse} from "libphonenumber-js";
+
+// note: we use this much more in code than in templates, hence doing as static methods instead of pipe
+export class PhoneNumberUtils {
+
+  public static convertToSystem(phone: string, country: CountryCode = 'ZA'): string {
+    if (!phone) {
+      return phone;
+    }
+    let parsed = parse(phone, country);
+    return format(parsed, 'International_plaintext').substring(1);
+  }
+
+  public static convertFromSystem(phone: string, country: CountryCode = 'ZA') {
+    if (!phone) {
+      return phone;
+    }
+    let parsed = parse('+' + phone, country);
+    let result = format(parsed, 'National');
+    // in case it didn't work, rather than undefined, pass back what we got
+    if (result) {
+      return result;
+    }
+    return phone;
+  }
+}

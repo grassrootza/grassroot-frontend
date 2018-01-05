@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {UserService} from "../user/user.service";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CampaignInfo} from "./model/campaign-info";
 import {Observable} from "rxjs/Observable";
-import {DateTimeUtils} from "../DateTimeUtils";
+import {DateTimeUtils} from "../utils/DateTimeUtils";
 
 @Injectable()
 export class CampaignService {

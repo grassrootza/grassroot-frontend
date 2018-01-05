@@ -1,0 +1,13 @@
+.form-label {
+  font-size: 1.1em;
+}
+
+.btn-success {
+  padding-left: 50px;
+  padding-right: 50px;
+  font-size: 1.1em
+}
+
+.top-buffer {
+  margin-top: 20px;
+}

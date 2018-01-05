@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {environment} from "../../environments/environment.prod";
+import {environment} from "../../environments/environment";
 import "rxjs/add/operator/map";
 import {GroupInfo} from "./model/group-info.model";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -8,7 +8,7 @@ import {UserService} from "../user/user.service";
 import {Group} from "./model/group.model";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {GroupRole} from "./model/group-role";
-import {DateTimeUtils} from "../DateTimeUtils";
+import {DateTimeUtils} from "../utils/DateTimeUtils";
 import {TaskType} from "../task/task-type";
 import {TaskInfo} from "../task/task-info.model";
 import {Membership, MembersPage} from "./model/membership.model";

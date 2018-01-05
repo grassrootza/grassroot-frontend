@@ -29,6 +29,8 @@
             <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">{{ 'groups.row.action.meeting' | translate }}</a>
             <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">{{ 'groups.row.action.vote' | translate }}</a>
             <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled">{{ 'groups.row.action.create' | translate }}</a>
+            <!-- todo : implement some form of permission control here -->
+            <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{ 'groups.row.action.broadcast' | translate }}</a>
           </div>
       </div>
 
