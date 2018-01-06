@@ -11,9 +11,15 @@
     "password": "Change password",
     "account": "Account settings",
     "integrations": "Integration settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "landing": {
+      "news": "NEWS",
+      "about": "ABOUT",
+      "contribute": "CONTRIBUTE",
+      "login": "LOGIN",
+      "register": "REGISTER"
+    }
   },
-
   "footer": {
     "aboutUs": "About Us",
     "news": "News",
@@ -338,10 +344,9 @@
   },
   "login": {
     "title": "Login",
-    "username": "Username",
-    "usernamePlaceholder": "Enter username",
+    "username": "Phone number or email address",
     "password": "Password",
-    "passwordPlaceholder": "Password",
+    "forgot": "Forgot your password?",
     "newUser": "New user? Register here "
   },
   "registration":{

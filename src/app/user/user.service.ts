@@ -5,6 +5,7 @@ import {AuthenticatedUser, AuthorizationResponse, UserProfile} from "./user.mode
 import {Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
+import {isValidNumber} from "libphonenumber-js";
 
 @Injectable()
 export class UserService {
@@ -37,8 +38,13 @@ export class UserService {
 
   login(user: string, password: string): Observable<AuthorizationResponse> {
 
+    if (isValidNumber(user, "ZA")) {
+      user = PhoneNumberUtils.convertToSystem(user);
+    }
+
+    console.log("submitting username: ", user);
     let params = new HttpParams()
-      .set('phoneNumber', PhoneNumberUtils.convertToSystem(user))
+      .set('username', user)
       .set('password', password);
 
     return this.httpClient.get<AuthorizationResponse>(this.loginUrl, {params: params})

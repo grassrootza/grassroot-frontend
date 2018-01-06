@@ -4,6 +4,7 @@
 
     <div class="container">
 
+      <!-- navbar for logged in user -->
       <nav class="navbar navbar-expand-lg navbar-light " *ngIf="loggedInUser">
 
         <a class="navbar-brand" [routerLink]="['/groups']"> <!-- will alter to home page when that is built -->
@@ -86,6 +87,51 @@
           </div>
         </div>
       </nav>
+
+      <!-- navbar for not logged in user -->
+      <nav class="navbar navbar-expand-lg navbar-light" *ngIf="!(loggedInUser)">
+        <a class="navbar-brand" [routerLink]="['/']"> <!-- will alter to home page when that is built -->
+          <img src="assets/grassroot-01.png"/>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                aria-controls="navbarsLoggedOut" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsLoggedOut">
+          <ul class="main-nav navbar-nav mr-auto">
+
+            <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/news')}">
+              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.news' | translate }} <span class="sr-only">(current)</span> </a>
+            </li>
+
+            <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/about')}">
+              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.about' | translate }} <span class="sr-only">(current)</span> </a>
+            </li>
+
+            <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/contribute')}">
+              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.contribute' | translate }} <span class="sr-only">(current)</span> </a>
+            </li>
+          </ul>
+
+          <div class=" my-2 my-lg-0">
+
+            <ul class="nav-item" class="navbar-nav mr-auto">
+
+              <li class="nav-item">
+                <a class="nav-link nav-login" [routerLink]="['/login']"> {{ 'menu.landing.login' | translate }} </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="btn btn-success btn-nav" [routerLink]="['/register']"> {{ 'menu.landing.register' | translate }} </a>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </nav>
+
     </div>
   </div>
 
@@ -113,7 +159,7 @@
             <span class="info" [innerHTML]="'footer.info' | translate ">
             </span>
               <div class="social-icons">
-                <img src="assets/icon-twitter.png"/>
+                <a href="https://twitter.com/grassrootza"><img src="assets/icon-twitter.png"/></a>
                 <img src="assets/icon-facebook.png"/>
                 <img src="assets/icon-linkedin.png"/>
               </div>

@@ -114,7 +114,12 @@ footer .row {
   display: none
 }
 
+.nav-login {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
 
-
-
-
+.btn-nav {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
