@@ -1,38 +1,37 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs/Observable";
-import {environment} from "../../environments/environment.prod";
-import "rxjs/add/operator/map";
-import {GroupInfo} from "./model/group-info.model";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {UserService} from "../user/user.service";
-import {Group} from "./model/group.model";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {GroupRole} from "./model/group-role";
-import {DateTimeUtils} from "../DateTimeUtils";
-import {TaskType} from "../task/task-type";
-import {TaskInfo} from "../task/task-info.model";
-import {Membership, MembersPage} from "./model/membership.model";
+import {Observable} from 'rxjs/Observable';
+import {environment} from '../../environments/environment.prod';
+import 'rxjs/add/operator/map';
+import {GroupInfo} from './model/group-info.model';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {UserService} from '../user/user.service';
+import {Group} from './model/group.model';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {GroupRole} from './model/group-role';
+import {DateTimeUtils} from '../DateTimeUtils';
+import {TaskType} from '../task/task-type';
+import {TaskInfo} from '../task/task-info.model';
+import {Membership, MembersPage} from './model/membership.model';
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
-import {GroupRef} from "./model/group-ref.model";
+import {GroupRef} from './model/group-ref.model';
 
 @Injectable()
 export class GroupService {
 
-  groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
-  groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
-  groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
-  newMembersLIstUrl = environment.backendAppUrl + "/api/group/fetch/members/new";
-  groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
-  groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
-  groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
-  groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
-  groupRemoveMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove";
-  groupAddMembersToTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/members/add/taskteam";
-  groupAssignTopicsToMemebersUrl = environment.backendAppUrl + "/api/group/modify/members/add/topics";
-  groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
-  groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
+  groupListUrl = environment.backendAppUrl + '/api/group/fetch/list';
+  groupDetailsUrl = environment.backendAppUrl + '/api/group/fetch/details';
+  groupMemberListUrl = environment.backendAppUrl + '/api/group/fetch/members';
+  groupMembersAddUrl = environment.backendAppUrl + '/api/group/modify/members/add';
+  groupCreateUrl = environment.backendAppUrl + '/api/group/modify/create';
+  groupPinUrl = environment.backendAppUrl + '/api/group/modify/pin';
+  groupUnpinUrl = environment.backendAppUrl + '/api/group/modify/unpin';
+  groupRemoveMembersUrl = environment.backendAppUrl + '/api/group/modify/members/remove';
+  groupAddMembersToTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/members/add/taskteam';
+  groupAssignTopicsToMemebersUrl = environment.backendAppUrl + '/api/group/modify/members/add/topics';
+  groupImportMembersAnalyzeUrl = environment.backendAppUrl + '/api/group/import/analyze';
+  groupImportMembersConfirmUrl = environment.backendAppUrl + '/api/group/import/confirm';
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -48,7 +47,7 @@ export class GroupService {
       return this.httpClient.get<GroupInfo[]>(fullUrl)
         .map(
           data => {
-            console.log("Groups json object from server: ", data);
+            console.log('Groups json object from server: ', data);
             return data.map(
               gr => new GroupInfo(
                 gr.name,
@@ -73,18 +72,18 @@ export class GroupService {
           error => {
             if (error.status == 401)
               this.userService.logout();
-            console.log("Error loading groups", error)
+            console.log('Error loading groups', error)
           });
     }
   }
 
   loadGroupDetails(groupUid: string): Observable<Group> {
-    const fullUrl = this.groupDetailsUrl + "/" + groupUid;
+    const fullUrl = this.groupDetailsUrl + '/' + groupUid;
 
     return this.httpClient.get<Group>(fullUrl)
       .map(
         gr => {
-          console.log("Group details loaded : ", gr);
+          console.log('Group details loaded : ', gr);
           return new Group(
             gr.groupUid,
             gr.name,
@@ -149,46 +148,19 @@ export class GroupService {
       );
   }
 
-  fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number): Observable<MembersPage> {
-    console.log("Fetching new members");
-    let params = new HttpParams()
-      .set('howRecentInDays', howRecentlyJoinedInDays.toString())
-      .set('page', pageNo.toString())
-      .set('size', pageSize.toString());
-
-    return this.httpClient.get<MembersPage>(this.newMembersLIstUrl, {params: params})
-      .map(
-        result => {
-          console.log("Fetched new members", result);
-          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics));
-          return new MembersPage(
-            result.number,
-            result.totalPages,
-            result.totalElements,
-            result.size,
-            result.first,
-            result.last,
-            transformedContent
-          )
-        }
-      );
-  }
-
-
-
   pinGroup(groupUid: string): Observable<boolean> {
-    const fullUrl = this.groupPinUrl + "/" + groupUid;
+    const fullUrl = this.groupPinUrl + '/' + groupUid;
     return this.httpClient.get<boolean>(fullUrl);
   }
 
   unpinGroup(groupUid: string): Observable<boolean> {
 
-    const fullUrl = this.groupUnpinUrl + "/" + groupUid;
+    const fullUrl = this.groupUnpinUrl + '/' + groupUid;
     return this.httpClient.get<boolean>(fullUrl);
   }
 
   removeMembers(groupUid: string, membersUids: string[]):Observable<boolean> {
-    const fullUrl = this.groupRemoveMembersUrl + "/" + groupUid;
+    const fullUrl = this.groupRemoveMembersUrl + '/' + groupUid;
     const params = {
       'memberUids': membersUids
     };
@@ -199,7 +171,7 @@ export class GroupService {
   }
 
   addMembersToTaskTeam(parentGroupUid: string, childGroupUid: string, membersUids: string[]): Observable<boolean> {
-    const fullUrl = this.groupAddMembersToTaskTeamUrl + "/" + parentGroupUid;
+    const fullUrl = this.groupAddMembersToTaskTeamUrl + '/' + parentGroupUid;
     const params = {
       'childGroupUid': childGroupUid,
       'memberUids': membersUids
@@ -212,7 +184,7 @@ export class GroupService {
   }
 
   assignTopicToMember(groupUid: string, membersUids: string[], topics: string[]): Observable<boolean> {
-    const fullUrl = this.groupAssignTopicsToMemebersUrl + "/" + groupUid;
+    const fullUrl = this.groupAssignTopicsToMemebersUrl + '/' + groupUid;
     const params = {
       'memberUids': membersUids,
       'topics': topics
@@ -251,7 +223,7 @@ export class GroupService {
   }
 
   confirmImport(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[]):Observable<GroupModifiedResponse>{
-    const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
+    const fullUrl = this.groupMembersAddUrl + '/' + groupUid;
     return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd)
       .map(resp => {
         return resp;

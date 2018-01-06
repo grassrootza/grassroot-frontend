@@ -49,6 +49,7 @@ import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcas
 import {BroadcastService} from "./broadcasts/broadcast.service";
 import {BroadcastConfirmComponent} from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
 import {BroadcastWorkflowGuard} from "./broadcasts/broadcast-create/create-workflow-guard.guard";
+import {NgbDateTimePickerModule} from '@zhaber/ng-bootstrap-datetimepicker';
 
 
 const routes: Routes = [
@@ -171,7 +172,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         whitelistedDomains: ['localhost:8080']
       }
     }),
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    NgbDateTimePickerModule
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},
