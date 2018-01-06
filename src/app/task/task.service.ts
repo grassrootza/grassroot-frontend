@@ -10,6 +10,7 @@ import {TaskType} from "./task-type";
 export class TaskService {
 
   private upcomingGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/upcoming/group";
+  private upcomingUserTasksUrl = environment.backendAppUrl + "/api/task/fetch/upcoming/user";
 
   constructor(private httpClient: HttpClient) {
   }
@@ -19,7 +20,41 @@ export class TaskService {
     return this.httpClient.get<Task[]>(fullUrl)
       .map(
         data =>
-          data.map(task => new Task(task.taskUid, task.title, TaskType[task.type], task.deadlineMillis, new Date(task.deadlineMillis), task.description, task.location))
+          data.map(task => new Task(
+            task.taskUid,
+            task.title,
+            TaskType[task.type],
+            task.deadlineMillis,
+            new Date(task.deadlineMillis),
+            task.description,
+            task.location,
+            task.parentUid,
+            task.parentName,
+            task.ancestorGroupName
+            )
+          )
+      );
+  }
+
+
+  public loadUpcomingUserTasks(userId: string): Observable<Task[]> {
+    let fullUrl = this.upcomingUserTasksUrl + "/" + userId;
+    return this.httpClient.get<Task[]>(fullUrl)
+      .map(
+        data =>
+          data.map(task => new Task(
+            task.taskUid,
+            task.title,
+            TaskType[task.type],
+            task.deadlineMillis,
+            new Date(task.deadlineMillis),
+            task.description,
+            task.location,
+            task.parentUid,
+            task.parentName,
+            task.ancestorGroupName
+            )
+          )
       );
   }
 }

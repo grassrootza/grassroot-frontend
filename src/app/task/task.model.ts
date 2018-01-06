@@ -8,7 +8,10 @@ export class Task {
               public deadlineMillis: number,
               public deadlineDate: Date,
               public description: string,
-              public location: string) {
+              public location: string,
+              public parentUid: string,
+              public parentName: string,
+              public ancestorGroupName: string) {
 
     /**
 

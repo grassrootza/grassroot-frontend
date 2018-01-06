@@ -20,6 +20,18 @@
     "licenceAgreement": "LICENCE AGREEMENT",
     "termsAndConditions": "TERMS AND CONDITIONS"
   },
+  "home": {
+    "my-agenda": {
+      "title": "My agenda",
+      "group-label": "Group"
+    },
+    "new-members": {
+      "title": "New members"
+    },
+    "starred-groups": {
+      "title": "Starred groups"
+    }
+  },
   "groups": {
     "title": "Groups",
     "create": "Create Group",

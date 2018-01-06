@@ -50,7 +50,7 @@
         <div class="row task-row" *ngFor="let task of group.comingUpEvents">
           <div class="col-md-4 no-padding-horizontal">
             <img src="assets/{{task.getEventIconName()}}"/>
-            <span class="task-type">{{task.type}}</span>
+            <span class="task-type">{{task.taskType}}</span>
           </div>
           <div class="col-md-8">
             {{task.deadlineTime | date:'dd MMMM, y'}}

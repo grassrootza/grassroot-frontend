@@ -231,6 +231,4 @@ export class GroupService {
 
   }
 
-
-
 }

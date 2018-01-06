@@ -60,6 +60,7 @@ export class UserService {
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
     localStorage.removeItem('token');
+    localStorage.removeItem('loggedInUser');
     console.log("routing to login");
     this.router.navigate(['/login']);
   }
@@ -69,7 +70,7 @@ export class UserService {
     return this._loggedInUser != null;
   }
 
-  getLoggedInUser() {
+  getLoggedInUser(): AuthenticatedUser {
     return this._loggedInUser;
   }
 }
