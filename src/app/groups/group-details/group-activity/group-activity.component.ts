@@ -53,14 +53,13 @@ export class GroupActivityComponent implements OnInit {
   }
 
   initCreateVoteForm(){
+
     this.createVoteForm = this.formBuilder.group({
+      'voteType': 'YES_NO',
       'title': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': '',
       'time': [this.fromDate(new Date()), Validators.required],
-      'parentType': 'GROUP',
-      voteOptions: this.formBuilder.array([
-        this.initVoteOptions(),
-      ])
+      'parentType': 'GROUP'
     })
   }
 
@@ -148,6 +147,26 @@ export class GroupActivityComponent implements OnInit {
 
   voteTypeChanged(voteType) {
     this.yesNoVote = voteType === 'YES_NO';
+    this.shouldValidateVoteOptions();
+    if(this.yesNoVote){
+      this.createVoteForm.removeControl('voteOptions');
+
+    }else{
+      this.createVoteForm.addControl('voteOptions', this.formBuilder.array([
+        this.initVoteOptions(),
+      ]))
+    }
+  }
+
+  shouldValidateVoteOptions(){
+    if(this.yesNoVote){
+      this.createVoteForm.removeControl('voteOptions');
+      this.createVoteForm.addControl('voteOptions', this.formBuilder.array([]))
+    }else{
+      this.createVoteForm.addControl('voteOptions', this.formBuilder.array([
+        this.initVoteOptions(),
+      ]))
+    }
   }
 
   createVote(){
@@ -156,8 +175,19 @@ export class GroupActivityComponent implements OnInit {
       console.log("vote create");
       let parentType: string = this.createVoteForm.get("parentType").value;
       let title: string = this.createVoteForm.get("title").value;
-      // let voteOptions: string[] = this.createVoteForm.get("voteOptions").value;
+
       let voteOptions: string[] = [];
+      if( this.createVoteForm.get("voteOptions") != null){
+        let voteOptionsObjects = this.createVoteForm.get("voteOptions").value;
+        if(voteOptionsObjects.length > 0){
+          for(let i = 0; i < voteOptionsObjects.length; i++){
+            voteOptions.push(voteOptionsObjects[i].option)
+          }
+        }
+      }
+
+
+
       let description: string = this.createVoteForm.get("description").value;
       let voteTime:NgbDateTimeStruct = this.createVoteForm.get("time").value;
       let voteMilis: number = new Date(voteTime.year,
@@ -170,6 +200,8 @@ export class GroupActivityComponent implements OnInit {
       this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis)
         .subscribe(task => {
           console.log("Vote successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
+          this.yesNoVote = true;
+          this.shouldValidateVoteOptions();
           this.initCreateVoteForm();
           this.loadTasks();
         },

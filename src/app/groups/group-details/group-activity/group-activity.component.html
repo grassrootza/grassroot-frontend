@@ -154,7 +154,7 @@
               <label for="vote-type">{{ 'group.activity.voteModal.typeOfVote' | translate }}</label>
             </div>
             <div class="col-sm-8">
-              <select class="form-control" id="vote-type" name="name-select" (change)="voteTypeChanged($event.target.value)">
+              <select class="form-control" id="vote-type" name="name-select" [formControl]="createVoteForm.controls['voteType']" (change)="voteTypeChanged($event.target.value)">
                 <option value="YES_NO">{{ 'group.activity.voteModal.yesNo' | translate }}</option>
                 <option value="MULTI_OPTION">{{ 'group.activity.voteModal.multiOption' | translate }}</option>
               </select>
