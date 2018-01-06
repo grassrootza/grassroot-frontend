@@ -5,6 +5,7 @@ import {Task} from "../task/task.model";
 import {DatePipe} from "@angular/common";
 import {GroupService} from "../groups/group.service";
 import {GroupInfo} from "../groups/model/group-info.model";
+import {MembersPage} from "../groups/model/membership.model";
 
 @Component({
   selector: 'app-home',
@@ -15,6 +16,7 @@ export class HomeComponent implements OnInit {
 
   public myTasks: Map<string, Task[]> = new Map();
   public pinnedGroups: GroupInfo[] = [];
+  public newMembersPage: MembersPage = null;
 
 
   constructor(private taskService: TaskService,
@@ -47,8 +49,12 @@ export class HomeComponent implements OnInit {
         this.pinnedGroups = groups.filter(gr => gr.pinned)
       }
     );
-
     this.groupService.loadGroups(false)
+
+    this.groupService.fetchNewMembers(7, 0, 20)
+      .subscribe(newMembersPage => {
+        this.newMembersPage = newMembersPage;
+      });
   }
 
   formatTaskDate(date: Date): string {

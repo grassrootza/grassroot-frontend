@@ -31,6 +31,14 @@
       <div class="card">
         <div class="card-body">
           <h3 [translate]="'home.new-members.title'">New members</h3>
+
+          <div *ngIf="newMembersPage">
+            <div *ngFor="let member of newMembersPage.content" class="member-row">
+              <h4>{{member.user.displayName}}</h4>
+              <span>Group: </span> {{member.group.name}}
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

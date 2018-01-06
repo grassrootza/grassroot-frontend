@@ -27,3 +27,7 @@
 .stared-groups .card-body {
   padding-top: 0;
 }
+
+.member-row {
+  margin-bottom: 2rem;
+}

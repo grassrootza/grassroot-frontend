@@ -23,6 +23,7 @@ export class GroupService {
   groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
   groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
   groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
+  newMembersLIstUrl = environment.backendAppUrl + "/api/group/fetch/members/new";
   groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
@@ -147,6 +148,33 @@ export class GroupService {
         }
       );
   }
+
+  fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number): Observable<MembersPage> {
+    console.log("Fetching new members");
+    let params = new HttpParams()
+      .set('howRecentInDays', howRecentlyJoinedInDays.toString())
+      .set('page', pageNo.toString())
+      .set('size', pageSize.toString());
+
+    return this.httpClient.get<MembersPage>(this.newMembersLIstUrl, {params: params})
+      .map(
+        result => {
+          console.log("Fetched new members", result);
+          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics));
+          return new MembersPage(
+            result.number,
+            result.totalPages,
+            result.totalElements,
+            result.size,
+            result.first,
+            result.last,
+            transformedContent
+          )
+        }
+      );
+  }
+
+
 
   pinGroup(groupUid: string): Observable<boolean> {
     const fullUrl = this.groupPinUrl + "/" + groupUid;
