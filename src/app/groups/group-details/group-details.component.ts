@@ -5,6 +5,8 @@ import {Group} from "../model/group.model";
 import {environment} from "../../../environments/environment";
 import {UserService} from "../../user/user.service";
 
+declare var $: any;
+
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -15,6 +17,8 @@ export class GroupDetailsComponent implements OnInit {
   public group: Group = null;
   public currentTab: string = "dashboard";
   public baseUrl: string = environment.backendAppUrl;
+
+  public joinMethodParams: any;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -52,7 +56,16 @@ export class GroupDetailsComponent implements OnInit {
       );
     });
 
+  }
 
+  joinMethodsModal() {
+    this.joinMethodParams = {
+      completeJoinCode: environment.ussdPrefix + this.group.joinCode + '#',
+      joinWords: this.group.joinWords.join(', '),
+      shortCode: environment.groupShortCode
+    };
+    console.log("join method params = ", this.joinMethodParams);
+    $('#group-join-methods').modal('show');
   }
 
 }

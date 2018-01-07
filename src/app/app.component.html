@@ -4,9 +4,10 @@
 
     <div class="container">
 
+      <!-- navbar for logged in user -->
       <nav class="navbar navbar-expand-lg navbar-light " *ngIf="loggedInUser">
 
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" [routerLink]="['/groups']"> <!-- will alter to home page when that is built -->
           <img src="assets/grassroot-01.png"/>
         </a>
 
@@ -63,15 +64,22 @@
                 </div>
               </li>
 
-              <li><img height="50" class="image rounded-circle profile-image"
-                       src="{{loggedInUserImageUrl}}/{{loggedInUser.userUid}}"/></li>
+              <li class="nav-item">
+                <!-- todo: restore fetching image, if it exists, and allow its upload in profile -->
+                <!--<img height="50" class="image rounded-circle profile-image"-->
+                       <!--src="{{loggedInUserImageUrl}}/{{loggedInUser.uid}}"/>-->
+              </li>
 
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">{{loggedInUser.displayName}}</a>
+                   aria-haspopup="true" aria-expanded="false"><i class="far fa-user"></i>
+                  {{loggedInUser.displayName}}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
+                  <a class="dropdown-item" [routerLink]="['/user']">{{ 'menu.profile' | translate }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user/password']">{{ 'menu.password' | translate }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user/account']">{{ 'menu.account' | translate }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user/integrations']">{{ 'menu.integrations' | translate }}</a>
                   <a class="dropdown-item" href="/" (click)="logout();">{{ 'menu.logout' | translate }}</a>
-
                 </div>
               </li>
 
@@ -79,9 +87,59 @@
           </div>
         </div>
       </nav>
+
+      <!-- navbar for not logged in user -->
+      <nav class="navbar navbar-expand-lg navbar-light" *ngIf="!(loggedInUser)">
+        <a class="navbar-brand" [routerLink]="['/']"> <!-- will alter to home page when that is built -->
+          <img src="assets/grassroot-01.png"/>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                aria-controls="navbarsLoggedOut" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsLoggedOut">
+          <ul class="main-nav navbar-nav mr-auto">
+
+            <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/news')}">
+              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.news' | translate }} <span class="sr-only">(current)</span> </a>
+            </li>
+
+            <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/about')}">
+              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.about' | translate }} <span class="sr-only">(current)</span> </a>
+            </li>
+
+            <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/contribute')}">
+              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.contribute' | translate }} <span class="sr-only">(current)</span> </a>
+            </li>
+          </ul>
+
+          <div class=" my-2 my-lg-0">
+
+            <ul class="nav-item" class="navbar-nav mr-auto">
+
+              <li class="nav-item">
+                <a class="nav-link nav-login" [routerLink]="['/login']"> {{ 'menu.landing.login' | translate }} </a>
+              </li>
+
+              <li class="nav-item">
+                <a class="btn btn-success btn-nav" [routerLink]="['/register']"> {{ 'menu.landing.register' | translate }} </a>
+              </li>
+
+            </ul>
+          </div>
+        </div>
+      </nav>
+
     </div>
   </div>
 
+  <div id="snackbar" [ngClass]="{'alert alert-info alert-dismissible grassroot-snackbar': true}" *ngIf="(alertMessage)">
+    {{ alertMessage | translate }}
+    <a href="#" class="close" data-dismiss="alert" aria-label="close"
+       (click)="clearAlert()"><i class="fas fa-times" aria-hidden="true"></i></a>
+  </div>
 
   <div class=" container main-content">
     <router-outlet></router-outlet>
@@ -106,9 +164,10 @@
             <span class="info" [innerHTML]="'footer.info' | translate ">
             </span>
               <div class="social-icons">
-                <img src="assets/icon-twitter.png"/>
-                <img src="assets/icon-facebook.png"/>
-                <img src="assets/icon-linkedin.png"/>
+                <a href="https://twitter.com/grassrootza" target="_blank"><img src="assets/icon-twitter.png"/></a>
+                <a href="https://facebook.com/grassrootnation" target="_blank"><img src="assets/icon-facebook.png"/></a>
+                <!-- todo : get insta icon, and add a WhatsApp icon -->
+                <a href="https://instagram.com/grassrootza"><i class="fab fa-instagram"></i></a>
               </div>
             </div>
           </div>

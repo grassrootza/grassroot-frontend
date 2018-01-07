@@ -1,0 +1,17 @@
+.forgot-password {
+  font-weight: lighter;
+  color: inherit;
+}
+
+.register-user {
+  font-weight: bolder;
+}
+
+.card-body {
+  background: white;
+}
+
+.login-button {
+  margin-top: 2rem;
+  font-weight: bold;
+}

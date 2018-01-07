@@ -1,0 +1,89 @@
+<div class="card-body">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-center">
+        <h2>{{ 'user.profile.title' | translate }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 justify-content-center">
+      <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <label class="form-label" for="name">{{ 'user.profile.name' | translate }}</label>
+            <input id="name" formControlName="name" type="text" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <label class="form-label" for="phone">{{ 'user.profile.phone' | translate }}</label>
+            <input id="phone" formControlName="phone" type="text" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <label class="form-label" for="email">{{ 'user.profile.email' | translate }}</label>
+            <input id="email" formControlName="email" type="text" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <label class="form-label" for="province">{{ 'user.profile.province' | translate }}</label>
+            <select id="province" formControlName="province" class="form-control">
+              <option *ngFor="let p of provinceKeys" [value]="p">{{ provinces[p] }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <label class="form-label" for="language">{{ 'user.profile.language' | translate }}</label>
+            <select id="language" formControlName="language" class="form-control">
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-sm-12">
+            <p class="form-label">
+              {{ 'user.profile.otp-note' | translate }}
+            </p>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-sm-12"> <!-- [disabled]="!contentForm.valid"  -->
+            <button type="submit" class="btn btn-success float-right">{{ 'action.save' | translate }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="enter-otp-modal" aria-hidden="true" >
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'user.profile.otp-title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="otpForm" (ngSubmit)="submitOtp()">
+        <div class="modal-body">
+            <div class="form-row">
+              <div class="form-group col-12">
+                <label>{{ 'user.profile.otp-label' | translate }}</label>
+                <input type="text" class="form-control" name="name" formControlName="otp">
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">{{ 'action.submit' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

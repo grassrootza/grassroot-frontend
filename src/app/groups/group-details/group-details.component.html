@@ -43,11 +43,15 @@
               </div>
 
               <div class="group-info">
-                <div class="card">
+                <div class="card group-join-card" (click)="joinMethodsModal()">
                   <div class="card-body text-center">
                     <strong>{{'group.joinCode' | translate}}</strong>
                     <div class="join-code">
                       {{group.joinCode}}
+                    </div>
+                    <strong *ngIf="group.joinWords?.length > 0">{{'group.joinWords' | translate}}</strong>
+                    <div class="join-word" *ngIf="group.joinWords?.length > 0">
+                      {{ group.joinWords }}
                     </div>
                   </div>
                 </div>
@@ -103,4 +107,51 @@
     <router-outlet></router-outlet>
   </div>
 
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="group-join-methods" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.joinMethods.modalTitle' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <p translate [translateParams]="joinMethodParams">
+            group.joinMethods.ussdCode
+          </p>
+          <p translate [translateParams]="joinMethodParams">
+            group.joinMethods.joinWords
+          </p>
+          <p *ngIf="group.hasJoinUrls()">
+            {{ 'group.joinMethods.joinUrls' | translate:joinMethodParams }}
+          </p>
+          <p *ngIf="!group.hasJoinUrls()">
+
+          </p>
+        </div>
+        <form (ngSubmit)="addJoinWord()">
+          <div class="form-row">
+            <div class="form-group col-12">
+              <label>{{ 'group.joinMethods.addJoinWord' | translate:joinMethodParams }}</label>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="joinWord" />
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Add</button>
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -7,9 +7,19 @@
     "noNotifications": "No notifications",
     "showHelp": "Show help",
     "help": "Help",
-    "logout": "Logout"
+    "profile": "My profile",
+    "password": "Change password",
+    "account": "Account settings",
+    "integrations": "Integration settings",
+    "logout": "Logout",
+    "landing": {
+      "news": "NEWS",
+      "about": "ABOUT",
+      "contribute": "CONTRIBUTE",
+      "login": "LOGIN",
+      "register": "REGISTER"
+    }
   },
-
   "footer": {
     "aboutUs": "About Us",
     "news": "News",
@@ -88,7 +98,8 @@
         "title": "Actions",
         "meeting": "Call meeting",
         "vote": "Take vote action",
-        "create": "Create action"
+        "create": "Create action",
+        "broadcast": "Send broadcast"
       },
       "taskTeam":{
         "title": "Task Teams",
@@ -109,6 +120,7 @@
     "myRole": "My role:",
     "sendBroadcast": "Send new broadcast",
     "joinCode": "Join code",
+    "joinWords": "Join words",
     "nav": {
       "dashboard": "Group Dashboard",
       "activity": "Activity",
@@ -123,6 +135,15 @@
       "add-meeting": "Schedule a new meeting",
       "add-vote": "Create a new vote",
       "add-todo": "Add a new action item"
+    },
+    "joinMethods": {
+      "modalTitle": "Ways to sign up members",
+      "ussdCode": "By dialing {{ completeJoinCode }}",
+      "joinWords": "By sending the message {{ joinWords }} to {{ shortCode }}",
+      "noJoinWords": "You have no join words ...",
+      "joinUrls": "By visiting {{longUrl}} (or {{shortUrl}}",
+      "addJoinWord": "You can add {{ joinCodesLeft }} more join words if you want: ",
+      "joinWordTaken": "Sorry, that word is already taken"
     },
     "allMembers": {
       "title": "All members ",
@@ -336,13 +357,48 @@
       }
     }
   },
-
+  "user": {
+    "profile": {
+      "title": "My profile",
+      "name": "Your name",
+      "phone": "* Mobile number",
+      "email": "* Email address",
+      "province": "Your province",
+      "language": "Your SMS and USSD language",
+      "otp-note": "* We will send you an OTP to confirm your changes",
+      "otp-title": "Enter pin",
+      "otp-label": "We sent a pin to your phone or email. Please enter it below:",
+      "completed": "Done, your profile has been updated"
+    },
+    "password": {
+      "title": "Change password",
+      "old": "Old password",
+      "new": "New password",
+      "confirm": "Confirm new password",
+      "change": "Change password",
+      "completed": "Done, your password has been updated",
+      "error": "Sorry, there was an error changing your password, please check your old password again"
+    },
+    "account": {
+      "title": "Under construction"
+    },
+    "integrations": {
+      "title": "Integration settings",
+      "facebook": "Facebook",
+      "fb-link": "Link new account / page",
+      "fb-complete": "Done! The Facebook integration is complete",
+      "twitter": "Twitter",
+      "tw-link": "Link new account",
+      "google": "Google",
+      "g-link": "Link new account",
+      "storing": "Storing details ..."
+    }
+  },
   "login": {
     "title": "Login",
-    "username": "Username",
-    "usernamePlaceholder": "Enter username",
+    "username": "Phone number or email address",
     "password": "Password",
-    "passwordPlaceholder": "Password",
+    "forgot": "Forgot your password?",
     "newUser": "New user? Register here "
   },
   "registration":{
@@ -363,6 +419,7 @@
     "ok": "OK",
     "save": "Save",
     "cancel": "Cancel",
+    "close": "Close",
     "submit": "Submit",
     "signUp": "Sign up",
     "continue": "Continue",

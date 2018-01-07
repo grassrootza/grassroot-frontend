@@ -18,6 +18,7 @@ export class LoginComponent {
 
   login(username: string, password: string): boolean {
 
+    console.log("username received: ", username);
     this.message = '';
 
     this.userService.login(username, password).subscribe(

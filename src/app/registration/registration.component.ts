@@ -26,18 +26,18 @@ export class RegistrationComponent {
 
           console.log("jwt-token: ", loginResponse.user.token);
           localStorage.setItem("token", loginResponse.user.token);
-          localStorage.setItem("msisdn", loginResponse.user.phoneNumber);
+          localStorage.setItem("msisdn", loginResponse.user.msisdn);
           this.router.navigate(['']);
         }
         else {
           const errMsg = loginResponse.errorCode;
 
           if (errMsg === "INVALID_MSISDN")
-            this.message = "Invalid msisdn";
+            this.message = "Invalid phone number";
           else if (errMsg === "INVALID_USERNAME")
             this.message = "Invalid username";
           else if (errMsg === "INVALID_PASSWORD")
-            this.message = "You must enter password";
+            this.message = "You must enter a password";
           else if (errMsg === "USER_ALREADY_EXISTS")
             this.message = "User with that phone number already registered";
           else this.message = "Unknown error: " + errMsg;

@@ -49,14 +49,24 @@ import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcas
 import {BroadcastService} from "./broadcasts/broadcast.service";
 import {BroadcastConfirmComponent} from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
 import {BroadcastWorkflowGuard} from "./broadcasts/broadcast-create/create-workflow-guard.guard";
+import {IntegrationsComponent} from './user/integrations/integrations.component';
+import {IntegrationsService} from "./user/integrations/integrations.service";
+import {IntegrationConnectComponent} from './user/integrations/integration-connect/integration-connect.component';
+import {JoinComponent} from './join/join.component';
+import {JoinService} from "./join/join.service";
+import {UserProfileComponent} from './user/profile-container/user-profile.component';
+import {ProfileFormComponent} from './user/profile-form/profile-form.component';
+import {PasswordComponent} from './user/password/password.component';
+import {AlertService} from "./utils/alert.service";
+import { AccountComponent } from './user/account/account.component';
 import {NgbDateTimePickerModule} from '@zhaber/ng-bootstrap-datetimepicker';
-
 
 const routes: Routes = [
 
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
+  {path: 'join', component: JoinComponent},
   {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
   {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},
   {
@@ -103,10 +113,19 @@ const routes: Routes = [
       {path: 'members', component: BroadcastMembersComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
       {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]}
     ]
-  }
+  },
+  {path: 'user', component: UserProfileComponent, canActivate: [LoggedInGuard],
+    children: [
+      {path: '', redirectTo: 'profile', pathMatch: 'full'},
+      {path: 'profile', component: ProfileFormComponent, canActivate: [LoggedInGuard]},
+      {path: 'password', component: PasswordComponent, canActivate: [LoggedInGuard]},
+      {path: 'account', component: AccountComponent, canActivate: [LoggedInGuard]},
+      {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard]},
+  ]},
+  {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]}
 ];
 
-
+// http://localhost:4200/integrations/connect/facebook
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
@@ -146,6 +165,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     BroadcastMembersComponent,
     BroadcastScheduleComponent,
     BroadcastConfirmComponent,
+    IntegrationsComponent,
+    IntegrationConnectComponent,
+    UserProfileComponent,
+    ProfileFormComponent,
+    JoinComponent,
+    PasswordComponent,
+    AccountComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent
@@ -179,8 +205,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     {provide: LocationStrategy, useClass: PathLocationStrategy},
     {provide: APP_BASE_HREF, useValue: '/'},
     LoggedInGuard,
+    AlertService,
     GroupService,
     UserService,
+    JoinService,
+    IntegrationsService,
     TaskService,
     CampaignService,
     BroadcastService,

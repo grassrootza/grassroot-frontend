@@ -43,6 +43,10 @@ strong {
   margin-bottom: 0.3rem;
 }
 
+.group-join-card {
+  cursor: pointer;
+}
+
 .my-role {
   font-size: 0.8rem;
   padding: 0.4rem;
