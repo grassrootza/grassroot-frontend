@@ -103,7 +103,10 @@ export class GroupService {
             gr.userPermissions,
             gr.userRole,
             gr.subGroups,
-            gr.topics
+            gr.topics,
+            gr.joinWords,
+            gr.joinLongUrl,
+            gr.joinShortUrl
           );
         }
       );

@@ -11,3 +11,11 @@
 .top-buffer {
   margin-top: 20px;
 }
+
+.top-buffer-lg {
+  margin-top: 40px;
+}
+
+.bottom-buffer {
+  margin-bottom: 40px;
+}

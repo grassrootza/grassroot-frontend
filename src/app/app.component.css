@@ -123,3 +123,15 @@ footer .row {
   padding-left: 2rem;
   padding-right: 2rem;
 }
+
+.grassroot-snackbar {
+  background: #2CBC4C;
+  text-align: center;
+  font-size: 1.1em;
+  color: white;
+}
+
+.grassroot-snackbar .close:hover {
+  color: white;
+  font-weight: bolder;
+}

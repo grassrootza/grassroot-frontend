@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {IntegrationsService} from "../integrations.service";
+import {AlertService} from "../../../utils/alert.service";
 
 @Component({
   selector: 'app-integration-connect',
@@ -9,13 +10,13 @@ import {IntegrationsService} from "../integrations.service";
 })
 export class IntegrationConnectComponent implements OnInit {
 
-  public provider: String = null;
-
-  constructor(private route: ActivatedRoute, private intService: IntegrationsService) { }
+  constructor(private route: ActivatedRoute,
+              private intService: IntegrationsService,
+              private alertService: AlertService,
+              private router: Router) { }
 
   ngOnInit() {
 
-    // todo : note this is not currently working because can't figure out how to preserve params, so need to get it to work first
     this.route.queryParams.subscribe((params: Params) => {
       console.log("params: ", params);
 
@@ -26,7 +27,15 @@ export class IntegrationConnectComponent implements OnInit {
       console.log("connected to: ", provider);
       console.log("code: ", code);
 
-      this.intService.storeFbConnectResult(params);
+      this.intService.storeFbConnectResult(params)
+        .subscribe(response => {
+          console.log("received response: ", response);
+          this.alertService.alert("user.integrations.fb-complete", true);
+          console.log("and, rerouting back to where we started");
+          this.router.navigate(['/user/integrations']);
+        }, error => {
+          console.log("but error: ", error);
+        })
     });
 
   }

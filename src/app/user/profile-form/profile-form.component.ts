@@ -3,6 +3,7 @@ import {UserProvince} from "../model/user-province.enum";
 import {UserService} from "../user.service";
 import {UserProfile} from "../user.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AlertService} from "../../utils/alert.service";
 
 declare var $: any;
 
@@ -20,7 +21,8 @@ export class ProfileFormComponent implements OnInit {
   profileForm: FormGroup;
   otpForm: FormGroup;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder,
+              private alertService: AlertService) {
     this.provinceKeys = Object.keys(this.provinces);
     // todo : validation of numbers, email, etc
     console.log("empty profile looks like: ", new UserProfile());
@@ -36,13 +38,14 @@ export class ProfileFormComponent implements OnInit {
   }
 
   saveChanges() {
-    // todo: set a "done" bar at the top?
     console.log("saving changes! form looks like: ", this.profileForm.value);
     this.userProfile = this.profileForm.value;
     this.userService.updateDetails(this.userProfile)
       .subscribe(message => {
         if (message == 'OTP_REQUIRED') {
           $('#enter-otp-modal').modal("show");
+        } else if (message == 'UPDATED') {
+          this.alertService.alert("user.profile.completed");
         }
     }, error => {
         console.log("that didn't work, error: ", error);
@@ -55,6 +58,7 @@ export class ProfileFormComponent implements OnInit {
         // really need that snackbar (or similar) design
         $("#enter-otp-modal").modal('hide');
         console.log("may have worked? ", message);
+        this.alertService.alert("user.profile.completed");
       }, error => {
         // display an error message ...
         console.log("ah, an error: ", error);

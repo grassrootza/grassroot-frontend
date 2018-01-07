@@ -5,5 +5,7 @@
 
 export const environment = {
   production: false,
-  backendAppUrl: "http://localhost:8080"
+  backendAppUrl: "http://localhost:8080",
+  ussdPrefix: `*134*1994*`,
+  groupShortCode: '39855'
 };

@@ -57,6 +57,8 @@ import {JoinService} from "./join/join.service";
 import {UserProfileComponent} from './user/profile-container/user-profile.component';
 import {ProfileFormComponent} from './user/profile-form/profile-form.component';
 import {PasswordComponent} from './user/password/password.component';
+import {AlertService} from "./utils/alert.service";
+import { AccountComponent } from './user/account/account.component';
 
 const routes: Routes = [
 
@@ -116,6 +118,7 @@ const routes: Routes = [
       {path: '', redirectTo: 'profile', pathMatch: 'full'},
       {path: 'profile', component: ProfileFormComponent, canActivate: [LoggedInGuard]},
       {path: 'password', component: PasswordComponent, canActivate: [LoggedInGuard]},
+      {path: 'account', component: AccountComponent, canActivate: [LoggedInGuard]},
       {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard]},
   ]},
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]}
@@ -166,7 +169,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     UserProfileComponent,
     ProfileFormComponent,
     JoinComponent,
-    PasswordComponent
+    PasswordComponent,
+    AccountComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent
@@ -199,6 +203,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     {provide: LocationStrategy, useClass: PathLocationStrategy},
     {provide: APP_BASE_HREF, useValue: '/'},
     LoggedInGuard,
+    AlertService,
     GroupService,
     UserService,
     JoinService,

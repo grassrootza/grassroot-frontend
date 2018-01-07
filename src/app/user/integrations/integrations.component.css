@@ -1,0 +1,38 @@
+.fb-logo {
+  color: #3b5998;
+  margin-right: 4px;
+  font-size: 1.2em;
+}
+
+.tw-logo {
+  color: #00aced;
+  margin-right: 4px;
+  font-size: 1.2em;
+}
+
+.g-logo {
+  color: #4885ed;
+  margin-right: 4px;
+  font-size: 1.2em;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+}
+.card-img {
+  order: -1;
+}
+.card-block {
+  order: 0;
+}
+
+.img-fluid {
+  width: 100%;
+  height: auto;
+}
+
+.btn-responsive {
+  white-space: normal !important;
+  word-wrap: break-word;
+}

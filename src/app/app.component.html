@@ -65,7 +65,7 @@
               </li>
 
               <li class="nav-item">
-                <!-- todo : decent default user icon, and fetch image if it exists -->
+                <!-- todo: restore fetching image, if it exists, and allow its upload in profile -->
                 <!--<img height="50" class="image rounded-circle profile-image"-->
                        <!--src="{{loggedInUserImageUrl}}/{{loggedInUser.uid}}"/>-->
               </li>
@@ -135,6 +135,11 @@
     </div>
   </div>
 
+  <div id="snackbar" [ngClass]="{'alert alert-info alert-dismissible grassroot-snackbar': true}" *ngIf="(alertMessage)">
+    {{ alertMessage | translate }}
+    <a href="#" class="close" data-dismiss="alert" aria-label="close"
+       (click)="clearAlert()"><i class="fas fa-times" aria-hidden="true"></i></a>
+  </div>
 
   <div class=" container main-content">
     <router-outlet></router-outlet>
@@ -159,9 +164,10 @@
             <span class="info" [innerHTML]="'footer.info' | translate ">
             </span>
               <div class="social-icons">
-                <a href="https://twitter.com/grassrootza"><img src="assets/icon-twitter.png"/></a>
-                <img src="assets/icon-facebook.png"/>
-                <img src="assets/icon-linkedin.png"/>
+                <a href="https://twitter.com/grassrootza" target="_blank"><img src="assets/icon-twitter.png"/></a>
+                <a href="https://facebook.com/grassrootnation" target="_blank"><img src="assets/icon-facebook.png"/></a>
+                <!-- todo : get insta icon, and add a WhatsApp icon -->
+                <a href="https://instagram.com/grassrootza"><i class="fab fa-instagram"></i></a>
               </div>
             </div>
           </div>

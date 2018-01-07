@@ -111,6 +111,8 @@ export class UserService {
   }
 
   updatePassword(oldPwd: string, newPwd: string, confirmPwd: string) {
+    console.log("calling update password");
+
     let params = new HttpParams()
       .set("oldPassword", oldPwd)
       .set("newPassword", newPwd)

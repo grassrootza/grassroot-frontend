@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from "../user.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
+import {AlertService} from "../../utils/alert.service";
 
 @Component({
   selector: 'app-password',
@@ -11,8 +12,10 @@ import {Router} from "@angular/router";
 export class PasswordComponent implements OnInit {
 
   pwdForm: FormGroup;
+  errorMessage: string;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(private userService: UserService, private formBuilder: FormBuilder, private router: Router,
+              private alertService: AlertService) {
     this.pwdForm = formBuilder.group({
       'oldpassword': ['', Validators.required],
       'newpassword': ['', Validators.required],
@@ -26,12 +29,18 @@ export class PasswordComponent implements OnInit {
   submitChange() {
     this.userService.updatePassword(this.pwdForm.value['oldpassword'], this.pwdForm.value['newpassword'], this.pwdForm.value['confirmpwd'])
       .subscribe(result => {
-        // todo : as above, put in a message of some form
-        console.log("worked? ", result);
-        this.router.navigate(['/user/password']); // to clear form (to do better)
+        // server only returns 200 if this succeeded, and that's all it returns
+        this.alertService.alert("user.password.completed");
+        this.pwdForm.reset();
       }, error => {
-        console.log("nope, failed", error);
+        console.log("nope, failed: ", error);
+        this.showFailure();
       })
+  }
+
+  // for security, we receive little to no information about what the eror was
+  showFailure() {
+    this.errorMessage = "user.password.error";
   }
 
 }

@@ -1,6 +1,53 @@
-<p>
-  integrations works!
-</p>
-<p>
-  <a href="#" (click)="connectFacebook()">Connect to Facebook</a>
-</p>
+<div class="card-body">
+  <div class="row">
+    <div class="col-md-12 col-12">
+      <div class="d-flex justify-content-center">
+        <h2>{{ 'user.integrations.title' | translate }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="row top-buffer-lg">
+    <div class="col-md-6 col-sm-12 col-12">
+      <h3>
+        <i class="fab fa-facebook-square fb-logo"></i>{{ 'user.integrations.facebook' | translate }}
+      </h3>
+    </div>
+    <div class="col-md-6 col-sm-12 col-12">
+      <button type="button" class="btn btn-success float-right btn-responsive" (click)="connectFacebook()">
+        <i class="fas fa-plus"></i> {{ 'user.integrations.fb-link' | translate }}
+      </button>
+    </div>
+  </div>
+  <hr>
+  <div class="row bottom-buffer" *ngIf="(settingsList.facebook.userConnectionValid)">
+    <ng-container *ngFor="let page of fbKeys">
+        <div class="col-md-2 col-sm-4 col-4">
+          <img class="img-fluid pull-left page-image" src="https://graph.facebook.com/v2.5/{{page}}/picture" />
+        </div>
+        <div class="col-md-4 col-sm-8 col-8">
+          {{ this.settingsList.facebook.managedPages[page] }}
+        </div>
+    </ng-container>
+  </div>
+  <div class="row top-buffer">
+    <div class="col-md-6 col-sm-12 col-12">
+      <h3><i class="fab fa-twitter-square tw-logo"></i>{{ 'user.integrations.twitter' | translate }}</h3>
+    </div>
+    <div class="col-md-6 col-sm-12 col-12">
+      <button type="button" class="btn btn-success float-right btn-responsive" (click)="connectTwitter()">
+        <i class="fas fa-plus"></i> {{ 'user.integrations.tw-link' | translate }}
+      </button>
+    </div>
+  </div>
+  <hr>
+  <div class="row top-buffer">
+    <div class="col-md-6 col-sm-12 col-12">
+      <h3><i class="fab fa-google g-logo"></i>{{ 'user.integrations.google' | translate }}</h3>
+    </div>
+    <div class="col-md-6 col-sm-12 col-12">
+      <button type="button" class="btn btn-success float-right btn-responsive" (click)="connectGoogle()">
+        <i class="fas fa-plus"></i> {{ 'user.integrations.g-link' | translate }}
+      </button>
+    </div>
+  </div>
+</div>

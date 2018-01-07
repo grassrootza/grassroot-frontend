@@ -25,7 +25,10 @@ export class Group {
               public userPermissions: string[],
               public userRole: string,
               public subGroups: GroupRef[],
-              public topics: string[]) {
+              public topics: string[],
+              public joinWords: string[],
+              public joinLongUrl: string,
+              public joinShortUrl: string) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 
@@ -33,10 +36,12 @@ export class Group {
     return this.userPermissions.indexOf(permission) >= 0;
   }
 
-
-
   public getFormattedRoleName(): string {
     return GroupRole[this.userRole];
+  }
+
+  public hasJoinUrls(): boolean {
+    return !!(this.joinLongUrl && this.joinShortUrl);
   }
 
 }

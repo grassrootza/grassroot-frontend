@@ -4,7 +4,7 @@ import {NavigationEnd, Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
 import {environment} from "../environments/environment";
 import {TranslateService} from '@ngx-translate/core';
-
+import {AlertService} from "./utils/alert.service";
 
 @Component({
   selector: 'app-root',
@@ -13,10 +13,10 @@ import {TranslateService} from '@ngx-translate/core';
 })
 
 
-// todo : general - UI - make use of upper case letters in titles consistent throughout
 export class AppComponent {
 
   loggedInUser: AuthenticatedUser = null;
+  alertMessage: string = "";
 
   currentUrl = "";
 
@@ -24,8 +24,8 @@ export class AppComponent {
 
   constructor(private router: Router,
               private userService: UserService,
-              private translateService: TranslateService
-  ) {
+              private translateService: TranslateService,
+              private alertService: AlertService) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
 
@@ -42,6 +42,11 @@ export class AppComponent {
       this.loggedInUser = user
     });
 
+    this.alertService.getAlert().subscribe(message=> {
+      // todo : fade it out?
+      this.alertMessage = message;
+    });
+
     translateService.addLangs(['en']);
     translateService.setDefaultLang('en');
     const browserLang = translateService.getBrowserLang();
@@ -52,6 +57,10 @@ export class AppComponent {
     this.userService.logout();
     // note: with path based routing for some reason need to call this
     return false;
+  }
+
+  clearAlert() {
+    this.alertMessage = "";
   }
 
 
