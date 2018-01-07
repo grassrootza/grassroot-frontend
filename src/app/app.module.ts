@@ -59,6 +59,7 @@ import {ProfileFormComponent} from './user/profile-form/profile-form.component';
 import {PasswordComponent} from './user/password/password.component';
 import {AlertService} from "./utils/alert.service";
 import { AccountComponent } from './user/account/account.component';
+import {NgbDateTimePickerModule} from '@zhaber/ng-bootstrap-datetimepicker';
 
 const routes: Routes = [
 
@@ -197,7 +198,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         whitelistedDomains: ['localhost:8080']
       }
     }),
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    NgbDateTimePickerModule
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},

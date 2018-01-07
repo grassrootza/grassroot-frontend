@@ -27,6 +27,7 @@
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.8",
     "@ngx-translate/core": "^9.0.2",
     "@ngx-translate/http-loader": "^2.0.1",
+    "@zhaber/ng-bootstrap-datetimepicker": "^1.0.0-alpha.5",
     "bootstrap": "^4.0.0-beta",
     "core-js": "^2.5.3",
     "jquery": "^3.0.0",

@@ -49,3 +49,7 @@ Ex. You want to add croatian language translation to site, these are the steps y
 - edit line in app.component.ts `translateService.use(browserLang.match(/en/) ? browserLang : 'en');` so it would look like this `translateService.use(browserLang.match(/en|hr/) ? browserLang : 'en');`
 <br/><br/>
 For using translated string in html you can use `translate pipe` (ex. {{ 'groups.row.action.meeting' | translate }}). For other ways of using translation see [Official guide](https://github.com/ngx-translate/core).
+
+
+## Date time picker
+Installed NG Bootstrap - Angular Datetime picker component specific to Bootstrap 4. To see working example visit [link](https://www.npmjs.com/package/@zhaber/ng-bootstrap-datetimepicker)

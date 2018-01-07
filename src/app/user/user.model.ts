@@ -21,7 +21,7 @@ export class AuthorizationResponse {
 }
 
 export class AuthenticatedUser {
-  constructor(public uid: String,
+  constructor(public userUid: string,
               public displayName: string,
               public msisdn: string,
               public email: string,

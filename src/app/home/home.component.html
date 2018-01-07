@@ -1,4 +1,67 @@
-<div class="groups-content">
-  <h1>Grassroot frontend </h1>
-  <p class="lead">We are using Angular 4 and Bootstrap 4 beta. <br> This is demo template. Now we should add some real components.</p>
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body my-agenda">
+          <h3 [translate]="'home.my-agenda.title'">My agenda</h3>
+
+          <div *ngFor="let entry of myTasks.entries()">
+            <div class="col-sm-7 day-label">
+              {{entry[0]}}
+            </div>
+            <div *ngFor="let task of entry[1]" class="day-task">
+              <div>
+                <img src="assets/{{task.getEventIconName()}}"/>
+                {{task.title}}
+              </div>
+              <div>
+                <span [translate]="'home.my-agenda.group-label'"> Group </span>: <b>{{task.ancestorGroupName}}</b>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <h3 [translate]="'home.new-members.title'">New members</h3>
+
+          <div *ngIf="newMembersPage">
+            <div *ngFor="let member of newMembersPage.content" class="member-row">
+              <h4>{{member.user.displayName}}</h4>
+              <span>Group: </span> {{member.group.name}}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-12 stared-groups">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title" [translate]="'home.starred-groups.title'">Starred groups</span>
+        </div>
+        <div class="card-body">
+
+          <app-group-info *ngFor="let gr of pinnedGroups"
+                          [group]="gr"
+                          [extendedInfoVisible]="pinnedGroups.length == 1">
+          </app-group-info>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </div>

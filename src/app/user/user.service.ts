@@ -75,7 +75,8 @@ export class UserService {
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
     localStorage.removeItem('token');
-    localStorage.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login, I think
+    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login
     console.log("routing to login");
     this.router.navigate(['/login']);
   }
@@ -85,7 +86,7 @@ export class UserService {
     return this._loggedInUser != null;
   }
 
-  getLoggedInUser() {
+  getLoggedInUser(): AuthenticatedUser {
     return this._loggedInUser;
   }
 
