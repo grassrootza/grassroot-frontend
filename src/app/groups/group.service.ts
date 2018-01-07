@@ -37,7 +37,20 @@ export class GroupService {
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
 
+  private _groupUid = new BehaviorSubject<string>("");
+
+  // Observable string streams
+  groupUid = this._groupUid.asObservable();
+
   constructor(private httpClient: HttpClient, private userService: UserService) {
+  }
+
+  setGroupUid(groupUid: string) {
+    this._groupUid.next(groupUid);
+  }
+
+  clearGroupUid() {
+    this._groupUid.next("");
   }
 
   loadGroups(clearCache: boolean) {

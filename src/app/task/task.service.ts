@@ -15,6 +15,7 @@ export class TaskService {
 
   private groupCreateMeetingUrl = environment.backendAppUrl + '/api/task/create/meeting';
   private groupCreateVoteUrl = environment.backendAppUrl + '/api/task/create/vote';
+  private groupCreateTodoUrl = environment.backendAppUrl + '/api/task/create/todo';
 
 
   constructor(private httpClient: HttpClient) {
@@ -84,6 +85,49 @@ export class TaskService {
       .set('voteOptions', voteOptions.join(","))
       .set('description', description)
       .set('time', time.toString());
+
+
+    return this.httpClient.post<Task>(fullUrl, null, {params: params});
+  }
+
+  createTodo(todoType: string, parentType: string, parentUid: string, subject: string,
+             dueDateTime: number, responseTag: string, requireImages: boolean, recurring:boolean, assignedMemberUids: string[], confirmingMemberUids: string[]):Observable<Task> {
+    let fullUrl = this.groupCreateTodoUrl;
+    let params;
+
+    if(todoType === "INFORMATION_REQUIRED"){
+      fullUrl = fullUrl +  '/information/' + parentType + '/' + parentUid;
+      params = new HttpParams()
+        .set("subject", subject)
+        .set("dueDateTime", dueDateTime.toString())
+        .set("responseTag", responseTag);
+    }
+
+    if(todoType === "VALIDATION_REQUIRED"){
+      fullUrl = fullUrl + '/confirmation/' + parentType + '/' + parentUid;
+      params = new HttpParams()
+        .set("subject", subject)
+        .set("dueDateTime", dueDateTime.toString())
+        .set("requireImages", requireImages.toString())
+        .set("recurring", recurring.toString())
+        .set("assignedMemberUids", assignedMemberUids.join(","))
+        .set("confirmingMemberUids", confirmingMemberUids.join(","));
+    }
+
+    if(todoType === "ACTION_REQUIRED"){
+      fullUrl = fullUrl + '/action/' + parentType + '/' + parentUid;
+      params = new HttpParams()
+        .set("subject", subject)
+        .set("dueDateTime", dueDateTime.toString())
+        .set("recurring", recurring.toString());
+    }
+
+    if(todoType === "VOLUNTEERS_NEEDED"){
+      fullUrl = fullUrl + '/volunteer/' + parentType + '/' + parentUid;
+      params = new HttpParams()
+        .set("subject", subject)
+        .set("dueDateTime", dueDateTime.toString());
+    }
 
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});

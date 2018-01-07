@@ -276,6 +276,23 @@
         "multiOption": "Set my own list of options",
         "enterVoteOption": "Enter the vote option",
         "addVoteOption": "Add vote option"
+      },
+      "todoModal":{
+        "title": "Create new action",
+        "subject": "Subject for the action",
+        "todoType": "What must members do?",
+        "dueDateTime": "Deadline",
+        "information": {
+          "label": "Label for response information:",
+          "placeholder": "How will you label the response e.g. ID"
+        },
+        "confirmation":{
+          "requireImages": "Require images",
+          "recurring": "Recurring",
+          "assignedMembers": "Assign members",
+          "confirmingMembers": "Confirming members"
+
+        }
       }
     }
   },
