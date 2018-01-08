@@ -51,7 +51,8 @@
                     </div>
                     <strong *ngIf="group.joinWords?.length > 0">{{'group.joinWords' | translate}}</strong>
                     <div class="join-word" *ngIf="group.joinWords?.length > 0">
-                      {{ group.joinWords }}
+                      {{ group.joinWords.join(", ") | uppercase }}
+                      {{ 'group.joinWordsSuffix' | translate:joinMethodParams | uppercase }}
                     </div>
                   </div>
                 </div>
@@ -123,29 +124,38 @@
           <p translate [translateParams]="joinMethodParams">
             group.joinMethods.ussdCode
           </p>
-          <p translate [translateParams]="joinMethodParams">
-            group.joinMethods.joinWords
+          <p *ngIf="(group.joinWords)">
+            {{ 'group.joinMethods.joinWords' | translate:joinMethodParams }}
           </p>
-          <p *ngIf="group.hasJoinUrls()">
-            {{ 'group.joinMethods.joinUrls' | translate:joinMethodParams }}
-          </p>
-          <p *ngIf="!group.hasJoinUrls()">
-
-          </p>
+          <ul *ngIf="(group.joinWords)" class="list-group">
+            <li *ngFor="let word of group.joinWords">
+              {{ word | titlecase }}
+              (<a href="#" class="grassroot-link" (click)="removeJoinWord(word)">remove</a>)
+            </li>
+          </ul>
         </div>
-        <form (ngSubmit)="addJoinWord()">
+        <form [formGroup]="addJoinWordForm" (ngSubmit)="addJoinWord()">
           <div class="form-row">
             <div class="form-group col-12">
               <label>{{ 'group.joinMethods.addJoinWord' | translate:joinMethodParams }}</label>
             </div>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" name="joinWord" />
+              <input type="text" class="form-control" formControlName="joinWord" name="joinWord" id="joinWord"/>
               <span class="input-group-btn">
-                <button class="btn btn-primary" type="submit">Add</button>
+                <button [disabled]="!addJoinWordForm.valid" class="btn btn-primary" type="submit">Add</button>
               </span>
+            </div>
+            <div class="alert alert-danger" role="alert"
+                 *ngIf="addJoinWordForm.controls.joinWord?.errors?.wordTaken">
+              {{ 'group.joinMethods.joinWordTaken' | translate }}
             </div>
           </div>
         </form>
+        <p *ngIf="group.hasJoinUrls()">
+          {{ 'group.joinMethods.joinUrls' | translate:joinMethodParams }}
+        </p>
+        <p *ngIf="!group.hasJoinUrls()">
+        </p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">

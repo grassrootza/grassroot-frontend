@@ -19,8 +19,15 @@ export class Membership {
               public user: User,
               public group: GroupInfo,
               public roleName: GroupRole,
-              public topics: string[]) {
+              public topics: string[],
+              public joinMethod: string,
+              public joinMethodDescriptor: string) {
   }
+
+  public joinMethodKey(): string {
+    return 'group.joinMethods.descriptors.' + this.joinMethod;
+  }
+
 }
 
 

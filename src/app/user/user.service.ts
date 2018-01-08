@@ -19,7 +19,6 @@ export class UserService {
   public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
 
   constructor(private httpClient: HttpClient, private router: Router) {
-
     console.log("Initializing user service");
     if (localStorage.getItem("loggedInUser") != null) {
       this._loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"))
@@ -80,7 +79,6 @@ export class UserService {
     console.log("routing to login");
     this.router.navigate(['/login']);
   }
-
 
   isLoggedIn(): boolean {
     return this._loggedInUser != null;

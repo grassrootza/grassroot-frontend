@@ -16,8 +16,8 @@
       "news": "NEWS",
       "about": "ABOUT",
       "contribute": "CONTRIBUTE",
-      "login": "LOGIN",
-      "register": "REGISTER"
+      "login": "Login",
+      "register": "Register"
     }
   },
   "footer": {
@@ -27,8 +27,8 @@
     "contactUs": "Contact Us",
     "info": "contact@grassroot.org.za<br/>Call us: (+27) 11 339 13 13",
     "copyright": "Copyright © 2018 Grassroot. All Rights Reserved",
-    "licenceAgreement": "LICENCE AGREEMENT",
-    "termsAndConditions": "TERMS AND CONDITIONS"
+    "privacyPolicy": "PRIVACY POLICY",
+    "termsOfUse": "TERMS OF USE"
   },
   "home": {
     "my-agenda": {
@@ -121,6 +121,7 @@
     "sendBroadcast": "Send new broadcast",
     "joinCode": "Join code",
     "joinWords": "Join words",
+    "joinWordsSuffix": " to {{ shortCode }}",
     "nav": {
       "dashboard": "Group Dashboard",
       "activity": "Activity",
@@ -139,11 +140,35 @@
     "joinMethods": {
       "modalTitle": "Ways to sign up members",
       "ussdCode": "By dialing {{ completeJoinCode }}",
-      "joinWords": "By sending the message {{ joinWords }} to {{ shortCode }}",
+      "joinWords": "By sending a message to {{ shortCode }} with one of your join codes",
       "noJoinWords": "You have no join words ...",
       "joinUrls": "By visiting {{longUrl}} (or {{shortUrl}}",
-      "addJoinWord": "You can add {{ joinCodesLeft }} more join words if you want: ",
-      "joinWordTaken": "Sorry, that word is already taken"
+      "addJoinWord": "You can add {{ joinWordsLeft }} more join words if you want: ",
+      "joinWordTaken": "Sorry, that join word is already taken",
+      "descriptors": {
+        "ADDED_BY_SYS_ADMIN": "Via: Added by Grassroot system admin",
+        "SELF_JOINED": "Via: Used USSD join code in past",
+        "BULK_IMPORT": "Via: Added in bulk import",
+
+        "ADDED_AT_CREATION": "Via: Added during group creation",
+        "ADDED_BY_OTHER_MEMBER": "Via: Added by another member ({{ joinMethodDescriptor }})",
+
+        "CAMPAIGN_GENERAL": "Via campaign: {{ joinMethodDescriptor }}",
+        "CAMPAIGN_PETITION": "Via petition: {{ joinMethodDescriptor }}",
+
+        "USSD_JOIN_CODE": "Via: group join code, USSD ({{ joinMethodDescriptor }})",
+        "SMS_JOIN_WORD": "Via: message with group join word ({{ joinMethodDescriptor }})",
+        "URL_JOIN_WORD": "Via: clicking on a link related to join word ({{ joinMethodDescriptor }})",
+        "JOIN_CODE_OTHER": "Via: group join code ({{ joinMethodDescriptor }}) with unknown channel",
+
+        "BROADCAST": "Via broadcast: {{ joinMethodDescriptor }}",
+        "BROADCAST_FB": "Via broadcast: {{ joinMethodDescriptor }} (Facebook post)",
+        "BROADCAST_TW": "Via broadcast: {{ joinMethodDescriptor }} (Twitter post)",
+
+        "FILE_IMPORT": "Via: bulk import of file ({{ joinMethodDescriptor }})",
+        "ADDED_SUBGROUP": "Via: added to task team ({{ joinMethodDescriptor }})",
+        "COPIED_INTO_GROUP": "Via: copied into group from another ({{ joinMethodDescriptor }})"
+      }
     },
     "allMembers": {
       "title": "All members ",
@@ -357,6 +382,20 @@
       }
     }
   },
+  "join": {
+    "title": "Join \"{{ groupName }}\"",
+    "description": "Group description: {{ groupDescription }}",
+    "intro": "Just enter your details below to join \"{{ groupName }}\". By joining, you are agreeing to give the details below to the group's organizer, through the Grassroot platform",
+    "privacy": "privacy policy",
+    "name": "Your name (can be a nickname or alias)",
+    "phone": "* Your phone number",
+    "email": "* Your email address",
+    "province": "Your province (optional)",
+    "province-none": "Select",
+    "topics": "Topics of interest (optional)",
+    "footnote": "* You can enter either an email or a phone number, or both (but at least one)",
+    "submit": "Join!"
+  },
   "user": {
     "profile": {
       "title": "My profile",
@@ -399,7 +438,8 @@
     "username": "Phone number or email address",
     "password": "Password",
     "forgot": "Forgot your password?",
-    "newUser": "New user? Register here "
+    "newUser-prefix": "New user? ",
+    "newUser-suffix": "Register here"
   },
   "registration":{
     "title": "Register",

@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  backendAppUrl: "http://staging.grassroot.cloud"
+  backendAppUrl: "https://staging.grassroot.cloud"
 };

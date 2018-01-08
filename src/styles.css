@@ -73,3 +73,46 @@ h6 {
   padding-top: 2rem;
   padding-bottom: 2rem;
 }
+
+.btn-primary {
+  background: #2CBC4C;
+  border-radius: 100px;
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  cursor: pointer;
+  background: #26A041;
+}
+
+.btn-primary:disabled {
+  background: white;
+  color: #cccccc;
+  border: 1px solid #cccccc;
+}
+
+.btn-secondary {
+  color: #929BAF;
+  font-family: Nunito;
+  border: 1px solid #929BAF;
+  border-radius: 100px;
+  background: white;
+}
+
+.btn-secondary:hover {
+  cursor: pointer;
+  color: #4A4A4A;
+  border: 1px solid #4A4A4A;
+  background: white;
+}
+
+.grassroot-link {
+  color: #2CBC4C;
+}
+
+.grassroot-link:hover {
+  cursor: pointer;
+  color: #26A041;
+  text-decoration: underline;
+}

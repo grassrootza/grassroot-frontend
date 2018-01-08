@@ -21,14 +21,14 @@
           <div class="form-group">
             <label for="password">{{ 'login.password' | translate }}</label>
             <input type="password" class="form-control" name="password" id="password" #password>
-            <a [routerLink]="['/password']" class="forgot-password">{{ 'login.forgot' | translate }}</a>
+            <a [routerLink]="['/password']" class="grassroot-link">{{ 'login.forgot' | translate }}</a>
           </div>
 
           <div class="form-group">
           </div>
 
-          <div class="form-group">
-            <button type="submit" class="btn btn-success btn-block login-button"
+          <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary login-button"
                     (click)="login(username.value, password.value)"> {{ 'login.title' | translate }} </button>
           </div>
         </form>
@@ -39,7 +39,8 @@
       </div>
       <div class="row">
         <div class="col-12 text-center">
-          <a class="register-user" [routerLink]="['/register']">{{ 'login.newUser' | translate }}</a>
+          {{ 'login.newUser-prefix' | translate }}
+          <a class="grassroot-link register-user" [routerLink]="['/register']">{{ 'login.newUser-suffix' | translate }}</a>
         </div>
       </div>
     </div>

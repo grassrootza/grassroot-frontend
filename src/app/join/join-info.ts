@@ -10,3 +10,13 @@ export class JoinInfo {
   groupTopics: string[];
 
 }
+
+export class JoinRequest {
+
+  name: string = "";
+  email: string = "";
+  phone: string = "";
+  province: string = "";
+  topics: string[] = [];
+
+}

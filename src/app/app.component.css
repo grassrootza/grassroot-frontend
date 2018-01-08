@@ -115,8 +115,15 @@ footer .row {
 }
 
 .nav-login {
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.nav-register {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .btn-nav {

@@ -120,11 +120,11 @@
             <ul class="nav-item" class="navbar-nav mr-auto">
 
               <li class="nav-item">
-                <a class="nav-link nav-login" [routerLink]="['/login']"> {{ 'menu.landing.login' | translate }} </a>
+                <a class="btn btn-secondary nav-login" [routerLink]="['/login']"> {{ 'menu.landing.login' | translate }} </a>
               </li>
 
               <li class="nav-item">
-                <a class="btn btn-success btn-nav" [routerLink]="['/register']"> {{ 'menu.landing.register' | translate }} </a>
+                <a class="btn btn-primary btn-nav" [routerLink]="['/register']"> {{ 'menu.landing.register' | translate }} </a>
               </li>
 
             </ul>
@@ -186,8 +186,8 @@
 
           <div class="col-6">
             <div class="float-right text-right">
-              <a href="#">{{ 'footer.licenceAgreement' | translate }}</a> | &nbsp;
-              <a href="#">{{ 'footer.termsAndConditions' | translate }}</a>
+              <a href="https://www.grassroot.org.za/privacy">{{ 'footer.privacyPolicy' | translate }}</a> | &nbsp;
+              <a href="#">{{ 'footer.termsOfUse' | translate }}</a>
             </div>
           </div>
         </div>

@@ -28,7 +28,8 @@ export class Group {
               public topics: string[],
               public joinWords: string[],
               public joinLongUrl: string,
-              public joinShortUrl: string) {
+              public joinShortUrl: string,
+              public joinWordsLeft: number) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 

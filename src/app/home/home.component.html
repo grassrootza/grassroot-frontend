@@ -35,7 +35,10 @@
           <div *ngIf="newMembersPage">
             <div *ngFor="let member of newMembersPage.content" class="member-row">
               <h4>{{member.user.displayName}}</h4>
-              <span>Group: </span> {{member.group.name}}
+              <p><span>Group: </span> {{member.group.name}}</p>
+              <!-- this is generating a 'object changed after checked error, and might be better to do via
+                   string concat of key for translate (and also param passing is being weird), but this is the idea -->
+              <p>{{ member.joinMethodKey() | translate:member }}</p>
             </div>
           </div>
 

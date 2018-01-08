@@ -34,6 +34,10 @@ export class GroupService {
   groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
   groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
 
+  groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
+  groupJoinWordAddUrl = environment.backendAppUrl + "/api/group/modify/joincodes/add";
+  groupJoinWordRemoveUrl = environment.backendAppUrl + "/api/group/modify/joincodes/remove";
+
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
 
@@ -107,7 +111,8 @@ export class GroupService {
             gr.topics,
             gr.joinWords,
             gr.joinLongUrl,
-            gr.joinShortUrl
+            gr.joinShortUrl,
+            gr.joinWordsLeft
           );
         }
       );
@@ -138,7 +143,7 @@ export class GroupService {
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
       .map(
         result => {
-          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics));
+          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -163,7 +168,7 @@ export class GroupService {
       .map(
         result => {
           console.log("Fetched new members", result);
-          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics));
+          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -260,6 +265,25 @@ export class GroupService {
         return resp;
       })
 
+  }
+
+  fetchActiveJoinWords(): Observable<string[]> {
+    const fullUrl = this.groupJoinWordsListUrl;
+    return this.httpClient.get<string[]>(fullUrl);
+  }
+
+  addGroupJoinWord(groupUid: string, joinWord: string) {
+    const fullUrl = this.groupJoinWordAddUrl + "/" + groupUid;
+    return this.httpClient.post(fullUrl, null, { params: {
+      "joinWord": joinWord
+    }});
+  }
+
+  removeGroupJoinWord(groupUid: string, joinWord: string) {
+    const fullUrl = this.groupJoinWordRemoveUrl + "/" + groupUid;
+    return this.httpClient.post(fullUrl, null, { params: {
+      "joinWord": joinWord
+      }});
   }
 
 }

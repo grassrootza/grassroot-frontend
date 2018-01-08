@@ -66,7 +66,8 @@ const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
-  {path: 'join', component: JoinComponent},
+  // todo: work out why this is always redirecting to login, even without LoggedInGuard, if we are not logged in
+  {path: 'join/:groupId/:code', component: JoinComponent},
   {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
   {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},
   {
@@ -124,8 +125,6 @@ const routes: Routes = [
   ]},
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]}
 ];
-
-// http://localhost:4200/integrations/connect/facebook
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
@@ -195,7 +194,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         tokenGetter: () => {
           return localStorage.getItem('token');
         },
-        whitelistedDomains: ['localhost:8080']
+        whitelistedDomains: ['localhost:8080', 'staging.grassroot.org.za']
       }
     }),
     NgbModule.forRoot(),
