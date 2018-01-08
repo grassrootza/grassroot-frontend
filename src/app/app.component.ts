@@ -29,9 +29,6 @@ export class AppComponent {
 
     this.loggedInUser = this.userService.getLoggedInUser();
 
-    if (this.loggedInUser == null)
-      this.router.navigate(['/login']);
-
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd)
         this.currentUrl = ev.url;

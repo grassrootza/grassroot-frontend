@@ -58,18 +58,17 @@ import {UserProfileComponent} from './user/profile-container/user-profile.compon
 import {ProfileFormComponent} from './user/profile-form/profile-form.component';
 import {PasswordComponent} from './user/password/password.component';
 import {AlertService} from "./utils/alert.service";
-import { AccountComponent } from './user/account/account.component';
+import {AccountComponent} from './user/account/account.component';
 import {NgbDateTimePickerModule} from '@zhaber/ng-bootstrap-datetimepicker';
-import { CreateMeetingComponent } from './groups/group-details/group-activity/create-meeting/create-meeting.component';
-import { CreateVoteComponent } from './groups/group-details/group-activity/create-vote/create-vote.component';
-import { CreateTodoComponent } from './groups/group-details/group-activity/create-todo/create-todo.component';
+import {CreateMeetingComponent} from './groups/group-details/group-activity/create-meeting/create-meeting.component';
+import {CreateVoteComponent} from './groups/group-details/group-activity/create-vote/create-vote.component';
+import {CreateTodoComponent} from './groups/group-details/group-activity/create-todo/create-todo.component';
 
 const routes: Routes = [
 
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
-  // todo: work out why this is always redirecting to login, even without LoggedInGuard, if we are not logged in
   {path: 'join/:groupId/:code', component: JoinComponent},
   {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
   {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},

@@ -7,7 +7,7 @@
         </div>
       </div>
     </div>
-    <div class="row" *ngIf="(joinInfo.groupDescription)">
+    <div class="row" *ngIf="(joinInfo?.groupDescription)">
       <div class="col-12">
         <div class="d-flex justify-content-center">
           <h3>{{ 'join.description' | translate:joinInfo }}</h3>
@@ -64,5 +64,34 @@
       </div>
     </div>
 
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="signup-user-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <form (submit)="signUpUser(password.value)">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'join.completed.signUpModal.title' | translate }}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <p>{{ 'join.completed.signUpModal.intro' | translate:joinInfo }}</p>
+          </div>
+          <div class="form-group">
+            <input type="password" class="form-control" name="password" id="password" #password>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary"
+                  (click)="signUpUser(password.value)">{{ 'join.completed.signUpModal.signup' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="activeModal.dismiss('Cancel clicked')">
+            {{ 'join.completed.signUpModal.close' | translate }}</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

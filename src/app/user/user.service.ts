@@ -26,12 +26,22 @@ export class UserService {
   }
 
   register(username: string, phoneNumber: string, password: string): Observable<AuthorizationResponse> {
-
     const params = new HttpParams()
       .set("username", username)
       .set("phoneNumber", phoneNumber)
       .set("password", password);
     return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params});
+  }
+
+  registerNew(email: string, phoneNumber: string, password: string): Observable<AuthorizationResponse> {
+    if (isValidNumber(phoneNumber, "ZA")) {
+      phoneNumber = PhoneNumberUtils.convertToSystem(phoneNumber);
+    }
+    const params = new HttpParams()
+      .set("email", email)
+      .set("phone", phoneNumber)
+      .set("password", password);
+    return this.httpClient.post<AuthorizationResponse>(this.registerUrl, null, {params: params});
   }
 
 

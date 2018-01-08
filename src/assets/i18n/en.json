@@ -411,7 +411,16 @@
     "province-none": "Select",
     "topics": "Topics of interest (optional)",
     "footnote": "* You can enter either an email or a phone number, or both (but at least one)",
-    "submit": "Join!"
+    "submit": "Join!",
+    "completed": {
+      "hasPasswordAlert": "Done! You have joined the group",
+      "signUpModal": {
+        "title": "Register for Grassroot?",
+        "intro": "Thanks! You've joined {{ groupName }}. Do you want to sign up for Grassroot too? It's a platform for organizing your community. You'll still receive communcation from {{ groupName }} even if you don't, but if you want to sign up just enter a password below. Your username will be your email or phone number.",
+        "signup" : "Register",
+        "close" : "No thanks"
+      }
+    }
   },
   "user": {
     "profile": {
