@@ -298,7 +298,8 @@
         "subject": "Meeting subject",
         "location": "Meeting location",
         "dateAndTime": "Meeting date and time",
-        "public": "Public meeting"
+        "public": "Public meeting",
+        "assignedMembers": "Assigned members (optional)"
       },
       "voteModal":{
         "title": "Create new vote",
@@ -309,7 +310,8 @@
         "yesNo": "Yes, no or abstain",
         "multiOption": "Set my own list of options",
         "enterVoteOption": "Enter the vote option",
-        "addVoteOption": "Add vote option"
+        "addVoteOption": "Add vote option",
+        "assignedMembers": "Assigned members (optional)"
       },
       "todoModal":{
         "title": "Create new action",
@@ -323,6 +325,7 @@
         "confirmation":{
           "requireImages": "Require images",
           "recurring": "Recurring",
+          "recurringInterval": "Recurring interval (in minutes)",
           "assignedMembers": "Assign members",
           "confirmingMembers": "Confirming members"
 

@@ -41,6 +41,27 @@ export class CreateTodoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.initCreateTodoForm();
+  }
+
+  fetchGroupMembers(){
+    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
+      this.assignedMemberUids = members.content;
+      this.confirmingMemberUids = members.content;
+      this.filteredAssignedMemberUids = this.assignedMemberUids;
+      this.filteredConfirmingMemberUids = this.confirmingMemberUids;
+    });
+  }
+
+  initCreateTodoForm(){
+
+    this.createTodoForm = this.formBuilder.group({
+      'todoType': TodoTypes[0].value,
+      'subject': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
+      'dueDateTime': [this.fromDate(new Date()), Validators.required],
+      'parentType': 'GROUP'
+    });
+
     let selectedTodoType = this.createTodoForm.controls['todoType'].value;
 
     if(selectedTodoType === TodoTypes[0].value){
@@ -53,19 +74,12 @@ export class CreateTodoComponent implements OnInit {
       this.initVolunteersNeededTodo();
     }
 
-  }
-  initCreateTodoForm(){
-
-    this.createTodoForm = this.formBuilder.group({
-      'todoType': TodoTypes[0].value,
-      'subject': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
-      'dueDateTime': [this.fromDate(new Date()), Validators.required],
-      'parentType': 'GROUP'
-    })
+    this.fetchGroupMembers();
   }
 
   initInformationRequiredTodo(){
     this.createTodoForm.addControl('responseTag', new FormControl('', Validators.required));
+    this.createTodoForm.addControl('assignedMemberUids', new FormControl([]));
     console.log("initInformationRequiredTodo");
   }
 
@@ -74,18 +88,13 @@ export class CreateTodoComponent implements OnInit {
     this.createTodoForm.addControl("assignedMemberUids", new FormControl([], Validators.required));
     this.createTodoForm.addControl("confirmingMemberUids", new FormControl([], Validators.required));
     this.createTodoForm.addControl("recurring", new FormControl(false));
-
-    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
-      this.assignedMemberUids = members.content;
-      this.confirmingMemberUids = members.content;
-      this.filteredAssignedMemberUids = this.assignedMemberUids;
-      this.filteredConfirmingMemberUids = this.confirmingMemberUids;
-    });
+    this.createTodoForm.addControl("recurringPeriodMillis", new FormControl(0));
     console.log("initValidationRequiredTodo");
   }
 
   initActionRequiredTodo(){
     this.createTodoForm.addControl("recurring", new FormControl(false));
+    this.createTodoForm.addControl("recurringPeriodMillis", new FormControl(0));
     console.log("initActionRequiredTodo");
   }
 
@@ -114,6 +123,8 @@ export class CreateTodoComponent implements OnInit {
     }else if(todoType === TodoTypes[3].value){
       this.initVolunteersNeededTodo();
     }
+
+    this.fetchGroupMembers();
   }
   removeAllAdditionalControls(){
     this.createTodoForm.removeControl("responseTag");
@@ -121,6 +132,7 @@ export class CreateTodoComponent implements OnInit {
     this.createTodoForm.removeControl("assignedMemberUids");
     this.createTodoForm.removeControl("confirmingMemberUids");
     this.createTodoForm.removeControl("recurring");
+    this.createTodoForm.removeControl("recurringPeriodMillis");
   }
 
   assignedMemberUidsPicked(){
@@ -191,8 +203,13 @@ export class CreateTodoComponent implements OnInit {
         recurring = this.createTodoForm.get("recurring").value;
       }
 
+      let recurringInterval: number = 0;
+      if(this.createTodoForm.get("recurringPeriodMillis") != null){
+        recurringInterval = this.createTodoForm.get("recurringPeriodMillis").value*60000;
+      }
+
       this.taskService.createTodo(todoType, parentType, this.groupUid, subject, dueTimemilis, responseTag, requireImages,
-        recurring, assignedMemberUids, confirmingMemberUids)
+        recurring, recurringInterval, assignedMemberUids, confirmingMemberUids)
         .subscribe(task => {
           console.log("Todo successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
           this.initCreateTodoForm();
