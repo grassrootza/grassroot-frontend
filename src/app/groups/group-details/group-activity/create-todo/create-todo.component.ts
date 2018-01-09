@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskService} from '../../../../task/task.service';
 import {GroupService} from '../../../group.service';
@@ -23,23 +23,21 @@ export class CreateTodoComponent implements OnInit {
 
   public todoTypes = TodoTypes;
   public createTodoForm: FormGroup;
-  private groupUid: string  = "";
   // private membersPage: MembersPage = new MembersPage(0, 0, 0, 0, true, false, []);
   public assignedMemberUids: Membership[] = [];
   public filteredAssignedMemberUids: Membership[] = [];
   public confirmingMemberUids: Membership[] = [];
   public filteredConfirmingMemberUids: Membership[] = [];
+  @Input() groupUid: string;
+  @Output() todoSaved: EventEmitter<boolean>;
 
 
 
-  constructor(private groupService: GroupService,
-              private taskService: TaskService,
-              private formBuilder: FormBuilder,
-              public activeModal: NgbActiveModal) {
+  constructor(private taskService: TaskService,
+              private groupService: GroupService,
+              private formBuilder: FormBuilder) {
     this.initCreateTodoForm();
-    groupService.groupUid.subscribe(groupUid => {
-      this.groupUid = groupUid;
-    })
+    this.todoSaved = new EventEmitter<boolean>();
   }
 
   ngOnInit() {
@@ -198,10 +196,11 @@ export class CreateTodoComponent implements OnInit {
         .subscribe(task => {
           console.log("Todo successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
           this.initCreateTodoForm();
-          this.activeModal.dismiss('Save clicked');
+          this.todoSaved.emit(true);
         },
           error => {
             console.log("Error creating task: ", error);
+            this.todoSaved.emit(false);
           })
     }else{
       console.log("Create todo form invalid!");

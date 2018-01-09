@@ -2,6 +2,7 @@
   [loadingText]="'groups.loading' | translate"
   [threshold]="500"
 > </ng4-loading-spinner>
+
 <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#create-group-modal">
   {{ 'groups.create' | translate }}
 </button>
@@ -112,102 +113,5 @@
 </nav>
 
 
-<div class="modal fade" tabindex="-1" role="dialog" id="create-group-modal" aria-hidden="true" >
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'groups.createNewModal.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-
-        <form [formGroup]="createGroupForm"
-              (ngSubmit)="createGroup()">
-
-          <div class="form-row">
-            <div class="form-group col-sm-6">
-              <label>{{ 'groups.createNewModal.groupName' | translate }}</label>
-              <input type="text" class="form-control" placeholder="{{ 'groups.createNewModal.groupName' | translate }}"
-                     name="name" [formControl]="createGroupForm.controls['name']">
-            </div>
-            <div class="form-group col-sm-4">
-              <label>{{ 'groups.createNewModal.network' | translate }}</label>
-              <select class="form-control">
-                <option>-</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>{{ 'groups.createNewModal.description' | translate }}</label>
-            <textarea class="form-control"
-                      name="description" [formControl]="createGroupForm.controls['description']"></textarea>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-sm-2">
-              <label>{{ 'groups.createNewModal.groupPrivacy.title' | translate }}</label>
-            </div>
-
-            <div class="form-group col-sm-4">
-              <div class="form-check form-check-inline">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="radio" checked value="true"
-                         name="discoverable" [formControl]="createGroupForm.controls['discoverable']">
-                  {{ 'groups.createNewModal.groupPrivacy.public' | translate }}
-                </label>
-              </div>
-            </div>
-
-            <div class="form-group col-sm-4">
-              <div class="form-check form-check-inline">
-                <label class="form-check-label">
-                  <input class="form-check-input" type="radio" value="false"
-                         name="discoverable" [formControl]="createGroupForm.controls['discoverable']">
-                  {{ 'groups.createNewModal.groupPrivacy.private' | translate }}
-                </label>
-              </div>
-            </div>
-
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-sm-6">
-              <label>{{ 'groups.createNewModal.reminders.title' | translate }}</label>
-            </div>
-            <div class="form-group col-sm-4">
-              <select class="form-control" name="reminderMinutes"
-                      [formControl]="createGroupForm.controls['reminderMinutes']">
-                <option value="2880">{{ 'groups.createNewModal.reminders.twoDays' | translate }}</option>
-                <option value="1440">{{ 'groups.createNewModal.reminders.oneDay' | translate }}</option>
-                <option value="720">{{ 'groups.createNewModal.reminders.halfDay' | translate }}</option>
-                <option value="60">{{ 'groups.createNewModal.reminders.oneHour' | translate }}</option>
-                <option value="0" selected>{{ 'groups.createNewModal.reminders.noReminders' | translate }}</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group col-sm-6">
-              <label>{{ 'groups.createNewModal.permission.title' | translate }}</label>
-            </div>
-            <div class="form-group col-sm-4">
-              <select class="form-control" name="permissionTemplate"
-                      [formControl]="createGroupForm.controls['permissionTemplate']">
-                <option value="DEFAULT_GROUP">{{ 'groups.createNewModal.permission.any' | translate }}</option>
-                <option value="CLOSED_GROUP">{{ 'groups.createNewModal.permission.organizer' | translate }}</option>
-              </select>
-            </div>
-          </div>
-
-        </form>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="createGroup()">{{ 'action.save' | translate }}</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-create-group (onGroupCreated)="groupCreated($event)"
+                  (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>

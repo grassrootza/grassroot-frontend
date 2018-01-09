@@ -32,6 +32,7 @@
     "core-js": "^2.5.3",
     "jquery": "^3.0.0",
     "libphonenumber-js": "^0.4.48",
+    "moment": "^2.20.1",
     "ng4-loading-spinner": "^1.1.1",
     "ngx-clipboard": "^9.0.1",
     "popper.js": "^1.13.0",
