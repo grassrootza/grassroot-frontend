@@ -40,6 +40,11 @@
     },
     "starred-groups": {
       "title": "Starred groups"
+    },
+    "create": {
+      "title": "Create",
+      "group": "Group",
+      "campaign": "Campaign"
     }
   },
   "groups": {

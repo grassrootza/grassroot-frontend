@@ -1,5 +1,23 @@
 <div class="container">
 
+
+  <div class="row">
+    <div class="col-12 padding-vertical">
+      <div class="dropdown float-right">
+        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" [translate]="'home.create.title'">
+          Create
+        </button>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item disabled" [translate]="'home.create.group'"
+             (click)="showCreateGroupDialog()">Group</a>
+          <a class="dropdown-item disabled" [translate]="'home.create.campaign'">Campaign</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="row">
 
     <div class="col-lg-4">
@@ -87,3 +105,6 @@
 
 
 </div>
+
+<app-create-group (onGroupCreated)="groupCreated($event)"
+                  (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>

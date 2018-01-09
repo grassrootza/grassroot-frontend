@@ -63,6 +63,7 @@ import {NgbDateTimePickerModule} from '@zhaber/ng-bootstrap-datetimepicker';
 import {CreateMeetingComponent} from './groups/group-details/group-activity/create-meeting/create-meeting.component';
 import {CreateVoteComponent} from './groups/group-details/group-activity/create-vote/create-vote.component';
 import {CreateTodoComponent} from './groups/group-details/group-activity/create-todo/create-todo.component';
+import {CreateGroupComponent} from './groups/create-group/create-group.component';
 
 const routes: Routes = [
 
@@ -175,7 +176,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AccountComponent,
     CreateMeetingComponent,
     CreateVoteComponent,
-    CreateTodoComponent
+    CreateTodoComponent,
+    CreateGroupComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent,

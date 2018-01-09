@@ -9,6 +9,10 @@ import {DayTasks} from "./day-task.model";
 
 import * as moment from 'moment';
 import {Moment} from 'moment';
+import {GroupRef} from "../groups/model/group-ref.model";
+import {Router} from "@angular/router";
+
+declare var $: any;
 
 @Component({
   selector: 'app-home',
@@ -27,7 +31,8 @@ export class HomeComponent implements OnInit {
 
   constructor(private taskService: TaskService,
               private userService: UserService,
-              private groupService: GroupService) {
+              private groupService: GroupService,
+              private router: Router) {
 
     this.agendaBaseDate = moment().startOf('day');
   }
@@ -65,6 +70,21 @@ export class HomeComponent implements OnInit {
       .subscribe(newMembersPage => {
         this.newMembersPage = newMembersPage;
       });
+  }
+
+
+  showCreateGroupDialog(): boolean {
+    $('#create-group-modal').modal("show");
+    return false;
+  }
+
+  groupCreated(groupRef: GroupRef) {
+    console.log("Group successfully created, groupUid: ", groupRef.groupUid);
+    this.router.navigate(["/group/" + groupRef.groupUid]);
+  }
+
+  groupCreationFailed(error: any) {
+    console.log("Failed to create group. Error: ", error)
   }
 
   formatTaskDate(date: Date): string {
