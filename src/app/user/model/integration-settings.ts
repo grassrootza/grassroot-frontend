@@ -9,12 +9,14 @@ export class IntegrationSettingsList {
 export class IntegrationSettings {
 
   userConnectionValid: boolean = false;
-  managedPages: Map<string, string> = new Map();
+  managedPages: ManagedPage[] = [];
 
 }
 
-// export class ManagedPageOrAccount {
-//
-//   providerUserId: string = ;
-//
-// }
+export class ManagedPage {
+
+  providerUserId: string = "";
+  displayName: string = "";
+  imageUrl: string = "";
+
+}

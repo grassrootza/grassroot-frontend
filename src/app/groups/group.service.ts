@@ -16,6 +16,7 @@ import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import
 import {GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
 import {GroupRef} from "./model/group-ref.model";
+import {JoinCodeInfo} from "./model/join-code-info";
 
 @Injectable()
 export class GroupService {
@@ -123,8 +124,6 @@ export class GroupService {
             gr.subGroups,
             gr.topics,
             gr.joinWords,
-            gr.joinLongUrl,
-            gr.joinShortUrl,
             gr.joinWordsLeft
           );
         }
@@ -285,10 +284,12 @@ export class GroupService {
     return this.httpClient.get<string[]>(fullUrl);
   }
 
-  addGroupJoinWord(groupUid: string, joinWord: string) {
+  addGroupJoinWord(groupUid: string, joinWord: string): Observable<JoinCodeInfo> {
     const fullUrl = this.groupJoinWordAddUrl + "/" + groupUid;
-    return this.httpClient.post(fullUrl, null, { params: {
-      "joinWord": joinWord
+    // nb : must always mirror inbound routing
+    const inboundUrl = environment.frontendAppUrl + "/" + groupUid + "/" + joinWord;
+    return this.httpClient.post<JoinCodeInfo>(fullUrl, null, { params: {
+      "joinWord": joinWord, "longJoinUrl": inboundUrl
     }});
   }
 

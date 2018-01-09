@@ -36,3 +36,12 @@
   white-space: normal !important;
   word-wrap: break-word;
 }
+
+.page-title {
+  font-size: 1.2em;
+}
+
+.remove-link {
+  color: #7A7D8C;
+  text-decoration: underline;
+}

@@ -1,3 +1,7 @@
+<ng4-loading-spinner
+  [loadingText]="'action.loading' | translate"
+  [threshold]="500"
+> </ng4-loading-spinner>
 <div class="card-body">
   <div class="row">
     <div class="col-md-12 col-12">
@@ -19,13 +23,18 @@
     </div>
   </div>
   <hr>
-  <div class="row bottom-buffer" *ngIf="(settingsList.facebook.userConnectionValid)">
-    <ng-container *ngFor="let page of fbKeys">
+  <div class="row bottom-buffer" *ngIf="(settingsList.facebook?.userConnectionValid)">
+    <ng-container *ngFor="let page of settingsList.facebook?.managedPages">
         <div class="col-md-2 col-sm-4 col-4">
-          <img class="img-fluid pull-left page-image" src="https://graph.facebook.com/v2.5/{{page}}/picture" />
+          <img class="img-fluid pull-left page-image" src="https://graph.facebook.com/v2.5/{{page.providerUserId}}/picture" />
         </div>
         <div class="col-md-4 col-sm-8 col-8">
-          {{ this.settingsList.facebook.managedPages[page] }}
+          <p class="page-title">
+            {{ page.displayName }}
+          </p>
+          <p>
+            <a href="" class="remove-link" (click)="removeFb(page)">{{ 'user.integrations.remove' | translate }}</a>
+          </p>
         </div>
     </ng-container>
   </div>
@@ -40,6 +49,17 @@
     </div>
   </div>
   <hr>
+  <div class="row bottom-buffer" *ngIf="(settingsList.twitter?.userConnectionValid)">
+    <ng-container *ngFor="let page of settingsList.twitter?.managedPages">
+      <div class="col-md-2 col-sm-4 col-4">
+        <img class="img-fluid pull-left page-image" src="{{ page.imageUrl }}" />
+      </div>
+      <div class="col-md-4 col-sm-8 col-8">
+        <p class="page-title">{{ page.displayName }}</p>
+        <p><a href="" class="remove-link" (click)="removeTwitter(page)">{{ 'user.integrations.remove' | translate }}</a>
+      </div>
+    </ng-container>
+  </div>
   <div class="row top-buffer">
     <div class="col-md-6 col-sm-12 col-12">
       <h3><i class="fab fa-google g-logo"></i>{{ 'user.integrations.google' | translate }}</h3>

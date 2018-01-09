@@ -2,6 +2,7 @@ import {GroupRole} from "./group-role";
 import {DatePipe} from "@angular/common";
 import {MembershipInfo} from "./membership.model";
 import {GroupRef} from "./group-ref.model";
+import {JoinCodeInfo} from "./join-code-info";
 
 export class Group {
 
@@ -26,9 +27,7 @@ export class Group {
               public userRole: string,
               public subGroups: GroupRef[],
               public topics: string[],
-              public joinWords: string[],
-              public joinLongUrl: string,
-              public joinShortUrl: string,
+              public joinWords: JoinCodeInfo[],
               public joinWordsLeft: number) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
@@ -41,8 +40,9 @@ export class Group {
     return GroupRole[this.userRole];
   }
 
-  public hasJoinUrls(): boolean {
-    return !!(this.joinLongUrl && this.joinShortUrl);
+  public joinWordsExtracted(): string[] {
+    return this.joinWords.map(jw => jw.word);
   }
 
 }
+

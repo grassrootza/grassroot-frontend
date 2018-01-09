@@ -1,7 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {IntegrationsService} from "../integrations.service";
 import {AlertService} from "../../../utils/alert.service";
+import {Observable} from "rxjs/Observable";
+import 'rxjs/add/observable/combineLatest';
 
 @Component({
   selector: 'app-integration-connect',
@@ -17,20 +19,19 @@ export class IntegrationConnectComponent implements OnInit {
 
   ngOnInit() {
 
-    this.route.queryParams.subscribe((params: Params) => {
-      console.log("params: ", params);
+    let navigation = Observable.combineLatest(this.route.params, this.route.queryParams,
+      (params, queryParams) => ({ params, queryParams} ));
 
-      let provider = params['providerId'];
-      let code = params['code'];
-      let status = params['status'];
+    navigation.subscribe((navigation) => {
+      console.log("params: ", navigation);
 
+      let provider = navigation.params.providerId;
       console.log("connected to: ", provider);
-      console.log("code: ", code);
 
-      this.intService.storeFbConnectResult(params)
+      this.intService.storeProviderConnectResult(provider, navigation.queryParams)
         .subscribe(response => {
           console.log("received response: ", response);
-          this.alertService.alert("user.integrations.fb-complete", true);
+          this.alertService.alert("user.integrations." + provider + "-complete", true);
           console.log("and, rerouting back to where we started");
           this.router.navigate(['/user/integrations']);
         }, error => {

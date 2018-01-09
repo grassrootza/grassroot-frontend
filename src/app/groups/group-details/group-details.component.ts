@@ -5,6 +5,10 @@ import {Group} from "../model/group.model";
 import {environment} from "../../../environments/environment";
 import {UserService} from "../../user/user.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
+import {ClipboardService} from 'ngx-clipboard';
+import {TranslateService} from "@ngx-translate/core";
+import {JoinCodeInfo} from "../model/join-code-info";
 
 declare var $: any;
 
@@ -23,12 +27,15 @@ export class GroupDetailsComponent implements OnInit {
   public addJoinWordForm: FormGroup;
 
   public activeJoinWords: string[] = [];
+  public joinWordCbString: string = "";
 
   constructor(private router: Router,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
               private userService: UserService,
-              private groupService: GroupService) {
+              private groupService: GroupService,
+              private translateService: TranslateService,
+              private spinnerService: Ng4LoadingSpinnerService) {
 
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
@@ -70,7 +77,7 @@ export class GroupDetailsComponent implements OnInit {
   setupJoinParams() {
     this.joinMethodParams = {
       completeJoinCode: environment.ussdPrefix + this.group.joinCode + '#',
-      joinWords: this.group.joinWords.join(', '),
+      joinWords: this.group.joinWords.map(jw => jw.word).join(", "),
       joinWordsLeft: this.group.joinWordsLeft,
       shortCode: environment.groupShortCode
     };
@@ -87,9 +94,7 @@ export class GroupDetailsComponent implements OnInit {
 
   checkJoinWordAvailability(control: FormControl) {
     let word = control.value.toLowerCase();
-    console.log("validating word: ");
     if (this.activeJoinWords.includes(word)) {
-      console.log("no! words coincide");
       return {
         wordTaken: {
           word: word
@@ -99,24 +104,49 @@ export class GroupDetailsComponent implements OnInit {
     return null;
   }
 
+  // on both, we are doing the updates locally instead of fetching whole new entity from server
+  // more efficient, but possibly more fragile. watch closely.
   addJoinWord() {
     let word: string = this.addJoinWordForm.get('joinWord').value;
+    this.spinnerService.show();
     this.groupService.addGroupJoinWord(this.group.groupUid, word).subscribe(result => {
-      console.log("worked! result: ", result);
-      this.group.joinWords.push(word);
+      this.spinnerService.hide();
+      this.group.joinWords.push(result);
+      this.group.joinWordsLeft--;
+      this.addJoinWordForm.get('joinWord').reset('');
+      this.setupJoinParams();
     }, error => {
       console.log("something went wrong! : ", error);
     })
   }
 
-  removeJoinWord(word: string) {
-    this.groupService.removeGroupJoinWord(this.group.groupUid, word).subscribe(result => {
+  removeJoinWord(joinWord: JoinCodeInfo) {
+    console.log("removing join word: ", joinWord);
+    this.groupService.removeGroupJoinWord(this.group.groupUid, joinWord.word).subscribe(result => {
       console.log("worked, result: ", result);
-      let index = this.group.joinWords.indexOf(word);
+      let index = this.group.joinWords.indexOf(joinWord);
       this.group.joinWords.splice(index, 1);
       this.group.joinWordsLeft++;
+      this.setupJoinParams();
     }, error => {
       console.log("well that didn't work ... ", error);
+    });
+    return false;
+  }
+
+  // note: this is a bit of a mess. would have thought copy to clipboard would be much simpler. guess not.
+  // most S-O answers not really providing guidance, so need to untangle. string generation works fine though.
+  copyToCb(joinWord: JoinCodeInfo) {
+    let params = {
+      'shortCode': this.joinMethodParams.shortCode,
+      'groupName': this.group.name,
+      'joinWord': joinWord.word,
+      'shortUrl': joinWord.shortUrl,
+      'ussdCode': this.joinMethodParams.completeJoinCode
+    };
+    this.translateService.get("group.joinMethods.joinWordCbText", params).subscribe(text => {
+      this.joinWordCbString = text;
+      console.log("copying: ", this.joinWordCbString);
     });
     return false;
   }

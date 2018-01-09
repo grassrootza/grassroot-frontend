@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {IntegrationSettingsList} from "../model/integration-settings";
 import {Observable} from "rxjs/Observable";
 
@@ -13,7 +13,7 @@ export class IntegrationsService {
 
   // we may want to cache this at some point, but it's important to keep it current, so ...
   fetchCurrentConnections(): Observable<IntegrationSettingsList> {
-    return this.httpClient.get(this.settingsUrlBase + "/status/all")
+    return this.httpClient.get<IntegrationSettingsList>(this.settingsUrlBase + "/status/all")
       .map(result => result["currentIntegrations"]);
   }
 
@@ -21,9 +21,18 @@ export class IntegrationsService {
     return this.httpClient.get(this.settingsUrlBase + "/connect/facebook/initiate", { responseType: 'text' });
   }
 
-  storeFbConnectResult(returnedParams: any) {
+  initiateTwitterConnect() {
+    return this.httpClient.get(this.settingsUrlBase + "/connect/twitter/initiate", { responseType: 'text' });
+  }
+
+  storeProviderConnectResult(provider: string, returnedParams: any) {
     console.log("params: ", returnedParams);
-    return this.httpClient.get(this.settingsUrlBase + "/connect/facebook/complete", { params: returnedParams });
+    return this.httpClient.get(this.settingsUrlBase + "/connect/" + provider + "/complete", { params: returnedParams });
+  }
+
+  removeProviderPage(provider: string, providerUserId: string) {
+    const params = new HttpParams().set("providerUserId", providerUserId);
+    return this.httpClient.post<IntegrationSettingsList>(this.settingsUrlBase + "/remove/" + provider, null, {params: params});
   }
 
 }

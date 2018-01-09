@@ -61,3 +61,32 @@ strong {
   font-size: 1.3rem;
   line-height: 2rem;
 }
+
+.join-code-label {
+  display: block;
+  clear: both;
+}
+
+.join-words-header {
+  border-top: none;
+  border-bottom: none;
+  background-color: #F5F6FA;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 16px;
+}
+
+.join-words-row {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  vertical-align: middle;
+  border-top: solid #ECEEF1 1px;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.join-words-add-container {
+  margin-top: 20px;
+}
