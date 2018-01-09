@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TaskService} from '../../../../task/task.service';
 import {GroupService} from '../../../group.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -14,17 +14,13 @@ export class CreateVoteComponent implements OnInit {
 
   public createVoteForm: FormGroup;
   public yesNoVote: boolean = true;
-  private groupUid: string  = "";
+  @Input() groupUid: string;
+  @Output() voteSaved: EventEmitter<boolean>;
 
-  constructor(private groupService: GroupService,
-              private taskService: TaskService,
-              private formBuilder: FormBuilder,
-              public activeModal: NgbActiveModal) {
+  constructor(private taskService: TaskService,
+              private formBuilder: FormBuilder) {
     this.initCreateVoteForm();
-    groupService.groupUid.subscribe(groupUid => {
-      this.groupUid = groupUid;
-    })
-
+    this.voteSaved = new EventEmitter<boolean>();
   }
 
   ngOnInit() {
@@ -120,10 +116,11 @@ export class CreateVoteComponent implements OnInit {
             this.yesNoVote = true;
             this.shouldValidateVoteOptions();
             this.initCreateVoteForm();
-            this.activeModal.dismiss('Save clicked');
+            this.voteSaved.emit(true);
           },
           error => {
             console.log("Error creating task: ", error);
+            this.voteSaved.emit(false);
           })
     }else{
       console.log("Create vote form invalid!");

@@ -1,6 +1,6 @@
 <div class="modal-header">
   <h5 class="modal-title">{{ 'group.activity.todoModal.title' | translate }}</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
@@ -103,5 +103,5 @@
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary" (click)="createTodo()" [disabled]="!createTodoForm.valid">{{ 'action.save' | translate }}</button>
-  <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="activeModal.dismiss('Cancel clicked')">{{ 'action.cancel' | translate }}</button>
+  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
 </div>

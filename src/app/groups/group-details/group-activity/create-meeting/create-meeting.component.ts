@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker';
@@ -13,19 +13,17 @@ import {GroupService} from '../../../group.service';
 })
 export class CreateMeetingComponent implements OnInit {
 
-  private groupUid: string;
   public createMeetingForm: FormGroup;
+  @Input() groupUid: string;
+  @Output() meetingSaved: EventEmitter<boolean>;
+
 
 
 
   constructor( private taskService: TaskService,
-               private formBuilder: FormBuilder,
-               public activeModal: NgbActiveModal,
-               private groupService: GroupService) {
+               private formBuilder: FormBuilder) {
     this.initCreateMeetingForm();
-    groupService.groupUid.subscribe(groupUid => {
-      this.groupUid = groupUid;
-    })
+    this.meetingSaved = new EventEmitter<boolean>();
   }
 
   initCreateMeetingForm(){
@@ -67,11 +65,11 @@ export class CreateMeetingComponent implements OnInit {
         .subscribe(task => {
             console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
             this.initCreateMeetingForm();
-            this.activeModal.dismiss('Save clicked');
-
+            this.meetingSaved.emit(true)
           },
           error => {
             console.log("Error creating task: ", error);
+            this.meetingSaved.emit(false);
           });
     }
     else {

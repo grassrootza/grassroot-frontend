@@ -11,6 +11,8 @@ import {CreateMeetingComponent} from './create-meeting/create-meeting.component'
 import {CreateVoteComponent} from './create-vote/create-vote.component';
 import {CreateTodoComponent} from './create-todo/create-todo.component';
 
+declare var $: any;
+
 
 @Component({
   selector: 'app-group-activity',
@@ -30,8 +32,7 @@ export class GroupActivityComponent implements OnInit {
               private route: ActivatedRoute,
               private userService: UserService,
               private groupService: GroupService,
-              private taskService: TaskService,
-              private modalService: NgbModal) {
+              private taskService: TaskService) {
 
 
   }
@@ -60,54 +61,35 @@ export class GroupActivityComponent implements OnInit {
   }
 
   showCreateMeetingModal(){
+    $("#create-meeting-modal").modal("show");
+  }
 
-    this.groupService.setGroupUid(this.groupUid);
-    let modalOptions: NgbModalOptions= {
-      size: 'lg'
-    };
-    this.modalService.open(CreateMeetingComponent, modalOptions).result.then((result) => {
-      console.log("closed with result", result);
+  meetingSaved(saveResponse){
+    console.log(saveResponse);
+    $("#create-meeting-modal").modal("hide");
+    if(saveResponse)
       this.loadTasks();
-      this.groupService.clearGroupUid();
-    }, (reason) => {
-      console.log("dismissed with reason ", reason);
-      this.loadTasks();
-      this.groupService.clearGroupUid();
-    });
   }
 
   showCreateVoteModal(){
-    this.groupService.setGroupUid(this.groupUid);
-    let modalOptions: NgbModalOptions = {
-      size: 'lg'
-    };
+    $("#create-vote-modal").modal("show");
+  }
 
-    this.modalService.open(CreateVoteComponent, modalOptions).result.then((result) => {
-      console.log("closed with result", result);
+  voteSaved(saveResponse){
+    console.log(saveResponse);
+    $("#create-vote-modal").modal("hide");
+    if(saveResponse)
       this.loadTasks();
-      this.groupService.clearGroupUid();
-    }, (reason) => {
-      console.log("dismissed with reason ", reason);
-      this.loadTasks();
-      this.groupService.clearGroupUid();
-    });
   }
 
   showCreateTodoModal(){
-    this.groupService.setGroupUid(this.groupUid);
-    let modalOptions: NgbModalOptions = {
-      size: 'lg'
-    };
-
-    this.modalService.open(CreateTodoComponent, modalOptions).result.then((result) => {
-      console.log("closed with result", result);
-      this.loadTasks();
-      this.groupService.clearGroupUid();
-    }, (reason) => {
-      console.log("dismissed with reason ", reason);
-      this.loadTasks();
-      this.groupService.clearGroupUid();
-    });
+    $("#create-todo-modal").modal("show");
   }
 
+  todoSaved(saveResponse){
+    console.log(saveResponse);
+    $("#create-todo-modal").modal("hide");
+    if(saveResponse)
+      this.loadTasks();
+  }
 }
