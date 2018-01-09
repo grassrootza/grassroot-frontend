@@ -11,6 +11,9 @@
 .my-agenda h3, .day-task {
   margin-left: 1rem;
   margin-right: 1rem;
+}
+
+.day, .day-task {
   margin-bottom: 1rem;
 }
 
@@ -28,6 +31,28 @@
   padding-top: 0;
 }
 
+
 .member-row {
   margin-bottom: 2rem;
+}
+
+.my-agenda-footer {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  padding-top: 1rem;
+  height: 4rem;
+}
+
+@media (min-width: 992px) {
+
+  .new-members-body {
+    height: 24rem;
+    overflow: auto;
+  }
+
+  .my-agenda-body {
+    height: 20rem;
+    overflow: auto;
+  }
+
 }
