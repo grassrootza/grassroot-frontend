@@ -39,7 +39,12 @@
       "title": "New members"
     },
     "starred-groups": {
-      "title": "Starred groups"
+      "title": "Starred groups",
+      "empty": "You have no pinned groups currently."
+    },
+    "active-campaigns": {
+      "title": "Active campaigns",
+      "empty": "You have no active campaigns currently."
     },
     "create": {
       "title": "Create",
