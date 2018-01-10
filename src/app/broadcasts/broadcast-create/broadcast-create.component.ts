@@ -20,7 +20,12 @@ export class BroadcastCreateComponent implements OnInit {
     console.log("Initiating new subscribe flow");
     this.route.params.subscribe(params => {
       console.log("got the parameters: ", params);
-      this.broadcastService.initCreate(params["type"], params["parentId"]);
+      this.broadcastService.fetchCreateParams(params["type"], params["parentId"]).subscribe(createParams => {
+        console.log("here are the fetch create params: ", createParams);
+        this.broadcastService.initCreate(params["type"], params["parentId"]);
+      }, error => {
+        console.log("failed, error: ", error);
+      });
     });
 
 

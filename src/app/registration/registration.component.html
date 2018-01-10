@@ -1,48 +1,61 @@
+<div id="banner-image"></div>
 <div class="row">
-  <div class="col-12 col-lg-8">
+  <div class="container col-md-8 offset-md-4">
+    <h1 class="display-1 register-banner">{{ 'registration.banner' | translate }}</h1>
+    <h2 class="display-2 register-sub-banner">{{ 'registration.sub-banner' | translate | uppercase }}</h2>
+  </div>
+</div>
+
+<div class="row mt-md-3 pt-5">
+  <div class="col-12 text-center">
+    <h2>{{ 'registration.title' | translate }}</h2>
+  </div>
+</div>
+<div class="row mt-md-3">
+  <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
     <div class="card">
-
-      <div class="card-header">
-        {{ 'registration.title' | translate }}
-      </div>
-
       <div class="card-body">
-
         <form>
-
           <div class="form-group">
-            <label for="username">{{ 'registration.username' | translate }}</label>
-            <input type="text" class="form-control" name="username" id="username" placeholder="{{ 'registration.usernamePlaceholder' | translate }}" #username>
+            <label for="username" class="grassroot-label-em">{{ 'registration.displayname' | translate }}</label>
+            <input type="text" class="form-control" name="username" id="username" #username>
           </div>
 
           <div class="form-group">
-            <label for="phoneNumber">{{ 'registration.phoneNumber' | translate }}</label>
-            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="{{ 'registration.phoneNumberPlaceholder' | translate }}"
-                   #phoneNumber>
+            <label for="phoneNumber" class="grassroot-label-em">{{ 'registration.phoneNumber' | translate }}</label>
+            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" #phoneNumber>
           </div>
-
 
           <div class="form-group">
-            <label for="password">{{ 'registration.password' | translate }}</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="{{ 'registration.passwordPlaceholder' | translate }}" #password>
+            <label for="phoneNumber" class="grassroot-label-em">{{ 'registration.emailAddress' | translate }}</label>
+            <input type="text" class="form-control" name="phoneNumber" id="emailAddress" #emailAddress>
           </div>
 
-          <button type="submit" class="btn btn-primary"
-                  (click)="register(username.value, phoneNumber.value, password.value)"> {{ 'action.signUp' | translate }}
-          </button>
+          <div class="form-group">
+            <label for="password" class="grassroot-label-em">{{ 'registration.password' | translate }}</label>
+            <input type="password" class="form-control" name="password" id="password" #password>
+          </div>
 
+          <div class="form-group text-center mt-md-3">
+            <button type="submit" class="btn btn-primary register-button"
+                    (click)="register(username.value, phoneNumber.value, password.value)"> {{ 'action.signUp' | translate }}
+            </button>
+          </div>
         </form>
-
 
         <div class="alert alert-danger my-lg-3" role="alert" *ngIf="message">
           {{ message }}
         </div>
 
+        <div class="form-group text-center grassroot-label-em">
+          {{ 'registration.haveAccountQ' | translate }}<br>
+          <a class="grassroot-link" [routerLink]="['/login']">{{ 'registration.haveAccountLink' | translate }}</a>
+        </div>
+
+
       </div>
 
     </div>
-
-    <a class="nav-link" [routerLink]="['/login']">{{ 'registration.haveAccount' | translate }}</a>
   </div>
 </div>
 

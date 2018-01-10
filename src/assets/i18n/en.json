@@ -488,14 +488,16 @@
     "newUser-suffix": "Register here"
   },
   "registration":{
-    "title": "Register",
-    "username": "YOUR NAME (WHAT PEOPLE KNOW YOU BY):",
-    "usernamePlaceholder": "Enter username",
-    "phoneNumber": "YOUR MOBILE NUMBER:",
-    "phoneNumberPlaceholder": "Enter phone number",
-    "password": "SET A PASSWORD:",
-    "passwordPlaceholder": "Password",
-    "haveAccount": "Already have an account? Click here to Login"
+    "banner": "Welcome to Grassroot",
+    "sub-banner": "Tools for a people's democracy",
+    "title": "Your Account Details",
+    "displayname": "Your name (what people know you by)",
+    "phoneNumber": "Your mobile number",
+    "emailAddress": "Your email address",
+    "footnote": "* At least one of mobile number or email address is required",
+    "password": "Set a password",
+    "haveAccountQ": "Already have an account?",
+    "haveAccountLink": "Click here to login"
   },
   "pagination":{
     "previous": "Prev",

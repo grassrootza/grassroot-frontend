@@ -1,0 +1,52 @@
+/* todo: clean this up for responsive, and fix image repeating (center it) */
+#banner-image {
+  position: absolute;
+  width: 100%;
+  height: 17%;
+  top: 70px;
+  left: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("/assets/register_banner.png");
+}
+
+.jumbotron {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  overflow: hidden;
+  opacity: 0.5;
+}
+
+.register-banner {
+  color: #FFFFFF;
+  font-family: Nunito;
+  font-size: 38px;
+  font-weight: 300;
+  line-height: 47px;
+  text-shadow: 0 3px 3px 0 rgba(0,0,0,0.1);
+}
+
+.register-sub-banner {
+  color: #FFFFFF;
+  font-family: Nunito;
+  font-size: 18px;
+  line-height: 47px;
+  text-shadow: 0 3px 3px 0 rgba(0,0,0,0.1);
+}
+
+.register-button {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 10px 60px;
+}
+
+@media (max-width: 640px)
+{
+  .register-sub-banner
+  {
+    display: none;
+  }
+}

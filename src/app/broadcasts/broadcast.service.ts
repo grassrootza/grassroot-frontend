@@ -11,6 +11,8 @@ import {
   BroadcastTypes
 } from "./model/broadcast-request";
 import {DateTimeUtils} from "../utils/DateTimeUtils";
+import {BroadcastParams} from "./model/broadcast-params";
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class BroadcastService {
@@ -19,6 +21,7 @@ export class BroadcastService {
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
 
   private createRequest: BroadcastRequest = new BroadcastRequest();
+  private createParams: BroadcastParams = new BroadcastParams();
 
   public currentStep: number = 1;
 
@@ -28,6 +31,13 @@ export class BroadcastService {
     const fullUrl = this.fetchUrlBase + type + "/" + entityUid;
   }
 
+  fetchCreateParams(type: string, entityUid: string): Observable<BroadcastParams> {
+    const fullUrl = this.createUrlBase + type + "/info/" + entityUid;
+    return this.httpClient.get<BroadcastParams>(fullUrl).map(result => {
+      this.createParams = result;
+      return result;
+    });
+  }
 
   // todo : watch this if have some complex user path (e.g., group -> create broadcast -> campaigns (via nav) -> campaign -> create)
   initCreate(type: String, parentId: String) {

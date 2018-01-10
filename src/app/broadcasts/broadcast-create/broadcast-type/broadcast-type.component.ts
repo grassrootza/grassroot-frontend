@@ -7,7 +7,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 @Component({
   selector: 'app-broadcast-type',
   templateUrl: './broadcast-type.component.html',
-  styleUrls: ['./broadcast-type.component.css']
+  styleUrls: ['./broadcast-type.component.css', '../broadcast-create.component.css']
 })
 export class BroadcastTypeComponent implements OnInit {
 
