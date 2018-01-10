@@ -1,3 +1,10 @@
+.login-graphic {
+  background-image: url('/assets/login-graphic.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
 .forgot-password {
   font-weight: lighter;
   color: inherit;
@@ -12,7 +19,20 @@
 }
 
 .login-button {
+  font-size: 1.2em;
   margin-top: 2rem;
   font-weight: bold;
   padding: 10px 60px;
+}
+
+.login-banner-text {
+  color: #FFFFFF;
+  font-family: Nunito;
+  font-size: 38px;
+  line-height: 47px;
+  text-shadow: 0 3px 3px 0 rgba(0,0,0,0.1);
+}
+
+.login-banner-bold {
+  font-weight: 600;
 }
