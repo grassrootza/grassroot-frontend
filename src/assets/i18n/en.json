@@ -516,5 +516,13 @@
     "time": "Time",
     "working": "Working",
     "loading": "Loading"
+  },
+  "task": {
+    "todo": {
+      "respondModal": {
+        "title": "Complete action",
+        "information-label": "Information"
+      }
+    }
   }
 }

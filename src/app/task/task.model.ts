@@ -1,4 +1,5 @@
 import {TaskType} from "./task-type";
+import {TodoType} from "./todo-type";
 
 export class Task {
 
@@ -11,7 +12,9 @@ export class Task {
               public location: string,
               public parentUid: string,
               public parentName: string,
-              public ancestorGroupName: string) {
+              public ancestorGroupName: string,
+              public todoType: TodoType,
+              public hasResponded: boolean) {
 
     /**
 

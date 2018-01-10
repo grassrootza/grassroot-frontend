@@ -40,8 +40,10 @@
               </div>
               <div *ngFor="let task of dayTasks.tasks" class="day-task">
                 <div>
-                  <img src="assets/{{task.getEventIconName()}}"/>
-                  {{task.title}}
+                  <a (click)="handleTaskClick(task)">
+                    <img src="assets/{{task.getEventIconName()}}"/>
+                    {{task.title}}
+                  </a>
                 </div>
                 <div>
                   <span [translate]="'home.my-agenda.group-label'"> Group </span>: <b>{{task.ancestorGroupName}}</b>
@@ -73,7 +75,7 @@
 
           <div class="float-right">
             <h4 class="float-right new-members-count-label">This week</h4>
-            <span class="new-members-count badge badge-secondary d-inline-block">{{newMembersPage.totalElements}}</span>
+            <span class="new-members-count badge badge-secondary d-inline-block">{{newMembersPage != null ? newMembersPage.totalElements : 0}}</span>
           </div>
 
           <h3 [translate]="'home.new-members.title'">New members</h3>
@@ -144,3 +146,5 @@
 
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
+
+<app-todo-respond [todoTask]="toDoToRespond"></app-todo-respond>
