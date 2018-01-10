@@ -27,20 +27,34 @@ export class PasswordComponent implements OnInit {
   }
 
   submitChange() {
-    this.userService.updatePassword(this.pwdForm.value['oldpassword'], this.pwdForm.value['newpassword'], this.pwdForm.value['confirmpwd'])
-      .subscribe(result => {
-        // server only returns 200 if this succeeded, and that's all it returns
-        this.alertService.alert("user.password.completed");
-        this.pwdForm.reset();
-      }, error => {
-        console.log("nope, failed: ", error);
-        this.showFailure();
-      })
+    if(this.pwdForm.value['newpassword'] !== this.pwdForm.value['confirmpwd']){
+      this.passwordMismatch();
+    }else{
+      this.userService.updatePassword(this.pwdForm.value['oldpassword'], this.pwdForm.value['newpassword'], this.pwdForm.value['confirmpwd'])
+        .subscribe(result => {
+          // server only returns 200 if this succeeded, and that's all it returns
+          this.alertService.alert("user.password.completed");
+          this.pwdForm.reset();
+        }, error => {
+          console.log("nope, failed: ", error);
+          this.showFailure();
+        })
+    }
   }
 
   // for security, we receive little to no information about what the eror was
   showFailure() {
     this.errorMessage = "user.password.error";
+    setTimeout(() => {
+      this.errorMessage = "";
+    }, 2000)
+  }
+
+  passwordMismatch(){
+    this.errorMessage = "user.password.mismatch";
+    setTimeout(() => {
+      this.errorMessage = "";
+    }, 2000)
   }
 
 }

@@ -454,7 +454,8 @@
       "confirm": "Confirm new password",
       "change": "Change password",
       "completed": "Done, your password has been updated",
-      "error": "Sorry, there was an error changing your password, please check your old password again"
+      "error": "Sorry, there was an error changing your password, please check your old password again",
+      "mismatch": "Sorry, your passwords do not match"
     },
     "account": {
       "title": "Under construction"

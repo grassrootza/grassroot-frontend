@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {UserProvince} from "../model/user-province.enum";
 import {UserService} from "../user.service";
 import {UserProfile} from "../user.model";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../utils/alert.service";
 
 declare var $: any;
@@ -39,6 +39,7 @@ export class ProfileFormComponent implements OnInit {
 
   saveChanges() {
     console.log("saving changes! form looks like: ", this.profileForm.value);
+    console.log("User email......" + this.userProfile.email);
     this.userProfile = this.profileForm.value;
     this.userService.updateDetails(this.userProfile)
       .subscribe(message => {
