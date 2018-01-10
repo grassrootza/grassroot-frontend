@@ -29,6 +29,11 @@
           <h3 [translate]="'home.my-agenda.title'">My agenda</h3>
 
           <div class="my-agenda-body">
+
+            <div class="day-task" *ngIf="baseDateFilteredTasks.length == 0">
+              <p>No upcoming tasks for you currently</p>
+            </div>
+
             <div *ngFor="let dayTasks of baseDateFilteredTasks" class="day">
               <div class="col-sm-8 day-label">
                 {{formatTaskDate(dayTasks.date)}}
@@ -65,16 +70,22 @@
     <div class="col-lg-8">
       <div class="card">
         <div class="card-body new-members">
+
+          <div class="float-right">
+            <h4 class="float-right new-members-count-label">This week</h4>
+            <span class="new-members-count badge badge-secondary d-inline-block">{{newMembersPage.totalElements}}</span>
+          </div>
+
           <h3 [translate]="'home.new-members.title'">New members</h3>
 
           <div class="new-members-body">
             <div *ngIf="newMembersPage">
               <div *ngFor="let member of newMembersPage.content" class="member-row">
                 <h4>{{member.user.displayName}}</h4>
-                <p><span>Group: </span> {{member.group.name}}</p>
+                <div><span>Group: </span> {{member.group.name}}</div>
                 <!-- this is generating a 'object changed after checked error, and might be better to do via
                      string concat of key for translate (and also param passing is being weird), but this is the idea -->
-                <p>{{ member.joinMethodKey() | translate:member }}</p>
+                <div>{{ member.joinMethodKey() | translate:member }}</div>
               </div>
             </div>
 
@@ -98,6 +109,31 @@
                           [group]="gr"
                           [extendedInfoVisible]="pinnedGroups.length == 1">
           </app-group-info>
+
+          <div *ngIf="pinnedGroups.length == 0" class="padding-vertical">
+            <p [translate]="'home.starred-groups.empty'">You have no pinned groups currently.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 active-campaigns">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title" [translate]="'home.active-campaigns.title'">Active campaigns</span>
+        </div>
+        <div class="card-body">
+
+          <app-campaign-info *ngFor="let camp of activeCampaigns"
+                             [campaign]="camp">
+          </app-campaign-info>
+
+          <div *ngIf="activeCampaigns.length == 0" class="padding-vertical">
+            <p [translate]="'home.active-campaigns.empty'">You have no active campaigns currently.</p>
+          </div>
         </div>
       </div>
     </div>

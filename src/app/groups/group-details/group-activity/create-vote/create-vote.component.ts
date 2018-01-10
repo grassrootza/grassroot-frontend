@@ -4,6 +4,7 @@ import {GroupService} from '../../../group.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {Membership} from '../../../model/membership.model';
 
 @Component({
   selector: 'app-create-vote',
@@ -14,16 +15,23 @@ export class CreateVoteComponent implements OnInit {
 
   public createVoteForm: FormGroup;
   public yesNoVote: boolean = true;
+  public membersList: Membership[] = [];
+
   @Input() groupUid: string;
   @Output() voteSaved: EventEmitter<boolean>;
 
+
   constructor(private taskService: TaskService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private groupService: GroupService) {
     this.initCreateVoteForm();
     this.voteSaved = new EventEmitter<boolean>();
   }
 
   ngOnInit() {
+    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
+      this.membersList = members.content;
+    });
   }
 
   initCreateVoteForm(){
@@ -33,7 +41,8 @@ export class CreateVoteComponent implements OnInit {
       'title': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': '',
       'time': [this.fromDate(new Date()), Validators.required],
-      'parentType': 'GROUP'
+      'parentType': 'GROUP',
+      'assignedMemberUids': []
     })
   }
 
@@ -110,7 +119,15 @@ export class CreateVoteComponent implements OnInit {
         voteTime.minute,
         voteTime.second).getTime();
 
-      this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis)
+      let assignedMemberUids: string[] = [];
+      if(this.createVoteForm.get("assignedMemberUids").value != null){
+        for(let i=0; i < this.createVoteForm.get("assignedMemberUids").value.length; i++ ){
+          assignedMemberUids.push(this.createVoteForm.get("assignedMemberUids").value[i]);
+        }
+      }
+
+
+      this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, assignedMemberUids)
         .subscribe(task => {
             console.log("Vote successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
             this.yesNoVote = true;

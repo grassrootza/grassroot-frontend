@@ -5,6 +5,7 @@ import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker';
 import {TaskService} from '../../../../task/task.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {GroupService} from '../../../group.service';
+import {Membership} from '../../../model/membership.model';
 
 @Component({
   selector: 'app-create-meeting',
@@ -16,12 +17,11 @@ export class CreateMeetingComponent implements OnInit {
   public createMeetingForm: FormGroup;
   @Input() groupUid: string;
   @Output() meetingSaved: EventEmitter<boolean>;
-
-
-
+  public membersList: Membership[] = [];
 
   constructor( private taskService: TaskService,
-               private formBuilder: FormBuilder) {
+               private formBuilder: FormBuilder,
+               private groupService: GroupService) {
     this.initCreateMeetingForm();
     this.meetingSaved = new EventEmitter<boolean>();
   }
@@ -33,10 +33,14 @@ export class CreateMeetingComponent implements OnInit {
       'dateTimeEpochMillis': [this.fromDate(new Date()), Validators.required],
       'parentType': 'GROUP',
       'publicMeeting': false,
+      'assignedMemberUids': []
     });
   }
 
   ngOnInit() {
+    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
+      this.membersList = members.content;
+    });
   }
 
   fromDate(date): NgbDateTimeStruct {
@@ -61,7 +65,15 @@ export class CreateMeetingComponent implements OnInit {
         meetingDateTime.second).getTime();
       let publicMeeting: boolean = this.createMeetingForm.get("publicMeeting").value;
 
-      this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis, publicMeeting)
+      let assignedMemberUids: string[] = [];
+      if( this.createMeetingForm.get("assignedMemberUids").value != null){
+        for(let i=0; i < this.createMeetingForm.get("assignedMemberUids").value.length; i++ ){
+          assignedMemberUids.push(this.createMeetingForm.get("assignedMemberUids").value[i]);
+        }
+      }
+
+
+      this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis, publicMeeting, assignedMemberUids)
         .subscribe(task => {
             console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
             this.initCreateMeetingForm();

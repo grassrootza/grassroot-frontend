@@ -23,11 +23,11 @@
   background-color: #75bc8f;
 }
 
-.stared-groups {
+.stared-groups, .active-campaigns {
   margin-top: 2rem;
 }
 
-.stared-groups .card-body {
+.stared-groups .card-body, .active-campaigns .card-body {
   padding-top: 0;
 }
 
@@ -41,6 +41,21 @@
   margin-right: 2rem;
   padding-top: 1rem;
   height: 4rem;
+}
+
+.new-members-count {
+  font-size: 1.5rem;
+  background-color: #cccccc;
+}
+
+.new-members-count-label {
+  margin-top: 0.2rem;
+  margin-left: 0.4rem;
+  margin-right: 0.8rem;
+}
+
+.new-members-body {
+  /*margin-top: 1rem;*/
 }
 
 @media (min-width: 992px) {

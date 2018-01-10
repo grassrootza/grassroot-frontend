@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import {Moment} from 'moment';
 import {GroupRef} from "../groups/model/group-ref.model";
 import {Router} from "@angular/router";
+import {CampaignInfo} from "../campaigns/model/campaign-info";
 
 declare var $: any;
 
@@ -24,6 +25,7 @@ export class HomeComponent implements OnInit {
   private myTasks: DayTasks[] = [];
   public baseDateFilteredTasks: DayTasks[] = [];
   public pinnedGroups: GroupInfo[] = [];
+  public activeCampaigns: CampaignInfo[] = [];
   public newMembersPage: MembersPage = null;
   public agendaBaseDate: Moment;
 
@@ -66,7 +68,7 @@ export class HomeComponent implements OnInit {
     );
     this.groupService.loadGroups(false)
 
-    this.groupService.fetchNewMembers(7, 0, 20)
+    this.groupService.fetchNewMembers(7, 0, 1000)
       .subscribe(newMembersPage => {
         this.newMembersPage = newMembersPage;
       });
@@ -118,7 +120,7 @@ export class HomeComponent implements OnInit {
 
     let maxDays = 5;
     let maxTasksPerNonBaseDay = 3;
-    let maxTasksTotal = 15;
+    let maxTasksTotal = 5;
 
     let totalTasks = 0;
 
