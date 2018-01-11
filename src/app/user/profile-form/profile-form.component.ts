@@ -25,6 +25,11 @@ export class ProfileFormComponent implements OnInit {
               private alertService: AlertService) {
     this.provinceKeys = Object.keys(this.provinces);
     // todo : validation of numbers, email, etc
+    this.profileForm = this.formBuilder.group({
+        'email':['',Validators.required,
+                Validators.email,
+                Validators.pattern("[^ @]*@[^ @]*")]
+    })
     console.log("empty profile looks like: ", new UserProfile());
     this.profileForm = this.formBuilder.group(new UserProfile());
     this.otpForm = this.formBuilder.group({
