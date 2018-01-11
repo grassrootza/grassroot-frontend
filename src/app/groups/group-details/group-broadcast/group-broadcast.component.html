@@ -1,3 +1,285 @@
-<h2>
-  Broadcast content goes here
-</h2>
+<div style="margin-top: 32px;">
+  <div class="card">
+    <div class="card-body events-box">
+      <div class="row">
+        <div class="col-6">
+          <h2>
+            {{'group.broadcast.title' | translate}}
+          </h2>
+        </div>
+        <div class="col-6">
+          <div class="float-right text-right">
+            <a *ngIf="group" [routerLink]="['/broadcast/create/group', group.groupUid]" class="btn btn-success broadcast-btn">
+              <img src="assets/icon_megaphone.png"/>
+              {{'group.sendBroadcast' | translate}}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card scheduled-broadcast" *ngIf="currentScheduledPage.content.length > 0">
+        <div class="card-body events-box">
+          <div class="row">
+            <div class="col-7">
+              <h1>Scheduled messages</h1>
+            </div>
+          </div>
+          <div class="container group-info-header d-none d-md-block">
+            <div class="row">
+              <div class="col-2"> {{'group.broadcast.table.sendOn' | translate}}</div>
+              <div class="col-3">{{'group.broadcast.table.sendTo' | translate}}</div>
+              <div class="col-1">{{'group.broadcast.table.sms' | translate}}</div>
+              <div class="col-1">{{'group.broadcast.table.email' | translate}}</div>
+              <div class="col-2">{{'group.broadcast.table.facebook' | translate}}</div>
+              <div class="col-2">{{'group.broadcast.table.twitter' | translate}}</div>
+              <div class="col-1">{{'group.broadcast.table.actions' | translate}}</div>
+            </div>
+          </div>
+          <div *ngFor="let broadcast of currentScheduledPage.content">
+            <div class="container group-info-row">
+              <div class="row flex flex-wrap">
+                <div class="col-2">
+                  {{broadcast.getFormattedDateTimeSent()}}
+                </div>
+
+                <div class="col-3">
+                  {{broadcast.provinces}}
+                </div>
+
+                <div class="col-1">
+                  {{broadcast.smsCount}}
+                </div>
+
+                <div class="col-1">
+                  {{broadcast.emailCount}}
+                </div>
+
+                <div class="col-2">
+                  {{broadcast.fbPage}}
+                </div>
+
+                <div class="col-2">
+                  {{broadcast.twitterAccount}}
+                </div>
+
+                <div class="col-1">
+
+                  <div class="dropdown">
+                    <a class="dropdown-toggle" id="scheduledActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="sentActionsDropdown">
+                      <a class="dropdown-item" (click)="showViewModal(broadcast)">{{'group.broadcast.table.scheduledActions.view' | translate}}</a>
+                      <a class="dropdown-item">{{'group.broadcast.table.scheduledActions.edit' | translate}}</a>
+                      <a class="dropdown-item">{{'group.broadcast.table.scheduledActions.cancel' | translate}}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row flex flex-wrap">
+                <div class="col-12 title">
+                  Title: {{broadcast.title}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <app-pagination [totalPages]="currentScheduledPage.totalPages" [shownPages]="3"
+                          (onPageSelected)="goToScheduledPage($event)"></app-pagination>
+
+        </div>
+
+      </div>
+
+      <div class="card" *ngIf="currentSentPage.content.length > 0">
+        <div class="card-body events-box">
+          <div class="row">
+            <div class="col-7">
+              <h1>Sent messages</h1>
+            </div>
+          </div>
+          <div class="container group-info-header d-none d-md-block">
+            <div class="row">
+              <div class="col-2"> {{'group.broadcast.table.sendOn' | translate}}</div>
+              <div class="col-3">{{'group.broadcast.table.sendTo' | translate}}</div>
+              <div class="col-1">{{'group.broadcast.table.sms' | translate}}</div>
+              <div class="col-1">{{'group.broadcast.table.email' | translate}}</div>
+              <div class="col-2">{{'group.broadcast.table.facebook' | translate}}</div>
+              <div class="col-2">{{'group.broadcast.table.twitter' | translate}}</div>
+              <div class="col-1">{{'group.broadcast.table.actions' | translate}}</div>
+            </div>
+          </div>
+          <div *ngFor="let broadcast of currentSentPage.content">
+            <div class="container group-info-row">
+              <div class="row flex flex-wrap">
+                <div class="col-2">
+                  {{broadcast.getFormattedDateTimeSent()}}
+                </div>
+
+                <div class="col-3">
+                  {{broadcast.provinces}}
+                </div>
+
+                <div class="col-1">
+                  {{broadcast.smsCount}}
+                </div>
+
+                <div class="col-1">
+                  {{broadcast.emailCount}}
+                </div>
+
+                <div class="col-2">
+                  {{broadcast.fbPage}}
+                </div>
+
+                <div class="col-2">
+                  {{broadcast.twitterAccount}}
+                </div>
+
+                <div class="col-1">
+                  <div class="dropdown">
+                    <a class="dropdown-toggle" id="sentActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="sentActionsDropdown">
+                      <a class="dropdown-item" (click)="showViewModal(broadcast)">{{'group.broadcast.table.sentActions.view' | translate}}</a>
+                      <a class="dropdown-item">{{'group.broadcast.table.sentActions.resend' | translate}}</a>
+                      <a class="dropdown-item">{{'group.broadcast.table.sentActions.sentReport' | translate}}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row flex flex-wrap">
+                <div class="col-12 title">
+                  Title: {{broadcast.title}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <app-pagination [totalPages]="currentSentPage.totalPages" [shownPages]="3"
+                          (onPageSelected)="goToSentPage($event)"></app-pagination>
+
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!--modals-->
+<div class="modal fade" tabindex="-1" role="dialog" id="broadcast-view-modal" aria-hidden="true">
+  <ng4-loading-spinner
+    [loadingText]="'action.working' | translate"
+    [threshold]="300"> </ng4-loading-spinner>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.broadcast.viewModal.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="modalBroadcast">
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <h4>
+              <strong>{{'group.broadcast.viewModal.broadcastVia' | translate}}</strong>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-11 offset-1">
+            <h5 [translate]="'group.broadcast.viewModal.sms'" [translateParams]="modalBroadcast"></h5>
+            <h5 [translate]="'group.broadcast.viewModal.email'" [translateParams]="modalBroadcast"></h5>
+            <h5 [translate]="'group.broadcast.viewModal.facebook'" [translateParams]="modalBroadcast"></h5>
+            <h5 [translate]="'group.broadcast.viewModal.twitter'" [translateParams]="modalBroadcast"></h5>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <h4>
+              <strong>{{'group.broadcast.viewModal.previewMessages' | translate}}</strong>
+            </h4>
+          </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 1rem !important;">
+          <div class="col-11 offset-1">
+            <ul class="nav nav-tabs" id="sent-view-tabs" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="sent-sms-tab" data-toggle="tab" href="#sent-sms" role="tab" aria-controls="sent-sms" aria-selected="true">
+                  {{'group.broadcast.viewModal.smsTab' | translate}}
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="sent-email-tab" data-toggle="tab" href="#sent-email" role="tab" aria-controls="sent-email" aria-selected="false">
+                  {{'group.broadcast.viewModal.emailTab' | translate}}
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="sent-facebook-tab" data-toggle="tab" href="#sent-facebook" role="tab" aria-controls="sent-facebook" aria-selected="false">
+                  {{'group.broadcast.viewModal.facebookTab' | translate}}
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="sent-twitter-tab" data-toggle="tab" href="#sent-twitter" role="tab" aria-controls="sent-twitter" aria-selected="false">
+                  {{'group.broadcast.viewModal.twitterTab' | translate}}
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="sent-sms" role="tabpanel" aria-labelledby="sent-sms-tab">
+                <textarea class="form-control" rows="5" name="sent-sms-text" [(ngModel)]="modalBroadcast.smsContent"></textarea>
+              </div>
+              <div class="tab-pane fade" id="sent-email" role="tabpanel" aria-labelledby="sent-email-tab">
+                <textarea class="form-control" rows="5" name="sent-email-text" [(ngModel)]="modalBroadcast.emailContent"></textarea>
+              </div>
+              <div class="tab-pane fade" id="sent-facebook" role="tabpanel" aria-labelledby="sent-facebook-tab">
+                <textarea class="form-control" rows="5" name="sent-fbPost-text" [(ngModel)]="modalBroadcast.fbPost"></textarea>
+              </div>
+              <div class="tab-pane fade" id="sent-twitter" role="tabpanel" aria-labelledby="sent-twitter-tab">
+                <textarea class="form-control" rows="5" name="sent-twitter-text" [(ngModel)]="modalBroadcast.twitterPost"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <h4>
+              <strong [translate]="'group.broadcast.viewModal.sentTo'" [translateParams]="modalBroadcast"></strong>
+            </h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <h4>
+              <strong [translate]="'group.broadcast.viewModal.when'" [translateParams]="{formattedDate: modalBroadcast.getFormattedDateTimeSent()}"></strong>
+            </h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6 offset-6">
+            <div class="row">
+              <h5>
+                <strong>{{'group.broadcast.viewModal.reviewCosts' | translate}}</strong>
+              </h5>
+            </div>
+            <div class="row">
+              <div class="col-6">SMS's: {{modalBroadcast.smsCount}}</div>
+              <div class="col-6" [translate]="'group.broadcast.viewModal.estimatedCost'" [translateParams]="modalBroadcast"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
