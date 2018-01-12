@@ -1,28 +1,30 @@
 <div class="card-body">
   <div class="form-row">
     <div class="col-12 text-center">
-      <h1 class="pwd-header text-center">Enter new password</h1>
+      <h1 class="pwd-header text-center">{{ 'reset.new.title' | translate }}</h1>
     </div>
   </div>
-  <div class="form-row">
-    <div class="col-12 text-center">
-      <p class="pwd-info">Final step</p>
-    </div>
-  </div>
-  <form>
+  <form novalidate [formGroup]="pwdGroup" (submit)="completeReset()">
     <div class="form-row">
       <div class="form-group col-md-10 offset-md-1 col-12 text-center">
-        <input type="text" class="form-control pwd-input" />
+        <label for="new-pwd" class="form-label">{{ 'reset.new.new_label' | translate }}</label>
+        <input formControlName="pwd_new" id="new-pwd" type="password" autocomplete="false" class="form-control pwd-input" />
       </div>
     </div>
     <div class="form-row">
       <div class="form-group col-md-10 offset-md-1 col-12 text-center">
-        <input type="text" class="form-control pwd-input" />
+        <label for="confirm-pwd" class="form-label">{{ 'reset.new.confirm_label' | translate }}</label>
+        <input formControlName="pwd_confirm" id="confirm-pwd" type="password" autocomplete="false" class="form-control pwd-input" />
       </div>
     </div>
+
+    <div class="col-md-10 offset-md-1 col-12 alert alert-danger" role="alert"
+         *ngIf="pwdGroup.errors && pwdGroup.get('pwd_confirm').dirty && pwdGroup.get('pwd_confirm').touched
+         && pwdGroup.errors.passwordMismatch">{{ 'reset.new.error' | translate }}</div>
+
     <div class="form-row">
       <div class="form-group col-12 text-center">
-        <button type="submit" class="btn btn-primary pwd-next">Get OTP</button>
+        <button [disabled]="!pwdGroup.valid" type="submit" class="btn btn-primary pwd-next">{{ 'reset.new.submit' | translate }}</button>
       </div>
     </div>
   </form>

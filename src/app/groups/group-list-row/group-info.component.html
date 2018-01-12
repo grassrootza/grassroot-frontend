@@ -26,13 +26,13 @@
             {{ 'groups.row.action.title' | translate }}
           </button>
           <div class="dropdown-menu">
-            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled" (click)="showCreateMeetingModal()">
+            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item" (click)="showCreateMeetingModal()">
               {{ 'groups.row.action.meeting' | translate }}
             </a>
-            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled" (click)="showCreateVoteModal()">
+            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item" (click)="showCreateVoteModal()">
               {{ 'groups.row.action.vote' | translate }}
             </a>
-            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled" (click)="showCreateTodoModal()">
+            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item" (click)="showCreateTodoModal()">
               {{ 'groups.row.action.create' | translate }}
             </a>
             <!-- todo : implement some form of permission control here -->
