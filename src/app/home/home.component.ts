@@ -14,6 +14,7 @@ import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
+import {TodoType} from "../task/todo-type";
 
 declare var $: any;
 
@@ -153,7 +154,13 @@ export class HomeComponent implements OnInit {
   }
 
   handleTaskClick(task: Task): boolean {
-    if (task.type == TaskType.TODO && (task.thisUserAssigned || task.wholeGroupAssigned) && !task.hasResponded) {
+    if (
+      task.type == TaskType.TODO
+      && task.todoType != TodoType.ACTION_REQUIRED
+      && (task.thisUserAssigned || task.wholeGroupAssigned)
+      && !task.hasResponded
+    ) {
+
       this.toDoToRespond = task;
       $('#respond-todo-modal').modal("show");
     }
