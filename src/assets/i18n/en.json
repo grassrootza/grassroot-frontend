@@ -558,7 +558,29 @@
     "password": "Password",
     "forgot": "Forgot your password?",
     "newUser-prefix": "New user? ",
-    "newUser-suffix": "Register here"
+    "newUser-suffix": "Register here",
+    "error-message": "Sorry, wrong phone, email or password"
+  },
+  "reset": {
+    "initiate": {
+      "title": "Password reset",
+      "info": "To reset your password, first please enter the phone number or email address you use to sign into Grassroot",
+      "next": "Get OTP",
+      "errorEither": "Please enter a valid phone number or email"
+    }, "validate": {
+      "title": "Enter code",
+      "info": "If your email or phone matched one we have on file, we have sent an OTP to your phone, or if you do not have a phone, to your email. Please enter it below.",
+      "error": "Sorry, you have entered the wrong code.",
+      "next": "Next"
+    }, "new": {
+      "title": "Enter new password",
+      "new_label": "New password",
+      "confirm_label": "Confirm password",
+      "error": "Sorry, the passwords do not match",
+      "submit": "Submit",
+      "complete": "Done, your password has been reset. You can now login.",
+      "server_error": "Sorry, something went wrong resetting your password, please try again later"
+    }
   },
   "registration":{
     "banner": "Welcome to Grassroot",

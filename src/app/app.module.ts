@@ -71,6 +71,7 @@ import { PwdResetInitiateComponent } from './login/password-reset/pwd-reset-init
 import { PwdResetValidateComponent } from './login/password-reset/pwd-reset-validate/pwd-reset-validate.component';
 import { PwdResetNewComponent } from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
 import { PasswordResetComponent } from './login/password-reset/password-reset.component';
+import {PasswordResetService} from "./login/password-reset/password-reset.service";
 
 const routes: Routes = [
 
@@ -243,6 +244,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TaskService,
     CampaignService,
     BroadcastService,
+    PasswordResetService,
     BroadcastWorkflowGuard
   ],
   bootstrap: [AppComponent]

@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, Validators} from "@angular/forms";
+import {PasswordResetService} from "../password-reset.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-pwd-reset-validate',
@@ -7,11 +10,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PwdResetValidateComponent implements OnInit {
 
-  constructor() {
-    console.log("initiating validate component");
+  otp = new FormControl();
+  invalidOtp: boolean = false;
+
+  constructor(private passwordService: PasswordResetService, private router: Router) {
   }
 
   ngOnInit() {
+    // provide no more information than that it is required
+    this.otp.setValidators(Validators.required);
   }
+
+  submitOtp() {
+    this.passwordService.validateOtp(this.otp.value).subscribe(result => {
+      this.invalidOtp = false;
+      this.router.navigate(['/forgot/reset']);
+    }, error2 => {
+      this.invalidOtp = true;
+    })
+  }
+
+
 
 }

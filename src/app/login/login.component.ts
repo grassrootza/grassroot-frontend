@@ -50,6 +50,7 @@ export class LoginComponent {
     return false;
   }
 
+  // todo: rather use i18n message
   private handleLoginError(error: string) {
     console.log("Login failed", error);
     this.message = "Login failed. Try again.";

@@ -1,24 +1,27 @@
 <div class="card-body">
   <div class="form-row">
     <div class="col-12 text-center">
-      <h1 class="pwd-header text-center">Password reset</h1>
+      <h1 class="pwd-header text-center">{{ 'reset.initiate.title' | translate }}</h1>
     </div>
   </div>
   <div class="form-row">
     <div class="col-12 text-center">
-      <p class="pwd-info">To reset your password, first please enter the phone number or email address
-      you use to sign into Grassroot</p>
+      <p class="pwd-info">{{ 'reset.initiate.info' | translate }}</p>
     </div>
   </div>
-  <form>
+  <form (submit)="submitUsername()">
     <div class="form-row">
       <div class="form-group col-md-10 offset-md-1 col-12 text-center">
-        <input type="text" class="form-control pwd-input" />
+        <input type="text" class="form-control pwd-input" [formControl]="username" />
       </div>
+    </div>
+    <div class="col-md-10 offset-md-1 col-12 alert alert-danger" role="alert"
+         *ngIf="username.errors && username.dirty && username.touched && username.errors.validEmailOrPhone">
+      {{ 'reset.initiate.errorEither' | translate }}
     </div>
     <div class="form-row">
       <div class="form-group col-12 text-center">
-        <button type="submit" class="btn btn-primary pwd-next">Get OTP</button>
+        <button [disabled]="!username.valid" type="submit" class="btn btn-primary pwd-next">{{ 'reset.initiate.next' | translate }}</button>
       </div>
     </div>
   </form>

@@ -94,7 +94,7 @@ h6 {
 .btn-primary:visited {
   color: white;
   background: #2CBC4C;
-  border: 2px solid #26A041;
+  border: 1px solid #26A041;
 }
 
 .btn-primary:disabled {
