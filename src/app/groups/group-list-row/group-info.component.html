@@ -26,9 +26,15 @@
             {{ 'groups.row.action.title' | translate }}
           </button>
           <div class="dropdown-menu">
-            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled">{{ 'groups.row.action.meeting' | translate }}</a>
-            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled">{{ 'groups.row.action.vote' | translate }}</a>
-            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled">{{ 'groups.row.action.create' | translate }}</a>
+            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item disabled" (click)="showCreateMeetingModal()">
+              {{ 'groups.row.action.meeting' | translate }}
+            </a>
+            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item disabled" (click)="showCreateVoteModal()">
+              {{ 'groups.row.action.vote' | translate }}
+            </a>
+            <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item disabled" (click)="showCreateTodoModal()">
+              {{ 'groups.row.action.create' | translate }}
+            </a>
             <!-- todo : implement some form of permission control here -->
             <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{ 'groups.row.action.broadcast' | translate }}</a>
           </div>
@@ -38,6 +44,30 @@
 
     <div class="col-6 order-2 text-right col-md-1 order-md-6 col-lg-1 chevron">
         <img src="assets/chevron_right.png" (click)="handleChevronPicked()"/>
+    </div>
+  </div>
+
+  <div class="modal fade" id="create-meeting-modal" tabindex="-1" role="dialog" aria-labelledby="create-meeting-modal" aria-hidden="true" *ngIf="groupUid">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <app-create-meeting [groupUid]="groupUid" (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="create-vote-modal" tabindex="-1" role="dialog" aria-labelledby="create-vote-modal" aria-hidden="true" *ngIf="groupUid">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <app-create-vote [groupUid]="groupUid" (voteSaved)="voteSaved($event)"></app-create-vote>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="create-todo-modal" tabindex="-1" role="dialog" aria-labelledby="create-todo-modal" aria-hidden="true" *ngIf="groupUid">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <app-create-todo [groupUid]="groupUid" (todoSaved)="todoSaved($event)"></app-create-todo>
+      </div>
     </div>
   </div>
 </div>
@@ -85,4 +115,6 @@
 
   </div>
 </div>
+
+
 

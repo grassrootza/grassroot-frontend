@@ -45,12 +45,16 @@ export class CreateTodoComponent implements OnInit {
   }
 
   fetchGroupMembers(){
-    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
-      this.assignedMemberUids = members.content;
-      this.confirmingMemberUids = members.content;
-      this.filteredAssignedMemberUids = this.assignedMemberUids;
-      this.filteredConfirmingMemberUids = this.confirmingMemberUids;
-    });
+    if(this.groupUid != "" && this.groupUid != undefined) {
+      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
+        this.assignedMemberUids = members.content;
+        this.confirmingMemberUids = members.content;
+        this.filteredAssignedMemberUids = this.assignedMemberUids;
+        this.filteredConfirmingMemberUids = this.confirmingMemberUids;
+      });
+    }
+
+
   }
 
   initCreateTodoForm(){
@@ -95,11 +99,15 @@ export class CreateTodoComponent implements OnInit {
   initActionRequiredTodo(){
     this.createTodoForm.addControl("recurring", new FormControl(false));
     this.createTodoForm.addControl("recurringPeriodMillis", new FormControl(0));
+    this.createTodoForm.addControl("assignedMemberUids", new FormControl([]));
+
     console.log("initActionRequiredTodo");
   }
 
   initVolunteersNeededTodo(){
     console.log("initVolunteersNeededTodo");
+    this.createTodoForm.addControl("assignedMemberUids", new FormControl([]));
+
   }
 
   fromDate(date): NgbDateTimeStruct {

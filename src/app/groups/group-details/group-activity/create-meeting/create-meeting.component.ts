@@ -15,7 +15,7 @@ import {Membership} from '../../../model/membership.model';
 export class CreateMeetingComponent implements OnInit {
 
   public createMeetingForm: FormGroup;
-  @Input() groupUid: string;
+  @Input() groupUid: string = "";
   @Output() meetingSaved: EventEmitter<boolean>;
   public membersList: Membership[] = [];
 
@@ -38,9 +38,12 @@ export class CreateMeetingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
-      this.membersList = members.content;
-    });
+    if(this.groupUid != "" && this.groupUid != undefined){
+      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
+        this.membersList = members.content;
+      });
+    }
+
   }
 
   fromDate(date): NgbDateTimeStruct {

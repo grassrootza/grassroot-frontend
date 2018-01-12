@@ -29,9 +29,11 @@ export class CreateVoteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
-      this.membersList = members.content;
-    });
+    if(this.groupUid != "" && this.groupUid != undefined){
+      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
+        this.membersList = members.content;
+      });
+    }
   }
 
   initCreateVoteForm(){
