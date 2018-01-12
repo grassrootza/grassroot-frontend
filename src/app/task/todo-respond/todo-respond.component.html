@@ -21,7 +21,7 @@
             <div class="col-sm-8">{{todoTask.ancestorGroupName}}</div>
           </div>
 
-          <div *ngIf="todoTask.todoType == todoTypeInfoRequired">
+          <div class="response-input" *ngIf="todoTask.todoType == todoTypeInfoRequired">
             <form [formGroup]="completeActionForm"
                   (ngSubmit)="completeAction()">
 
@@ -43,10 +43,23 @@
             </form>
           </div>
 
-          <div *ngIf="todoTask.todoType != todoTypeInfoRequired">
-            <p>Yet to implement</p>
-          </div>
+          <div class="response-input"
+               *ngIf="todoTask.todoType == todoTypeValidationRequired || todoTask.todoType == todoTypeVolunteersNedded ">
+            <div class="col-12">
+              <button class="btn btn-success float-right resp-yes-no" (click)="respondYes()" [translate]="'action.yes'">
+                Yes
+              </button>
+              <button class="btn btn-success float-right" (click)="respondNo()" [translate]="'action.no'">No</button>
 
+              <span *ngIf="todoTask.todoType == todoTypeValidationRequired"
+                    [translate]="'task.todo.respondModal.validate-action-label'"> Is action complete ??</span>
+
+              <span *ngIf="todoTask.todoType == todoTypeVolunteersNedded "
+                    [translate]="'task.todo.respondModal.volunteers-needed-label'"> Do you volunter ?</span>
+
+
+            </div>
+          </div>
 
         </div>
 

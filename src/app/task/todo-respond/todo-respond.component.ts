@@ -18,7 +18,11 @@ export class ToDoRespondComponent implements OnInit, OnChanges {
   public todoTask: Task = null;
 
   public todoTypeInfoRequired = TodoType.INFORMATION_REQUIRED;
+  public todoTypeVolunteersNedded = TodoType.VOLUNTEERS_NEEDED;
+  public todoTypeValidationRequired = TodoType.VALIDATION_REQUIRED;
 
+  private RESPONSE_YES = "Yes";
+  private RESPONSE_NO = "No";
 
   constructor(private taskService: TaskService,
               private userService: UserService,
@@ -39,6 +43,16 @@ export class ToDoRespondComponent implements OnInit, OnChanges {
     console.log("Completing action");
     let response = this.completeActionForm.get("information").value;
     this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, response);
+  }
+
+  respondYes() {
+    console.log("Completing action Yes");
+    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, this.RESPONSE_YES);
+  }
+
+  respondNo() {
+    console.log("Completing action No");
+    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, this.RESPONSE_NO);
   }
 
   ngOnInit() {
