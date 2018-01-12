@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 justify-content-center">
-      <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+      <form novalidate [formGroup]="profileForm" (ngSubmit)="saveChanges()">
         <div class="form-row">
           <div class="form-group col-sm-12">
             <label class="form-label" for="name">{{ 'user.profile.name' | translate }}</label>
@@ -19,16 +19,40 @@
           <div class="form-group col-sm-12">
             <label class="form-label" for="phone">{{ 'user.profile.phone' | translate }}</label>
             <input id="phone" formControlName="phone" type="text" class="form-control"/>
+            <div class="alert alert-danger"
+              *ngIf="profileForm.controls['phone'].hasError('invalidNumber')
+              && (profileForm.controls['phone'].touched || profileForm.controls['phone'].dirty)">
+              Invalid phone number</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-sm-12">
             <label class="form-label" for="email">{{ 'user.profile.email' | translate }}</label>
             <input id="email" formControlName="email" type="text" class="form-control"/>
+
+            <!--<div class="alert alert-danger"
+                 *ngIf="profileForm.controls['email'].valid && (profileForm.controls['email'].dirty || profileForm.controls['email'].touched)">Valid email Required</div>
+            -->
             <div class="alert alert-danger"
-                 *ngIf="profileForm.controls['email'].valid && profileForm.controls['email'].touched">Invalid email address</div>
+                 *ngIf="profileForm.get('email').hasError('required')
+                 && (profileForm.get('email').touched || profileForm.get('email').dirty)">
+                  Valid email Required</div>
+
+            <div class="alert alert-danger"
+                 *ngIf="profileForm.controls['email'].hasError('pattern')
+                 && (profileForm.controls['email'].touched || profileForm.controls['email'].dirty)">Email must contain @ character</div>
+
+            <div class="alert alert-danger"
+                 *ngIf="profileForm.get('email').hasError('email')
+                 && (profileForm.get('email').touched || profileForm.get('email').dirty)">Valid email Required</div>
+
+            <div class="alert alert-danger"
+                 *ngIf="profileForm.get('email').hasError('emailDomain')
+                 && (profileForm.get('email').touched || profileForm.get('email').dirty)">Valid email domain Required</div>
+
           </div>
-        </div>
+          </div>
+
         <div class="form-row">
           <div class="form-group col-sm-12">
             <label class="form-label" for="province">{{ 'user.profile.province' | translate }}</label>

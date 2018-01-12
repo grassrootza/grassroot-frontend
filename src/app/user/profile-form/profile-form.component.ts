@@ -4,6 +4,8 @@ import {UserService} from "../user.service";
 import {UserProfile} from "../user.model";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../utils/alert.service";
+import {validateEmail} from "../../validators/validateEmail";
+import {validatePhoneNumber} from "../../validators/validatePhoneNumber";
 
 declare var $: any;
 
@@ -21,15 +23,26 @@ export class ProfileFormComponent implements OnInit {
   profileForm: FormGroup;
   otpForm: FormGroup;
 
+  email : FormControl;
+
   constructor(private userService: UserService, private formBuilder: FormBuilder,
               private alertService: AlertService) {
     this.provinceKeys = Object.keys(this.provinces);
     // todo : validation of numbers, email, etc
     this.profileForm = this.formBuilder.group({
         'email':['',Validators.required,
+                Validators.pattern("[^ @]*@[^ @]*"),
                 Validators.email,
-                Validators.pattern("[^ @]*@[^ @]*")]
-    })
+                validateEmail],
+        'phone':['',Validators.required,
+                Validators.pattern(""),
+                validatePhoneNumber]
+    });
+
+    /*this.email = new FormControl('',[Validators.required,
+      Validators.pattern("[^ @]*@[^ @]*"),
+      validateEmail]);*/
+
     console.log("empty profile looks like: ", new UserProfile());
     this.profileForm = this.formBuilder.group(new UserProfile());
     this.otpForm = this.formBuilder.group({
