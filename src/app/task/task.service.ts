@@ -151,16 +151,12 @@ export class TaskService {
   }
 
 
-  respondToDo(todoUid: string, userUid: string, response: string) {
+  respondToDo(todoUid: string, userUid: string, response: string): Observable<string> {
     let url = this.groupRespondeTodoUrl + "/" + todoUid + "/" + userUid;
     let params = new HttpParams()
       .set("response", response);
 
-    this.httpClient.get(url, {params: params})
-      .subscribe(
-        resp => console.log("Complete action response: ", resp)
-      );
-
+    return this.httpClient.get<string>(url, {params: params})
 
   }
 }

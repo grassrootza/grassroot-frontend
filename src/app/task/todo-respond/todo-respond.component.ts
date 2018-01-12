@@ -5,6 +5,8 @@ import {TodoType} from "../todo-type";
 import {Task} from "../task.model";
 import {UserService} from "../../user/user.service";
 
+declare var $: any;
+
 @Component({
   selector: 'app-todo-respond',
   templateUrl: './todo-respond.component.html',
@@ -41,18 +43,37 @@ export class ToDoRespondComponent implements OnInit, OnChanges {
 
   completeAction() {
     console.log("Completing action");
-    let response = this.completeActionForm.get("information").value;
-    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, response);
+    if (this.completeActionForm.valid) {
+
+      $('#respond-todo-modal').modal("hide");
+
+      let response = this.completeActionForm.get("information").value;
+      this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, response)
+        .subscribe(
+          resp => console.log("Complete action success, response: ", resp),
+          error => console.log("Complete action failed: ", error)
+        );
+    }
   }
 
   respondYes() {
     console.log("Completing action Yes");
-    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, this.RESPONSE_YES);
+    $('#respond-todo-modal').modal("hide");
+    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, this.RESPONSE_YES)
+      .subscribe(
+        resp => console.log("Complete action success, response: ", resp),
+        error => console.log("Complete action failed: ", error)
+      );
   }
 
   respondNo() {
     console.log("Completing action No");
-    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, this.RESPONSE_NO);
+    $('#respond-todo-modal').modal("hide");
+    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, this.RESPONSE_NO)
+      .subscribe(
+        resp => console.log("Complete action success, response: ", resp),
+        error => console.log("Complete action failed: ", error)
+      );
   }
 
   ngOnInit() {
