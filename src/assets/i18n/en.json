@@ -364,6 +364,7 @@
       "types": {
         "title": "How would you like to broadcast this message?",
         "smsLabel": "SMS",
+        "smsCosts": "SMS costs: {{ smsCostCents }}c/message",
         "emailLabel": "Email",
         "fbLabel": "Facebook",
         "twitterLabel": "Twitter"
@@ -371,11 +372,23 @@
       "content": {
         "pageTitle": "What would you like to say?",
         "titleSection": "Title",
-        "titleLabel": "Give this message a title for easy reference later:",
+        "titleLabel": "Give this message a title for easy reference later",
         "smsSection": "Short message (SMS, notification, etc)",
         "emailSection": "Email",
         "fbSection": "Facebook post",
         "twitterSection": "Tweet",
+        "charsRemaining": " characters remaining",
+        "link": {
+          "file": "attach image or file",
+          "join": "insert a join link",
+          "campaign": "insert a campaign link"
+        },
+        "merge": {
+          "label": "insert merge field: ",
+          "select": "(Select)",
+          "name": "Name",
+          "province": "Province"
+        },
         "errors": {
           "title": "Please enter a title for this broadcast",
           "shortMessage": "Please enter a short message - if you want to leave it blank, please go back and unselect it",
@@ -386,9 +399,11 @@
       },
       "members": {
         "title": "Who would you like to send it to?",
-        "allMembers": "All members ({{memberCount}})",
+        "allMembers": "All members ({{allMemberCount}})",
         "taskTeams": "Selected task teams",
-        "customSelection": "Custom selection"
+        "customSelection": "Custom selection",
+        "smsCount": "SMS's: {{ smsNumber }}",
+        "costEstimate": "Estimated cost: R{{ broadcastCost }}"
       },
       "schedule": {
         "title": "When would you like to send it?",
@@ -400,12 +415,17 @@
       "confirm": {
         "title": "Review & Confirm Broadcast Message",
         "types": "Broadcast via:",
-        "shortMessageLabel": "Short message ({{sendShortMessageCount}})",
-        "emailLabel": "Email ({{sendEmailCount}})",
+        "shortMessageLabel": "Short message",
+        "emailLabel": "Email",
         "content": "Preview messages:",
         "titleLabel": "Title: {{title}} ",
         "memberCount": "Send to ({{totalMemberCount}} members)",
-        "schedule": "When: {{sendTimeDescription}}",
+        "schedule": {
+          "prefix": "When: ",
+          "IMMEDIATE": "Send now",
+          "ADDED_TO_GROUP": "On member join",
+          "FUTURE": "On {{ sendTime }}"
+        },
         "send": "Send now",
         "edit": "Edit"
       },
@@ -413,6 +433,11 @@
         "costsTitle": "Review costs",
         "smsCount": "SMSs: ",
         "costsEstimate": "Estimated cost: R{{costEstimate}}"
+      },
+      "sent": {
+        "IMMEDIATE": "Done! Your broadcast is being sent right now",
+        "ADDED_TO_GROUP": "Done! New members will get the broadcast on joining",
+        "FUTURE": "Done! The broadcast has been queued for sending"
       }
     }
   },

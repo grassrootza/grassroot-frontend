@@ -14,8 +14,7 @@ export class BroadcastWorkflowGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.steps.indexOf(next.routeConfig.path) < this.broadcastService.currentStep;
-
+    return this.steps.indexOf(next.routeConfig.path) < this.broadcastService.latestStep;
   }
 
 }

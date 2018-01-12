@@ -120,3 +120,23 @@ h6 {
 .grassroot-label-em {
   font-size: 1.1em;
 }
+
+.nav-tabs {
+  border-bottom: 1px solid #26A041;
+  margin-bottom: 8px;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+  color: white;
+  background-color: #2CBC4C;
+}
+
+.nav-tabs .nav-link, .nav-tabs .nav-item.show .nav-link {
+  color: #2CBC4C;
+  background-color: white;
+  border-bottom: 1px solid #26A041;
+}
+
+.list-group .badge-pill {
+  background: #2CBC4C;
+}

@@ -65,6 +65,7 @@ import {CreateVoteComponent} from './groups/group-details/group-activity/create-
 import {CreateTodoComponent} from './groups/group-details/group-activity/create-todo/create-todo.component';
 import {CreateGroupComponent} from './groups/create-group/create-group.component';
 import {ClipboardModule} from 'ngx-clipboard';
+import { QuillEditorModule } from 'ngx-quill-editor';
 
 const routes: Routes = [
 
@@ -193,6 +194,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     Ng4LoadingSpinnerModule,
     ClipboardModule,
+    QuillEditorModule,
     RouterModule.forRoot(routes), // <-- routes
     TranslateModule.forRoot({
       loader: {

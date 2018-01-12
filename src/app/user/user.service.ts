@@ -62,11 +62,6 @@ export class UserService {
           console.log("AuthResponse: ", authResponse);
           if (authResponse.errorCode == null) {
             this.storeAuthUser(authResponse.user.token, authResponse.user);
-            // const token = authResponse.user.token;
-            // localStorage.setItem("token", token);
-            // this._loggedInUser = authResponse.user;
-            // this.loggedInUser.emit(this._loggedInUser);
-            // localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
           }
           return authResponse;
         }
@@ -86,6 +81,11 @@ export class UserService {
     localStorage.removeItem('token');
     localStorage.removeItem('loggedInUser');
     localStorage.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login
+
+    // clear up broadcast items, just in case user had some lying around
+    localStorage.removeItem('broadcastCreateRequest');
+    localStorage.removeItem('broadcastCreateStep');
+
     console.log("routing to login");
     this.router.navigate(['/login']);
   }

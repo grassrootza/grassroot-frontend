@@ -1,19 +1,26 @@
 import {Component, OnInit} from '@angular/core';
 import {BroadcastContent, BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 
 @Component({
   selector: 'app-broadcast-content',
   templateUrl: './broadcast-content.component.html',
-  styleUrls: ['./broadcast-content.component.css']
+  styleUrls: ['./broadcast-content.component.css', '../broadcast-create.component.css']
 })
 export class BroadcastContentComponent implements OnInit {
 
   types: BroadcastTypes;
   content: BroadcastContent;
   contentForm: FormGroup;
+
+  MAX_SMS_LENGTH: number = 160;
+  public smsCharsLeft: number = this.MAX_SMS_LENGTH;
+
+  MAX_SOCIAL_LENGTH: number=  240; // using Twitter, but enforcing good posting practice on FB
+  public fbCharsLeft: number = this.MAX_SOCIAL_LENGTH;
+  public twCharsLeft: number = this.MAX_SOCIAL_LENGTH;
 
   constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService) {
     this.contentForm = formBuilder.group(new BroadcastContent());
@@ -25,6 +32,19 @@ export class BroadcastContentComponent implements OnInit {
     this.setUpValidation();
   }
 
+  // todo : save things every few words
+  keyUpShortMessage(event: any) {
+    this.smsCharsLeft = this.MAX_SMS_LENGTH - event.target.value.length;
+  }
+
+  fbKeyUp(event: any) {
+    this.fbCharsLeft = this.MAX_SOCIAL_LENGTH - event.target.value.length;
+  }
+
+  twKeyUp(event: any) {
+    this.twCharsLeft = this.MAX_SOCIAL_LENGTH - event.target.value.length;
+  }
+
   setUpValidation() {
     this.contentForm.controls['title'].setValidators([Validators.required]);
     if (this.types.shortMessage) { this.contentForm.controls['shortMessage'].setValidators([Validators.required]); }
@@ -33,7 +53,6 @@ export class BroadcastContentComponent implements OnInit {
     if (this.types.twitter) { this.contentForm.controls['twitterPost'].setValidators([Validators.required]); }
   }
 
-  // todo : probably want some form of caching / save draft
   validateAndSaveContent() {
     if (!this.contentForm.valid) {
       return false;
@@ -45,6 +64,7 @@ export class BroadcastContentComponent implements OnInit {
 
   next() {
     if (this.validateAndSaveContent()) {
+      this.broadcastService.setPageCompleted('content');
       this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(), this.broadcastService.parentId(), 'members']);
     }
   }
@@ -56,7 +76,7 @@ export class BroadcastContentComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate([this.broadcastService.cancelRoute()]);
+    this.broadcastService.cancelCurrentCreate();
   }
 
 }

@@ -1,8 +1,26 @@
 .type-icon {
-  font-size: 104px;
+  font-size: 72px;
 }
 
-.type-checbox {
-  width: 30px;
-  height: 30px;
+.gr-icon {
+  color: #2CBC4C;
+}
+
+.fb-logo {
+  color: #3b5998;
+}
+
+.tw-logo {
+  color: #00aced;
+}
+
+.type-header {
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.fb-select {
+  width: 80%;
 }

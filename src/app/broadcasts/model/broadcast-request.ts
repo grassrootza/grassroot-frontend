@@ -1,32 +1,35 @@
+import {NgbDateTimeStruct} from "@zhaber/ng-bootstrap-datetimepicker";
+import {DateTimeUtils} from "../../utils/DateTimeUtils";
+
 export class BroadcastRequest {
 
-  type: String;
-  parentId: String;
+  type: string;
+  parentId: string;
 
-  title: String = "";
+  title: string = "";
 
   sendShortMessages: boolean = false;
-  shortMessageString: String = "";
+  shortMessageString: string = "";
 
   sendEmail: boolean = false;
-  emailContent: String = "";
+  emailContent: string = "";
 
   postToFacebook: boolean = false;
-  facebookPage: String = "";
-  facebookContent: String = "";
-  facebookLink: String = "";
+  facebookPage: string = "";
+  facebookContent: string = "";
+  facebookLink: string = "";
 
   postToTwitter: boolean = false;
-  twitterAccount: String = "";
-  twitterContent: String = "";
-  twitterLink: String = "";
+  twitterAccount: string = "";
+  twitterContent: string = "";
+  twitterLink: string = "";
 
-  selectionType: String = "ALL_MEMBERS";
-  subgroups: String[] = [];
-  provinces: String[] = [];
-  topics: String[] = [];
+  selectionType: string = "ALL_MEMBERS";
+  subgroups: string[] = [];
+  provinces: string[] = [];
+  topics: string[] = [];
 
-  sendType: String = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
+  sendType: string = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
   sendNow: boolean = true;
   sendOnJoin: boolean = false;
   sendAtTime: boolean = false;
@@ -59,57 +62,65 @@ export class BroadcastTypes {
   shortMessage: boolean = false;
   email: boolean = false;
   facebook: boolean = false;
-  facebookPage: String = "";
+  facebookPage: string = "";
   twitter: boolean = false;
-  twitterAccount: String = "";
+  twitterAccount: string = "";
 
 }
 
 export class BroadcastContent {
 
   // todo: images and file attachments
-  title: String = "";
-  shortMessage: String = "";
-  emailContent: String = "";
-  facebookPost: String = "";
-  facebookLink: String = "";
-  twitterPost: String = "";
-  twitterLink: String = "";
+  title: string = "";
+  shortMessage: string = "";
+  emailContent: string = "";
+  facebookPost: string = "";
+  facebookLink: string = "";
+  twitterPost: string = "";
+  twitterLink: string = "";
 
 }
 
 export class BroadcastMembers {
 
-  selectionType: String = "ALL_MEMBERS";
-  taskTeams: String[] = [];
-  provinces: String[] = [];
-  topics: String[] = [];
+  selectionType: string = "ALL_MEMBERS";
+  taskTeams: string[] = [];
+  provinces: string[] = [];
+  topics: string[] = [];
 
+}
+
+export class BroadcastCost {
+  smsNumber: number = 999;
+  broadcastCost: string = "0.00";
 }
 
 export class BroadcastSchedule {
 
-  sendType: String = "IMMEDIATE";
+  sendType: string = "IMMEDIATE";
   sendDate: string = Date();
+  dateTimeEpochMillis: NgbDateTimeStruct = DateTimeUtils.fromDate(new Date());
 
 }
 
 export class BroadcastConfirmation {
 
   sendShortMessage: boolean;
-  sendShortMessageCount: number;
+  smsNumber: number;
   sendEmail: boolean;
   sendEmailCount: number;
   postFacebook: boolean;
-  facebookPage: String;
+  fbPageName: string;
   postTwitter: boolean;
-  twitterAccount: String;
+  twitterAccount: string;
 
   totalMemberCount: number;
-  topics: String[];
-  provinces: String[];
+  topics: string[];
+  provinces: string[];
 
-  sendTime: String;
-  sendTimeDescription: String;
+  sendTimeDescription: string;
+  sendTime: string;
+
+  broadcastCost: string;
 
 }

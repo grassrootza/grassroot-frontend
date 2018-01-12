@@ -3,6 +3,9 @@ import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 import {BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup} from "@angular/forms";
+import {BroadcastParams} from "../../model/broadcast-params";
+
+declare var tinymce: any;
 
 @Component({
   selector: 'app-broadcast-type',
@@ -12,6 +15,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 export class BroadcastTypeComponent implements OnInit {
 
   public typesForm: FormGroup;
+  public createParams: BroadcastParams = new BroadcastParams();
 
   constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService) {
     this.typesForm = this.formBuilder.group(new BroadcastTypes(), {validator: oneItemSelected});
@@ -19,25 +23,46 @@ export class BroadcastTypeComponent implements OnInit {
 
   ngOnInit() {
     this.typesForm.setValue(this.broadcastService.getTypes());
+    this.broadcastService.createParams.subscribe(createParams => {
+      this.createParams = createParams;
+    })
   }
 
   saveTypes(): boolean {
     if (!this.typesForm.valid) {
       return false;
     }
+    if (this.typesForm.get('twitter')) {
+      console.log("twitter exists, setting it to account");
+      this.typesForm.get("twitterAccount").reset(this.createParams.twitterAccount.displayName);
+    }
+    if (this.typesForm.get('facebook')) {
+      let fbPage = this.typesForm.get("facebookPage").value;
+      console.log("facebook selected, set to : ", fbPage);
+      if (!(fbPage) || fbPage == "") {
+        console.log("settting fb page to default");
+        this.typesForm.get("facebookPage").reset(this.createParams.facebookPages[0].providerUserId);
+      }
+    }
+    console.log("form values: ", this.typesForm.value);
     this.broadcastService.setTypes(this.typesForm.value);
     return true;
   }
 
   next() {
     if (this.saveTypes()) {
+      this.broadcastService.setPageCompleted('types');
       this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(),
-        this.broadcastService.parentId(), 'content'])
+        this.broadcastService.parentId(), 'content']);
     }
   }
 
   cancel() {
-    this.router.navigate([this.broadcastService.cancelRoute()]);
+    this.broadcastService.cancelCurrentCreate();
+  }
+
+  debugFb() {
+    console.log("select value: ", this.typesForm.get("fbPageName").value);
   }
 
 }

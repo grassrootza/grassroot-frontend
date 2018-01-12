@@ -1,18 +1,14 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {UserService} from "../user/user.service";
 import {environment} from "../../environments/environment";
 import {
-  BroadcastConfirmation,
-  BroadcastContent,
-  BroadcastMembers,
-  BroadcastRequest,
-  BroadcastSchedule,
+  BroadcastConfirmation, BroadcastContent, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
   BroadcastTypes
 } from "./model/broadcast-request";
 import {DateTimeUtils} from "../utils/DateTimeUtils";
 import {BroadcastParams} from "./model/broadcast-params";
 import {Observable} from "rxjs/Observable";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class BroadcastService {
@@ -21,11 +17,20 @@ export class BroadcastService {
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
 
   private createRequest: BroadcastRequest = new BroadcastRequest();
-  private createParams: BroadcastParams = new BroadcastParams();
 
+  private _createParams: BroadcastParams = new BroadcastParams();
+  public createParams: EventEmitter<BroadcastParams> = new EventEmitter(null);
+
+  public pages: string[] = ['types', 'content', 'members', 'schedule'];
+  public latestStep: number = 1; // in case we go backwards
   public currentStep: number = 1;
 
-  constructor(private httpClient: HttpClient, private userService: UserService) { }
+  public loadedFromCache: boolean = false;
+
+  constructor(private httpClient: HttpClient, private router: Router) {
+    // look for anything cached in here (constructor, not initCreate) so it's available to the route
+    this.loadBroadcast();
+  }
 
   fetchBroadcasts(type: String, entityUid: String, clearCache: boolean) {
     const fullUrl = this.fetchUrlBase + type + "/" + entityUid;
@@ -34,17 +39,28 @@ export class BroadcastService {
   fetchCreateParams(type: string, entityUid: string): Observable<BroadcastParams> {
     const fullUrl = this.createUrlBase + type + "/info/" + entityUid;
     return this.httpClient.get<BroadcastParams>(fullUrl).map(result => {
-      this.createParams = result;
+      console.log("create fetch result: ", result);
+      this._createParams = result as BroadcastParams; // note: because JS typing is such a disaster, this doesn't seem to work
+      this.createParams.emit(this._createParams);
       return result;
     });
   }
 
-  // todo : watch this if have some complex user path (e.g., group -> create broadcast -> campaigns (via nav) -> campaign -> create)
-  initCreate(type: String, parentId: String) {
-    this.createRequest = new BroadcastRequest();
-    this.createRequest.type = type;
-    this.createRequest.parentId = parentId;
-    this.currentStep = 1
+  getCreateParams(): BroadcastParams {
+    return this._createParams;
+  }
+
+  initCreate(type: string, parentId: string) {
+    if (this.createRequest.type != type || this.createRequest.parentId != parentId) {
+      console.log("create type or parent switched, clearing store");
+      if (this.loadedFromCache) {
+        // something was sitting in cache, but user switched entity or type, so remove
+        this.clearBroadcast();
+      }
+      this.createRequest.type = type;
+      this.createRequest.parentId = parentId;
+      this.latestStep = 1;
+    }
   }
 
   getTypes(): BroadcastTypes {
@@ -59,13 +75,14 @@ export class BroadcastService {
   }
 
   setTypes(types: BroadcastTypes) {
+    console.log("setting types to : ", types);
     this.createRequest.sendShortMessages = types.shortMessage;
     this.createRequest.sendEmail = types.email;
     this.createRequest.postToFacebook = types.facebook;
     this.createRequest.facebookPage = types.facebookPage;
     this.createRequest.postToTwitter = types.twitter;
     this.createRequest.twitterAccount = types.twitterAccount;
-    this.currentStep = 2;
+    this.saveBroadcast();
   }
 
   getContent(): BroadcastContent {
@@ -88,7 +105,7 @@ export class BroadcastService {
     this.createRequest.facebookLink = content.facebookLink;
     this.createRequest.twitterContent = content.twitterPost;
     this.createRequest.twitterLink = content.twitterLink;
-    this.currentStep = 3;
+    this.saveBroadcast();
   }
 
   getMembers(): BroadcastMembers {
@@ -105,19 +122,21 @@ export class BroadcastService {
     this.createRequest.subgroups = members.taskTeams;
     this.createRequest.provinces = members.provinces;
     this.createRequest.topics = members.topics;
-    this.currentStep = 4;
+    this.saveBroadcast();
   }
 
   getSchedule(): BroadcastSchedule {
     return  {
       sendType: this.createRequest.sendType,
-      sendDate: this.createRequest.sendDate
+      sendDate: this.createRequest.sendDate,
+      dateTimeEpochMillis: DateTimeUtils.fromDate(new Date())
     }
   }
 
   setSchedule(schedule: BroadcastSchedule) {
     this.createRequest.sendType = schedule.sendType;
     this.createRequest.sendDate = schedule.sendDate;
+    this.saveBroadcast(); // since we remain on this step
   }
 
   // todo : populate fields like number messages etc by querying back end
@@ -126,21 +145,28 @@ export class BroadcastService {
     cn.sendShortMessage = this.createRequest.sendShortMessages;
     cn.sendEmail = this.createRequest.sendEmail;
     cn.postFacebook = this.createRequest.postToFacebook;
-    cn.facebookPage = this.createRequest.facebookPage;
+    cn.fbPageName = this.getFbDisplayName(this.createRequest.facebookPage);
     cn.postTwitter = this.createRequest.postToTwitter;
     cn.twitterAccount = this.createRequest.twitterAccount;
 
-    cn.sendShortMessageCount = 100;
-    cn.sendEmailCount = 50;
-    cn.totalMemberCount = 150;
+    cn.smsNumber = this.createRequest.sendShortMessages ? this._createParams.allMemberCount : 0;
+
+    cn.totalMemberCount = this._createParams.allMemberCount;
+    // cn.sendEmailCount = 50;
 
     cn.provinces = this.createRequest.provinces;
     cn.topics = this.createRequest.topics;
 
-    cn.sendTime = this.createRequest.sendDate; // todo: slightly more complex logic
-    cn.sendTimeDescription = "Sending now"; // todo : make real
+    cn.sendTimeDescription = this.createRequest.sendType;
+    cn.sendTime = this.createRequest.sendDate; // todo: format
+
+    cn.broadcastCost = (cn.smsNumber * this._createParams.smsCostCents / 100).toFixed(2);
 
     return cn;
+  }
+
+  private getFbDisplayName(fbUserId: string): string {
+    return this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName;
   }
 
   sendBroadcast() {
@@ -152,12 +178,14 @@ export class BroadcastService {
 
     const fullUrl = this.createUrlBase + this.createRequest.type + "/" + this.createRequest.parentId;
     return this.httpClient.post(fullUrl, this.createRequest);
-    // invoke http client
   }
 
-  cancelRoute(): String {
-    return this.createRequest.type == 'campaign' ? '/campaign/' + this.createRequest.parentId :
+  cancelCurrentCreate() {
+    let parentRoute = this.createRequest.type == 'campaign' ? '/campaign/' + this.createRequest.parentId :
       '/group/' + this.createRequest.parentId;
+    this.clearBroadcast();
+    this.router.navigate([parentRoute]);
+    return false; // in case called on an anchor tag
   }
 
   currentType(): String {
@@ -172,5 +200,40 @@ export class BroadcastService {
     return '/broadcast/create/' + this.currentType() + '/' + this.parentId() + '/' + child;
   }
 
+  /*
+  Below helps persist and retrieve in-progress broadcast
+   */
+  saveBroadcast() {
+    localStorage.setItem('broadcastCreateRequest', JSON.stringify(this.createRequest));
+  }
+
+  loadBroadcast() {
+    let storedString = localStorage.getItem('broadcastCreateRequest');
+    console.log("stored string: ", storedString);
+    if (storedString) {
+      this.createRequest = JSON.parse(storedString);
+      this.loadedFromCache = true;
+    } else {
+      console.log("nothing in cache, just return new empty");
+      this.createRequest = new BroadcastRequest();
+    }
+    let storedStep = localStorage.getItem('broadcastCreateStep');
+    this.latestStep = Number(storedStep) || 1;
+    this.currentStep = this.latestStep;
+  }
+
+  clearBroadcast() {
+    this.createRequest = new BroadcastRequest();
+    localStorage.removeItem('broadcastCreateRequest');
+    localStorage.removeItem('broadcastCreateStep');
+  }
+
+  setPageCompleted(page: string) {
+    let nextPage = this.pages.indexOf(page) + 1 + 1; // 1 for zero base, 1 to go to next
+    if (this.latestStep < nextPage) {
+      this.latestStep = nextPage;
+      localStorage.setItem('broadcastCreateStep', this.latestStep.toString());
+    }
+  }
 
 }

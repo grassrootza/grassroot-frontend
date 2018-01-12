@@ -33,20 +33,7 @@ export class BroadcastCreateComponent implements OnInit {
       if (ev instanceof NavigationEnd) {
         let uri = ev.urlAfterRedirects;
         this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
-        switch (this.currentTab) {
-          case 'types':
-            this.broadcastService.currentStep = 1;
-            break;
-          case 'content':
-            this.broadcastService.currentStep = 2;
-            break;
-          case 'members':
-            this.broadcastService.currentStep = 3;
-            break;
-          case 'schedule':
-            this.broadcastService.currentStep = 4;
-            break;
-        }
+        this.broadcastService.currentStep = this.broadcastService.pages.indexOf(this.currentTab) + 1;
       }
     });
   }

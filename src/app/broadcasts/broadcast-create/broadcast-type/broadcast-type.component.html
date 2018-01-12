@@ -1,4 +1,4 @@
-<div class="card-body">
+<div class="col-md-10 offset-md-1 col-12">
   <div class="row">
     <div class="col-md-12 text-center mb-md-3" >
       <h3>{{ 'broadcasts.create.types.title' | translate }}</h3>
@@ -11,50 +11,74 @@
 
         <div class="form-row">
 
-          <div class="col-sm-4">
+          <div class="col-md-2 col-sm-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input type="checkbox" class="form-check-input" formControlName="shortMessage">
-                <i class="fas fa-mobile-alt type-icon"></i>
+                <i class="fas fa-mobile-alt type-icon gr-icon"></i>
               </label>
             </div>
           </div>
-          <div class="form-group col-sm-4">
+          <div class="col-md-4 col-sm-8 pr-md-5">
+            <p class="type-header">
+              {{ 'broadcasts.create.types.smsLabel' | translate }}
+            </p>
+            <p>{{ 'broadcasts.create.types.smsCosts' | translate:createParams }}</p>
+          </div>
+
+          <div class="col-md-2 col-sm-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" value="false"
                        formControlName="email">
-                <i class="fas fa-envelope type-icon"></i>
-                <!--{{ 'broadcasts.create.types.emailLabel' | translate }}-->
+                <i class="fas fa-envelope type-icon gr-icon"></i>
               </label>
             </div>
           </div>
+          <div class="col-md-4 col-sm-8 pl-md-3">
+            <p class="type-header">{{ 'broadcasts.create.types.emailLabel' | translate }}</p>
+          </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group col-sm-4">
+        <div class="form-row mt-md-5">
+
+          <div class="col-md-2 col-sm-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" value="false"
                        formControlName="facebook">
-                <i class="fab fa-facebook-square type-icon"></i>
-                <!--{{ 'broadcasts.create.types.fbLabel' | translate }}-->
+                <i class="fab fa-facebook-square type-icon fb-logo"></i>
               </label>
             </div>
           </div>
-          <div class="form-group col-sm-4">
+          <div class="col-md-4 col-sm-8">
+            <p class="type-header">{{ 'broadcasts.create.types.fbLabel' | translate }}</p>
+            <!-- todo : fix these controls and add link new / change account settings -->
+            <select (change)="debugFb()" class="form-control fb-select" formControlName="facebookPage">
+              <option *ngFor="let page of createParams.facebookPages; let i = index"
+                      value="{{ page.providerUserId }}" selected="{{ i == 0 }}">
+                {{ page.displayName }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group col-md-2 col-sm-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" value="false"
                        formControlName="twitter">
-                <i class="fab fa-twitter type-icon"></i>
-                <!--{{ 'broadcasts.create.types.twitterLabel' | translate }}-->
+                <i class="fab fa-twitter type-icon tw-logo"></i>
               </label>
             </div>
           </div>
+          <div class="col-md-4 col-sm-8 pl-md-3">
+            <p class="type-header">{{ 'broadcasts.create.types.twitterLabel' | translate }}</p>
+            <p>{{ createParams.twitterAccount.displayName }}</p>
+          </div>
+
         </div>
 
-        <div class="form-row">
+        <div class="form-row mt-md-3">
           <div class="col-sm-4">
             <button type="button" (click)="cancel()" class="btn btn-secondary cancel-button">
                     {{ 'action.cancel' | translate }}
