@@ -32,8 +32,7 @@ export class ProfileFormComponent implements OnInit {
     this.profileForm = this.formBuilder.group({
         'email':['',Validators.required,
                 Validators.pattern("[^ @]*@[^ @]*"),
-                Validators.email,
-                validateEmail],
+                Validators.email],
         'phone':['',Validators.required,
                 Validators.pattern(""),
                 validatePhoneNumber]

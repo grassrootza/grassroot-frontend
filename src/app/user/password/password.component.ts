@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "../user.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators,AbstractControl} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AlertService} from "../../utils/alert.service";
 
@@ -20,16 +20,13 @@ export class PasswordComponent implements OnInit {
       'oldpassword': ['', Validators.required],
       'newpassword': ['', Validators.required],
       'confirmpwd' : ['', Validators.required]
-    });
+    },{validator:this.comparePasswords});
   }
 
   ngOnInit() {
   }
 
   submitChange() {
-    if(this.pwdForm.value['newpassword'] !== this.pwdForm.value['confirmpwd']){
-      this.passwordMismatch();
-    }else{
       this.userService.updatePassword(this.pwdForm.value['oldpassword'], this.pwdForm.value['newpassword'], this.pwdForm.value['confirmpwd'])
         .subscribe(result => {
           // server only returns 200 if this succeeded, and that's all it returns
@@ -39,7 +36,7 @@ export class PasswordComponent implements OnInit {
           console.log("nope, failed: ", error);
           this.showFailure();
         })
-    }
+    
   }
 
   // for security, we receive little to no information about what the eror was
@@ -55,6 +52,17 @@ export class PasswordComponent implements OnInit {
     setTimeout(() => {
       this.errorMessage = "";
     }, 2000)
+  }
+
+  comparePasswords(control:AbstractControl){
+      let password = control.get('newpassword').value;
+      let confirmPassword = control.get('confirmpwd').value;
+
+      if(password != confirmPassword){
+          control.get('confirmpwd').setErrors({MatchPassword:true})
+      }else{
+        return null;
+      }
   }
 
 }
