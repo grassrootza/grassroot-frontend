@@ -12,6 +12,8 @@ import {Moment} from 'moment';
 import {GroupRef} from "../groups/model/group-ref.model";
 import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
+import {Task} from "../task/task.model";
+import {TaskType} from "../task/task-type";
 
 declare var $: any;
 
@@ -29,7 +31,7 @@ export class HomeComponent implements OnInit {
   public newMembersPage: MembersPage = null;
   public agendaBaseDate: Moment;
 
-
+  public toDoToRespond: Task = null;
 
   constructor(private taskService: TaskService,
               private userService: UserService,
@@ -46,6 +48,8 @@ export class HomeComponent implements OnInit {
     let newTasks: DayTasks[] = [];
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid)
       .subscribe(tasks => {
+
+        console.log("Fetched my tasks:", tasks);
         tasks.forEach(t => {
           let taskDate = new Date(t.deadlineDate.getFullYear(), t.deadlineDate.getMonth(), t.deadlineDate.getDate());
           let dayTasks = newTasks.find(td => td.date.toDateString() == taskDate.toDateString());
@@ -57,8 +61,8 @@ export class HomeComponent implements OnInit {
         });
 
         this.myTasks = newTasks;
-        this.filterMyAgendaTasksRegardingBaseDate()
-        console.log("Fetched my tasks:", this, this.myTasks);
+        this.filterMyAgendaTasksRegardingBaseDate();
+
       });
 
     this.groupService.groupInfoList.subscribe(
@@ -146,6 +150,14 @@ export class HomeComponent implements OnInit {
     });
 
     this.baseDateFilteredTasks = filteredTasks;
+  }
+
+  handleTaskClick(task: Task): boolean {
+    if (task.type == TaskType.TODO && !task.hasResponded) {
+      this.toDoToRespond = task;
+      $('#respond-todo-modal').modal("show");
+    }
+    return false;
   }
 
 }

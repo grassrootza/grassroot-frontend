@@ -47,7 +47,7 @@
       "empty": "You have no active campaigns currently."
     },
     "create": {
-      "title": "Create",
+      "title": "Create New",
       "group": "Group",
       "campaign": "Campaign"
     }
@@ -336,6 +336,54 @@
 
         }
       }
+    },
+    "broadcast": {
+      "title": "Broadcast messages",
+      "sendNew": "Send new broadcast",
+      "table": {
+        "sendOn": "Send on",
+        "sendTo": "Send to",
+        "sms": "SMS",
+        "email": "Email",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "actions": "Actions",
+        "scheduledActions": {
+          "view": "View",
+          "edit": "Edit",
+          "cancel": "Cancel"
+        },
+        "sentActions": {
+          "view": "View",
+          "resend": "Resend",
+          "sentReport": "Sent report"
+        }
+      },
+      "viewModal": {
+        "title": "Broadcast message",
+        "broadcastVia": "Broadcast via",
+        "sms": "SMS ({{smsCount}})",
+        "facebook": "Facebook: {{fbPage}}",
+        "email": "Email ({{emailCount}})",
+        "twitter": "Twitter: {{twitterAccount}}",
+        "previewMessages": "Preview messages",
+        "smsTab": "SMS",
+        "facebookTab": "Facebook",
+        "emailTab": "Email",
+        "twitterTab": "Twitter",
+        "sentTo": "Sent to ({{totalSent}} members)",
+        "when": "When: {{formattedDate}}",
+        "reviewCosts": "Review costs",
+        "estimatedCost": "Estimated cost: {{costEstimate}}"
+      }
+    },
+    "members":{
+      "management": "Member management",
+      "addMember": "Add a member",
+      "importList": "Import list",
+      "allMembers": "All members",
+      "taskTeams": "Task teams",
+      "customFilter": "Custom filter"
     }
   },
   "campaigns": {
@@ -543,5 +591,13 @@
     "time": "Time",
     "working": "Working",
     "loading": "Loading"
+  },
+  "task": {
+    "todo": {
+      "respondModal": {
+        "title": "Complete action",
+        "information-label": "Information"
+      }
+    }
   }
 }

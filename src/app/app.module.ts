@@ -64,8 +64,13 @@ import {CreateMeetingComponent} from './groups/group-details/group-activity/crea
 import {CreateVoteComponent} from './groups/group-details/group-activity/create-vote/create-vote.component';
 import {CreateTodoComponent} from './groups/group-details/group-activity/create-todo/create-todo.component';
 import {CreateGroupComponent} from './groups/create-group/create-group.component';
+import {ToDoRespondComponent} from './task/todo-respond/todo-respond.component';
 import {ClipboardModule} from 'ngx-clipboard';
-import { QuillEditorModule } from 'ngx-quill-editor';
+import {QuillEditorModule} from 'ngx-quill-editor';
+import { PwdResetInitiateComponent } from './login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component';
+import { PwdResetValidateComponent } from './login/password-reset/pwd-reset-validate/pwd-reset-validate.component';
+import { PwdResetNewComponent } from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
+import { PasswordResetComponent } from './login/password-reset/password-reset.component';
 
 const routes: Routes = [
 
@@ -73,6 +78,13 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/:groupId/:code', component: JoinComponent},
+  {path: 'forgot', component: PasswordResetComponent,
+    children: [
+      {path: '', redirectTo: 'initiate', pathMatch: 'full'},
+      {path: 'initiate', component: PwdResetInitiateComponent},
+      {path: 'validate', component: PwdResetValidateComponent},
+      {path: 'reset', component: PwdResetNewComponent}
+    ]},
   {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
   {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},
   {
@@ -179,7 +191,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     CreateMeetingComponent,
     CreateVoteComponent,
     CreateTodoComponent,
-    CreateGroupComponent
+    CreateGroupComponent,
+    ToDoRespondComponent,
+    PwdResetInitiateComponent,
+    PwdResetValidateComponent,
+    PwdResetNewComponent,
+    PasswordResetComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent,

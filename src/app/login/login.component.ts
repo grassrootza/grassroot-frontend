@@ -27,8 +27,7 @@ export class LoginComponent {
         if (authResponse.errorCode == null) {
           let afterLoginUrl = localStorage.getItem("afterLoginUrl");
           if (!afterLoginUrl)
-            afterLoginUrl = "groups";
-
+            afterLoginUrl = "/";
 
           let afterLoginParams = localStorage.getItem("afterLoginParams");
           localStorage.removeItem("afterLoginUrl");

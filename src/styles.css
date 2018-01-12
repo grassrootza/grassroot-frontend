@@ -86,6 +86,17 @@ h6 {
   background: #26A041;
 }
 
+/* none of these are working, nothing gets rid of bootstrap blue crappiness, good old CSS */
+.btn-primary:active,
+.btn-primary:target,
+.btn-primary:focus,
+.btn-primary:active:focus,
+.btn-primary:visited {
+  color: white;
+  background: #2CBC4C;
+  border: 2px solid #26A041;
+}
+
 .btn-primary:disabled {
   background: white;
   color: #cccccc;

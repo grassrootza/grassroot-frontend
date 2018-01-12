@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {
   BroadcastConfirmation, BroadcastContent, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
@@ -9,6 +9,7 @@ import {DateTimeUtils} from "../utils/DateTimeUtils";
 import {BroadcastParams} from "./model/broadcast-params";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
+import {Broadcast, BroadcastPage} from './model/broadcast';
 
 @Injectable()
 export class BroadcastService {
@@ -229,11 +230,59 @@ export class BroadcastService {
   }
 
   setPageCompleted(page: string) {
-    let nextPage = this.pages.indexOf(page) + 1 + 1; // 1 for zero base, 1 to go to next
+    let nextPage = this.pages.indexOf(page) + 1 + 1;
+    // 1 for zero base, 1 to go to next
     if (this.latestStep < nextPage) {
       this.latestStep = nextPage;
       localStorage.setItem('broadcastCreateStep', this.latestStep.toString());
     }
+  }
+
+  getGroupBroadcasts(groupUid: string, broadcastSchedule: string, pageNo: number, pageSize: number): Observable<BroadcastPage>{
+    console.log("Fetching group broadcasts");
+    let params = new HttpParams()
+      .set('page', pageNo.toString())
+      .set('size', pageSize.toString())
+      .set('broadcastSchedule', broadcastSchedule);
+    const fullUrl = this.fetchUrlBase + 'group/' + groupUid;
+
+    return this.httpClient.get<BroadcastPage>(fullUrl, {params: params})
+      .map(
+        result => {
+          console.log("Group broadcasts json object from server: ", result);
+          let transformetContent = result.content.map(
+
+            bc => new Broadcast(
+              bc.title,
+              bc.shortMessageSent,
+              bc.emailSent,
+              bc.smsCount,
+              bc.emailCount,
+              bc.fbPage != null ? bc.fbPage : "",
+              bc.twitterAccount != null ? bc.twitterAccount : "",
+              bc.dateTimeSent != null ? DateTimeUtils.getDateFromJavaInstant(bc.dateTimeSent) : null,
+              bc.scheduledSendTime != null ? DateTimeUtils.getDateFromJavaInstant(bc.scheduledSendTime) : null,
+              bc.costEstimate,
+              bc.smsContent,
+              bc.emailContent,
+              bc.fbPost,
+              bc.twitterPost,
+              bc.smsCount + bc.emailCount,
+              bc.provinces,
+              bc.topics
+            )
+          );
+          return new BroadcastPage(
+            result.number,
+            result.totalPages,
+            result.totalElements,
+            result.size,
+            result.first,
+            result.last,
+            transformetContent
+          )
+        }
+      )
   }
 
 }

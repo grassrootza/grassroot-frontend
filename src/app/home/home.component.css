@@ -1,3 +1,9 @@
+#create-dropdown {
+  padding: 10px 40px;
+  font-size: 1.1em;
+  background-color: #26A041;
+}
+
 .groups-content {
   padding: 3rem 1.5rem;
   text-align: center;
@@ -6,9 +12,10 @@
 .my-agenda {
   padding-left: 0;
   padding-right: 0;
+  border-top: #2CBC4C solid 4px;
 }
 
-.my-agenda h3, .day-task {
+.my-agenda h2, .day-task {
   margin-left: 1rem;
   margin-right: 1rem;
 }
@@ -20,20 +27,30 @@
 .day-label {
   padding: 0.5rem;
   margin-bottom: 0.3rem;
-  background-color: #75bc8f;
+  background-color: #26A041;
+  color: white;
 }
 
 .stared-groups, .active-campaigns {
   margin-top: 2rem;
 }
 
+.stared-groups .card-header {
+  background-color: #26A041;
+  color: white;
+}
+
+.active-campaigns .card-header {
+  background-color: #26A041;
+  color: white;
+}
+
 .stared-groups .card-body, .active-campaigns .card-body {
   padding-top: 0;
 }
 
-
 .member-row {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .my-agenda-footer {
@@ -43,9 +60,13 @@
   height: 4rem;
 }
 
+.new-members {
+  border-top: #2CBC4C solid 3px;
+}
+
 .new-members-count {
   font-size: 1.5rem;
-  background-color: #cccccc;
+  background-color: #1ABC9C;
 }
 
 .new-members-count-label {
