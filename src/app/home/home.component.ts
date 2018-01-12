@@ -153,7 +153,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleTaskClick(task: Task): boolean {
-    if (task.type == TaskType.TODO && !task.hasResponded) {
+    if (task.type == TaskType.TODO && (task.thisUserAssigned || task.wholeGroupAssigned) && !task.hasResponded) {
       this.toDoToRespond = task;
       $('#respond-todo-modal').modal("show");
     }

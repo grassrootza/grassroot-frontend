@@ -14,7 +14,9 @@ export class Task {
               public parentName: string,
               public ancestorGroupName: string,
               public todoType: TodoType,
-              public hasResponded: boolean) {
+              public hasResponded: boolean,
+              public wholeGroupAssigned: boolean,
+              public thisUserAssigned: boolean) {
 
     /**
 

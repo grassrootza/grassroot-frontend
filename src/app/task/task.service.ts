@@ -40,7 +40,9 @@ export class TaskService {
             task.parentName,
             task.ancestorGroupName,
             task.todoType != null ? TodoType[task.todoType] : null,
-            task.hasResponded
+            task.hasResponded,
+            task.wholeGroupAssigned,
+            task.thisUserAssigned
             )
           )
       );
@@ -64,7 +66,9 @@ export class TaskService {
             task.parentName,
             task.ancestorGroupName,
             task.todoType != null ? TodoType[task.todoType] : null,
-            task.hasResponded
+            task.hasResponded,
+            task.wholeGroupAssigned,
+            task.thisUserAssigned
             )
           )
       );
@@ -154,7 +158,7 @@ export class TaskService {
 
     this.httpClient.get(url, {params: params})
       .subscribe(
-        resp => console.log("Complete action response")
+        resp => console.log("Complete action response: ", resp)
       );
 
 

@@ -590,13 +590,17 @@
     "date": "Date",
     "time": "Time",
     "working": "Working",
-    "loading": "Loading"
+    "loading": "Loading",
+    "yes": "Yes",
+    "no": "No"
   },
   "task": {
     "todo": {
       "respondModal": {
         "title": "Complete action",
-        "information-label": "Information"
+        "information-label": "Your response",
+        "validate-action-label": "Is the action complete?",
+        "volunteers-needed-label": "Do you volunteer?"
       }
     }
   }
