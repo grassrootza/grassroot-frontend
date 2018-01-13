@@ -4,8 +4,7 @@ import {UserService} from "../user.service";
 import {UserProfile} from "../user.model";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../utils/alert.service";
-import {validateEmail} from "../../validators/validateEmail";
-import {validatePhoneNumber} from "../../validators/validatePhoneNumber";
+import {NumberValidator} from "../../validators/NumberValidator";
 
 declare var $: any;
 
@@ -23,30 +22,24 @@ export class ProfileFormComponent implements OnInit {
   profileForm: FormGroup;
   otpForm: FormGroup;
 
-  email : FormControl;
-
   constructor(private userService: UserService, private formBuilder: FormBuilder,
               private alertService: AlertService) {
     this.provinceKeys = Object.keys(this.provinces);
     // todo : validation of numbers, email, etc
-    this.profileForm = this.formBuilder.group({
-        'email':['',Validators.required,
-                Validators.pattern("[^ @]*@[^ @]*"),
-                Validators.email],
-        'phone':['',Validators.required,
-                Validators.pattern(""),
-                validatePhoneNumber]
-    });
-
-    /*this.email = new FormControl('',[Validators.required,
-      Validators.pattern("[^ @]*@[^ @]*"),
-      validateEmail]);*/
 
     console.log("empty profile looks like: ", new UserProfile());
     this.profileForm = this.formBuilder.group(new UserProfile());
     this.otpForm = this.formBuilder.group({
       'otp': ['', Validators.compose([Validators.required, Validators.minLength(3)])]
-    })
+    });
+
+    this.profileForm = new FormGroup({
+        email:new FormControl('',[Validators.required,Validators.pattern("[^ @]*@[^ @]*"),Validators.email]),
+        name:new FormControl('',Validators.required),
+        phone:new FormControl('',[Validators.required,NumberValidator.numberValidator]),
+        province:new FormControl('',Validators.required),
+        language:new FormControl('',Validators.required)
+    });
   }
 
   ngOnInit() {
@@ -82,5 +75,4 @@ export class ProfileFormComponent implements OnInit {
         console.log("ah, an error: ", error);
       });
   }
-
 }

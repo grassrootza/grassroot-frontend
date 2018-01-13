@@ -7,7 +7,8 @@ export function validatePhoneNumber(control:AbstractControl){
 
     format(parsed_number,"International_plaintext");
     if(!isValidNumber(parsed_number)){
-        return {invalidNumber:true}
+        control.get('phone').setErrors({invalidNumber:true})
+        //return {invalidNumber:true}
     }
     return null;
 }

@@ -8,7 +8,7 @@
   </div>
   <div class="row">
     <div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 justify-content-center">
-      <form novalidate [formGroup]="profileForm" (ngSubmit)="saveChanges()">
+      <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
         <div class="form-row">
           <div class="form-group col-sm-12">
             <label class="form-label" for="name">{{ 'user.profile.name' | translate }}</label>
@@ -19,36 +19,29 @@
           <div class="form-group col-sm-12">
             <label class="form-label" for="phone">{{ 'user.profile.phone' | translate }}</label>
             <input id="phone" formControlName="phone" type="text" class="form-control"/>
+
             <div class="alert alert-danger"
-              *ngIf="profileForm.controls['phone'].hasError('invalidNumber')
-              && (profileForm.controls['phone'].touched || profileForm.controls['phone'].dirty)">
-              Invalid phone number</div>
+              *ngIf="profileForm.controls['phone'].hasError('required')">
+                This field is required</div>
+
+            <div class="alert alert-danger"
+                 *ngIf="profileForm.controls['phone'].hasError('invalidNumber')">
+                Invalid phone number</div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-sm-12">
             <label class="form-label" for="email">{{ 'user.profile.email' | translate }}</label>
-            <input id="email" formControlName="email" type="text" class="form-control"/>
+            <input id="email" type="text" class="form-control" formControlName="email"/>
 
-            <!--<div class="alert alert-danger"
-                 *ngIf="profileForm.controls['email'].valid && (profileForm.controls['email'].dirty || profileForm.controls['email'].touched)">Valid email Required</div>
-            -->
-            <div class="alert alert-danger"
-                 *ngIf="profileForm.get('email').hasError('required')
-                 && (profileForm.get('email').touched || profileForm.get('email').dirty)">
+            <div *ngIf="profileForm.controls['email'].hasError('required')" class="alert alert-danger">
+                  This field is required</div>
+
+            <div *ngIf="profileForm.controls['email'].hasError('pattern')" class="alert alert-danger">
+                  Email must contain @ character</div>
+
+            <div *ngIf="profileForm.controls['email'].hasError('email')" class="alert alert-danger">
                   Valid email Required</div>
-
-            <div class="alert alert-danger"
-                 *ngIf="profileForm.controls['email'].hasError('pattern')
-                 && (profileForm.controls['email'].touched || profileForm.controls['email'].dirty)">Email must contain @ character</div>
-
-            <div class="alert alert-danger"
-                 *ngIf="profileForm.get('email').hasError('email')
-                 && (profileForm.get('email').touched || profileForm.get('email').dirty)">Valid email Required</div>
-
-            <!-- <div class="alert alert-danger"
-                 *ngIf="profileForm.get('email').hasError('emailDomain')
-                 && (profileForm.get('email').touched || profileForm.get('email').dirty)">Valid email domain Required</div> -->
 
           </div>
           </div>
@@ -76,9 +69,11 @@
             </p>
           </div>
         </div>
+        {{profileForm.valid}}
+        {{profileForm.invalid}}
         <div class="form-row">
           <div class="form-group col-sm-12"> <!-- [disabled]="!contentForm.valid"  -->
-            <button type="submit" class="btn btn-success float-right">{{ 'action.save' | translate }}
+            <button type="submit" class="btn btn-success float-right" [disabled]="profileForm.invalid">{{ 'action.save' | translate }}
             </button>
           </div>
         </div>
