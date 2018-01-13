@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {UserService} from "../user/user.service";
 import {Router} from "@angular/router";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {eitherEmailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../utils/CustomValidators";
 
 @Component({
   selector: 'app-registration',
@@ -10,36 +12,36 @@ import {Router} from "@angular/router";
 export class RegistrationComponent {
 
   message: string = "";
+  regForm: FormGroup;
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, private router: Router, private fb: FormBuilder) {
+    this.regForm = fb.group({
+      name: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
+      phone: ['', optionalPhoneValidator],
+      email: ['', optionalEmailValidator],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(5)])]
+    }, { validator: eitherEmailOrPhoneEntered })
   }
 
-  register(username: string, phoneNumber: string, password: string): boolean {
-
+  register(): boolean {
     this.message = '';
 
-    this.userService.register(username, phoneNumber, password).subscribe(
+    this.userService.register(this.regForm.get('name').value, this.regForm.get('phone').value,
+      this.regForm.get('email').value, this.regForm.get('password').value).subscribe(
       loginResponse => {
-
         console.log("Login response: ", loginResponse);
         if (loginResponse.errorCode == null) {
-
-          console.log("jwt-token: ", loginResponse.user.token);
-          localStorage.setItem("token", loginResponse.user.token);
-          localStorage.setItem("msisdn", loginResponse.user.msisdn);
           this.router.navigate(['']);
         }
         else {
           const errMsg = loginResponse.errorCode;
 
           if (errMsg === "INVALID_MSISDN")
-            this.message = "Invalid phone number";
+            this.message = "The phone number you entered is invalid";
           else if (errMsg === "INVALID_USERNAME")
-            this.message = "Invalid username";
-          else if (errMsg === "INVALID_PASSWORD")
-            this.message = "You must enter a password";
+            this.message = "Please enter a valid name (without special characters)";
           else if (errMsg === "USER_ALREADY_EXISTS")
-            this.message = "User with that phone number already registered";
+            this.message = "A user with that phone number or email already exists";
           else this.message = "Unknown error: " + errMsg;
 
           console.log("Registration error!", errMsg);
@@ -51,6 +53,5 @@ export class RegistrationComponent {
     );
     return false;
   }
-
 
 }

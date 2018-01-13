@@ -415,7 +415,9 @@
         "smsCosts": "SMS costs: {{ smsCostCents }}c/message",
         "emailLabel": "Email",
         "fbLabel": "Facebook",
-        "twitterLabel": "Twitter"
+        "twitterLabel": "Twitter",
+        "linkAccount": "link new account/page",
+        "changeAccount": "change account settings"
       },
       "content": {
         "pageTitle": "What would you like to say?",

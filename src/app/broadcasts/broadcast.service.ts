@@ -52,6 +52,7 @@ export class BroadcastService {
   }
 
   initCreate(type: string, parentId: string) {
+    console.log(`type: ${type}, parentId: ${parentId}`);
     if (this.createRequest.type != type || this.createRequest.parentId != parentId) {
       console.log("create type or parent switched, clearing store");
       if (this.loadedFromCache) {
@@ -197,8 +198,9 @@ export class BroadcastService {
     return this.createRequest.parentId;
   }
 
-  routeUrl(child: String) {
-    return '/broadcast/create/' + this.currentType() + '/' + this.parentId() + '/' + child;
+  parentViewRoute(): string {
+    return (this.createRequest) ? (this.createRequest.type == 'campaign' ? '/campaign/' : '/group/') + this.createRequest.parentId :
+      '/home';
   }
 
   /*

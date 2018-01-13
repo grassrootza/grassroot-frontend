@@ -25,25 +25,23 @@ export class UserService {
     }
   }
 
-  register(username: string, phoneNumber: string, password: string): Observable<AuthorizationResponse> {
-    const params = new HttpParams()
-      .set("username", username)
-      .set("phoneNumber", phoneNumber)
-      .set("password", password);
-    return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params});
-  }
-
-  registerNew(email: string, phoneNumber: string, password: string): Observable<AuthorizationResponse> {
-    if (isValidNumber(phoneNumber, "ZA")) {
-      phoneNumber = PhoneNumberUtils.convertToSystem(phoneNumber);
+  register(name: string, phone: string, email: string, password: string): Observable<AuthorizationResponse> {
+    if (isValidNumber(phone, "ZA")) {
+      phone = PhoneNumberUtils.convertToSystem(phone);
     }
     const params = new HttpParams()
+      .set("name", name)
+      .set("phone", phone)
       .set("email", email)
-      .set("phone", phoneNumber)
       .set("password", password);
-    return this.httpClient.post<AuthorizationResponse>(this.registerUrl, null, {params: params});
+    return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params})
+      .map(authResponse => {
+        if (authResponse.errorCode == null) {
+          this.storeAuthUser(authResponse.user.token, authResponse.user);
+        }
+        return authResponse;
+      });
   }
-
 
   login(user: string, password: string): Observable<AuthorizationResponse> {
 

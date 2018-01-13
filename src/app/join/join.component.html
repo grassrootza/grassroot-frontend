@@ -43,10 +43,10 @@
             <label for="province">{{ 'join.province' | translate }}</label>
             <select id="province" formControlName="province" class="form-control">
               <option value="">Select</option>
-              <option *ngFor="let p of provinceKeys" [value]="p">{{ provinces[p] }}</option>
+              <option *ngFor="let p of provinceKeys" [value]="p">{{ province[p] }}</option>
             </select>
           </div>
-          <div class="form-group">
+          <div class="form-group" *ngIf="(joinInfo.groupTopics)">
             <label for="topics">{{ 'join.topics' | translate }}</label>
             <select class="form-control" id="topics" name="topics" multiple>
               <option *ngFor="let topic of joinInfo.groupTopics">
@@ -67,6 +67,7 @@
   </div>
 </div>
 
+<!-- todo : maybe just redirect them to register page with pre-filled values -->
 <div class="modal fade" tabindex="-1" role="dialog" id="signup-user-modal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -88,8 +89,9 @@
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary"
                   (click)="signUpUser(password.value)">{{ 'join.completed.signUpModal.signup' | translate }}</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="activeModal.dismiss('Cancel clicked')">
-            {{ 'join.completed.signUpModal.close' | translate }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            {{ 'join.completed.signUpModal.close' | translate }}
+          </button>
         </div>
       </form>
     </div>

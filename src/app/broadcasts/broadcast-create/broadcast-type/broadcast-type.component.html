@@ -54,12 +54,14 @@
           <div class="col-md-4 col-sm-8">
             <p class="type-header">{{ 'broadcasts.create.types.fbLabel' | translate }}</p>
             <!-- todo : fix these controls and add link new / change account settings -->
-            <select (change)="debugFb()" class="form-control fb-select" formControlName="facebookPage">
+            <select *ngIf="createParams.fbConnected" (change)="debugFb()" class="form-control fb-select" formControlName="facebookPage">
               <option *ngFor="let page of createParams.facebookPages; let i = index"
                       value="{{ page.providerUserId }}" selected="{{ i == 0 }}">
                 {{ page.displayName }}
               </option>
             </select>
+            <a [routerLink]="['/user/integrations']" class="grassroot-link account-link">
+              {{ ('broadcasts.create.types.' + (createParams.fbConnected ? 'changeAccount' : 'linkAccount')) | translate }}</a>
           </div>
 
           <div class="form-group col-md-2 col-sm-4">
@@ -73,7 +75,9 @@
           </div>
           <div class="col-md-4 col-sm-8 pl-md-3">
             <p class="type-header">{{ 'broadcasts.create.types.twitterLabel' | translate }}</p>
-            <p>{{ createParams.twitterAccount.displayName }}</p>
+            <p class="type-desc" *ngIf="createParams.twitterConnected">{{ createParams.twitterAccount.displayName }}</p>
+            <a [routerLink]="['/user/integrations']" class="grassroot-link account-link">
+              {{ ('broadcasts.create.types.' + (createParams.twitterConnected ? 'changeAccount' : 'linkAccount')) | translate }}</a>
           </div>
 
         </div>

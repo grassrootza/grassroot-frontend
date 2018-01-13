@@ -6,6 +6,9 @@
   top: 70px;
   left: 0;
   z-index: -1;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
   background-image:
     linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url("/assets/register_banner.png");
@@ -41,6 +44,16 @@
   font-size: 1.2em;
   font-weight: bold;
   padding: 10px 60px;
+}
+
+.footnote {
+  font-size: 0.9em;
+  padding: 0;
+  margin: 0;
+}
+
+.alert-danger {
+  margin-top: 10px;
 }
 
 @media (max-width: 640px)

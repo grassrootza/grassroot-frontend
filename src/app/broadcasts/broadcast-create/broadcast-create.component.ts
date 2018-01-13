@@ -9,6 +9,9 @@ import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 })
 export class BroadcastCreateComponent implements OnInit {
 
+  type: string;
+  parentId: string;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private broadcastService: BroadcastService) {
@@ -19,10 +22,10 @@ export class BroadcastCreateComponent implements OnInit {
   ngOnInit() {
     console.log("Initiating new subscribe flow");
     this.route.params.subscribe(params => {
-      console.log("got the parameters: ", params);
-      this.broadcastService.fetchCreateParams(params["type"], params["parentId"]).subscribe(createParams => {
-        console.log("here are the fetch create params: ", createParams);
-        this.broadcastService.initCreate(params["type"], params["parentId"]);
+      this.type = params["type"];
+      this.parentId = params["parentId"];
+      this.broadcastService.fetchCreateParams(this.type, this.parentId).subscribe(createParams => {
+        this.broadcastService.initCreate(this.type, this.parentId);
       }, error => {
         console.log("failed, error: ", error);
       });

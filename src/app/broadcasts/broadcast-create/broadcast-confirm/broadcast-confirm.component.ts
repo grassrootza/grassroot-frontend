@@ -36,10 +36,12 @@ export class BroadcastConfirmComponent implements OnInit {
     console.log("okay, here goes ...");
     this.broadcastService.sendBroadcast().subscribe(result => {
       console.log("it worked! result: ", result);
+      let redirectRoute = this.broadcastService.parentViewRoute();
       this.broadcastService.clearBroadcast();
       this.activeModal.dismiss('Broadcast sent!');
       this.alertService.alert('broadcasts.create.sent.' + this.confirmFields.sendTimeDescription, true);
-      this.router.navigate(['/home']); // should send to wherever we came from
+      // maybe consider storing prior URL (though seems a non-trivial thing), but for now just go to view of parent
+      this.router.navigate([redirectRoute]);
     }, error => {
       console.log("it failed! result: ", error);
     })

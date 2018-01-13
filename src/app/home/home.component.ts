@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   public pinnedGroups: GroupInfo[] = [];
   public activeCampaigns: CampaignInfo[] = [];
   public newMembersPage: MembersPage = null;
+
   public agendaBaseDate: Moment;
 
   public toDoToRespond: Task = null;

@@ -73,6 +73,10 @@ import { PwdResetNewComponent } from './login/password-reset/pwd-reset-new/pwd-r
 import { PasswordResetComponent } from './login/password-reset/password-reset.component';
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
 
+export function getJwtToken(): string {
+  return localStorage.getItem('token');
+}
+
 const routes: Routes = [
 
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -223,9 +227,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     JwtModule.forRoot({
       config: {
-        tokenGetter: () => {
-          return localStorage.getItem('token');
-        },
+        headerName: 'Authorization',
+        authScheme: 'Bearer ',
+        tokenGetter: getJwtToken,
         whitelistedDomains: ['localhost:8080', 'staging.grassroot.org.za']
       }
     }),

@@ -132,6 +132,10 @@ h6 {
   font-size: 1.1em;
 }
 
+.form-control-em {
+  font-size: 1.1em;
+}
+
 .nav-tabs {
   border-bottom: 1px solid #26A041;
   margin-bottom: 8px;

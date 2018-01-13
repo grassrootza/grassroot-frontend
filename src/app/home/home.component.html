@@ -54,7 +54,7 @@
                 <button class="btn btn-secondary" (click)="decreaseAgendaBaseDate()">&lt;</button>
               </div>
               <div class="col-6 text-center">
-                <button class="btn btn-secondary">{{getDayName(agendaBaseDate)}}</button>
+                <button class="btn btn-secondary">{{getDayName(agendaBaseDate.toDate())}}</button>
               </div>
               <div class="col-3">
                 <button class="btn btn-secondary" (click)="increaseAgendaBaseDate()">&gt;</button>

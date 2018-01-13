@@ -9,8 +9,8 @@ import {CampaignInfo} from "../model/campaign-info";
 })
 export class CampaignsComponent implements OnInit {
 
-  protected activeCampaigns: CampaignInfo[] = [];
-  protected pastCampaigns: CampaignInfo[] = [];
+  public activeCampaigns: CampaignInfo[] = [];
+  public pastCampaigns: CampaignInfo[] = [];
 
   constructor(private campaignService: CampaignService) { }
 
