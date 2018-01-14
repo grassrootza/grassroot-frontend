@@ -1,3 +1,124 @@
-<h2>
-  Settings content goes here
-</h2>
+<div *ngIf="group">
+  <div class="card">
+    <div class="card-body events-box">
+      <div class="row">
+        <div class="col-6">
+          <h2>
+            {{'group.settings.title' | translate}}
+          </h2>
+        </div>
+      </div>
+
+        <form [formGroup]="groupForm"
+              (ngSubmit)="updateGroup()">
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="group-name">{{'group.settings.groupName' | translate}}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="group-name" placeholder="{{'group.settings.groupName' | translate}}"
+                     name="name" [formControl]="groupForm.controls['name']" (keyup)="settingsChangedTrigger()">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="group-description">{{'group.settings.groupDescription' | translate}}</label>
+            </div>
+            <div class="col-sm-8">
+              <textarea class="form-control" id="group-description" placeholder="{{'group.settings.groupDescription' | translate}}"
+                        name="description" [formControl]="groupForm.controls['description']" rows="3" (keyup)="settingsChangedTrigger()"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="group-description">{{'group.settings.groupPrivacy' | translate}}</label>
+            </div>
+            <div class="col-sm-8">
+              <div class="form-check form-check-inline privacy-radios">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="publicRadio" value="PUBLIC"
+                       [formControl]="groupForm.controls['privacy']" (change)="settingsChangedTrigger()">
+                <img src="assets/icon_lock_open.png" />
+                <label for="publicRadio">{{'group.settings.groupPublic' | translate}}</label>
+              </div>
+              <div class="form-check form-check-inline privacy-radios">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="privateRadio" value="PRIVATE"
+                       [formControl]="groupForm.controls['privacy']" (change)="settingsChangedTrigger()">
+                <label for="privateRadio">{{'group.settings.groupPrivate' | translate}}</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="group-reminder-in-minutes">{{'group.settings.reminderInMinutes' | translate}}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="group-reminder-in-minutes" [formControl]="groupForm.controls['reminderInMinutes']"
+                      name="name-select" (change)="settingsChangedTrigger()">
+                <option [ngValue]="0">{{'group.settings.reminders.noReminder' | translate}} </option>
+                <option [ngValue]="60">{{'group.settings.reminders.hourBefore' | translate}} </option>
+                <option [ngValue]="720">{{'group.settings.reminders.halfDayBefore' | translate}} </option>
+                <option [ngValue]="1440">{{'group.settings.reminders.dayBefore' | translate}} </option>
+                <option [ngValue]="2880">{{'group.settings.reminders.twoDaysBefore' | translate}} </option>
+              </select>
+            </div>
+          </div>
+
+
+          <div id="accordion" role="tablist" *ngIf="shouldDisplayPermissionsTable()">
+            <div class="card">
+              <div class="card-header" role="tab" id="permissions-table-heading">
+                <h5 class="mb-0">
+                  <a data-toggle="collapse" href="#permissions-table" role="button" aria-expanded="true" aria-controls="permissions-table">
+                    {{'group.settings.advancedPermissions' | translate}}
+                  </a>
+                </h5>
+              </div>
+
+              <div id="permissions-table" class="collapse" role="tabpanel" aria-labelledby="permissions-table-heading" data-parent="#accordion">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="container group-info-header d-none d-md-block">
+                      <div class="row">
+                        <div class="col-5">{{'group.settings.permission' | translate}}</div>
+                        <div class="col-2">{{'group.settings.ordinaryMember' | translate}}</div>
+                        <div class="col-2">{{'group.settings.committeeMember' | translate}}</div>
+                        <div class="col-2">{{'group.settings.groupOrganizer' | translate}}</div>
+                      </div>
+                    </div>
+                    <div class="container group-info-row" *ngFor="let permission of permissionsToDisplay; let i = index">
+                      <div class="row">
+                        <div class="col-5">
+                          {{getFormattedUserPermissions(permission)}}
+                        </div>
+
+                        <div class="col-2">
+                          <input type="checkbox" [formControl]="groupForm.get('ordinaryMemberPermissions').get(permission)" (change)="permissionsChangedTrigger()" >
+                        </div>
+
+                        <div class="col-2">
+                          <input type="checkbox" [formControl]="groupForm.get('committeeMemberPermissions').get(permission)" (change)="permissionsChangedTrigger()">
+                        </div>
+
+                        <div class="col-2">
+                          <input type="checkbox" [formControl]="groupForm.get('groupOrganizerPermissions').get(permission)" (change)="permissionsChangedTrigger()">
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+      <button type="button" class="btn btn-primary float-right save-settings-btn" (click)="updateGroup()" [disabled]="!groupForm.valid">{{ 'action.save' | translate }}</button>
+
+    </div>
+  </div>
+</div>
+

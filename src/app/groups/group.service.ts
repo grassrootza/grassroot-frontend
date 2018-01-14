@@ -1,22 +1,23 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs/Observable";
-import {environment} from "../../environments/environment";
-import "rxjs/add/operator/map";
-import {GroupInfo} from "./model/group-info.model";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {UserService} from "../user/user.service";
-import {Group} from "./model/group.model";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {GroupRole} from "./model/group-role";
-import {DateTimeUtils} from "../utils/DateTimeUtils";
-import {TaskType} from "../task/task-type";
-import {TaskInfo} from "../task/task-info.model";
-import {Membership, MembersPage} from "./model/membership.model";
+import {Observable} from 'rxjs/Observable';
+import {environment} from '../../environments/environment';
+import 'rxjs/add/operator/map';
+import {GroupInfo} from './model/group-info.model';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {UserService} from '../user/user.service';
+import {Group} from './model/group.model';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {GroupRole} from './model/group-role';
+import {DateTimeUtils} from '../utils/DateTimeUtils';
+import {TaskType} from '../task/task-type';
+import {TaskInfo} from '../task/task-info.model';
+import {Membership, MembersPage} from './model/membership.model';
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
-import {GroupRef} from "./model/group-ref.model";
-import {JoinCodeInfo} from "./model/join-code-info";
+import {GroupRef} from './model/group-ref.model';
+import {JoinCodeInfo} from './model/join-code-info';
+import {GroupPermissionsByRole, Permission} from './model/permission.model';
 
 @Injectable()
 export class GroupService {
@@ -34,6 +35,10 @@ export class GroupService {
   groupAssignTopicsToMemebersUrl = environment.backendAppUrl + "/api/group/modify/members/add/topics";
   groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
   groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
+  groupUpdateSettingsUrl = environment.backendAppUrl + "/api/group/modify/settings";
+  groupFetchPermissionsForRoleUrl = environment.backendAppUrl + "/api/group/fetch/permissions";
+  groupFetchPermissionsDisplayedUrl = environment.backendAppUrl + "/api/group/fetch/permissions-displayed";
+  groupUpdatePermissionsForRole = environment.backendAppUrl + '/api/group/modify/permissions/update';
 
   groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
   groupJoinWordAddUrl = environment.backendAppUrl + "/api/group/modify/joincodes/add";
@@ -117,7 +122,8 @@ export class GroupService {
             gr.subGroups,
             gr.topics,
             gr.joinWords,
-            gr.joinWordsLeft
+            gr.joinWordsLeft,
+            gr.reminderMinutes
           );
         }
       );
@@ -323,6 +329,46 @@ export class GroupService {
     let params = new HttpParams()
       .set("groupUid", groupUid);
     return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
+  updateGroupSettings(groupUid: string, name: string, description: string, isPublic: boolean, reminderInMinutes: number): Observable<boolean> {
+    const fullUrl = this.groupUpdateSettingsUrl + '/' + groupUid;
+
+    let params = new HttpParams()
+      .set('name', name)
+      .set('description', description)
+      .set('isPublic', isPublic.toString())
+      .set('reminderMinutes', reminderInMinutes.toString());
+
+    return this.httpClient.post<boolean>(fullUrl, null, {params: params}).map(resp => {
+      return resp;
+    })
+  }
+
+  updateGroupPermissionsForRole(updatedPermissionsByRole: any, groupUid: string): Observable<any> {
+    const fullUrl = this.groupUpdatePermissionsForRole + '/' + groupUid;
+
+    return this.httpClient.post<any>(fullUrl, updatedPermissionsByRole).map(resp => {
+      return resp;
+    })
+  }
+
+  fetchGroupPermissionsToDisplay(): Observable<string[]> {
+
+    return this.httpClient.get<string[]>(this.groupFetchPermissionsDisplayedUrl).map(resp => {
+      return resp;
+    })
+  }
+
+  fetchGroupPermissionsForRole(groupUid: string, roleName: string[]): Observable<GroupPermissionsByRole> {
+    const fullUrl = this.groupFetchPermissionsForRoleUrl + '/' + groupUid;
+
+    let params = new HttpParams()
+      .set('roleNames', roleName.join(","));
+
+    return this.httpClient.post<GroupPermissionsByRole>(fullUrl, null, {params: params}).map(resp => {
+      return new GroupPermissionsByRole(resp);
+    })
   }
 
 }
