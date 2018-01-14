@@ -39,7 +39,10 @@ export class GroupService {
   groupJoinWordAddUrl = environment.backendAppUrl + "/api/group/modify/joincodes/add";
   groupJoinWordRemoveUrl = environment.backendAppUrl + "/api/group/modify/joincodes/remove";
 
-  memberGrowthStatsUrl = environment.backendAppUrl + "/api/group/stats/member-growth";
+  statsMemberGrowthUrl = environment.backendAppUrl + "/api/group/stats/member-growth";
+  statsProvincesUrl = environment.backendAppUrl + "/api/group/stats/provinces";
+  statsSourcesUrl = environment.backendAppUrl + "/api/group/stats/sources";
+  statsOrganisationsUrl = environment.backendAppUrl + "/api/group/stats/organisations";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -284,7 +287,7 @@ export class GroupService {
 
   fetchMemberGrowthStats(groupUid: string, year: number, month: number): Observable<any> {
 
-    const fullUrl = this.memberGrowthStatsUrl;
+    const fullUrl = this.statsMemberGrowthUrl;
     let params = new HttpParams()
       .set("groupUid", groupUid);
 
@@ -296,6 +299,30 @@ export class GroupService {
 
     return this.httpClient.get<any>(fullUrl, {params: params});
 
+  }
+
+  fetchProvinceStats(groupUid: string): Observable<any> {
+
+    const fullUrl = this.statsProvincesUrl;
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
+  fetchSourcesStats(groupUid: string): Observable<any> {
+
+    const fullUrl = this.statsSourcesUrl;
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
+  fetchOrganisationsStats(groupUid: string): Observable<any> {
+
+    const fullUrl = this.statsOrganisationsUrl;
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
   }
 
 }
