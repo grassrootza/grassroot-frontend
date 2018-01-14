@@ -25,15 +25,16 @@ export const optionalEmailValidator = (control: AbstractControl) => {
   return Validators.email(control);
 };
 
-export const eitherEmailOrPhoneEntered = (form: FormGroup) => {
-  let email = form.get("email");
-  let phone = form.get("phone");
+export const emailOrPhoneEntered = (emailFieldName: string = "email", phoneFieldName: string = "phone") => {
+  return (form: FormGroup) => {
+    let email = form.get(emailFieldName);
+    let phone = form.get(phoneFieldName);
 
-  if ((!email.value) && (!phone.value)) {
-    // console.log("fire error!");
-    return { emailAndPhoneBlank: true}
+    if ((!email.value) && (!phone.value)) {
+      // console.log("fire error!");
+      return {emailAndPhoneBlank: true}
+    }
+
+    return null;
   }
-
-  return null;
-
 };

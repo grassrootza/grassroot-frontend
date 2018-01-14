@@ -12,7 +12,6 @@ declare var $: any;
 })
 export class CreateGroupComponent implements OnInit {
 
-
   @Output()
   public onGroupCreated = new EventEmitter<GroupRef>();
 
@@ -20,7 +19,6 @@ export class CreateGroupComponent implements OnInit {
   public onGroupCreationFailed = new EventEmitter<any>();
 
   public createGroupForm: FormGroup;
-
 
   constructor(private groupService: GroupService, formBuilder: FormBuilder) {
     this.createGroupForm = formBuilder.group({

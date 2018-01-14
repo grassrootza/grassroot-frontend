@@ -1,0 +1,63 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="add-member-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ 'group.allMembers.addMember.title' | translate }}</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form [formGroup]="addMemberForm" (submit)="postMember()">
+        <div class="modal-body">
+          <div class="form-group row">
+            <div class="col-md-6 col-sm-12">
+              <label for="name" class="grassroot-label-em">{{ 'group.allMembers.addMember.name' | translate }}</label>
+              <input type="text" class="form-control form-control-em" id="name" name="name" [formControl]="addMemberForm.controls['displayName']">
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <label for="role" class="grassroot-label-em">{{ 'group.allMembers.addMember.role' | translate }}</label>
+              <!--<input type="text" class="form-control form-control-em" id="role" name="role" [formControl]="addMemberForm.controls['roleName']">-->
+              <select id="role" class="form-control form-control-em" [formControl]="addMemberForm.controls['roleName']">
+                <option *ngFor="let r of roleKeys; let i = index" [value]="r" [selected]="i == 0">{{ role[r] }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-6 col-sm-12">
+              <label for="phone" class="grassroot-label-em">{{ 'group.allMembers.addMember.phone' | translate }}</label>
+              <input type="text" class="form-control form-control-em" id="phone" name="phone" [formControl]="addMemberForm.controls['memberMsisdn']">
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <label for="role" class="grassroot-label-em">{{ 'group.allMembers.addMember.email' | translate }}</label>
+              <input type="text" class="form-control form-control-em" id="email" name="email" [formControl]="addMemberForm.controls['emailAddress']">
+            </div>
+          </div>
+          <div class="form-group row footnote">
+            <div class="col-12">
+            <p class="footnote">{{ 'registration.footnote' | translate }}</p>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-md-6 col-sm-12">
+              <label for="province" class="grassroot-label-em">{{ 'group.allMembers.addMember.province' | translate }}</label>
+              <select id="province" [formControl]="addMemberForm.controls['province']" class="form-control">
+                <option value="">Select</option>
+                <option *ngFor="let p of provinceKeys" [value]="p">{{ province[p] }}</option>
+              </select>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <label for="affiliation" class="grassroot-label-em">{{ 'group.allMembers.addMember.affiliation' | translate }}</label>
+              <input type="text" class="form-control form-control-em" id="affiliation" name="affiliation" [formControl]="addMemberForm.controls['affiliation']">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" [disabled]="!addMemberForm.valid" class="btn btn-primary save-button">{{ 'action.save' | translate }}</button>
+          <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" >{{ 'action.cancel' | translate }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

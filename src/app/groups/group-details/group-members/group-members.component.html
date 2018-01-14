@@ -9,9 +9,8 @@
         </div>
         <div class="col-6">
           <div class="float-right text-right">
-            <button class="btn btn-outline-secondary rectangle">
-              <img src="assets/add-user.png"/>
-              {{'group.members.addMember' | translate}}
+            <button class="btn btn-secondary rectangle hover-primary" data-toggle="modal" data-target="#add-member-modal">
+              <i class="fas fa-user-plus"></i> {{'group.members.addMember' | translate}}
             </button>
             <button class="btn btn-outline-secondary rectangle" [routerLink]="['/group/import/', group.groupUid]">
               <img src="assets/import.png"/>
@@ -65,3 +64,5 @@
   </div>
 
 </div>
+
+<app-group-add-member [groupUid]="groupUid" (onMemberAdded)="onMemberAdded()" (onMemberAddingFailed)="onMemberFailed()"></app-group-add-member>
