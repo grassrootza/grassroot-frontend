@@ -223,6 +223,17 @@
           }
         }
       },
+      "addMember": {
+        "title": "Add new member",
+        "name": "Name",
+        "role": "Role",
+        "phone": "Cellphone number",
+        "email": "Email",
+        "province": "Province (optional)",
+        "affiliation": "Organisation / Affiliation (optional)",
+        "complete": "Done! Member added",
+        "failed": "Sorry, there was an error adding the member"
+      },
       "manage":{
         "manage": "Manage",
         "view": "View",

@@ -155,3 +155,11 @@ h6 {
 .list-group .badge-pill {
   background: #2CBC4C;
 }
+
+.save-button {
+  padding: 10px 50px;
+}
+
+.cancel-button {
+  padding: 10px 20px;
+}

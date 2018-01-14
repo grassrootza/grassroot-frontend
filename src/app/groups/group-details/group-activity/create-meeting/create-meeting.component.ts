@@ -1,9 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker';
 import {TaskService} from '../../../../task/task.service';
-import {ActivatedRoute, Params} from '@angular/router';
 import {GroupService} from '../../../group.service';
 import {Membership} from '../../../model/membership.model';
 

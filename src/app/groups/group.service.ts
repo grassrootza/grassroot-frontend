@@ -184,8 +184,6 @@ export class GroupService {
       );
   }
 
-
-
   pinGroup(groupUid: string): Observable<boolean> {
     const fullUrl = this.groupPinUrl + "/" + groupUid;
     return this.httpClient.get<boolean>(fullUrl);
@@ -248,19 +246,13 @@ export class GroupService {
       .map(
         data => {
           return data.map(
-            gami => new GroupAddMemberInfo(
-              gami.memberMsisdn,
-              gami.displayName,
-              gami.roleName,
-              gami.alernateNumbers,
-              gami.emailAddress
-            )
+            gami => new GroupAddMemberInfo(gami.memberMsisdn, gami.displayName, gami.roleName, gami.alernateNumbers, gami.emailAddress)
           )
         }
       )
   }
 
-  confirmImport(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[]):Observable<GroupModifiedResponse>{
+  confirmAddMembersToGroup(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[]):Observable<GroupModifiedResponse>{
     const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
     return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd)
       .map(resp => {

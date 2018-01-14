@@ -9,7 +9,8 @@ export class User {
               public lastName: string,
               public firstName: string,
               public enabled: string,
-              public languageCode: string,) {
+              public languageCode: string,
+              public province: string) {
   }
 }
 

@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {UserService} from "../user/user.service";
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {eitherEmailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../utils/CustomValidators";
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../utils/CustomValidators";
 
 @Component({
   selector: 'app-registration',
@@ -20,7 +20,7 @@ export class RegistrationComponent {
       phone: ['', optionalPhoneValidator],
       email: ['', optionalEmailValidator],
       password: ['', Validators.compose([Validators.required, Validators.minLength(5)])]
-    }, { validator: eitherEmailOrPhoneEntered })
+    }, { validator: emailOrPhoneEntered("email", "phone") })
   }
 
   register(): boolean {

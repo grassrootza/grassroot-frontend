@@ -1,6 +1,8 @@
 import {User} from "../../user/user.model";
 import {GroupInfo} from "./group-info.model";
 import {GroupRole} from "./group-role";
+import {PhoneNumberUtils} from "../../utils/PhoneNumberUtils";
+import {UserProvince} from "../../user/model/user-province.enum";
 
 export class MembershipInfo {
 
@@ -26,6 +28,18 @@ export class Membership {
 
   public joinMethodKey(): string {
     return 'group.joinMethods.descriptors.' + this.joinMethod;
+  }
+
+  public formattedProvince(): string {
+    if (this.user.province) {
+      return UserProvince[this.user.province];
+    } else {
+      return "Unknown";
+    }
+  }
+
+  public nationalNumber(): string {
+    return PhoneNumberUtils.convertFromSystem(this.user.phoneNumber);
   }
 
 }

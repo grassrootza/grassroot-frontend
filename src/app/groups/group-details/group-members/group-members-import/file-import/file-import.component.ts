@@ -84,7 +84,7 @@ export class FileImportComponent implements OnInit {
   }
 
   confirmImport(){
-    this.groupService.confirmImport(this.groupUid, this.groupAddMembersInfo).subscribe(resp => {
+    this.groupService.confirmAddMembersToGroup(this.groupUid, this.groupAddMembersInfo).subscribe(resp => {
       this.groupModifiedResponse = resp;
       $('#group-modified-response-modal').modal('show');
     })

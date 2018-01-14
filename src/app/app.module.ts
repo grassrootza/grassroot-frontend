@@ -72,6 +72,7 @@ import { PwdResetValidateComponent } from './login/password-reset/pwd-reset-vali
 import { PwdResetNewComponent } from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
 import { PasswordResetComponent } from './login/password-reset/password-reset.component';
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
+import { GroupAddMemberComponent } from './groups/group-details/group-members/group-add-member/group-add-member.component';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -201,7 +202,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PwdResetInitiateComponent,
     PwdResetValidateComponent,
     PwdResetNewComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    GroupAddMemberComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent,
