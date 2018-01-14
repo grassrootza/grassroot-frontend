@@ -28,7 +28,8 @@ export class Group {
               public subGroups: GroupRef[],
               public topics: string[],
               public joinWords: JoinCodeInfo[],
-              public joinWordsLeft: number) {
+              public joinWordsLeft: number,
+              public reminderMinutes: number) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 

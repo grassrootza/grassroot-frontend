@@ -399,6 +399,27 @@
       "allMembers": "All members",
       "taskTeams": "Task teams",
       "customFilter": "Custom filter"
+    },
+    "settings": {
+      "title": "Group settings",
+      "groupName": "Group name",
+      "groupDescription": "Group description",
+      "groupPrivacy": "Group privacy",
+      "groupPublic": "Public",
+      "groupPrivate": "Private",
+      "advancedPermissions": "Advanced permissions",
+      "reminderInMinutes": "When will reminders be sent?",
+      "reminders": {
+        "noReminder": "No reminder",
+        "hourBefore": "An hour before",
+        "halfDayBefore": "Half a day before",
+        "dayBefore": "One day before",
+        "twoDaysBefore": "Two days before"
+      },
+      "permission": "Permission",
+      "ordinaryMember": "Ordinary member",
+      "committeeMember": "Committee member",
+      "groupOrganizer": "Group organizer"
     }
   },
   "campaigns": {
