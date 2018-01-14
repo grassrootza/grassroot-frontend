@@ -146,7 +146,11 @@
       "todos": "Action items",
       "add-meeting": "Schedule a new meeting",
       "add-vote": "Create a new vote",
-      "add-todo": "Add a new action item"
+      "add-todo": "Add a new action item",
+      "member-growth.period.THIS_MONTH": "This month",
+      "member-growth.period.LAST_MONTH": "Last month",
+      "member-growth.period.THIS_YEAR": "This year",
+      "member-growth.period.ALL_TIME": "All time"
     },
     "joinMethods": {
       "modalTitle": "Ways to sign up members",

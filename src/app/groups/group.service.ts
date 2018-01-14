@@ -39,6 +39,8 @@ export class GroupService {
   groupJoinWordAddUrl = environment.backendAppUrl + "/api/group/modify/joincodes/add";
   groupJoinWordRemoveUrl = environment.backendAppUrl + "/api/group/modify/joincodes/remove";
 
+  memberGrowthStatsUrl = environment.backendAppUrl + "/api/group/stats/member-growth";
+
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
 
@@ -286,6 +288,22 @@ export class GroupService {
     return this.httpClient.post(fullUrl, null, { params: {
       "joinWord": joinWord
       }});
+  }
+
+  fetchMemberGrowthStats(groupUid: string, year: number, month: number): Observable<any> {
+
+    const fullUrl = this.memberGrowthStatsUrl;
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+
+    if (year)
+      params = params.set("year", year.toString());
+
+    if (month)
+      params = params.set("month", month.toString());
+
+    return this.httpClient.get<any>(fullUrl, {params: params});
+
   }
 
 }

@@ -77,4 +77,36 @@
 
   </div>
 
+
+  <div class="row stat-panel">
+
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-8">
+                <h5>Members growth</h5>
+                <canvas id="memberGrowthChart" height="200"></canvas>
+              </div>
+
+              <div class="col-sm-4">
+                <select class="custom-select" (change)="memberGrowthPeriodChanged($event.target.value)">
+                  <option *ngFor="let period of memberGrowthPeriods" [selected]="currentMemberGrowthPeriod == period"
+                          value="{{period}}" [translate]="'group.dashboard.member-growth.period.' + period">Period
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
 </div>

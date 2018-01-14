@@ -29,6 +29,7 @@
     "@ngx-translate/http-loader": "^2.0.1",
     "@zhaber/ng-bootstrap-datetimepicker": "^1.0.0-beta.9",
     "bootstrap": "4.0.0-beta.2",
+    "chart.js": "^2.7.1",
     "core-js": "^2.5.3",
     "jquery": "^3.0.0",
     "libphonenumber-js": "^0.4.49",
