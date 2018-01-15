@@ -57,6 +57,9 @@ export class ProfileFormComponent implements OnInit {
           $('#enter-otp-modal').modal("show");
         } else if (message == 'UPDATED') {
           this.alertService.alert("user.profile.completed");
+          setTimeout(()=>{
+            this.alertService.clear();
+          },5000);
         }
     }, error => {
         console.log("that didn't work, error: ", error);
@@ -70,6 +73,9 @@ export class ProfileFormComponent implements OnInit {
         $("#enter-otp-modal").modal('hide');
         console.log("may have worked? ", message);
         this.alertService.alert("user.profile.completed");
+        setTimeout(()=>{
+          this.alertService.clear();
+        },5000);
       }, error => {
         // display an error message ...
         console.log("ah, an error: ", error);

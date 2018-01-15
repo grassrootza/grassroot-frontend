@@ -21,7 +21,7 @@ export class LoginComponent {
     this.loginForm = new FormGroup({
         username: new FormControl('',[Validators.required,requirePhoneNumberOrEmail,NumberValidator.numberValidator]),
         password:new FormControl('',Validators.required)
-    })
+    });
   }
 
   login(username: string, password: string): boolean {
