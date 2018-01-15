@@ -236,6 +236,8 @@
       },
       "addMember": {
         "title": "Add new member",
+        "searchMemberField": "Look up existing grassroot member by name or contact details",
+        "minimumLetters": "Minimum 3 letters required for search",
         "name": "Name",
         "role": "Role",
         "phone": "Cellphone number",

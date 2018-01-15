@@ -18,6 +18,7 @@ import {GroupModifiedResponse} from './model/group-modified-response.model';
 import {GroupRef} from './model/group-ref.model';
 import {JoinCodeInfo} from './model/join-code-info';
 import {GroupPermissionsByRole} from './model/permission.model';
+import {GroupMembersAutocompleteResponse} from './model/group-members-autocomplete-response.model';
 
 @Injectable()
 export class GroupService {
@@ -49,6 +50,8 @@ export class GroupService {
   statsSourcesUrl = environment.backendAppUrl + "/api/group/stats/sources";
   statsOrganisationsUrl = environment.backendAppUrl + "/api/group/stats/organisations";
   statsMemberDetailsUrl = environment.backendAppUrl + "/api/group/stats/member-details";
+
+  groupSearchUserByTermUrl = environment.backendAppUrl + "/api/group/fetch//user/names";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -382,6 +385,16 @@ export class GroupService {
     return this.httpClient.post<GroupPermissionsByRole>(fullUrl, null, {params: params}).map(resp => {
       return new GroupPermissionsByRole(resp);
     })
+  }
+
+  searchForUsers(searchTerm: string): Observable<GroupMembersAutocompleteResponse[]> {
+    let params = new HttpParams()
+      .set('fragment', searchTerm);
+
+    return this.httpClient.get<GroupMembersAutocompleteResponse[]>(this.groupSearchUserByTermUrl, {params: params})
+      .map(resp => {
+        return resp;
+      })
   }
 
 }
