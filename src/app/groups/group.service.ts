@@ -17,7 +17,7 @@ import {GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
 import {GroupRef} from './model/group-ref.model';
 import {JoinCodeInfo} from './model/join-code-info';
-import {GroupPermissionsByRole, Permission} from './model/permission.model';
+import {GroupPermissionsByRole} from './model/permission.model';
 
 @Injectable()
 export class GroupService {
@@ -48,6 +48,7 @@ export class GroupService {
   statsProvincesUrl = environment.backendAppUrl + "/api/group/stats/provinces";
   statsSourcesUrl = environment.backendAppUrl + "/api/group/stats/sources";
   statsOrganisationsUrl = environment.backendAppUrl + "/api/group/stats/organisations";
+  statsMemberDetailsUrl = environment.backendAppUrl + "/api/group/stats/member-details";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -330,6 +331,18 @@ export class GroupService {
       .set("groupUid", groupUid);
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
+
+  fetchMemberDetailsStats(groupUid: string): Observable<any> {
+
+    const fullUrl = this.statsMemberDetailsUrl;
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
+
+
+
 
   updateGroupSettings(groupUid: string, name: string, description: string, isPublic: boolean, reminderInMinutes: number): Observable<boolean> {
     const fullUrl = this.groupUpdateSettingsUrl + '/' + groupUid;

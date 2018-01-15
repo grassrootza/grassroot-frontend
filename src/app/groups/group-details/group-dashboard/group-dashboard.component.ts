@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import {UserProvince} from "../../../user/model/user-province.enum";
 import {TranslateService} from "@ngx-translate/core";
 import {GroupJoinMethod} from "../../model/join-method";
+import {MemberDetailPercent} from "./member-detail-percent.model";
 
 @Component({
   selector: 'app-group-dashboard',
@@ -24,6 +25,8 @@ export class GroupDashboardComponent implements OnInit {
 
   public memberGrowthPeriods = ["THIS_MONTH", "LAST_MONTH", "THIS_YEAR", "ALL_TIME"];
   public currentMemberGrowthPeriod = "THIS_MONTH";
+
+  public memberDetailsStats: MemberDetailPercent[] = [];
 
   constructor(private groupService: GroupService,
               private taskService: TaskService,
@@ -42,6 +45,7 @@ export class GroupDashboardComponent implements OnInit {
       this.loadProvinceStats();
       this.loadSourcesStats();
       this.loadOrganisationsStats();
+      this.loadMemberDetailsStats();
     });
   }
 
@@ -275,6 +279,28 @@ export class GroupDashboardComponent implements OnInit {
               }
             }
           });
+        }
+      );
+  }
+
+
+  public loadMemberDetailsStats() {
+    if (!this.groupUid)
+      return;
+
+    this.groupService.fetchMemberDetailsStats(this.groupUid)
+      .subscribe(
+        results => {
+          console.log("member details stats: ", results);
+          let newStats: MemberDetailPercent[] = [];
+          let details = Object.keys(results);
+          details.forEach(detail => {
+              newStats.push(new MemberDetailPercent(detail, results[detail]));
+            }
+          );
+
+          this.memberDetailsStats = newStats;
+          console.log("New  member detail stats", this.memberDetailsStats);
         }
       );
   }

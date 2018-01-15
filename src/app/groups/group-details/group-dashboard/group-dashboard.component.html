@@ -87,7 +87,7 @@
           <div class="container">
             <div class="row">
               <div class="col-sm-8">
-                <h5>Members growth</h5>
+                <h5 [translate]="'group.dashboard.stats.title.member-growth'">Members rast</h5>
                 <canvas id="memberGrowthChart" height="200" width="400"></canvas>
               </div>
 
@@ -112,7 +112,7 @@
     <div class="col-sm-4">
       <div class="card">
         <div class="card-body">
-          <h5>Provinces</h5>
+          <h5 [translate]="'group.dashboard.stats.title.provinces'">Provinces</h5>
           <canvas id="provincesChart" width="400" height="400"></canvas>
         </div>
       </div>
@@ -121,7 +121,7 @@
     <div class="col-sm-4">
       <div class="card">
         <div class="card-body">
-          <h5>Sources</h5>
+          <h5 [translate]="'group.dashboard.stats.title.sources'">Sources</h5>
           <canvas id="sourcesChart" width="400" height="400"></canvas>
         </div>
       </div>
@@ -130,12 +130,40 @@
     <div class="col-sm-4">
       <div class="card">
         <div class="card-body">
-          <h5>Organisations</h5>
+          <h5 [translate]="'group.dashboard.stats.title.organisations'">Organisations</h5>
           <canvas id="organisationsChart" width="400" height="400"></canvas>
         </div>
       </div>
     </div>
 
+  </div>
+
+
+  <div class="row stat-panel">
+
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 [translate]="'group.dashboard.stats.title.member-details'">Member details</h5>
+          <div class="container">
+            <div *ngFor="let mds of memberDetailsStats" class="row member-details-stat">
+              <div class="col-sm-4 member-details-stat-label"
+                   [translate]="'group.dashboard.member-details.stats.' + mds.name">
+                Detail
+              </div>
+              <div class="col-sm-8">
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                       [style.width]="mds.percent + '%'"
+                       [attr.aria-valuenow]="mds.percent" aria-valuemin="0" aria-valuemax="100">{{mds.percent}}%
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 

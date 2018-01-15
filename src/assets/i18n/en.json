@@ -147,10 +147,21 @@
       "add-meeting": "Schedule a new meeting",
       "add-vote": "Create a new vote",
       "add-todo": "Add a new action item",
+      "stats.title.member-growth": "Member growth",
+      "stats.title.provinces": "Provinces",
+      "stats.title.sources": "Sources",
+      "stats.title.organisations": "Organisations",
+      "stats.title.member-details": "Member details",
       "member-growth.period.THIS_MONTH": "This month",
       "member-growth.period.LAST_MONTH": "Last month",
       "member-growth.period.THIS_YEAR": "This year",
-      "member-growth.period.ALL_TIME": "All time"
+      "member-growth.period.ALL_TIME": "All time",
+      "member-details.stats.EMAIL": "Email",
+      "member-details.stats.PHONE": "Phone number",
+      "member-details.stats.PROVINCE": "Province",
+      "member-details.stats.ORGANISATION": "Organisation",
+      "member-details.stats.FACEBOOK": "Facebook",
+      "member-details.stats.TWITTER": "Twitter"
     },
     "joinMethods": {
       "modalTitle": "Ways to sign up members",
