@@ -14,6 +14,11 @@
             <label class="form-label" for="name">{{ 'user.profile.name' | translate }}</label>
             <input id="name" formControlName="name" type="text" class="form-control"/>
           </div>
+
+          <div class="alert alert-danger"
+               *ngIf="profileForm.controls['name'].hasError('required')">
+            This field is required</div>
+
         </div>
         <div class="form-row">
           <div class="form-group col-sm-12">
@@ -27,6 +32,10 @@
             <div class="alert alert-danger"
                  *ngIf="profileForm.controls['phone'].hasError('invalidNumber')">
                 Invalid phone number</div>
+
+            <div class="alert alert-danger"
+                 *ngIf="profileForm.controls['phone'].hasError('numbersOnly')">
+              Only numbers required!</div>
           </div>
         </div>
         <div class="form-row">
