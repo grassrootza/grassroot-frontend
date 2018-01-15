@@ -2,14 +2,14 @@
 
 
   <div class="row">
-    <div class="col-12 padding-vertical">
+    <div class="col-12">
       <div class="dropdown float-right">
-        <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" [translate]="'home.create.title'">
-          Create
+        <button id="create-dropdown" class="btn btn-primary dropdown-toggle create-button" type="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-plus"></i> {{ 'home.create.title' | translate }}
         </button>
         <div class="dropdown-menu">
-          <a href="#" class="dropdown-item disabled" [translate]="'home.create.group'"
+          <a href="#" class="dropdown-item" [translate]="'home.create.group'"
              (click)="showCreateGroupDialog()">Group</a>
           <a class="dropdown-item disabled" [translate]="'home.create.campaign'">Campaign</a>
         </div>
@@ -18,25 +18,29 @@
   </div>
 
 
-  <div class="row">
-
+  <div class="row mt-3">
     <div class="col-lg-4">
-
       <div class="card">
-
         <div class="card-body my-agenda">
 
-          <h3 [translate]="'home.my-agenda.title'">My agenda</h3>
+          <h2 [translate]="'home.my-agenda.title'" class="my-agenda-title">My agenda</h2>
 
           <div class="my-agenda-body">
+
+            <div class="day-task" *ngIf="baseDateFilteredTasks.length == 0">
+              <p>No upcoming tasks for you currently</p>
+            </div>
+
             <div *ngFor="let dayTasks of baseDateFilteredTasks" class="day">
               <div class="col-sm-8 day-label">
                 {{formatTaskDate(dayTasks.date)}}
               </div>
               <div *ngFor="let task of dayTasks.tasks" class="day-task">
                 <div>
-                  <img src="assets/{{task.getEventIconName()}}"/>
-                  {{task.title}}
+                  <a (click)="handleTaskClick(task)">
+                    <img src="assets/{{task.getEventIconName()}}"/>
+                    {{task.title}}
+                  </a>
                 </div>
                 <div>
                   <span [translate]="'home.my-agenda.group-label'"> Group </span>: <b>{{task.ancestorGroupName}}</b>
@@ -50,7 +54,7 @@
                 <button class="btn btn-secondary" (click)="decreaseAgendaBaseDate()">&lt;</button>
               </div>
               <div class="col-6 text-center">
-                <button class="btn btn-secondary">{{getDayName(agendaBaseDate)}}</button>
+                <button class="btn btn-secondary">{{getDayName(agendaBaseDate.toDate())}}</button>
               </div>
               <div class="col-3">
                 <button class="btn btn-secondary" (click)="increaseAgendaBaseDate()">&gt;</button>
@@ -65,16 +69,22 @@
     <div class="col-lg-8">
       <div class="card">
         <div class="card-body new-members">
-          <h3 [translate]="'home.new-members.title'">New members</h3>
+
+          <div class="float-right">
+            <h3 class="float-right new-members-count-label">This week</h3>
+            <span class="new-members-count badge badge-secondary d-inline-block">{{newMembersPage != null ? newMembersPage.totalElements : 0}}</span>
+          </div>
+
+          <h2 [translate]="'home.new-members.title'">New members</h2>
 
           <div class="new-members-body">
             <div *ngIf="newMembersPage">
               <div *ngFor="let member of newMembersPage.content" class="member-row">
                 <h4>{{member.user.displayName}}</h4>
-                <p><span>Group: </span> {{member.group.name}}</p>
+                <div><span>Group: </span> {{member.group.name}}</div>
                 <!-- this is generating a 'object changed after checked error, and might be better to do via
                      string concat of key for translate (and also param passing is being weird), but this is the idea -->
-                <p>{{ member.joinMethodKey() | translate:member }}</p>
+                <div>{{ member.joinMethodKey() | translate:member }}</div>
               </div>
             </div>
 
@@ -90,14 +100,38 @@
     <div class="col-sm-12 stared-groups">
       <div class="card">
         <div class="card-header">
-          <span class="card-title" [translate]="'home.starred-groups.title'">Starred groups</span>
+          <span class="card-title h5" [translate]="'home.starred-groups.title'">Starred groups</span>
         </div>
         <div class="card-body">
-
           <app-group-info *ngFor="let gr of pinnedGroups"
                           [group]="gr"
                           [extendedInfoVisible]="pinnedGroups.length == 1">
           </app-group-info>
+
+          <div *ngIf="pinnedGroups.length == 0" class="padding-vertical">
+            <p [translate]="'home.starred-groups.empty'">You have no pinned groups currently.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12 active-campaigns">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title h5" [translate]="'home.active-campaigns.title'">Active campaigns</span>
+        </div>
+        <div class="card-body">
+
+          <app-campaign-info *ngFor="let camp of activeCampaigns"
+                             [campaign]="camp">
+          </app-campaign-info>
+
+          <div *ngIf="activeCampaigns.length == 0" class="padding-vertical">
+            <p [translate]="'home.active-campaigns.empty'">You have no active campaigns currently.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -108,3 +142,5 @@
 
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
+
+<app-todo-respond [todoTask]="toDoToRespond"></app-todo-respond>

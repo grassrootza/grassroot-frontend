@@ -5,6 +5,7 @@ import {JoinInfo, JoinRequest} from "./join-info";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AlertService} from "../utils/alert.service";
 import {UserService} from "../user/user.service";
+import {UserProvince} from "../user/model/user-province.enum";
 
 declare var $: any;
 
@@ -18,6 +19,11 @@ export class JoinComponent implements OnInit {
   groupUid: string;
   code: string;
 
+  province = UserProvince;
+  provinceKeys: string[];
+
+  isUserLoggedIn: boolean = false;
+
   public joinForm: FormGroup;
   public joinInfo: JoinInfo = new JoinInfo();
   public joinRequest: JoinRequest = new JoinRequest();
@@ -27,11 +33,14 @@ export class JoinComponent implements OnInit {
               private formBuilder: FormBuilder,
               private alertService: AlertService,
               private userService: UserService) {
+    this.provinceKeys = Object.keys(this.province);
     this.joinForm = formBuilder.group(this.joinRequest);
   }
 
   // todo: if user is logged in already, don't show / require name, email, etc.
+  // todo: add in form validation (various)
   ngOnInit() {
+    this.isUserLoggedIn = this.userService.isLoggedIn();
     this.route.params.subscribe((params: Params) => {
       console.log("params: ", params);
       this.groupUid = params['groupId'];

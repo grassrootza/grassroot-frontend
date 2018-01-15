@@ -27,8 +27,7 @@ export class LoginComponent {
         if (authResponse.errorCode == null) {
           let afterLoginUrl = localStorage.getItem("afterLoginUrl");
           if (!afterLoginUrl)
-            afterLoginUrl = "groups";
-
+            afterLoginUrl = "/";
 
           let afterLoginParams = localStorage.getItem("afterLoginParams");
           localStorage.removeItem("afterLoginUrl");
@@ -51,6 +50,7 @@ export class LoginComponent {
     return false;
   }
 
+  // todo: rather use i18n message
   private handleLoginError(error: string) {
     console.log("Login failed", error);
     this.message = "Login failed. Try again.";

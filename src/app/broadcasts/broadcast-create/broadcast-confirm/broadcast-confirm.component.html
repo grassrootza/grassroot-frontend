@@ -10,41 +10,49 @@
       <p class="section-title">
         {{ 'broadcasts.create.confirm.types' | translate }}
       </p>
-      <ul>
-        <li *ngIf="confirmFields.sendShortMessage">{{ 'broadcasts.create.confirm.shortMessageLabel' | translate:confirmFields }}</li>
-        <li *ngIf="confirmFields.sendEmail">{{ 'broadcasts.create.confirm.emailLabel' | translate:confirmFields }}</li>
-        <li *ngIf="confirmFields.postFacebook">{{ 'broadcasts.create.types.fbLabel' | translate }}</li>
-        <li *ngIf="confirmFields.postTwitter">{{ 'broadcasts.create.types.twitterLabel' | translate }}</li>
+      <ul class="list-group">
+        <li class="list-group-item" *ngIf="confirmFields.sendShortMessage">{{ 'broadcasts.create.confirm.shortMessageLabel' | translate }}
+          <span class="badge badge-primary badge-pill">{{ confirmFields.smsNumber }}</span></li>
+        <li class="list-group-item" *ngIf="confirmFields.sendEmail">{{ 'broadcasts.create.confirm.emailLabel' | translate }}
+          <span class="badge badge-primary badge-pill">{{ confirmFields.sendEmailCount }}</span></li>
+        <li class="list-group-item" *ngIf="confirmFields.postFacebook">{{ 'broadcasts.create.types.fbLabel' | translate }}
+          <span class="badge badge-primary badge-pill">{{ confirmFields.fbPageName }}</span></li>
+        <li class="list-group-item" *ngIf="confirmFields.postTwitter">{{ 'broadcasts.create.types.twitterLabel' | translate }}
+          <span class="badge badge-primary badge-pill">{{ confirmFields.twitterAccount }}</span></li>
       </ul>
     </div>
   </div>
-  <div class="row">
+  <div class="row mt-3">
     <div class="col-12">
       <p class="section-title">
         {{ 'broadcasts.create.confirm.content' | translate }}
       </p>
-      <ul>
-        <li>{{ 'broadcasts.create.confirm.titleLabel' | translate:contentFields }}</li>
+      <ul class="list-group">
+        <li class="list-group-item bc-title">{{ 'broadcasts.create.confirm.titleLabel' | translate:contentFields }}</li>
       </ul>
       <ngb-tabset *ngIf="confirmFields.sendShortMessage" class="content-tabset">
-        <ngb-tab title="{{ 'broadcasts.create.types.smsLabel' | translate }}">
+        <ngb-tab>
+          <ng-template ngbTabTitle><span class="tab-title-text">{{ 'broadcasts.create.types.smsLabel' | translate }}</span></ng-template>
           <ng-template ngbTabContent>
-            {{ contentFields.shortMessage }}
+            <span class="tab-content-text">{{ contentFields.shortMessage }}</span>
           </ng-template>
         </ngb-tab>
-        <ngb-tab *ngIf="confirmFields.sendEmail" title="{{ 'broadcasts.create.types.emailLabel' | translate }}">
+        <ngb-tab *ngIf="confirmFields.sendEmail">
+          <ng-template ngbTabTitle><span class="tab-title-text">{{ 'broadcasts.create.types.emailLabel' | translate }}</span></ng-template>
           <ng-template ngbTabContent>
-            {{ contentFields.emailContent }}
+            <div class="tab-content-text" [innerHtml]="contentFields.emailContent"></div>
           </ng-template>
         </ngb-tab>
-        <ngb-tab *ngIf="confirmFields.postFacebook" title="{{ 'broadcasts.create.types.fbLabel' | translate }}">
+        <ngb-tab *ngIf="confirmFields.postFacebook">
+          <ng-template ngbTabTitle><span class="tab-title-text">{{ 'broadcasts.create.types.fbLabel' | translate }}</span></ng-template>
           <ng-template ngbTabContent>
-            {{ contentFields.facebookPost }}
+            <span class="tab-content-text">{{ contentFields.facebookPost }}</span>
           </ng-template>
         </ngb-tab>
-        <ngb-tab *ngIf="confirmFields.postTwitter" title="{{ 'broadcasts.create.types.twitterLabel' | translate }}">
+        <ngb-tab *ngIf="confirmFields.postTwitter">
+          <ng-template ngbTabTitle><span class="tab-title-text">{{ 'broadcasts.create.types.twitterLabel' | translate }}</span></ng-template>
           <ng-template ngbTabContent>
-            {{ contentFields.twitterPost }}
+            <span class="tab-content-text">{{ contentFields.twitterPost }}</span>
           </ng-template>
         </ngb-tab>
       </ngb-tabset>
@@ -54,19 +62,30 @@
     <div class="col-12">
       <p class="section-title">
         {{ 'broadcasts.create.confirm.memberCount' | translate:confirmFields }}
-        <!-- todo : add topic list, etc -->
       </p>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
       <p class="section-title">
-        {{ 'broadcasts.create.confirm.schedule' | translate:confirmFields }}
+        {{ 'broadcasts.create.confirm.schedule.prefix' | translate }}
+        {{ ('broadcasts.create.confirm.schedule.' + confirmFields.sendTimeDescription) | translate }}
       </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8 offset-md-4">
+      <p class="text-center">Review costs</p>
+      <span>{{ 'broadcasts.create.members.smsCount' | translate:confirmFields }}</span>
+      <span class="float-right">{{ 'broadcasts.create.members.costEstimate' | translate:confirmFields }}</span>
     </div>
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary" (click)="confirm()">{{ 'broadcasts.create.confirm.send' | translate }}</button>
-  <button type="button" class="btn btn-secondary" (click)="edit()">{{ 'broadcasts.create.confirm.edit' | translate }}</button>
+  <button type="button" class="btn btn-primary next-button" (click)="confirm()">
+    {{ 'broadcasts.create.confirm.send' | translate }}
+  </button>
+  <button type="button" class="btn btn-secondary back-button" (click)="edit()">
+    {{ 'broadcasts.create.confirm.edit' | translate }}
+  </button>
 </div>

@@ -9,6 +9,9 @@ import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 })
 export class BroadcastCreateComponent implements OnInit {
 
+  type: string;
+  parentId: string;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private broadcastService: BroadcastService) {
@@ -19,8 +22,13 @@ export class BroadcastCreateComponent implements OnInit {
   ngOnInit() {
     console.log("Initiating new subscribe flow");
     this.route.params.subscribe(params => {
-      console.log("got the parameters: ", params);
-      this.broadcastService.initCreate(params["type"], params["parentId"]);
+      this.type = params["type"];
+      this.parentId = params["parentId"];
+      this.broadcastService.fetchCreateParams(this.type, this.parentId).subscribe(createParams => {
+        this.broadcastService.initCreate(this.type, this.parentId);
+      }, error => {
+        console.log("failed, error: ", error);
+      });
     });
 
 
@@ -28,20 +36,7 @@ export class BroadcastCreateComponent implements OnInit {
       if (ev instanceof NavigationEnd) {
         let uri = ev.urlAfterRedirects;
         this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
-        switch (this.currentTab) {
-          case 'types':
-            this.broadcastService.currentStep = 1;
-            break;
-          case 'content':
-            this.broadcastService.currentStep = 2;
-            break;
-          case 'members':
-            this.broadcastService.currentStep = 3;
-            break;
-          case 'schedule':
-            this.broadcastService.currentStep = 4;
-            break;
-        }
+        this.broadcastService.currentStep = this.broadcastService.pages.indexOf(this.currentTab) + 1;
       }
     });
   }

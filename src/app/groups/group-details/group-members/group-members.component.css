@@ -9,3 +9,9 @@
   border: 1px solid #929BAF;
   border-radius: 100px;
 }
+
+.hover-primary:hover {
+  cursor: pointer;
+  background: #26A041;
+  color: white;
+}

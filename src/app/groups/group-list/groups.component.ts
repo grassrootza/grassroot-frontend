@@ -13,8 +13,10 @@ declare var $: any;
 })
 export class GroupsComponent implements OnInit {
 
-  protected groups: GroupInfo[] = [];
-  protected pinnedGroups: GroupInfo[] = [];
+  // aot build doesn't like these being private, wants them public
+  public groups: GroupInfo[] = [];
+  public pinnedGroups: GroupInfo[] = [];
+  public pagesList: number[] = [];
 
   protected currentPage: number = 1;
   protected totalCount: number = 0;
@@ -22,9 +24,7 @@ export class GroupsComponent implements OnInit {
   protected numberOfPages: number = 1;
   protected filteredGroups: GroupInfo[] = [];
   protected filteredGroupsPage: GroupInfo[] = [];
-  protected pagesList: number[] = [];
   protected pickedRoleFilter: String = '';
-
 
   constructor(private groupService: GroupService,
     private spinnerService: Ng4LoadingSpinnerService) {

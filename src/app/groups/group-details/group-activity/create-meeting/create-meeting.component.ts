@@ -1,9 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker';
 import {TaskService} from '../../../../task/task.service';
-import {ActivatedRoute, Params} from '@angular/router';
 import {GroupService} from '../../../group.service';
 import {Membership} from '../../../model/membership.model';
 
@@ -15,7 +13,7 @@ import {Membership} from '../../../model/membership.model';
 export class CreateMeetingComponent implements OnInit {
 
   public createMeetingForm: FormGroup;
-  @Input() groupUid: string;
+  @Input() groupUid: string = "";
   @Output() meetingSaved: EventEmitter<boolean>;
   public membersList: Membership[] = [];
 
@@ -38,9 +36,12 @@ export class CreateMeetingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
-      this.membersList = members.content;
-    });
+    if(this.groupUid != "" && this.groupUid != undefined){
+      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
+        this.membersList = members.content;
+      });
+    }
+
   }
 
   fromDate(date): NgbDateTimeStruct {

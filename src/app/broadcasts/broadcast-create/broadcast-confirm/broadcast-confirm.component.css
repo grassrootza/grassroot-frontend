@@ -3,7 +3,21 @@
 }
 
 .content-tabset {
-  /* todo : make this non-terrible */
   padding-left: 100px;
   padding-right: 100px;
+
+}
+
+.tab-title-text {
+  font-size: 1.1em;
+  padding: 10px;
+}
+
+.tab-content-text {
+  font-size: 1.1em;
+}
+
+.bc-title {
+  font-size: 1.1em;
+  font-weight: bolder;
 }

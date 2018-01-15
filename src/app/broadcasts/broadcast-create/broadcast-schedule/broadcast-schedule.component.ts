@@ -9,7 +9,7 @@ import {BroadcastConfirmComponent} from "../broadcast-confirm/broadcast-confirm.
 @Component({
   selector: 'app-broadcast-schedule',
   templateUrl: './broadcast-schedule.component.html',
-  styleUrls: ['./broadcast-schedule.component.css']
+  styleUrls: ['./broadcast-schedule.component.css', '../broadcast-create.component.css']
 })
 export class BroadcastScheduleComponent implements OnInit {
 
@@ -37,6 +37,7 @@ export class BroadcastScheduleComponent implements OnInit {
       return;
     }
     this.broadcastService.setSchedule(this.scheduleForm.value);
+    this.broadcastService.setPageCompleted('schedule');
     // this.confirmationForm.setValue(this.broadcastService.getConfirmationFields());
     console.log("about to open modal ...");
     this.modalService.open(BroadcastConfirmComponent).result.then((result) => {
@@ -52,7 +53,7 @@ export class BroadcastScheduleComponent implements OnInit {
   }
 
   cancel() {
-    this.router.navigate([this.broadcastService.cancelRoute()]);
+    this.broadcastService.cancelCurrentCreate();
   }
 
 }

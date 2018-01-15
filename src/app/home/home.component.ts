@@ -11,6 +11,10 @@ import * as moment from 'moment';
 import {Moment} from 'moment';
 import {GroupRef} from "../groups/model/group-ref.model";
 import {Router} from "@angular/router";
+import {CampaignInfo} from "../campaigns/model/campaign-info";
+import {Task} from "../task/task.model";
+import {TaskType} from "../task/task-type";
+import {TodoType} from "../task/todo-type";
 
 declare var $: any;
 
@@ -24,10 +28,12 @@ export class HomeComponent implements OnInit {
   private myTasks: DayTasks[] = [];
   public baseDateFilteredTasks: DayTasks[] = [];
   public pinnedGroups: GroupInfo[] = [];
+  public activeCampaigns: CampaignInfo[] = [];
   public newMembersPage: MembersPage = null;
+
   public agendaBaseDate: Moment;
 
-
+  public toDoToRespond: Task = null;
 
   constructor(private taskService: TaskService,
               private userService: UserService,
@@ -44,6 +50,8 @@ export class HomeComponent implements OnInit {
     let newTasks: DayTasks[] = [];
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid)
       .subscribe(tasks => {
+
+        console.log("Fetched my tasks:", tasks);
         tasks.forEach(t => {
           let taskDate = new Date(t.deadlineDate.getFullYear(), t.deadlineDate.getMonth(), t.deadlineDate.getDate());
           let dayTasks = newTasks.find(td => td.date.toDateString() == taskDate.toDateString());
@@ -55,8 +63,8 @@ export class HomeComponent implements OnInit {
         });
 
         this.myTasks = newTasks;
-        this.filterMyAgendaTasksRegardingBaseDate()
-        console.log("Fetched my tasks:", this, this.myTasks);
+        this.filterMyAgendaTasksRegardingBaseDate();
+
       });
 
     this.groupService.groupInfoList.subscribe(
@@ -66,7 +74,7 @@ export class HomeComponent implements OnInit {
     );
     this.groupService.loadGroups(false)
 
-    this.groupService.fetchNewMembers(7, 0, 20)
+    this.groupService.fetchNewMembers(7, 0, 1000)
       .subscribe(newMembersPage => {
         this.newMembersPage = newMembersPage;
       });
@@ -118,7 +126,7 @@ export class HomeComponent implements OnInit {
 
     let maxDays = 5;
     let maxTasksPerNonBaseDay = 3;
-    let maxTasksTotal = 15;
+    let maxTasksTotal = 5;
 
     let totalTasks = 0;
 
@@ -144,6 +152,20 @@ export class HomeComponent implements OnInit {
     });
 
     this.baseDateFilteredTasks = filteredTasks;
+  }
+
+  handleTaskClick(task: Task): boolean {
+    if (
+      task.type == TaskType.TODO
+      && task.todoType != TodoType.ACTION_REQUIRED
+      && (task.thisUserAssigned || task.wholeGroupAssigned)
+      && !task.hasResponded
+    ) {
+
+      this.toDoToRespond = task;
+      $('#respond-todo-modal').modal("show");
+    }
+    return false;
   }
 
 }

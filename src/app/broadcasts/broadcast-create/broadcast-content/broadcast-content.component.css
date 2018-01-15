@@ -5,3 +5,27 @@
 .btn-primary {
   margin-left: 2rem;
 }
+
+.insertion-link {
+  font-size: 1.1em;
+  background: none;
+  color: #2CBC4C;
+  padding: 0;
+  border: none;
+  text-decoration: underline;
+  display: block;
+}
+
+.email-link {
+  background: none;
+  color: #2CBC4C;
+  padding: 0;
+  margin-right: 25px;
+  margin-top: 1rem;
+  border: none;
+  text-decoration: underline;
+}
+
+.insertion-link:hover {
+  cursor: pointer;
+}

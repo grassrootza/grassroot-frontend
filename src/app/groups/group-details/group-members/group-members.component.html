@@ -4,17 +4,18 @@
       <div class="row">
         <div class="col-6">
           <h2>
-            Member management
+            {{'group.members.management' | translate}}
           </h2>
         </div>
         <div class="col-6">
           <div class="float-right text-right">
-            <button class="btn btn-outline-secondary rectangle">
-              <img src="assets/add-user.png"/>
-              Add a member</button>
+            <button class="btn btn-secondary rectangle hover-primary" data-toggle="modal" data-target="#add-member-modal">
+              <i class="fas fa-user-plus"></i> {{'group.members.addMember' | translate}}
+            </button>
             <button class="btn btn-outline-secondary rectangle" [routerLink]="['/group/import/', group.groupUid]">
               <img src="assets/import.png"/>
-              Import list</button>
+              {{'group.members.importList' | translate}}
+            </button>
           </div>
         </div>
 
@@ -29,20 +30,23 @@
             <img *ngIf="currentTab == 'all'" src="assets/members-white.png"/>
             <img *ngIf="currentTab != 'all'" src="assets/members.png"/>
             <br/>
-            All members
+            {{'group.members.allMembers' | translate}}
+
           </a>
 
           <a class="btn rectangle-23"
              [ngClass]="{'btn-success': currentTab == 'task-teams', 'btn-outline-success': currentTab != 'task-teams'}"
              [routerLink]="['task-teams']">
             <img src="assets/shared-folder.png"><br/>
-            Task teams</a>
+            {{'group.members.taskTeams' | translate}}
+          </a>
 
           <a class="btn rectangle-23"
              [ngClass]="{'btn-success': currentTab == 'filter', 'btn-outline-success': currentTab != 'filter'}"
              [routerLink]="['filter']">
             <img src="assets/filter-white.png"><br/>
-            Custom filter</a>
+            {{'group.members.customFilter' | translate}}
+          </a>
 
         </div>
       </div>
@@ -60,3 +64,5 @@
   </div>
 
 </div>
+
+<app-group-add-member [groupUid]="groupUid" (onMemberAdded)="onMemberAdded()" (onMemberAddingFailed)="onMemberFailed()"></app-group-add-member>

@@ -1,4 +1,5 @@
-import {CountryCode, format, parse} from "libphonenumber-js";
+import {CountryCode, format, isValidNumber, parse} from "libphonenumber-js";
+import {AbstractControl} from "@angular/forms";
 
 // note: we use this much more in code than in templates, hence doing as static methods instead of pipe
 export class PhoneNumberUtils {
@@ -22,5 +23,12 @@ export class PhoneNumberUtils {
       return result;
     }
     return phone;
+  }
+
+  public static convertIfPhone(username: string): string {
+    if (isValidNumber(username, "ZA")) {
+      username = PhoneNumberUtils.convertToSystem(username);
+    }
+    return username;
   }
 }

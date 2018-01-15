@@ -86,6 +86,17 @@ h6 {
   background: #26A041;
 }
 
+/* none of these are working, nothing gets rid of bootstrap blue crappiness, good old CSS */
+.btn-primary:active,
+.btn-primary:target,
+.btn-primary:focus,
+.btn-primary:active:focus,
+.btn-primary:visited {
+  color: white;
+  background: #2CBC4C;
+  border: 1px solid #26A041;
+}
+
 .btn-primary:disabled {
   background: white;
   color: #cccccc;
@@ -115,4 +126,40 @@ h6 {
   cursor: pointer;
   color: #26A041;
   text-decoration: underline;
+}
+
+.grassroot-label-em {
+  font-size: 1.1em;
+}
+
+.form-control-em {
+  font-size: 1.1em;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #26A041;
+  margin-bottom: 8px;
+}
+
+.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+  color: white;
+  background-color: #2CBC4C;
+}
+
+.nav-tabs .nav-link, .nav-tabs .nav-item.show .nav-link {
+  color: #2CBC4C;
+  background-color: white;
+  border-bottom: 1px solid #26A041;
+}
+
+.list-group .badge-pill {
+  background: #2CBC4C;
+}
+
+.save-button {
+  padding: 10px 50px;
+}
+
+.cancel-button {
+  padding: 10px 20px;
 }

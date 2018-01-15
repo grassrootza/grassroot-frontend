@@ -54,3 +54,7 @@ h5 img {
 .card-footer {
   background-color: white;
 }
+
+.stat-panel {
+  margin-top: 2rem;
+}

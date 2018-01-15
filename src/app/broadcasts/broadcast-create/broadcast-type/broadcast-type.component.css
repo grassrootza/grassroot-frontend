@@ -1,0 +1,35 @@
+.type-icon {
+  font-size: 72px;
+}
+
+.gr-icon {
+  color: #2CBC4C;
+}
+
+.fb-logo {
+  color: #3b5998;
+}
+
+.tw-logo {
+  color: #00aced;
+}
+
+.type-header {
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.type-desc {
+  margin: 0;
+  padding: 0;
+}
+
+.fb-select {
+  width: 80%;
+}
+
+.account-link {
+  text-decoration: underline;
+}

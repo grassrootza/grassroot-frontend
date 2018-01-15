@@ -5,7 +5,7 @@ import "rxjs/add/operator/map";
 import {Task} from "./task.model";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {TaskType} from "./task-type";
-import {GroupRef} from '../groups/model/group-ref.model';
+import {TodoType} from "./todo-type";
 
 @Injectable()
 export class TaskService {
@@ -16,6 +16,8 @@ export class TaskService {
   private groupCreateMeetingUrl = environment.backendAppUrl + '/api/task/create/meeting';
   private groupCreateVoteUrl = environment.backendAppUrl + '/api/task/create/vote';
   private groupCreateTodoUrl = environment.backendAppUrl + '/api/task/create/todo';
+
+  private groupRespondeTodoUrl = environment.backendAppUrl + '/api/task/respond/todo/information';
 
 
   constructor(private httpClient: HttpClient) {
@@ -36,7 +38,11 @@ export class TaskService {
             task.location,
             task.parentUid,
             task.parentName,
-            task.ancestorGroupName
+            task.ancestorGroupName,
+            task.todoType != null ? TodoType[task.todoType] : null,
+            task.hasResponded,
+            task.wholeGroupAssigned,
+            task.thisUserAssigned
             )
           )
       );
@@ -58,7 +64,11 @@ export class TaskService {
             task.location,
             task.parentUid,
             task.parentName,
-            task.ancestorGroupName
+            task.ancestorGroupName,
+            task.todoType != null ? TodoType[task.todoType] : null,
+            task.hasResponded,
+            task.wholeGroupAssigned,
+            task.thisUserAssigned
             )
           )
       );
@@ -138,5 +148,15 @@ export class TaskService {
 
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
+  }
+
+
+  respondToDo(todoUid: string, userUid: string, response: string): Observable<string> {
+    let url = this.groupRespondeTodoUrl + "/" + todoUid + "/" + userUid;
+    let params = new HttpParams()
+      .set("response", response);
+
+    return this.httpClient.get<string>(url, {params: params})
+
   }
 }

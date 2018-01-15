@@ -39,10 +39,15 @@
       "title": "New members"
     },
     "starred-groups": {
-      "title": "Starred groups"
+      "title": "Starred groups",
+      "empty": "You have no pinned groups currently."
+    },
+    "active-campaigns": {
+      "title": "Active campaigns",
+      "empty": "You have no active campaigns currently."
     },
     "create": {
-      "title": "Create",
+      "title": "Create New",
       "group": "Group",
       "campaign": "Campaign"
     }
@@ -141,7 +146,11 @@
       "todos": "Action items",
       "add-meeting": "Schedule a new meeting",
       "add-vote": "Create a new vote",
-      "add-todo": "Add a new action item"
+      "add-todo": "Add a new action item",
+      "member-growth.period.THIS_MONTH": "This month",
+      "member-growth.period.LAST_MONTH": "Last month",
+      "member-growth.period.THIS_YEAR": "This year",
+      "member-growth.period.ALL_TIME": "All time"
     },
     "joinMethods": {
       "modalTitle": "Ways to sign up members",
@@ -213,6 +222,17 @@
             "email": "Email"
           }
         }
+      },
+      "addMember": {
+        "title": "Add new member",
+        "name": "Name",
+        "role": "Role",
+        "phone": "Cellphone number",
+        "email": "Email",
+        "province": "Province (optional)",
+        "affiliation": "Organisation / Affiliation (optional)",
+        "complete": "Done! Member added",
+        "failed": "Sorry, there was an error adding the member"
       },
       "manage":{
         "manage": "Manage",
@@ -331,6 +351,75 @@
 
         }
       }
+    },
+    "broadcast": {
+      "title": "Broadcast messages",
+      "sendNew": "Send new broadcast",
+      "table": {
+        "sendOn": "Send on",
+        "sendTo": "Send to",
+        "sms": "SMS",
+        "email": "Email",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "actions": "Actions",
+        "scheduledActions": {
+          "view": "View",
+          "edit": "Edit",
+          "cancel": "Cancel"
+        },
+        "sentActions": {
+          "view": "View",
+          "resend": "Resend",
+          "sentReport": "Sent report"
+        }
+      },
+      "viewModal": {
+        "title": "Broadcast message",
+        "broadcastVia": "Broadcast via",
+        "sms": "SMS ({{smsCount}})",
+        "facebook": "Facebook: {{fbPage}}",
+        "email": "Email ({{emailCount}})",
+        "twitter": "Twitter: {{twitterAccount}}",
+        "previewMessages": "Preview messages",
+        "smsTab": "SMS",
+        "facebookTab": "Facebook",
+        "emailTab": "Email",
+        "twitterTab": "Twitter",
+        "sentTo": "Sent to ({{totalSent}} members)",
+        "when": "When: {{formattedDate}}",
+        "reviewCosts": "Review costs",
+        "estimatedCost": "Estimated cost: {{costEstimate}}"
+      }
+    },
+    "members":{
+      "management": "Member management",
+      "addMember": "Add a member",
+      "importList": "Import list",
+      "allMembers": "All members",
+      "taskTeams": "Task teams",
+      "customFilter": "Custom filter"
+    },
+    "settings": {
+      "title": "Group settings",
+      "groupName": "Group name",
+      "groupDescription": "Group description",
+      "groupPrivacy": "Group privacy",
+      "groupPublic": "Public",
+      "groupPrivate": "Private",
+      "advancedPermissions": "Advanced permissions",
+      "reminderInMinutes": "When will reminders be sent?",
+      "reminders": {
+        "noReminder": "No reminder",
+        "hourBefore": "An hour before",
+        "halfDayBefore": "Half a day before",
+        "dayBefore": "One day before",
+        "twoDaysBefore": "Two days before"
+      },
+      "permission": "Permission",
+      "ordinaryMember": "Ordinary member",
+      "committeeMember": "Committee member",
+      "groupOrganizer": "Group organizer"
     }
   },
   "campaigns": {
@@ -359,18 +448,33 @@
       "types": {
         "title": "How would you like to broadcast this message?",
         "smsLabel": "SMS",
+        "smsCosts": "SMS costs: {{ smsCostCents }}c/message",
         "emailLabel": "Email",
         "fbLabel": "Facebook",
-        "twitterLabel": "Twitter"
+        "twitterLabel": "Twitter",
+        "linkAccount": "link new account/page",
+        "changeAccount": "change account settings"
       },
       "content": {
         "pageTitle": "What would you like to say?",
         "titleSection": "Title",
-        "titleLabel": "Give this message a title for easy reference later:",
+        "titleLabel": "Give this message a title for easy reference later",
         "smsSection": "Short message (SMS, notification, etc)",
         "emailSection": "Email",
         "fbSection": "Facebook post",
         "twitterSection": "Tweet",
+        "charsRemaining": " characters remaining",
+        "link": {
+          "file": "attach image or file",
+          "join": "insert a join link",
+          "campaign": "insert a campaign link"
+        },
+        "merge": {
+          "label": "insert merge field: ",
+          "select": "(Select)",
+          "name": "Name",
+          "province": "Province"
+        },
         "errors": {
           "title": "Please enter a title for this broadcast",
           "shortMessage": "Please enter a short message - if you want to leave it blank, please go back and unselect it",
@@ -381,9 +485,11 @@
       },
       "members": {
         "title": "Who would you like to send it to?",
-        "allMembers": "All members ({{memberCount}})",
+        "allMembers": "All members ({{allMemberCount}})",
         "taskTeams": "Selected task teams",
-        "customSelection": "Custom selection"
+        "customSelection": "Custom selection",
+        "smsCount": "SMS's: {{ smsNumber }}",
+        "costEstimate": "Estimated cost: R{{ broadcastCost }}"
       },
       "schedule": {
         "title": "When would you like to send it?",
@@ -395,12 +501,17 @@
       "confirm": {
         "title": "Review & Confirm Broadcast Message",
         "types": "Broadcast via:",
-        "shortMessageLabel": "Short message ({{sendShortMessageCount}})",
-        "emailLabel": "Email ({{sendEmailCount}})",
+        "shortMessageLabel": "Short message",
+        "emailLabel": "Email",
         "content": "Preview messages:",
         "titleLabel": "Title: {{title}} ",
         "memberCount": "Send to ({{totalMemberCount}} members)",
-        "schedule": "When: {{sendTimeDescription}}",
+        "schedule": {
+          "prefix": "When: ",
+          "IMMEDIATE": "Send now",
+          "ADDED_TO_GROUP": "On member join",
+          "FUTURE": "On {{ sendTime }}"
+        },
         "send": "Send now",
         "edit": "Edit"
       },
@@ -408,6 +519,11 @@
         "costsTitle": "Review costs",
         "smsCount": "SMSs: ",
         "costsEstimate": "Estimated cost: R{{costEstimate}}"
+      },
+      "sent": {
+        "IMMEDIATE": "Done! Your broadcast is being sent right now",
+        "ADDED_TO_GROUP": "Done! New members will get the broadcast on joining",
+        "FUTURE": "Done! The broadcast has been queued for sending"
       }
     }
   },
@@ -481,17 +597,41 @@
     "password": "Password",
     "forgot": "Forgot your password?",
     "newUser-prefix": "New user? ",
-    "newUser-suffix": "Register here"
+    "newUser-suffix": "Register here",
+    "error-message": "Sorry, wrong phone, email or password"
+  },
+  "reset": {
+    "initiate": {
+      "title": "Password reset",
+      "info": "To reset your password, first please enter the phone number or email address you use to sign into Grassroot",
+      "next": "Get OTP",
+      "errorEither": "Please enter a valid phone number or email"
+    }, "validate": {
+      "title": "Enter code",
+      "info": "If your email or phone matched one we have on file, we have sent an OTP to your phone, or if you do not have a phone, to your email. Please enter it below.",
+      "error": "Sorry, you have entered the wrong code.",
+      "next": "Next"
+    }, "new": {
+      "title": "Enter new password",
+      "new_label": "New password",
+      "confirm_label": "Confirm password",
+      "error": "Sorry, the passwords do not match",
+      "submit": "Submit",
+      "complete": "Done, your password has been reset. You can now login.",
+      "server_error": "Sorry, something went wrong resetting your password, please try again later"
+    }
   },
   "registration":{
-    "title": "Register",
-    "username": "YOUR NAME (WHAT PEOPLE KNOW YOU BY):",
-    "usernamePlaceholder": "Enter username",
-    "phoneNumber": "YOUR MOBILE NUMBER:",
-    "phoneNumberPlaceholder": "Enter phone number",
-    "password": "SET A PASSWORD:",
-    "passwordPlaceholder": "Password",
-    "haveAccount": "Already have an account? Click here to Login"
+    "banner": "Welcome to Grassroot",
+    "sub-banner": "Tools for a people's democracy",
+    "title": "Your Account Details",
+    "displayname": "Your name (what people know you by)",
+    "phoneNumber": "Your mobile number",
+    "emailAddress": "Your email address",
+    "footnote": "* At least one of mobile number or email address is required",
+    "password": "Set a password",
+    "haveAccountQ": "Already have an account?",
+    "haveAccountLink": "Click here to login"
   },
   "pagination":{
     "previous": "Prev",
@@ -511,6 +651,18 @@
     "date": "Date",
     "time": "Time",
     "working": "Working",
-    "loading": "Loading"
+    "loading": "Loading",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "task": {
+    "todo": {
+      "respondModal": {
+        "title": "Complete action",
+        "information-label": "Your response",
+        "validate-action-label": "Is the action complete?",
+        "volunteers-needed-label": "Do you volunteer?"
+      }
+    }
   }
 }

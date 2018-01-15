@@ -5,11 +5,11 @@
         <nav class="navbar navbar-expand-lg navbar-light">
           <div class="collapse navbar-collapse" id="userProfileNavbar">
             <ul class="main-nav navbar-nav mr-auto">
-              <li class="nav-item" [ngClass]="{active: currentTab === 'profile'}">
-                <a class="nav-link" [routerLink]="['profile']" [translate]="'menu.profile'">My profile</a>
-                <a class="nav-link" [routerLink]="['password']" [translate]="'menu.password'"></a>
-                <a class="nav-link" [routerLink]="['account']" [translate]="'menu.account'"></a>
-                <a class="nav-link" [routerLink]="['integrations']" [translate]="'menu.integrations'"></a>
+              <li class="nav-item">
+                <a class="nav-link" [ngClass]="{active: currentTab === 'profile'}" [routerLink]="['profile']" [translate]="'menu.profile'">My profile</a>
+                <a class="nav-link" [ngClass]="{active: currentTab === 'password'}" [routerLink]="['password']" [translate]="'menu.password'"></a>
+                <a class="nav-link" [ngClass]="{active: currentTab === 'account'}" [routerLink]="['account']" [translate]="'menu.account'"></a>
+                <a class="nav-link" [ngClass]="{active: currentTab === 'integrations'}" [routerLink]="['integrations']" [translate]="'menu.integrations'"></a>
                 <a class="nav-link" href="" (click)="logout()" [translate]="'menu.logout'"></a>
               </li>
             </ul>
