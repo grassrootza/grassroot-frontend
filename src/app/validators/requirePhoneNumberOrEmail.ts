@@ -12,7 +12,7 @@ export function requirePhoneNumberOrEmail(control:AbstractControl){
 
     isPhoneNumber = inputStr.length == 10 && phoneNumberFormat.test(inputStr) ? true : false;
 
-    if(!isEmail || !isPhoneNumber){
+    if(!isEmail && !isPhoneNumber){
         return{invalidInput:true}
     }
     return null;

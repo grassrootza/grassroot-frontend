@@ -23,17 +23,36 @@
     <div class="card-body">
       <div class="row">
         <div class="col-md-10 offset-md-1 col-12">
-          <form>
+          <form [formGroup]="loginForm">
             <div class="form-group">
               <label for="username" class="grassroot-label-em">{{ 'login.username' | translate }}</label>
-              <input type="text" class="form-control" name="username" id="username" #username>
+              <input type="text" class="form-control" formControlName="username" name="username" id="username" #username>
+            </div>
+
+            <div class="alert alert-danger"
+                 *ngIf="loginForm.controls['username'].hasError('required')">
+              Username required</div>
+
+            <div class="alert alert-danger"
+                 *ngIf="loginForm.controls['username'].hasError('invalidInput')">
+                  Phone number or email required
+            </div>
+
+            <div class="alert alert-danger"
+              *ngIf="loginForm.controls['username'].hasError('invalidNumber')">
+              Phone number invalid
             </div>
 
             <div class="form-group">
               <label for="password" class="grassroot-label-em">{{ 'login.password' | translate }}</label>
-              <input type="password" class="form-control" name="password" id="password" #password>
+              <input type="password" class="form-control" name="password" formControlName="password" id="password" #password>
               <a [routerLink]="['/forgot']" class="grassroot-link">{{ 'login.forgot' | translate }}</a>
             </div>
+
+            <div class="alert alert-danger"
+                 *ngIf="loginForm.controls['password'].hasError('required')
+                  && (loginForm.controls['password'].touched || loginForm.controls['password'].dirty)">
+              Password required</div>
 
             <div class="form-group text-center">
               <button type="submit" class="btn btn-primary login-button"
