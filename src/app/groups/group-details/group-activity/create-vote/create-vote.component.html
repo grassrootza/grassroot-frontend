@@ -68,11 +68,23 @@
 
     <div class="form-group row">
       <div class="col-sm-4 col-form-label text-right">
-        <label for="vote-date-time">{{ 'group.activity.voteModal.dateAndTime' | translate }}</label>
+        <label for="vote-date">{{ 'group.activity.voteModal.dateAndTime' | translate }}</label>
       </div>
-      <div class="col-sm-8">
-        <ngbd-datetimepicker id="vote-date-time" #dtp datePlaceholder="yyyy-mm-dd"
-                             [formControl]="createVoteForm.controls['time']"></ngbd-datetimepicker>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <div class="input-group">
+            <input class="form-control" placeholder="yyyy-mm-dd" id="vote-date"
+                   name="dp" [formControl]="createVoteForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <ngb-timepicker [formControl]="createVoteForm.controls['time']" [spinners]="false"></ngb-timepicker>
       </div>
     </div>
 

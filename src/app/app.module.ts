@@ -59,7 +59,6 @@ import {ProfileFormComponent} from './user/profile-form/profile-form.component';
 import {PasswordComponent} from './user/password/password.component';
 import {AlertService} from "./utils/alert.service";
 import {AccountComponent} from './user/account/account.component';
-import {NgbDateTimePickerModule} from '@zhaber/ng-bootstrap-datetimepicker';
 import {CreateMeetingComponent} from './groups/group-details/group-activity/create-meeting/create-meeting.component';
 import {CreateVoteComponent} from './groups/group-details/group-activity/create-vote/create-vote.component';
 import {CreateTodoComponent} from './groups/group-details/group-activity/create-todo/create-todo.component';
@@ -235,8 +234,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         whitelistedDomains: ['localhost:8080', 'staging.grassroot.org.za']
       }
     }),
-    NgbModule.forRoot(),
-    NgbDateTimePickerModule
+    NgbModule.forRoot()
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},

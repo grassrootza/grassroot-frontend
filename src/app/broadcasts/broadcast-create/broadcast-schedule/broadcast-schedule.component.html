@@ -45,9 +45,23 @@
         </div>
 
         <div class="form-row" *ngIf="scheduleForm.get('sendType').value == 'FUTURE'">
-          <div class="form-group col-sm-12">
-            <ngbd-datetimepicker id="broadcast-date-time" #dtp datePlaceholder="yyyy-mm-dd"
-                                 formControlName="dateTimeEpochMillis" [displayMonths]="displayMonths"></ngbd-datetimepicker>
+          <div class="form-group row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" id="meeting-date-time"
+                         name="dp" formControlName="dateEpochMillis" ngbDatepicker #d="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                      <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <ngb-timepicker formControlName="timeEpochMillis" [spinners]="false"></ngb-timepicker>
+            </div>
           </div>
         </div>
 

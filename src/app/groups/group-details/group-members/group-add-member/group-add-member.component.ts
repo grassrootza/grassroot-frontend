@@ -87,13 +87,9 @@ export class GroupAddMemberComponent implements OnInit {
 
   pickedItem(pickedUser: GroupMembersAutocompleteResponse){
     //TODO: implement filling rest of the form with user data when user is picked, need to fetch user details from server
-    console.log("picked");
-    console.log(pickedUser);
-
     this.addMemberForm.controls['displayName'].setValue(pickedUser.label);
     this.addMemberForm.controls['roleName'].setValue("ROLE_ORDINARY_MEMBER");
     this.addMemberForm.controls['memberMsisdn'].setValue(pickedUser.value);
-    console.log(this.addMemberForm.valid);
 
   }
 
