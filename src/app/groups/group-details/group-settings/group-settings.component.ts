@@ -66,14 +66,15 @@ export class GroupSettingsComponent implements OnInit {
       'description': ['', Validators.required],
       'privacy': ["PUBLIC", Validators.required],
       'reminderInMinutes': [0, Validators.required],
-      'ordinaryMemberPermissions': this.permissionsForm(),
-      'committeeMemberPermissions': this.permissionsForm(),
-      'groupOrganizerPermissions': this.permissionsForm(),
+      'ordinaryMemberPermissions': this.permissionsForm("ROLE_ORDINARY_MEMBER"),
+      'committeeMemberPermissions': this.permissionsForm("ROLE_COMMITTEE_MEMBER"),
+      'groupOrganizerPermissions': this.permissionsForm("ROLE_GROUP_ORGANIZER"),
     });
 
   }
 
-  permissionsForm(){
+  permissionsForm(userRole: string){
+
 
     return this.formBuilder.group(
       {
@@ -83,14 +84,13 @@ export class GroupSettingsComponent implements OnInit {
         "GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY": false,
         "GROUP_PERMISSION_ADD_GROUP_MEMBER": false,
         "GROUP_PERMISSION_DELETE_GROUP_MEMBER": false,
-        "GROUP_PERMISSION_UPDATE_GROUP_DETAILS": false,
-        "GROUP_PERMISSION_CHANGE_PERMISSION_TEMPLATE": false,
+        "GROUP_PERMISSION_UPDATE_GROUP_DETAILS": userRole == 'ROLE_GROUP_ORGANIZER' ? [{value: false, disabled: true}] : false,
+        "GROUP_PERMISSION_CHANGE_PERMISSION_TEMPLATE": userRole == 'ROLE_GROUP_ORGANIZER' ? [{value: false, disabled: true}] : false,
         "GROUP_PERMISSION_CLOSE_OPEN_LOGBOOK": false,
         "GROUP_PERMISSION_VIEW_MEETING_RSVPS": false,
         "GROUP_PERMISSION_READ_UPCOMING_EVENTS": false,
       }
     );
-
 
   }
 
