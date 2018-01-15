@@ -30,16 +30,16 @@
             </div>
 
             <div class="alert alert-danger"
-                 *ngIf="loginForm.controls['username'].hasError('required')">
+                 *ngIf="loginForm.controls['username'].hasError('required') && (loginForm.controls['username'].touched || loginForm.controls['username'].dirty)">
               Username required</div>
 
             <div class="alert alert-danger"
-                 *ngIf="loginForm.controls['username'].hasError('invalidInput')">
+                 *ngIf="loginForm.controls['username'].hasError('invalidInput') && (loginForm.controls['username'].touched || loginForm.controls['username'].dirty)">
                   Phone number or email required
             </div>
 
             <div class="alert alert-danger"
-              *ngIf="loginForm.controls['username'].hasError('invalidNumber')">
+              *ngIf="loginForm.controls['username'].hasError('invalidNumber') && (loginForm.controls['username'].touched || loginForm.controls['username'].dirty)">
               Phone number invalid
             </div>
 

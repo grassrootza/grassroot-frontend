@@ -5,7 +5,7 @@ import {GroupService} from '../../group.service';
 import {Group} from '../../model/group.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from '../../model/permission.model';
-import {Observable} from 'rxjs/Observable';
+import {AlertService} from "../../../utils/alert.service";
 
 @Component({
   selector: 'app-group-settings',
@@ -31,8 +31,7 @@ export class GroupSettingsComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private formBuilder: FormBuilder,
-  ) {
-
+              private alertService: AlertService) {
     this.initGroupForm();
   }
 
@@ -173,7 +172,6 @@ export class GroupSettingsComponent implements OnInit {
 
   permissionsChangedTrigger(){
     this.permissionsChanged = true;
-
   }
 
   updateGroup(){
@@ -206,6 +204,7 @@ export class GroupSettingsComponent implements OnInit {
     this.groupService.updateGroupPermissionsForRole(updatedPermissionsByRole, this.group.groupUid).subscribe(resp => {
       this.permissionsChanged = false;
       this.getPermissionsForRole(this.group.groupUid);
+      this.alertService.alert("group.settings.updateDone");
     });
   }
 
