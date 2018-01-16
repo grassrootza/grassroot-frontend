@@ -8,17 +8,15 @@ import {GroupModifiedResponse} from '../../../model/group-modified-response.mode
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
 import {Observable} from 'rxjs/Observable';
 import {GroupMembersAutocompleteResponse} from '../../../model/group-members-autocomplete-response.model';
+// doing these manually as else there are warnings of very heavy import load if take all rxjs
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/merge";
+import "rxjs/add/operator/switchMap";
+import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/distinctUntilChanged";
 
 declare var $: any;
-
-const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
-  'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
-  'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
-  'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
-  'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Islands', 'Virginia',
-  'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 
 @Component({
   selector: 'app-group-add-member',
@@ -31,7 +29,6 @@ export class GroupAddMemberComponent implements OnInit {
   @Output() public onMemberAddingFailed = new EventEmitter<any>();
 
   @Input() groupUid: string = "";
-
 
   public addMemberForm: FormGroup;
 
