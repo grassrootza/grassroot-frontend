@@ -246,10 +246,13 @@
         "email": "Email",
         "province": "Province (optional)",
         "affiliation": "Organisation / Affiliation (optional)",
-        "taskTeam": "Also add to task team",
-        "topics": "Assign topic",
+        "taskTeam": "Also add to task team(s)",
+        "topics": "Assign topic(s)",
         "complete": "Done! Member added",
-        "failed": "Sorry, there was an error adding the member"
+        "failed": "Sorry, there was an error adding the member",
+        "errors":{
+          "name": "Please enter member name"
+        }
       },
       "manage":{
         "manage": "Manage",
@@ -289,7 +292,22 @@
           "body": "This group does not have any topics"
         }
 
+      },
+      "edit":{
+        "title": "Edit member",
+        "notAllowed": {
+          "title": "Can't edit details",
+          "body": "You are not allowed to edit details for this user"
+        }
       }
+    },
+    "memberProfile":{
+      "activity": "Activity",
+      "role": "Role: ",
+      "phone": "Phone: ",
+      "email": "Email: ",
+      "province": "Province: ",
+      "taggedWithTopics": "Tagged with topics: "
     },
     "import": {
       "nav": {

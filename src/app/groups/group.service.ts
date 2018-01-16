@@ -18,7 +18,8 @@ import {GroupModifiedResponse} from './model/group-modified-response.model';
 import {GroupRef} from './model/group-ref.model';
 import {JoinCodeInfo} from './model/join-code-info';
 import {GroupPermissionsByRole} from './model/permission.model';
-import {GroupMembersAutocompleteResponse} from './model/group-members-autocomplete-response.model';
+import {GroupRelatedUserResponse} from './model/group-related-user.model';
+import {GroupMemberActivity} from './model/group-member-activity';
 
 @Injectable()
 export class GroupService {
@@ -33,13 +34,17 @@ export class GroupService {
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
   groupRemoveMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove";
   groupAddMembersToTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/members/add/taskteam";
-  groupAssignTopicsToMemebersUrl = environment.backendAppUrl + "/api/group/modify/members/add/topics";
+  groupAssignTopicsToMembersUrl = environment.backendAppUrl + "/api/group/modify/members/add/topics";
   groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
   groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
   groupUpdateSettingsUrl = environment.backendAppUrl + "/api/group/modify/settings";
   groupFetchPermissionsForRoleUrl = environment.backendAppUrl + "/api/group/fetch/permissions";
   groupFetchPermissionsDisplayedUrl = environment.backendAppUrl + "/api/group/fetch/permissions-displayed";
   groupUpdatePermissionsForRole = environment.backendAppUrl + '/api/group/modify/permissions/update';
+  groupFetchMemberByMemberUidUrl = environment.backendAppUrl + '/api/group/fetch/member';
+  groupFetchMemberActivityUrl = environment.backendAppUrl + '/api/group/fetch/members/activity';
+  groupMemberChangeRoleUrl = environment.backendAppUrl + '/api/group/modify/members/modify/role';
+  groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
 
   groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
   groupJoinWordAddUrl = environment.backendAppUrl + "/api/group/modify/joincodes/add";
@@ -52,7 +57,7 @@ export class GroupService {
   statsMemberDetailsUrl = environment.backendAppUrl + "/api/group/stats/member-details";
   statsTopicInterestsUrl = environment.backendAppUrl + "/api/group/stats/topic-interests";
 
-  groupSearchUserByTermUrl = environment.backendAppUrl + "/api/group/fetch//user/names";
+  groupSearchUserByTermUrl = environment.backendAppUrl + "/api/user/related/user/names";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -159,7 +164,7 @@ export class GroupService {
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
       .map(
         result => {
-          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor));
+          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor, m.affiliations, m.canEditDetails));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -184,7 +189,7 @@ export class GroupService {
       .map(
         result => {
           console.log("Fetched new members", result);
-          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor));
+          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor,  m.affiliations, m.canEditDetails));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -234,7 +239,7 @@ export class GroupService {
   }
 
   assignTopicToMember(groupUid: string, membersUids: string[], topics: string[]): Observable<boolean> {
-    const fullUrl = this.groupAssignTopicsToMemebersUrl + "/" + groupUid;
+    const fullUrl = this.groupAssignTopicsToMembersUrl + "/" + groupUid;
     const params = {
       'memberUids': membersUids,
       'topics': topics
@@ -398,14 +403,77 @@ export class GroupService {
     })
   }
 
-  searchForUsers(searchTerm: string): Observable<GroupMembersAutocompleteResponse[]> {
+  searchForUsers(searchTerm: string): Observable<GroupRelatedUserResponse[]> {
     let params = new HttpParams()
       .set('fragment', searchTerm);
 
-    return this.httpClient.get<GroupMembersAutocompleteResponse[]>(this.groupSearchUserByTermUrl, {params: params})
+    return this.httpClient.get<GroupRelatedUserResponse[]>(this.groupSearchUserByTermUrl, {params: params})
       .map(resp => {
         return resp;
       })
   }
 
+  fetchGroupMemberByMemberUid(groupUid:string, memberUid: string): Observable<Membership> {
+    const fullUrl = this.groupFetchMemberByMemberUidUrl + '/' + groupUid;
+
+    let params = new HttpParams()
+      .set("memberUid", memberUid);
+
+    return this.httpClient.get<Membership>(fullUrl, {params: params})
+      .map(m => {
+        return new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor,  m.affiliations, m.canEditDetails);
+      } )
+  }
+
+  fetchMemberActivity(groupUid: string, memberUid: string): Observable<GroupMemberActivity[]>{
+    const fullUrl = this.groupFetchMemberActivityUrl + '/' + groupUid;
+
+    let params = new HttpParams()
+      .set("memberUid", memberUid);
+
+    return this.httpClient.get<GroupMemberActivity[]>(fullUrl, {params: params})
+      .map(resp => {
+        return resp.map(a => new GroupMemberActivity(
+          a.groupUid,
+          a.memberUid,
+          a.actionLogType,
+          a.logSubType,
+          a.nameOfRelatedEntity,
+          a.auxField,
+          a.dateOfLog != null ? DateTimeUtils.getDateFromJavaInstant(a.dateOfLog) : null,
+          a.dateOfLogEpochMillis,
+          a.topics
+        ));
+      })
+  }
+
+  updateGroupMemberRole(groupUid: string, memberUid: string, role: string): Observable<Membership>{
+    const fullUrl = this.groupMemberChangeRoleUrl + '/' + groupUid;
+
+    let params = new HttpParams()
+      .set("memberUid", memberUid)
+      .set("roleName", role);
+
+    return this.httpClient.post<Membership>(fullUrl, null, {params: params})
+      .map(resp =>  {
+        return resp;
+      })
+  }
+
+  updateGroupMemberDetails(groupUid: string, memberUid: string, name: string, email: string, phone: string, province: string):Observable<Membership>{
+    const fullUrl = this.groupMemberChangeDetailsUrl + '/' + groupUid;
+    let params = new HttpParams()
+      .set("memberUid", memberUid)
+      .set("name", name)
+      .set("email", email)
+      .set("phone", phone)
+      .set("province", province);
+
+    return this.httpClient.post<Membership>(fullUrl, null, {params: params})
+      .map(resp => {
+        return resp;
+      })
+  }
 }
+
+

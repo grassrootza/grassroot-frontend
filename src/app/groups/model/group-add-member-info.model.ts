@@ -1,4 +1,5 @@
 import {GroupRole} from "./group-role";
+import {UserProvince} from '../../user/model/user-province.enum';
 
 export class GroupAddMemberInfo {
 
@@ -8,10 +9,10 @@ export class GroupAddMemberInfo {
               public roleName: string = "ROLE_ORDINARY_MEMBER",
               public alernateNumbers: String[] = [],
               public emailAddress: String = "",
-              public province: string = "",
-              public affiliation: string = "",
-              public taskTeam: string = "",
-              public topic: string = "") {
+              public province: UserProvince = null,
+              public affiliations: string[] = [],
+              public taskTeams: string[] = [],
+              public topics: string[] = []) {
   }
 
   public getFormattedRoleName(): string {
