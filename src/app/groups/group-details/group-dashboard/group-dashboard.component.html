@@ -98,9 +98,10 @@
                   </option>
                 </select>
 
-                <div *ngIf="group" class="container">
-                  <div class="row task-team" *ngFor="let subGroup of group.subGroups">
-                    <div class="col-md-12 no-padding-horizontal">
+                <div *ngIf="group" class="container-fluid task-teams">
+                  <h5 [translate]="'group.dashboard.task-teams'">Task teams</h5>
+                  <div class="row" *ngFor="let subGroup of group.subGroups">
+                    <div class="col-md-12">
                       <div class="btn-group" role="group">
                         <button type="button" class="btn subgroup-link">{{subGroup.name}}</button>
                         <span class="input-group-addon" id="btnGroupAddon">{{subGroup.memberCount}}</span>

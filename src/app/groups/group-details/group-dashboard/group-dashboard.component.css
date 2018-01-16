@@ -73,7 +73,11 @@ h5 img {
   margin-bottom: 1rem;
 }
 
-.task-team {
+.task-teams {
+  margin-top: 2rem;
+}
+
+.task-teams .row {
   margin-top: 0.5rem;
 }
 
