@@ -50,6 +50,7 @@ export class GroupService {
   statsSourcesUrl = environment.backendAppUrl + "/api/group/stats/sources";
   statsOrganisationsUrl = environment.backendAppUrl + "/api/group/stats/organisations";
   statsMemberDetailsUrl = environment.backendAppUrl + "/api/group/stats/member-details";
+  statsTopicInterestsUrl = environment.backendAppUrl + "/api/group/stats/topic-interests";
 
   groupSearchUserByTermUrl = environment.backendAppUrl + "/api/group/fetch//user/names";
 
@@ -342,6 +343,16 @@ export class GroupService {
       .set("groupUid", groupUid);
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
+
+  fetchTopicInterestsStats(groupUid: string): Observable<any> {
+
+    const fullUrl = this.statsTopicInterestsUrl;
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
+
 
 
 

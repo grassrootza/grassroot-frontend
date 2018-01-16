@@ -7,9 +7,9 @@ import {Chart} from 'chart.js';
 import {GroupService} from "../../group.service";
 import * as moment from 'moment';
 import {UserProvince} from "../../../user/model/user-province.enum";
-import {TranslateService} from "@ngx-translate/core";
 import {GroupJoinMethod} from "../../model/join-method";
-import {MemberDetailPercent} from "./member-detail-percent.model";
+import {ItemPercentage} from "./member-detail-percent.model";
+import {Group} from "../../model/group.model";
 
 @Component({
   selector: 'app-group-dashboard',
@@ -19,6 +19,7 @@ import {MemberDetailPercent} from "./member-detail-percent.model";
 export class GroupDashboardComponent implements OnInit {
 
   private groupUid: string = null;
+  private group: Group = null;
   public meetings: Task[] = [];
   public votes: Task[] = [];
   public todos: Task[] = [];
@@ -26,12 +27,12 @@ export class GroupDashboardComponent implements OnInit {
   public memberGrowthPeriods = ["THIS_MONTH", "LAST_MONTH", "THIS_YEAR", "ALL_TIME"];
   public currentMemberGrowthPeriod = "THIS_MONTH";
 
-  public memberDetailsStats: MemberDetailPercent[] = [];
+  public memberDetailsStats: ItemPercentage[] = [];
+  public topicInterestsStats: ItemPercentage[] = [];
 
   constructor(private groupService: GroupService,
               private taskService: TaskService,
-              private route: ActivatedRoute,
-              private translateService: TranslateService) {
+              private route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -39,6 +40,17 @@ export class GroupDashboardComponent implements OnInit {
     this.route.parent.params.subscribe((params: Params) => {
       console.log("Activated route params: ", params);
       this.groupUid = params['id'];
+
+      this.groupService.loadGroupDetails(this.groupUid)
+        .subscribe(
+          groupDetails => {
+            this.group = groupDetails;
+          },
+          error => {
+            console.log("Error loading groups", error.status)
+          }
+        );
+
       console.log("Tasks Group id: ", this.groupUid);
       this.loadTasks();
       this.loadMemberGrowthStats(moment().year(), moment().month() + 1);
@@ -46,6 +58,7 @@ export class GroupDashboardComponent implements OnInit {
       this.loadSourcesStats();
       this.loadOrganisationsStats();
       this.loadMemberDetailsStats();
+      this.loadTopicInterestsStats();
     });
   }
 
@@ -292,10 +305,10 @@ export class GroupDashboardComponent implements OnInit {
       .subscribe(
         results => {
           console.log("member details stats: ", results);
-          let newStats: MemberDetailPercent[] = [];
+          let newStats: ItemPercentage[] = [];
           let details = Object.keys(results);
           details.forEach(detail => {
-              newStats.push(new MemberDetailPercent(detail, results[detail]));
+              newStats.push(new ItemPercentage(detail, results[detail]));
             }
           );
 
@@ -304,4 +317,27 @@ export class GroupDashboardComponent implements OnInit {
         }
       );
   }
+
+  public loadTopicInterestsStats() {
+    if (!this.groupUid)
+      return;
+
+    this.groupService.fetchTopicInterestsStats(this.groupUid)
+      .subscribe(
+        results => {
+          console.log("topic interests stats: ", results);
+          let newStats: ItemPercentage[] = [];
+          let details = Object.keys(results);
+          details.forEach(detail => {
+            newStats.push(new ItemPercentage(detail, results[detail]));
+            }
+          );
+
+          this.topicInterestsStats = newStats;
+          console.log("New topic interests stats", this.topicInterestsStats);
+        }
+      );
+  }
+
+
 }
