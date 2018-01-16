@@ -58,3 +58,12 @@ h5 img {
 .stat-panel {
   margin-top: 2rem;
 }
+
+.member-details-stat-label {
+  font-size: 0.8rem;
+}
+
+.member-details-stat {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}

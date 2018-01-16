@@ -1,5 +1,6 @@
-import {NgbDateTimeStruct} from "@zhaber/ng-bootstrap-datetimepicker";
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
+import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {NgbTime} from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
 
 export class BroadcastRequest {
 
@@ -99,7 +100,8 @@ export class BroadcastSchedule {
 
   sendType: string = "IMMEDIATE";
   sendDate: string = Date();
-  dateTimeEpochMillis: NgbDateTimeStruct = DateTimeUtils.fromDate(new Date());
+  dateEpochMillis: NgbDateStruct = DateTimeUtils.dateFromDate(new Date());
+  timeEpochMillis: NgbTimeStruct = DateTimeUtils.timeFromDate(new Date());
 
 }
 

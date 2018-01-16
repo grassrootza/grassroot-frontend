@@ -2,8 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {TaskService} from '../../../../task/task.service';
 import {GroupService} from '../../../group.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {Membership} from '../../../model/membership.model';
 
 @Component({
@@ -42,7 +41,8 @@ export class CreateVoteComponent implements OnInit {
       'voteType': 'YES_NO',
       'title': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': '',
-      'time': [this.fromDate(new Date()), Validators.required],
+      'date': [this.dateFromDate(new Date()), Validators.required],
+      'time': [this.timeFromDate(new Date()), Validators.required],
       'parentType': 'GROUP',
       'assignedMemberUids': []
     })
@@ -62,13 +62,22 @@ export class CreateVoteComponent implements OnInit {
     control.removeAt(i);
   }
 
-  fromDate(date): NgbDateTimeStruct {
-    if (date) {
-      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
-    } else {
+  dateFromDate(date): NgbDateStruct{
+    if(date){
+      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate()};
+    }else{
       return date;
     }
   }
+
+  timeFromDate(date): NgbTimeStruct{
+    if(date){
+      return {hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
+    }else{
+      return date;
+    }
+  }
+
 
   voteTypeChanged(voteType) {
     this.yesNoVote = voteType === 'YES_NO';
@@ -113,10 +122,12 @@ export class CreateVoteComponent implements OnInit {
 
 
       let description: string = this.createVoteForm.get("description").value;
-      let voteTime:NgbDateTimeStruct = this.createVoteForm.get("time").value;
-      let voteMilis: number = new Date(voteTime.year,
-        voteTime.month-1,
-        voteTime.day,
+
+      let voteDate: NgbDateStruct = this.createVoteForm.get('date').value;
+      let voteTime: NgbTimeStruct = this.createVoteForm.get('time').value;
+      let voteMilis: number = new Date(voteDate.year,
+        voteDate.month-1,
+        voteDate.day,
         voteTime.hour,
         voteTime.minute,
         voteTime.second).getTime();

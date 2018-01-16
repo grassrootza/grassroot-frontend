@@ -131,7 +131,8 @@ export class BroadcastService {
     return  {
       sendType: this.createRequest.sendType,
       sendDate: this.createRequest.sendDate,
-      dateTimeEpochMillis: DateTimeUtils.fromDate(new Date())
+      dateEpochMillis: DateTimeUtils.dateFromDate(new Date()),
+      timeEpochMillis: DateTimeUtils.timeFromDate(new Date())
     }
   }
 

@@ -1,4 +1,4 @@
-import {NgbDateTimeStruct} from "@zhaber/ng-bootstrap-datetimepicker";
+import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 
 export class DateTimeUtils {
 
@@ -11,20 +11,28 @@ export class DateTimeUtils {
     return date.getTime();
   }
 
-  public static fromDate(date): NgbDateTimeStruct {
+  public static dateFromDate(date): NgbDateStruct {
     if (date) {
-      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
+      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate()};
     } else {
       return date;
     }
   }
 
-  public static fromNgbStruct(dateTime: NgbDateTimeStruct): number {
-    return new Date(dateTime.year,
-      dateTime.month-1,
-      dateTime.day,
-      dateTime.hour,
-      dateTime.minute,
-      dateTime.second).getTime();
+  public static timeFromDate(date): NgbTimeStruct {
+    if (date) {
+      return {hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
+    } else {
+      return date;
+    }
+  }
+
+  public static fromNgbStruct(date: NgbDateStruct, time: NgbTimeStruct): number {
+    return new Date(date.year,
+      date.month-1,
+      date.day,
+      time.hour,
+      time.minute,
+      time.second).getTime();
   }
 }
