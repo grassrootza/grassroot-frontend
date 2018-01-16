@@ -8,6 +8,7 @@ import {GroupModifiedResponse} from '../../../model/group-modified-response.mode
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
 import {Observable} from 'rxjs/Observable';
 import {GroupMembersAutocompleteResponse} from '../../../model/group-members-autocomplete-response.model';
+import {Group} from '../../../model/group.model';
 
 declare var $: any;
 
@@ -32,8 +33,8 @@ export class GroupAddMemberComponent implements OnInit {
 
   @Input() groupUid: string = "";
 
-
   public addMemberForm: FormGroup;
+  public group: Group = null;
 
   province = UserProvince;
   provinceKeys: string[];
@@ -54,7 +55,6 @@ export class GroupAddMemberComponent implements OnInit {
     this.setupValidation();
     console.log("alright, ready to work");
 
-
   }
 
   private setupValidation() {
@@ -65,6 +65,11 @@ export class GroupAddMemberComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.groupUid);
+    this.groupService.loadGroupDetails(this.groupUid).subscribe(gr => {
+        this.group = gr
+    }
+    )
   }
 
   search = (text$: Observable<string>) =>

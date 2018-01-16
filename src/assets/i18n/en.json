@@ -244,6 +244,8 @@
         "email": "Email",
         "province": "Province (optional)",
         "affiliation": "Organisation / Affiliation (optional)",
+        "taskTeam": "Also add to task team",
+        "topics": "Assign topic",
         "complete": "Done! Member added",
         "failed": "Sorry, there was an error adding the member"
       },

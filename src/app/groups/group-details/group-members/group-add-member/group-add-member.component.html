@@ -68,6 +68,23 @@
               <input type="text" class="form-control form-control-em" id="affiliation" name="affiliation" [formControl]="addMemberForm.controls['affiliation']">
             </div>
           </div>
+
+          <div class="form-group row" *ngIf="group">
+            <div class="col-md-6 col-sm-12" *ngIf="group.subGroups.length > 0">
+              <label for="task-teams" class="grassroot-label-em">{{ 'group.allMembers.addMember.taskTeam' | translate }}</label>
+              <select id="task-teams" [formControl]="addMemberForm.controls['taskTeam']" class="form-control">
+                <option value="">Select</option>
+                <option *ngFor="let g of group.subGroups" [value]="g.groupUid">{{ g.name }}</option>
+              </select>
+            </div>
+            <div class="col-md-6 col-sm-12" *ngIf="group.topics.length > 0">
+              <label for="topics" class="grassroot-label-em">{{ 'group.allMembers.addMember.topics' | translate }}</label>
+              <select id="topics" [formControl]="addMemberForm.controls['topic']" class="form-control">
+                <option value="">Select</option>
+                <option *ngFor="let topic of group.topics" [value]="topic">{{ topic }}</option>
+              </select>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="submit" [disabled]="!addMemberForm.valid" class="btn btn-primary save-button">{{ 'action.save' | translate }}</button>

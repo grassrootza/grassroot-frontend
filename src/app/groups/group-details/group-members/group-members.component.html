@@ -65,4 +65,4 @@
 
 </div>
 
-<app-group-add-member [groupUid]="groupUid" (onMemberAdded)="onMemberAdded()" (onMemberAddingFailed)="onMemberFailed()"></app-group-add-member>
+<app-group-add-member *ngIf="group" [groupUid]="groupUid" (onMemberAdded)="onMemberAdded()" (onMemberAddingFailed)="onMemberFailed()"></app-group-add-member>
