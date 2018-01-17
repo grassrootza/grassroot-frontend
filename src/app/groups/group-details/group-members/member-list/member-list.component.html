@@ -44,7 +44,7 @@
       <div class="col-md-1">
         <div class="float-right">
           <div class="dropdown">
-            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
+            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" [disabled]=""
                     aria-haspopup="true" aria-expanded="false" [translate]="'group.allMembers.manage.manage'">
               Manage
             </button>
@@ -55,7 +55,7 @@
                   (click)="showAssignTopicToMemberModal(member)">Assign topic</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.taskTeam'"
                  (click)="showAddMemberToTaskTeamModal(member)">Add to task team</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="removeMember(member.user.uid)">Remove</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showMemberRemoveModal(member)">Remove</a>
             </div>
           </div>
         </div>
@@ -220,6 +220,56 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal">
           {{ 'action.ok' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="confirm-user-removal-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.members.removeTitle' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>{{ 'group.members.removeMember' | translate}}</h3>
+
+        <div class="container group-info-header d-none d-md-block">
+          <div class="row">
+            <div class="col-3">Name</div>
+            <div class="col-3">Role</div>
+            <div class="col-3">Phone</div>
+            <div class="col-3">email</div>
+          </div>
+        </div>
+        <div class="container group-info-row">
+          <div class="row flex flex-wrap">
+            <div class="col-3">
+              {{singleMemberManage.user.displayName}}
+            </div>
+            <div class="col-3">
+              {{singleMemberManage.roleName}}
+            </div>
+            <div class="col-3">
+              {{singleMemberManage.user.phoneNumber}}
+            </div>
+            <div class="col-3">
+              {{singleMemberManage.user.email}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="removeMember(singleMemberManage.user.uid)">
+          {{ 'group.members.yesButton' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'group.members.noButton' | translate }}
         </button>
       </div>
     </div>

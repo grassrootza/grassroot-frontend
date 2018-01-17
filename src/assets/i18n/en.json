@@ -398,7 +398,11 @@
       "importList": "Import list",
       "allMembers": "All members",
       "taskTeams": "Task teams",
-      "customFilter": "Custom filter"
+      "customFilter": "Custom filter",
+      "removeMember": "Are you sure you want to remove this member?",
+      "removeTitle": "Remove member",
+      "yesButton": "Yes,remove member",
+      "noButton": "No,cancel"
     },
     "settings": {
       "title": "Group settings",
