@@ -467,7 +467,7 @@ export class GroupService {
       .set("name", name)
       .set("email", email)
       .set("phone", phone)
-      .set("province", province);
+      .set("province", province != null ? province : "");
 
     return this.httpClient.post<Membership>(fullUrl, null, {params: params})
       .map(resp => {

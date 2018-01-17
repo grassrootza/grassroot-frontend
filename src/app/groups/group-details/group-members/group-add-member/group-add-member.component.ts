@@ -24,7 +24,6 @@ export class GroupAddMemberComponent implements OnInit {
   @Output() public onMemberAddingFailed = new EventEmitter<any>();
 
   @Input() groupUid: string = "";
-  @Input() member: Membership = null;
 
   public addMemberForm: FormGroup;
   public group: Group = null;
@@ -94,7 +93,7 @@ export class GroupAddMemberComponent implements OnInit {
 
   postMember() {
     console.log("okay, posting member ...");
-    if(this.addMemberForm.controls['affiliations'].value != ""){
+    if(this.addMemberForm.controls['affiliations'].value != null){
       let affiliations = this.addMemberForm.controls['affiliations'].value.split(",");
       this.addMemberForm.controls['affiliations'].setValue(affiliations);
     }
