@@ -47,6 +47,13 @@ export class GroupAllMembersComponent implements OnInit {
         );
       this.goToPage(0);
     });
+
+    this.groupService.groupMemberAdded.subscribe(success => {
+      if(success) {
+        this.goToPage(0);
+        this.groupService.groupMemberAddedSuccess(false);
+      }
+    })
   }
 
 

@@ -62,6 +62,8 @@ export class GroupService {
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
 
+  private groupMemberAdded_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public groupMemberAdded: Observable<boolean> = this.groupMemberAdded_.asObservable();
 
   constructor(private httpClient: HttpClient, private userService: UserService) {
   }
@@ -473,6 +475,10 @@ export class GroupService {
       .map(resp => {
         return resp;
       })
+  }
+
+  groupMemberAddedSuccess(success: boolean){
+    this.groupMemberAdded_.next(success);
   }
 }
 

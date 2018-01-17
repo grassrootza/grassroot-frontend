@@ -235,21 +235,6 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-        <div class="form-group row">
-          <div class="col-12">
-            <ng-template #rt let-r="result" let-t="term">
-              {{'group.allMembers.addMember.name' | translate}}: {{r.name}}, {{'group.allMembers.addMember.phone' | translate}}: {{r.phone}}
-            </ng-template>
-            <input id="typeahead-basic" type="text" class="form-control form-control-em" [ngbTypeahead]="search"
-                   [resultTemplate]="rt" [inputFormatter]="formatter"
-                   placeholder="{{'group.allMembers.addMember.searchMemberField' | translate}}" (selectItem)="pickedItem($event.item)"/>
-            <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
-            <span *ngIf="lengthInvalid">{{'group.allMembers.addMember.minimumLetters' | translate}}</span>
-          </div>
-        </div>
-      </div>
-
       <form [formGroup]="editMemberForm" (submit)="saveEditMember()">
         <div class="modal-body">
           <div class="form-group row">
