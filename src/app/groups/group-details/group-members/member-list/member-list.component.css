@@ -38,3 +38,7 @@
   background-color: white;
   border: solid 1px #cccccc;
 }
+
+.dropdown-item {
+  cursor: pointer;
+}

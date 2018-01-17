@@ -81,4 +81,6 @@ img.pin {
 
 }
 
-
+.dropdown-item {
+  cursor: pointer;
+}

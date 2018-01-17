@@ -5,8 +5,7 @@
 
 export const environment = {
   production: false,
-  // backendAppUrl: "http://localhost:8080",
-  backendAppUrl: "https://app.grassroot.org.za",
+  backendAppUrl: "http://localhost:8080",
   frontendAppUrl: "http://alpha.grassroot.cloud/join/", // leave as this for testing (bitly doesn't like localhost)
   ussdPrefix: `*134*1994*`,
   groupShortCode: '31660'
