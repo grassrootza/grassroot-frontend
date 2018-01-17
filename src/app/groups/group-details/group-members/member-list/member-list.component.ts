@@ -194,7 +194,7 @@ export class MemberListComponent implements OnInit {
 
   saveEditMember() {
     console.log("okay, posting member ...");
-    if(this.editMemberForm.controls['affiliations'].value != ""){
+    if(this.editMemberForm.controls['affiliations'].value != null){
       let affiliations = this.editMemberForm.controls['affiliations'].value.split(",");
       this.editMemberForm.controls['affiliations'].setValue(affiliations);
     }
@@ -236,14 +236,6 @@ export class MemberListComponent implements OnInit {
       $('#member-edit-modal').modal('hide');
       this.singleMemberManage = null;
     }
-
-    // this.groupService.confirmAddMembersToGroup(this.group.groupUid, [this.editMemberForm.value]).subscribe(result => {
-    //   console.log("got this result back: ", result);
-    //   $('#add-member-modal').modal("hide");
-    // }, error => {
-    //   console.log("well that didn't work: ", error);
-    //   $('#add-member-modal').modal("hide");
-    // })
   }
 
 }
