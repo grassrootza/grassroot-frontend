@@ -59,11 +59,38 @@ h5 img {
   margin-top: 2rem;
 }
 
-.member-details-stat-label {
+.stats-label {
   font-size: 0.8rem;
 }
 
-.member-details-stat {
+.member-details-stat, .topic-interests {
+  height: 15rem;
+  overflow: auto;
+}
+
+.member-details-stat .row, .topic-interests .row {
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+.task-teams {
+  margin-top: 2rem;
+}
+
+.task-teams .row {
+  margin-top: 0.5rem;
+}
+
+.input-group-addon {
+  background-color: #949DB0;
+  color: white;
+  font-size: 13px;
+  border: none;
+}
+
+.subgroup-link {
+  background-color: #F5F6FA;
+  color: #7A7D8C;
+  font-size: 14px;
+}
+

@@ -72,6 +72,7 @@ import { PwdResetNewComponent } from './login/password-reset/pwd-reset-new/pwd-r
 import { PasswordResetComponent } from './login/password-reset/password-reset.component';
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
 import { GroupAddMemberComponent } from './groups/group-details/group-members/group-add-member/group-add-member.component';
+import { GroupMembersProfileComponent } from './groups/group-details/group-members/group-members-profile/group-members-profile.component';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -110,6 +111,7 @@ const routes: Routes = [
           {path: 'all', component: GroupAllMembersComponent, canActivate: [LoggedInGuard]},
           {path: 'task-teams', component: GroupTaskTeamsComponent, canActivate: [LoggedInGuard]},
           {path: 'filter', component: GroupCustomFilterComponent, canActivate: [LoggedInGuard]},
+          {path: ':memberUid', component:GroupMembersProfileComponent, canActivate: [LoggedInGuard]}
         ]
       },
       {path: 'settings', component: GroupSettingsComponent, canActivate: [LoggedInGuard]}
@@ -202,7 +204,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PwdResetValidateComponent,
     PwdResetNewComponent,
     PasswordResetComponent,
-    GroupAddMemberComponent
+    GroupAddMemberComponent,
+    GroupMembersProfileComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent,

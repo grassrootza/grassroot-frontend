@@ -54,6 +54,7 @@ export class GroupAllMembersComponent implements OnInit {
     this.groupService.fetchGroupMembers(this.groupUid, page, 10)
       .subscribe(
         membersPage => {
+          console.log(membersPage);
           this.currentPage = membersPage;
         },
         error => {

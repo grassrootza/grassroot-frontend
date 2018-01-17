@@ -147,11 +147,13 @@
       "add-meeting": "Schedule a new meeting",
       "add-vote": "Create a new vote",
       "add-todo": "Add a new action item",
+      "task-teams": "Task teams",
       "stats.title.member-growth": "Member growth",
       "stats.title.provinces": "Provinces",
       "stats.title.sources": "Sources",
       "stats.title.organisations": "Organisations",
       "stats.title.member-details": "Member details",
+      "stats.title.topic-interests": "Topic interests",
       "member-growth.period.THIS_MONTH": "This month",
       "member-growth.period.LAST_MONTH": "Last month",
       "member-growth.period.THIS_YEAR": "This year",
@@ -244,8 +246,13 @@
         "email": "Email",
         "province": "Province (optional)",
         "affiliation": "Organisation / Affiliation (optional)",
+        "taskTeam": "Also add to task team(s)",
+        "topics": "Assign topic(s)",
         "complete": "Done! Member added",
-        "failed": "Sorry, there was an error adding the member"
+        "failed": "Sorry, there was an error adding the member",
+        "errors":{
+          "name": "Please enter member name"
+        }
       },
       "manage":{
         "manage": "Manage",
@@ -285,7 +292,22 @@
           "body": "This group does not have any topics"
         }
 
+      },
+      "edit":{
+        "title": "Edit member",
+        "notAllowed": {
+          "title": "Can't edit details",
+          "body": "You are not allowed to edit details for this user"
+        }
       }
+    },
+    "memberProfile":{
+      "activity": "Activity",
+      "role": "Role: ",
+      "phone": "Phone: ",
+      "email": "Email: ",
+      "province": "Province: ",
+      "taggedWithTopics": "Tagged with topics: "
     },
     "import": {
       "nav": {

@@ -25,7 +25,7 @@
     </div>
 
 
-    <app-member-list [currentPage]="currentPage" [group]="group"  (memberRemoved)="memberRemoved()"></app-member-list>
+    <app-member-list [currentPage]="currentPage" [group]="group"  (memberRemoved)="memberRemoved()" (shouldReloadList)="goToPage(0)"></app-member-list>
 
   </div>
 

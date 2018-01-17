@@ -97,6 +97,21 @@
                           value="{{period}}" [translate]="'group.dashboard.member-growth.period.' + period">Period
                   </option>
                 </select>
+
+                <div *ngIf="group" class="container-fluid task-teams">
+                  <h5 [translate]="'group.dashboard.task-teams'">Task teams</h5>
+                  <div class="row" *ngFor="let subGroup of group.subGroups">
+                    <div class="col-md-12">
+                      <div class="btn-group" role="group">
+                        <button type="button" class="btn subgroup-link">{{subGroup.name}}</button>
+                        <span class="input-group-addon" id="btnGroupAddon">{{subGroup.memberCount}}</span>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+
+
               </div>
             </div>
           </div>
@@ -145,9 +160,9 @@
       <div class="card">
         <div class="card-body">
           <h5 [translate]="'group.dashboard.stats.title.member-details'">Member details</h5>
-          <div class="container">
-            <div *ngFor="let mds of memberDetailsStats" class="row member-details-stat">
-              <div class="col-sm-4 member-details-stat-label"
+          <div class="container member-details-stat">
+            <div *ngFor="let mds of memberDetailsStats" class="row">
+              <div class="col-sm-4 stats-label"
                    [translate]="'group.dashboard.member-details.stats.' + mds.name">
                 Detail
               </div>
@@ -164,6 +179,30 @@
         </div>
       </div>
     </div>
+
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 [translate]="'group.dashboard.stats.title.topic-interests'">Topic interests</h5>
+          <div class="container topic-interests">
+            <div *ngFor="let mds of topicInterestsStats" class="rowt">
+              <div class="col-sm-4 stats-label">
+                mds.name
+              </div>
+              <div class="col-sm-8">
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                       [style.width]="mds.percent + '%'"
+                       [attr.aria-valuenow]="mds.percent" aria-valuemin="0" aria-valuemax="100">{{mds.percent}}%
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 

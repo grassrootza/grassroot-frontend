@@ -7,18 +7,11 @@ import {GroupRole} from '../../../model/group-role';
 import {GroupModifiedResponse} from '../../../model/group-modified-response.model';
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
 import {Observable} from 'rxjs/Observable';
-import {GroupMembersAutocompleteResponse} from '../../../model/group-members-autocomplete-response.model';
+import {Group} from '../../../model/group.model';
+import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';
+import {Membership} from '../../../model/membership.model';
 
 declare var $: any;
-
-const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'California', 'Colorado',
-  'Connecticut', 'Delaware', 'District Of Columbia', 'Federated States Of Micronesia', 'Florida', 'Georgia',
-  'Guam', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine',
-  'Marshall Islands', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana',
-  'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Northern Mariana Islands', 'Ohio', 'Oklahoma', 'Oregon', 'Palau', 'Pennsylvania', 'Puerto Rico', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virgin Islands', 'Virginia',
-  'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
 
 @Component({
   selector: 'app-group-add-member',
@@ -31,9 +24,10 @@ export class GroupAddMemberComponent implements OnInit {
   @Output() public onMemberAddingFailed = new EventEmitter<any>();
 
   @Input() groupUid: string = "";
-
+  @Input() member: Membership = null;
 
   public addMemberForm: FormGroup;
+  public group: Group = null;
 
   province = UserProvince;
   provinceKeys: string[];
@@ -54,7 +48,6 @@ export class GroupAddMemberComponent implements OnInit {
     this.setupValidation();
     console.log("alright, ready to work");
 
-
   }
 
   private setupValidation() {
@@ -65,6 +58,10 @@ export class GroupAddMemberComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.groupService.loadGroupDetails(this.groupUid).subscribe(gr => {
+        this.group = gr
+    }
+    )
   }
 
   search = (text$: Observable<string>) =>
@@ -81,20 +78,27 @@ export class GroupAddMemberComponent implements OnInit {
           }))
       .merge(this.hideSearchingWhenUnsubscribed);
 
-  formatter(x: { value: string, label: string }) {
-    return "Name: " + x.label + ", Phone number: " + x.value;
+  formatter(x: { name: string, phone: string }) {
+    return "Name: " + x.name + ", Phone number: " + x.phone;
   }
 
-  pickedItem(pickedUser: GroupMembersAutocompleteResponse){
+  pickedItem(pickedUser: GroupRelatedUserResponse){
     //TODO: implement filling rest of the form with user data when user is picked, need to fetch user details from server
-    this.addMemberForm.controls['displayName'].setValue(pickedUser.label);
+    this.addMemberForm.controls['displayName'].setValue(pickedUser.name);
     this.addMemberForm.controls['roleName'].setValue("ROLE_ORDINARY_MEMBER");
-    this.addMemberForm.controls['memberMsisdn'].setValue(pickedUser.value);
+    this.addMemberForm.controls['memberMsisdn'].setValue(pickedUser.phone);
+    this.addMemberForm.controls['emailAddress'].setValue(pickedUser.email);
+    this.addMemberForm.controls['province'].setValue(pickedUser.province);
 
   }
 
   postMember() {
     console.log("okay, posting member ...");
+    if(this.addMemberForm.controls['affiliations'].value != ""){
+      let affiliations = this.addMemberForm.controls['affiliations'].value.split(",");
+      this.addMemberForm.controls['affiliations'].setValue(affiliations);
+    }
+
     this.groupService.confirmAddMembersToGroup(this.groupUid, [this.addMemberForm.value]).subscribe(result => {
       console.log("got this result back: ", result);
       $('#add-member-modal').modal("hide");

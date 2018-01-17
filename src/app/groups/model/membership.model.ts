@@ -23,7 +23,9 @@ export class Membership {
               public roleName: GroupRole,
               public topics: string[],
               public joinMethod: string,
-              public joinMethodDescriptor: string) {
+              public joinMethodDescriptor: string,
+              public affiliations: string[],
+              public canEditDetails: boolean) {
   }
 
   public joinMethodKey(): string {
