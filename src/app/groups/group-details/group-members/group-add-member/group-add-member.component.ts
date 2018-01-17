@@ -10,6 +10,13 @@ import {Observable} from 'rxjs/Observable';
 import {Group} from '../../../model/group.model';
 import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';
 import {Membership} from '../../../model/membership.model';
+// doing these manually as else there are warnings of very heavy import load if take all rxjs
+import "rxjs/add/operator/do";
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/merge";
+import "rxjs/add/operator/switchMap";
+import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/distinctUntilChanged";
 
 declare var $: any;
 
