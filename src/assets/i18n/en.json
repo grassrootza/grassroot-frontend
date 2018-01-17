@@ -147,10 +147,23 @@
       "add-meeting": "Schedule a new meeting",
       "add-vote": "Create a new vote",
       "add-todo": "Add a new action item",
+      "task-teams": "Task teams",
+      "stats.title.member-growth": "Member growth",
+      "stats.title.provinces": "Provinces",
+      "stats.title.sources": "Sources",
+      "stats.title.organisations": "Organisations",
+      "stats.title.member-details": "Member details",
+      "stats.title.topic-interests": "Topic interests",
       "member-growth.period.THIS_MONTH": "This month",
       "member-growth.period.LAST_MONTH": "Last month",
       "member-growth.period.THIS_YEAR": "This year",
-      "member-growth.period.ALL_TIME": "All time"
+      "member-growth.period.ALL_TIME": "All time",
+      "member-details.stats.EMAIL": "Email",
+      "member-details.stats.PHONE": "Phone number",
+      "member-details.stats.PROVINCE": "Province",
+      "member-details.stats.ORGANISATION": "Organisation",
+      "member-details.stats.FACEBOOK": "Facebook",
+      "member-details.stats.TWITTER": "Twitter"
     },
     "joinMethods": {
       "modalTitle": "Ways to sign up members",
@@ -225,14 +238,21 @@
       },
       "addMember": {
         "title": "Add new member",
+        "searchMemberField": "Look up existing grassroot member by name or contact details",
+        "minimumLetters": "Minimum 3 letters required for search",
         "name": "Name",
         "role": "Role",
         "phone": "Cellphone number",
         "email": "Email",
         "province": "Province (optional)",
         "affiliation": "Organisation / Affiliation (optional)",
+        "taskTeam": "Also add to task team(s)",
+        "topics": "Assign topic(s)",
         "complete": "Done! Member added",
-        "failed": "Sorry, there was an error adding the member"
+        "failed": "Sorry, there was an error adding the member",
+        "errors":{
+          "name": "Please enter member name"
+        }
       },
       "manage":{
         "manage": "Manage",
@@ -272,7 +292,22 @@
           "body": "This group does not have any topics"
         }
 
+      },
+      "edit":{
+        "title": "Edit member",
+        "notAllowed": {
+          "title": "Can't edit details",
+          "body": "You are not allowed to edit details for this user"
+        }
       }
+    },
+    "memberProfile":{
+      "activity": "Activity",
+      "role": "Role: ",
+      "phone": "Phone: ",
+      "email": "Email: ",
+      "province": "Province: ",
+      "taggedWithTopics": "Tagged with topics: "
     },
     "import": {
       "nav": {
@@ -574,7 +609,8 @@
       "confirm": "Confirm new password",
       "change": "Change password",
       "completed": "Done, your password has been updated",
-      "error": "Sorry, there was an error changing your password, please check your old password again"
+      "error": "Sorry, there was an error changing your password, please check your old password again",
+      "mismatch": "Sorry, your passwords do not match"
     },
     "account": {
       "title": "Under construction"

@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {UserProvince} from "../model/user-province.enum";
 import {UserService} from "../user.service";
 import {UserProfile} from "../user.model";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../utils/alert.service";
+import {NumberValidator} from "../../validators/NumberValidator";
 
 declare var $: any;
 
@@ -25,11 +26,20 @@ export class ProfileFormComponent implements OnInit {
               private alertService: AlertService) {
     this.provinceKeys = Object.keys(this.provinces);
     // todo : validation of numbers, email, etc
+
     console.log("empty profile looks like: ", new UserProfile());
     this.profileForm = this.formBuilder.group(new UserProfile());
     this.otpForm = this.formBuilder.group({
       'otp': ['', Validators.compose([Validators.required, Validators.minLength(3)])]
-    })
+    });
+
+    this.profileForm = new FormGroup({
+        email:new FormControl('',[Validators.required,Validators.pattern("[^ @]*@[^ @]*"),Validators.email]),
+        name:new FormControl('',Validators.required),
+        phone:new FormControl('',[Validators.required,NumberValidator.numberValidator]),
+        province:new FormControl('',Validators.required),
+        language:new FormControl('',Validators.required)
+    });
   }
 
   ngOnInit() {
@@ -39,6 +49,7 @@ export class ProfileFormComponent implements OnInit {
 
   saveChanges() {
     console.log("saving changes! form looks like: ", this.profileForm.value);
+    console.log("User email......" + this.userProfile.email);
     this.userProfile = this.profileForm.value;
     this.userService.updateDetails(this.userProfile)
       .subscribe(message => {
@@ -46,6 +57,9 @@ export class ProfileFormComponent implements OnInit {
           $('#enter-otp-modal').modal("show");
         } else if (message == 'UPDATED') {
           this.alertService.alert("user.profile.completed");
+          setTimeout(()=>{
+            this.alertService.clear();
+          },5000);
         }
     }, error => {
         console.log("that didn't work, error: ", error);
@@ -59,10 +73,12 @@ export class ProfileFormComponent implements OnInit {
         $("#enter-otp-modal").modal('hide');
         console.log("may have worked? ", message);
         this.alertService.alert("user.profile.completed");
+        setTimeout(()=>{
+          this.alertService.clear();
+        },5000);
       }, error => {
         // display an error message ...
         console.log("ah, an error: ", error);
       });
   }
-
 }

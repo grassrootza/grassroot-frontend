@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker';
 import {TaskService} from '../../../../task/task.service';
 import {GroupService} from '../../../group.service';
 import {Membership} from '../../../model/membership.model';
+import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-create-meeting',
@@ -28,7 +28,8 @@ export class CreateMeetingComponent implements OnInit {
     this.createMeetingForm = this.formBuilder.group({
       'subject': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'location': ['', Validators.required],
-      'dateTimeEpochMillis': [this.fromDate(new Date()), Validators.required],
+      'date': [this.dateFromDate(new Date()), Validators.required],
+      'time': [this.timeFromDate(new Date()), Validators.required],
       'parentType': 'GROUP',
       'publicMeeting': false,
       'assignedMemberUids': []
@@ -44,10 +45,18 @@ export class CreateMeetingComponent implements OnInit {
 
   }
 
-  fromDate(date): NgbDateTimeStruct {
-    if (date) {
-      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
-    } else {
+  dateFromDate(date): NgbDateStruct{
+    if(date){
+      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate()};
+    }else{
+      return date;
+    }
+  }
+
+  timeFromDate(date): NgbTimeStruct{
+    if(date){
+      return {hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
+    }else{
       return date;
     }
   }
@@ -57,13 +66,16 @@ export class CreateMeetingComponent implements OnInit {
       let parentType: string = this.createMeetingForm.get("parentType").value;
       let meetingSubject: string = this.createMeetingForm.get("subject").value;
       let meetingLocation: string = this.createMeetingForm.get("location").value;
-      let meetingDateTime:NgbDateTimeStruct = this.createMeetingForm.get("dateTimeEpochMillis").value;
-      let dateTimeEpochMillis: number = new Date(meetingDateTime.year,
-        meetingDateTime.month-1,
-        meetingDateTime.day,
-        meetingDateTime.hour,
-        meetingDateTime.minute,
-        meetingDateTime.second).getTime();
+
+      let voteDate: NgbDateStruct = this.createMeetingForm.get('date').value;
+      let voteTime: NgbTimeStruct = this.createMeetingForm.get('time').value;
+      let dateTimeEpochMillis: number = new Date(voteDate.year,
+        voteDate.month-1,
+        voteDate.day,
+        voteTime.hour,
+        voteTime.minute,
+        voteTime.second).getTime();
+
       let publicMeeting: boolean = this.createMeetingForm.get("publicMeeting").value;
 
       let assignedMemberUids: string[] = [];

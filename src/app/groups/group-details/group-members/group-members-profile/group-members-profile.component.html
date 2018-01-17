@@ -1,0 +1,61 @@
+<div class="card" style="margin-top: 32px;" *ngIf="member">
+  <div class="card-body events-box">
+    <div class="row">
+      <div class="col-9">
+        <h2>{{member.user.displayName}}</h2>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <span class="bold-text">{{'group.memberProfile.role' | translate}}</span>{{member.roleName}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6">
+        <span class="bold-text">{{'group.memberProfile.phone' | translate}}</span>{{member.nationalNumber()}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span  class="bold-text">{{'group.memberProfile.email' | translate}}</span>{{member.user.email}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6">
+        <span  class="bold-text">{{'group.memberProfile.province' | translate}}</span>{{member.formattedProvince()}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 32px;" *ngIf="activities">
+  <div class="card-body events-box">
+    <div class="row">
+      <div class="col-9">
+        <h2>{{'group.memberProfile.activity' | translate}}</h2>
+      </div>
+    </div>
+    <div class="card activity" *ngFor="let activity of activities">
+      <div class="card-body events-box">
+        <div class="row">
+          <div class="col-12">
+            {{activity.getFormattedDateOfLog()}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <img src="{{activity.getActionLogIcon()}}"> {{activity.getActionDescription()}}: {{activity.nameOfRelatedEntity}}
+          </div>
+        </div>
+        <div class="row" *ngIf="activity.topics">
+          <div class="col-12">
+            {{'group.memberProfile.taggedWithTopics' | translate}}
+            <span>{{activity.topics.join(",")}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

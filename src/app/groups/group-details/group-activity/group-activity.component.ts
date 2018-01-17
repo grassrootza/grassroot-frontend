@@ -5,11 +5,6 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {TaskService} from '../../../task/task.service';
 import {Task} from '../../../task/task.model';
 import {TaskType} from '../../../task/task-type';
-import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker';
-import {NgbModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
-import {CreateMeetingComponent} from './create-meeting/create-meeting.component';
-import {CreateVoteComponent} from './create-vote/create-vote.component';
-import {CreateTodoComponent} from './create-todo/create-todo.component';
 
 declare var $: any;
 
@@ -24,7 +19,6 @@ export class GroupActivityComponent implements OnInit {
   public groupUid: string = "";
   public upcomingTasks: Task[] = [];
   public taskTypes = TaskType;
-  model: NgbDateTimeStruct;
 
 
 

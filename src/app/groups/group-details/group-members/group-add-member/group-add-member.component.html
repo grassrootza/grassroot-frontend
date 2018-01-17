@@ -7,12 +7,30 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      <div class="modal-body">
+        <div class="form-group row">
+          <div class="col-12">
+            <ng-template #rt let-r="result" let-t="term">
+              {{'group.allMembers.addMember.name' | translate}}: {{r.name}}, {{'group.allMembers.addMember.phone' | translate}}: {{r.phone}}
+            </ng-template>
+            <input id="typeahead-basic" type="text" class="form-control form-control-em" [ngbTypeahead]="search"
+                   [resultTemplate]="rt" [inputFormatter]="formatter"
+                   placeholder="{{'group.allMembers.addMember.searchMemberField' | translate}}" (selectItem)="pickedItem($event.item)"/>
+            <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
+            <span *ngIf="lengthInvalid">{{'group.allMembers.addMember.minimumLetters' | translate}}</span>
+          </div>
+        </div>
+      </div>
+
       <form [formGroup]="addMemberForm" (submit)="postMember()">
         <div class="modal-body">
           <div class="form-group row">
             <div class="col-md-6 col-sm-12">
               <label for="name" class="grassroot-label-em">{{ 'group.allMembers.addMember.name' | translate }}</label>
               <input type="text" class="form-control form-control-em" id="name" name="name" [formControl]="addMemberForm.controls['displayName']">
+              <div class="error" [hidden]="addMemberForm.controls['displayName'].valid || addMemberForm.controls['displayName'].untouched">
+                {{ 'group.allMembers.addMember.errors.name' | translate }}
+              </div>
             </div>
             <div class="col-md-6 col-sm-12">
               <label for="role" class="grassroot-label-em">{{ 'group.allMembers.addMember.role' | translate }}</label>
@@ -35,7 +53,10 @@
           </div>
           <div class="form-group row footnote">
             <div class="col-12">
-            <p class="footnote">{{ 'registration.footnote' | translate }}</p>
+              <div class="error">
+                {{ 'registration.footnote' | translate }}
+              </div>
+            <!--<p class="footnote">{{ 'registration.footnote' | translate }}</p>-->
             </div>
           </div>
 
@@ -43,13 +64,28 @@
             <div class="col-md-6 col-sm-12">
               <label for="province" class="grassroot-label-em">{{ 'group.allMembers.addMember.province' | translate }}</label>
               <select id="province" [formControl]="addMemberForm.controls['province']" class="form-control">
-                <option value="">Select</option>
+                <option [value]="null">Select</option>
                 <option *ngFor="let p of provinceKeys" [value]="p">{{ province[p] }}</option>
               </select>
             </div>
             <div class="col-md-6 col-sm-12">
               <label for="affiliation" class="grassroot-label-em">{{ 'group.allMembers.addMember.affiliation' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="affiliation" name="affiliation" [formControl]="addMemberForm.controls['affiliation']">
+              <input type="text" class="form-control form-control-em" id="affiliation" name="affiliation" [formControl]="addMemberForm.controls['affiliations']">
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="group">
+            <div class="col-md-6 col-sm-12" *ngIf="group.subGroups.length > 0">
+              <label for="task-teams" class="grassroot-label-em">{{ 'group.allMembers.addMember.taskTeam' | translate }}</label>
+              <select id="task-teams" [formControl]="addMemberForm.controls['taskTeams']" class="form-control" multiple>
+                <option *ngFor="let g of group.subGroups" [value]="g.groupUid">{{ g.name }}</option>
+              </select>
+            </div>
+            <div class="col-md-6 col-sm-12" *ngIf="group.topics.length > 0">
+              <label for="topics" class="grassroot-label-em">{{ 'group.allMembers.addMember.topics' | translate }}</label>
+              <select id="topics" [formControl]="addMemberForm.controls['topics']" class="form-control" multiple>
+                <option *ngFor="let topic of group.topics" [value]="topic">{{ topic }}</option>
+              </select>
             </div>
           </div>
         </div>

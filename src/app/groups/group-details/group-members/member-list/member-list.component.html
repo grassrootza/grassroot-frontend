@@ -49,8 +49,8 @@
               Manage
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.view'">View</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.edit'">Edit</a>
+              <a class="dropdown-item" routerLink="../{{member.user.uid}}" [translate]="'group.allMembers.manage.view'">View</a>
+              <a class="dropdown-item disabled" (click)="showEditModal(member)" [translate]="'group.allMembers.manage.edit'">Edit</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.topics'"
                   (click)="showAssignTopicToMemberModal(member)">Assign topic</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.taskTeam'"
@@ -231,6 +231,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ 'group.members.removeTitle' | translate }}</h5>
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -270,8 +271,10 @@
         </button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           {{ 'group.members.noButton' | translate }}
+
         </button>
       </div>
     </div>
   </div>
 </div>
+

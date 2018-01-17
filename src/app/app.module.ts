@@ -59,7 +59,6 @@ import {ProfileFormComponent} from './user/profile-form/profile-form.component';
 import {PasswordComponent} from './user/password/password.component';
 import {AlertService} from "./utils/alert.service";
 import {AccountComponent} from './user/account/account.component';
-import {NgbDateTimePickerModule} from '@zhaber/ng-bootstrap-datetimepicker';
 import {CreateMeetingComponent} from './groups/group-details/group-activity/create-meeting/create-meeting.component';
 import {CreateVoteComponent} from './groups/group-details/group-activity/create-vote/create-vote.component';
 import {CreateTodoComponent} from './groups/group-details/group-activity/create-todo/create-todo.component';
@@ -73,6 +72,7 @@ import { PwdResetNewComponent } from './login/password-reset/pwd-reset-new/pwd-r
 import { PasswordResetComponent } from './login/password-reset/password-reset.component';
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
 import { GroupAddMemberComponent } from './groups/group-details/group-members/group-add-member/group-add-member.component';
+import { GroupMembersProfileComponent } from './groups/group-details/group-members/group-members-profile/group-members-profile.component';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -111,6 +111,7 @@ const routes: Routes = [
           {path: 'all', component: GroupAllMembersComponent, canActivate: [LoggedInGuard]},
           {path: 'task-teams', component: GroupTaskTeamsComponent, canActivate: [LoggedInGuard]},
           {path: 'filter', component: GroupCustomFilterComponent, canActivate: [LoggedInGuard]},
+          {path: ':memberUid', component:GroupMembersProfileComponent, canActivate: [LoggedInGuard]}
         ]
       },
       {path: 'settings', component: GroupSettingsComponent, canActivate: [LoggedInGuard]}
@@ -203,7 +204,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     PwdResetValidateComponent,
     PwdResetNewComponent,
     PasswordResetComponent,
-    GroupAddMemberComponent
+    GroupAddMemberComponent,
+    GroupMembersProfileComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent,
@@ -235,8 +237,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         whitelistedDomains: ['localhost:8080', 'staging.grassroot.org.za']
       }
     }),
-    NgbModule.forRoot(),
-    NgbDateTimePickerModule
+    NgbModule.forRoot()
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},

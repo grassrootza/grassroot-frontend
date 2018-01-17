@@ -1,11 +1,15 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {GroupAddMemberInfo} from "../../../model/group-add-member-info.model";
-import {GroupService} from "../../../group.service";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {UserProvince} from "../../../../user/model/user-province.enum";
-import {GroupRole} from "../../../model/group-role";
-import {GroupModifiedResponse} from "../../../model/group-modified-response.model";
-import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../../../../utils/CustomValidators";
+import {GroupAddMemberInfo} from '../../../model/group-add-member-info.model';
+import {GroupService} from '../../../group.service';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UserProvince} from '../../../../user/model/user-province.enum';
+import {GroupRole} from '../../../model/group-role';
+import {GroupModifiedResponse} from '../../../model/group-modified-response.model';
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
+import {Observable} from 'rxjs/Observable';
+import {Group} from '../../../model/group.model';
+import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';
+import {Membership} from '../../../model/membership.model';
 
 declare var $: any;
 
@@ -20,8 +24,10 @@ export class GroupAddMemberComponent implements OnInit {
   @Output() public onMemberAddingFailed = new EventEmitter<any>();
 
   @Input() groupUid: string = "";
+  @Input() member: Membership = null;
 
   public addMemberForm: FormGroup;
+  public group: Group = null;
 
   province = UserProvince;
   provinceKeys: string[];
@@ -29,12 +35,19 @@ export class GroupAddMemberComponent implements OnInit {
   role = GroupRole;
   roleKeys: string[];
 
+  searching = false;
+  lengthInvalid = true;
+  searchFailed = false;
+  hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
+
+
   constructor(private groupService: GroupService, private fb: FormBuilder) {
     this.provinceKeys = Object.keys(this.province);
     this.roleKeys = Object.keys(GroupRole);
     this.addMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("emailAddress", "memberMsisdn")});
     this.setupValidation();
     console.log("alright, ready to work");
+
   }
 
   private setupValidation() {
@@ -45,11 +58,47 @@ export class GroupAddMemberComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.groupService.loadGroupDetails(this.groupUid).subscribe(gr => {
+        this.group = gr
+    }
+    )
+  }
+
+  search = (text$: Observable<string>) =>
+    text$
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .do(term => term.length < 3 ? this.lengthInvalid = true : this.lengthInvalid = false)
+      .switchMap(term => term.length < 3 ?  Observable.of([]) :
+        this.groupService.searchForUsers(term)
+          .do(() => this.searchFailed = false)
+          .catch(() => {
+            this.searchFailed = true;
+            return Observable.of([]);
+          }))
+      .merge(this.hideSearchingWhenUnsubscribed);
+
+  formatter(x: { name: string, phone: string }) {
+    return "Name: " + x.name + ", Phone number: " + x.phone;
+  }
+
+  pickedItem(pickedUser: GroupRelatedUserResponse){
+    //TODO: implement filling rest of the form with user data when user is picked, need to fetch user details from server
+    this.addMemberForm.controls['displayName'].setValue(pickedUser.name);
+    this.addMemberForm.controls['roleName'].setValue("ROLE_ORDINARY_MEMBER");
+    this.addMemberForm.controls['memberMsisdn'].setValue(pickedUser.phone);
+    this.addMemberForm.controls['emailAddress'].setValue(pickedUser.email);
+    this.addMemberForm.controls['province'].setValue(pickedUser.province);
 
   }
 
   postMember() {
     console.log("okay, posting member ...");
+    if(this.addMemberForm.controls['affiliations'].value != ""){
+      let affiliations = this.addMemberForm.controls['affiliations'].value.split(",");
+      this.addMemberForm.controls['affiliations'].setValue(affiliations);
+    }
+
     this.groupService.confirmAddMembersToGroup(this.groupUid, [this.addMemberForm.value]).subscribe(result => {
       console.log("got this result back: ", result);
       $('#add-member-modal').modal("hide");

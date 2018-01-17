@@ -1,10 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {TaskService} from '../../../../task/task.service';
 import {GroupService} from '../../../group.service';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {NgbDateTimeStruct} from '@zhaber/ng-bootstrap-datetimepicker'
-import {Membership, MembersPage} from '../../../model/membership.model';
+import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {Membership} from '../../../model/membership.model';
 
 const TodoTypes: any[] =
   [
@@ -62,7 +61,8 @@ export class CreateTodoComponent implements OnInit {
     this.createTodoForm = this.formBuilder.group({
       'todoType': TodoTypes[0].value,
       'subject': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
-      'dueDateTime': [this.fromDate(new Date()), Validators.required],
+      'date': [this.dateFromDate(new Date()), Validators.required],
+      'time': [this.timeFromDate(new Date()), Validators.required],
       'parentType': 'GROUP'
     });
 
@@ -110,10 +110,18 @@ export class CreateTodoComponent implements OnInit {
 
   }
 
-  fromDate(date): NgbDateTimeStruct {
-    if (date) {
-      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate(), hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
-    } else {
+  dateFromDate(date): NgbDateStruct{
+    if(date){
+      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate()};
+    }else{
+      return date;
+    }
+  }
+
+  timeFromDate(date): NgbTimeStruct{
+    if(date){
+      return {hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
+    }else{
       return date;
     }
   }
@@ -179,13 +187,15 @@ export class CreateTodoComponent implements OnInit {
         responseTag = this.createTodoForm.get("responseTag").value;
       }
 
-      let dueTime:NgbDateTimeStruct = this.createTodoForm.get("dueDateTime").value;
-      let dueTimemilis: number = new Date(dueTime.year,
-        dueTime.month-1,
-        dueTime.day,
-        dueTime.hour,
-        dueTime.minute,
-        dueTime.second).getTime();
+      let voteDate: NgbDateStruct = this.createTodoForm.get('date').value;
+      let voteTime: NgbTimeStruct = this.createTodoForm.get('time').value;
+      let dueTimemilis: number = new Date(voteDate.year,
+        voteDate.month-1,
+        voteDate.day,
+        voteTime.hour,
+        voteTime.minute,
+        voteTime.second).getTime();
+
 
       let assignedMemberUids: string[] = [];
       if(this.createTodoForm.get("assignedMemberUids") != null){
