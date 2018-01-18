@@ -48,11 +48,12 @@
   </div>
 
 
-  <app-create-meeting [groupUid]="groupUid" (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+  <app-create-meeting *ngIf="group" [groupUid]="group.groupUid"
+                      (meetingSaved)="meetingSaved($event)"></app-create-meeting>
 
-  <app-create-vote [groupUid]="groupUid" (voteSaved)="voteSaved($event)"></app-create-vote>
+  <app-create-vote *ngIf="group" [groupUid]="group.groupUid" (voteSaved)="voteSaved($event)"></app-create-vote>
 
-  <app-create-todo [groupUid]="groupUid" (todoSaved)="todoSaved($event)"></app-create-todo>
+  <app-create-todo *ngIf="group" [groupUid]="group.groupUid" (todoSaved)="todoSaved($event)"></app-create-todo>
 
 </div>
 

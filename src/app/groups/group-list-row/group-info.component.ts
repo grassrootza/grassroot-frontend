@@ -19,8 +19,6 @@ export class GroupInfoComponent implements OnInit {
   @Input()
   public extendedInfoVisible = false;
 
-  public groupUid: string = "";
-
   constructor() {
   }
 
@@ -36,35 +34,29 @@ export class GroupInfoComponent implements OnInit {
   }
 
   showCreateMeetingModal(){
-    this.groupUid = this.group.groupUid;
     $("#create-meeting-modal").modal("show");
   }
 
   meetingSaved(saveResponse){
     console.log(saveResponse);
-    this.groupUid = "";
     $("#create-meeting-modal").modal("hide");
   }
 
   showCreateVoteModal(){
-    this.groupUid = this.group.groupUid;
     $("#create-vote-modal").modal("show");
   }
 
   voteSaved(saveResponse){
     console.log(saveResponse);
-    this.groupUid = "";
     $("#create-vote-modal").modal("hide");
   }
 
   showCreateTodoModal(){
-    this.groupUid = this.group.groupUid;
     $("#create-todo-modal").modal("show");
   }
 
   todoSaved(saveResponse){
     console.log(saveResponse);
-    this.groupUid = "";
     $("#create-todo-modal").modal("hide");
   }
 

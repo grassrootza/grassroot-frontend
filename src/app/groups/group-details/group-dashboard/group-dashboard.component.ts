@@ -11,6 +11,8 @@ import {GroupJoinMethod} from "../../model/join-method";
 import {ItemPercentage} from "./member-detail-percent.model";
 import {Group} from "../../model/group.model";
 
+declare var $: any;
+
 @Component({
   selector: 'app-group-dashboard',
   templateUrl: './group-dashboard.component.html',
@@ -79,6 +81,40 @@ export class GroupDashboardComponent implements OnInit {
       )
   }
 
+
+  showCreateMeetingModal() {
+    this.groupUid = this.group.groupUid;
+    $("#create-meeting-modal").modal("show");
+  }
+
+  meetingSaved(saveResponse) {
+    console.log(saveResponse);
+    this.groupUid = "";
+    $("#create-meeting-modal").modal("hide");
+  }
+
+  showCreateVoteModal() {
+    this.groupUid = this.group.groupUid;
+    $("#create-vote-modal").modal("show");
+  }
+
+  voteSaved(saveResponse) {
+    console.log(saveResponse);
+    this.groupUid = "";
+    $("#create-vote-modal").modal("hide");
+  }
+
+  showCreateTodoModal() {
+    this.groupUid = this.group.groupUid;
+    $("#create-todo-modal").modal("show");
+  }
+
+  todoSaved(saveResponse) {
+    console.log(saveResponse);
+    this.groupUid = "";
+    $("#create-todo-modal").modal("hide");
+  }
+
   public memberGrowthPeriodChanged(newPeriod: string) {
     console.log("member growth period changed: ", newPeriod);
     this.currentMemberGrowthPeriod = newPeriod;
@@ -98,7 +134,6 @@ export class GroupDashboardComponent implements OnInit {
         this.loadMemberGrowthStats(null, null);
         break;
     }
-
   }
 
   public loadMemberGrowthStats(year: number, month: number) {

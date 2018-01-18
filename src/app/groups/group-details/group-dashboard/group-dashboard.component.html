@@ -74,9 +74,7 @@
       </div>
     </div>
 
-
   </div>
-
 
   <div class="row stat-panel">
 
@@ -228,5 +226,11 @@
 
   </div>
 
-
 </div>
+
+
+<app-create-meeting [groupUid]="groupUid" (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+
+<app-create-vote [groupUid]="groupUid" (voteSaved)="voteSaved($event)"></app-create-vote>
+
+<app-create-todo [groupUid]="groupUid" (todoSaved)="todoSaved($event)"></app-create-todo>
