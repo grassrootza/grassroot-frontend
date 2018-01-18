@@ -32,11 +32,11 @@ export class BroadcastTypeComponent implements OnInit {
     if (!this.typesForm.valid) {
       return false;
     }
-    if (this.typesForm.get('twitter')) {
+    if (this.typesForm.get('twitter').value && this.createParams.twitterAccount) {
       console.log("twitter exists, setting it to account");
       this.typesForm.get("twitterAccount").reset(this.createParams.twitterAccount.displayName);
     }
-    if (this.typesForm.get('facebook')) {
+    if (this.typesForm.get('facebook').value && this.createParams.facebookPages) {
       let fbPage = this.typesForm.get("facebookPage").value;
       console.log("facebook selected, set to : ", fbPage);
       if (!(fbPage) || fbPage == "") {

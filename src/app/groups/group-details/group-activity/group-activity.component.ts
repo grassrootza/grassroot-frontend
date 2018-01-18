@@ -17,8 +17,10 @@ declare var $: any;
 export class GroupActivityComponent implements OnInit {
 
   public groupUid: string = "";
+  public userUid: string = "";
   public upcomingTasks: Task[] = [];
   public taskTypes = TaskType;
+  public pastTasks : Task[] = [];
 
 
 

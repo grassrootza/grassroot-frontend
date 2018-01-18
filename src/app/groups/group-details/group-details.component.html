@@ -153,7 +153,7 @@
             <div *ngFor="let wordInfo of group.joinWords">
               <div class="container join-words-row">
                 <div class="row flex flex-wrap">
-                  <div class="col-4">{{ wordInfo.word }}</div>
+                  <div class="col-4">{{ wordInfo.word | uppercase }}</div>
                   <div class="col-4">{{ wordInfo.shortUrl }}</div>
                   <div class="col-2"><a href="" class="grassroot-link" (click)="removeJoinWord(wordInfo)">
                     <i class="fas fa-minus-circle"></i>

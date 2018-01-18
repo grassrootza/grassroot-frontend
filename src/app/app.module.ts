@@ -234,7 +234,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         headerName: 'Authorization',
         authScheme: 'Bearer ',
         tokenGetter: getJwtToken,
-        whitelistedDomains: ['localhost:8080', 'staging.grassroot.org.za']
+        whitelistedDomains: ['localhost:8080', 'staging.grassroot.org.za', 'app.grassroot.org.za']
       }
     }),
     NgbModule.forRoot()

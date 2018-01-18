@@ -55,6 +55,7 @@ export class GroupMembersComponent implements OnInit {
 
   onMemberAdded() {
     this.loadGroup();
+    this.groupService.groupMemberAddedSuccess(true);
     this.alertService.alert("group.allMembers.addMember.complete");
   }
 

@@ -31,9 +31,6 @@ export class PasswordComponent implements OnInit {
         .subscribe(result => {
           // server only returns 200 if this succeeded, and that's all it returns
           this.alertService.alert("user.password.completed");
-          setTimeout(()=>{
-            this.alertService.clear();
-          },5000);
           this.pwdForm.reset();
         }, error => {
           console.log("nope, failed: ", error);

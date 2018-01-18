@@ -25,6 +25,9 @@ export class AlertService {
   alert(message: string, keepAfterRouteChange: boolean = false) {
     this.subject.next(message);
     this.keepAfterRouteChange = keepAfterRouteChange;
+    setTimeout(()=>{
+      this.clear();
+    },3000); // remove it after 3 seconds
   }
 
   clear() {

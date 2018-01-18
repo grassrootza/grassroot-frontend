@@ -85,7 +85,6 @@ export class CreateMeetingComponent implements OnInit {
         }
       }
 
-
       this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis, publicMeeting, assignedMemberUids)
         .subscribe(task => {
             console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);

@@ -107,7 +107,7 @@
       "action": {
         "title": "Actions",
         "meeting": "Call meeting",
-        "vote": "Take vote action",
+        "vote": "Take vote",
         "create": "Create action",
         "broadcast": "Send broadcast"
       },
@@ -458,7 +458,8 @@
       "permission": "Permission",
       "ordinaryMember": "Ordinary member",
       "committeeMember": "Committee member",
-      "groupOrganizer": "Group organizer"
+      "groupOrganizer": "Group organizer",
+      "updateDone": "Done, group settings have been updated"
     }
   },
   "campaigns": {

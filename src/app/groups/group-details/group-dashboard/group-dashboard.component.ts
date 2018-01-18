@@ -19,7 +19,8 @@ import {Group} from "../../model/group.model";
 export class GroupDashboardComponent implements OnInit {
 
   private groupUid: string = null;
-  private group: Group = null;
+
+  public group: Group = null;
   public meetings: Task[] = [];
   public votes: Task[] = [];
   public todos: Task[] = [];

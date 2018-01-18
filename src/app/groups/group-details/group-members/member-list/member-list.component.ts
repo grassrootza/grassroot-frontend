@@ -41,10 +41,6 @@ export class MemberListComponent implements OnInit {
   provinceKeys: string[];
   role = GroupRole;
   roleKeys: string[];
-  searching = false;
-  lengthInvalid = true;
-  searchFailed = false;
-  hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
   public roleChanged:boolean = false;
   public detailsChanged: boolean = false;
 
@@ -63,24 +59,6 @@ export class MemberListComponent implements OnInit {
     this.editMemberForm.controls['roleName'].setValidators([Validators.required]);
     this.editMemberForm.controls['emailAddress'].setValidators(optionalEmailValidator);
     this.editMemberForm.controls['memberMsisdn'].setValidators(optionalPhoneValidator);
-  }
-
-  search = (text$: Observable<string>) =>
-    text$
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .do(term => term.length < 3 ? this.lengthInvalid = true : this.lengthInvalid = false)
-      .switchMap(term => term.length < 3 ?  Observable.of([]) :
-        this.groupService.searchForUsers(term)
-          .do(() => this.searchFailed = false)
-          .catch(() => {
-            this.searchFailed = true;
-            return Observable.of([]);
-          }))
-      .merge(this.hideSearchingWhenUnsubscribed);
-
-  formatter(x: { name: string, phone: string }) {
-    return "Name: " + x.name + ", Phone number: " + x.phone;
   }
 
   ngOnInit() {
@@ -133,17 +111,6 @@ export class MemberListComponent implements OnInit {
       $('#no-topics-for-group').modal('show');
     }
   }
-
-  pickedItem(pickedUser: GroupRelatedUserResponse){
-    //TODO: implement filling rest of the form with user data when user is picked, need to fetch user details from server
-    this.editMemberForm.controls['displayName'].setValue(pickedUser.name);
-    this.editMemberForm.controls['roleName'].setValue("ROLE_ORDINARY_MEMBER");
-    this.editMemberForm.controls['memberMsisdn'].setValue(pickedUser.phone);
-    this.editMemberForm.controls['emailAddress'].setValue(pickedUser.email);
-    this.editMemberForm.controls['province'].setValue(pickedUser.province);
-
-  }
-
 
   showEditModal(member: Membership){
     if(member.canEditDetails){
@@ -200,7 +167,7 @@ export class MemberListComponent implements OnInit {
 
   saveEditMember() {
     console.log("okay, posting member ...");
-    if(this.editMemberForm.controls['affiliations'].value != ""){
+    if(this.editMemberForm.controls['affiliations'].value != null){
       let affiliations = this.editMemberForm.controls['affiliations'].value.split(",");
       this.editMemberForm.controls['affiliations'].setValue(affiliations);
     }
@@ -242,14 +209,6 @@ export class MemberListComponent implements OnInit {
       $('#member-edit-modal').modal('hide');
       this.singleMemberManage = null;
     }
-
-    // this.groupService.confirmAddMembersToGroup(this.group.groupUid, [this.editMemberForm.value]).subscribe(result => {
-    //   console.log("got this result back: ", result);
-    //   $('#add-member-modal').modal("hide");
-    // }, error => {
-    //   console.log("well that didn't work: ", error);
-    //   $('#add-member-modal').modal("hide");
-    // })
   }
 
 }

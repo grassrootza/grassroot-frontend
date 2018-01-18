@@ -19,6 +19,8 @@ export class TaskService {
 
   private groupRespondeTodoUrl = environment.backendAppUrl + '/api/task/respond/todo/information';
 
+  private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/updated/group";
+
 
   constructor(private httpClient: HttpClient) {
   }
@@ -159,4 +161,5 @@ export class TaskService {
     return this.httpClient.get<string>(url, {params: params})
 
   }
+
 }
