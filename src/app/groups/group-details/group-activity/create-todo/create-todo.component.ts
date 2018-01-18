@@ -43,7 +43,7 @@ export class CreateTodoComponent implements OnInit {
 
   ngOnInit() {
     this.initCreateTodoForm();
-    $('#create-todo-modal-' + this.groupUid).on('shown.bs.modal', function () {
+    $('#create-todo-modal').on('shown.bs.modal', function () {
       this.fetchGroupMembers();
     }.bind(this));
   }
