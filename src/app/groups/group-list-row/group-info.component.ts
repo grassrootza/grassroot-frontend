@@ -37,11 +37,7 @@ export class GroupInfoComponent implements OnInit {
 
   showCreateMeetingModal(){
     this.groupUid = this.group.groupUid;
-    // we hav to add timeout because for some reason modal wont show if we first
-    // set groupUid and then try to display it without timeout of 1ms
-    setTimeout(function(){
-      $("#create-meeting-modal").modal("show");
-    }, 1);
+    $("#create-meeting-modal").modal("show");
   }
 
   meetingSaved(saveResponse){
@@ -52,9 +48,7 @@ export class GroupInfoComponent implements OnInit {
 
   showCreateVoteModal(){
     this.groupUid = this.group.groupUid;
-    setTimeout(function(){
-      $("#create-vote-modal").modal("show");
-    }, 1);
+    $("#create-vote-modal").modal("show");
   }
 
   voteSaved(saveResponse){
@@ -65,10 +59,7 @@ export class GroupInfoComponent implements OnInit {
 
   showCreateTodoModal(){
     this.groupUid = this.group.groupUid;
-    setTimeout(function(){
-      $("#create-todo-modal").modal("show");
-    }, 1);
-
+    $("#create-todo-modal").modal("show");
   }
 
   todoSaved(saveResponse){

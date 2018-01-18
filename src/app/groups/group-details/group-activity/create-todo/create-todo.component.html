@@ -1,128 +1,156 @@
-<div class="modal-header">
-  <h5 class="modal-title">{{ 'group.activity.todoModal.title' | translate }}</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<div class="modal-body">
+<div class="modal fade" id="create-todo-modal" tabindex="-1" role="dialog" aria-labelledby="create-todo-modal"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
 
-  <form [formGroup]="createTodoForm"
-        (ngSubmit)="createTodo()">
 
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="vote-subject">{{ 'group.activity.todoModal.subject' | translate }}</label>
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.activity.todoModal.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" id="vote-subject" placeholder="{{ 'group.activity.todoModal.subject' | translate }}"
-               name="subject" [formControl]="createTodoForm.controls['subject']">
-      </div>
-    </div>
+      <div class="modal-body">
 
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="vote-date-time">{{ 'group.activity.todoModal.dueDateTime' | translate }}</label>
-      </div>
-      <div class="col-sm-4">
-        <div class="form-group">
-          <div class="input-group">
-            <input class="form-control" placeholder="yyyy-mm-dd" id="vote-date-time"
-                   name="dp" [formControl]="createTodoForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
-              </button>
+        <form [formGroup]="createTodoForm"
+              (ngSubmit)="createTodo()">
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="vote-subject">{{ 'group.activity.todoModal.subject' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="vote-subject"
+                     placeholder="{{ 'group.activity.todoModal.subject' | translate }}"
+                     name="subject" [formControl]="createTodoForm.controls['subject']">
             </div>
           </div>
-        </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="vote-date-time">{{ 'group.activity.todoModal.dueDateTime' | translate }}</label>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" id="vote-date-time"
+                         name="dp" [formControl]="createTodoForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                      <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <ngb-timepicker [formControl]="createTodoForm.controls['time']" [spinners]="false"></ngb-timepicker>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="vote-type">{{ 'group.activity.todoModal.todoType' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="vote-type" name="name-select"
+                      [formControl]="createTodoForm.controls['todoType']"
+                      (change)="todoTypeChanged($event.target.value)">
+                <option *ngFor="let todoType of todoTypes" [value]="todoType.value"> {{todoType.name}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="createTodoForm.controls['todoType'].value === todoTypes[0].value">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="information-todo-responseTag">{{ 'group.activity.todoModal.information.label' | translate
+                }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="information-todo-responseTag"
+                     placeholder="{{ 'group.activity.todoModal.information.placeholder' | translate }}"
+                     name="subject" [formControl]="createTodoForm.controls['responseTag']">
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="createTodoForm.controls['todoType'].value === todoTypes[1].value">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="todo-require-images">{{ 'group.activity.todoModal.confirmation.requireImages' | translate
+                }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="checkbox" class="form-check-input" id="todo-require-images"
+                     [formControl]="createTodoForm.controls['requireImages']">
+            </div>
+          </div>
+
+
+          <div class="form-group row"
+               *ngIf="createTodoForm.controls['todoType'].value === todoTypes[1].value || createTodoForm.controls['todoType'].value === todoTypes[2].value">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="todo-recurring">{{ 'group.activity.todoModal.confirmation.recurring' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="checkbox" class="form-check-input" id="todo-recurring"
+                     [formControl]="createTodoForm.controls['recurring']">
+            </div>
+          </div>
+
+          <div class="form-group row"
+               *ngIf="createTodoForm.controls['todoType'].value === todoTypes[1].value || createTodoForm.controls['todoType'].value === todoTypes[2].value">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="todo-recurring-interval">{{ 'group.activity.todoModal.confirmation.recurringInterval' |
+                translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="number" min="0" class="form-control" id="todo-recurring-interval"
+                     placeholder="{{ 'group.activity.todoModal.confirmation.recurringInterval' | translate }}"
+                     name="subject" [formControl]="createTodoForm.controls['recurringPeriodMillis']">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="todo-assigned-members">{{ 'group.activity.todoModal.confirmation.assignedMembers' | translate
+                }}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="todo-assigned-members"
+                      [formControl]="createTodoForm.controls['assignedMemberUids']"
+                      name="name-select" multiple (change)="assignedMemberUidsPicked()">
+                <option *ngFor="let member of filteredAssignedMemberUids" [ngValue]="member.user.uid">
+                  {{member.user.displayName}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="createTodoForm.controls['todoType'].value === todoTypes[1].value">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="todo-confirming-members">{{ 'group.activity.todoModal.confirmation.confirmingMembers' |
+                translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="todo-confirming-members"
+                      [formControl]="createTodoForm.controls['confirmingMemberUids']"
+                      name="name-select" multiple (change)="confirmingMemberUidsPicked()">
+                <option *ngFor="let member of filteredConfirmingMemberUids" [ngValue]="member.user.uid">
+                  {{member.user.displayName}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+        </form>
+
       </div>
-      <div class="col-sm-4">
-        <ngb-timepicker [formControl]="createTodoForm.controls['time']" [spinners]="false"></ngb-timepicker>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="createTodo()" [disabled]="!createTodoForm.valid">{{
+          'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
       </div>
+
     </div>
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="vote-type">{{ 'group.activity.todoModal.todoType' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <select class="form-control" id="vote-type" name="name-select" [formControl]="createTodoForm.controls['todoType']" (change)="todoTypeChanged($event.target.value)">
-          <option *ngFor="let todoType of todoTypes" [value]="todoType.value"> {{todoType.name}}</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group row" *ngIf="createTodoForm.controls['todoType'].value === todoTypes[0].value">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="information-todo-responseTag">{{ 'group.activity.todoModal.information.label' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" id="information-todo-responseTag" placeholder="{{ 'group.activity.todoModal.information.placeholder' | translate }}"
-               name="subject" [formControl]="createTodoForm.controls['responseTag']">
-      </div>
-    </div>
-
-    <div class="form-group row" *ngIf="createTodoForm.controls['todoType'].value === todoTypes[1].value">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="todo-require-images">{{ 'group.activity.todoModal.confirmation.requireImages' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="checkbox" class="form-check-input" id="todo-require-images" [formControl]="createTodoForm.controls['requireImages']">
-      </div>
-    </div>
-
-
-    <div class="form-group row" *ngIf="createTodoForm.controls['todoType'].value === todoTypes[1].value || createTodoForm.controls['todoType'].value === todoTypes[2].value">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="todo-recurring">{{ 'group.activity.todoModal.confirmation.recurring' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="checkbox" class="form-check-input" id="todo-recurring" [formControl]="createTodoForm.controls['recurring']">
-      </div>
-    </div>
-
-    <div class="form-group row" *ngIf="createTodoForm.controls['todoType'].value === todoTypes[1].value || createTodoForm.controls['todoType'].value === todoTypes[2].value">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="todo-recurring-interval">{{ 'group.activity.todoModal.confirmation.recurringInterval' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="number" min="0" class="form-control" id="todo-recurring-interval" placeholder="{{ 'group.activity.todoModal.confirmation.recurringInterval' | translate }}"
-               name="subject" [formControl]="createTodoForm.controls['recurringPeriodMillis']">
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="todo-assigned-members">{{ 'group.activity.todoModal.confirmation.assignedMembers' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <select class="form-control" id="todo-assigned-members" [formControl]="createTodoForm.controls['assignedMemberUids']"
-                name="name-select" multiple (change)="assignedMemberUidsPicked()">
-          <option *ngFor="let member of filteredAssignedMemberUids" [ngValue]="member.user.uid">
-            {{member.user.displayName}}
-          </option>
-        </select>
-      </div>
-    </div>
-
-    <div class="form-group row" *ngIf="createTodoForm.controls['todoType'].value === todoTypes[1].value">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="todo-confirming-members">{{ 'group.activity.todoModal.confirmation.confirmingMembers' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <select class="form-control" id="todo-confirming-members" [formControl]="createTodoForm.controls['confirmingMemberUids']"
-                name="name-select" multiple (change)="confirmingMemberUidsPicked()">
-          <option *ngFor="let member of filteredConfirmingMemberUids" [ngValue]="member.user.uid">
-            {{member.user.displayName}}
-          </option>
-        </select>
-      </div>
-    </div>
-
-  </form>
-
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-primary" (click)="createTodo()" [disabled]="!createTodoForm.valid">{{ 'action.save' | translate }}</button>
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+  </div>
 </div>
