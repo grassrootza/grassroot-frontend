@@ -17,9 +17,9 @@
     </div>
 
     <div *ngIf="currentPage">
-      <app-member-list [currentPage]="currentPage"></app-member-list>
+      <app-member-list [currentPage]="currentPage" (sortUserList)="loadMembersPage(0, $event)"></app-member-list>
 
-      <app-pagination [totalPages]="currentPage.totalPages" (onPageSelected)="loadMembersPage($event)"></app-pagination>
+      <app-pagination [totalPages]="currentPage.totalPages" (onPageSelected)="loadMembersPage($event, [])"></app-pagination>
     </div>
 
   </div>

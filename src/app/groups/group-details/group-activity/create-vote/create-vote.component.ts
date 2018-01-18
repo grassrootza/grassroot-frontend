@@ -32,7 +32,7 @@ export class CreateVoteComponent implements OnInit {
   ngOnInit() {
     $('#create-vote-modal').on('shown.bs.modal', function () {
       if (this.groupUid != "" && this.groupUid != undefined) {
-        this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members => {
+        this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
           this.membersList = members.content;
         });
       }

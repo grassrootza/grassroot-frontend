@@ -65,6 +65,9 @@ export class GroupService {
   private groupMemberAdded_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public groupMemberAdded: Observable<boolean> = this.groupMemberAdded_.asObservable();
 
+  private shouldReloadPaginationNumbers_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public shouldReloadPaginationNumbers: Observable<boolean> = this.shouldReloadPaginationNumbers_.asObservable();
+
   constructor(private httpClient: HttpClient, private userService: UserService) {
   }
 
@@ -157,11 +160,15 @@ export class GroupService {
   }
 
 
-  fetchGroupMembers(groupUid: string, pageNo: number, pageSize: number): Observable<MembersPage> {
+  fetchGroupMembers(groupUid: string, pageNo: number, pageSize: number, sort: string[]): Observable<MembersPage> {
     let params = new HttpParams()
       .set('groupUid', groupUid)
       .set('page', pageNo.toString())
       .set('size', pageSize.toString());
+
+    if(sort[1] != ""){
+      params = params.set('sort', sort.join(','));
+    }
 
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
       .map(
@@ -479,6 +486,10 @@ export class GroupService {
 
   groupMemberAddedSuccess(success: boolean){
     this.groupMemberAdded_.next(success);
+  }
+
+  shouldReloadPaginationPagesNumbers(reload: boolean){
+    this.shouldReloadPaginationNumbers_.next(reload);
   }
 }
 

@@ -50,7 +50,7 @@ export class CreateTodoComponent implements OnInit {
 
   fetchGroupMembers(){
     if(this.groupUid != "" && this.groupUid != undefined) {
-      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
+      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members =>{
         this.assignedMemberUids = members.content;
         this.confirmingMemberUids = members.content;
         this.filteredAssignedMemberUids = this.assignedMemberUids;

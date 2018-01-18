@@ -25,12 +25,13 @@
     </div>
 
 
-    <app-member-list [currentPage]="currentPage" [group]="group"  (memberRemoved)="memberRemoved()" (shouldReloadList)="goToPage(0)"></app-member-list>
+    <app-member-list [currentPage]="currentPage" [group]="group"  (memberRemoved)="memberRemoved()"
+                     (shouldReloadList)="goToPage(0, [])" (sortUserList)="goToPage(0, $event)"></app-member-list>
 
   </div>
 
   <app-pagination [totalPages]="currentPage.totalPages" [shownPages]="3"
-                  (onPageSelected)="goToPage($event)"></app-pagination>
+                  (onPageSelected)="goToPage($event, this.filterMembersPage)"></app-pagination>
 
 </div>
 

@@ -20,6 +20,7 @@ export class GroupActivityComponent implements OnInit {
   public upcomingTasks: Task[] = [];
   public taskTypes = TaskType;
 
+  public createTaskGroupUid: string = null;
 
 
   constructor(private router: Router,
@@ -55,6 +56,7 @@ export class GroupActivityComponent implements OnInit {
   }
 
   showCreateMeetingModal(){
+    this.createTaskGroupUid = this.groupUid;
     $("#create-meeting-modal").modal("show");
   }
 
@@ -66,6 +68,7 @@ export class GroupActivityComponent implements OnInit {
   }
 
   showCreateVoteModal(){
+    this.createTaskGroupUid = this.groupUid;
     $("#create-vote-modal").modal("show");
   }
 
@@ -77,6 +80,7 @@ export class GroupActivityComponent implements OnInit {
   }
 
   showCreateTodoModal(){
+    this.createTaskGroupUid = this.groupUid;
     $("#create-todo-modal").modal("show");
   }
 

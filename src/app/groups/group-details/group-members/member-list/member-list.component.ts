@@ -32,6 +32,15 @@ export class MemberListComponent implements OnInit {
   @Output()
   shouldReloadList: EventEmitter<boolean>;
 
+  @Output()
+  sortUserList: EventEmitter<string[]>;
+
+  showNameFilter: number = 0;
+  showRoleFilter: number = 0;
+  showProvinceFilter: number = 0;
+  showPhoneFilter: number = 0;
+  showEmailFilter: number = 0;
+
   singleMemberManage: Membership = null;
   selectedTaskTeam: GroupRef = null;
   selectedTopics: string[] = [];
@@ -48,6 +57,7 @@ export class MemberListComponent implements OnInit {
               private fb: FormBuilder) {
     this.memberRemoved = new EventEmitter<any>();
     this.shouldReloadList = new EventEmitter<boolean>();
+    this.sortUserList = new EventEmitter<string[]>();
     this.editMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("emailAddress", "memberMsisdn")});
     this.provinceKeys = Object.keys(this.province);
     this.roleKeys = Object.keys(GroupRole);
@@ -158,6 +168,64 @@ export class MemberListComponent implements OnInit {
   detailsChangedTrigger(){
     this.detailsChanged = true;
   }
+
+  filterData(fieldToFilter: string){
+    let direction = "";
+    if(fieldToFilter === "user.displayName"){
+      this.showRoleFilter = 0;
+      this.showProvinceFilter = 0;
+      this.showPhoneFilter = 0;
+      this.showEmailFilter = 0;
+      switch (this.showNameFilter){
+        case 0: this.showNameFilter = 1; direction = "desc"; break;
+        case 1: this.showNameFilter = 2; direction = "asc"; break;
+        case 2: this.showNameFilter = 0; direction = ""; break;
+      }
+    }else if(fieldToFilter === "roleName"){
+      this.showNameFilter = 0;
+      this.showProvinceFilter = 0;
+      this.showPhoneFilter = 0;
+      this.showEmailFilter = 0;
+      switch (this.showRoleFilter){
+        case 0: this.showRoleFilter = 1; direction = "desc"; break;
+        case 1: this.showRoleFilter = 2; direction = "asc"; break;
+        case 2: this.showRoleFilter = 0; direction = ""; break;
+      }
+    }else if(fieldToFilter === "user.province"){
+      this.showNameFilter = 0;
+      this.showRoleFilter = 0;
+      this.showPhoneFilter = 0;
+      this.showEmailFilter = 0;
+      switch (this.showProvinceFilter){
+        case 0: this.showProvinceFilter = 1; direction = "desc"; break;
+        case 1: this.showProvinceFilter = 2; direction = "asc"; break;
+        case 2: this.showProvinceFilter = 0; direction = ""; break;
+      }
+    }else if(fieldToFilter === "user.phoneNumber"){
+      this.showNameFilter = 0;
+      this.showRoleFilter = 0;
+      this.showProvinceFilter = 0;
+      this.showEmailFilter = 0;
+      switch (this.showPhoneFilter){
+        case 0: this.showPhoneFilter = 1; direction = "desc"; break;
+        case 1: this.showPhoneFilter = 2; direction = "asc"; break;
+        case 2: this.showPhoneFilter = 0; direction = ""; break;
+      }
+    }else if(fieldToFilter === "user.emailAddress"){
+      this.showNameFilter = 0;
+      this.showRoleFilter = 0;
+      this.showProvinceFilter = 0;
+      this.showPhoneFilter = 0;
+      switch (this.showEmailFilter){
+        case 0: this.showEmailFilter = 1; direction = "desc"; break;
+        case 1: this.showEmailFilter = 2; direction = "asc"; break;
+        case 2: this.showEmailFilter = 0; direction = ""; break;
+      }
+    }
+    this.sortUserList.emit([fieldToFilter, direction]);
+    this.groupService.shouldReloadPaginationPagesNumbers(true);
+  }
+
 
   saveEditMember() {
     console.log("okay, posting member ...");
