@@ -5,6 +5,8 @@ import {GroupService} from '../../../group.service';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {Membership} from '../../../model/membership.model';
 
+declare var $: any;
+
 const TodoTypes: any[] =
   [
     { "value": "INFORMATION_REQUIRED", "name": "Respond with information" },
@@ -41,6 +43,9 @@ export class CreateTodoComponent implements OnInit {
 
   ngOnInit() {
     this.initCreateTodoForm();
+    $('#create-todo-modal-' + this.groupUid).on('shown.bs.modal', function () {
+      this.fetchGroupMembers();
+    }.bind(this));
   }
 
   fetchGroupMembers(){
@@ -52,8 +57,6 @@ export class CreateTodoComponent implements OnInit {
         this.filteredConfirmingMemberUids = this.confirmingMemberUids;
       });
     }
-
-
   }
 
   initCreateTodoForm(){
@@ -77,8 +80,6 @@ export class CreateTodoComponent implements OnInit {
     }else if(selectedTodoType === TodoTypes[3].value){
       this.initVolunteersNeededTodo();
     }
-
-    this.fetchGroupMembers();
   }
 
   initInformationRequiredTodo(){

@@ -5,6 +5,8 @@ import {GroupService} from '../../../group.service';
 import {Membership} from '../../../model/membership.model';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 
+declare var $: any;
+
 @Component({
   selector: 'app-create-meeting',
   templateUrl: './create-meeting.component.html',
@@ -37,12 +39,15 @@ export class CreateMeetingComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.groupUid != "" && this.groupUid != undefined){
-      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
-        this.membersList = members.content;
-      });
-    }
 
+    $('#create-meeting-modal').on('shown.bs.modal', function () {
+      console.log("Create meeting dialog shown for group: " + this.groupUid);
+      if (this.groupUid != "" && this.groupUid != undefined) {
+        this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members => {
+          this.membersList = members.content;
+        });
+      }
+    }.bind(this))
   }
 
   dateFromDate(date): NgbDateStruct{

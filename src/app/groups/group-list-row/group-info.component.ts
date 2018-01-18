@@ -14,7 +14,17 @@ export class GroupInfoComponent implements OnInit {
   public group: GroupInfo = null;
 
   @Output()
-  public pinToggled: EventEmitter<GroupInfo> = new EventEmitter(null);
+  public pinToggled: EventEmitter<GroupInfo> = new EventEmitter();
+
+  @Output()
+  public onTriggerCreateMeeting: EventEmitter<GroupInfo> = new EventEmitter();
+
+  @Output()
+  public onTriggerCreateVote: EventEmitter<GroupInfo> = new EventEmitter();
+
+  @Output()
+  public onTriggerCreateTodo: EventEmitter<GroupInfo> = new EventEmitter();
+
 
   @Input()
   public extendedInfoVisible = false;
@@ -33,31 +43,17 @@ export class GroupInfoComponent implements OnInit {
     this.extendedInfoVisible = !this.extendedInfoVisible;
   }
 
-  showCreateMeetingModal(){
-    $("#create-meeting-modal").modal("show");
+  triggerCreateMeetingAction() {
+    console.log("Triggering create meeting action for group: " + this.group.groupUid);
+    this.onTriggerCreateMeeting.emit(this.group)
   }
 
-  meetingSaved(saveResponse){
-    console.log(saveResponse);
-    $("#create-meeting-modal").modal("hide");
+  triggerCreateVoteAction() {
+    this.onTriggerCreateVote.emit(this.group)
   }
 
-  showCreateVoteModal(){
-    $("#create-vote-modal").modal("show");
-  }
-
-  voteSaved(saveResponse){
-    console.log(saveResponse);
-    $("#create-vote-modal").modal("hide");
-  }
-
-  showCreateTodoModal(){
-    $("#create-todo-modal").modal("show");
-  }
-
-  todoSaved(saveResponse){
-    console.log(saveResponse);
-    $("#create-todo-modal").modal("hide");
+  triggerCreateTodoAction() {
+    this.onTriggerCreateTodo.emit(this.group)
   }
 
 }
