@@ -105,6 +105,9 @@
         <div class="card-body">
           <app-group-info *ngFor="let gr of pinnedGroups"
                           [group]="gr"
+                          (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
+                          (onTriggerCreateVote)="showCreateVoteModal($event)"
+                          (onTriggerCreateTodo)="showCreateTodoModal($event)"
                           [extendedInfoVisible]="pinnedGroups.length == 1">
           </app-group-info>
 
@@ -144,3 +147,12 @@
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
 
 <app-todo-respond [todoTask]="toDoToRespond"></app-todo-respond>
+
+<app-create-meeting [groupUid]="createTaskGroupUid"
+                    (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+
+<app-create-vote [groupUid]="createTaskGroupUid"
+                 (voteSaved)="voteSaved($event)"></app-create-vote>
+
+<app-create-todo [groupUid]="createTaskGroupUid"
+                 (todoSaved)="todoSaved($event)"></app-create-todo>

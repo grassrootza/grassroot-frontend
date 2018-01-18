@@ -33,6 +33,8 @@ export class GroupDashboardComponent implements OnInit {
   public memberDetailsStats: ItemPercentage[] = [];
   public topicInterestsStats: ItemPercentage[] = [];
 
+  public createTaskGroupUid: string = null;
+
   constructor(private groupService: GroupService,
               private taskService: TaskService,
               private route: ActivatedRoute) {
@@ -83,38 +85,35 @@ export class GroupDashboardComponent implements OnInit {
 
 
   showCreateMeetingModal() {
-    this.groupUid = this.group.groupUid;
+    console.log("Show create meeting modal for group: " + this.group.groupUid);
+    this.createTaskGroupUid = this.group.groupUid;
     $("#create-meeting-modal").modal("show");
   }
 
   meetingSaved(saveResponse) {
     console.log(saveResponse);
-    this.groupUid = "";
     $("#create-meeting-modal").modal("hide");
   }
 
   showCreateVoteModal() {
-    this.groupUid = this.group.groupUid;
+    this.createTaskGroupUid = this.group.groupUid;
     $("#create-vote-modal").modal("show");
   }
 
   voteSaved(saveResponse) {
     console.log(saveResponse);
-    this.groupUid = "";
     $("#create-vote-modal").modal("hide");
   }
 
   showCreateTodoModal() {
-    this.groupUid = this.group.groupUid;
+    this.createTaskGroupUid = this.group.groupUid;
     $("#create-todo-modal").modal("show");
   }
 
   todoSaved(saveResponse) {
     console.log(saveResponse);
-    this.groupUid = "";
     $("#create-todo-modal").modal("hide");
   }
-
   public memberGrowthPeriodChanged(newPeriod: string) {
     console.log("member growth period changed: ", newPeriod);
     this.currentMemberGrowthPeriod = newPeriod;

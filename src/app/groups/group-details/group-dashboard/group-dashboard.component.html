@@ -101,7 +101,7 @@
                           aria-haspopup="true" aria-expanded="false">
                     {{ 'groups.row.action.title' | translate }}
                   </button>
-                  <div class="dropdown-menu">
+                  <div *ngIf="group" class="dropdown-menu">
                     <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item"
                        (click)="showCreateMeetingModal()">
                       {{ 'groups.row.action.meeting' | translate }}
@@ -229,8 +229,11 @@
 </div>
 
 
-<app-create-meeting [groupUid]="groupUid" (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+<app-create-meeting [groupUid]="createTaskGroupUid"
+                    (meetingSaved)="meetingSaved($event)"></app-create-meeting>
 
-<app-create-vote [groupUid]="groupUid" (voteSaved)="voteSaved($event)"></app-create-vote>
+<app-create-vote [groupUid]="createTaskGroupUid"
+                 (voteSaved)="voteSaved($event)"></app-create-vote>
 
-<app-create-todo [groupUid]="groupUid" (todoSaved)="todoSaved($event)"></app-create-todo>
+<app-create-todo [groupUid]="createTaskGroupUid"
+                 (todoSaved)="todoSaved($event)"></app-create-todo>
