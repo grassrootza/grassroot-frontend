@@ -58,9 +58,9 @@ export class GroupAllMembersComponent implements OnInit {
   }
 
 
-  goToPage(page: number, filter: string[]){
-    this.filterMembersPage = filter;
-    this.groupService.fetchGroupMembers(this.groupUid, page, 10, filter)
+  goToPage(page: number, sort: string[]){
+    this.filterMembersPage = sort;
+    this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort)
       .subscribe(
         membersPage => {
           console.log(membersPage);

@@ -6,6 +6,12 @@
         <a class="btn subgroup-link" (click)="loadMembers(subGroup)">{{subGroup.name}}</a>
         <span class="input-group-addon" id="btnGroupAddon">{{subGroup.memberCount}}</span>
       </div>
+      <div>
+        <button type="button" class="btn btn-primary float-right" (click)="showCreateTaskTeamModal()">
+          <i class="fas fa-plus"></i>
+          {{ 'group.taskTeam.addNew' | translate }}
+        </button>
+      </div>
     </div>
   </div>
 
@@ -17,11 +23,15 @@
     </div>
 
     <div *ngIf="currentPage">
-      <app-member-list [currentPage]="currentPage" (sortUserList)="loadMembersPage(0, $event)"></app-member-list>
+      <app-member-list [currentPage]="currentPage" [group]="group"  (sortUserList)="loadMembersPage(0, $event)"></app-member-list>
 
       <app-pagination [totalPages]="currentPage.totalPages" (onPageSelected)="loadMembersPage($event, [])"></app-pagination>
     </div>
 
   </div>
 
+  <app-create-task-team [group]="group" (taskTeamSaved)="closeModal()"></app-create-task-team>
+
 </div>
+
+

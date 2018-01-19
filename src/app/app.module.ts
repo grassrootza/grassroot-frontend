@@ -73,6 +73,8 @@ import { PasswordResetComponent } from './login/password-reset/password-reset.co
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
 import { GroupAddMemberComponent } from './groups/group-details/group-members/group-add-member/group-add-member.component';
 import { GroupMembersProfileComponent } from './groups/group-details/group-members/group-members-profile/group-members-profile.component';
+import { MemberFilterComponent } from './groups/member-filter/member-filter.component';
+import { CreateTaskTeamComponent } from './groups/group-details/group-members/group-task-teams/create-task-team/create-task-team.component';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -205,7 +207,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     PwdResetNewComponent,
     PasswordResetComponent,
     GroupAddMemberComponent,
-    GroupMembersProfileComponent
+    GroupMembersProfileComponent,
+    MemberFilterComponent,
+    CreateTaskTeamComponent
   ],
   entryComponents: [
     BroadcastConfirmComponent,

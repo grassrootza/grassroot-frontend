@@ -6,6 +6,8 @@ import {GroupService} from "../../../group.service";
 import {MembersPage} from "../../../model/membership.model";
 import {GroupRef} from "../../../model/group-ref.model";
 
+declare var $:any;
+
 @Component({
   selector: 'app-group-task-teams',
   templateUrl: './group-task-teams.component.html',
@@ -51,7 +53,18 @@ export class GroupTaskTeamsComponent implements OnInit {
     this.groupService.fetchGroupMembers(this.selectedSubGroup.groupUid, pageNo, 10, sort)
       .subscribe(
         result => this.currentPage = result,
-        error => console.log("Failed to load group members: ", error)
+        error => {
+          console.log("Failed to load group members: ", error);
+          this.currentPage = null;
+        }
       );
+  }
+
+  showCreateTaskTeamModal(){
+    $("#create-task-team-modal").modal("show");
+  }
+
+  closeModal(){
+    $("#create-task-team-modal").modal("hide");
   }
 }
