@@ -124,7 +124,7 @@ export class UserService {
       .set("oldPassword", oldPwd)
       .set("newPassword", newPwd)
       .set("confirmNewPwd", confirmPwd)
-      .set("callingInterface", "ANGULAR");
+      .set("callingInterface", "WEB_2");
 
     return this.httpClient.post(this.updatePasswordUrl, null, {params: params});
   }

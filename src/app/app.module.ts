@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 import {Ng4LoadingSpinnerModule} from 'ng4-loading-spinner';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -18,9 +17,6 @@ import {GroupInfoComponent} from './groups/group-list-row/group-info.component';
 import {GroupDetailsComponent} from './groups/group-details/group-details.component';
 import {GroupMembersComponent} from "./groups/group-details/group-members/group-members.component";
 import {GroupDashboardComponent} from "./groups/group-details/group-dashboard/group-dashboard.component";
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {GroupActivityComponent} from './groups/group-details/group-activity/group-activity.component';
 import {GroupBroadcastComponent} from './groups/group-details/group-broadcast/group-broadcast.component';
 import {GroupSettingsComponent} from './groups/group-details/group-settings/group-settings.component';
@@ -36,19 +32,6 @@ import {FileImportComponent} from './groups/group-details/group-members/group-me
 import {GoogleImportComponent} from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
 import {TwitterImportComponent} from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
 import {FacebookImportComponent} from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
-import {CampaignsComponent} from './campaigns/campaign-list/campaigns.component';
-import {CampaignService} from "./campaigns/campaign.service";
-import {CampaignInfoComponent} from './campaigns/campaign-list-row/campaign-info.component';
-import {CampaignCreateComponent} from './campaigns/campaign-create/campaign-create.component';
-import {BroadcastsComponent} from './broadcasts/broadcast-list/broadcasts.component';
-import {BroadcastCreateComponent} from "./broadcasts/broadcast-create/broadcast-create.component";
-import {BroadcastTypeComponent} from './broadcasts/broadcast-create/broadcast-type/broadcast-type.component';
-import {BroadcastContentComponent} from './broadcasts/broadcast-create/broadcast-content/broadcast-content.component';
-import {BroadcastMembersComponent} from './broadcasts/broadcast-create/broadcast-members/broadcast-members.component';
-import {BroadcastScheduleComponent} from "./broadcasts/broadcast-create/broadcast-schedule/broadcast-schedule.component";
-import {BroadcastService} from "./broadcasts/broadcast.service";
-import {BroadcastConfirmComponent} from './broadcasts/broadcast-create/broadcast-confirm/broadcast-confirm.component';
-import {BroadcastWorkflowGuard} from "./broadcasts/broadcast-create/create-workflow-guard.guard";
 import {IntegrationsComponent} from './user/integrations/integrations.component';
 import {IntegrationsService} from "./user/integrations/integrations.service";
 import {IntegrationConnectComponent} from './user/integrations/integration-connect/integration-connect.component';
@@ -65,17 +48,24 @@ import {CreateTodoComponent} from './groups/group-details/group-activity/create-
 import {CreateGroupComponent} from './groups/create-group/create-group.component';
 import {ToDoRespondComponent} from './task/todo-respond/todo-respond.component';
 import {ClipboardModule} from 'ngx-clipboard';
-import {QuillEditorModule} from 'ngx-quill-editor';
-import { PwdResetInitiateComponent } from './login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component';
-import { PwdResetValidateComponent } from './login/password-reset/pwd-reset-validate/pwd-reset-validate.component';
-import { PwdResetNewComponent } from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
-import { PasswordResetComponent } from './login/password-reset/password-reset.component';
+import {PwdResetInitiateComponent} from './login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component';
+import {PwdResetValidateComponent} from './login/password-reset/pwd-reset-validate/pwd-reset-validate.component';
+import {PwdResetNewComponent} from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
+import {PasswordResetComponent} from './login/password-reset/password-reset.component';
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
-import { GroupAddMemberComponent } from './groups/group-details/group-members/group-add-member/group-add-member.component';
-import { GroupMembersProfileComponent } from './groups/group-details/group-members/group-members-profile/group-members-profile.component';
+import {GroupAddMemberComponent} from './groups/group-details/group-members/group-add-member/group-add-member.component';
+import {GroupMembersProfileComponent} from './groups/group-details/group-members/group-members-profile/group-members-profile.component';
+import {SharedModule} from "./shared.module";
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
 }
 
 const routes: Routes = [
@@ -127,17 +117,12 @@ const routes: Routes = [
       {path: 'facebook', component: GoogleImportComponent, canActivate: [LoggedInGuard]},
     ]
   },
-  {path: 'campaigns', component: CampaignsComponent, canActivate: [LoggedInGuard]},
-  {path: 'campaign/create', component: CampaignCreateComponent, canActivate: [LoggedInGuard]},
   {
-    path: 'broadcast/create/:type/:parentId', component: BroadcastCreateComponent, canActivate: [LoggedInGuard],
-    children: [
-      {path: '', redirectTo: 'types', pathMatch: 'full'},
-      {path: 'types', component: BroadcastTypeComponent, canActivate: [LoggedInGuard]},
-      {path: 'content', component: BroadcastContentComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
-      {path: 'members', component: BroadcastMembersComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]},
-      {path: 'schedule', component: BroadcastScheduleComponent, canActivate: [LoggedInGuard, BroadcastWorkflowGuard]}
-    ]
+    path: 'campaigns', loadChildren: './campaigns/campaigns.module#CampaignsModule', canActivate: [LoggedInGuard],
+  },
+  {
+    path: 'broadcast/create/:type/:parentId',
+      loadChildren: './broadcasts/broadcasts.module#BroadcastsModule', canActivateChild: [LoggedInGuard]
   },
   {path: 'user', component: UserProfileComponent, canActivate: [LoggedInGuard],
     children: [
@@ -149,10 +134,6 @@ const routes: Routes = [
   ]},
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]}
 ];
-
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
-}
 
 @NgModule({
   declarations: [
@@ -178,16 +159,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     GoogleImportComponent,
     TwitterImportComponent,
     FacebookImportComponent,
-    CampaignsComponent,
-    CampaignInfoComponent,
-    CampaignCreateComponent,
-    BroadcastsComponent,
-    BroadcastCreateComponent,
-    BroadcastTypeComponent,
-    BroadcastContentComponent,
-    BroadcastMembersComponent,
-    BroadcastScheduleComponent,
-    BroadcastConfirmComponent,
     IntegrationsComponent,
     IntegrationConnectComponent,
     UserProfileComponent,
@@ -208,19 +179,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupMembersProfileComponent
   ],
   entryComponents: [
-    BroadcastConfirmComponent,
     CreateMeetingComponent,
     CreateVoteComponent,
     CreateTodoComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
     Ng4LoadingSpinnerModule,
     ClipboardModule,
-    QuillEditorModule,
     RouterModule.forRoot(routes), // <-- routes
     TranslateModule.forRoot({
       loader: {
@@ -237,7 +204,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         whitelistedDomains: ['localhost:8080', 'staging.grassroot.org.za', 'app.grassroot.org.za']
       }
     }),
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    SharedModule.forRoot()
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},
@@ -249,10 +217,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     JoinService,
     IntegrationsService,
     TaskService,
-    CampaignService,
-    BroadcastService,
-    PasswordResetService,
-    BroadcastWorkflowGuard
+    PasswordResetService
   ],
   bootstrap: [AppComponent]
 })
