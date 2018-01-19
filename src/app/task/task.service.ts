@@ -19,7 +19,7 @@ export class TaskService {
 
   private groupRespondeTodoUrl = environment.backendAppUrl + '/api/task/respond/todo/information';
 
-  private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/updated/group";
+  private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
 
 
   constructor(private httpClient: HttpClient) {
@@ -49,6 +49,59 @@ export class TaskService {
           )
       );
   }
+
+  /*public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
+      let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
+
+      return this.httpClient.get(url).map(
+        data => data["addedAndUpdated"].map(task => new Task(
+          task.taskUid,
+          task.title,
+          TaskType[task.type],
+          task.deadlineMillis,
+          new Date(task.deadlineMillis),
+          task.description,
+          task.location,
+          task.parentUid,
+          task.parentName,
+          task.ancestorGroupName,
+          task.todoType != null ? TodoType[task.todoType] : null,
+          task.hasResponded,
+          task.wholeGroupAssigned,
+          task.thisUserAssigned
+        ))
+      );
+  }*/
+
+    public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
+      let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
+
+      return this.httpClient.get(url).map(
+          res => {
+            console.log("results: ", res);
+            let tasks = res["addedAndUpdated"];
+            console.log("***** my tasks: ", JSON.stringify(tasks));  
+            console.log("first one: ", tasks[0]);
+            return tasks as Task[];
+            // return tasks.map(task => { return new Task(
+            //     task.taskUid,
+            //     task.title,
+            //     task.type,
+            //     task.deadlineMillis,
+            //     new Date(task.deadlineMillis),
+            //     task.description,
+            //     task.location,
+            //     task.parentUid,
+            //     task.parentName,
+            //     task.ancestorGroupName,
+            //     task.todoType,
+            //     task.hasResponded,
+            //     task.wholeGroupAssigned,
+            //     task.thisUserAssigned
+            //   ), error => { console.log("error in mapping", error.getmessage) }})
+          }
+      );
+   }
 
 
   public loadUpcomingUserTasks(userId: string): Observable<Task[]> {

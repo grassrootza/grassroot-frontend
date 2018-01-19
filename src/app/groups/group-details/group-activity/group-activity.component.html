@@ -56,6 +56,46 @@
   </div>
 </div>
 
+<div *ngIf="pastTasks.length > 0" style="margin-top: 32px;">
+  <div class="card">
+    <div class="card-body events-box">
+      <div class="row">
+        <div class="col-7">
+          <h1> Past Activity</h1>
+        </div>
+      </div>
+      <div class="card" *ngFor="let task of pastTasks" style="margin-bottom: 1rem !important;">
+        <div class="card-body events-box" >
+          <div class="row">
+            <div class="col-1">
+              <div class="date-box rounded text-center">
+                <h3>{{task.deadlineDate | date: 'dd'}}</h3>
+                {{task.deadlineDate | date: 'MMM'}}
+              </div>
+            </div>
+            <div class="col-11">
+              <div class="row">
+                <span class="font-weight-bold">
+                  <img [src]="'assets/' + task.getEventIconName() "/>
+                  {{task.type}}:&nbsp;
+                </span>
+                  {{task.title}}
+              </div>
+              <div class="row" *ngIf="task.type === taskTypes.VOTE">
+                <span class="font-weight-bold" [translate]="'group.activity.voteCloses'"> Closes:</span>&nbsp;
+                {{task.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+              </div>
+              <div class="row">
+                <p>{{task.description}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!--modals-->
 <div class="modal fade" id="create-meeting-modal" tabindex="-1" role="dialog" aria-labelledby="create-meeting-modal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">

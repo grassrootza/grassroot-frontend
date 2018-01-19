@@ -21,6 +21,7 @@ export class GroupActivityComponent implements OnInit {
   public upcomingTasks: Task[] = [];
   public taskTypes = TaskType;
   public pastTasks : Task[] = [];
+  public allTasks: Task[] = [];
 
 
 
@@ -37,8 +38,11 @@ export class GroupActivityComponent implements OnInit {
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
       this.groupUid = params['id'];
+      console.log("User uid={},group uid={}",this.userService.getLoggedInUser().userUid,this.groupUid);
       this.loadTasks();
     });
+    this.userUid = this.userService.getLoggedInUser().userUid;
+    this.loadAllGroupTasks();
   }
 
   loadTasks(){
@@ -54,6 +58,29 @@ export class GroupActivityComponent implements OnInit {
           console.log("Error loading tasks for group", error.status);
         }
       );
+  }
+
+  loadAllGroupTasks(){
+    console.log("calling subscribe");
+    this.taskService.loadAllGroupTasks(this.userUid,this.groupUid)
+      .subscribe(tasks => {
+           console.log("got tasks: ", tasks);
+           this.allTasks = tasks;
+           var today: Date = new Date();
+          for(let x = 0;x < this.allTasks.length;x++){
+              if(new Date(this.allTasks[x].deadlineMillis) < today)
+                this.pastTasks.push(this.allTasks[x]);
+          }
+        },error =>{
+          console.log("error, trying to find why");
+          if(error.status == 401){
+            console.log("Error @@@@@@@", error.status);
+          }
+          console.log(error.getmessage);
+        }
+      );
+          console.log("All Tasks @@@@",this.allTasks.length);
+      
   }
 
   showCreateMeetingModal(){
