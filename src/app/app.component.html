@@ -47,10 +47,21 @@
               <li class="nav-item dropdown notifications">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
+                  <span *ngIf="notifications.length > 0"
+                        class="badge badge-danger badge-pill">{{notifications.length}}</span>
                   <img src="assets/icon-bell.png"/>
                 </a>
-                <div class="dropdown-menu" aria-labelledby="dropdown01">
-                  <a class="dropdown-item" href="#">{{ 'menu.noNotifications' | translate }}</a>
+                <div class="dropdown-menu scrollable-menu notifications" aria-labelledby="dropdown01">
+                  <a *ngFor="let ntf of notifications" class="dropdown-item" href="#"
+                     (click)="handleNotificationClick($event)">
+                    <div class="notification-item">
+                      <span class="notification-item-title">{{ntf.message}}</span><br/>
+                      <span class="notification-item-time">{{ntf.createdDatetime.fromNow()}}</span>
+                      <a href="#" (click)="markNotificationRead(ntf.uid)" class="badge badge-info">Mark read</a>
+                    </div>
+                  </a>
+                  <a *ngIf="notifications.length == 0" class="dropdown-item" href="#">{{ 'menu.noNotifications' |
+                    translate }}</a>
                 </div>
               </li>
 
@@ -141,7 +152,18 @@
        (click)="clearAlert()"><i class="fas fa-times" aria-hidden="true"></i></a>
   </div>
 
+
   <div class="container main-content">
+
+
+    <div *ngIf="popupNotification" class="ntf-popup alert alert-info">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <span class="notification-item-title">{{popupNotification.message}}</span><br/>
+      <span class="notification-item-time">{{popupNotification.createdDatetime.fromNow()}}</span>
+      <a href="#" (click)="markNotificationRead(popupNotification.uid)" class="badge badge-info">Mark read</a>
+    </div>
+
+
     <router-outlet></router-outlet>
   </div>
 

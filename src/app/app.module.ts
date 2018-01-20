@@ -66,15 +66,16 @@ import {CreateGroupComponent} from './groups/create-group/create-group.component
 import {ToDoRespondComponent} from './task/todo-respond/todo-respond.component';
 import {ClipboardModule} from 'ngx-clipboard';
 import {QuillEditorModule} from 'ngx-quill-editor';
-import { PwdResetInitiateComponent } from './login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component';
-import { PwdResetValidateComponent } from './login/password-reset/pwd-reset-validate/pwd-reset-validate.component';
-import { PwdResetNewComponent } from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
-import { PasswordResetComponent } from './login/password-reset/password-reset.component';
+import {PwdResetInitiateComponent} from './login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component';
+import {PwdResetValidateComponent} from './login/password-reset/pwd-reset-validate/pwd-reset-validate.component';
+import {PwdResetNewComponent} from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
+import {PasswordResetComponent} from './login/password-reset/password-reset.component';
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
-import { GroupAddMemberComponent } from './groups/group-details/group-members/group-add-member/group-add-member.component';
-import { GroupMembersProfileComponent } from './groups/group-details/group-members/group-members-profile/group-members-profile.component';
-import { MemberFilterComponent } from './groups/member-filter/member-filter.component';
-import { CreateTaskTeamComponent } from './groups/group-details/group-members/group-task-teams/create-task-team/create-task-team.component';
+import {GroupAddMemberComponent} from './groups/group-details/group-members/group-add-member/group-add-member.component';
+import {GroupMembersProfileComponent} from './groups/group-details/group-members/group-members-profile/group-members-profile.component';
+import {MemberFilterComponent} from './groups/member-filter/member-filter.component';
+import {CreateTaskTeamComponent} from './groups/group-details/group-members/group-task-teams/create-task-team/create-task-team.component';
+import {NotificationService} from "./user/notification.service";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -250,6 +251,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AlertService,
     GroupService,
     UserService,
+    NotificationService,
     JoinService,
     IntegrationsService,
     TaskService,
