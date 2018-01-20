@@ -12,16 +12,22 @@ import {BroadcastScheduleComponent} from "./broadcast-create/broadcast-schedule/
 import {BroadcastConfirmComponent} from "./broadcast-create/broadcast-confirm/broadcast-confirm.component";
 import {BroadcastWorkflowGuard} from "./broadcast-create/create-workflow-guard.guard";
 import {BroadcastCreateComponent} from "./broadcast-create/broadcast-create.component";
+import {BroadcastContentComponent} from "./broadcast-create/broadcast-content/broadcast-content.component";
+import {SharedModule} from "../shared.module";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
+    NgbModule,
     QuillEditorModule,
     RouterModule.forChild(BROADCAST_ROUTES)
   ],
   declarations: [
     BroadcastCreateComponent,
     BroadcastTypeComponent,
+    BroadcastContentComponent,
     BroadcastMembersComponent,
     BroadcastScheduleComponent,
     BroadcastConfirmComponent,
