@@ -81,17 +81,23 @@ export class MemberListComponent implements OnInit {
   public selectAllOnPage(event): void {
     let target = event.target || event.srcElement || event.currentTarget;
     let shouldSelectAll = target.checked;
-
     this.currentPage.content.forEach(m => m.selected = shouldSelectAll);
+  }
+
+  showMemberRemoveModal(member: Membership){
+    this.singleMemberManage = member;
+    $('#confirm-user-removal-modal').modal("show");
   }
 
   removeMember(memberUid: string){
     let groupUid = this.currentPage.content[0].group.groupUid;
     let memberUids: string[] = [];
     memberUids.push(memberUid);
+
     this.groupService.removeMembers(groupUid, memberUids).subscribe(response => {
       this.memberRemoved.emit();
-    })
+    });
+    $('#confirm-user-removal-modal').modal("hide");
   }
 
   showAddMemberToTaskTeamModal(member: Membership){

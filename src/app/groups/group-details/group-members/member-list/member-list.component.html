@@ -94,7 +94,7 @@
       <div class="col-md-1">
         <div class="float-right">
           <div class="dropdown">
-            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
+            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" [disabled]=""
                     aria-haspopup="true" aria-expanded="false" [translate]="'group.allMembers.manage.manage'">
               Manage
             </button>
@@ -105,7 +105,7 @@
                   (click)="showAssignTopicToMemberModal(member)">Assign topic</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.taskTeam'"
                  (click)="showAddMemberToTaskTeamModal(member)">Add to task team</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="removeMember(member.user.uid)">Remove</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showMemberRemoveModal(member)">Remove</a>
             </div>
           </div>
         </div>
@@ -276,107 +276,57 @@
   </div>
 </div>
 
-<div id="member-edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="confirm-user-removal-modal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">{{ 'group.allMembers.edit.title' | translate }}</h3>
+        <h5 class="modal-title">{{ 'group.members.removeTitle' | translate }}</h5>
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form [formGroup]="editMemberForm" (submit)="saveEditMember()">
-        <div class="modal-body">
-          <div class="form-group row">
-            <div class="col-md-6 col-sm-12">
-              <label for="name" class="grassroot-label-em">{{ 'group.allMembers.addMember.name' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="name" name="name" [formControl]="editMemberForm.controls['displayName']" (change)="detailsChangedTrigger()">
-              <div class="error" [hidden]="editMemberForm.controls['displayName'].valid || editMemberForm.controls['displayName'].untouched">
-                {{ 'group.allMembers.addMember.errors.name' | translate }}
-              </div>
-            </div>
-            <div class="col-md-6 col-sm-12">
-              <label for="role" class="grassroot-label-em">{{ 'group.allMembers.addMember.role' | translate }}</label>
-              <!--<input type="text" class="form-control form-control-em" id="role" name="role" [formControl]="addMemberForm.controls['roleName']">-->
-              <select id="role" class="form-control form-control-em" [formControl]="editMemberForm.controls['roleName']" (change)="roleChangedTrigger()">
-                <option *ngFor="let r of roleKeys; let i = index" [value]="r" [selected]="i == 0">{{ role[r] }}</option>
-              </select>
-            </div>
-          </div>
 
-          <div class="form-group row">
-            <div class="col-md-6 col-sm-12">
-              <label for="phone" class="grassroot-label-em">{{ 'group.allMembers.addMember.phone' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="phone" name="phone" [formControl]="editMemberForm.controls['memberMsisdn']" (change)="detailsChangedTrigger()">
-            </div>
-            <div class="col-md-6 col-sm-12">
-              <label for="role" class="grassroot-label-em">{{ 'group.allMembers.addMember.email' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="email" name="email" [formControl]="editMemberForm.controls['emailAddress']" (change)="detailsChangedTrigger()">
-            </div>
-          </div>
-          <div class="form-group row footnote">
-            <div class="col-12">
-              <div class="error">
-                {{ 'registration.footnote' | translate }}
-              </div>
-              <!--<p class="footnote">{{ 'registration.footnote' | translate }}</p>-->
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="col-md-6 col-sm-12">
-              <label for="province" class="grassroot-label-em">{{ 'group.allMembers.addMember.province' | translate }}</label>
-              <select id="province" [formControl]="editMemberForm.controls['province']" class="form-control" (change)="detailsChangedTrigger()">
-                <option [value]="null">Select</option>
-                <option *ngFor="let p of provinceKeys" [value]="p">{{ province[p] }}</option>
-              </select>
-            </div>
-            <div class="col-md-6 col-sm-12">
-              <label for="affiliation" class="grassroot-label-em">{{ 'group.allMembers.addMember.affiliation' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="affiliation" name="affiliation" [formControl]="editMemberForm.controls['affiliations']" (change)="detailsChangedTrigger()">
-            </div>
-          </div>
-
-          <div class="form-group row" *ngIf="group">
-            <div class="col-md-6 col-sm-12" *ngIf="group.subGroups.length > 0">
-              <label for="task-teams" class="grassroot-label-em">{{ 'group.allMembers.addMember.taskTeam' | translate }}</label>
-              <select id="task-teams" [formControl]="editMemberForm.controls['taskTeams']" class="form-control" multiple (change)="detailsChangedTrigger()">
-                <option *ngFor="let g of group.subGroups" [value]="g.groupUid">{{ g.name }}</option>
-              </select>
-            </div>
-            <div class="col-md-6 col-sm-12" *ngIf="group.topics.length > 0">
-              <label for="topics" class="grassroot-label-em">{{ 'group.allMembers.addMember.topics' | translate }}</label>
-              <select id="topics" [formControl]="editMemberForm.controls['topics']" class="form-control" multiple (change)="detailsChangedTrigger()">
-                <option *ngFor="let topic of group.topics" [value]="topic">{{ topic }}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" [disabled]="!editMemberForm.valid" class="btn btn-primary save-button">{{ 'action.save' | translate }}</button>
-          <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" >{{ 'action.cancel' | translate }}</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="cant-edit-details" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.edit.notAllowed.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
       <div class="modal-body">
-        <h3>{{ 'group.allMembers.edit.notAllowed.body' | translate}}</h3>
+        <h3>{{ 'group.members.removeMember' | translate}}</h3>
+
+
+
+        <div class="container group-info-header d-none d-md-block">
+          <div class="row">
+            <div class="col-3">Name</div>
+            <div class="col-3">Role</div>
+            <div class="col-3">Phone</div>
+            <div class="col-3">email</div>
+          </div>
+        </div>
+        <div class="container group-info-row">
+          <div class="row flex flex-wrap">
+            <div class="col-3">
+              {{singleMemberManage.user.displayName}}
+            </div>
+
+            <div class="col-3">
+              {{singleMemberManage.roleName}}
+            </div>
+            <div class="col-3">
+              {{singleMemberManage.user.phoneNumber}}
+            </div>
+            <div class="col-3">
+              {{singleMemberManage.user.email}}
+
+            </div>
+          </div>
+        </div>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          {{ 'action.ok' | translate }}
+        <button type="button" class="btn btn-primary" (click)="removeMember(singleMemberManage.user.uid)">
+          {{ 'group.members.yesButton' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'group.members.noButton' | translate }}
+
         </button>
       </div>
     </div>

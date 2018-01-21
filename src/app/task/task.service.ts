@@ -19,6 +19,8 @@ export class TaskService {
 
   private groupRespondeTodoUrl = environment.backendAppUrl + '/api/task/respond/todo/information';
 
+  private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
+
 
   constructor(private httpClient: HttpClient) {
   }
@@ -47,6 +49,17 @@ export class TaskService {
           )
       );
   }
+
+  public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
+    let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
+    return this.httpClient.get(url).map(
+      res => {
+          console.log("results: ", res);
+          let tasks = res["addedAndUpdated"];
+          return tasks as Task[];
+      }
+      );
+   }
 
 
   public loadUpcomingUserTasks(userId: string): Observable<Task[]> {
@@ -159,4 +172,5 @@ export class TaskService {
     return this.httpClient.get<string>(url, {params: params})
 
   }
+
 }

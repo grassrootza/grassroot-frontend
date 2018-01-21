@@ -57,7 +57,6 @@ export class AppComponent implements OnInit {
     });
 
     this.alertService.getAlert().subscribe(message=> {
-      // todo : fade it out?
       this.alertMessage = message;
     });
 

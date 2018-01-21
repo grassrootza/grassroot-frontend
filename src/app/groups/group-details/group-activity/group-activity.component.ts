@@ -19,9 +19,9 @@ export class GroupActivityComponent implements OnInit {
   public groupUid: string = "";
   public upcomingTasks: Task[] = [];
   public taskTypes = TaskType;
+  public pastTasks : Task[] = [];
 
   public createTaskGroupUid: string = null;
-
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -36,7 +36,9 @@ export class GroupActivityComponent implements OnInit {
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
       this.groupUid = params['id'];
+      console.log("User uid={},group uid={}",this.userService.getLoggedInUser().userUid,this.groupUid);
       this.loadTasks();
+      this.loadAllGroupTasks();
     });
   }
 
@@ -52,6 +54,22 @@ export class GroupActivityComponent implements OnInit {
             this.userService.logout();
           console.log("Error loading tasks for group", error.status);
         }
+      );
+  }
+
+  loadAllGroupTasks(){
+    console.log("calling subscribe");
+    this.taskService.loadAllGroupTasks(this.userService.getLoggedInUser().userUid, this.groupUid)
+      .subscribe(tasks => {
+          let now = new Date();
+          this.pastTasks = tasks.filter(t => new Date(t.deadlineMillis) < now);
+          console.log("Old Tasks @@@@", this.pastTasks.length);
+        }, error =>{
+          if(error.status == 401){
+            console.log("Error @@@@@@@", error.status);
+          }
+          console.log(error.getmessage);
+      }
       );
   }
 
