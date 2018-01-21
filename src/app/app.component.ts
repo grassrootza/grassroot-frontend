@@ -40,7 +40,6 @@ export class AppComponent {
     });
 
     this.alertService.getAlert().subscribe(message=> {
-      // todo : fade it out?
       this.alertMessage = message;
     });
 

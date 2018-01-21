@@ -17,13 +17,10 @@ declare var $: any;
 export class GroupActivityComponent implements OnInit {
 
   public groupUid: string = "";
-  public userUid: string = "";
   public upcomingTasks: Task[] = [];
   public taskTypes = TaskType;
   public pastTasks : Task[] = [];
   public allTasks: Task[] = [];
-
-
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -40,9 +37,8 @@ export class GroupActivityComponent implements OnInit {
       this.groupUid = params['id'];
       console.log("User uid={},group uid={}",this.userService.getLoggedInUser().userUid,this.groupUid);
       this.loadTasks();
+      this.loadAllGroupTasks();
     });
-    this.userUid = this.userService.getLoggedInUser().userUid;
-    this.loadAllGroupTasks();
   }
 
   loadTasks(){
@@ -62,25 +58,19 @@ export class GroupActivityComponent implements OnInit {
 
   loadAllGroupTasks(){
     console.log("calling subscribe");
-    this.taskService.loadAllGroupTasks(this.userUid,this.groupUid)
+    this.taskService.loadAllGroupTasks(this.userService.getLoggedInUser().userUid, this.groupUid)
       .subscribe(tasks => {
-           console.log("got tasks: ", tasks);
-           this.allTasks = tasks;
-           var today: Date = new Date();
-          for(let x = 0;x < this.allTasks.length;x++){
-              if(new Date(this.allTasks[x].deadlineMillis) < today)
-                this.pastTasks.push(this.allTasks[x]);
-          }
-        },error =>{
-          console.log("error, trying to find why");
+          this.allTasks = tasks;
+          let now = new Date();
+          this.pastTasks = this.allTasks.filter(t => new Date(t.deadlineMillis) < now);
+        }, error =>{
           if(error.status == 401){
             console.log("Error @@@@@@@", error.status);
           }
           console.log(error.getmessage);
-        }
+      }
       );
-          console.log("All Tasks @@@@",this.allTasks.length);
-      
+    console.log("All Tasks @@@@",this.allTasks.length);
   }
 
   showCreateMeetingModal(){
