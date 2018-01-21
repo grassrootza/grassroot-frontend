@@ -22,7 +22,6 @@ export class Notification {
   }
 
   public static transformDates(ntf: Notification) {
-    console.log("Transforming dates: ", ntf.createdDatetime, ntf.deadlineDateTime);
     ntf.createdDatetime = moment(ntf.createdDatetime);
     ntf.deadlineDateTime = moment(ntf.deadlineDateTime);
     return ntf;

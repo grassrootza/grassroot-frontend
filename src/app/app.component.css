@@ -155,7 +155,7 @@ footer .row {
 
 .notification-item-time {
   font-size: 0.8rem;
-  color: #cccccc;
+  color: #7a7a7a;
 }
 
 .scrollable-menu {
@@ -165,6 +165,7 @@ footer .row {
 }
 
 .ntf-popup {
+  width: 20rem;
   position: absolute;
   z-index: 1000;
   top: 100px;

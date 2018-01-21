@@ -26,7 +26,17 @@ export class AppComponent implements OnInit {
 
   popupNotification: Notification = null;
 
+  newNotifications: Notification[] = [];
+
+  currentPopupNotificationIndex = 0;
+
   currentUrl = "";
+  popopNotificationTimeoutId: any = null;
+  popupNotificationEngaged = false;
+  popupNotificationDisplayInProgress = false;
+
+  maxNumberOfPopupNotificationInRole = 3;
+
 
   public loggedInUserImageUrl = environment.backendAppUrl + "/api/user/profile/image/view";
 
@@ -61,6 +71,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
 
+    $(".ntf-popup").hide();
     this.pullNotifications();
     setInterval(() => {
       this.pullNotifications()
@@ -68,21 +79,23 @@ export class AppComponent implements OnInit {
   }
 
   private pullNotifications() {
+
+    if (this.popupNotificationEngaged || this.popupNotificationDisplayInProgress) {
+      console.log("Skipping notifications pull, popupNotificationEngaged: " + this.popupNotificationEngaged + ", popupNotificationDisplayInProgress: " + this.popupNotificationDisplayInProgress);
+      return;
+    }
+
     this.notificationService.fetchUnreadNotifications()
       .subscribe(
         notifications => {
           console.log("Notifications: ", notifications);
-
-          const newNotifications = notifications.filter(nn => !this.notifications.find(old => old.uid == nn.uid));
-
+          this.newNotifications = notifications.filter(nn => !this.notifications.find(old => old.uid == nn.uid));
           this.notifications = notifications;
-          if (newNotifications.length > 0) {
-            this.popupNotification = newNotifications[0];
-            $(".ntf-popup").show();
-            setTimeout(() => {
-              this.hidePopupNotification()
-            }, 4000);
+          if (this.newNotifications.length > 0) {
+            this.currentPopupNotificationIndex = 0;
+            this.showNextNewNotification();
           }
+
           else this.popupNotification = null;
         },
         error => {
@@ -91,8 +104,39 @@ export class AppComponent implements OnInit {
       );
   }
 
+  showNextNewNotification() {
+    if (this.newNotifications.length > this.currentPopupNotificationIndex && this.currentPopupNotificationIndex < this.maxNumberOfPopupNotificationInRole) {
+      this.popupNotificationDisplayInProgress = true;
+      console.log("Showing popup ntf " + this.currentPopupNotificationIndex);
+      this.popupNotification = this.newNotifications[this.currentPopupNotificationIndex];
+      $(".ntf-popup").fadeIn(500);
+      this.popopNotificationTimeoutId = setTimeout(() => {
+        this.hidePopupNotification()
+      }, 4000);
+      this.currentPopupNotificationIndex++;
+    }
+    else {
+      this.popupNotificationDisplayInProgress = false;
+      this.popupNotificationEngaged = false;
+    }
+  }
+
+  popupNotificationMouseEnter() {
+    console.log("Mouse enter popup notification");
+    this.popupNotificationEngaged = true;
+    clearTimeout(this.popopNotificationTimeoutId)
+  }
+
+  popupNotificationMouseExit() {
+    console.log("Mouse exit popup notification");
+    this.popupNotificationEngaged = false;
+    this.hidePopupNotification()
+  }
+
   hidePopupNotification() {
-    $(".ntf-popup").delay(200).fadeOut(2000);
+    $(".ntf-popup").fadeOut(500, function () {
+      this.showNextNewNotification();
+    }.bind(this));
   }
 
   logout() {
@@ -118,6 +162,8 @@ export class AppComponent implements OnInit {
           console.log("Mark notification result: ", successResponse);
           //remove notification with this uid, since it's no longed unread
           this.notifications = this.notifications.filter(ntf => ntf.uid != notificationUid);
+          this.popupNotificationEngaged = false;
+          this.hidePopupNotification()
         },
         error => console.log("Mark notification failed!", error)
       );
