@@ -35,6 +35,8 @@ export class HomeComponent implements OnInit {
 
   public toDoToRespond: Task = null;
 
+  public createTaskGroupUid: string = null;
+
   constructor(private taskService: TaskService,
               private userService: UserService,
               private groupService: GroupService,
@@ -167,5 +169,38 @@ export class HomeComponent implements OnInit {
     }
     return false;
   }
+
+
+  showCreateMeetingModal(group: GroupInfo) {
+    console.log("Show create meeting modal for group: " + group.groupUid);
+    this.createTaskGroupUid = group.groupUid;
+    $("#create-meeting-modal").modal("show");
+  }
+
+  meetingSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-meeting-modal").modal("hide");
+  }
+
+  showCreateVoteModal(group: GroupInfo) {
+    this.createTaskGroupUid = group.groupUid;
+    $("#create-vote-modal").modal("show");
+  }
+
+  voteSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-vote-modal").modal("hide");
+  }
+
+  showCreateTodoModal(group: GroupInfo) {
+    this.createTaskGroupUid = group.groupUid;
+    $("#create-todo-modal").modal("show");
+  }
+
+  todoSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-todo-modal").modal("hide");
+  }
+
 
 }

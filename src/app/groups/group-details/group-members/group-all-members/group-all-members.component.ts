@@ -24,6 +24,7 @@ export class GroupAllMembersComponent implements OnInit {
   selectedTopics: string[] = [];
 
   bulkManageMembers: Membership[] = [];
+  filterMembersPage: string[] = [];
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -45,20 +46,21 @@ export class GroupAllMembersComponent implements OnInit {
             console.log("Error loading groups", error.status)
           }
         );
-      this.goToPage(0);
+      this.goToPage(0, []);
     });
 
     this.groupService.groupMemberAdded.subscribe(success => {
       if(success) {
-        this.goToPage(0);
+        this.goToPage(0, []);
         this.groupService.groupMemberAddedSuccess(false);
       }
     })
   }
 
 
-  goToPage(page: number){
-    this.groupService.fetchGroupMembers(this.groupUid, page, 10)
+  goToPage(page: number, sort: string[]){
+    this.filterMembersPage = sort;
+    this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort)
       .subscribe(
         membersPage => {
           console.log(membersPage);
@@ -105,7 +107,7 @@ export class GroupAllMembersComponent implements OnInit {
     });
     this.groupService.addMembersToTaskTeam(this.group.groupUid, this.selectedTaskTeam.groupUid, memberUids).subscribe(response => {
       $('#bulk-add-members-to-task-team-modal').modal('hide');
-      this.goToPage(0);
+      this.goToPage(0, []);
     })
   }
 
@@ -116,7 +118,7 @@ export class GroupAllMembersComponent implements OnInit {
     });
     this.groupService.assignTopicToMember(this.group.groupUid, memberUids, this.selectedTopics).subscribe(response => {
       $('#bulk-member-assign-topics').modal('hide');
-      this.goToPage(0);
+      this.goToPage(0, []);
     })
   }
 
@@ -135,12 +137,12 @@ export class GroupAllMembersComponent implements OnInit {
     this.bulkManageMembers.forEach(m => memberUids.push(m.user.uid.toString()));
     this.groupService.removeMembers(this.groupUid, memberUids).subscribe(response => {
       $('#bulk-remove-members-modal').modal('hide');
-      this.goToPage(0);
+      this.goToPage(0, []);
     });
   }
 
   memberRemoved(){
-    this.goToPage(0);
+    this.goToPage(0, []);
   }
 
   bulkManageCheckNumberOfSelectedMembers(): number{

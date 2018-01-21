@@ -20,6 +20,7 @@ import {JoinCodeInfo} from './model/join-code-info';
 import {GroupPermissionsByRole} from './model/permission.model';
 import {GroupRelatedUserResponse} from './model/group-related-user.model';
 import {GroupMemberActivity} from './model/group-member-activity';
+import set = Reflect.set;
 
 @Injectable()
 export class GroupService {
@@ -45,6 +46,8 @@ export class GroupService {
   groupFetchMemberActivityUrl = environment.backendAppUrl + '/api/group/fetch/members/activity';
   groupMemberChangeRoleUrl = environment.backendAppUrl + '/api/group/modify/members/modify/role';
   groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
+  groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
+  groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
 
   groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
   groupJoinWordAddUrl = environment.backendAppUrl + "/api/group/modify/joincodes/add";
@@ -64,6 +67,9 @@ export class GroupService {
 
   private groupMemberAdded_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public groupMemberAdded: Observable<boolean> = this.groupMemberAdded_.asObservable();
+
+  private shouldReloadPaginationNumbers_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public shouldReloadPaginationNumbers: Observable<boolean> = this.shouldReloadPaginationNumbers_.asObservable();
 
   constructor(private httpClient: HttpClient, private userService: UserService) {
   }
@@ -157,11 +163,15 @@ export class GroupService {
   }
 
 
-  fetchGroupMembers(groupUid: string, pageNo: number, pageSize: number): Observable<MembersPage> {
+  fetchGroupMembers(groupUid: string, pageNo: number, pageSize: number, sort: string[]): Observable<MembersPage> {
     let params = new HttpParams()
       .set('groupUid', groupUid)
       .set('page', pageNo.toString())
       .set('size', pageSize.toString());
+
+    if(sort[1] != ""){
+      params = params.set('sort', sort.join(','));
+    }
 
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
       .map(
@@ -477,8 +487,48 @@ export class GroupService {
       })
   }
 
+  filterGroupMembers(groupUid: string, provinces: string[], taskTeams: string[], topics: string[]): Observable<Membership[]> {
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+
+    if(provinces != null){
+      params = params.set("provinces", provinces.join(","));
+    }
+
+    if(taskTeams != null){
+      params = params.set("taskTeams", taskTeams.join(","));
+    }
+
+    if(topics != null){
+      params = params.set("topics", topics.join(","));
+    }
+
+
+    return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
+      .map(resp => {
+        return resp;
+      })
+  }
+
+  createTaskTeam(parentUid: string, taskTeamName: string, memberUids: string[]):Observable<any>{
+    const fullUrl = this.groupCreateTaskTeamUrl + '/' + parentUid;
+
+    let params = new HttpParams()
+      .set("taskTeamName", taskTeamName)
+      .set("memberUids", memberUids.join(","));
+
+    return this.httpClient.post<any>(fullUrl, null, {params: params})
+      .map(resp => {
+        return resp;
+      })
+  }
+
   groupMemberAddedSuccess(success: boolean){
     this.groupMemberAdded_.next(success);
+  }
+
+  shouldReloadPaginationPagesNumbers(reload: boolean){
+    this.shouldReloadPaginationNumbers_.next(reload);
   }
 }
 

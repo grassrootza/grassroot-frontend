@@ -5,6 +5,8 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {Membership} from '../../../model/membership.model';
 
+declare var $: any;
+
 @Component({
   selector: 'app-create-vote',
   templateUrl: './create-vote.component.html',
@@ -28,11 +30,13 @@ export class CreateVoteComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.groupUid != "" && this.groupUid != undefined){
-      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000).subscribe(members =>{
-        this.membersList = members.content;
-      });
-    }
+    $('#create-vote-modal').on('shown.bs.modal', function () {
+      if (this.groupUid != "" && this.groupUid != undefined) {
+        this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
+          this.membersList = members.content;
+        });
+      }
+    }.bind(this));
   }
 
   initCreateVoteForm(){

@@ -26,6 +26,8 @@ export class GroupsComponent implements OnInit {
   protected filteredGroupsPage: GroupInfo[] = [];
   protected pickedRoleFilter: String = '';
 
+  public createTaskGroupUid: string = null;
+
   constructor(private groupService: GroupService,
     private spinnerService: Ng4LoadingSpinnerService) {
   }
@@ -165,6 +167,38 @@ export class GroupsComponent implements OnInit {
 
   groupCreationFailed(error: any) {
     console.log("Failed to create group. Error: ", error)
+  }
+
+
+  showCreateMeetingModal(group: GroupInfo) {
+    console.log("Show create meeting modal for group: " + group.groupUid);
+    this.createTaskGroupUid = group.groupUid;
+    $("#create-meeting-modal").modal("show");
+  }
+
+  meetingSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-meeting-modal").modal("hide");
+  }
+
+  showCreateVoteModal(group: GroupInfo) {
+    this.createTaskGroupUid = group.groupUid;
+    $("#create-vote-modal").modal("show");
+  }
+
+  voteSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-vote-modal").modal("hide");
+  }
+
+  showCreateTodoModal(group: GroupInfo) {
+    this.createTaskGroupUid = group.groupUid;
+    $("#create-todo-modal").modal("show");
+  }
+
+  todoSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-todo-modal").modal("hide");
   }
 
 }

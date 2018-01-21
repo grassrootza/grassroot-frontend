@@ -1,123 +1,138 @@
-<div class="modal-header">
-  <h5 class="modal-title">{{ 'group.activity.voteModal.title' | translate }}</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<div class="modal-body">
+<div class="modal fade" id="create-vote-modal" tabindex="-1" role="dialog"
+     aria-labelledby="create-vote-modal"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
 
-  <form [formGroup]="createVoteForm"
-        (ngSubmit)="createVote()">
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="vote-subject">{{ 'group.activity.voteModal.subject' | translate }}</label>
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.activity.voteModal.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" id="vote-subject" placeholder="{{ 'group.activity.voteModal.subject' | translate }}"
-               name="subject" [formControl]="createVoteForm.controls['title']">
-      </div>
-    </div>
+      <div class="modal-body">
 
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="vote-type">{{ 'group.activity.voteModal.typeOfVote' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <select class="form-control" id="vote-type" name="name-select" [formControl]="createVoteForm.controls['voteType']" (change)="voteTypeChanged($event.target.value)">
-          <option value="YES_NO">{{ 'group.activity.voteModal.yesNo' | translate }}</option>
-          <option value="MULTI_OPTION">{{ 'group.activity.voteModal.multiOption' | translate }}</option>
-        </select>
-      </div>
-    </div>
+        <form [formGroup]="createVoteForm"
+              (ngSubmit)="createVote()">
 
-    <div class="form-group row" *ngIf="!yesNoVote">
-      <div class="col-sm-4 col-form-label">
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="vote-subject">{{ 'group.activity.voteModal.subject' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="vote-subject"
+                     placeholder="{{ 'group.activity.voteModal.subject' | translate }}"
+                     name="subject" [formControl]="createVoteForm.controls['title']">
+            </div>
+          </div>
 
-      </div>
-      <div class="col-sm-8">
-        <div formArrayName="voteOptions">
-          <div *ngFor="let options of createVoteForm.controls.voteOptions.controls; let i=index">
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="vote-type">{{ 'group.activity.voteModal.typeOfVote' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="vote-type" name="name-select"
+                      [formControl]="createVoteForm.controls['voteType']"
+                      (change)="voteTypeChanged($event.target.value)">
+                <option value="YES_NO">{{ 'group.activity.voteModal.yesNo' | translate }}</option>
+                <option value="MULTI_OPTION">{{ 'group.activity.voteModal.multiOption' | translate }}</option>
+              </select>
+            </div>
+          </div>
 
-            <div [formGroupName]="i" style="margin-bottom: 0.1rem">
-              <div class="input-group">
-                <input type="text" class="form-control" placeholder="{{'group.activity.voteModal.enterVoteOption' | translate}}"
-                       aria-describedby="basic-addon2" formControlName="option">
-                <span class="input-group-addon" id="basic-addon" *ngIf="createVoteForm.controls.voteOptions.controls.length > 1"
-                      (click)="removeOption(i)">
-                  -
-                </span>
+          <div class="form-group row" *ngIf="!yesNoVote">
+            <div class="col-sm-4 col-form-label">
+
+            </div>
+            <div class="col-sm-8">
+              <div formArrayName="voteOptions">
+                <div *ngFor="let options of createVoteForm.controls.voteOptions.controls; let i=index">
+
+                  <div [formGroupName]="i" style="margin-bottom: 0.1rem">
+                    <div class="input-group">
+                      <input type="text" class="form-control"
+                             placeholder="{{'group.activity.voteModal.enterVoteOption' | translate}}"
+                             aria-describedby="basic-addon2" formControlName="option">
+                      <span class="input-group-addon" id="basic-addon"
+                            *ngIf="createVoteForm.controls.voteOptions.controls.length > 1"
+                            (click)="removeOption(i)">
+                        -
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div>
+                <button type="button" class="btn btn-secondary" (click)="addOption()">
+                  {{'group.activity.voteModal.addVoteOption' | translate}}
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="vote-date">{{ 'group.activity.voteModal.dateAndTime' | translate }}</label>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" id="vote-date"
+                         name="dp" [formControl]="createVoteForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                      <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-
-        </div>
-
-        <div>
-          <button type="button" class="btn btn-secondary" (click)="addOption()">
-            {{'group.activity.voteModal.addVoteOption' | translate}}
-          </button>
-        </div>
-
-      </div>
-    </div>
-
-
-
-
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="vote-date">{{ 'group.activity.voteModal.dateAndTime' | translate }}</label>
-      </div>
-      <div class="col-sm-4">
-        <div class="form-group">
-          <div class="input-group">
-            <input class="form-control" placeholder="yyyy-mm-dd" id="vote-date"
-                   name="dp" [formControl]="createVoteForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
-              </button>
+            <div class="col-sm-4">
+              <ngb-timepicker [formControl]="createVoteForm.controls['time']" [spinners]="false"></ngb-timepicker>
             </div>
           </div>
-        </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="vote-description">{{ 'group.activity.voteModal.description' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <textarea class="form-control" id="vote-description" rows="3"
+                        placeholder="{{ 'group.activity.voteModal.description' | translate }}"
+                        [formControl]="createVoteForm.controls['description']"></textarea>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="todo-confirming-members">{{ 'group.activity.voteModal.assignedMembers' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="todo-confirming-members"
+                      [formControl]="createVoteForm.controls['assignedMemberUids']"
+                      name="name-select" multiple>
+                <option *ngFor="let member of membersList" [ngValue]="member.user.uid">
+                  {{member.user.displayName}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+
+        </form>
+
       </div>
-      <div class="col-sm-4">
-        <ngb-timepicker [formControl]="createVoteForm.controls['time']" [spinners]="false"></ngb-timepicker>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="createVote()" [disabled]="!createVoteForm.valid">{{
+          'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
       </div>
+
     </div>
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="vote-description">{{ 'group.activity.voteModal.description' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <textarea class="form-control" id="vote-description" rows="3"
-                  placeholder="{{ 'group.activity.voteModal.description' | translate }}"
-                  [formControl]="createVoteForm.controls['description']"></textarea>
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="todo-confirming-members">{{ 'group.activity.voteModal.assignedMembers' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <select class="form-control" id="todo-confirming-members" [formControl]="createVoteForm.controls['assignedMemberUids']"
-                name="name-select" multiple>
-          <option *ngFor="let member of membersList" [ngValue]="member.user.uid">
-            {{member.user.displayName}}
-          </option>
-        </select>
-      </div>
-    </div>
-
-
-  </form>
-
+  </div>
 </div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-primary" (click)="createVote()" [disabled]="!createVoteForm.valid">{{ 'action.save' | translate }}</button>
-  <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
-</div>
+

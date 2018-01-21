@@ -20,7 +20,8 @@ export class GroupActivityComponent implements OnInit {
   public upcomingTasks: Task[] = [];
   public taskTypes = TaskType;
   public pastTasks : Task[] = [];
-  public allTasks: Task[] = [];
+
+  public createTaskGroupUid: string = null;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -60,9 +61,9 @@ export class GroupActivityComponent implements OnInit {
     console.log("calling subscribe");
     this.taskService.loadAllGroupTasks(this.userService.getLoggedInUser().userUid, this.groupUid)
       .subscribe(tasks => {
-          this.allTasks = tasks;
           let now = new Date();
-          this.pastTasks = this.allTasks.filter(t => new Date(t.deadlineMillis) < now);
+          this.pastTasks = tasks.filter(t => new Date(t.deadlineMillis) < now);
+          console.log("Old Tasks @@@@", this.pastTasks.length);
         }, error =>{
           if(error.status == 401){
             console.log("Error @@@@@@@", error.status);
@@ -70,10 +71,10 @@ export class GroupActivityComponent implements OnInit {
           console.log(error.getmessage);
       }
       );
-    console.log("All Tasks @@@@",this.allTasks.length);
   }
 
   showCreateMeetingModal(){
+    this.createTaskGroupUid = this.groupUid;
     $("#create-meeting-modal").modal("show");
   }
 
@@ -85,6 +86,7 @@ export class GroupActivityComponent implements OnInit {
   }
 
   showCreateVoteModal(){
+    this.createTaskGroupUid = this.groupUid;
     $("#create-vote-modal").modal("show");
   }
 
@@ -96,6 +98,7 @@ export class GroupActivityComponent implements OnInit {
   }
 
   showCreateTodoModal(){
+    this.createTaskGroupUid = this.groupUid;
     $("#create-todo-modal").modal("show");
   }
 

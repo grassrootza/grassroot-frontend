@@ -97,26 +97,14 @@
 </div>
 
 <!--modals-->
-<div class="modal fade" id="create-meeting-modal" tabindex="-1" role="dialog" aria-labelledby="create-meeting-modal" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <app-create-meeting [groupUid]="groupUid" (meetingSaved)="meetingSaved($event)"></app-create-meeting>
-    </div>
-  </div>
-</div>
 
-<div class="modal fade" id="create-vote-modal" tabindex="-1" role="dialog" aria-labelledby="create-vote-modal" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <app-create-vote [groupUid]="groupUid" (voteSaved)="voteSaved($event)"></app-create-vote>
-    </div>
-  </div>
-</div>
+<app-create-meeting [groupUid]="createTaskGroupUid"
+                    (meetingSaved)="meetingSaved($event)"></app-create-meeting>
 
-<div class="modal fade" id="create-todo-modal" tabindex="-1" role="dialog" aria-labelledby="create-todo-modal" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <app-create-todo [groupUid]="groupUid" (todoSaved)="todoSaved($event)"></app-create-todo>
-    </div>
-  </div>
-</div>
+<app-create-vote [groupUid]="createTaskGroupUid"
+                 (voteSaved)="voteSaved($event)"></app-create-vote>
+
+<app-create-todo [groupUid]="createTaskGroupUid"
+                 (todoSaved)="todoSaved($event)"></app-create-todo>
+
+

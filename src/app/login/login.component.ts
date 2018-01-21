@@ -2,8 +2,7 @@ import {Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserService} from "../user/user.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {requirePhoneNumberOrEmail} from "../validators/requirePhoneNumberOrEmail";
-import {NumberValidator} from "../validators/NumberValidator";
+import {eitherEmailOrPhoneValid} from "../utils/CustomValidators";
 
 @Component({
   selector: 'app-login',
@@ -19,9 +18,9 @@ export class LoginComponent {
   constructor(public userService: UserService, private router: Router) {
     this.message = '';
     this.loginForm = new FormGroup({
-        username: new FormControl('',[Validators.required,requirePhoneNumberOrEmail,NumberValidator.numberValidator]),
+        username: new FormControl('',[Validators.required, Validators.minLength(3), eitherEmailOrPhoneValid]),
         password:new FormControl('',Validators.required)
-    });
+    }, { updateOn: 'blur' });
   }
 
   login(username: string, password: string): boolean {

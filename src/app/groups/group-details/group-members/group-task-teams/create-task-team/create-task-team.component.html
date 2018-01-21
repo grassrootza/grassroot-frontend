@@ -1,0 +1,48 @@
+<div class="modal fade" id="create-task-team-modal" tabindex="-1" role="dialog" aria-labelledby="create-meeting-modal"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.taskTeam.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="createTaskTeamForm"
+              (ngSubmit)="createTaskTeam()">
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="meeting-subject">{{ 'group.taskTeam.name' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="meeting-subject"
+                     placeholder="{{ 'group.taskTeam.name' | translate }}"
+                     name="subject" [formControl]="createTaskTeamForm.controls['taskTeamName']">
+            </div>
+          </div>
+          <h4>{{'group.taskTeam.numberOfMembers' | translate}}
+            <i class="fas fa-user"></i>
+            {{createTaskTeamForm.controls['membersCount'].value}}
+          </h4>
+          <hr/>
+          <h4>{{ 'group.taskTeam.selectMembers' | translate }}</h4>
+          <app-member-filter [groupUid]="group.groupUid" (members)="updateMembersCount($event)"></app-member-filter>
+
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="createTaskTeam()" [disabled]="!createTaskTeamForm.valid">{{'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
