@@ -18,6 +18,7 @@ import {BroadcastsModule} from "../broadcasts/broadcasts.module";
 import {Ng4LoadingSpinnerModule} from "ng4-loading-spinner";
 import {ClipboardModule} from "ngx-clipboard/dist";
 import {GroupBroadcastComponent} from "./group-details/group-broadcast/group-broadcast.component";
+import {CreateTaskTeamComponent} from "./group-details/group-members/group-task-teams/create-task-team/create-task-team.component";
 
 @NgModule({
   imports: [
@@ -41,7 +42,8 @@ import {GroupBroadcastComponent} from "./group-details/group-broadcast/group-bro
     GroupCustomFilterComponent,
     GroupMembersProfileComponent,
     GroupSettingsComponent,
-    GroupAddMemberComponent
+    GroupAddMemberComponent,
+    CreateTaskTeamComponent
   ],
   exports: [
     ClipboardModule

@@ -132,6 +132,7 @@ export class MemberListComponent implements OnInit {
       this.editMemberForm.controls['emailAddress'].setValue(member.user.email != null ? member.user.email : "");
       this.editMemberForm.controls['province'].setValue(member.user.province);
       this.editMemberForm.controls['affiliations'].setValue(member.affiliations.join(","));
+      this.editMemberForm.controls['taskTeams'].setValue(member.group.subGroups != null ? member.group.subGroups : "");
 
       this.singleMemberManage = member;
 

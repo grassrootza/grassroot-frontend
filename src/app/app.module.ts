@@ -37,6 +37,7 @@ import {SharedModule} from "./shared.module";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {NotificationService} from "./user/notification.service";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -81,7 +82,9 @@ const routes: Routes = [
     path: 'broadcast/create/:type/:parentId',
       loadChildren: './broadcasts/broadcasts.module#BroadcastsModule', canActivate: [LoggedInGuard]
   },
-  {path: 'user', loadChildren: './user/user-profile.module#UserProfileModule', canActivate: [LoggedInGuard]},
+  {
+    path: 'user', loadChildren: './user/user-profile.module#UserProfileModule', canActivate: [LoggedInGuard]
+  },
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]}
 ];
 
@@ -137,6 +140,7 @@ const routes: Routes = [
     AlertService,
     GroupService,
     UserService,
+    NotificationService,
     JoinService,
     IntegrationsService,
     TaskService,

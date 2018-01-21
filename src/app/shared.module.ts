@@ -9,6 +9,7 @@ import {CreateVoteComponent} from "./groups/group-details/group-activity/create-
 import {CreateMeetingComponent} from "./groups/group-details/group-activity/create-meeting/create-meeting.component";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {PaginationComponent} from "./pagination/pagination.component";
+import {MemberFilterComponent} from "./groups/member-filter/member-filter.component";
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import {PaginationComponent} from "./pagination/pagination.component";
     CreateVoteComponent,
     CreateTodoComponent,
     PaginationComponent,
+    MemberFilterComponent
   ],
   entryComponents: [
     CreateMeetingComponent,
@@ -32,7 +34,7 @@ import {PaginationComponent} from "./pagination/pagination.component";
   ],
   exports: [
     RouterModule, FormsModule, ReactiveFormsModule, TranslateModule,
-    CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, PaginationComponent // todo: move into LoggedInShared
+    CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, PaginationComponent, MemberFilterComponent // todo: move into LoggedInShared
   ]
 })
 export class SharedModule {
