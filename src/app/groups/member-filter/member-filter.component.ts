@@ -12,14 +12,9 @@ import {Membership} from '../model/membership.model';
 })
 export class MemberFilterComponent implements OnInit {
 
+  @Input() groupUid: string = "";
 
-  @Input()
-  groupUid: string = "";
-
-  @Output()
-  public members: EventEmitter<Membership[]> = new EventEmitter();
-
-
+  @Output() public members: EventEmitter<Membership[]> = new EventEmitter();
 
   province = UserProvince;
   provinceKeys: string[];

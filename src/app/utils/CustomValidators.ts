@@ -1,5 +1,6 @@
 import {isValidNumber} from "libphonenumber-js";
 import {AbstractControl, FormGroup, Validators} from "@angular/forms";
+import {isNumeric} from "rxjs/util/isNumeric";
 
 export const optionalPhoneValidator = (control: AbstractControl) => {
   let inputStr = control.value;
@@ -23,6 +24,20 @@ export const optionalEmailValidator = (control: AbstractControl) => {
   // console.log("value present, validate");
 
   return Validators.email(control);
+};
+
+export const eitherEmailOrPhoneValid = (control: AbstractControl) => {
+  let inputStr = control.value;
+  if (!inputStr || inputStr.length < 3) {
+    return null;
+  }
+
+  if (isNumeric(inputStr)) {
+    return optionalPhoneValidator(control);
+  } else {
+    return optionalEmailValidator(control);
+  }
+
 };
 
 export const emailOrPhoneEntered = (emailFieldName: string = "email", phoneFieldName: string = "phone") => {

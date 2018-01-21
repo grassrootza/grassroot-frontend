@@ -20,7 +20,7 @@ export class PasswordComponent implements OnInit {
       'oldpassword': ['', Validators.required],
       'newpassword': ['', Validators.required],
       'confirmpwd' : ['', Validators.required]
-    },{validator:this.comparePasswords});
+    },{ validator: this.comparePasswords, updateOn: 'blur'});
   }
 
   ngOnInit() {
