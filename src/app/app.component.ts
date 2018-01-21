@@ -21,21 +21,20 @@ export class AppComponent implements OnInit {
 
   loggedInUser: AuthenticatedUser = null;
   alertMessage: string = "";
+  currentUrl = "";
 
   notifications: Notification[] = [];
 
   popupNotification: Notification = null;
 
-  newNotifications: Notification[] = [];
+  private newNotifications: Notification[] = [];
+  private currentPopupNotificationIndex = 0;
+  private popopNotificationTimeoutId: any = null;
+  private popupNotificationEngaged = false;
+  private popupNotificationDisplayInProgress = false;
 
-  currentPopupNotificationIndex = 0;
-
-  currentUrl = "";
-  popopNotificationTimeoutId: any = null;
-  popupNotificationEngaged = false;
-  popupNotificationDisplayInProgress = false;
-
-  maxNumberOfPopupNotificationInSequence = 3;
+  private maxNumberOfPopupNotificationInSequence = 3;
+  private DISPLAYED_NOTIFICATIONS_STORAGE_KEY: string = "displayedNotifications";
 
   public loggedInUserImageUrl = environment.backendAppUrl + "/api/user/profile/image/view";
 
@@ -88,7 +87,12 @@ export class AppComponent implements OnInit {
       .subscribe(
         notifications => {
           console.log("Notifications: ", notifications);
-          this.newNotifications = notifications.filter(nn => !this.notifications.find(old => old.uid == nn.uid));
+
+          let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+          if (!displayedNotifications)
+            displayedNotifications = "";
+
+          this.newNotifications = notifications.filter(nn => displayedNotifications.indexOf(nn.uid) == -1);
           this.notifications = notifications;
           if (this.newNotifications.length > 0) {
             this.currentPopupNotificationIndex = 0;
@@ -112,6 +116,13 @@ export class AppComponent implements OnInit {
       this.popopNotificationTimeoutId = setTimeout(() => {
         this.hidePopupNotification()
       }, 4000);
+
+
+      let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+      displayedNotifications = displayedNotifications ? displayedNotifications : "";
+      displayedNotifications = displayedNotifications + ";" + this.popupNotification.uid;
+      localStorage.setItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
+
       this.currentPopupNotificationIndex++;
     }
     else {
