@@ -16,7 +16,6 @@ import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from "@angular/co
 import {GroupInfoComponent} from './groups/group-list-row/group-info.component';
 import {TaskService} from "./task/task.service";
 import {JwtModule} from "@auth0/angular-jwt";
-import {PaginationComponent} from './pagination/pagination.component';
 import {GroupMembersImportComponent} from './groups/group-details/group-members/group-members-import/group-members-import.component';
 import {FileImportComponent} from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
 import {GoogleImportComponent} from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
@@ -27,12 +26,8 @@ import {IntegrationConnectComponent} from './user/integrations/integration-conne
 import {JoinComponent} from './join/join.component';
 import {JoinService} from "./join/join.service";
 import {AlertService} from "./utils/alert.service";
-import {CreateMeetingComponent} from './groups/group-details/group-activity/create-meeting/create-meeting.component';
-import {CreateVoteComponent} from './groups/group-details/group-activity/create-vote/create-vote.component';
-import {CreateTodoComponent} from './groups/group-details/group-activity/create-todo/create-todo.component';
 import {CreateGroupComponent} from './groups/create-group/create-group.component';
 import {ToDoRespondComponent} from './task/todo-respond/todo-respond.component';
-import {ClipboardModule} from 'ngx-clipboard';
 import {PwdResetInitiateComponent} from './login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component';
 import {PwdResetValidateComponent} from './login/password-reset/pwd-reset-validate/pwd-reset-validate.component';
 import {PwdResetNewComponent} from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
@@ -98,7 +93,6 @@ const routes: Routes = [
     RegistrationComponent,
     HomeComponent,
     GroupInfoComponent,
-    PaginationComponent,
     GroupMembersImportComponent,
     FileImportComponent,
     GoogleImportComponent,
@@ -106,9 +100,6 @@ const routes: Routes = [
     FacebookImportComponent,
     IntegrationConnectComponent,
     JoinComponent,
-    CreateMeetingComponent,
-    CreateVoteComponent,
-    CreateTodoComponent,
     CreateGroupComponent,
     ToDoRespondComponent,
     PwdResetInitiateComponent,
@@ -116,16 +107,10 @@ const routes: Routes = [
     PwdResetNewComponent,
     PasswordResetComponent
   ],
-  entryComponents: [
-    CreateMeetingComponent,
-    CreateVoteComponent,
-    CreateTodoComponent
-  ],
   imports: [
     BrowserModule,
     HttpClientModule,
     Ng4LoadingSpinnerModule,
-    ClipboardModule,
     RouterModule.forRoot(routes), // <-- routes
     TranslateModule.forRoot({
       loader: {

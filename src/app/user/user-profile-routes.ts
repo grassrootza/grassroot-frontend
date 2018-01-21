@@ -7,11 +7,11 @@ import {PasswordComponent} from "./password/password.component";
 import {UserProfileComponent} from "./profile-container/user-profile.component";
 
 export const USER_PROFILE_ROUTES: Routes = [
-  {path: 'user', component: UserProfileComponent, canActivate: [LoggedInGuard], children: [
+  {path: '', component: UserProfileComponent, canActivate: [LoggedInGuard], children: [
     {path: '', redirectTo: 'profile', pathMatch: 'full'},
     {path: 'profile', component: ProfileFormComponent, canActivate: [LoggedInGuard]},
     {path: 'password', component: PasswordComponent, canActivate: [LoggedInGuard]},
     {path: 'account', component: AccountComponent, canActivate: [LoggedInGuard]},
-    {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard]},
+    {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard]}
   ]}
 ];
