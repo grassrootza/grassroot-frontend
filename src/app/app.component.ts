@@ -35,8 +35,7 @@ export class AppComponent implements OnInit {
   popupNotificationEngaged = false;
   popupNotificationDisplayInProgress = false;
 
-  maxNumberOfPopupNotificationInRole = 3;
-
+  maxNumberOfPopupNotificationInSequence = 3;
 
   public loggedInUserImageUrl = environment.backendAppUrl + "/api/user/profile/image/view";
 
@@ -105,7 +104,7 @@ export class AppComponent implements OnInit {
   }
 
   showNextNewNotification() {
-    if (this.newNotifications.length > this.currentPopupNotificationIndex && this.currentPopupNotificationIndex < this.maxNumberOfPopupNotificationInRole) {
+    if (this.newNotifications.length > this.currentPopupNotificationIndex && this.currentPopupNotificationIndex < this.maxNumberOfPopupNotificationInSequence) {
       this.popupNotificationDisplayInProgress = true;
       console.log("Showing popup ntf " + this.currentPopupNotificationIndex);
       this.popupNotification = this.newNotifications[this.currentPopupNotificationIndex];
