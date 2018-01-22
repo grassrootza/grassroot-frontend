@@ -57,7 +57,7 @@
     "create": "Create Group",
     "loading": "Loading groups",
     "filter": {
-      "selectRole": "Select role",
+      "selectRole": "Select a role",
       "commitee": "Commitee",
       "member": "Member",
       "organizer": "Organizer",
@@ -133,6 +133,7 @@
     "joinWords": "Join words",
     "joinWordsSuffix": " to {{ shortCode }}",
     "noJoinWordsCanSet": " None. Click to add",
+    "flyer": "Download flyer",
     "nav": {
       "dashboard": "Group Dashboard",
       "activity": "Activity",
@@ -448,7 +449,9 @@
     "settings": {
       "title": "Group settings",
       "groupName": "Group name",
-      "groupDescription": "Group description",
+      "network": "Network",
+      "networkSelect": "(feature under construction)",
+      "groupDescription": "Group description (shown to people when they join)",
       "groupPrivacy": "Group privacy",
       "groupPublic": "Public",
       "groupPrivate": "Private",
@@ -465,7 +468,12 @@
       "ordinaryMember": "Ordinary member",
       "committeeMember": "Committee member",
       "groupOrganizer": "Group organizer",
-      "updateDone": "Done, group settings have been updated"
+      "updateDone": "Done, group settings have been updated",
+      "image": {
+        "click": "Click to add a group profile picture ",
+        "drag": "... or drag and drop ",
+        "change": "Click to change group profile picture "
+      }
     },
     "taskTeam": {
       "addNew": "Add task team",
@@ -582,7 +590,7 @@
   },
   "join": {
     "title": "Join \"{{ groupName }}\"",
-    "description": "Group description: {{ groupDescription }}",
+    "description": "About this group: {{ groupDescription }}",
     "intro": "Just enter your details below to join \"{{ groupName }}\". By joining, you are agreeing to give the details below to the group's organizer, through the Grassroot platform",
     "privacy": "privacy policy",
     "name": "Your name (can be a nickname or alias)",

@@ -29,6 +29,21 @@
   margin-right: 0.5rem;
   margin-bottom: 0.2rem;
 }
-.save-settings-btn{
-  margin-top: 1rem;
+
+.dragarea {
+  font-size: 1.2em;
+  border: 2px dashed #bbb;
+  padding: 10px ;
+  background-color: #fff;
+  color: #bbb;
+  height: 100%;
+  align-items: center;
+}
+
+.droparea {
+  font-size: 1.2em;
+  border: 2px dashed #bbb;
+  padding: 10px ;
+  background-color: #eff;
+  color: #aaa;
 }

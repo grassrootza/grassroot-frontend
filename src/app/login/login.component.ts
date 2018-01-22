@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {UserService} from "../user/user.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {eitherEmailOrPhoneValid} from "../utils/CustomValidators";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,7 @@ export class LoginComponent {
   message: string;
   loginForm:FormGroup;
 
-  constructor(public userService: UserService, private router: Router) {
+  constructor(public userService: UserService, private router: Router, private translate: TranslateService) {
     this.message = '';
     this.loginForm = new FormGroup({
         username: new FormControl('',[Validators.required, Validators.minLength(3), eitherEmailOrPhoneValid]),
@@ -57,10 +58,8 @@ export class LoginComponent {
     return false;
   }
 
-  // todo: rather use i18n message
   private handleLoginError(error: string) {
-    console.log("Login failed", error);
-    this.message = "Login failed. Try again.";
+    this.translate.get("login.error-message").subscribe(msg => this.message = msg);
     setTimeout(() => {
       this.message = "";
     }, 2000)

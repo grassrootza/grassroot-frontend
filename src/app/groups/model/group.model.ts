@@ -29,7 +29,8 @@ export class Group {
               public topics: string[],
               public joinWords: JoinCodeInfo[],
               public joinWordsLeft: number,
-              public reminderMinutes: number) {
+              public reminderMinutes: number,
+              public profileImageUrl: string) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 
@@ -39,6 +40,10 @@ export class Group {
 
   public getFormattedRoleName(): string {
     return GroupRole[this.userRole];
+  }
+
+  public hasProfileImage(): boolean {
+    return !!this.profileImageUrl;
   }
 
   public joinWordsExtracted(): string[] {

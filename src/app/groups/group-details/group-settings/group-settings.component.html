@@ -1,62 +1,83 @@
 <div *ngIf="group">
   <div class="card">
-    <div class="card-body events-box">
-      <div class="row">
-        <div class="col-6">
-          <h2>
-            {{'group.settings.title' | translate}}
-          </h2>
+    <div class="card-body">
+
+      <div class="row mt-md-1 mb-md-3">
+        <div class="d-flex col-12 justify-content-center">
+          <h2>{{'group.settings.title' | translate}}</h2>
         </div>
       </div>
 
-        <form [formGroup]="groupForm"
-              (ngSubmit)="updateGroup()">
+      <div class="row">
+        <div class="col-md-8 offset-md-2 col-12">
+
+          <form [formGroup]="groupForm" (ngSubmit)="updateGroup()">
 
           <div class="form-group row">
-            <div class="col-sm-4 col-form-label text-right">
-              <label for="group-name">{{'group.settings.groupName' | translate}}</label>
-            </div>
-            <div class="col-sm-8">
-              <input type="text" class="form-control" id="group-name" placeholder="{{'group.settings.groupName' | translate}}"
+            <div class="col-md-6 col-sm-12">
+              <label class="grassroot-label-em" for="group-name">{{'group.settings.groupName' | translate}}</label>
+              <input type="text" class="form-control form-control-em" id="group-name" placeholder="{{'group.settings.groupName' | translate}}"
                      name="name" [formControl]="groupForm.controls['name']" (keyup)="settingsChangedTrigger()">
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <label class="grassroot-label-em">{{ 'group.settings.network' | translate }}</label>
+              <select class="form-control form-control-em">
+                <option>{{ 'group.settings.networkSelect' | translate }}</option>
+              </select>
             </div>
           </div>
 
           <div class="form-group row">
-            <div class="col-sm-4 col-form-label text-right">
-              <label for="group-description">{{'group.settings.groupDescription' | translate}}</label>
+            <div class="col-md-3 col-sm-6" *ngIf="(group.hasProfileImage())">
+              <img class="img-thumbnail" src="{{ group.profileImageUrl }}" />
             </div>
-            <div class="col-sm-8">
-              <textarea class="form-control" id="group-description" placeholder="{{'group.settings.groupDescription' | translate}}"
+            <div [ngClass]="(group.hasProfileImage()) ? 'col-md-9 col-sm-6' : 'col-12'">
+              <div draggable="true" ngClass="{{imgDragAreaClass}}">
+                <div class="col-md-12 text-center" >
+                  <a href="javascript:void(0)" (click)="file.click()" >
+                    {{ (group.hasProfileImage() ? 'group.settings.image.change' : 'group.settings.image.click') | translate}}</a>
+                  {{ 'group.settings.image.drag'  | translate}}
+                  <input type="file" #file
+                         [multiple]="false"
+                         (change) = "onImageSelected($event)"
+                         style="display:none" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-12">
+              <label class="grassroot-label-em" for="group-description">{{'group.settings.groupDescription' | translate}}</label>
+              <textarea class="form-control form-control-em" id="group-description" placeholder="{{'group.settings.groupDescription' | translate}}"
                         name="description" [formControl]="groupForm.controls['description']" rows="3" (keyup)="settingsChangedTrigger()"></textarea>
             </div>
           </div>
 
-          <div class="form-group row">
-            <div class="col-sm-4 col-form-label text-right">
-              <label for="group-description">{{'group.settings.groupPrivacy' | translate}}</label>
+          <div class="form-group row mt-md-3">
+            <div class="col-md-3 col-sm-4 col-form-label">
+              <label for="publicRadio" class="grassroot-label-em" >{{'group.settings.groupPrivacy' | translate}}</label>
             </div>
-            <div class="col-sm-8">
+            <div class="col-md-9 col-sm-8">
               <div class="form-check form-check-inline privacy-radios">
                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="publicRadio" value="PUBLIC"
                        [formControl]="groupForm.controls['privacy']" (change)="settingsChangedTrigger()">
-                <img src="assets/icon_lock_open.png" />
-                <label for="publicRadio">{{'group.settings.groupPublic' | translate}}</label>
+                <label class="grassroot-label-em" for="publicRadio"><i class="fas fa-lock-open"></i> {{'group.settings.groupPublic' | translate}}</label>
               </div>
               <div class="form-check form-check-inline privacy-radios">
                 <input class="form-check-input" type="radio" name="inlineRadioOptions" id="privateRadio" value="PRIVATE"
                        [formControl]="groupForm.controls['privacy']" (change)="settingsChangedTrigger()">
-                <label for="privateRadio">{{'group.settings.groupPrivate' | translate}}</label>
+                <label class="grassroot-label-em" for="privateRadio"><i class="fas fa-lock"></i> {{'group.settings.groupPrivate' | translate}}</label>
               </div>
             </div>
           </div>
 
           <div class="form-group row">
-            <div class="col-sm-4 col-form-label text-right">
-              <label for="group-reminder-in-minutes">{{'group.settings.reminderInMinutes' | translate}}</label>
+            <div class="col-sm-6 col-form-label">
+              <label class="grassroot-label-em" for="group-reminder-in-minutes">{{'group.settings.reminderInMinutes' | translate}}</label>
             </div>
-            <div class="col-sm-8">
-              <select class="form-control" id="group-reminder-in-minutes" [formControl]="groupForm.controls['reminderInMinutes']"
+            <div class="col-sm-6">
+              <select class="form-control form-control-em" id="group-reminder-in-minutes" [formControl]="groupForm.controls['reminderInMinutes']"
                       name="name-select" (change)="settingsChangedTrigger()">
                 <option [ngValue]="0">{{'group.settings.reminders.noReminder' | translate}} </option>
                 <option [ngValue]="60">{{'group.settings.reminders.hourBefore' | translate}} </option>
@@ -114,9 +135,20 @@
               </div>
             </div>
           </div>
-        </form>
 
-      <button type="button" class="btn btn-primary float-right save-settings-btn" (click)="updateGroup()" [disabled]="!groupForm.valid">{{ 'action.save' | translate }}</button>
+          <div class="form-group row mt-3">
+            <div class="col-md-6 col-sm-12">
+              <button type="button" class="btn btn-secondary float-left cancel-button" [routerLink]="['../dashboard']">{{ 'action.cancel' | translate }}</button>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <button type="button" class="btn btn-primary float-right save-button" (click)="updateGroup()" [disabled]="!groupForm.valid">{{ 'action.save' | translate }}</button>
+            </div>
+          </div>
+
+          </form>
+        </div>
+      </div>
+
 
     </div>
   </div>

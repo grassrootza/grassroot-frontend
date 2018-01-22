@@ -9,13 +9,18 @@
       <div class="row">
         <div class="col-md-4">
           <img class="img-fluid"
-               src="{{baseUrl}}/api/group/fetch/flyer?typeOfFile=JPEG&groupUid={{group.groupUid}}&color=true&language=en"/>
+               src="{{ group.hasProfileImage() ? group.profileImageUrl : flyerUrlJpg }}"/>
         </div>
 
         <div class="col-md-8 group-description">
           <p>{{group.description}}</p>
           <div class="row">
             <div class="col-md-7">
+              <!-- maybe do a modal to select options in future -->
+              <div class="group-info" *ngIf="group.hasProfileImage()">
+                <a class="grassroot-link flyer-link" target="_blank" href="{{ flyerUrlPDF }}">{{ 'group.flyer' | translate }}</a>
+              </div>
+
               <div class="group-info creation-info">
                 <strong>{{'group.creationLabel' | translate}}</strong>
                 <span>{{'group.creationInfo' | translate:group}}</span>
