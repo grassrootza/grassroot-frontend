@@ -1,11 +1,12 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {GroupService} from '../groups/group.service';
 
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.css']
 })
-export class PaginationComponent implements OnChanges {
+export class PaginationComponent implements  OnChanges {
 
   public selectedPage: number = 0;
 
@@ -20,12 +21,18 @@ export class PaginationComponent implements OnChanges {
 
   public pagesList: number[] = [];
 
-  constructor() {
+  constructor(private groupService: GroupService) {
   }
 
 
   ngOnChanges(changes: SimpleChanges): void {
     this.selectPage(0);
+    this.groupService.shouldReloadPaginationNumbers.subscribe(shouldReload => {
+      if(shouldReload && this.selectedPage != 0){
+        this.selectPage(0);
+      }
+
+    })
   }
 
   selectPage(pageNo: number) {

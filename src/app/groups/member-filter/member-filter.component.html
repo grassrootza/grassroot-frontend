@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-3 col-sm-12">
+    <label for="province" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.province' | translate }}</label>
+    <select id="province" class="form-control" [(ngModel)]="selectedProvince" multiple (change)="filterData()">
+      <option *ngFor="let p of provinceKeys" [value]="p">{{ province[p] }}</option>
+    </select>
+  </div>
+
+  <div class="col-md-3 col-sm-12" *ngIf="group && group.subGroups.length > 0">
+    <label for="province" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.taskTeam' | translate }}</label>
+    <select id="task-teams" class="form-control" [(ngModel)]="selectedTaskTeams" multiple (change)="filterData()">
+      <option *ngFor="let taskTeam of group.subGroups" [value]="taskTeam.groupUid">{{ taskTeam.name }}</option>
+    </select>
+  </div>
+
+  <div class="col-md-3 col-sm-12" *ngIf="group && group.topics.length > 0">
+    <label for="province" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.topics' | translate }}</label>
+    <select id="topics" class="form-control" [(ngModel)]="selectedTopics" multiple (change)="filterData()">
+      <option *ngFor="let topic of group.topics" [value]="topic">{{ topic }}</option>
+    </select>
+  </div>
+</div>
+
+
+
+<!--<button type="button" class="btn btn-primary" style="margin-top: 1rem;" (click)="filterData()">{{ 'group.allMembers.filterMembers.update' | translate }}</button>-->

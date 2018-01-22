@@ -11,6 +11,8 @@ import {GroupJoinMethod} from "../../model/join-method";
 import {ItemPercentage} from "./member-detail-percent.model";
 import {Group} from "../../model/group.model";
 
+declare var $: any;
+
 @Component({
   selector: 'app-group-dashboard',
   templateUrl: './group-dashboard.component.html',
@@ -30,6 +32,8 @@ export class GroupDashboardComponent implements OnInit {
 
   public memberDetailsStats: ItemPercentage[] = [];
   public topicInterestsStats: ItemPercentage[] = [];
+
+  public createTaskGroupUid: string = null;
 
   constructor(private groupService: GroupService,
               private taskService: TaskService,
@@ -79,6 +83,37 @@ export class GroupDashboardComponent implements OnInit {
       )
   }
 
+
+  showCreateMeetingModal() {
+    console.log("Show create meeting modal for group: " + this.group.groupUid);
+    this.createTaskGroupUid = this.group.groupUid;
+    $("#create-meeting-modal").modal("show");
+  }
+
+  meetingSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-meeting-modal").modal("hide");
+  }
+
+  showCreateVoteModal() {
+    this.createTaskGroupUid = this.group.groupUid;
+    $("#create-vote-modal").modal("show");
+  }
+
+  voteSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-vote-modal").modal("hide");
+  }
+
+  showCreateTodoModal() {
+    this.createTaskGroupUid = this.group.groupUid;
+    $("#create-todo-modal").modal("show");
+  }
+
+  todoSaved(saveResponse) {
+    console.log(saveResponse);
+    $("#create-todo-modal").modal("hide");
+  }
   public memberGrowthPeriodChanged(newPeriod: string) {
     console.log("member growth period changed: ", newPeriod);
     this.currentMemberGrowthPeriod = newPeriod;
@@ -98,7 +133,6 @@ export class GroupDashboardComponent implements OnInit {
         this.loadMemberGrowthStats(null, null);
         break;
     }
-
   }
 
   public loadMemberGrowthStats(year: number, month: number) {

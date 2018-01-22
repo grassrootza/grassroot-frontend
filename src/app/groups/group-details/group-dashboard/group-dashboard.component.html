@@ -74,9 +74,7 @@
       </div>
     </div>
 
-
   </div>
-
 
   <div class="row stat-panel">
 
@@ -98,6 +96,30 @@
                   </option>
                 </select>
 
+                <div class="dropdown">
+                  <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false">
+                    {{ 'groups.row.action.title' | translate }}
+                  </button>
+                  <div *ngIf="group" class="dropdown-menu">
+                    <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')" class="dropdown-item"
+                       (click)="showCreateMeetingModal()">
+                      {{ 'groups.row.action.meeting' | translate }}
+                    </a>
+                    <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')" class="dropdown-item"
+                       (click)="showCreateVoteModal()">
+                      {{ 'groups.row.action.vote' | translate }}
+                    </a>
+                    <a *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')" class="dropdown-item"
+                       (click)="showCreateTodoModal()">
+                      {{ 'groups.row.action.create' | translate }}
+                    </a>
+                    <!-- todo : implement some form of permission control here -->
+                    <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{
+                      'groups.row.action.broadcast' | translate }}</a>
+                  </div>
+                </div>
+
                 <div *ngIf="group" class="container-fluid task-teams">
                   <h5 [translate]="'group.dashboard.task-teams'">Task teams</h5>
                   <div class="row" *ngFor="let subGroup of group.subGroups">
@@ -110,7 +132,6 @@
                     </div>
                   </div>
                 </div>
-
 
               </div>
             </div>
@@ -205,5 +226,14 @@
 
   </div>
 
-
 </div>
+
+
+<app-create-meeting [groupUid]="createTaskGroupUid"
+                    (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+
+<app-create-vote [groupUid]="createTaskGroupUid"
+                 (voteSaved)="voteSaved($event)"></app-create-vote>
+
+<app-create-todo [groupUid]="createTaskGroupUid"
+                 (todoSaved)="todoSaved($event)"></app-create-todo>

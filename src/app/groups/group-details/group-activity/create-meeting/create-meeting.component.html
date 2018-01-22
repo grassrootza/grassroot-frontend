@@ -1,88 +1,103 @@
-<div class="modal-header">
-  <h5 class="modal-title">{{ 'group.activity.meetingModal.title' | translate }}</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<div class="modal-body">
+<div class="modal fade" id="create-meeting-modal" tabindex="-1" role="dialog" aria-labelledby="create-meeting-modal"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
 
-  <form [formGroup]="createMeetingForm"
-        (ngSubmit)="createMeeting()">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.activity.meetingModal.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
 
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="meeting-subject">{{ 'group.activity.meetingModal.subject' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="text" class="form-control" id="meeting-subject" placeholder="{{ 'group.activity.meetingModal.subject' | translate }}"
-               name="subject" [formControl]="createMeetingForm.controls['subject']">
-      </div>
-    </div>
+        <form [formGroup]="createMeetingForm"
+              (ngSubmit)="createMeeting()">
 
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="meeting-location">{{ 'group.activity.meetingModal.location' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="text" id="meeting-location" class="form-control" placeholder="{{ 'group.activity.meetingModal.location' | translate }}"
-               name="location" [formControl]="createMeetingForm.controls['location']">
-      </div>
-    </div>
-
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="meeting-date-time">{{ 'group.activity.meetingModal.dateAndTime' | translate }}</label>
-      </div>
-      <div class="col-sm-4">
-        <div class="form-group">
-          <div class="input-group">
-            <input class="form-control" placeholder="yyyy-mm-dd" id="meeting-date-time"
-                   name="dp" [formControl]="createMeetingForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
-                <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
-              </button>
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="meeting-subject">{{ 'group.activity.meetingModal.subject' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="meeting-subject"
+                     placeholder="{{ 'group.activity.meetingModal.subject' | translate }}"
+                     name="subject" [formControl]="createMeetingForm.controls['subject']">
             </div>
           </div>
-        </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="meeting-location">{{ 'group.activity.meetingModal.location' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" id="meeting-location" class="form-control"
+                     placeholder="{{ 'group.activity.meetingModal.location' | translate }}"
+                     name="location" [formControl]="createMeetingForm.controls['location']">
+            </div>
+          </div>
+
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="meeting-date-time">{{ 'group.activity.meetingModal.dateAndTime' | translate }}</label>
+            </div>
+            <div class="col-sm-4">
+              <div class="form-group">
+                <div class="input-group">
+                  <input class="form-control" placeholder="yyyy-mm-dd" id="meeting-date-time"
+                         name="dp" [formControl]="createMeetingForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                      <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <ngb-timepicker [formControl]="createMeetingForm.controls['time']" [spinners]="false"></ngb-timepicker>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="meeting-public">{{ 'group.activity.meetingModal.public' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="checkbox" class="form-check-input" id="meeting-public"
+                     [formControl]="createMeetingForm.controls['publicMeeting']">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="todo-confirming-members">{{ 'group.activity.meetingModal.assignedMembers' | translate
+                }}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="todo-confirming-members"
+                      [formControl]="createMeetingForm.controls['assignedMemberUids']"
+                      name="name-select" multiple>
+                <option *ngFor="let member of membersList" [ngValue]="member.user.uid">
+                  {{member.user.displayName}}
+                </option>
+              </select>
+            </div>
+          </div>
+
+
+        </form>
+
       </div>
-      <div class="col-sm-4">
-        <ngb-timepicker [formControl]="createMeetingForm.controls['time']" [spinners]="false"></ngb-timepicker>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="createMeeting()" [disabled]="!createMeetingForm.valid">{{
+          'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
       </div>
+
     </div>
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="meeting-public">{{ 'group.activity.meetingModal.public' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <input type="checkbox" class="form-check-input" id="meeting-public" [formControl]="createMeetingForm.controls['publicMeeting']">
-      </div>
-    </div>
-
-    <div class="form-group row">
-      <div class="col-sm-4 col-form-label text-right">
-        <label for="todo-confirming-members">{{ 'group.activity.meetingModal.assignedMembers' | translate }}</label>
-      </div>
-      <div class="col-sm-8">
-        <select class="form-control" id="todo-confirming-members" [formControl]="createMeetingForm.controls['assignedMemberUids']"
-                name="name-select" multiple>
-          <option *ngFor="let member of membersList" [ngValue]="member.user.uid">
-            {{member.user.displayName}}
-          </option>
-        </select>
-      </div>
-    </div>
-
-
-  </form>
-
+  </div>
 </div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-primary" (click)="createMeeting()" [disabled]="!createMeetingForm.valid">{{ 'action.save' | translate }}</button>
-  <button type="button" class="btn btn-secondary" data-dismiss="modal" >{{ 'action.cancel' | translate }}</button>
-</div>
-
 
 

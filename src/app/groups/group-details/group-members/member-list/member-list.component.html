@@ -4,11 +4,61 @@
       <input type="checkbox" class="checkbox-shape" (click)="selectAllOnPage($event)"/>
     </div>
 
-    <div class="col-2" [translate]="'group.allMembers.table.name'">Name</div>
-    <div class="col-2" [translate]="'group.allMembers.table.role'">Role</div>
-    <div class="col-2" [translate]="'group.allMembers.table.province'">Province</div>
-    <div class="col-2" [translate]="'group.allMembers.table.phone'">Phone</div>
-    <div class="col-2" [translate]="'group.allMembers.table.email'">email</div>
+    <div class="col-2" (click)="filterData('user.displayName')"> {{'group.allMembers.table.name' | translate}}
+        <span *ngIf="showNameFilter == 0">
+          <i class="fas fa-sort"></i>
+        </span>
+        <span *ngIf="showNameFilter == 1">
+          <i class="fas fa-sort-down"></i>
+        </span>
+        <span *ngIf="showNameFilter == 2">
+          <i class="fas fa-sort-up"></i>
+        </span>
+    </div>
+    <div class="col-2" (click)="filterData('roleName')">{{'group.allMembers.table.role' | translate}}
+      <span *ngIf="showRoleFilter == 0">
+          <i class="fas fa-sort"></i>
+        </span>
+      <span *ngIf="showRoleFilter == 1">
+          <i class="fas fa-sort-down"></i>
+        </span>
+      <span *ngIf="showRoleFilter == 2">
+          <i class="fas fa-sort-up"></i>
+      </span>
+    </div>
+    <div class="col-2" (click)="filterData('user.province')">{{'group.allMembers.table.province' | translate}}
+      <span *ngIf="showProvinceFilter == 0">
+          <i class="fas fa-sort"></i>
+      </span>
+      <span *ngIf="showProvinceFilter == 1">
+          <i class="fas fa-sort-down"></i>
+      </span>
+      <span *ngIf="showProvinceFilter == 2">
+          <i class="fas fa-sort-up"></i>
+      </span>
+    </div>
+    <div class="col-2" (click)="filterData('user.phoneNumber')">{{'group.allMembers.table.phone' | translate}}
+      <span *ngIf="showPhoneFilter == 0">
+          <i class="fas fa-sort"></i>
+      </span>
+      <span *ngIf="showPhoneFilter == 1">
+          <i class="fas fa-sort-down"></i>
+      </span>
+      <span *ngIf="showPhoneFilter == 2">
+          <i class="fas fa-sort-up"></i>
+      </span>
+    </div>
+    <div class="col-2" (click)="filterData('user.emailAddress')">{{'group.allMembers.table.email' | translate}}
+      <span *ngIf="showEmailFilter == 0">
+          <i class="fas fa-sort"></i>
+      </span>
+      <span *ngIf="showEmailFilter == 1">
+          <i class="fas fa-sort-down"></i>
+      </span>
+      <span *ngIf="showEmailFilter == 2">
+          <i class="fas fa-sort-up"></i>
+      </span>
+    </div>
     <div class="col-1"></div>
   </div>
 </div>

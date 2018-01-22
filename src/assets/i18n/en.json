@@ -254,6 +254,12 @@
           "name": "Please enter member name"
         }
       },
+      "filterMembers": {
+        "province": "Province",
+        "taskTeam": "Task team",
+        "topics": "Topics",
+        "update": "Update"
+      },
       "manage":{
         "manage": "Manage",
         "view": "View",
@@ -460,6 +466,13 @@
       "committeeMember": "Committee member",
       "groupOrganizer": "Group organizer",
       "updateDone": "Done, group settings have been updated"
+    },
+    "taskTeam": {
+      "addNew": "Add task team",
+      "title": "Create new task team",
+      "name": "Give this task team a name",
+      "numberOfMembers": "Number of members that will be added:",
+      "selectMembers": "Select members based on custom filter"
     }
   },
   "campaigns": {

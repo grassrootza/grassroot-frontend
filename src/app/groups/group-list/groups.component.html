@@ -30,7 +30,11 @@
     <app-group-info *ngFor="let gr of pinnedGroups"
                     [group]="gr"
                     [extendedInfoVisible]="pinnedGroups.length == 1"
-                    (pinToggled)="toggleGroupPin($event)">
+                    (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
+                    (onTriggerCreateVote)="showCreateVoteModal($event)"
+                    (onTriggerCreateTodo)="showCreateTodoModal($event)"
+                    (pinToggled)="toggleGroupPin($event)"
+    >
     </app-group-info>
 
   </div>
@@ -89,7 +93,13 @@
       </div>
     </div>
 
-    <app-group-info *ngFor="let gr of filteredGroupsPage" [group]="gr" (pinToggled)="toggleGroupPin($event)"></app-group-info>
+    <app-group-info *ngFor="let gr of filteredGroupsPage"
+                    [group]="gr"
+                    (pinToggled)="toggleGroupPin($event)"
+                    (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
+                    (onTriggerCreateVote)="showCreateVoteModal($event)"
+                    (onTriggerCreateTodo)="showCreateTodoModal($event)">
+    </app-group-info>
 
   </div>
 </div>
@@ -115,3 +125,12 @@
 
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
+
+<app-create-meeting [groupUid]="createTaskGroupUid"
+                    (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+
+<app-create-vote [groupUid]="createTaskGroupUid"
+                 (voteSaved)="voteSaved($event)"></app-create-vote>
+
+<app-create-todo [groupUid]="createTaskGroupUid"
+                 (todoSaved)="todoSaved($event)"></app-create-todo>
