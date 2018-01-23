@@ -39,6 +39,8 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NotificationService} from "./user/notification.service";
 
+import { ClipboardModule } from 'ng2-clipboard';
+
 export function getJwtToken(): string {
   return localStorage.getItem('token');
 }
@@ -113,6 +115,7 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
+    ClipboardModule,
     Ng4LoadingSpinnerModule,
     RouterModule.forRoot(routes), // <-- routes
     TranslateModule.forRoot({

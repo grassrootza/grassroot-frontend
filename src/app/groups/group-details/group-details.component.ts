@@ -9,6 +9,8 @@ import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 import {TranslateService} from "@ngx-translate/core";
 import {JoinCodeInfo} from "../model/join-code-info";
 
+import { ClipboardService } from 'ng2-clipboard/ng2-clipboard';
+
 declare var $: any;
 
 @Component({
@@ -37,7 +39,8 @@ export class GroupDetailsComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private translateService: TranslateService,
-              private spinnerService: Ng4LoadingSpinnerService) {
+              private spinnerService: Ng4LoadingSpinnerService,
+              private clipboardService:ClipboardService) {
 
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
@@ -150,9 +153,14 @@ export class GroupDetailsComponent implements OnInit {
     };
     this.translateService.get("group.joinMethods.joinWordCbText", params).subscribe(text => {
       this.joinWordCbString = text;
+      this.clipboardService.copy(this.joinWordCbString);
       console.log("copying: ", this.joinWordCbString);
     });
     return false;
   }
+
+
+
+  //copyToClipboard =()=>{this.clipboardService.copy("I wanna copy this text again and again");return false}
 
 }
