@@ -1,0 +1,30 @@
+/* height changes not having much effect, to fix in future */
+.dragarea {
+  font-size: 1.1em;
+  border: 2px dashed #bbb;
+  padding: 30px 15px;
+  background-color: #fff;
+  color: #bbb;
+  /*height: 100%;*/
+  align-items: center;
+}
+
+.droparea {
+  font-size: 1.1em;
+  border: 2px dashed #bbb;
+  padding: 10px ;
+  background-color: #eff;
+  color: #aaa;
+}
+
+.form-row {
+  margin-top: 20px;
+}
+
+.no-vertical {
+  margin-top: 0;
+}
+
+/*#description {*/
+  /*height: 100%;*/
+/*}*/
