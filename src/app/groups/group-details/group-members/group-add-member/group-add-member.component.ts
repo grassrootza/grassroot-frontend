@@ -9,7 +9,6 @@ import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} fro
 import {Observable} from 'rxjs/Observable';
 import {Group} from '../../../model/group.model';
 import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';
-import {Membership} from '../../../model/membership.model';
 // doing these manually as else there are warnings of very heavy import load if take all rxjs
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/catch";
@@ -89,7 +88,6 @@ export class GroupAddMemberComponent implements OnInit {
   }
 
   pickedItem(pickedUser: GroupRelatedUserResponse){
-    //TODO: implement filling rest of the form with user data when user is picked, need to fetch user details from server
     this.addMemberForm.controls['displayName'].setValue(pickedUser.name);
     this.addMemberForm.controls['roleName'].setValue("ROLE_ORDINARY_MEMBER");
     this.addMemberForm.controls['memberMsisdn'].setValue(pickedUser.phone);

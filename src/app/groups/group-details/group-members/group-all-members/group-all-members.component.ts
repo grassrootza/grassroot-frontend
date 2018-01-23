@@ -78,7 +78,7 @@ export class GroupAllMembersComponent implements OnInit {
     if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
       $('#bulk-manage-no-members-selected').modal('show');
     }else if(this.group.topics.length == 0){
-      $('#no-task-teams-for-group').modal('show');
+      $('#no-topics-for-group').modal('show');
     }else{
       $('#bulk-member-assign-topics').modal('show');
     }
@@ -89,7 +89,7 @@ export class GroupAllMembersComponent implements OnInit {
     if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
       $('#bulk-manage-no-members-selected').modal('show');
     }else if(this.group.subGroups.length == 0){
-      $('#no-topics-for-group').modal('show');
+      $('#no-task-teams-for-group').modal('show');
     }else{
       $('#bulk-add-members-to-task-team-modal').modal('show');
     }

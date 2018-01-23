@@ -1,5 +1,5 @@
 import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
-import {ActivatedRoute, Params, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {GroupService} from '../../../../group.service';
 import {GroupMembersImportExcelSheetAnalysis} from '../../../../model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from '../../../../model/group-add-member-info.model';
@@ -23,14 +23,12 @@ export class FileImportComponent implements OnInit {
   @Input() maxSize: number = 5; // 5MB
   @Output() uploadStatus = new EventEmitter();
 
-
   sheetHasHeader = true;
   nameColumn = 0;
   phoneColumn = 0;
   emailColumn = -1;
   provinceColumn = -1;
   roleColumn = -1;
-
 
   groupMembersImportExcelSheetAnalysis: GroupMembersImportExcelSheetAnalysis = null;
   groupAddMembersInfo: GroupAddMemberInfo[] = [];

@@ -2,7 +2,7 @@ import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {UserProvince} from "./model/user-province.enum";
 
 export class User {
-  constructor(public uid: String,
+  constructor(public uid: string,
               public displayName: string,
               public phoneNumber: string,
               public email: string,

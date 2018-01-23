@@ -290,8 +290,6 @@
       <div class="modal-body">
         <h3>{{ 'group.members.removeMember' | translate}}</h3>
 
-
-
         <div class="container group-info-header d-none d-md-block">
           <div class="row">
             <div class="col-3">Name</div>
@@ -303,17 +301,17 @@
         <div class="container group-info-row">
           <div class="row flex flex-wrap">
             <div class="col-3">
-              {{singleMemberManage.user.displayName}}
+              {{singleMemberManage?.user.displayName}}
             </div>
 
             <div class="col-3">
-              {{singleMemberManage.roleName}}
+              {{singleMemberManage?.roleName}}
             </div>
             <div class="col-3">
-              {{singleMemberManage.user.phoneNumber}}
+              {{singleMemberManage?.user.phoneNumber}}
             </div>
             <div class="col-3">
-              {{singleMemberManage.user.email}}
+              {{singleMemberManage?.user.email}}
 
             </div>
           </div>

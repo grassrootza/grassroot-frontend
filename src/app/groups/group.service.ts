@@ -20,7 +20,6 @@ import {JoinCodeInfo} from './model/join-code-info';
 import {GroupPermissionsByRole} from './model/permission.model';
 import {GroupRelatedUserResponse} from './model/group-related-user.model';
 import {GroupMemberActivity} from './model/group-member-activity';
-import set = Reflect.set;
 
 @Injectable()
 export class GroupService {
@@ -48,6 +47,7 @@ export class GroupService {
   groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
+  groupUploadImageUrl = environment.backendAppUrl + "/api/group/modify/image/upload";
 
   groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
   groupJoinWordAddUrl = environment.backendAppUrl + "/api/group/modify/joincodes/add";
@@ -141,7 +141,8 @@ export class GroupService {
             gr.topics,
             gr.joinWords,
             gr.joinWordsLeft,
-            gr.reminderMinutes
+            gr.reminderMinutes,
+            gr.profileImageUrl
           );
         }
       );
@@ -262,6 +263,12 @@ export class GroupService {
         console.log(response);
         return true;
       })
+  }
+
+  uploadGroupImage(groupUid, image): Observable<any> {
+    const fullUrl = this.groupUploadImageUrl + "/" + groupUid;
+    console.log("returning post to: ", fullUrl);
+    return this.httpClient.post(fullUrl, image, { responseType: 'text' });
   }
 
   importHeaderAnalyze(file, params):Observable<GroupMembersImportExcelSheetAnalysis>{

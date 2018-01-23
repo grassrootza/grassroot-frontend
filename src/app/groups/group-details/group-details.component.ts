@@ -6,7 +6,6 @@ import {environment} from "../../../environments/environment";
 import {UserService} from "../../user/user.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
-import {ClipboardService} from 'ngx-clipboard';
 import {TranslateService} from "@ngx-translate/core";
 import {JoinCodeInfo} from "../model/join-code-info";
 
@@ -21,7 +20,10 @@ export class GroupDetailsComponent implements OnInit {
 
   public group: Group = null;
   public currentTab: string = "dashboard";
+
   public baseUrl: string = environment.backendAppUrl;
+  public flyerUrlJpg: string = "";
+  public flyerUrlPDF: string = "";
 
   public joinMethodParams: any;
   public addJoinWordForm: FormGroup;
@@ -63,6 +65,8 @@ export class GroupDetailsComponent implements OnInit {
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
+            this.flyerUrlJpg = this.baseUrl + "/api/group/fetch/flyer?typeOfFile=JPEG&groupUid=" + groupUid + "&color=true&language=en";
+            this.flyerUrlPDF = this.baseUrl + "/api/group/fetch/flyer?typeOfFile=PDF&groupUid=" + groupUid + "&color=true&language=en";
             this.setupJoinParams();
           },
           error => {

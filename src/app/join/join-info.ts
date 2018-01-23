@@ -6,6 +6,7 @@ export class JoinInfo {
   groupUid: string;
   groupName: string;
   groupDescription: string;
+  groupImageUrl: string;
 
   groupTopics: string[];
 

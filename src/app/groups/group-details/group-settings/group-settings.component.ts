@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {UserService} from '../../../user/user.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {GroupService} from '../../group.service';
@@ -25,7 +25,12 @@ export class GroupSettingsComponent implements OnInit {
   private settingsChanged: boolean = false;
   private permissionsChanged: boolean = false;
 
+  imageErrors: String[] = [];
+  imgDragAreaClass: string = 'dragarea';
+  MAX_IMAGE_SIZE = 2; // in mb (allow for photos)
+  IMAGE_EXTENSIONS = "png, jpg, jpeg, gif";
 
+  @Output() uploadStatus = new EventEmitter();
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -73,7 +78,6 @@ export class GroupSettingsComponent implements OnInit {
   }
 
   permissionsForm(userRole: string){
-
 
     return this.formBuilder.group(
       {
@@ -206,6 +210,55 @@ export class GroupSettingsComponent implements OnInit {
       this.getPermissionsForRole(this.group.groupUid);
       this.alertService.alert("group.settings.updateDone");
     });
+  }
+
+  onImageSelected(event) {
+    this.saveImage(event.target.files);
+  }
+
+  saveImage(images) {
+    this.imageErrors = []; // Clear error
+    // Validate file size and allowed extensions
+    if (images.length > 0 && (!this.isValidImage(images[0]))) {
+      this.uploadStatus.emit(false);
+      return;
+    }
+
+    if (images.length > 0) {
+      let image = images[0];
+      let formData: FormData = new FormData();
+      formData.append("image", image, image.name);
+      console.log("attempting to upload image ... name: ", image.name);
+      this.groupService.uploadGroupImage(this.group.groupUid, formData).
+        subscribe(response => {
+          console.log("response: ", response);
+        },
+        error => {
+          console.log("error uploading image, error: ", error);
+        })
+    }
+  }
+
+  private isValidImage(image) {
+    this.isValidFileType(image);
+    this.isValidFileSize(image);
+    return this.imageErrors.length === 0;
+  }
+
+  private isValidFileType(image) {
+    let extensions = (this.IMAGE_EXTENSIONS.split(',')).map(x => x.toLocaleUpperCase().trim());
+    let ext = image.name.toUpperCase().split('.').pop() || image.name;
+    let exists = extensions.includes(ext);
+    if (!exists) {
+      this.imageErrors.push("Error (image file type): " + image.name);
+    }
+  }
+
+  private isValidFileSize(image) {
+    let fileSizeinMB = image.size / (1024 * 1000);
+    let size = Math.round(fileSizeinMB * 100) / 100; // convert upto 2 decimal place
+    if (size > this.MAX_IMAGE_SIZE)
+      this.imageErrors.push("Error (file size): " + image.name + ": exceed file size limit of " + this.MAX_IMAGE_SIZE + "MB ( " + size + "MB )");
   }
 
 }

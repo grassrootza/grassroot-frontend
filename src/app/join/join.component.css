@@ -11,3 +11,8 @@
   padding-left: 1rem;
   padding-right: 1rem;
 }
+
+.join-header {
+  font-weight: 600;
+  display: block !important;
+}

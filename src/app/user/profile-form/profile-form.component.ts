@@ -25,7 +25,6 @@ export class ProfileFormComponent implements OnInit {
   constructor(private userService: UserService, private formBuilder: FormBuilder,
               private alertService: AlertService) {
     this.provinceKeys = Object.keys(this.provinces);
-    // todo : validation of numbers, email, etc
 
     console.log("empty profile looks like: ", new UserProfile());
     this.profileForm = this.formBuilder.group(new UserProfile());

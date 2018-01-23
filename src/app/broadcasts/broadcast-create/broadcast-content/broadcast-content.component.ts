@@ -1,13 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {BroadcastContent, BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 
+/*
+todo : add these back when can figure out CLI weirdness
+'https://cdn.quilljs.com/1.2.2/quill.snow.css', 'https://cdn.quilljs.com/1.2.2/quill.bubble.css',
+ */
 @Component({
   selector: 'app-broadcast-content',
   templateUrl: './broadcast-content.component.html',
-  styleUrls: ['./broadcast-content.component.css', '../broadcast-create.component.css']
+  styleUrls: ['./broadcast-content.component.css',
+    '../broadcast-create.component.css']
 })
 export class BroadcastContentComponent implements OnInit {
 

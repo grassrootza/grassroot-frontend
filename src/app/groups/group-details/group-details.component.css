@@ -47,6 +47,10 @@ strong {
   cursor: pointer;
 }
 
+.flyer-link {
+  font-size: 1.1em;
+}
+
 .my-role {
   font-size: 0.8rem;
   padding: 0.4rem;
