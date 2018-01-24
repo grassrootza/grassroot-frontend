@@ -10,16 +10,29 @@
     <div class="row">
       <div class="col-md-10 offset-md-1 col-sm-12 justify-content-center">
         <form [formGroup]="createCampaignForm" (ngSubmit)="createCampaign()">
+
           <div class="form-row">
-            <div class="form-group col-sm-12">
+            <div class="form-group col-md-8 col-sm-12">
               <label class="form-label grassroot-label-em" for="name">{{ 'campaign.create.name' | translate }}</label>
-              <input class="form-control" id="name" formControlName="name" placeholder="{{ 'campaign.create.namePlace' | translate }}" />
+              <input type="text" class="form-control form-control-em" id="name" [formControl]="createCampaignForm.controls['name']" placeholder="{{ 'campaign.create.namePlace' | translate }}" />
             </div>
+            <div class="form-group col-md-4 col-sm-12">
+              <label class="form-label grassroot-label-em" for="code">Code</label>
+              <input type = "number" class="form-control form-control-em" id="code"
+                     [formControl]="createCampaignForm.controls['code']" placeholder="{{ 'campaign.create.codePlace' | translate }}" />
+              <div class="alert alert-danger" role="alert"
+                   *ngIf="createCampaignForm.controls.code?.errors?.wordTaken">
+                {{ 'campaign.create.codeTaken' | translate }}
+              </div>
+            </div>
+
           </div>
+
           <div class="form-row">
             <div class="form-group col-md-8 col-sm-12">
               <label class="form-label grassroot-label-em" for="description">{{ 'campaign.create.description' | translate }}</label>
-              <textarea class="form-control" id="description" formControlName="description" rows="4" placeholder="{{ 'campaign.create.descriptionPlace' | translate }}"></textarea>
+              <textarea class="form-control" id="description" [formControl]="createCampaignForm.controls['description']"
+                        rows="4" placeholder="{{ 'campaign.create.descriptionPlace' | translate }}"></textarea>
             </div>
             <div class="form-group col-md-4 col-sm-12">
               <label class="form-label grassroot-label-em">{{ 'campaign.create.image' | translate }}</label>
@@ -36,13 +49,14 @@
               </div>
             </div>
           </div>
+
           <div class="form-row">
             <div class="col-md-2 col-sm-6"><label class="grassroot-label-em">{{ 'campaign.create.starts' | translate }}</label></div>
             <div class="col-md-4 col-sm-6">
               <div class="form-group">
                 <div class="input-group">
-                  <input class="form-control" placeholder="yyyy-mm-dd" id="campaign-start-date-time"
-                         name="sdp" ngbDatepicker #d="ngbDatepicker">
+                  <input class="form-control" placeholder="yyyy-mm-dd" id="campaign-start-date"
+                         [formControl]="createCampaignForm.controls['startDate']" name="sdp" ngbDatepicker #d="ngbDatepicker">
                   <div class="input-group-append">
                     <button class="btn calendar-button" (click)="d.toggle()" type="button">
                       <i class="far fa-calendar"></i>
@@ -57,8 +71,8 @@
             <div class="col-md-4 col-sm-6">
               <div class="form-group">
                 <div class="input-group">
-                  <input class="form-control" placeholder="yyyy-mm-dd" id="campaign-start-end-time"
-                         name="edp" ngbDatepicker #d="ngbDatepicker">
+                  <input class="form-control" placeholder="yyyy-mm-dd" id="campaign-end-date"
+                         [formControl]="createCampaignForm.controls['endDate']" name="edp" ngbDatepicker #d="ngbDatepicker">
                   <div class="input-group-append">
                     <button class="btn calendar-button" (click)="d.toggle()" type="button">
                       <i class="far fa-calendar"></i>
@@ -77,8 +91,8 @@
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" checked value="true"
-                         name="discoverable" >
+                  <input class="form-check-input" type="radio" checked value="ACQUISITION"
+                         name="type" [formControl]="createCampaignForm.controls['type']">
                   {{ 'campaign.create.acquisition' | translate }}
                 </label>
               </div>
@@ -87,8 +101,8 @@
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" value="false"
-                         name="discoverable" >
+                  <input class="form-check-input" type="radio" value="PETITION"
+                         name="type" [formControl]="createCampaignForm.controls['type']">
                   {{ 'campaign.create.petition' | translate }}
                 </label>
               </div>
@@ -97,8 +111,8 @@
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" value="false"
-                         name="discoverable" >
+                  <input class="form-check-input" type="radio" value="INFORMATION"
+                         name="type" [formControl]="createCampaignForm.controls['type']" >
                   {{ 'campaign.create.information' | translate }}
                 </label>
               </div>
@@ -113,23 +127,28 @@
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" checked value="true"
-                         name="master-group" >
+                  <input class="form-check-input" type="radio" value="NEW"
+                         name="master-group" [formControl]="createCampaignForm.controls['groupType']">
                   {{ 'campaign.create.master-group.new' | translate }}
                 </label>
               </div>
-              <input type="text" class="form-control form-control-em" placeholder="{{ 'campaign.create.master-group.new-name-place' | translate }}"/>
+              <input *ngIf="createCampaignForm.controls.groupType?.value == 'NEW'"
+                     [formControl]="createCampaignForm.controls['groupName']"
+                     type="text" class="form-control form-control-em"
+                     placeholder="{{ 'campaign.create.master-group.new-name-place' | translate }}"/>
             </div>
 
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" value="false"
-                         name="master-group" >
+                  <input class="form-check-input" type="radio" value="EXISTING"
+                         name="master-group" [formControl]="createCampaignForm.controls['groupType']">
                   {{ 'campaign.create.master-group.existing' | translate }}
                 </label>
               </div>
-              <select class="form-control form-control-em">
+              <select *ngIf="createCampaignForm.controls.groupType?.value == 'EXISTING'"
+                      [formControl]="createCampaignForm.controls['groupUid']"
+                      class="form-control form-control-em">
                 <option>{{ 'campaign.create.master-group.existing-select' | translate }}</option>
               </select>
             </div>
@@ -145,7 +164,8 @@
               <label for="amandla-url" class="grassroot-label-em">URL:</label>
             </div>
             <div class="form-group col-sm-9">
-              <input id="amandla-url" type="text" class="form-control form-control-em" placeholder="{{ 'campaign.create.petition-place' | translate }}"/>
+              <input id="amandla-url" type="text" [formControl]="createCampaignForm.controls['amandlaUrl']"
+                     class="form-control form-control-em" placeholder="{{ 'campaign.create.petition-place' | translate }}"/>
             </div>
           </div>
 
@@ -157,8 +177,8 @@
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" checked value="true"
-                         name="sms-share" >
+                  <input class="form-check-input" type="radio" value="true"
+                         name="sms-share" [formControl]="createCampaignForm.controls['smsShare']">
                   {{ 'action.yes' | translate }}
                 </label>
               </div>
@@ -168,18 +188,19 @@
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
                   <input class="form-check-input" type="radio" value="false"
-                         name="master-group" >
+                         name="sms-share" [formControl]="createCampaignForm.controls['smsShare']">
                   {{ 'action.no' | translate }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="row">
+
+          <div class="row" *ngIf="createCampaignForm.controls.smsShare?.value == 'true'">
             <div class="col-sm-3">
               <label for="sms-limit" class="grassroot-label-em">{{ 'campaign.create.sms-share.sms-limit' | translate }}</label>
             </div>
             <div class="col-sm-3">
-              <input id="sms-limit" type="number" class="form-control" />
+              <input id="sms-limit" type="number" class="form-control" [formControl]="createCampaignForm.controls['smsLimit']"/>
             </div>
             <div class="col-sm-3 text-left">
               {{ 'campaign.create.sms-share.sms-cost' | translate }}
@@ -194,18 +215,18 @@
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" checked value="true"
-                         name="landing-page" >
+                  <input class="form-check-input" type="radio" value="GRASSROOT"
+                         name="landing-page" [formControl]="createCampaignForm.controls['landingPage']">
                   {{ 'campaign.create.landing-page.grassroot' | translate }}
                 </label>
               </div>
             </div>
 
-            <div class="form-group col-sm-3">
+            <div class="form-group col-sm-3" *ngIf="createCampaignForm.controls.amandlaUrl?.value">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" value="false"
-                         name="landing-page" >
+                  <input class="form-check-input" type="radio" value="AMANDLA"
+                         name="landing-page" [formControl]="createCampaignForm.controls['landingPage']">
                   {{ 'campaign.create.landing-page.amandla' | translate }}
                 </label>
               </div>
@@ -214,19 +235,22 @@
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">
-                  <input class="form-check-input" type="radio" value="false"
-                         name="landing-page" >
+                  <input class="form-check-input" type="radio" value="OTHER"
+                         name="landing-page" [formControl]="createCampaignForm.controls['landingPage']">
                   {{ 'campaign.create.landing-page.other' | translate }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="row">
+
+          <div class="row" *ngIf="createCampaignForm.controls.landingPage?.value == 'OTHER'">
             <div class="form-group col-sm-3">
               <label for="landing-url" class="grassroot-label-em">URL:</label>
             </div>
             <div class="form-group col-sm-9">
-              <input id="landing-url" type="text" class="form-control form-control-em" placeholder="{{ 'campaign.create.landing-page.other-place' | translate }}"/>
+              <input id="landing-url" [formControl]="createCampaignForm.controls['landingUrl']"
+                     type="text" class="form-control form-control-em"
+                     placeholder="{{ 'campaign.create.landing-page.other-place' | translate }}"/>
             </div>
           </div>
 

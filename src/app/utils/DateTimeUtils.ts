@@ -1,4 +1,5 @@
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import * as moment from "moment";
 
 export class DateTimeUtils {
 
@@ -27,6 +28,15 @@ export class DateTimeUtils {
     }
   }
 
+  public static nowAsDateStruct(): NgbDateStruct {
+    return { year: moment().year(), month: moment().month() + 1, day: moment().date() };
+  }
+
+  public static futureDateStruct(monthsToAdd: number, daysToAdd: number): NgbDateStruct {
+    let date = moment().add(monthsToAdd, 'months').add(daysToAdd, 'days');
+    return { year: date.year(), month: date.month() + 1, day: date.date() };
+  }
+
   public static fromNgbStruct(date: NgbDateStruct, time: NgbTimeStruct): number {
     return new Date(date.year,
       date.month-1,
@@ -36,3 +46,7 @@ export class DateTimeUtils {
       time.second).getTime();
   }
 }
+
+export const epochMillisFromDate = (ngbDate: NgbDateStruct) => {
+  return moment(ngbDate).valueOf()
+};
