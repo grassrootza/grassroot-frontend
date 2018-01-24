@@ -4,8 +4,6 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {Task} from "./task.model";
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {TaskType} from "./task-type";
-import {TodoType} from "./todo-type";
 
 @Injectable()
 export class TaskService {
@@ -28,27 +26,10 @@ export class TaskService {
   public loadUpcomingGroupTasks(groupId: string): Observable<Task[]> {
     let fullUrl = this.upcomingGroupTasksUrl + "/" + groupId;
     return this.httpClient.get<Task[]>(fullUrl)
-      .map(
-        data =>
-          data.map(task => new Task(
-            task.taskUid,
-            task.title,
-            TaskType[task.type],
-            task.deadlineMillis,
-            new Date(task.deadlineMillis),
-            task.description,
-            task.location,
-            task.parentUid,
-            task.parentName,
-            task.ancestorGroupName,
-            task.todoType != null ? TodoType[task.todoType] : null,
-            task.hasResponded,
-            task.wholeGroupAssigned,
-            task.thisUserAssigned
-            )
-          )
-      );
+      .map(data => data.map(task => Task.createInstanceFromData(task)));
   }
+
+
 
   public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
     let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
@@ -65,26 +46,7 @@ export class TaskService {
   public loadUpcomingUserTasks(userId: string): Observable<Task[]> {
     let fullUrl = this.upcomingUserTasksUrl + "/" + userId;
     return this.httpClient.get<Task[]>(fullUrl)
-      .map(
-        data =>
-          data.map(task => new Task(
-            task.taskUid,
-            task.title,
-            TaskType[task.type],
-            task.deadlineMillis,
-            new Date(task.deadlineMillis),
-            task.description,
-            task.location,
-            task.parentUid,
-            task.parentName,
-            task.ancestorGroupName,
-            task.todoType != null ? TodoType[task.todoType] : null,
-            task.hasResponded,
-            task.wholeGroupAssigned,
-            task.thisUserAssigned
-            )
-          )
-      );
+      .map(data => data.map(task => Task.createInstanceFromData(task)));
   }
 
 

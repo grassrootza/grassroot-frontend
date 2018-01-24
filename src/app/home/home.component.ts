@@ -4,7 +4,7 @@ import {UserService} from "../user/user.service";
 import {DatePipe} from "@angular/common";
 import {GroupService} from "../groups/group.service";
 import {GroupInfo} from "../groups/model/group-info.model";
-import {MembersPage} from "../groups/model/membership.model";
+import {Membership, MembersPage} from "../groups/model/membership.model";
 import {DayTasks} from "./day-task.model";
 
 import * as moment from 'moment';
@@ -15,6 +15,7 @@ import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
 import {TodoType} from "../task/todo-type";
+import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 
 declare var $: any;
 
@@ -37,36 +38,62 @@ export class HomeComponent implements OnInit {
 
   public createTaskGroupUid: string = null;
 
+  private tasksLoaded = false;
+  private newMembersLoaded = false;
+  private groupsLoaded = false;
+
+  private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
+  private NEW_MEMBERS_DATA_CACHE = "NEW_MEMBERS_DATA_CACHE";
+
   constructor(private taskService: TaskService,
               private userService: UserService,
               private groupService: GroupService,
-              private router: Router) {
+              private router: Router,
+              private spinnerService: Ng4LoadingSpinnerService) {
 
     this.agendaBaseDate = moment().startOf('day');
   }
 
   ngOnInit() {
 
+    let cachedTasks = localStorage.getItem(this.MY_AGENDA_DATA_CACHE);
+    if (cachedTasks) {
+      this.tasksLoaded = true;
+      let cachedTasksData = JSON.parse(localStorage.getItem(this.MY_AGENDA_DATA_CACHE));
+      this.myTasks = this.groupTasksByDay(cachedTasksData.map(task => Task.createInstanceFromData(task)));
+      this.filterMyAgendaTasksRegardingBaseDate();
+    }
 
-    console.log("fetching tasks for homepage");
-    let newTasks: DayTasks[] = [];
+    let cachedNewMembers = localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE);
+    if (cachedNewMembers) {
+      this.newMembersLoaded = true;
+      let cachedNewMembers = JSON.parse(localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE));
+      cachedNewMembers.content = cachedNewMembers.content.map(membership => Membership.createInctance(membership));
+      this.newMembersPage = cachedNewMembers;
+    }
+
+    this.groupsLoaded = true;
+
+    if (!this.tasksLoaded || !this.newMembersLoaded) {
+      this.spinnerService.show();
+    }
+
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid)
       .subscribe(tasks => {
-
-        console.log("Fetched my tasks:", tasks);
-        tasks.forEach(t => {
-          let taskDate = new Date(t.deadlineDate.getFullYear(), t.deadlineDate.getMonth(), t.deadlineDate.getDate());
-          let dayTasks = newTasks.find(td => td.date.toDateString() == taskDate.toDateString());
-          if (!dayTasks) {
-            dayTasks = new DayTasks(taskDate, []);
-            newTasks.push(dayTasks);
-          }
-          dayTasks.tasks.push(t)
-        });
-
-        this.myTasks = newTasks;
+        this.myTasks = this.groupTasksByDay(tasks);
         this.filterMyAgendaTasksRegardingBaseDate();
+        localStorage.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
+        this.tasksLoaded = true;
+        this.hideSpinnerIfAllLoaded();
+      });
 
+
+    this.groupService.fetchNewMembers(7, 0, 1000)
+      .subscribe(newMembersPage => {
+        this.newMembersPage = newMembersPage;
+        localStorage.setItem(this.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
+        this.newMembersLoaded = true;
+        this.hideSpinnerIfAllLoaded();
       });
 
     this.groupService.groupInfoList.subscribe(
@@ -74,14 +101,29 @@ export class HomeComponent implements OnInit {
         this.pinnedGroups = groups.filter(gr => gr.pinned)
       }
     );
-    this.groupService.loadGroups(false)
-
-    this.groupService.fetchNewMembers(7, 0, 1000)
-      .subscribe(newMembersPage => {
-        this.newMembersPage = newMembersPage;
-      });
+    this.groupService.loadGroups(false);
   }
 
+
+  private hideSpinnerIfAllLoaded() {
+    if (this.newMembersLoaded && this.newMembersLoaded && this.groupsLoaded) {
+      this.spinnerService.hide();
+    }
+  }
+
+  private groupTasksByDay(tasks) {
+    let newTasks: DayTasks[] = [];
+    tasks.forEach(t => {
+      let taskDate = new Date(t.deadlineDate.getFullYear(), t.deadlineDate.getMonth(), t.deadlineDate.getDate());
+      let dayTasks = newTasks.find(td => td.date.toDateString() == taskDate.toDateString());
+      if (!dayTasks) {
+        dayTasks = new DayTasks(taskDate, []);
+        newTasks.push(dayTasks);
+      }
+      dayTasks.tasks.push(t)
+    });
+    return newTasks;
+  }
 
   showCreateGroupDialog(): boolean {
     $('#create-group-modal').modal("show");

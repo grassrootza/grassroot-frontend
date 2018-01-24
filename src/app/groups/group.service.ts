@@ -90,7 +90,7 @@ export class GroupService {
                 gr.memberCount,
                 gr.groupUid,
                 gr.userPermissions,
-                GroupRole[gr.userRole],
+                GroupRole[<string>gr.userRole],
                 gr.nextEventTime != null ? DateTimeUtils.getDateFromJavaInstant(gr.nextEventTime) : null,
                 gr.nextEventType != null ? TaskType[gr.nextEventType] : null,
                 gr.pinned,
@@ -177,7 +177,7 @@ export class GroupService {
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
       .map(
         result => {
-          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor, m.affiliations, m.canEditDetails));
+          let transformedContent = result.content.map(m => Membership.createInctance(m));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -202,7 +202,7 @@ export class GroupService {
       .map(
         result => {
           console.log("Fetched new members", result);
-          let transformedContent = result.content.map(m => new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor,  m.affiliations, m.canEditDetails));
+          let transformedContent = result.content.map(m => Membership.createInctance(m));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -440,7 +440,7 @@ export class GroupService {
 
     return this.httpClient.get<Membership>(fullUrl, {params: params})
       .map(m => {
-        return new Membership(false, m.user, m.group, GroupRole[m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor,  m.affiliations, m.canEditDetails);
+        return Membership.createInctance(m);
       } )
   }
 

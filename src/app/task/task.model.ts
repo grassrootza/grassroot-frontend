@@ -63,5 +63,26 @@ export class Task {
       return "";
   }
 
+  public static createInstanceFromData(taskData: Task) {
+    return new Task(
+      taskData.taskUid,
+      taskData.title,
+      taskData.type = TaskType[<string>taskData.type],
+      taskData.deadlineMillis,
+      new Date(taskData.deadlineMillis),
+      taskData.description,
+      taskData.location,
+      taskData.parentUid,
+      taskData.parentName,
+      taskData.ancestorGroupName,
+      taskData.todoType != null ? TodoType[<string>taskData.todoType] : null,
+      taskData.hasResponded,
+      taskData.wholeGroupAssigned,
+      taskData.thisUserAssigned
+    )
+  }
+
+
+
 
 }
