@@ -8,6 +8,7 @@ export enum UserProvince {
   ZA_LP = "Limpopo",
   ZA_NW = "North West",
   ZA_FS = "Free State",
-  ZA_MP = "Mpumalanga"
+  ZA_MP = "Mpumalanga",
+  INTL = "International"
 
 }

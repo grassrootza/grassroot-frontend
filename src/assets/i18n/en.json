@@ -497,9 +497,50 @@
       "viewCampaign": "View"
     }
   },
+  "campaign": {
+    "create": {
+      "title": "Let's Setup a New Campaign",
+      "name": "Campaign Name/Title",
+      "namePlace": "A headline for the campaign",
+      "description": "Description",
+      "descriptionPlace": "A longer description of the campaign. This will be shown to uses who click on a short link",
+      "image": "Campaign Image (optional)",
+      "drag-drop": "Drag & drop",
+      "click-file": "a file here or ",
+      "browse": "browse",
+      "remove-image": "remove-image",
+      "starts": "Campaign Starts: ",
+      "ends": "Campaign Ends: ",
+      "type": "Campaign Type: ",
+      "acquisition": "Acquisition",
+      "petition": "Petition",
+      "information": "Information",
+      "master-group": {
+        "label": "Master Group: ",
+        "new": "New Group",
+        "new-name-place": "Give this group a name",
+        "existing": "Add to existing group",
+        "existing-select": "(Select group)"
+      },
+      "petition-link": "Do you want to add an Amandla Awethu petition?",
+      "petition-place": "Address of your Amandla Awethu petition (https://...)",
+      "sms-share": {
+        "allow-toggle": "Allow SMS sharing:",
+        "sms-limit": "SMS limit: ",
+        "sms-cost": "Estimated cost: R"
+      },
+      "landing-page": {
+        "label": "Landing page: ",
+        "grassroot": "Use Grassroot page",
+        "amandla": "Use Amandla Awethu page",
+        "other": "Other web page",
+        "other-place": "Address of your home page"
+      }
+    }
+  },
   "broadcasts": {
     "create": {
-      "title": "Send a new broadcast message",
+      "title": "Send a New Broadcast Message",
       "nav": {
         "types": "Message types",
         "content": "Message content",

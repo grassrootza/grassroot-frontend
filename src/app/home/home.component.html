@@ -11,7 +11,8 @@
         <div class="dropdown-menu">
           <a href="#" class="dropdown-item" [translate]="'home.create.group'"
              (click)="showCreateGroupDialog()">Group</a>
-          <a class="dropdown-item disabled" [translate]="'home.create.campaign'">Campaign</a>
+          <a class="dropdown-item" [translate]="'home.create.campaign'"
+             [routerLink]="['/campaigns/create']">Campaign</a>
         </div>
       </div>
     </div>

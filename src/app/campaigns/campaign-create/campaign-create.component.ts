@@ -11,6 +11,7 @@ import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 export class CampaignCreateComponent implements OnInit {
 
   public createCampaignForm: FormGroup;
+  public dragAreaClass: string = "dragarea";
 
   constructor(private campaignService: CampaignService, private formBuilder: FormBuilder,
               private spinnerService: Ng4LoadingSpinnerService) {
@@ -26,6 +27,10 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   createCampaign() {
+
+  }
+
+  uploadCampaignImage(event) {
 
   }
 

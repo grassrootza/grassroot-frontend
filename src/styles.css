@@ -163,3 +163,18 @@ h6 {
 .cancel-button {
   padding: 10px 20px;
 }
+
+.calendar-button {
+  color: #929BAF;
+  font-weight: 600;
+  border: 1px solid #929BAF;
+  border-radius: 5px;
+  background: white;
+}
+
+.calendar-button:hover {
+  cursor: pointer;
+  color: #2CBC4C;
+  border: 1px solid #2CBC4C;
+  background: white;
+}
