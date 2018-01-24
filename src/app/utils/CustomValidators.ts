@@ -17,13 +17,26 @@ export const optionalPhoneValidator = (control: AbstractControl) => {
 };
 
 export const optionalEmailValidator = (control: AbstractControl) => {
-  // console.log("calling email validator");
   if (!control.value) {
     return null;
   }
-  // console.log("value present, validate");
-
   return Validators.email(control);
+};
+
+export const urlPattern = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+
+export const optionalUrlValidator = (control: AbstractControl) => {
+  if (!control.value) {
+    return null;
+  }
+  return urlValidator(control);
+};
+
+export const urlValidator = (control: AbstractControl) => {
+  if (urlPattern.test(control.value)) {
+    return null;
+  }
+  return { validUrl: true };
 };
 
 export const eitherEmailOrPhoneValid = (control: AbstractControl) => {

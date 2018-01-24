@@ -6,6 +6,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CampaignInfo} from "./model/campaign-info";
 import {Observable} from "rxjs/Observable";
 import {DateTimeUtils} from "../utils/DateTimeUtils";
+import {CampaignRequest} from "./campaign-create/campaign-request";
 
 @Injectable()
 export class CampaignService {
@@ -59,6 +60,10 @@ export class CampaignService {
           console.log("Error loading campaigns", error)
         }
       )
+  }
+
+  createCampaign(request: CampaignRequest): Observable<CampaignInfo> {
+    return this.httpClient.post<CampaignInfo>(this.campaignCreateUrl, request);
   }
 
 }

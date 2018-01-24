@@ -1,6 +1,5 @@
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
-import {NgbTime} from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
 
 export class BroadcastRequest {
 
