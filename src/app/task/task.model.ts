@@ -1,5 +1,6 @@
 import {TaskType} from "./task-type";
 import {TodoType} from "./todo-type";
+import {DateTimeUtils} from "../utils/DateTimeUtils";
 
 export class Task {
 
@@ -82,6 +83,16 @@ export class Task {
     )
   }
 
+  private static convertDate(dateValue): Date {
+    if (dateValue != null) {
+      if (typeof dateValue == "string")
+        return new Date(dateValue)
+      else
+        return DateTimeUtils.getDateFromJavaInstant(dateValue)
+    }
+    else return null;
+
+  }
 
 
 

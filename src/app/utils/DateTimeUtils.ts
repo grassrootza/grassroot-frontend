@@ -3,7 +3,7 @@ import * as moment from "moment";
 
 export class DateTimeUtils {
 
-  public static getDateFromJavaInstant(instant) {
+  public static getDateFromJavaInstant(instant): Date {
     return new Date(instant.epochSecond * 1000)
   }
 

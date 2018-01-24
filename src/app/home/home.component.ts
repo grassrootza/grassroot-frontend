@@ -4,7 +4,7 @@ import {UserService} from "../user/user.service";
 import {DatePipe} from "@angular/common";
 import {GroupService} from "../groups/group.service";
 import {GroupInfo} from "../groups/model/group-info.model";
-import {Membership, MembersPage} from "../groups/model/membership.model";
+import {MembersPage} from "../groups/model/membership.model";
 import {DayTasks} from "./day-task.model";
 
 import * as moment from 'moment';
@@ -42,8 +42,6 @@ export class HomeComponent implements OnInit {
   private newMembersLoaded = false;
   private groupsLoaded = false;
 
-  private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
-  private NEW_MEMBERS_DATA_CACHE = "NEW_MEMBERS_DATA_CACHE";
 
   constructor(private taskService: TaskService,
               private userService: UserService,
@@ -56,57 +54,53 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
 
-    let cachedTasks = localStorage.getItem(this.MY_AGENDA_DATA_CACHE);
-    if (cachedTasks) {
-      this.tasksLoaded = true;
-      let cachedTasksData = JSON.parse(localStorage.getItem(this.MY_AGENDA_DATA_CACHE));
-      this.myTasks = this.groupTasksByDay(cachedTasksData.map(task => Task.createInstanceFromData(task)));
-      this.filterMyAgendaTasksRegardingBaseDate();
-    }
-
-    let cachedNewMembers = localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE);
-    if (cachedNewMembers) {
-      this.newMembersLoaded = true;
-      let cachedNewMembers = JSON.parse(localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE));
-      cachedNewMembers.content = cachedNewMembers.content.map(membership => Membership.createInctance(membership));
-      this.newMembersPage = cachedNewMembers;
-    }
-
-    this.groupsLoaded = true;
-
-    if (!this.tasksLoaded || !this.newMembersLoaded) {
+    if (!this.tasksLoaded || !this.newMembersLoaded || !this.newMembersLoaded) {
+      console.log("Showing spinner");
       this.spinnerService.show();
     }
 
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid)
+    this.taskService.upcomingTasks
       .subscribe(tasks => {
-        this.myTasks = this.groupTasksByDay(tasks);
-        this.filterMyAgendaTasksRegardingBaseDate();
-        localStorage.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
-        this.tasksLoaded = true;
-        this.hideSpinnerIfAllLoaded();
+        if (tasks) {
+          this.myTasks = this.groupTasksByDay(tasks);
+          this.filterMyAgendaTasksRegardingBaseDate();
+          console.log("Tasks loaded:", tasks);
+          this.tasksLoaded = true;
+          this.hideSpinnerIfAllLoaded();
+        }
       });
 
 
-    this.groupService.fetchNewMembers(7, 0, 1000)
+    this.groupService.newMembersInMyGroups
       .subscribe(newMembersPage => {
-        this.newMembersPage = newMembersPage;
-        localStorage.setItem(this.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
-        this.newMembersLoaded = true;
-        this.hideSpinnerIfAllLoaded();
+        if (newMembersPage) {
+          this.newMembersPage = newMembersPage;
+          this.newMembersLoaded = true;
+          this.hideSpinnerIfAllLoaded();
+        }
       });
 
-    this.groupService.groupInfoList.subscribe(
-      groups => {
-        this.pinnedGroups = groups.filter(gr => gr.pinned)
-      }
-    );
+
+    this.groupService.groupInfoList
+      .subscribe(
+        groups => {
+          if (groups) {
+            this.pinnedGroups = groups.filter(gr => gr.pinned);
+            this.groupsLoaded = true;
+            this.hideSpinnerIfAllLoaded();
+          }
+        }
+      );
+
+    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.groupService.fetchNewMembers(7, 0, 1000);
     this.groupService.loadGroups(false);
   }
 
 
   private hideSpinnerIfAllLoaded() {
-    if (this.newMembersLoaded && this.newMembersLoaded && this.groupsLoaded) {
+    if (this.tasksLoaded && this.newMembersLoaded && this.groupsLoaded) {
+      console.log("Hiding spinner");
       this.spinnerService.hide();
     }
   }

@@ -33,6 +33,9 @@ export class GroupsComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.spinnerService.show(); // todo: possibly only show if cache is empty
+
     this.groupService.groupInfoList.subscribe(
       groupList => {
         console.log("Groups loaded: ", groupList);
@@ -50,7 +53,6 @@ export class GroupsComponent implements OnInit {
       }
     );
 
-    this.spinnerService.show(); // todo: possibly only show if cache is empty
     this.groupService.loadGroups(true);
   }
 

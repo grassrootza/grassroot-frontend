@@ -4,6 +4,7 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {Task} from "./task.model";
 import {HttpClient, HttpParams} from '@angular/common/http';
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class TaskService {
@@ -19,9 +20,23 @@ export class TaskService {
 
   private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
 
+  private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
+  public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
+  private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
+
 
   constructor(private httpClient: HttpClient) {
+
+    let cachedTasks = localStorage.getItem(this.MY_AGENDA_DATA_CACHE);
+    if (cachedTasks) {
+      let cachedTasksData = JSON.parse(localStorage.getItem(this.MY_AGENDA_DATA_CACHE));
+      console.log("Cached tasks before", cachedTasksData);
+      cachedTasksData = cachedTasksData.map(task => Task.createInstanceFromData(task));
+      console.log("Cached tasks before", cachedTasksData);
+      this.upcomingTasksSubject.next(cachedTasksData);
+    }
   }
+
 
   public loadUpcomingGroupTasks(groupId: string): Observable<Task[]> {
     let fullUrl = this.upcomingGroupTasksUrl + "/" + groupId;
@@ -43,10 +58,20 @@ export class TaskService {
    }
 
 
-  public loadUpcomingUserTasks(userId: string): Observable<Task[]> {
+  public loadUpcomingUserTasks(userId: string) {
+
     let fullUrl = this.upcomingUserTasksUrl + "/" + userId;
-    return this.httpClient.get<Task[]>(fullUrl)
-      .map(data => data.map(task => Task.createInstanceFromData(task)));
+    this.httpClient.get<Task[]>(fullUrl)
+      .map(data => data.map(task => Task.createInstanceFromData(task)))
+      .subscribe(
+        tasks => {
+          this.upcomingTasksSubject.next(tasks);
+          localStorage.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
+        },
+        error => {
+          console.log("Failed to fetch upcoming tasks!", error);
+        }
+      );
   }
 
 

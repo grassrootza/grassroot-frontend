@@ -3,6 +3,7 @@ import {GroupRef} from "./group-ref.model";
 import {GroupRole} from "./group-role";
 import {TaskType} from "../../task/task-type";
 import {DatePipe} from "@angular/common";
+import {DateTimeUtils} from "../../utils/DateTimeUtils";
 
 export class GroupInfo {
 
@@ -43,6 +44,32 @@ export class GroupInfo {
     return "";
   }
 
+  public static createInstance(groupInfoData: GroupInfo): GroupInfo {
+    return new GroupInfo(
+      groupInfoData.name,
+      groupInfoData.description,
+      groupInfoData.memberCount,
+      groupInfoData.groupUid,
+      groupInfoData.userPermissions,
+      GroupRole[<string>groupInfoData.userRole],
+      GroupInfo.convertDate(groupInfoData.nextEventTime),
+      groupInfoData.nextEventType != null ? TaskType[<string>groupInfoData.nextEventType] : null,
+      groupInfoData.pinned,
+      groupInfoData.comingUpEvents.map(e => TaskInfo.createInstance(e)),
+      groupInfoData.subGroups
+    )
+  }
+
+  private static convertDate(dateValue): Date {
+    if (dateValue != null) {
+      if (typeof dateValue == "string")
+        return new Date(dateValue)
+      else
+        return DateTimeUtils.getDateFromJavaInstant(dateValue)
+    }
+    else return null;
+
+  }
 
 
 }

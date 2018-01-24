@@ -7,10 +7,7 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {UserService} from '../user/user.service';
 import {Group} from './model/group.model';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {GroupRole} from './model/group-role';
 import {DateTimeUtils} from '../utils/DateTimeUtils';
-import {TaskType} from '../task/task-type';
-import {TaskInfo} from '../task/task-info.model';
 import {Membership, MembersPage} from './model/membership.model';
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from './model/group-add-member-info.model';
@@ -71,7 +68,29 @@ export class GroupService {
   private shouldReloadPaginationNumbers_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public shouldReloadPaginationNumbers: Observable<boolean> = this.shouldReloadPaginationNumbers_.asObservable();
 
+  private newMembersInMyGroups_: BehaviorSubject<MembersPage> = new BehaviorSubject<MembersPage>(null);
+  public newMembersInMyGroups: Observable<MembersPage> = this.newMembersInMyGroups_.asObservable();
+
+  private NEW_MEMBERS_DATA_CACHE = "NEW_MEMBERS_DATA_CACHE";
+  private MY_GROUPS_DATA_CACHE = "MY_GROUPS_DATA_CACHE";
+
   constructor(private httpClient: HttpClient, private userService: UserService) {
+
+    let cachedMyGroups = localStorage.getItem(this.MY_GROUPS_DATA_CACHE);
+    if (cachedMyGroups) {
+      let cachedMyGroupsData = JSON.parse(localStorage.getItem(this.MY_GROUPS_DATA_CACHE));
+      console.log("cachedMyGroupsData before", cachedMyGroupsData);
+      cachedMyGroupsData = cachedMyGroupsData.map(gr => GroupInfo.createInstance(gr));
+      console.log("cachedMyGroupsData after", cachedMyGroupsData);
+      this.groupInfoList_.next(cachedMyGroupsData);
+    }
+
+    let cachedNewMembers = localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE);
+    if (cachedNewMembers) {
+      let cachedNewMembersData = JSON.parse(localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE));
+      cachedNewMembersData.content = cachedNewMembersData.content.map(membership => Membership.createInctance(membership));
+      this.newMembersInMyGroups_.next(cachedNewMembersData);
+    }
   }
 
   loadGroups(clearCache: boolean) {
@@ -81,28 +100,12 @@ export class GroupService {
 
       return this.httpClient.get<GroupInfo[]>(fullUrl)
         .map(
-          data => {
-            console.log("Groups json object from server: ", data);
-            return data.map(
-              gr => new GroupInfo(
-                gr.name,
-                gr.description,
-                gr.memberCount,
-                gr.groupUid,
-                gr.userPermissions,
-                GroupRole[<string>gr.userRole],
-                gr.nextEventTime != null ? DateTimeUtils.getDateFromJavaInstant(gr.nextEventTime) : null,
-                gr.nextEventType != null ? TaskType[gr.nextEventType] : null,
-                gr.pinned,
-                gr.comingUpEvents.map(e => new TaskInfo(e.taskUid, e.title, TaskType[e.taskType], DateTimeUtils.getDateFromJavaInstant(e.deadlineTime))),
-                gr.subGroups
-              )
-            )
-          }
+          data => data.map(gr => GroupInfo.createInstance(gr))
         )
         .subscribe(
           groups => {
             this.groupInfoList_.next(groups);
+            localStorage.setItem(this.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
           },
           error => {
             if (error.status == 401)
@@ -191,14 +194,14 @@ export class GroupService {
       );
   }
 
-  fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number): Observable<MembersPage> {
+  fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number) {
     console.log("Fetching new members");
     let params = new HttpParams()
       .set('howRecentInDays', howRecentlyJoinedInDays.toString())
       .set('page', pageNo.toString())
       .set('size', pageSize.toString());
 
-    return this.httpClient.get<MembersPage>(this.newMembersLIstUrl, {params: params})
+    this.httpClient.get<MembersPage>(this.newMembersLIstUrl, {params: params})
       .map(
         result => {
           console.log("Fetched new members", result);
@@ -212,6 +215,15 @@ export class GroupService {
             result.last,
             transformedContent
           )
+        }
+      )
+      .subscribe(
+        newMembersPage => {
+          this.newMembersInMyGroups_.next(newMembersPage);
+          localStorage.setItem(this.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
+        },
+        error => {
+          console.log("Failed to fetch new members", error);
         }
       );
   }
