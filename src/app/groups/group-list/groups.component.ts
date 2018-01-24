@@ -39,17 +39,19 @@ export class GroupsComponent implements OnInit {
     this.groupService.groupInfoList.subscribe(
       groupList => {
         console.log("Groups loaded: ", groupList);
-        this.spinnerService.hide();
+        if (groupList) {
+          this.spinnerService.hide();
 
-        this.groups = groupList;
-        this.resolvePinnedGroups();
+          this.groups = groupList;
+          this.resolvePinnedGroups();
 
-        this.filteredGroups = this.groups;
-        this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
-        this.totalCount = this.filteredGroups.length;
-        this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
-        this.currentPage = 1;
-        this.generatePageList(this.numberOfPages);
+          this.filteredGroups = this.groups;
+          this.filteredGroupsPage = this.filteredGroups.slice(0, this.pageSize);
+          this.totalCount = this.filteredGroups.length;
+          this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+          this.currentPage = 1;
+          this.generatePageList(this.numberOfPages);
+        }
       }
     );
 
