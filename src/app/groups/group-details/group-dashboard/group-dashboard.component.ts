@@ -64,7 +64,7 @@ export class GroupDashboardComponent implements OnInit {
       this.loadOrganisationsStats();
       this.loadMemberDetailsStats();
       this.loadTopicInterestsStats();
-    });
+    }); 
   }
 
   private loadTasks() {

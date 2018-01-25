@@ -4,9 +4,8 @@ h5 img {
 }
 
 .events-box {
-  height: auto;
-  /*min-height: 20rem;*/
-  max-height: 20rem;
+  min-height: 15rem;
+  max-height: 15rem;
   overflow-y: auto;
 }
 
