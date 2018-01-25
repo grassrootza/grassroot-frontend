@@ -41,7 +41,7 @@
                 </span>
                   {{task.title}}
               </div>
-              <div class="row" *ngIf="task.type === taskTypes.VOTE">
+              <div class="row" *ngIf="task.type == taskTypes.VOTE">
                 <span class="font-weight-bold" [translate]="'group.activity.voteCloses'"> Closes:</span>&nbsp;
                 {{task.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
               </div>
@@ -81,7 +81,7 @@
                 </span>
                   {{task.title}}
               </div>
-              <div class="row" *ngIf="task.type === taskTypes.VOTE">
+              <div class="row" *ngIf="task.type == taskTypes.VOTE">
                 <span class="font-weight-bold" [translate]="'group.activity.voteCloses'"> Closes:</span>&nbsp;
                 {{task.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
               </div>

@@ -63,8 +63,8 @@
               <div class="col-3">
                 {{member.user.displayName}}
               </div>
-              <div class="col-3">
-                {{member.roleName}}
+              <div class="col-3" [translate]="'enum.GroupRole.' + member.roleName">
+                Group role
               </div>
               <div class="col-3">
                 {{member.user.phoneNumber}}
@@ -135,8 +135,8 @@
               <div class="col-3">
                 {{member.user.displayName}}
               </div>
-              <div class="col-3">
-                {{member.roleName}}
+              <div class="col-3" [translate]="'enum.GroupRole.' + member.roleName">
+                Group role
               </div>
               <div class="col-3">
                 {{member.user.phoneNumber}}
@@ -219,8 +219,8 @@
               <div class="col-3">
                 {{member.user.displayName}}
               </div>
-              <div class="col-3">
-                {{member.roleName}}
+              <div class="col-3" [translate]="'enum.GroupRole.' + member.roleName">
+                Group role
               </div>
               <div class="col-3">
                 {{member.user.phoneNumber}}

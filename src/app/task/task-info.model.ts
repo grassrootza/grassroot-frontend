@@ -27,7 +27,7 @@ export class TaskInfo {
       e.taskUid,
       e.title,
       TaskType[<string>e.taskType],
-      e.deadlineTime instanceof Date ? e.deadlineTime : DateTimeUtils.getDateFromJavaInstant(e.deadlineTime)
+      DateTimeUtils.parseDate(e.deadlineTime)
     );
   }
 

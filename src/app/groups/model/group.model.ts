@@ -1,4 +1,3 @@
-import {GroupRole} from "./group-role";
 import {DatePipe} from "@angular/common";
 import {MembershipInfo} from "./membership.model";
 import {GroupRef} from "./group-ref.model";
@@ -38,9 +37,6 @@ export class Group {
     return this.userPermissions.indexOf(permission) >= 0;
   }
 
-  public getFormattedRoleName(): string {
-    return GroupRole[this.userRole];
-  }
 
   public hasProfileImage(): boolean {
     return !!this.profileImageUrl;

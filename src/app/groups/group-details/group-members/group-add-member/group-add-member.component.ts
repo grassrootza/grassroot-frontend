@@ -89,7 +89,7 @@ export class GroupAddMemberComponent implements OnInit {
 
   pickedItem(pickedUser: GroupRelatedUserResponse){
     this.addMemberForm.controls['displayName'].setValue(pickedUser.name);
-    this.addMemberForm.controls['roleName'].setValue("ROLE_ORDINARY_MEMBER");
+    this.addMemberForm.controls['roleName'].setValue(GroupRole.ROLE_ORDINARY_MEMBER);
     this.addMemberForm.controls['memberMsisdn'].setValue(pickedUser.phone);
     this.addMemberForm.controls['emailAddress'].setValue(pickedUser.email);
     this.addMemberForm.controls['province'].setValue(pickedUser.province);

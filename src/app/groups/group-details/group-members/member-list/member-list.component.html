@@ -74,13 +74,16 @@
       </div>
 
       <div class="col-md-2">
-          <span class="badge badge-success">
-            {{member.roleName}}
+          <span class="badge badge-success" [translate]="'enum.GroupRole.' + member.roleName">
+            Group role
           </span>
       </div>
 
       <div class="col-md-2">
-        {{member.formattedProvince()}}
+        <span *ngIf="member.user.province" [translate]="'enum.UserProvince.' + member.user.province">
+          User province
+        </span>
+        <span *ngIf="!member.user.province" [translate]="'enum.UserProvince.UNKNOWN'">Unknown</span>
       </div>
 
       <div class="col-md-2">

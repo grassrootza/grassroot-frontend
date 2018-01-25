@@ -22,6 +22,8 @@ export class TaskService {
 
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
+  private upcomingTasksErrorSubject: BehaviorSubject<any> = new BehaviorSubject(null);
+  public upcomingTaskError: Observable<any> = this.upcomingTasksErrorSubject.asObservable();
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
 
@@ -51,8 +53,8 @@ export class TaskService {
     return this.httpClient.get(url).map(
       res => {
           console.log("results: ", res);
-          let tasks = res["addedAndUpdated"];
-          return tasks as Task[];
+        let tasks = res["addedAndUpdated"]  as Task[];
+        return tasks.map(t => Task.createInstanceFromData(t))
       }
       );
    }
@@ -69,6 +71,7 @@ export class TaskService {
           localStorage.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
         },
         error => {
+          this.upcomingTasksErrorSubject.next(error);
           console.log("Failed to fetch upcoming tasks!", error);
         }
       );
