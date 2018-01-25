@@ -95,6 +95,12 @@ export class HomeComponent implements OnInit {
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
     this.groupService.fetchNewMembers(7, 0, 1000);
     this.groupService.loadGroups(false);
+
+    // hack for present so if there's an error user can regain control, should preferably connect to
+    // observables in services so if they throw auth errors it defaults back
+    setTimeout(() => {
+      this.spinnerService.hide();
+    }, 2000);
   }
 
 

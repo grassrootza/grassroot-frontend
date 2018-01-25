@@ -25,5 +25,6 @@
 }
 
 .campaign-details .view-campaign-btn {
+  cursor: pointer;
   margin-top: 1rem;
 }

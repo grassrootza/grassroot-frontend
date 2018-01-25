@@ -50,7 +50,8 @@
       "title": "Create New",
       "group": "Group",
       "campaign": "Campaign"
-    }
+    },
+    "loading": "Fetching data ..."
   },
   "groups": {
     "title": "Groups",
@@ -539,6 +540,54 @@
         "other": "Other web page",
         "other-place": "Address of your home page"
       }
+    },
+    "dashboard": {
+      "analyze": "Campaign Dashboard",
+      "messages": "Response Messages",
+      "broadcasts": "Broadcasts",
+      "settings": "Settings"
+    },
+    "messages": {
+      "title": "Customize your message responses for: ",
+      "actions": {
+        "options": "Response options: ",
+        "sign": "Sign petition",
+        "more": "More info",
+        "info": "Information requested from user",
+        "name": "Name",
+        "province": "Province",
+        "additional": "Request additional information?",
+        "email": "Email address",
+        "org": "Organization / Affiliation"
+      },
+      "message": "Message ",
+      "tag": "Assign tag for this screen (optional): ",
+      "languages": {
+        "link": "Choose what languages you'd like to support",
+        "modal-title": "Choose which languages you'd like to use for the USSD channel",
+        "modal-sub": "Choose up to 5 languages",
+        "error": "Please select at least one language"
+      },
+      "initial": {
+        "title": "Initial Response",
+        "placeholder": "The SA National Department of Health (NDOH) is establishing the National Health Insurance (NHI) to achieve universal access to quality health care for all who live in South Africa."
+      },
+      "more": {
+        "title": "More Info",
+        "placeholder": "We welcome the commitment from the NDOH to a NHI based on principles of equity, health as a right and redress of past inequalities"
+      },
+      "join": {
+        "title": "Join Us",
+        "placeholder": "Thanks for participating. Let's get your details to tell you about future events and campaigns"
+      },
+      "sign": {
+        "title": "Sign Petition",
+        "placeholder": "Thanks for participating. Let's get your details to tell you about future events and campaigns"
+      },
+      "share": {
+        "title": "Share Screen",
+        "placeholder": "Thank you for joining forces with us. If you want to share this with others please type their number"
+      }
     }
   },
   "broadcasts": {
@@ -752,6 +801,7 @@
     "continue": "Continue",
     "next": "Next",
     "back": "Back",
+    "preview": "Preview",
     "confirm": "Confirm",
     "date": "Date",
     "time": "Time",
@@ -759,6 +809,9 @@
     "loading": "Loading",
     "yes": "Yes",
     "no": "No"
+  },
+  "general": {
+    "charsRemaining": "Characters remaining"
   },
   "task": {
     "todo": {

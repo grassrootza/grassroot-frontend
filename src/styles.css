@@ -118,6 +118,10 @@ h6 {
   background: white;
 }
 
+.badge-primary {
+  background: #2CBC4C;
+}
+
 .grassroot-link {
   color: #2CBC4C;
 }
