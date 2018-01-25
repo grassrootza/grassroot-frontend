@@ -1,5 +1,7 @@
 export enum TaskType {
-  MEETING = "Meeting",
-  VOTE = "Vote",
-  TODO = "To do"
+
+  MEETING = "MEETING",
+  VOTE = "VOTE",
+  TODO = "TODO"
+
 }

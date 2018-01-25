@@ -1,4 +1,5 @@
 import {TaskType} from "./task-type";
+import {DateTimeUtils} from "../utils/DateTimeUtils";
 
 export class TaskInfo {
 
@@ -10,7 +11,6 @@ export class TaskInfo {
 
   public getEventIconName(): string {
 
-
     if (this.taskType == TaskType.MEETING)
       return "icon_meeting.png";
     else if (this.taskType == TaskType.VOTE)
@@ -20,5 +20,16 @@ export class TaskInfo {
     else
       return "";
   }
+
+
+  public static createInstance(e: TaskInfo): TaskInfo {
+    return new TaskInfo(
+      e.taskUid,
+      e.title,
+      TaskType[<string>e.taskType],
+      e.deadlineTime instanceof Date ? e.deadlineTime : DateTimeUtils.getDateFromJavaInstant(e.deadlineTime)
+    );
+  }
+
 
 }

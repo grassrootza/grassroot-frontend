@@ -1,0 +1,62 @@
+<div *ngIf="campaign != null">
+
+  <div class="card campaign-summary">
+    <div class="card-body">
+      <h2 class="campaign-title">{{ campaign.name }}</h2>
+
+      <div class="row">
+        <div class="col-md-4">
+          <!-- insert image, dates -->
+        </div>
+        <div class="col-md-8 campaign-description">
+          <p>{{campaign.description}}</p>
+          <div class="row">
+            <div class="col-md-7">
+              <!-- some details -->
+            </div>
+            <div class="col-md-5 text-right">
+              <div class="campaign-info">
+                <a [routerLink]="['/broadcast/create/campaign', campaign.campaignUid]" class="btn btn-success broadcast-btn">
+                  <img src="assets/icon_megaphone.png"/>
+                  {{'group.sendBroadcast' | translate}}
+                </a>
+              </div>
+              <!-- then the rest -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light">
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#campaignNavbars"
+            aria-controls="campaignNavbars" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="campaignNavbars">
+      <ul class="main-nav navbar-nav mr-auto">
+        <li class="nav-item" [ngClass]="{active: currentTab === 'dashboard'}">
+          <a class="nav-link" href="#" [routerLink]="['analyze']" [translate]="'campaign.dashboard.analyze'"> Dashboard </a>
+        </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'messages'}">
+          <a class="nav-link" href="#" [routerLink]="['messages']" [translate]="'campaign.dashboard.messages'"> Messages </a>
+        </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'broadcasts'}">
+          <a class="nav-link" href="#" [routerLink]="['broadcasts']" [translate]="'campaign.dashboard.broadcasts'"> Broadcasts </a>
+        </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'settings'}">
+          <a class="nav-link" href="#" [routerLink]="['settings']" [translate]="'campaign.dashboard.settings'"> Settings </a>
+        </li>
+      </ul>
+    </div>
+
+  </nav>
+
+  <div class="tab-area card-body">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

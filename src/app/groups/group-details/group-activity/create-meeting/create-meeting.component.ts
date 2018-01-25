@@ -4,6 +4,7 @@ import {TaskService} from '../../../../task/task.service';
 import {GroupService} from '../../../group.service';
 import {Membership} from '../../../model/membership.model';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {DateTimeUtils} from "../../../../utils/DateTimeUtils";
 
 declare var $: any;
 
@@ -30,8 +31,8 @@ export class CreateMeetingComponent implements OnInit {
     this.createMeetingForm = this.formBuilder.group({
       'subject': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'location': ['', Validators.required],
-      'date': [this.dateFromDate(new Date()), Validators.required],
-      'time': [this.timeFromDate(new Date()), Validators.required],
+      'date': [DateTimeUtils.dateFromDate(new Date()), Validators.required],
+      'time': [DateTimeUtils.timeFromDate(new Date()), Validators.required],
       'parentType': 'GROUP',
       'publicMeeting': false,
       'assignedMemberUids': []
@@ -48,22 +49,6 @@ export class CreateMeetingComponent implements OnInit {
         });
       }
     }.bind(this))
-  }
-
-  dateFromDate(date): NgbDateStruct{
-    if(date){
-      return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate()};
-    }else{
-      return date;
-    }
-  }
-
-  timeFromDate(date): NgbTimeStruct{
-    if(date){
-      return {hour: date.getHours(), minute: date.getMinutes(), second: date.getSeconds()};
-    }else{
-      return date;
-    }
   }
 
   createMeeting(){

@@ -1,5 +1,6 @@
 import {TaskType} from "./task-type";
 import {TodoType} from "./todo-type";
+import {DateTimeUtils} from "../utils/DateTimeUtils";
 
 export class Task {
 
@@ -62,6 +63,37 @@ export class Task {
     else
       return "";
   }
+
+  public static createInstanceFromData(taskData: Task) {
+    return new Task(
+      taskData.taskUid,
+      taskData.title,
+      taskData.type = TaskType[<string>taskData.type],
+      taskData.deadlineMillis,
+      new Date(taskData.deadlineMillis),
+      taskData.description,
+      taskData.location,
+      taskData.parentUid,
+      taskData.parentName,
+      taskData.ancestorGroupName,
+      taskData.todoType != null ? TodoType[<string>taskData.todoType] : null,
+      taskData.hasResponded,
+      taskData.wholeGroupAssigned,
+      taskData.thisUserAssigned
+    )
+  }
+
+  private static convertDate(dateValue): Date {
+    if (dateValue != null) {
+      if (typeof dateValue == "string")
+        return new Date(dateValue)
+      else
+        return DateTimeUtils.getDateFromJavaInstant(dateValue)
+    }
+    else return null;
+
+  }
+
 
 
 }

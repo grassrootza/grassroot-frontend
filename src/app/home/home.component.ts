@@ -15,6 +15,7 @@ import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
 import {TodoType} from "../task/todo-type";
+import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 
 declare var $: any;
 
@@ -37,51 +38,92 @@ export class HomeComponent implements OnInit {
 
   public createTaskGroupUid: string = null;
 
+  private tasksLoaded = false;
+  private newMembersLoaded = false;
+  private groupsLoaded = false;
+
+
   constructor(private taskService: TaskService,
               private userService: UserService,
               private groupService: GroupService,
-              private router: Router) {
+              private router: Router,
+              private spinnerService: Ng4LoadingSpinnerService) {
 
     this.agendaBaseDate = moment().startOf('day');
   }
 
   ngOnInit() {
 
+    if (!this.tasksLoaded || !this.newMembersLoaded || !this.newMembersLoaded) {
+      console.log("Showing spinner");
+      this.spinnerService.show();
+    }
 
-    console.log("fetching tasks for homepage");
-    let newTasks: DayTasks[] = [];
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid)
+    this.taskService.upcomingTasks
       .subscribe(tasks => {
-
-        console.log("Fetched my tasks:", tasks);
-        tasks.forEach(t => {
-          let taskDate = new Date(t.deadlineDate.getFullYear(), t.deadlineDate.getMonth(), t.deadlineDate.getDate());
-          let dayTasks = newTasks.find(td => td.date.toDateString() == taskDate.toDateString());
-          if (!dayTasks) {
-            dayTasks = new DayTasks(taskDate, []);
-            newTasks.push(dayTasks);
-          }
-          dayTasks.tasks.push(t)
-        });
-
-        this.myTasks = newTasks;
-        this.filterMyAgendaTasksRegardingBaseDate();
-
+        if (tasks) {
+          this.myTasks = this.groupTasksByDay(tasks);
+          this.filterMyAgendaTasksRegardingBaseDate();
+          console.log("Tasks loaded:", tasks);
+          this.tasksLoaded = true;
+          this.hideSpinnerIfAllLoaded();
+        }
       });
 
-    this.groupService.groupInfoList.subscribe(
-      groups => {
-        this.pinnedGroups = groups.filter(gr => gr.pinned)
-      }
-    );
-    this.groupService.loadGroups(false)
 
-    this.groupService.fetchNewMembers(7, 0, 1000)
+    this.groupService.newMembersInMyGroups
       .subscribe(newMembersPage => {
-        this.newMembersPage = newMembersPage;
+        if (newMembersPage) {
+          this.newMembersPage = newMembersPage;
+          this.newMembersLoaded = true;
+          this.hideSpinnerIfAllLoaded();
+        }
       });
+
+
+    this.groupService.groupInfoList
+      .subscribe(
+        groups => {
+          if (groups) {
+            this.pinnedGroups = groups.filter(gr => gr.pinned);
+            this.groupsLoaded = true;
+            this.hideSpinnerIfAllLoaded();
+          }
+        }
+      );
+
+    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.groupService.fetchNewMembers(7, 0, 1000);
+    this.groupService.loadGroups(false);
+
+    // hack for present so if there's an error user can regain control, should preferably connect to
+    // observables in services so if they throw auth errors it defaults back
+    setTimeout(() => {
+      this.spinnerService.hide();
+    }, 2000);
   }
 
+
+  private hideSpinnerIfAllLoaded() {
+    if (this.tasksLoaded && this.newMembersLoaded && this.groupsLoaded) {
+      console.log("Hiding spinner");
+      this.spinnerService.hide();
+    }
+  }
+
+  private groupTasksByDay(tasks) {
+    let newTasks: DayTasks[] = [];
+    tasks.forEach(t => {
+      let taskDate = new Date(t.deadlineDate.getFullYear(), t.deadlineDate.getMonth(), t.deadlineDate.getDate());
+      let dayTasks = newTasks.find(td => td.date.toDateString() == taskDate.toDateString());
+      if (!dayTasks) {
+        dayTasks = new DayTasks(taskDate, []);
+        newTasks.push(dayTasks);
+      }
+      dayTasks.tasks.push(t)
+    });
+    return newTasks;
+  }
 
   showCreateGroupDialog(): boolean {
     $('#create-group-modal').modal("show");

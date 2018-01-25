@@ -38,6 +38,7 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NotificationService} from "./user/notification.service";
+import {CampaignService} from "./campaigns/campaign.service";
 
 import { ClipboardModule } from 'ng2-clipboard';
 
@@ -79,6 +80,9 @@ const routes: Routes = [
   },
   {
     path: 'campaigns', loadChildren: './campaigns/campaigns.module#CampaignsModule', canActivate: [LoggedInGuard],
+  },
+  {
+    path: 'campaign/:id', loadChildren: './campaigns/campaign-dashboard.module#CampaignDashboardModule', canActivate: [LoggedInGuard]
   },
   {
     path: 'broadcast/create/:type/:parentId',
@@ -142,6 +146,7 @@ const routes: Routes = [
     LoggedInGuard,
     AlertService,
     GroupService,
+    CampaignService,
     UserService,
     NotificationService,
     JoinService,
