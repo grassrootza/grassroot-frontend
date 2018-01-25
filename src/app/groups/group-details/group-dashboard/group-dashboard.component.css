@@ -3,9 +3,12 @@ h5 img {
   margin-right: 0.3rem;
 }
 
+/*Divs with auto heigh based on one with max events not working,
+ tried display:table with table row and cell but stil not working. to be worked on later.*/
 .events-box {
-  min-height: 15rem;
-  max-height: 15rem;
+  /*height: auto;*/
+  min-height: 20rem;
+  max-height: 20rem;
   overflow-y: auto;
 }
 
