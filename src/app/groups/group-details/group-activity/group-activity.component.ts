@@ -17,7 +17,6 @@ declare var $: any;
 export class GroupActivityComponent implements OnInit {
 
   public groupUid: string = "";
-  public userUid: string = "";
   public upcomingTasks: Task[] = [];
   public taskTypes = TaskType;
   public pastTasks : Task[] = [];
@@ -41,8 +40,6 @@ export class GroupActivityComponent implements OnInit {
       this.loadTasks();
       this.loadAllGroupTasks();
     });
-    this.userUid = this.userService.getLoggedInUser().userUid;
-    this.loadAllGroupTasks();
   }
 
   loadTasks(){
@@ -62,7 +59,6 @@ export class GroupActivityComponent implements OnInit {
 
   loadAllGroupTasks(){
     console.log("calling subscribe");
-
     this.taskService.loadAllGroupTasks(this.userService.getLoggedInUser().userUid, this.groupUid)
       .subscribe(tasks => {
           let now = new Date();
@@ -74,7 +70,6 @@ export class GroupActivityComponent implements OnInit {
             console.log("Error @@@@@@@", error.status);
           }
           console.log(error.getmessage);
-
       }
       );
   }

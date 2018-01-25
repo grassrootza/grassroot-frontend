@@ -50,7 +50,6 @@ export class TaskService {
       );
   }
 
-
   public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
     let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
     return this.httpClient.get(url).map(
