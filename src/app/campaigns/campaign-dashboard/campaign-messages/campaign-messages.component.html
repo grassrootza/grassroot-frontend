@@ -1,0 +1,63 @@
+<div class="col-12">
+  <div class="row mb-md-3">
+    <div class="col-md-4 col-sm-12 text-left" >
+      <h3>{{ 'campaign.messages.title' | translate }}</h3>
+      <a href="#" class="grassroot-link">{{ 'campaign.messages.languages.link' | translate }}</a>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <h3>Petition</h3>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <button class="btn btn-secondary">{{ 'action.preview' | translate }}</button>
+      <button class="btn btn-primary">{{ 'action.save' | translate }}</button>
+    </div>
+  </div>
+  <div class="row section-title">
+    <div class="col-12">
+      <p>
+        <span class="badge badge-primary badge-pill section-badge">1</span>{{ 'campaign.messages.initial.title' | translate }}
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7 col-sm-12">
+      {{ 'campaign.messages.message' | translate }}
+      <ngb-tabset class="content-tabset">
+        <ngb-tab>
+          <ng-template ngbTabTitle>English</ng-template>
+          <ng-template ngbTabContent>
+            <textarea class="form-control boxsizingBorder" rows="4" placeholder="{{ 'campaign.messages.initial.placeholder' | translate }}"></textarea>
+            <p class="character-count">{{ 'general.charsRemaining' | translate }}: 0</p>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab>
+          <ng-template ngbTabTitle>Zulu</ng-template>
+          <ng-template ngbTabContent>
+            <textarea class="form-control boxsizingBorder" rows="4" placeholder="{{ 'campaign.messages.initial.placeholder' | translate }}"></textarea>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </div>
+    <div class="col-md-4 offset-md-1 col-sm-12">
+      <label class="form-label">{{ 'campaign.messages.tag' | translate }}</label>
+      <input type="text" class="form-control form-control-em" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-7 col-sm-12">
+      <p class="actions-title">{{ 'campaign.messages.actions.options' | translate }}</p>
+      <ul class="list-group">
+        <li class="list-group-item"><span class="badge badge-pill badge-secondary action-enum">1.</span> {{ 'campaign.messages.actions.sign' | translate }}</li>
+        <li class="list-group-item"><span class="badge badge-pill badge-secondary action-enum">2.</span> {{ 'campaign.messages.actions.more' | translate }}</li>
+      </ul>
+    </div>
+  </div>
+  <hr class="section-separator">
+  <div class="row section-title">
+    <div class="col-12">
+      <p>
+        <span class="badge badge-primary badge-pill section-badge">2</span>{{ 'campaign.messages.more.title' | translate }}
+      </p>
+    </div>
+  </div>
+</div>

@@ -21,9 +21,9 @@
       </div>
       <div class="row">
         <div class="col">
-          <a href="#/campaign/{{campaign.campaignUid}}">
-            <button class="btn btn-success view-campaign-btn float-left">{{ 'campaigns.row.viewCampaign' | translate }}</button>
-          </a>
+          <button [routerLink]="['/campaign', campaign.campaignUid]" class="btn btn-success view-campaign-btn float-left">
+            {{ 'campaigns.row.viewCampaign' | translate }}
+          </button>
         </div>
       </div>
     </div>

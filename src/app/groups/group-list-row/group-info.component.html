@@ -6,8 +6,8 @@
       <a href="#" [routerLink]="['/group', group.groupUid]">{{group.name}}</a>
     </div>
     <div class="col-md-2 order-md-2 col-lg-2 d-none d-md-block">
-          <span class="badge badge-success">
-            {{group.userRole}}
+          <span class="badge badge-success" [translate]="'enum.GroupRole.' + group.userRole">
+            Group role
           </span>
     </div>
     <div class="col-md-3 order-md-3 col-lg-3 d-none d-md-block">
@@ -63,7 +63,7 @@
         <div class="row task-row" *ngFor="let task of group.comingUpEvents">
           <div class="col-md-4 no-padding-horizontal">
             <img src="assets/{{task.getEventIconName()}}"/>
-            <span class="task-type">{{task.taskType}}</span>
+            <span class="task-type" [translate]="'enum.TaskType.' + task.taskType">Task type</span>
           </div>
           <div class="col-md-8">
             {{task.deadlineTime | date:'dd MMMM, y'}}

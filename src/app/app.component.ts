@@ -77,6 +77,9 @@ export class AppComponent implements OnInit {
 
   private pullNotifications() {
 
+    if (!this.userService.isLoggedIn())
+      return;
+
     if (this.popupNotificationEngaged || this.popupNotificationDisplayInProgress) {
       console.log("Skipping notifications pull, popupNotificationEngaged: " + this.popupNotificationEngaged + ", popupNotificationDisplayInProgress: " + this.popupNotificationDisplayInProgress);
       return;

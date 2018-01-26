@@ -30,8 +30,8 @@
       <ul class="list-group">
         <li class="list-group-item bc-title">{{ 'broadcasts.create.confirm.titleLabel' | translate:contentFields }}</li>
       </ul>
-      <ngb-tabset *ngIf="confirmFields.sendShortMessage" class="content-tabset">
-        <ngb-tab>
+      <ngb-tabset class="content-tabset">
+        <ngb-tab *ngIf="confirmFields.sendShortMessage" >
           <ng-template ngbTabTitle><span class="tab-title-text">{{ 'broadcasts.create.types.smsLabel' | translate }}</span></ng-template>
           <ng-template ngbTabContent>
             <span class="tab-content-text">{{ contentFields.shortMessage }}</span>

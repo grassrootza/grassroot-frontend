@@ -59,8 +59,10 @@ export class GroupService {
 
   groupSearchUserByTermUrl = environment.backendAppUrl + "/api/user/related/user/names";
 
-  private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject([]);
+  private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
+  private groupInfoListError_: BehaviorSubject<any> = new BehaviorSubject(null);
+  public groupInfoListError: Observable<any> = this.groupInfoListError_.asObservable();
 
   private groupMemberAdded_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public groupMemberAdded: Observable<boolean> = this.groupMemberAdded_.asObservable();
@@ -70,6 +72,8 @@ export class GroupService {
 
   private newMembersInMyGroups_: BehaviorSubject<MembersPage> = new BehaviorSubject<MembersPage>(null);
   public newMembersInMyGroups: Observable<MembersPage> = this.newMembersInMyGroups_.asObservable();
+  private newMembersInMyGroupsError_: BehaviorSubject<any> = new BehaviorSubject<MembersPage>(null);
+  public newMembersInMyGroupsError: Observable<any> = this.newMembersInMyGroupsError_.asObservable();
 
   private NEW_MEMBERS_DATA_CACHE = "NEW_MEMBERS_DATA_CACHE";
   private MY_GROUPS_DATA_CACHE = "MY_GROUPS_DATA_CACHE";
@@ -93,26 +97,25 @@ export class GroupService {
     }
   }
 
-  loadGroups(clearCache: boolean) {
+  loadGroups() {
 
-    if (this.groupInfoList_.getValue().length == 0 || clearCache) {
-      const fullUrl = this.groupListUrl;
+    const fullUrl = this.groupListUrl;
 
-      return this.httpClient.get<GroupInfo[]>(fullUrl)
-        .map(
-          data => data.map(gr => GroupInfo.createInstance(gr))
-        )
-        .subscribe(
-          groups => {
-            this.groupInfoList_.next(groups);
-            localStorage.setItem(this.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
-          },
-          error => {
-            if (error.status == 401)
-              this.userService.logout();
-            console.log("Error loading groups", error)
-          });
-    }
+    return this.httpClient.get<GroupInfo[]>(fullUrl)
+      .map(
+        data => data.map(gr => GroupInfo.createInstance(gr))
+      )
+      .subscribe(
+        groups => {
+          this.groupInfoList_.next(groups);
+          localStorage.setItem(this.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
+        },
+        error => {
+          this.groupInfoListError_.next(error);
+          if (error.status == 401)
+            this.userService.logout();
+          console.log("Error loading groups", error)
+        });
   }
 
   loadGroupDetails(groupUid: string): Observable<Group> {
@@ -224,6 +227,7 @@ export class GroupService {
         },
         error => {
           console.log("Failed to fetch new members", error);
+          this.newMembersInMyGroupsError_.next(error);
         }
       );
   }

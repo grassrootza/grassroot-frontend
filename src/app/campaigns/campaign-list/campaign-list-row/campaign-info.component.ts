@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CampaignInfo} from "../model/campaign-info";
+import {CampaignInfo} from "../../model/campaign-info";
 
 @Component({
   selector: 'app-campaign-info',

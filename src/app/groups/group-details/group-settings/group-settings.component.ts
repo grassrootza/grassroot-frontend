@@ -6,6 +6,7 @@ import {Group} from '../../model/group.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from '../../model/permission.model';
 import {AlertService} from "../../../utils/alert.service";
+import {GroupRole} from "../../model/group-role";
 
 @Component({
   selector: 'app-group-settings',
@@ -21,7 +22,9 @@ export class GroupSettingsComponent implements OnInit {
   public committeeMemberPermissions: Permission[] = [];
   public groupOrganizerPermissions: Permission[] = [];
   public permissionsToDisplay: string[] = [];
-  public roles: string[] = ["ROLE_GROUP_ORGANIZER", "ROLE_COMMITTEE_MEMBER", "ROLE_ORDINARY_MEMBER"];
+
+  public roles: string[] = [GroupRole.ROLE_GROUP_ORGANIZER, GroupRole.ROLE_COMMITTEE_MEMBER, GroupRole.ROLE_ORDINARY_MEMBER];
+
   private settingsChanged: boolean = false;
   private permissionsChanged: boolean = false;
 
@@ -70,9 +73,9 @@ export class GroupSettingsComponent implements OnInit {
       'description': ['', Validators.required],
       'privacy': ["PUBLIC", Validators.required],
       'reminderInMinutes': [0, Validators.required],
-      'ordinaryMemberPermissions': this.permissionsForm("ROLE_ORDINARY_MEMBER"),
-      'committeeMemberPermissions': this.permissionsForm("ROLE_COMMITTEE_MEMBER"),
-      'groupOrganizerPermissions': this.permissionsForm("ROLE_GROUP_ORGANIZER"),
+      'ordinaryMemberPermissions': this.permissionsForm(GroupRole.ROLE_ORDINARY_MEMBER),
+      'committeeMemberPermissions': this.permissionsForm(GroupRole.ROLE_COMMITTEE_MEMBER),
+      'groupOrganizerPermissions': this.permissionsForm(GroupRole.ROLE_GROUP_ORGANIZER),
     });
 
   }
@@ -123,11 +126,11 @@ export class GroupSettingsComponent implements OnInit {
     this.groupService.fetchGroupPermissionsForRole(groupUid, this.roles).subscribe( perms => {
 
       for (let role of this.roles) {
-        if(role == "ROLE_ORDINARY_MEMBER")
+        if (role == GroupRole.ROLE_ORDINARY_MEMBER)
           this.ordinaryMemberPermissions = perms.getParameters(role);
-        else if(role == "ROLE_COMMITTEE_MEMBER")
+        else if (role == GroupRole.ROLE_COMMITTEE_MEMBER)
           this.committeeMemberPermissions = perms.getParameters(role);
-        else if(role == "ROLE_GROUP_ORGANIZER")
+        else if (role == GroupRole.ROLE_GROUP_ORGANIZER)
           this.groupOrganizerPermissions = perms.getParameters(role);
       }
       this.populateFormData(null, this.ordinaryMemberPermissions, this.committeeMemberPermissions, this.groupOrganizerPermissions);
@@ -135,21 +138,21 @@ export class GroupSettingsComponent implements OnInit {
     });
   }
 
-  getPermissionForRoleFormValues(role: string): Permission[]{
+  getPermissionForRoleFormValues(role: GroupRole): Permission[] {
     let permissions: Permission[] = [];
-    if(role == "ROLE_ORDINARY_MEMBER"){
+    if (role == GroupRole.ROLE_ORDINARY_MEMBER) {
       this.permissionsToDisplay.forEach(p => {
         let perm = this.ordinaryMemberPermissions.find(perm => perm.permission === p);
         perm.permissionEnabled = this.groupForm.get("ordinaryMemberPermissions").get(p).value;
         permissions.push(perm);
       });
-    }else if(role == "ROLE_COMMITTEE_MEMBER"){
+    } else if (role == GroupRole.ROLE_COMMITTEE_MEMBER) {
       this.permissionsToDisplay.forEach(p => {
         let perm = this.committeeMemberPermissions.find(perm => perm.permission === p);
         perm.permissionEnabled = this.groupForm.get("committeeMemberPermissions").get(p).value;
         permissions.push(perm);
       });
-    }else if(role == "ROLE_GROUP_ORGANIZER"){
+    } else if (role == GroupRole.ROLE_GROUP_ORGANIZER) {
       this.permissionsToDisplay.forEach(p => {
         let perm = this.groupOrganizerPermissions.find(perm => perm.permission === p);
         perm.permissionEnabled = this.groupForm.get("groupOrganizerPermissions").get(p).value;
@@ -200,9 +203,9 @@ export class GroupSettingsComponent implements OnInit {
 
   public updatePermissions(){
     let updatedPermissionsByRole = {
-      "ROLE_ORDINARY_MEMBER": this.getPermissionForRoleFormValues("ROLE_ORDINARY_MEMBER"),
-      "ROLE_COMMITTEE_MEMBER": this.getPermissionForRoleFormValues("ROLE_COMMITTEE_MEMBER"),
-      "ROLE_GROUP_ORGANIZER": this.getPermissionForRoleFormValues("ROLE_GROUP_ORGANIZER")
+      "ROLE_ORDINARY_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_ORDINARY_MEMBER),
+      "ROLE_COMMITTEE_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_COMMITTEE_MEMBER),
+      "ROLE_GROUP_ORGANIZER": this.getPermissionForRoleFormValues(GroupRole.ROLE_GROUP_ORGANIZER)
     };
 
     this.groupService.updateGroupPermissionsForRole(updatedPermissionsByRole, this.group.groupUid).subscribe(resp => {
