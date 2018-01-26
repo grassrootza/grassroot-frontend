@@ -104,8 +104,11 @@ export class AppComponent implements OnInit {
           else this.popupNotification = null;
         },
         error => {
-          console.log("Notifications error: ", error);
+          if (error.status == 401)
+            this.userService.logout(true);
+          else console.log("Notifications error: ", error);
         }
+
       );
   }
 
@@ -152,7 +155,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.userService.logout();
+    this.userService.logout(false);
     // note: with path based routing for some reason need to call this
     return false;
   }

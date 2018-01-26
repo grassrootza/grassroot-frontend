@@ -32,8 +32,6 @@ export class CampaignDashboardComponent implements OnInit {
         this.campaign = campaignInfo;
       }, error2 => {
         // todo : maybe just retreat to home, and/or show an alert
-        if (error2.status = 401)
-          this.userService.logout();
         console.log("Error loading campaign", error2.status)
       })
     });

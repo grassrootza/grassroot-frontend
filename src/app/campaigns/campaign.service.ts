@@ -59,8 +59,6 @@ export class CampaignService {
           this.campaignInfoList_.next(this._campaigns)
         },
         error => {
-          if (error.status == 401)
-            this.userService.logout();
           console.log("Error loading campaigns", error)
         }
       )

@@ -49,8 +49,6 @@ export class GroupBroadcastComponent implements OnInit {
             this.group = groupDetails;
           },
           error => {
-            if (error.status = 401)
-              this.userService.logout();
             console.log("Error loading groups", error.status)
           }
         );

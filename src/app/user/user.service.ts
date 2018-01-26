@@ -18,6 +18,8 @@ export class UserService {
   private _loggedInUser: AuthenticatedUser = null;
   public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
 
+  public showForceLogoutReason = false;
+
   constructor(private httpClient: HttpClient, private router: Router) {
     console.log("Initializing user service");
     if (localStorage.getItem("loggedInUser") != null) {
@@ -73,7 +75,10 @@ export class UserService {
     localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
   }
 
-  logout(): any {
+  logout(showForceLogoutReason: boolean): any {
+
+    this.showForceLogoutReason = showForceLogoutReason;
+
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
     localStorage.removeItem('token');

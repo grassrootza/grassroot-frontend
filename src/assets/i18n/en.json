@@ -804,7 +804,8 @@
     "forgot": "Forgot your password?",
     "newUser-prefix": "New user? ",
     "newUser-suffix": "Register here",
-    "error-message": "Sorry, wrong phone, email or password"
+    "error-message": "Sorry, wrong phone, email or password",
+    "forced.logout.message": "For security, please enter your login again"
   },
   "reset": {
     "initiate": {
