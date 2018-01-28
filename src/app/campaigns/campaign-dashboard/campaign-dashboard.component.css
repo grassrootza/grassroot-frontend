@@ -43,3 +43,8 @@
 .card-body {
   background: white;
 }
+
+.join-code {
+  font-size: 1.3rem;
+  line-height: 2rem;
+}

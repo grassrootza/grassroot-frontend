@@ -16,3 +16,35 @@ export class CampaignRequest {
 
   imageKey: string = "";
 }
+
+export class CampaignMsgRequest {
+
+  constructor(public linkedActionType: string,
+              public messages: Map<string, string> = new Map<string, string>(),
+              public tags: string[] = []) {}
+
+}
+
+export class CampaignMsgServerReq {
+
+  linkedActionType: string;
+  messages: CampaignMsgPair[];
+  tags: string[];
+
+  constructor(linkedActionType: string,
+              messageMap: Map<string, string>,
+              tags: string[] = []) {
+    this.linkedActionType = linkedActionType;
+    this.tags = tags;
+    this.messages = Array.from(messageMap.keys()).map(key => new CampaignMsgPair(messageMap.get(key), key));
+  }
+
+
+}
+
+
+export class CampaignMsgPair {
+  constructor(public message: string,
+              public language: string) { // three digit term
+  }
+}

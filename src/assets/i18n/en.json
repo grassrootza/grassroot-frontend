@@ -551,13 +551,17 @@
     }
   },
   "campaign": {
+    "types": {
+      "PETITION": "Petitition",
+      "ACQUISITION": "Acquisition",
+      "INFORMATION": "Information"
+    },
     "create": {
       "title": "Let's Setup a New Campaign",
       "name": "Campaign Name/Title",
       "namePlace": "A headline for the campaign",
       "code": "USSD code (*134*1994*...)",
       "codePlace": "3 digits only",
-      "codeTaken": "Sorry, that code is already taken, try another",
       "description": "Description",
       "descriptionPlace": "A longer description of the campaign. This will be shown to uses who click on a short link",
       "image": "Campaign Image (optional)",
@@ -591,13 +595,33 @@
         "amandla": "Use Amandla Awethu page",
         "other": "Other web page",
         "other-place": "Address of your home page"
+      },
+      "errors": {
+        "codeTaken": "Sorry, that code is taken",
+        "fieldRequired": "This field is required",
+        "codeFormat": "Code must be numbers only",
+        "codeLength": "Code must be 3 digits long",
+        "typeRequired": "You must select a campaign type",
+        "groupRequired": "You must create or choose a master group",
+        "groupNameEmpty": "Please enter a name",
+        "groupSelectEmpty": "Please select a group",
+        "urlFormat": "Please enter a valid URL (or leave blank)"
+      },
+      "complete": {
+        "success": "Done! Now please enter the campaign's messages",
+        "error": "Sorry, there was an error creating the campaign: "
       }
     },
     "dashboard": {
       "analyze": "Campaign Dashboard",
       "messages": "Response Messages",
       "broadcasts": "Broadcasts",
-      "settings": "Settings"
+      "settings": "Settings",
+      "code-title": "Campaign Code",
+      "code-specified": "*134*1994*{{campaignCode}}#",
+      "creationLabel": "Created by: ",
+      "creationInfo": "{{ creatingUserName }} on {{ createdDate }}",
+      "typeLabel": "Campaign type: "
     },
     "messages": {
       "title": "Customize your message responses for: ",
@@ -605,6 +629,7 @@
         "options": "Response options: ",
         "sign": "Sign petition",
         "more": "More info",
+        "exit": "Exit",
         "info": "Information requested from user",
         "name": "Name",
         "province": "Province",
@@ -639,6 +664,10 @@
       "share": {
         "title": "Share Screen",
         "placeholder": "Thank you for joining forces with us. If you want to share this with others please type their number"
+      },
+      "done": {
+        "success": "Done! The messages have been set",
+        "error": "Sorry, there was an error updating"
       }
     }
   },
@@ -846,6 +875,7 @@
   "action":{
     "ok": "OK",
     "save": "Save",
+    "send": "Send",
     "cancel": "Cancel",
     "close": "Close",
     "submit": "Submit",
@@ -860,7 +890,8 @@
     "working": "Working",
     "loading": "Loading",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "done": "Done"
   },
   "general": {
     "charsRemaining": "Characters remaining"

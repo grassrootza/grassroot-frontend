@@ -68,11 +68,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
 
-    $(".ntf-popup").hide();
-    this.pullNotifications();
-    setInterval(() => {
-      this.pullNotifications()
-    }, 10000);
+    // $(".ntf-popup").hide();
+    // this.pullNotifications();
+    // setInterval(() => {
+    //   this.pullNotifications()
+    // }, 10000);
   }
 
   private pullNotifications() {
@@ -88,7 +88,7 @@ export class AppComponent implements OnInit {
     this.notificationService.fetchUnreadNotifications()
       .subscribe(
         notifications => {
-          console.log("Notifications: ", notifications);
+          // console.log("Notifications: ", notifications);
 
           let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
           if (!displayedNotifications)

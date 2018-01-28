@@ -1,63 +1,81 @@
 <div class="col-12">
   <div class="row mb-md-3">
-    <div class="col-md-4 col-sm-12 text-left" >
+    <div class="col-md-5 col-sm-12 text-left" >
       <h3>{{ 'campaign.messages.title' | translate }}</h3>
-      <a href="#" class="grassroot-link">{{ 'campaign.messages.languages.link' | translate }}</a>
+      <button class="btn btn-link grassroot-link" data-toggle="modal" data-target="#select-language-modal">
+        {{ 'campaign.messages.languages.link' | translate }}</button>
     </div>
-    <div class="col-md-4 col-sm-12">
+    <div class="col-md-3 col-sm-12">
       <h3>Petition</h3>
     </div>
     <div class="col-md-4 col-sm-12">
-      <button class="btn btn-secondary">{{ 'action.preview' | translate }}</button>
-      <button class="btn btn-primary">{{ 'action.save' | translate }}</button>
+      <button class="btn btn-secondary preview-button float-right">{{ 'action.preview' | translate }}</button>
+      <button class="btn btn-primary save-button float-right">{{ 'action.save' | translate }}</button>
     </div>
   </div>
-  <div class="row section-title">
-    <div class="col-12">
-      <p>
-        <span class="badge badge-primary badge-pill section-badge">1</span>{{ 'campaign.messages.initial.title' | translate }}
-      </p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-7 col-sm-12">
-      {{ 'campaign.messages.message' | translate }}
-      <ngb-tabset class="content-tabset">
-        <ngb-tab>
-          <ng-template ngbTabTitle>English</ng-template>
-          <ng-template ngbTabContent>
-            <textarea class="form-control boxsizingBorder" rows="4" placeholder="{{ 'campaign.messages.initial.placeholder' | translate }}"></textarea>
-            <p class="character-count">{{ 'general.charsRemaining' | translate }}: 0</p>
-          </ng-template>
-        </ngb-tab>
-        <ngb-tab>
-          <ng-template ngbTabTitle>Zulu</ng-template>
-          <ng-template ngbTabContent>
-            <textarea class="form-control boxsizingBorder" rows="4" placeholder="{{ 'campaign.messages.initial.placeholder' | translate }}"></textarea>
-          </ng-template>
-        </ngb-tab>
-      </ngb-tabset>
-    </div>
-    <div class="col-md-4 offset-md-1 col-sm-12">
-      <label class="form-label">{{ 'campaign.messages.tag' | translate }}</label>
-      <input type="text" class="form-control form-control-em" />
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-md-7 col-sm-12">
-      <p class="actions-title">{{ 'campaign.messages.actions.options' | translate }}</p>
-      <ul class="list-group">
-        <li class="list-group-item"><span class="badge badge-pill badge-secondary action-enum">1.</span> {{ 'campaign.messages.actions.sign' | translate }}</li>
-        <li class="list-group-item"><span class="badge badge-pill badge-secondary action-enum">2.</span> {{ 'campaign.messages.actions.more' | translate }}</li>
-      </ul>
-    </div>
-  </div>
+  <campaign-message-tabset blockIndex="1" titleKey="campaign.messages.initial.title" placeHolderKey="campaign.messages.initial.placeholder"
+                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'OPENING')"
+                           [responseOptions]="['campaign.messages.actions.sign', 'campaign.messages.actions.more']"></campaign-message-tabset>
+
   <hr class="section-separator">
-  <div class="row section-title">
-    <div class="col-12">
-      <p>
-        <span class="badge badge-primary badge-pill section-badge">2</span>{{ 'campaign.messages.more.title' | translate }}
-      </p>
+
+  <campaign-message-tabset blockIndex="2" titleKey="campaign.messages.more.title" placeHolderKey="campaign.messages.more.placeholder"
+                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'MORE_INFO')"
+                           [responseOptions]="['campaign.messages.actions.sign', 'campaign.messages.actions.exit']"></campaign-message-tabset>
+
+  <hr class="section-separator">
+
+  <campaign-message-tabset blockIndex="3" titleKey="campaign.messages.sign.title" placeHolderKey="campaign.messages.sign.placeholder"
+                          [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'SIGN_PETITION')"
+                          [responseOptions]="['campaign.messages.actions.name', 'campaign.messages.actions.province']"></campaign-message-tabset>
+
+  <hr class="section-separator">
+
+  <campaign-message-tabset blockIndex="4" titleKey="campaign.messages.share.title" placeHolderKey="campaign.messages.share.placeholder"
+                          [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'SHARE')"></campaign-message-tabset>
+
+  <div class="row mt-md-3">
+    <div class="col-sm-12">
+      <button class="btn btn-secondary preview-button float-right">{{ 'action.preview' | translate }}</button>
+      <button (click)="setMessages()" type="button" class="btn btn-primary save-button float-right">{{ 'action.save' | translate }}</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="select-language-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ 'campaign.messages.languages.modal-title' | translate }}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row col-12">
+          <p>{{ 'campaign.messages.languages.modal-sub' | translate }}</p>
+        </div>
+        <div class="row" [formGroup]="languageForm">
+          <div *ngFor="let language of availableLanguages" class="form-group col-sm-4">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="false"
+                       name="{{ language.threeDigitCode }}" formControlName="{{ language.threeDigitCode }}">
+                {{ language.fullName }}
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary float-left cancel-button" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+        <button type="button" class="btn btn-primary float-right save-button" (click)="updateLanguages()">{{
+          'action.done' | translate }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

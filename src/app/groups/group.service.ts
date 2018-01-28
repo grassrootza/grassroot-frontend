@@ -299,8 +299,14 @@ export class GroupService {
     return this.httpClient.post<GroupAddMemberInfo[]>(this.groupImportMembersConfirmUrl, null, {params: params})
       .map(
         data => {
+          console.log("members back: ", data);
           return data.map(
-            gami => new GroupAddMemberInfo(gami.memberMsisdn, gami.displayName, gami.roleName, gami.alernateNumbers, gami.emailAddress)
+            gami => new GroupAddMemberInfo(gami.memberMsisdn,
+              gami.displayName,
+              gami.roleName,
+              gami.alernateNumbers,
+              gami.emailAddress,
+              gami.province)
           )
         }
       )

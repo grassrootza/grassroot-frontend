@@ -9,6 +9,7 @@ import {CampaignMessagesComponent} from './campaign-dashboard/campaign-messages/
 import {CampaignBroadcastsComponent} from './campaign-dashboard/campaign-broadcasts/campaign-broadcasts.component';
 import {CampaignSettingsComponent} from './campaign-dashboard/campaign-settings/campaign-settings.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {MessageTabsetComponent} from "./campaign-dashboard/campaign-messages/message-tabset/message-tabset.component";
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     CampaignStatsComponent,
     CampaignMessagesComponent,
     CampaignBroadcastsComponent,
-    CampaignSettingsComponent
+    CampaignSettingsComponent,
+    MessageTabsetComponent
   ]
 })
 export class CampaignDashboardModule {

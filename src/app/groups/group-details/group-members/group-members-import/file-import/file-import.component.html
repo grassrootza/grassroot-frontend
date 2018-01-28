@@ -102,7 +102,7 @@
            [translate]="'group.import.file.memberTable.phone'">phone</div>
       <div *ngIf="emailColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.email'">email</div>
       <div *ngIf="provinceColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.province'">Province</div>
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'" [translate]="'group.import.file.memberTable.role'">Role</div>
+      <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'" [translate]="'group.import.file.memberTable.role'">Role</div>
     </div>
   </div>
   <div *ngFor="let member of groupAddMembersInfo">
@@ -121,10 +121,10 @@
         </div>
 
         <div *ngIf="provinceColumn != -1" class="col-2">
-          province
+          {{ 'enum.UserProvince.' + member.province | translate }}
         </div>
 
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
+        <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
           {{member.getFormattedRoleName()}}
         </div>
 

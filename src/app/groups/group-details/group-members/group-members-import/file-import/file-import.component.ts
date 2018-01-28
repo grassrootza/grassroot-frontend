@@ -46,7 +46,7 @@ export class FileImportComponent implements OnInit {
     });
   }
 
-  changeFile(){
+  changeFile() {
     this.groupMembersImportExcelSheetAnalysis = null;
     this.groupAddMembersInfo = [];
   }
@@ -61,6 +61,7 @@ export class FileImportComponent implements OnInit {
       roleColumn: this.roleColumn,
       header: this.sheetHasHeader
     };
+
     this.groupService.importAnalyzeMembers(params).subscribe(resp => {
       this.groupAddMembersInfo = resp;
     })
