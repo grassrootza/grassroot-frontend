@@ -30,8 +30,6 @@ export class CampaignDashboardComponent implements OnInit {
         console.log("result: ", campaignInfo);
         this.campaign = campaignInfo;
       }, error2 => {
-        if (error2.status = 401)
-          this.userService.logout();
         console.log("Error loading campaign", error2.status)
       })
     });

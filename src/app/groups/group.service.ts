@@ -112,8 +112,6 @@ export class GroupService {
         },
         error => {
           this.groupInfoListError_.next(error);
-          if (error.status == 401)
-            this.userService.logout();
           console.log("Error loading groups", error)
         });
   }
