@@ -34,6 +34,16 @@
   <campaign-message-tabset blockIndex="4" titleKey="campaign.messages.share.title" placeHolderKey="campaign.messages.share.placeholder"
                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'SHARE')"></campaign-message-tabset>
 
+  <hr class="section-separator">
+
+  <campaign-message-tabset blockIndex="5" titleKey="campaign.messages.exit_positive.title" placeHolderKey="campaign.messages.share.placeholder"
+                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'EXIT_POSITIVE')"></campaign-message-tabset>
+
+  <hr class="section-separator">
+
+  <campaign-message-tabset blockIndex="6" titleKey="campaign.messages.exit_negative.title" placeHolderKey="campaign.messages.share.placeholder"
+                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'EXIT_NEGATIVE')"></campaign-message-tabset>
+
   <div class="row mt-md-3">
     <div class="col-sm-12">
       <button class="btn btn-secondary preview-button float-right">{{ 'action.preview' | translate }}</button>

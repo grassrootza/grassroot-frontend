@@ -5,6 +5,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {CampaignService} from "../../campaign.service";
 import {AlertService} from "../../../utils/alert.service";
 import {ActivatedRoute} from "@angular/router";
+import moment = require("moment");
 
 declare var $: any;
 
@@ -14,6 +15,11 @@ declare var $: any;
   styleUrls: ['./campaign-messages.component.css']
 })
 export class CampaignMessagesComponent implements OnInit {
+
+  // todo: alter for campaign types etc
+  private typeList = ['OPENING', 'MORE_INFO', 'SIGN_PETITION', 'SHARE', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'];
+  private typeIndexes = {};
+  private typeMsgIds = {};
 
   public availableLanguages = MSG_LANGUAGES;
   public selectedLanguages: Language[];
@@ -37,6 +43,27 @@ export class CampaignMessagesComponent implements OnInit {
         this.fb.control(!(this.selectedLanguages.indexOf(language))));
     });
     this.route.parent.params.subscribe(params => this.campaignUid = params['id']);
+    this.setUpMessages();
+  }
+
+  // todo : alter for campaign types, and generally make less hideous
+  setUpMessages() {
+    this.typeList.forEach((type, index) => {
+      let msgId = "message_" + moment().valueOf() + "_" + index;
+      this._storedMessages.push(new CampaignMsgRequest(msgId, type));
+      this.typeIndexes[type] = index;
+      this.typeMsgIds[type] = msgId;
+    });
+
+    this._storedMessages[this.typeIndexes['OPENING']].nextMsgIds = [this.typeMsgIds['SIGN_PETITION'],
+      this.typeMsgIds['MORE_INFO']];
+    this._storedMessages[this.typeIndexes['MORE_INFO']].nextMsgIds = [this.typeMsgIds['SIGN_PETITION'],
+      this.typeMsgIds['EXIT_NEGATIVE']];
+    this._storedMessages[this.typeIndexes['SIGN_PETITION']].nextMsgIds = [this.typeMsgIds['SHARE'],
+      this.typeMsgIds['EXIT_POSITIVE']];
+    // share, and the exits, have no 'next'
+
+    console.log("messages now: ", this._storedMessages);
   }
 
   updateLanguages() {
@@ -51,7 +78,10 @@ export class CampaignMessagesComponent implements OnInit {
 
   storeMessages(event: object, actionType: string) {
     if (!this._storedMessages.find(msg => msg.linkedActionType == actionType)) {
-      this._storedMessages.push(new CampaignMsgRequest(actionType));
+      let msgRequest = new CampaignMsgRequest("message_" + moment().valueOf() + "_" + this._storedMessages.length,
+        actionType);
+      console.log("msgRequest: ", msgRequest);
+      this._storedMessages.push(msgRequest);
     }
     this._storedMessages.find(msg => msg.linkedActionType == actionType).messages = event as Map<string, string>;
   }

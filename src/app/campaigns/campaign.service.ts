@@ -59,7 +59,7 @@ export class CampaignService {
     console.log("sending message requests: ", messageRequests);
     let fullUrl = this.campaignMessageSetUrl + "/" + campaignUid;
     let serverMsgRequests: CampaignMsgServerReq[] = messageRequests.map(req =>
-      new CampaignMsgServerReq(req.linkedActionType, req.messages, req.tags));
+      new CampaignMsgServerReq(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags));
     console.log("server msg requests: ", serverMsgRequests);
     // console.log("message request, messages: ", messageRequests.map(mr => mr.messages));
     return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests);

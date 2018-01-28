@@ -665,6 +665,14 @@
         "title": "Share Screen",
         "placeholder": "Thank you for joining forces with us. If you want to share this with others please type their number"
       },
+      "exit_positive": {
+        "title": "Positive exit",
+        "placeholder": "Thank you for joining forces with us! We hope to see you soon at one of our events"
+      },
+      "exit_negative": {
+        "title": "Negative exit",
+        "placeholder": "Thank you for engaging our campaign, and we hope you will join us in the future"
+      },
       "done": {
         "success": "Done! The messages have been set",
         "error": "Sorry, there was an error updating"
