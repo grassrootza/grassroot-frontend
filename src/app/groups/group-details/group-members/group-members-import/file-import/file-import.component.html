@@ -85,6 +85,10 @@
   </div>
 </div>
 
+<!-- <div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-8 mx-auto">
+    {{saveColumnOrder()}}
+</div> -->
+
 <div *ngIf="groupAddMembersInfo.length > 0">
   <div class="row btn-actions">
     <div class="col-3 mx-auto">
@@ -98,7 +102,7 @@
     <div class="row">
       <div>Line</div>
 
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'"
+      <div class="col-2"
            >
            <select class="form-control">
               <option>Name</option>
@@ -111,7 +115,7 @@
            </select>
       </div>
 
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'"
+      <div class="col-2"
            >
            <select class="form-control">
               <option>Name</option>
@@ -136,7 +140,7 @@
            </select>
       </div>
 
-      <div *ngIf="provinceColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.province'">
+      <div *ngIf="provinceColumn != -1" class="col-2">
           <select class="form-control">
               <option>Name</option>
               <option>Surname</option>
@@ -148,7 +152,7 @@
            </select>
       </div>
 
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
+      <div class="col-2">
           <select class="form-control">
               <option>Name</option>
               <option>Surname</option>
@@ -166,11 +170,11 @@
     <div class="container group-info-row">
       <div class="row flex flex-wrap">
         <div>{{i + 1}}</div>
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
+        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
           {{member.displayName}}
         </div>
 
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
+        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
           {{member.memberMsisdn}}
         </div>
 
@@ -182,7 +186,7 @@
           {{ 'enum.UserProvince.' + member.province | translate }}
         </div>
 
-        <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
+        <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
           {{member.getFormattedRoleName()}}
         </div>
 
