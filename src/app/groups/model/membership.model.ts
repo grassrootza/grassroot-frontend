@@ -44,7 +44,7 @@ export class Membership {
     return PhoneNumberUtils.convertFromSystem(this.user.phoneNumber);
   }
 
-  public static createInctance(membershipData: Membership): Membership {
+  public static createInstance(membershipData: Membership): Membership {
     return new Membership(false, membershipData.user, membershipData.group, GroupRole[<string>membershipData.roleName], membershipData.topics, membershipData.joinMethod, membershipData.joinMethodDescriptor, membershipData.affiliations, membershipData.canEditDetails);
   }
 }

@@ -2,7 +2,7 @@
 
   <div class="card">
     <div class="card-body">
-      <div class="btn-group" role="group" *ngFor="let subGroup of group.subGroups">
+      <div *ngFor="let subGroup of group.subGroups" class="btn-group" role="group">
         <a class="btn subgroup-link" (click)="loadMembers(subGroup)">{{subGroup.name}}</a>
         <span class="input-group-addon" id="btnGroupAddon">{{subGroup.memberCount}}</span>
       </div>

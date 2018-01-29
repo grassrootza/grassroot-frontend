@@ -92,7 +92,7 @@ export class GroupService {
     let cachedNewMembers = localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE);
     if (cachedNewMembers) {
       let cachedNewMembersData = JSON.parse(localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE));
-      cachedNewMembersData.content = cachedNewMembersData.content.map(membership => Membership.createInctance(membership));
+      cachedNewMembersData.content = cachedNewMembersData.content.map(membership => Membership.createInstance(membership));
       this.newMembersInMyGroups_.next(cachedNewMembersData);
     }
   }
@@ -181,7 +181,7 @@ export class GroupService {
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
       .map(
         result => {
-          let transformedContent = result.content.map(m => Membership.createInctance(m));
+          let transformedContent = result.content.map(m => Membership.createInstance(m));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -206,7 +206,7 @@ export class GroupService {
       .map(
         result => {
           console.log("Fetched new members", result);
-          let transformedContent = result.content.map(m => Membership.createInctance(m));
+          let transformedContent = result.content.map(m => Membership.createInstance(m));
           return new MembersPage(
             result.number,
             result.totalPages,
@@ -460,7 +460,7 @@ export class GroupService {
 
     return this.httpClient.get<Membership>(fullUrl, {params: params})
       .map(m => {
-        return Membership.createInctance(m);
+        return Membership.createInstance(m);
       } )
   }
 
@@ -532,9 +532,7 @@ export class GroupService {
 
 
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
-      .map(resp => {
-        return resp;
-      })
+      .map(resp => resp.map(m => Membership.createInstance(m)))
   }
 
   createTaskTeam(parentUid: string, taskTeamName: string, memberUids: string[]):Observable<any>{

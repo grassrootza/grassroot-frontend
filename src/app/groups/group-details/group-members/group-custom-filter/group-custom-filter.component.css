@@ -1,0 +1,47 @@
+.row {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.group-members-count {
+  font-size: 14px;
+  color: #2CBC4C;
+}
+
+.btn.dropdown-toggle {
+  padding: 0.5rem;
+  font-size: 14px;
+  background-color: white;
+  border: solid 1px #cccccc;
+}
+
+.group-info-header {
+  border-top: none;
+  border-bottom: none;
+  background-color: #F5F6FA;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.group-info-row {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  vertical-align: middle;
+  border-top: solid #ECEEF1 1px;
+}
+
+.group-info-row {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.group-info-row img {
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+}
+
+.dropdown-item {
+  cursor: pointer;
+}
