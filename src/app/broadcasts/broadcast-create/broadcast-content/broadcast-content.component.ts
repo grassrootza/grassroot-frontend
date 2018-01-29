@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BroadcastContent, BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
@@ -82,6 +82,24 @@ export class BroadcastContentComponent implements OnInit {
 
   cancel() {
     this.broadcastService.cancelCurrentCreate();
+  }
+
+  uploadImage(event) {
+    let images = event.target.files;
+
+    if (images.length > 0) {
+      let image = images[0];
+      let formData: FormData = new FormData();
+      formData.append("image", image, image.name);
+      console.log("attempting to upload image ... name: ", image.name);
+      this.broadcastService.uploadImage(formData).
+      subscribe(response => {
+          console.log("response: ", response);
+        },
+        error => {
+          console.log("error uploading image, error: ", error);
+        })
+    }
   }
 
 }

@@ -16,6 +16,7 @@ export class BroadcastService {
 
   fetchUrlBase = environment.backendAppUrl + "/api/broadcast/fetch/";
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
+  imageUploadUrl = environment.backendAppUrl + "/api/broadcast/create/image/upload";
 
   private createRequest: BroadcastRequest = new BroadcastRequest();
 
@@ -169,7 +170,12 @@ export class BroadcastService {
   }
 
   private getFbDisplayName(fbUserId: string): string {
-    return this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName;
+    console.log("no really");
+    if (this._createParams.facebookPages && fbUserId) {
+      return this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName
+    } else {
+      return "";
+    }
   }
 
   sendBroadcast() {
@@ -239,6 +245,11 @@ export class BroadcastService {
       this.latestStep = nextPage;
       localStorage.setItem('broadcastCreateStep', this.latestStep.toString());
     }
+  }
+
+  uploadImage(image): Observable<any> {
+    const fullUrl = this.imageUploadUrl;
+    return this.httpClient.post(fullUrl, image, { responseType: 'text' });
   }
 
   getGroupBroadcasts(groupUid: string, broadcastSchedule: string, pageNo: number, pageSize: number): Observable<BroadcastPage>{

@@ -70,7 +70,6 @@ export class BroadcastTypes {
 
 export class BroadcastContent {
 
-  // todo: images and file attachments
   title: string = "";
   shortMessage: string = "";
   emailContent: string = "";
