@@ -313,6 +313,9 @@
         "province": "Province",
         "taskTeam": "Task team",
         "topics": "Topics",
+        "joinMethods": "Joined source",
+        "campaigns": "Joined via campaign",
+        "petitions": "Joined via petition",
         "update": "Update"
       },
       "manage":{

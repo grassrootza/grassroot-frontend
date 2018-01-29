@@ -40,7 +40,8 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NotificationService} from "./user/notification.service";
 import {CampaignService} from "./campaigns/campaign.service";
 
-import { ClipboardModule } from 'ng2-clipboard';
+
+import {ClipboardModule} from 'ng2-clipboard';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
