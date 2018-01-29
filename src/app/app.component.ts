@@ -67,7 +67,6 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     $(".ntf-popup").hide();
     this.pullNotifications();
     setInterval(() => {
@@ -88,7 +87,7 @@ export class AppComponent implements OnInit {
     this.notificationService.fetchUnreadNotifications()
       .subscribe(
         notifications => {
-          console.log("Notifications: ", notifications);
+          // console.log("Notifications: ", notifications);
 
           let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
           if (!displayedNotifications)
@@ -104,8 +103,11 @@ export class AppComponent implements OnInit {
           else this.popupNotification = null;
         },
         error => {
-          console.log("Notifications error: ", error);
+          if (error.status == 401)
+            this.userService.logout(true);
+          else console.log("Notifications error: ", error);
         }
+
       );
   }
 
@@ -152,7 +154,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.userService.logout();
+    this.userService.logout(false);
     // note: with path based routing for some reason need to call this
     return false;
   }

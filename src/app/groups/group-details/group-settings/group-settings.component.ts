@@ -55,8 +55,6 @@ export class GroupSettingsComponent implements OnInit {
             this.populateFormData(this.group, [], [], []);
           },
           error => {
-            if (error.status = 401)
-              this.userService.logout();
             console.log("Error loading groups", error.status)
           }
         );

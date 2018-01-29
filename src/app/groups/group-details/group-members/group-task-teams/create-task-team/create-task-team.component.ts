@@ -44,8 +44,6 @@ export class CreateTaskTeamComponent implements OnInit {
 
         },
         error => {
-          if (error.status = 401)
-            this.userService.logout();
           console.log('Error loading group members', error.status);
         }
       )

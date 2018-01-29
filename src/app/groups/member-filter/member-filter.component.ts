@@ -38,8 +38,6 @@ export class MemberFilterComponent implements OnInit {
           console.log(this.group);
         },
         error => {
-          if (error.status = 401)
-            this.userService.logout();
           console.log("Error loading groups", error.status)
         }
       );

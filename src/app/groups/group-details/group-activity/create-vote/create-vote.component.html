@@ -126,10 +126,10 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="createVote()" [disabled]="!createVoteForm.valid">{{
-          'action.save' | translate }}
+        <button type="button" class="btn btn-primary save-button" (click)="createVote()" [disabled]="!createVoteForm.valid">{{
+          'action.send' | translate }}
         </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
       </div>
 
     </div>

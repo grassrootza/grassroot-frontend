@@ -25,6 +25,6 @@
   margin-top: 0;
 }
 
-/*#description {*/
-  /*height: 100%;*/
-/*}*/
+.alert-inline {
+  margin-top: 10px;
+}

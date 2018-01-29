@@ -6,20 +6,42 @@
 
       <div class="row">
         <div class="col-md-4">
-          <!-- insert image, dates -->
+          <span>{{ campaign.campaignStartDate.format('DD MMM YYYY') }}</span> to
+          <span>{{ campaign.campaignEndDate.format('DD MMM YYYY') }}</span>
         </div>
         <div class="col-md-8 campaign-description">
-          <p>{{campaign.description}}</p>
           <div class="row">
             <div class="col-md-7">
+              <p>{{campaign.description}}</p>
               <!-- some details -->
+              <div class="campaign-info creation-info">
+                <strong>{{'campaign.dashboard.creationLabel' | translate}}</strong>
+                <span translate [translateParams]="{
+                  creatingUserName: campaign.creatingUserName,
+                  createdDate: campaign.createdDate.format('DD MMMM YYYY')
+                }">
+                  campaign.dashboard.creationInfo</span>
+              </div>
+              <div class="campaign-info">
+                {{ 'campaign.dashboard.typeLabel' | translate }}{{ 'campaign.types.' + campaign.campaignType | translate }}
+              </div>
             </div>
             <div class="col-md-5 text-right">
               <div class="campaign-info">
                 <a [routerLink]="['/broadcast/create/campaign', campaign.campaignUid]" class="btn btn-success broadcast-btn">
-                  <img src="assets/icon_megaphone.png"/>
+                  <i class="fas fa-bullhorn"></i>
                   {{'group.sendBroadcast' | translate}}
                 </a>
+              </div>
+              <div class="campaign-info">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <strong>{{ 'campaign.dashboard.code-title' | translate}}</strong>
+                    <div class="join-code">
+                      {{ 'campaign.dashboard.code-specified' | translate:campaign }}
+                    </div>
+                  </div>
+                </div>
               </div>
               <!-- then the rest -->
             </div>

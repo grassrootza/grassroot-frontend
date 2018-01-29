@@ -159,9 +159,9 @@
               <option selected="true">Role</option>
            </select>
       </div>
-
     </div>
   </div>
+  
   <div *ngFor="let member of groupAddMembersInfo | slice:0:7; let i = index">
     <div class="container group-info-row">
       <div class="row flex flex-wrap">
@@ -179,10 +179,10 @@
         </div>
 
         <div *ngIf="provinceColumn != -1" class="col-2">
-          province
+          {{ 'enum.UserProvince.' + member.province | translate }}
         </div>
 
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
+        <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
           {{member.getFormattedRoleName()}}
         </div>
 

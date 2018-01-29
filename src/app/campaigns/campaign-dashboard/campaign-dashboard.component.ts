@@ -24,16 +24,12 @@ export class CampaignDashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("initiating campaign dashboard");
     this.route.params.subscribe((params: Params) => {
       let campaignUid = params['id'];
-      console.log("and now have loaded campaign UID: ", campaignUid);
       this.campaignService.loadCampaign(campaignUid).subscribe(campaignInfo => {
+        console.log("result: ", campaignInfo);
         this.campaign = campaignInfo;
       }, error2 => {
-        // todo : maybe just retreat to home, and/or show an alert
-        if (error2.status = 401)
-          this.userService.logout();
         console.log("Error loading campaign", error2.status)
       })
     });

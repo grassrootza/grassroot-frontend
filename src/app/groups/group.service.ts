@@ -112,8 +112,6 @@ export class GroupService {
         },
         error => {
           this.groupInfoListError_.next(error);
-          if (error.status == 401)
-            this.userService.logout();
           console.log("Error loading groups", error)
         });
   }
@@ -299,8 +297,14 @@ export class GroupService {
     return this.httpClient.post<GroupAddMemberInfo[]>(this.groupImportMembersConfirmUrl, null, {params: params})
       .map(
         data => {
+          console.log("members back: ", data);
           return data.map(
-            gami => new GroupAddMemberInfo(gami.memberMsisdn, gami.displayName, gami.roleName, gami.alernateNumbers, gami.emailAddress)
+            gami => new GroupAddMemberInfo(gami.memberMsisdn,
+              gami.displayName,
+              gami.roleName,
+              gami.alernateNumbers,
+              gami.emailAddress,
+              gami.province)
           )
         }
       )

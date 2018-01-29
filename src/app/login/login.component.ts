@@ -16,12 +16,15 @@ export class LoginComponent {
   message: string;
   loginForm:FormGroup;
 
+  showForceLogoutReason = false;
+
   constructor(public userService: UserService, private router: Router, private translate: TranslateService) {
     this.message = '';
     this.loginForm = new FormGroup({
         username: new FormControl('',[Validators.required, Validators.minLength(3), eitherEmailOrPhoneValid]),
         password:new FormControl('',Validators.required)
     }, { updateOn: 'blur' });
+    this.showForceLogoutReason = this.userService.showForceLogoutReason;
   }
 
   login(username: string, password: string): boolean {

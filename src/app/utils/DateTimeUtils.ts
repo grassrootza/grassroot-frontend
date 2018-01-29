@@ -20,6 +20,10 @@ export class DateTimeUtils {
     return new Date(instant.epochSecond * 1000)
   }
 
+  public static getMomentFromJavaInstant(instant): any {
+    return moment.unix(instant.epochSecond);
+  }
+
   public static convertDateStringToEpochMilli(dateString: string) {
     let date = new Date(dateString);
     return date.getTime();
