@@ -63,6 +63,7 @@ export class GroupActivityComponent implements OnInit {
           this.pastTasks = tasks.filter(t => new Date(t.deadlineMillis) < now);
           console.log("Old Tasks @@@@", this.pastTasks.length);
         }, error =>{
+
           if(error.status == 401){
             console.log("Error @@@@@@@", error.status);
           }
