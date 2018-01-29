@@ -9,7 +9,7 @@ import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 import {TranslateService} from "@ngx-translate/core";
 import {JoinCodeInfo} from "../model/join-code-info";
 
-import { ClipboardService } from 'ng2-clipboard/ng2-clipboard';
+import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
 
 declare var $: any;
 
@@ -32,6 +32,8 @@ export class GroupDetailsComponent implements OnInit {
 
   public activeJoinWords: string[] = [];
   public joinWordCbString: string = "";
+
+  public justCopied: boolean = false;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -141,8 +143,6 @@ export class GroupDetailsComponent implements OnInit {
     return false;
   }
 
-  // note: this is a bit of a mess. would have thought copy to clipboard would be much simpler. guess not.
-  // most S-O answers not really providing guidance, so need to untangle. string generation works fine though.
   copyToCb(joinWord: JoinCodeInfo) {
     let params = {
       'shortCode': this.joinMethodParams.shortCode,
@@ -154,13 +154,15 @@ export class GroupDetailsComponent implements OnInit {
     this.translateService.get("group.joinMethods.joinWordCbText", params).subscribe(text => {
       this.joinWordCbString = text;
       this.clipboardService.copy(this.joinWordCbString);
-      console.log("copying: ", this.joinWordCbString);
+      this.justCopied = true;
+      joinWord.copied = true;
+      setTimeout(() => joinWord.copied = false, 1500);
     });
     return false;
   }
 
+  showCopiedString() {
 
-
-  //copyToClipboard =()=>{this.clipboardService.copy("I wanna copy this text again and again");return false}
+  }
 
 }

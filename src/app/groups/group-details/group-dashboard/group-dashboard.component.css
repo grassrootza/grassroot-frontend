@@ -6,8 +6,7 @@ h5 img {
 /*Divs with auto heigh based on one with max events not working,
  tried display:table with table row and cell but stil not working. to be worked on later.*/
 .events-box {
-  /*height: auto;*/
-  min-height: 20rem;
+  height: auto;
   max-height: 20rem;
   overflow-y: auto;
 }

@@ -130,8 +130,8 @@
     "private": "Private group",
     "myRole": "My role:",
     "sendBroadcast": "Send new broadcast",
-    "joinCode": "Join code",
-    "joinWords": "Join words",
+    "joinCode": "Dial to join",
+    "joinWords": "SMS to join",
     "joinWordsSuffix": " to {{ shortCode }}",
     "noJoinWordsCanSet": " None. Click to add",
     "flyer": "Download flyer",
@@ -169,8 +169,9 @@
     },
     "joinMethods": {
       "modalTitle": "Ways to sign up members",
-      "ussdCode": "By dialing {{ completeJoinCode }}",
-      "joinWords": "By SMSing {{ shortCode }} with one of your join codes, or clicking on of their links:",
+      "ussdCode": "1. <b>Dial</b> {{ completeJoinCode }}",
+      "joinWords": "2. <b>SMS</b> with a join word to {{ shortCode }}",
+      "clickLink": "3. <b>Click</b> on one of your short links",
       "noWordsLeft": "You have run out of join words (each group can have up to three). To create a new one, please remove an old one first.",
       "joinWordCbText": "To join {{ groupName }}, just text {{ joinWord }} to {{ shortCode}}, dial {{ ussdCode }}, or click here: {{ shortUrl }}",
       "addJoinWord": {
@@ -808,7 +809,9 @@
     "working": "Working",
     "loading": "Loading",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "copy": "Copy",
+    "copied": "Copied"
   },
   "general": {
     "charsRemaining": "Characters remaining"
