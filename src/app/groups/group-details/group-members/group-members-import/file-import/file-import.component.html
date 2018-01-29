@@ -85,6 +85,10 @@
   </div>
 </div>
 
+<!-- <div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-8 mx-auto">
+    {{saveColumnOrder()}}
+</div> -->
+
 <div *ngIf="groupAddMembersInfo.length > 0">
   <div class="row btn-actions">
     <div class="col-3 mx-auto">
@@ -96,35 +100,93 @@
 
   <div class="container group-info-header d-none d-md-block">
     <div class="row">
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'"
-           [translate]="'group.import.file.memberTable.name'">Name</div>
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'"
-           [translate]="'group.import.file.memberTable.phone'">phone</div>
-      <div *ngIf="emailColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.email'">email</div>
-      <div *ngIf="provinceColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.province'">Province</div>
-      <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'" [translate]="'group.import.file.memberTable.role'">Role</div>
+      <div>Line</div>
+
+      <div class="col-2"
+           >
+           <select class="form-control">
+              <option>Name</option>
+              <option>Surname</option>
+              <option>Cellphone</option>
+              <option>Email</option>
+              <option>Province</option>
+              <option>Organisation/Affiliation</option>
+              <option>Role</option>
+           </select>
+      </div>
+
+      <div class="col-2"
+           >
+           <select class="form-control">
+              <option>Name</option>
+              <option>Surname</option>
+              <option selected="true">Cellphone</option>
+              <option>Email</option>
+              <option>Province</option>
+              <option>Organisation/Affiliation</option>
+              <option>Role</option>
+           </select>
+      </div>
+
+      <div *ngIf="emailColumn != -1" class="col-2">
+          <select class="form-control">
+              <option>Name</option>
+              <option>Surname</option>
+              <option>Cellphone</option>
+              <option selected="true">Email</option>
+              <option>Province</option>
+              <option>Organisation/Affiliation</option>
+              <option>Role</option>
+           </select>
+      </div>
+
+      <div *ngIf="provinceColumn != -1" class="col-2">
+          <select class="form-control">
+              <option>Name</option>
+              <option>Surname</option>
+              <option>Cellphone</option>
+              <option>Email</option>
+              <option selected="true">Province</option>
+              <option>Organisation/Affiliation</option>
+              <option>Role</option>
+           </select>
+      </div>
+
+      <div class="col-2">
+          <select class="form-control">
+              <option>Name</option>
+              <option>Surname</option>
+              <option>Cellphone</option>
+              <option>Email</option>
+              <option>Province</option>
+              <option>Organisation/Affiliation</option>
+              <option selected="true">Role</option>
+           </select>
+      </div>
     </div>
   </div>
-  <div *ngFor="let member of groupAddMembersInfo">
+  
+  <div *ngFor="let member of groupAddMembersInfo | slice:0:7; let i = index">
     <div class="container group-info-row">
       <div class="row flex flex-wrap">
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
-          <input type="text" class="form-control" [(ngModel)]="member.displayName">
+        <div>{{i + 1}}</div>
+        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
+          {{member.displayName}}
         </div>
 
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
-          <input type="text" class="form-control" [(ngModel)]="member.memberMsisdn">
+        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
+          {{member.memberMsisdn}}
         </div>
 
         <div *ngIf="emailColumn != -1" class="col-2">
-          <input type="text" class="form-control" [(ngModel)]="member.emailAddress">
+          {{member.emailAddress}}
         </div>
 
         <div *ngIf="provinceColumn != -1" class="col-2">
           {{ 'enum.UserProvince.' + member.province | translate }}
         </div>
 
-        <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
+        <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
           {{member.getFormattedRoleName()}}
         </div>
 
