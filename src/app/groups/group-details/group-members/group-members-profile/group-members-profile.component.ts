@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {GroupService} from '../../../group.service';
 import {UserService} from '../../../../user/user.service';
 import {Membership} from '../../../model/membership.model';
@@ -31,8 +31,6 @@ export class GroupMembersProfileComponent implements OnInit {
           this.member = membership;
         },
         error => {
-          if (error.status = 401)
-            this.userService.logout();
           console.log("Error loading groups", error.status)
         }
       );

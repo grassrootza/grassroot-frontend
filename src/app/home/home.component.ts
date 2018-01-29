@@ -38,9 +38,9 @@ export class HomeComponent implements OnInit {
 
   public createTaskGroupUid: string = null;
 
-  private tasksLoaded = false;
-  private newMembersLoaded = false;
-  private groupsLoaded = false;
+  private tasksLoadFinished = false;
+  private newMembersLoadFinished = false;
+  private groupsLoadFinished = false;
 
 
   constructor(private taskService: TaskService,
@@ -48,37 +48,58 @@ export class HomeComponent implements OnInit {
               private groupService: GroupService,
               private router: Router,
               private spinnerService: Ng4LoadingSpinnerService) {
-
     this.agendaBaseDate = moment().startOf('day');
   }
 
   ngOnInit() {
 
-    if (!this.tasksLoaded || !this.newMembersLoaded || !this.newMembersLoaded) {
+    if (!this.tasksLoadFinished || !this.newMembersLoadFinished || !this.newMembersLoadFinished) {
       console.log("Showing spinner");
       this.spinnerService.show();
     }
 
     this.taskService.upcomingTasks
-      .subscribe(tasks => {
+      .subscribe(
+        tasks => {
         if (tasks) {
           this.myTasks = this.groupTasksByDay(tasks);
           this.filterMyAgendaTasksRegardingBaseDate();
-          console.log("Tasks loaded:", tasks);
-          this.tasksLoaded = true;
+          this.tasksLoadFinished = true;
           this.hideSpinnerIfAllLoaded();
         }
-      });
+        });
+
+    this.taskService.upcomingTaskError.subscribe(
+      error => {
+        if (error) {
+          console.log("Tasks load failed:", error);
+          this.tasksLoadFinished = true;
+          this.hideSpinnerIfAllLoaded();
+        }
+      }
+    );
 
 
     this.groupService.newMembersInMyGroups
       .subscribe(newMembersPage => {
         if (newMembersPage) {
           this.newMembersPage = newMembersPage;
-          this.newMembersLoaded = true;
+          this.newMembersLoadFinished = true;
           this.hideSpinnerIfAllLoaded();
         }
       });
+
+
+    this.groupService.newMembersInMyGroupsError
+      .subscribe(
+        error => {
+          if (error) {
+            this.newMembersLoadFinished = true;
+            this.hideSpinnerIfAllLoaded();
+            console.log("New members load failed!", error);
+          }
+        }
+      );
 
 
     this.groupService.groupInfoList
@@ -86,7 +107,18 @@ export class HomeComponent implements OnInit {
         groups => {
           if (groups) {
             this.pinnedGroups = groups.filter(gr => gr.pinned);
-            this.groupsLoaded = true;
+            this.groupsLoadFinished = true;
+            this.hideSpinnerIfAllLoaded();
+          }
+        }
+      );
+
+    this.groupService.groupInfoList
+      .subscribe(
+        error => {
+          if (error) {
+            console.log("Pinned groups load failed!", error);
+            this.groupsLoadFinished = true;
             this.hideSpinnerIfAllLoaded();
           }
         }
@@ -94,19 +126,13 @@ export class HomeComponent implements OnInit {
 
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
     this.groupService.fetchNewMembers(7, 0, 1000);
-    this.groupService.loadGroups(false);
+    this.groupService.loadGroups();
 
-    // hack for present so if there's an error user can regain control, should preferably connect to
-    // observables in services so if they throw auth errors it defaults back
-    setTimeout(() => {
-      this.spinnerService.hide();
-    }, 2000);
   }
 
 
   private hideSpinnerIfAllLoaded() {
-    if (this.tasksLoaded && this.newMembersLoaded && this.groupsLoaded) {
-      console.log("Hiding spinner");
+    if (this.tasksLoadFinished && this.newMembersLoadFinished && this.groupsLoadFinished) {
       this.spinnerService.hide();
     }
   }

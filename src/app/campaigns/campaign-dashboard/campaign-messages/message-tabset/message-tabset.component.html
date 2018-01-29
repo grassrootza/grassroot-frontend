@@ -1,0 +1,43 @@
+<div class="row section-title">
+  <div class="col-12">
+    <p>
+      <span class="badge badge-primary badge-pill section-badge">{{ blockIndex }}</span>{{ titleKey | translate }}
+    </p>
+  </div>
+</div>
+<div class="row" *ngIf="((languages))" [formGroup]="formGroup">
+  <div class="col-md-7 col-sm-12">
+    {{ 'campaign.messages.message' | translate }}
+    <ngb-tabset class="content-tabset">
+      <ngb-tab *ngFor="let language of languages">
+        <ng-template ngbTabTitle>
+          {{ language.shortName }}
+          <!-- todo: fix color coordination -->
+          <span class="warning-symbol" *ngIf="formGroup.get(language.threeDigitCode)?.errors?.required">*</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <textarea class="form-control boxsizingBorder" rows="4"
+                    placeholder="{{ placeHolderKey | translate }}"
+                    formControlName="{{ language.threeDigitCode }}"></textarea>
+          <p class="character-count">{{ 'general.charsRemaining' | translate }}: 0</p>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+  <div class="col-md-4 offset-md-1 col-sm-12">
+    <label class="form-label">{{ 'campaign.messages.tag' | translate }}</label>
+    <input type="text" class="form-control form-control-em" />
+  </div>
+</div>
+
+<div class="row" *ngIf="(responseOptions)">
+  <div class="col-md-7 col-sm-12">
+    <p class="actions-title">{{ 'campaign.messages.actions.options' | translate }}</p>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let option of responseOptions; let i = index">
+        <span class="badge badge-pill badge-secondary action-enum">{{i + 1}}.</span>
+        {{ option | translate }}
+      </li>
+    </ul>
+  </div>
+</div>

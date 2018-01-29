@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Params, Router} from '@angular/router';
 import {UserService} from '../../../../user/user.service';
 import {GroupService} from '../../../group.service';
@@ -42,8 +42,6 @@ export class GroupMembersImportComponent implements OnInit {
             this.group = groupDetails;
           },
           error => {
-            if (error.status = 401)
-              this.userService.logout();
             console.log("Error loading groups", error.status)
           }
         );

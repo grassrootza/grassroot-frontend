@@ -38,8 +38,8 @@ export class GroupsComponent implements OnInit {
 
     this.groupService.groupInfoList.subscribe(
       groupList => {
-        console.log("Groups loaded: ", groupList);
         if (groupList) {
+          console.log("Groups loaded: ", groupList);
           this.spinnerService.hide();
 
           this.groups = groupList;
@@ -55,7 +55,17 @@ export class GroupsComponent implements OnInit {
       }
     );
 
-    this.groupService.loadGroups(true);
+    this.groupService.groupInfoListError
+      .subscribe(
+        error => {
+          if (error) {
+            console.log("Failed to fetch group list!", error);
+            this.spinnerService.hide();
+          }
+        }
+      );
+
+    this.groupService.loadGroups();
   }
 
 
@@ -166,7 +176,7 @@ export class GroupsComponent implements OnInit {
 
   groupCreated(groupRef: GroupRef) {
     console.log("Group successfully created, groupUid: ", groupRef.groupUid);
-    this.groupService.loadGroups(true);
+    this.groupService.loadGroups();
   }
 
   groupCreationFailed(error: any) {

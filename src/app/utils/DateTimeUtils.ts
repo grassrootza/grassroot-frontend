@@ -3,8 +3,25 @@ import * as moment from "moment";
 
 export class DateTimeUtils {
 
+
+  public static parseDate(dateValue): Date {
+    if (dateValue != null) {
+      if (dateValue instanceof Date)
+        return dateValue;
+      else if (typeof dateValue == "string")
+        return new Date(dateValue);
+      else
+        return DateTimeUtils.getDateFromJavaInstant(dateValue)
+    }
+    else return null;
+  }
+
   public static getDateFromJavaInstant(instant): Date {
     return new Date(instant.epochSecond * 1000)
+  }
+
+  public static getMomentFromJavaInstant(instant): any {
+    return moment.unix(instant.epochSecond);
   }
 
   public static convertDateStringToEpochMilli(dateString: string) {

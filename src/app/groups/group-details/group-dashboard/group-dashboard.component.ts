@@ -114,6 +114,7 @@ export class GroupDashboardComponent implements OnInit {
     console.log(saveResponse);
     $("#create-todo-modal").modal("hide");
   }
+
   public memberGrowthPeriodChanged(newPeriod: string) {
     console.log("member growth period changed: ", newPeriod);
     this.currentMemberGrowthPeriod = newPeriod;

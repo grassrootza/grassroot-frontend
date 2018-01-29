@@ -50,8 +50,6 @@ export class GroupActivityComponent implements OnInit {
           this.upcomingTasks = tasks;
         },
         error => {
-          if(error.status = 401)
-            this.userService.logout();
           console.log("Error loading tasks for group", error.status);
         }
       );

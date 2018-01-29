@@ -52,7 +52,7 @@ export class GroupInfo {
       groupInfoData.groupUid,
       groupInfoData.userPermissions,
       GroupRole[<string>groupInfoData.userRole],
-      GroupInfo.convertDate(groupInfoData.nextEventTime),
+      DateTimeUtils.parseDate(groupInfoData.nextEventTime),
       groupInfoData.nextEventType != null ? TaskType[<string>groupInfoData.nextEventType] : null,
       groupInfoData.pinned,
       groupInfoData.comingUpEvents.map(e => TaskInfo.createInstance(e)),
@@ -60,16 +60,7 @@ export class GroupInfo {
     )
   }
 
-  private static convertDate(dateValue): Date {
-    if (dateValue != null) {
-      if (typeof dateValue == "string")
-        return new Date(dateValue)
-      else
-        return DateTimeUtils.getDateFromJavaInstant(dateValue)
-    }
-    else return null;
 
-  }
 
 
 }

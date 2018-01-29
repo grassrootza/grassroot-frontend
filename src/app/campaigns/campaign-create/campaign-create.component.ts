@@ -5,6 +5,11 @@ import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 import {DateTimeUtils, epochMillisFromDate} from "../../utils/DateTimeUtils";
 import {optionalUrlValidator, urlValidator} from "../../utils/CustomValidators";
 import {CampaignRequest} from "./campaign-request";
+import {GroupService} from "../../groups/group.service";
+import {GroupInfo} from "../../groups/model/group-info.model";
+import {AlertService} from "../../utils/alert.service";
+import {Router} from "@angular/router";
+import {isNumeric} from "rxjs/util/isNumeric";
 
 @Component({
   selector: 'app-campaign-create',
@@ -16,18 +21,26 @@ export class CampaignCreateComponent implements OnInit {
   public createCampaignForm: FormGroup;
   public dragAreaClass: string = "dragarea";
 
-  constructor(private campaignService: CampaignService, private formBuilder: FormBuilder,
+  public takenCodes: string[] = [];
+  public availableGroups: GroupInfo[] = [];
+
+  constructor(private campaignService: CampaignService,
+              private groupService: GroupService,
+              private formBuilder: FormBuilder,
+              private router: Router,
+              private alertService: AlertService,
               private spinnerService: Ng4LoadingSpinnerService) {
 
     this.createCampaignForm = this.formBuilder.group({
       'name': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': ['', Validators.compose([Validators.required, Validators.minLength(10)])],
-      'code': ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(3)])],
+      'code': ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(3),
+        checkCodeIsNumber, this.checkCodeAvailability.bind(this)])],
       'startDate': [DateTimeUtils.nowAsDateStruct(), Validators.required],
       'endDate': [DateTimeUtils.futureDateStruct(3, 0), Validators.required],
       'type': ['', Validators.required],
       'groupType': ['', Validators.required],
-      'groupUid': [''],
+      'groupUid': ['', hasChosenGroupIfNeeded],
       'groupName': ['', hasGroupNameIfNeeded],
       'amandlaUrl': ['', optionalUrlValidator],
       'smsShare': ['false'],
@@ -38,21 +51,46 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.campaignService.fetchActiveCampaignCodes().subscribe(result => {
+      this.takenCodes = result
+    }, error => {
+      console.log("error fetching codes: ", error);
+    });
+    this.groupService.groupInfoList.subscribe(result => this.loadGroupSelector(result));
+  }
 
+  loadGroupSelector(groups: GroupInfo[]) {
+    this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_UPDATE_GROUP_DETAILS"));
+  }
+
+  checkCodeAvailability(control: FormControl) {
+    let code = control.value;
+    if (this.takenCodes.includes("" + code)) {
+      return { codeTaken: true }
+    }
+    return null;
   }
 
   createCampaign() {
     if (!this.createCampaignForm.valid) {
       Object.keys(this.createCampaignForm.controls)
         .filter(field => this.createCampaignForm.controls[field].errors)
-        .map(field => console.log(field + ": ", this.createCampaignForm.controls[field].errors));
+        .map(field => {
+          this.createCampaignForm.controls[field].markAsTouched( {onlySelf: true });
+          console.log(field + ": ", this.createCampaignForm.controls[field].errors)
+        });
       return false;
     }
 
+    this.spinnerService.show();
     this.campaignService.createCampaign(this.getRequestFromForm()).subscribe(result => {
-      console.log("well that worked");
+      this.alertService.alert("campaign.create.complete.success");
+      this.spinnerService.hide();
+      this.router.navigate(['/campaign/' + result.campaignUid + '/messages']);
     }, error2 => {
+      // todo : proper error messages
       console.log("error creating campaign! : ", error2);
+      this.spinnerService.hide();
     });
   }
 
@@ -109,6 +147,18 @@ export const hasGroupNameIfNeeded = (input: FormControl) => {
   return null;
 };
 
+export const hasChosenGroupIfNeeded = (input: FormControl) => {
+  if (!input.root) {
+    return null;
+  }
+
+  if (input.root.get('groupType') && input.root.get('groupType').value == 'EXISTING') {
+    return Validators.required(input);
+  }
+
+  return null;
+};
+
 export const hasValidLandingUrlIfNeeded = (input: FormControl) => {
   if (!input.root || !(input.root.get('landingPage'))) {
     return null;
@@ -118,5 +168,13 @@ export const hasValidLandingUrlIfNeeded = (input: FormControl) => {
     return urlValidator(input);
   }
 
+  return null;
+};
+
+export const checkCodeIsNumber = (control: FormControl) => {
+  let code = control.value;
+  if ((code) && !isNumeric(code)) {
+    return { codeNumber: true }
+  }
   return null;
 };

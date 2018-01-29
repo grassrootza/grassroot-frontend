@@ -8,8 +8,6 @@ import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} fro
 import {GroupAddMemberInfo} from '../../../model/group-add-member-info.model';
 import {GroupRole} from '../../../model/group-role';
 import {UserProvince} from '../../../../user/model/user-province.enum';
-import {Observable} from 'rxjs/Observable';
-import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';
 
 declare var $: any;
 
@@ -126,14 +124,7 @@ export class MemberListComponent implements OnInit {
     if(member.canEditDetails){
       $('#member-edit-modal').modal('show');
       this.editMemberForm.controls['displayName'].setValue(member.user.displayName);
-      let role = "";
-      if(member.roleName === "Member")
-        role = "ROLE_ORDINARY_MEMBER";
-      else if(member.roleName === "Committee")
-        role = "ROLE_COMMITTEE_MEMBER";
-      else
-        role = "ROLE_GROUP_ORGANIZER";
-      this.editMemberForm.controls['roleName'].setValue(role);
+      this.editMemberForm.controls['roleName'].setValue(member.roleName);
       this.editMemberForm.controls['memberMsisdn'].setValue(member.user.phoneNumber != null ? member.user.phoneNumber : "");
       this.editMemberForm.controls['emailAddress'].setValue(member.user.email != null ? member.user.email : "");
       this.editMemberForm.controls['province'].setValue(member.user.province);

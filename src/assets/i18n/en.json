@@ -1,4 +1,56 @@
 {
+  "enum": {
+    "TaskType": {
+      "MEETING": "Meeting",
+      "VOTE": "Vote",
+      "TODO": "To do"
+    },
+    "GroupRole": {
+      "ROLE_ORDINARY_MEMBER": "Member",
+      "ROLE_COMMITTEE_MEMBER": "Committee",
+      "ROLE_GROUP_ORGANIZER": "Organizer"
+    },
+    "TodoType": {
+      "INFORMATION_REQUIRED": "Respond with information",
+      "VALIDATION_REQUIRED": "Validate action",
+      "ACTION_REQUIRED": "Take action",
+      "VOLUNTEERS_NEEDED": "Volunteer"
+    },
+    "UserProvince": {
+      "ZA_GP": "Gauteng",
+      "ZA_NC": "Northern Cape",
+      "ZA_WC": "Western Cape",
+      "ZA_EC": "Eastern Cape",
+      "ZA_KZN": "KwaZulu-Natal",
+      "ZA_LP": "Limpopo",
+      "ZA_NW": "North West",
+      "ZA_FS": "Free State",
+      "ZA_MP": "Mpumalanga",
+      "INTL": "International",
+      "UNKNOWN": "Unknown"
+    },
+    "GroupJoinMethod": {
+      "ADDED_BY_SYS_ADMIN": "Added by admin",
+      "SELF_JOINED": "Self joined",
+      "BULK_IMPORT": "Bulk import",
+      "ADDED_AT_CREATION": "Added at creation",
+      "ADDED_BY_OTHER_MEMBER": "Added by member",
+      "CAMPAIGN_GENERAL": "Campaign",
+      "CAMPAIGN_PETITION": "Petition",
+      "USSD_JOIN_CODE": "USSD",
+      "SMS_JOIN_WORD": "SMS",
+      "URL_JOIN_WORD": "Landing page",
+      "SEARCH_JOIN_WORD": "Search",
+      "JOIN_CODE_OTHER": "Join code",
+      "BROADCAST": "Broadcast",
+      "BROADCAST_FB": "Facebook",
+      "BROADCAST_TW": "Twitter",
+      "FILE_IMPORT": "File import",
+      "ADDED_SUBGROUP": "Subgroup",
+      "COPIED_INTO_GROUP": "Copied"
+    }
+  },
+
   "menu": {
     "home": "HOME",
     "groups": "GROUPS",
@@ -500,13 +552,17 @@
     }
   },
   "campaign": {
+    "types": {
+      "PETITION": "Petitition",
+      "ACQUISITION": "Acquisition",
+      "INFORMATION": "Information"
+    },
     "create": {
       "title": "Let's Setup a New Campaign",
       "name": "Campaign Name/Title",
       "namePlace": "A headline for the campaign",
       "code": "USSD code (*134*1994*...)",
       "codePlace": "3 digits only",
-      "codeTaken": "Sorry, that code is already taken, try another",
       "description": "Description",
       "descriptionPlace": "A longer description of the campaign. This will be shown to uses who click on a short link",
       "image": "Campaign Image (optional)",
@@ -540,13 +596,33 @@
         "amandla": "Use Amandla Awethu page",
         "other": "Other web page",
         "other-place": "Address of your home page"
+      },
+      "errors": {
+        "codeTaken": "Sorry, that code is taken",
+        "fieldRequired": "This field is required",
+        "codeFormat": "Code must be numbers only",
+        "codeLength": "Code must be 3 digits long",
+        "typeRequired": "You must select a campaign type",
+        "groupRequired": "You must create or choose a master group",
+        "groupNameEmpty": "Please enter a name",
+        "groupSelectEmpty": "Please select a group",
+        "urlFormat": "Please enter a valid URL (or leave blank)"
+      },
+      "complete": {
+        "success": "Done! Now please enter the campaign's messages",
+        "error": "Sorry, there was an error creating the campaign: "
       }
     },
     "dashboard": {
       "analyze": "Campaign Dashboard",
       "messages": "Response Messages",
       "broadcasts": "Broadcasts",
-      "settings": "Settings"
+      "settings": "Settings",
+      "code-title": "Campaign Code",
+      "code-specified": "*134*1994*{{campaignCode}}#",
+      "creationLabel": "Created by: ",
+      "creationInfo": "{{ creatingUserName }} on {{ createdDate }}",
+      "typeLabel": "Campaign type: "
     },
     "messages": {
       "title": "Customize your message responses for: ",
@@ -554,6 +630,7 @@
         "options": "Response options: ",
         "sign": "Sign petition",
         "more": "More info",
+        "exit": "Exit",
         "info": "Information requested from user",
         "name": "Name",
         "province": "Province",
@@ -588,6 +665,18 @@
       "share": {
         "title": "Share Screen",
         "placeholder": "Thank you for joining forces with us. If you want to share this with others please type their number"
+      },
+      "exit_positive": {
+        "title": "Positive exit",
+        "placeholder": "Thank you for joining forces with us! We hope to see you soon at one of our events"
+      },
+      "exit_negative": {
+        "title": "Negative exit",
+        "placeholder": "Thank you for engaging our campaign, and we hope you will join us in the future"
+      },
+      "done": {
+        "success": "Done! The messages have been set",
+        "error": "Sorry, there was an error updating"
       }
     }
   },
@@ -753,7 +842,8 @@
     "forgot": "Forgot your password?",
     "newUser-prefix": "New user? ",
     "newUser-suffix": "Register here",
-    "error-message": "Sorry, wrong phone, email or password"
+    "error-message": "Sorry, wrong phone, email or password",
+    "forced.logout.message": "For security, please enter your login again"
   },
   "reset": {
     "initiate": {
@@ -795,6 +885,7 @@
   "action":{
     "ok": "OK",
     "save": "Save",
+    "send": "Send",
     "cancel": "Cancel",
     "close": "Close",
     "submit": "Submit",
@@ -811,7 +902,8 @@
     "yes": "Yes",
     "no": "No",
     "copy": "Copy",
-    "copied": "Copied"
+    "copied": "Copied",
+    "done": "Done"
   },
   "general": {
     "charsRemaining": "Characters remaining"

@@ -6,7 +6,7 @@ export class GroupAddMemberInfo {
 
   constructor(public memberMsisdn: String = "",
               public displayName: String = "",
-              public roleName: string = "ROLE_ORDINARY_MEMBER",
+              public roleName: string = GroupRole.ROLE_ORDINARY_MEMBER,
               public alernateNumbers: String[] = [],
               public emailAddress: String = "",
               public province: UserProvince = null,
