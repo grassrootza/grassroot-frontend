@@ -4,5 +4,6 @@ export class MembersFilter {
   taskTeams: string[] = null;
   topics: string[] = null;
   joinSources: string[] = null;
+  campaigns: string[] = null;
 
 }

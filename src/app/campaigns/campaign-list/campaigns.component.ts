@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../campaign.service";
 import {CampaignInfo} from "../model/campaign-info";
 
@@ -24,7 +24,7 @@ export class CampaignsComponent implements OnInit {
       }
     );
 
-    this.campaignService.loadCampaigns(true);
+    this.campaignService.loadCampaigns();
   }
 
 }

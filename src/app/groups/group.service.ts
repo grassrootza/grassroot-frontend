@@ -514,7 +514,13 @@ export class GroupService {
       })
   }
 
-  filterGroupMembers(groupUid: string, provinces: string[], taskTeams: string[], topics: string[]): Observable<Membership[]> {
+  filterGroupMembers(groupUid: string,
+                     provinces: string[],
+                     taskTeams: string[],
+                     topics: string[],
+                     joinMethods: string[],
+                     joinedCampaignsUids: string[]): Observable<Membership[]> {
+
     let params = new HttpParams()
       .set("groupUid", groupUid);
 
@@ -528,6 +534,14 @@ export class GroupService {
 
     if(topics != null){
       params = params.set("topics", topics.join(","));
+    }
+
+    if (joinMethods != null) {
+      params = params.set("joinMethods", joinMethods.join(","));
+    }
+
+    if (joinedCampaignsUids != null) {
+      params = params.set("joinedCampaignsUids", joinedCampaignsUids.join(","));
     }
 
 
