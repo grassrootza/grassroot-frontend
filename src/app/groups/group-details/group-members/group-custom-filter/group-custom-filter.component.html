@@ -1,3 +1,64 @@
-<p>
-  group-custom-filter works!
-</p>
+<div class="card" style="margin-top: 32px;">
+
+  <div class="card-body events-box">
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+
+          <h3>Custom filter</h3>
+          <hr/>
+
+          <app-member-filter *ngIf="group" [taskTeams]="group.subGroups"
+                             [topics]="group.topics"
+                             (filterChanged)="membersFilterChanged($event)">
+          </app-member-filter>
+        </div>
+      </div>
+
+
+      <hr/>
+
+      <div *ngIf="currentPage" class="row">
+
+        <div class="col-9">
+          <h3>Matching members</h3>
+        </div>
+
+        <div class="col-3">
+          <div class="float-right">
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" [disabled]="false"
+                      aria-haspopup="true" aria-expanded="false" [translate]="'group.allMembers.bulkManage.bulkManage'">
+
+              </button>
+              <div class="dropdown-menu">
+                <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.meeting'">Call a meeting</a>-->
+                <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.broadcast'">Send broadcast</a>-->
+                <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.topics'" (click)="showBulkAssignTopicsModal()">Assign topic</a>-->
+                <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.taskTeam'" (click)="showBulkAddToTaskTeamModal()">Add to task team</a>-->
+                <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.role'">Change role</a>-->
+                <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showBulkRemoveModal()">Remove</a>-->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row" *ngIf="group && currentPage">
+        <div class="col">
+          <app-member-list [currentPage]="currentPage" [group]="group"></app-member-list>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+</div>
+
+
+

@@ -61,7 +61,7 @@ strong {
 }
 
 .join-code {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   line-height: 2rem;
 }
 
@@ -92,4 +92,29 @@ strong {
 
 .join-words-add-container {
   margin-top: 20px;
+}
+
+.join-word {
+  font-size: 1.1rem;
+  line-height: 2rem;
+}
+
+.remove-button {
+  color: #7A7D8C;
+}
+
+.copy-button {
+  background: white;
+  color: #7A7D8C;
+  border: 2px solid #ECEEF1;
+  border-radius: 0;
+  padding: 0 10px;
+  margin: 0;
+}
+
+.copy-button:hover {
+  cursor: pointer;
+  font-weight: bold;
+  color: #2CBC4C;
+  border: 2px solid #2CBC4C;
 }

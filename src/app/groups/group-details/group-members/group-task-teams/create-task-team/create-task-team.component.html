@@ -28,9 +28,16 @@
             <i class="fas fa-user"></i>
             {{createTaskTeamForm.controls['membersCount'].value}}
           </h4>
+
           <hr/>
+
           <h4>{{ 'group.taskTeam.selectMembers' | translate }}</h4>
-          <app-member-filter [groupUid]="group.groupUid" (members)="updateMembersCount($event)"></app-member-filter>
+
+          <app-member-filter [taskTeams]="group.subGroups"
+                             [topics]="group.topics"
+                             (filterChanged)="membersFilterChanged($event)">
+
+          </app-member-filter>
 
 
         </form>

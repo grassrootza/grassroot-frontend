@@ -4,6 +4,7 @@ import {Membership, MembersPage} from '../../../../model/membership.model';
 import {Group} from '../../../../model/group.model';
 import {UserService} from '../../../../../user/user.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MembersFilter} from "../../../../member-filter/filter.model";
 
 @Component({
   selector: 'app-create-task-team',
@@ -49,9 +50,19 @@ export class CreateTaskTeamComponent implements OnInit {
       )
   }
 
-  updateMembersCount(members: Membership[]){
-    this.filteredMembers = members;
-    this.createTaskTeamForm.controls['membersCount'].setValue(members.length);
+  membersFilterChanged(filter: MembersFilter) {
+
+    console.log("Members filter change, loading members...");
+
+    this.groupService.filterGroupMembers(this.group.groupUid, filter.provinces, filter.taskTeams, null)
+      .subscribe(
+        members => {
+          console.log("Fetched filtered members: ", members);
+          this.filteredMembers = members;
+          this.createTaskTeamForm.controls['membersCount'].setValue(members.length);
+        },
+        error => console.log("Error fetching members", error)
+      );
   }
 
   createTaskTeam(){

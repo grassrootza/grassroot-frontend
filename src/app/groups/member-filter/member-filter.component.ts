@@ -1,9 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserProvince} from '../../user/model/user-province.enum';
-import {GroupService} from '../group.service';
-import {Group} from '../model/group.model';
-import {UserService} from '../../user/user.service';
-import {Membership} from '../model/membership.model';
+
+import {MembersFilter} from "./filter.model";
+import {GroupRef} from "../model/group-ref.model";
+import {GroupJoinMethod} from "../model/join-method";
+
+declare var $: any;
 
 @Component({
   selector: 'app-member-filter',
@@ -12,42 +14,67 @@ import {Membership} from '../model/membership.model';
 })
 export class MemberFilterComponent implements OnInit {
 
-  @Input() groupUid: string = "";
-
-  @Output() public members: EventEmitter<Membership[]> = new EventEmitter();
-
-  province = UserProvince;
   provinceKeys: string[];
-  public group: Group = null;
+  joinMethods: string[];
 
-  public selectedProvince = null;
-  public selectedTaskTeams = null;
-  public selectedTopics = null;
+  @Input()
+  taskTeams: GroupRef[] = [];
 
-  constructor(private groupService: GroupService,
-              private userService: UserService) {
-    this.provinceKeys = Object.keys(this.province);
+  @Input()
+  topics: string[] = [];
+
+  private filter: MembersFilter = new MembersFilter();
+
+  @Output()
+  public filterChanged: EventEmitter<MembersFilter> = new EventEmitter();
+
+
+  constructor() {
+    this.provinceKeys = Object.keys(UserProvince);
+    this.joinMethods = Object.keys(GroupJoinMethod);
   }
 
   ngOnInit() {
-    console.log(this.groupUid);
-    this.groupService.loadGroupDetails(this.groupUid)
-      .subscribe(
-        groupDetails => {
-          this.group = groupDetails;
-          console.log(this.group);
-        },
-        error => {
-          console.log("Error loading groups", error.status)
-        }
-      );
+
+    this.setupSelect2();
   }
 
-  filterData(){
-    console.log(this.selectedProvince);
-    console.log(this.selectedTaskTeams);
-    this.groupService.filterGroupMembers(this.groupUid, this.selectedProvince, this.selectedTaskTeams, this.selectedTopics).subscribe(resp => {
-      this.members.emit(resp);
-    })
+  setupSelect2() {
+    $(".provinces-multi-select").select2({placeholder: "Select a state"});
+    $(".task-teams-multi-select").select2({placeholder: "Select task teams"});
+    $(".topics-multi-select").select2({placeholder: "Select topics"});
+    $(".join-methods-multi-select").select2({placeholder: "Select sources"});
+
+    $(".provinces-multi-select").on('change.select2', function () {
+      var data = $('.provinces-multi-select').select2('data');
+      this.filter.provinces = data.length > 0 ? data.map(p => p.id) : null;
+      this.fireFilterChange();
+    }.bind(this));
+
+    $(".task-teams-multi-select").on('change.select2', function () {
+      var data = $('.task-teams-multi-select').select2('data');
+      this.filter.taskTeams = data.length > 0 ? data.map(tt => tt.id) : null;
+      this.fireFilterChange();
+    }.bind(this));
+
+    $(".topics-multi-select").on('change.select2', function () {
+      var data = $('.topics-multi-select').select2('data');
+      this.filter.topics = data.length > 0 ? data.map(tt => tt.id) : null;
+      this.fireFilterChange();
+    }.bind(this));
+
+    $(".join-methods-multi-select").on('change.select2', function () {
+      var data = $('.join-methods-multi-select').select2('data');
+      this.filter.joinSources = data.length > 0 ? data.map(tt => tt.id) : null;
+      this.fireFilterChange();
+    }.bind(this));
+
+
+
+  }
+
+  private fireFilterChange() {
+    console.log("Filter changed: ", this.filter);
+    this.filterChanged.emit(this.filter);
   }
 }
