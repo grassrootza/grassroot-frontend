@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {SharedModule} from "../shared.module";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {GroupDetailsRoutes} from "./group-details-routes";
+import {GROUP_DETAILS_ROUTES} from "./group-details-routes";
 import {GroupDashboardComponent} from "./group-details/group-dashboard/group-dashboard.component";
 import {GroupActivityComponent} from "./group-details/group-activity/group-activity.component";
 import {GroupMembersComponent} from "./group-details/group-members/group-members.component";
@@ -14,19 +14,18 @@ import {GroupTaskTeamsComponent} from "./group-details/group-members/group-task-
 import {GroupDetailsComponent} from "./group-details/group-details.component";
 import {GroupAddMemberComponent} from "./group-details/group-members/group-add-member/group-add-member.component";
 import {MemberListComponent} from "./group-details/group-members/member-list/member-list.component";
-import {BroadcastsModule} from "../broadcasts/broadcasts.module";
 import {Ng4LoadingSpinnerModule} from "ng4-loading-spinner";
 import {GroupBroadcastComponent} from "./group-details/group-broadcast/group-broadcast.component";
 import {CreateTaskTeamComponent} from "./group-details/group-members/group-task-teams/create-task-team/create-task-team.component";
+import {RouterModule} from "@angular/router";
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
-    GroupDetailsRoutes,
     NgbModule,
     Ng4LoadingSpinnerModule,
-    BroadcastsModule,
+    RouterModule.forChild(GROUP_DETAILS_ROUTES)
   ],
   declarations: [
     GroupDetailsComponent,

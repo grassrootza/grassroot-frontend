@@ -77,11 +77,11 @@
             <button class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.join' | translate }}</button>
             <button (click)="fbFile.click()" class="insertion-link"><i class="fas fa-images"></i>
               {{ 'broadcasts.create.content.link.file' | translate }}</button>
-            <button class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.campaign' | translate }}</button>
+            <button *ngIf="(params.campaignLinks)" class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.campaign' | translate }}</button>
             <input type="file" #fbFile
                    [multiple]="false"
                    accept="image/*"
-                   (change) = "uploadImage($event)"
+                   (change) = "uploadImage($event, 'facebook')"
                    style="display:none" />
           </div>
         </div>
@@ -101,8 +101,13 @@
           </div>
           <div class="col-md-4">
             <button class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.join' | translate }}</button>
-            <button class="insertion-link"><i class="fas fa-images"></i> {{ 'broadcasts.create.content.link.file' | translate }}</button>
-            <button class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.campaign' | translate }}</button>
+            <button (click)="twitterFile.click()" class="insertion-link"><i class="fas fa-images"></i> {{ 'broadcasts.create.content.link.file' | translate }}</button>
+            <button *ngIf="(params.campaignLinks)" class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.campaign' | translate }}</button>
+            <input type="file" #twitterFile
+                   [multiple]="false"
+                   accept="image/*"
+                   (change) = "uploadImage($event, 'twitter')"
+                   style="display:none" />
           </div>
         </div>
         <div class="error" [hidden]="contentForm.controls['twitterPost'].valid || contentForm.controls['twitterPost'].untouched">

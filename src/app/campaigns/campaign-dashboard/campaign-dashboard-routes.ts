@@ -1,5 +1,4 @@
-import {RouterModule, Routes} from "@angular/router";
-import {NgModule} from "@angular/core";
+import {Routes} from "@angular/router";
 import {CampaignDashboardComponent} from "./campaign-dashboard.component";
 import {LoggedInGuard} from "../../logged-in.guard";
 import {CampaignStatsComponent} from "./campaign-stats/campaign-stats.component";
@@ -7,7 +6,7 @@ import {CampaignMessagesComponent} from "./campaign-messages/campaign-messages.c
 import {CampaignSettingsComponent} from "./campaign-settings/campaign-settings.component";
 import {CampaignBroadcastsComponent} from "./campaign-broadcasts/campaign-broadcasts.component";
 
-const CAMPAIGN_DASHBOARD_ROUTES: Routes = [
+export const CAMPAIGN_DASHBOARD_ROUTES: Routes = [
   {path: '', component: CampaignDashboardComponent, canActivate: [LoggedInGuard],
     children: [
       {path: '', redirectTo:'messages', pathMatch: 'full'},
@@ -17,11 +16,3 @@ const CAMPAIGN_DASHBOARD_ROUTES: Routes = [
       {path: 'settings', component: CampaignSettingsComponent, canActivate: [LoggedInGuard]}
   ]}
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(CAMPAIGN_DASHBOARD_ROUTES)],
-  exports: [RouterModule]
-})
-export class CampaignDashboardRoutes {
-
-}

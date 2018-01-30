@@ -18,11 +18,13 @@ export class BroadcastRequest {
   facebookPage: string = "";
   facebookContent: string = "";
   facebookLink: string = "";
+  facebookImageKey: string = "";
 
   postToTwitter: boolean = false;
   twitterAccount: string = "";
   twitterContent: string = "";
   twitterLink: string = "";
+  twitterImageKey: string = "";
 
   selectionType: string = "ALL_MEMBERS";
   subgroups: string[] = [];
@@ -58,25 +60,24 @@ export class BroadcastRequest {
 }
 
 export class BroadcastTypes {
-
   shortMessage: boolean = false;
   email: boolean = false;
   facebook: boolean = false;
   facebookPage: string = "";
   twitter: boolean = false;
   twitterAccount: string = "";
-
 }
 
 export class BroadcastContent {
-
   title: string = "";
   shortMessage: string = "";
   emailContent: string = "";
   facebookPost: string = "";
   facebookLink: string = "";
+  facebookImageKey: string = "";
   twitterPost: string = "";
   twitterLink: string = "";
+  twitterImageKey: string = "";
 
 }
 
