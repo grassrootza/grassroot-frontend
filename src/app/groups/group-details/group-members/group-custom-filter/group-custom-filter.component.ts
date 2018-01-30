@@ -4,6 +4,8 @@ import {MembersFilter} from "../../../member-filter/filter.model";
 import {GroupService} from "../../../group.service";
 import {Group} from "../../../model/group.model";
 import {ActivatedRoute, Params} from "@angular/router";
+import {CampaignService} from "../../../../campaigns/campaign.service";
+import {CampaignInfo} from "../../../../campaigns/model/campaign-info";
 
 @Component({
   selector: 'app-group-custom-filter',
@@ -18,7 +20,12 @@ export class GroupCustomFilterComponent implements OnInit {
   @Input()
   group: Group;
 
-  constructor(private groupService: GroupService, private route: ActivatedRoute) {
+  groupCampaigns: CampaignInfo[] = [];
+
+
+  constructor(private groupService: GroupService,
+              private campaignService: CampaignService,
+              private route: ActivatedRoute) {
   }
 
 
@@ -30,6 +37,17 @@ export class GroupCustomFilterComponent implements OnInit {
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
+
+            this.campaignService.loadGroupCampaigns(this.group.groupUid)
+              .subscribe(
+                campaigns => {
+                  this.groupCampaigns = campaigns;
+                },
+                error => {
+                  console.log("Failed to fetch group campaigns", error);
+                }
+              );
+
           },
           error => {
             console.log("Error loading groups", error.status)
@@ -42,7 +60,7 @@ export class GroupCustomFilterComponent implements OnInit {
 
     console.log("Members filter change, loading members...");
 
-    this.groupService.filterGroupMembers(this.group.groupUid, filter.provinces, filter.taskTeams, null)
+    this.groupService.filterGroupMembers(this.group.groupUid, filter.provinces, filter.taskTeams, filter.topics, filter.joinSources, filter.campaigns)
       .subscribe(
         members => {
           console.log("Fetched filtered members: ", members);

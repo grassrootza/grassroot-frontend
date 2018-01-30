@@ -5,6 +5,8 @@ import {Group} from '../../../../model/group.model';
 import {UserService} from '../../../../../user/user.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MembersFilter} from "../../../../member-filter/filter.model";
+import {CampaignInfo} from "../../../../../campaigns/model/campaign-info";
+import {CampaignService} from "../../../../../campaigns/campaign.service";
 
 @Component({
   selector: 'app-create-task-team',
@@ -22,15 +24,29 @@ export class CreateTaskTeamComponent implements OnInit {
   public currentPage:MembersPage = new MembersPage(0,0, 0,0, true, false, []);
 
   private filteredMembers: Membership[] = [];
+
   public createTaskTeamForm: FormGroup;
 
+  groupCampaigns: CampaignInfo[] = [];
 
 
   constructor(private groupService: GroupService,
+              private campaignService: CampaignService,
               private userService: UserService,
               private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+
+    this.campaignService.loadGroupCampaigns(this.group.groupUid)
+      .subscribe(
+        campaigns => {
+          this.groupCampaigns = campaigns;
+        },
+        error => {
+          console.log("Failed to fetch group campaigns", error);
+        }
+      );
+
     this.createTaskTeamForm = this.formBuilder.group({
       'taskTeamName': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'membersCount': [0, Validators.min(1)]
@@ -54,7 +70,7 @@ export class CreateTaskTeamComponent implements OnInit {
 
     console.log("Members filter change, loading members...");
 
-    this.groupService.filterGroupMembers(this.group.groupUid, filter.provinces, filter.taskTeams, null)
+    this.groupService.filterGroupMembers(this.group.groupUid, filter.provinces, filter.taskTeams, filter.topics, filter.joinSources, filter.campaigns)
       .subscribe(
         members => {
           console.log("Fetched filtered members: ", members);
