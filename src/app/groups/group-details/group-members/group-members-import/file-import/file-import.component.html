@@ -23,7 +23,7 @@
   </ul>
 </div>
 
-<div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-8 mx-auto">
+<!-- <div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-8 mx-auto">
   <div class="row">
     <button type="button" class="btn btn-success" [translate]="'group.import.file.changeFile'" (click)="changeFile()">Change file to upload</button>
   </div>
@@ -83,11 +83,11 @@
   <div class="row">
     <button type="button" class="btn btn-success" [translate]="'action.save'" (click)="saveColumnOrder()">Change file to upload</button>
   </div>
-</div>
-
-<!-- <div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-8 mx-auto">
-    {{saveColumnOrder()}}
 </div> -->
+
+<div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-8 mx-auto">
+    {{saveColumnOrder()}}
+</div>
 
 <div *ngIf="groupAddMembersInfo.length > 0">
   <div class="row btn-actions">
@@ -174,7 +174,7 @@
           {{member.displayName}}
         </div>
 
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
+        <div *ngIf="phoneColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
           {{member.memberMsisdn}}
         </div>
 

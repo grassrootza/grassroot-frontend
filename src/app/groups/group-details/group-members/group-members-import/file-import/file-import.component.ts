@@ -51,7 +51,28 @@ export class FileImportComponent implements OnInit {
     this.groupAddMembersInfo = [];
   }
 
+  checkColumns(cells:String[]){
+      for(var i = 0; i < cells.length;i++){
+        if(cells[i].toLowerCase().startsWith("email")){
+            this.emailColumn = 0;
+        }
+        if(cells[i].toLowerCase().startsWith("province")){
+            this.provinceColumn = 0;
+        }
+        if(cells[i].toLowerCase().startsWith("role")){
+            this.roleColumn = 0;
+        }
+        if(cells[i].toLowerCase().startsWith("phone")){
+            this.phoneColumn = 0;
+        }
+        if(cells[i].toLowerCase().startsWith("name") || cells[i].toLowerCase().startsWith("firstname")){
+            this.nameColumn = 0;
+        }
+      }
+  }
+
   saveColumnOrder(){
+    this.checkColumns(this.groupMembersImportExcelSheetAnalysis.firstRowCells);
     const params = {
       tempPath: this.groupMembersImportExcelSheetAnalysis.tmpFilePath,
       nameColumn: this.nameColumn,
@@ -66,6 +87,7 @@ export class FileImportComponent implements OnInit {
       this.groupAddMembersInfo = resp;
     })
   }
+
 
   backToExcelAnalysis(){
     this.groupAddMembersInfo = [];
