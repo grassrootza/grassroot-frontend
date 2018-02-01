@@ -5,6 +5,9 @@ import {MembersFilter} from "./filter.model";
 import {GroupRef} from "../model/group-ref.model";
 import {GroupJoinMethod} from "../model/join-method";
 import {CampaignInfo} from "../../campaigns/model/campaign-info";
+import {FormBuilder, FormGroup} from "@angular/forms";
+import {DateTimeUtils} from "../../utils/DateTimeUtils";
+import * as moment from "moment";
 
 declare var $: any;
 
@@ -27,13 +30,21 @@ export class MemberFilterComponent implements OnInit {
   @Input()
   topics: string[] = [];
 
+  joinDateConditions: string[] = ["DAYS_AGO-EXACT", "DAYS_AGO-BEFORE", "DAYS_AGO-AFTER", "DATE-EXACT", "DATE-BEFORE", "DATE-AFTER"];
+
+  joinDateConditionType = null;
+
+  public filterForm: FormGroup;
+
+
+
   private filter: MembersFilter = new MembersFilter();
 
   @Output()
   public filterChanged: EventEmitter<MembersFilter> = new EventEmitter();
 
 
-  constructor() {
+  constructor(private formBuilder: FormBuilder) {
     this.provinceKeys = Object.keys(UserProvince);
     this.joinMethods = Object.keys(GroupJoinMethod);
   }
@@ -41,6 +52,11 @@ export class MemberFilterComponent implements OnInit {
   ngOnInit() {
 
     this.setupSelect2();
+
+    this.filterForm = this.formBuilder.group({
+      'date': [DateTimeUtils.dateFromDate(new Date())],
+      'daysAgo': 1
+    });
   }
 
   setupSelect2() {
@@ -50,38 +66,74 @@ export class MemberFilterComponent implements OnInit {
     $(".join-methods-multi-select").select2({placeholder: "Select sources"});
     $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
 
+
     $(".provinces-multi-select").on('change.select2', function () {
-      var data = $('.provinces-multi-select').select2('data');
+      const data = $('.provinces-multi-select').select2('data');
       this.filter.provinces = data.length > 0 ? data.map(p => p.id) : null;
       this.fireFilterChange();
     }.bind(this));
 
     $(".task-teams-multi-select").on('change.select2', function () {
-      var data = $('.task-teams-multi-select').select2('data');
+      const data = $('.task-teams-multi-select').select2('data');
       this.filter.taskTeams = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
 
     $(".topics-multi-select").on('change.select2', function () {
-      var data = $('.topics-multi-select').select2('data');
+      const data = $('.topics-multi-select').select2('data');
       this.filter.topics = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
 
     $(".join-methods-multi-select").on('change.select2', function () {
-      var data = $('.join-methods-multi-select').select2('data');
+      const data = $('.join-methods-multi-select').select2('data');
       this.filter.joinSources = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
 
     $(".campaigns-multi-select").on('change.select2', function () {
-      var data = $('.campaigns-multi-select').select2('data');
+      const data = $('.campaigns-multi-select').select2('data');
       this.filter.campaigns = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
 
 
+  }
 
+  dateConditionTypeChanged(value) {
+    console.log("Join data select data: ", value);
+
+    if (value == "ANY") {
+      this.joinDateConditionType = null;
+      this.filter.joinDateCondition = null;
+      this.filter.joinDate = null;
+      this.filter.joinDaysAgo = null;
+    }
+    else {
+      this.joinDateConditionType = value.split("-")[0];
+      this.filter.joinDateCondition = value.split("-")[1];
+      if (this.joinDateConditionType == "DAYS_AGO") {
+        this.filter.joinDaysAgo = this.filterForm.get('daysAgo').value;
+        this.filter.joinDate = null;
+      }
+      else {
+        this.filter.joinDate = DateTimeUtils.momentFromNgbStruct(this.filterForm.get('date').value, null);
+        this.filter.joinDaysAgo = null;
+      }
+    }
+    this.fireFilterChange();
+  }
+
+  dateChanged(date) {
+    console.log("Date changed: ", date);
+    this.filter.joinDate = moment([date.year, date.month - 1, date.day, 0, 0, 0, 0]);
+    this.fireFilterChange();
+  }
+
+  daysAgoChanged(value) {
+    console.log("Days ago changed: ", value);
+    this.filter.joinDaysAgo = value;
+    this.fireFilterChange();
   }
 
   private fireFilterChange() {

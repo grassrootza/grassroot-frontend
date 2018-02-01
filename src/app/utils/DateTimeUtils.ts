@@ -1,5 +1,6 @@
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import * as moment from "moment";
+import {Moment} from "moment";
 
 export class DateTimeUtils {
 
@@ -61,6 +62,20 @@ export class DateTimeUtils {
       time.hour,
       time.minute,
       time.second).getTime();
+  }
+
+  public static momentFromNgbStruct(date: NgbDateStruct, time: NgbTimeStruct): Moment {
+    return moment(
+      [
+        date.year,
+        date.month - 1,
+        date.day,
+        time ? time.hour : 0,
+        time ? time.minute : 0,
+        time ? time.second : 0,
+        0
+      ]
+    )
   }
 }
 

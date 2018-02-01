@@ -313,10 +313,20 @@
         "province": "Province",
         "taskTeam": "Task team",
         "topics": "Topics",
-        "joinMethods": "Joined source",
-        "campaigns": "Joined via campaign",
-        "petitions": "Joined via petition",
-        "update": "Update"
+        "joinMethods": "Join source",
+        "campaigns": "Join via campaign",
+        "petitions": "Join via petition",
+        "joinDate": "Joined",
+        "joinDateAny": "Any time",
+        "update": "Update",
+        "DATE-EXACT": "on",
+        "DATE-BEFORE": "before",
+        "DATE-AFTER": "after",
+        "DAYS_AGO-EXACT": "exactly",
+        "DAYS_AGO-BEFORE": "more then",
+        "DAYS_AGO-AFTER": "less then",
+        "DAYS_AGO_SUFIX": "days ago"
+
       },
       "manage":{
         "manage": "Manage",

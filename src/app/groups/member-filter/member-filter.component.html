@@ -54,6 +54,63 @@
   </div>
 
 
+  <div class="col-sm-3 col-lg-2 filter-item">
+    <label for="campaigns" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.joinDate'">Joined
+      on date</label>
+  </div>
+  <div class=" col-sm-3 col-lg-3 filter-item">
+    <select id="joinDateCondition" class="form-control join-date-condition-multi-select"
+            (change)="dateConditionTypeChanged($event.target.value)">
+      <option value="ANY" [translate]="'group.allMembers.filterMembers.joinDateAny'"> Any date</option>
+      <optgroup label="Days ago">
+        <option [value]="joinDateConditions[0]" [translate]="'group.allMembers.filterMembers.' + joinDateConditions[0]">
+          more then
+        </option>
+        <option [value]="joinDateConditions[1]" [translate]="'group.allMembers.filterMembers.' + joinDateConditions[1]">
+          exactly
+        </option>
+        <option [value]="joinDateConditions[2]" [translate]="'group.allMembers.filterMembers.' + joinDateConditions[2]">
+          less then
+        </option>
+      </optgroup>
+      <optgroup label="Date">
+        <option [value]="joinDateConditions[3]" [translate]="'group.allMembers.filterMembers.' + joinDateConditions[3]">
+          before
+        </option>
+        <option [value]="joinDateConditions[4]" [translate]="'group.allMembers.filterMembers.' + joinDateConditions[4]">
+          on
+        </option>
+        <option [value]="joinDateConditions[5]" [translate]="'group.allMembers.filterMembers.' + joinDateConditions[5]">
+          after
+        </option>
+      </optgroup>
+    </select>
+  </div>
+
+  <div class=" col-sm-6 col-lg-7 filter-item">
+    <input *ngIf="joinDateConditionType == 'DAYS_AGO'" type="number" [formControl]="filterForm.controls['daysAgo']"
+           class="form-control float-left" value="1" (keydown)="daysAgoChanged($event.target.value)"
+           (change)="daysAgoChanged($event.target.value)" style="width: auto !important;"/>
+    <span *ngIf="joinDateConditionType == 'DAYS_AGO'">&nbsp;&nbsp;</span>
+    <label *ngIf="joinDateConditionType == 'DAYS_AGO'" class="grassroot-label-em"
+           [translate]="'group.allMembers.filterMembers.DAYS_AGO_SUFIX'">days ago</label>
+
+    <div *ngIf="joinDateConditionType == 'DATE'" class="form-group">
+      <div class="input-group">
+        <input class="form-control" placeholder="yyyy-mm-dd" [formControl]="filterForm.controls['date']"
+               ngbDatepicker #d="ngbDatepicker" (ngModelChange)="dateChanged($event)" style="width: auto !important;">
+
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+            <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
 </div>
 
 

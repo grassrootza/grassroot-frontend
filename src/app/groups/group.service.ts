@@ -17,6 +17,7 @@ import {JoinCodeInfo} from './model/join-code-info';
 import {GroupPermissionsByRole} from './model/permission.model';
 import {GroupRelatedUserResponse} from './model/group-related-user.model';
 import {GroupMemberActivity} from './model/group-member-activity';
+import {MembersFilter} from "./member-filter/filter.model";
 
 @Injectable()
 export class GroupService {
@@ -516,33 +517,38 @@ export class GroupService {
   }
 
   filterGroupMembers(groupUid: string,
-                     provinces: string[],
-                     taskTeams: string[],
-                     topics: string[],
-                     joinMethods: string[],
-                     joinedCampaignsUids: string[]): Observable<Membership[]> {
+                     filter: MembersFilter): Observable<Membership[]> {
 
     let params = new HttpParams()
       .set("groupUid", groupUid);
 
-    if(provinces != null){
-      params = params.set("provinces", provinces.join(","));
+    if (filter.provinces != null) {
+      params = params.set("provinces", filter.provinces.join(","));
     }
 
-    if(taskTeams != null){
-      params = params.set("taskTeams", taskTeams.join(","));
+    if (filter.taskTeams != null) {
+      params = params.set("taskTeams", filter.taskTeams.join(","));
     }
 
-    if(topics != null){
-      params = params.set("topics", topics.join(","));
+    if (filter.topics != null) {
+      params = params.set("topics", filter.topics.join(","));
     }
 
-    if (joinMethods != null) {
-      params = params.set("joinMethods", joinMethods.join(","));
+    if (filter.joinSources != null) {
+      params = params.set("joinMethods", filter.joinSources.join(","));
     }
 
-    if (joinedCampaignsUids != null) {
-      params = params.set("joinedCampaignsUids", joinedCampaignsUids.join(","));
+    if (filter.campaigns != null) {
+      params = params.set("joinedCampaignsUids", filter.campaigns.join(","));
+    }
+
+    if (filter.joinDate != null) {
+      params = params.set("joinDate", filter.joinDate.format("YYYY-MM-DD"));
+      params = params.set("joinDaysAgoCondition", filter.joinDateCondition)
+    }
+    else if (filter.joinDaysAgo != null) {
+      params = params.set("joinDaysAgo", filter.joinDaysAgo.toString());
+      params = params.set("joinDaysAgoCondition", filter.joinDateCondition)
     }
 
 

@@ -1,3 +1,6 @@
+import {Moment} from "moment";
+import {JoinDateCondition} from "./joindatecondition.enum";
+
 export class MembersFilter {
 
   provinces: string[] = null;
@@ -5,5 +8,8 @@ export class MembersFilter {
   topics: string[] = null;
   joinSources: string[] = null;
   campaigns: string[] = null;
+  joinDate: Moment = null;
+  joinDaysAgo: number = null;
+  joinDateCondition: JoinDateCondition = null
 
 }
