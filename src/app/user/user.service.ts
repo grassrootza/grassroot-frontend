@@ -54,7 +54,8 @@ export class UserService {
     console.log("submitting username: ", user);
     let params = new HttpParams()
       .set('username', user)
-      .set('password', password);
+      .set('password', password)
+      .set("interfaceType", "WEB_2");
 
     return this.httpClient.get<AuthorizationResponse>(this.loginUrl, {params: params})
       .map(

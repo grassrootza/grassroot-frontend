@@ -8,7 +8,7 @@
 
     <div class="row">
       <div class="col-6">
-        <span class="bold-text">{{'group.memberProfile.role' | translate}}</span>{{member.roleName}}
+        <span class="bold-text">{{ 'group.memberProfile.role' | translate}}</span>{{ 'enum.GroupRole.' + member.roleName | translate}}
       </div>
     </div>
 
@@ -24,7 +24,7 @@
     </div>
     <div class="row">
       <div class="col-6">
-        <span  class="bold-text">{{'group.memberProfile.province' | translate}}</span>{{member.formattedProvince()}}
+        <span  class="bold-text">{{'group.memberProfile.province' | translate}}</span>{{ 'enum.UserProvince.' + member.formattedProvince() | translate }}
       </div>
     </div>
   </div>
@@ -46,10 +46,10 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <img src="{{activity.getActionLogIcon()}}"> {{activity.getActionDescription()}}: {{activity.nameOfRelatedEntity}}
+            <img src="{{activity.getActionLogIcon()}}"> {{ "group.memberProfile.logs." + activity.getActionDescription() | translate }}: {{activity.nameOfRelatedEntity}}
           </div>
         </div>
-        <div class="row" *ngIf="activity.topics">
+        <div class="row" *ngIf="activity.topics && activity.topics.length > 0">
           <div class="col-12">
             {{'group.memberProfile.taggedWithTopics' | translate}}
             <span>{{activity.topics.join(",")}}</span>

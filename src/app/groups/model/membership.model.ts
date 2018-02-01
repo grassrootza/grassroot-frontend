@@ -36,7 +36,7 @@ export class Membership {
     if (this.user.province) {
       return UserProvince[this.user.province];
     } else {
-      return "Unknown";
+      return "UNKNOWN";
     }
   }
 

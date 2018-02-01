@@ -476,6 +476,7 @@ export class GroupService {
           a.groupUid,
           a.memberUid,
           a.actionLogType,
+          a.taskType,
           a.logSubType,
           a.nameOfRelatedEntity,
           a.auxField,
