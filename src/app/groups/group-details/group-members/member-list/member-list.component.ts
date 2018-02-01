@@ -3,7 +3,7 @@ import {Membership, MembersPage} from '../../../model/membership.model';
 import {GroupService} from '../../../group.service';
 import {Group} from '../../../model/group.model';
 import {GroupRef} from '../../../model/group-ref.model';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
 import {GroupAddMemberInfo} from '../../../model/group-add-member-info.model';
 import {GroupRole} from '../../../model/group-role';
@@ -44,12 +44,17 @@ export class MemberListComponent implements OnInit {
   selectedTopics: string[] = [];
 
   public editMemberForm: FormGroup;
+  public protectedEditControls: FormArray;
+
   province = UserProvince;
   provinceKeys: string[];
   role = GroupRole;
   roleKeys: string[];
+
   public roleChanged:boolean = false;
-  public detailsChanged: boolean = false;
+
+  public coreDetailsChanged: boolean = false;
+  public withinGroupAttrsChanged: boolean = false;
 
   constructor(private groupService: GroupService,
               private fb: FormBuilder) {
@@ -59,14 +64,19 @@ export class MemberListComponent implements OnInit {
     this.editMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("emailAddress", "memberMsisdn")});
     this.provinceKeys = Object.keys(this.province);
     this.roleKeys = Object.keys(GroupRole);
-    this.setupValidation();
+    this.setupEditFormProperties();
   }
 
-  private setupValidation() {
+  private setupEditFormProperties() {
     this.editMemberForm.controls['displayName'].setValidators([Validators.required]);
     this.editMemberForm.controls['roleName'].setValidators([Validators.required]);
     this.editMemberForm.controls['emailAddress'].setValidators(optionalEmailValidator);
     this.editMemberForm.controls['memberMsisdn'].setValidators(optionalPhoneValidator);
+
+    this.protectedEditControls = this.fb.array([this.editMemberForm.controls['displayName'],
+      this.editMemberForm.controls['memberMsisdn'],
+      this.editMemberForm.controls['emailAddress'],
+      this.editMemberForm.controls['province']]);
   }
 
   ngOnInit() {
@@ -121,21 +131,22 @@ export class MemberListComponent implements OnInit {
   }
 
   showEditModal(member: Membership){
-    if(member.canEditDetails){
-      $('#member-edit-modal').modal('show');
-      this.editMemberForm.controls['displayName'].setValue(member.user.displayName);
-      this.editMemberForm.controls['roleName'].setValue(member.roleName);
-      this.editMemberForm.controls['memberMsisdn'].setValue(member.user.phoneNumber != null ? member.user.phoneNumber : "");
-      this.editMemberForm.controls['emailAddress'].setValue(member.user.email != null ? member.user.email : "");
-      this.editMemberForm.controls['province'].setValue(member.user.province);
-      this.editMemberForm.controls['affiliations'].setValue(member.affiliations.join(","));
-      this.editMemberForm.controls['taskTeams'].setValue(member.group.subGroups != null ? member.group.subGroups : "");
+    $('#member-edit-modal').modal('show');
+    this.editMemberForm.controls['displayName'].setValue(member.user.displayName);
+    this.editMemberForm.controls['roleName'].setValue(member.roleName);
+    this.editMemberForm.controls['memberMsisdn'].setValue(member.user.phoneNumber != null ? member.user.phoneNumber : "");
+    this.editMemberForm.controls['emailAddress'].setValue(member.user.email != null ? member.user.email : "");
+    this.editMemberForm.controls['province'].setValue(member.user.province);
+    this.editMemberForm.controls['affiliations'].setValue(member.affiliations.join(","));
+    this.editMemberForm.controls['taskTeams'].setValue(member.group.subGroups != null ? member.group.subGroups : "");
 
-      this.singleMemberManage = member;
-
-    }else{
-      $('#cant-edit-details').modal('show');
+    if (!member.canEditDetails) {
+      this.protectedEditControls.disable();
+    } else {
+      this.protectedEditControls.enable();
     }
+
+    this.singleMemberManage = member;
   }
 
   selectTaskTeam(taskTeam: GroupRef){
@@ -163,8 +174,12 @@ export class MemberListComponent implements OnInit {
     this.roleChanged = true;
   }
 
-  detailsChangedTrigger(){
-    this.detailsChanged = true;
+  coreDetailsChangedTrigger(){
+    this.coreDetailsChanged = true;
+  }
+
+  withinGroupDetailsChangedTrigger() {
+    this.withinGroupAttrsChanged = true;
   }
 
   filterData(fieldToFilter: string){
@@ -226,45 +241,47 @@ export class MemberListComponent implements OnInit {
 
 
   saveEditMember() {
-    console.log("okay, posting member ...");
     if(this.editMemberForm.controls['affiliations'].value != null){
       let affiliations = this.editMemberForm.controls['affiliations'].value.split(",");
       this.editMemberForm.controls['affiliations'].setValue(affiliations);
     }
+
+    console.log("have core details changed?: ", this.coreDetailsChanged);
+
     let memberUid = this.singleMemberManage.user.uid.toString();
     let name = this.editMemberForm.controls['displayName'].value;
     let email = this.editMemberForm.controls['emailAddress'].value;
     let phone = this.editMemberForm.controls['memberMsisdn'].value;
     let province = this.editMemberForm.controls['province'].value;
 
-    if(this.roleChanged){
+    if (this.roleChanged) {
       this.groupService.updateGroupMemberRole(this.group.groupUid, memberUid,
         this.editMemberForm.controls['roleName'].value).subscribe(resp => {
 
         this.roleChanged = false;
 
-        if(this.detailsChanged){
+        if(this.coreDetailsChanged){
 
           this.groupService.updateGroupMemberDetails(this.group.groupUid, memberUid, name, email, phone, province)
             .subscribe(resp => {
               console.log(resp);
-              this.detailsChanged = false;
+              this.coreDetailsChanged = false;
             })
         }
         this.shouldReloadList.emit(true);
         $('#member-edit-modal').modal('hide');
         this.singleMemberManage = null;
       })
-    }else if(this.detailsChanged && !this.roleChanged){
+    } else if(this.coreDetailsChanged && !this.roleChanged){
       this.groupService.updateGroupMemberDetails(this.group.groupUid, memberUid, name, email, phone, province)
         .subscribe(resp => {
           console.log(resp);
-          this.detailsChanged = false;
+          this.coreDetailsChanged = false;
           $('#member-edit-modal').modal('hide');
           this.singleMemberManage = null;
           this.shouldReloadList.emit(true);
         })
-    }else if(!this.detailsChanged && !this.roleChanged){
+    } else if(!this.coreDetailsChanged && !this.roleChanged){
       console.log("Nothing changed in form not submiting it");
       $('#member-edit-modal').modal('hide');
       this.singleMemberManage = null;

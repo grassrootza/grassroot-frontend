@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {UserService} from "../user/user.service";
 import {environment} from "../../environments/environment";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
@@ -11,6 +11,7 @@ import {CampaignMsgRequest, CampaignMsgServerReq, CampaignRequest} from "./campa
 export class CampaignService {
 
   campaignListUrl = environment.backendAppUrl + "/api/campaign/manage/list";
+  groupCampaignListUrl = environment.backendAppUrl + "/api/campaign/manage/list/group";
   campaignCreateUrl = environment.backendAppUrl + "/api/campaign/manage/create";
   campaignFetchUrl = environment.backendAppUrl + "/api/campaign/manage/fetch";
   campaignActiveCodesUrl = environment.backendAppUrl + "/api/campaign/manage/codes/list/active";
@@ -28,8 +29,9 @@ export class CampaignService {
 
   constructor(private httpClient: HttpClient, private userService: UserService) { }
 
-  loadCampaigns(clearCache: Boolean) {
-    return this.httpClient.get<CampaignInfo[]>(this.campaignListUrl)
+  loadCampaigns() {
+
+    this.httpClient.get<CampaignInfo[]>(this.campaignListUrl)
       .map(
         data => {
           console.log("Campaign json object from server: ", data);
@@ -45,6 +47,15 @@ export class CampaignService {
           console.log("Error loading campaigns", error)
         }
       )
+  }
+
+  loadGroupCampaigns(groupUid: string): Observable<CampaignInfo[]> {
+
+    const params = new HttpParams()
+      .set("groupUid", groupUid);
+
+    return this.httpClient.get<CampaignInfo[]>(this.groupCampaignListUrl, {params: params})
+      .map(campaigns => campaigns.map(cp => getCampaignEntity(cp)))
   }
 
   fetchActiveCampaignCodes(): Observable<string[]> {

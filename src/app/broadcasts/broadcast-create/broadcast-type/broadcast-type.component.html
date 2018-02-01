@@ -14,7 +14,7 @@
           <div class="col-md-2 col-sm-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
-                <input type="checkbox" class="form-check-input" formControlName="shortMessage">
+                <input type="checkbox" [disabled]="!createParams.isSmsAllowed" class="form-check-input" formControlName="shortMessage">
                 <i class="fas fa-mobile-alt type-icon gr-icon"></i>
               </label>
             </div>
@@ -23,7 +23,7 @@
             <p class="type-header">
               {{ 'broadcasts.create.types.smsLabel' | translate }}
             </p>
-            <p>{{ 'broadcasts.create.types.smsCosts' | translate:createParams }}</p>
+            <p *ngIf="createParams.isSmsAllowed">{{ 'broadcasts.create.types.smsCosts' | translate:createParams }}</p>
           </div>
 
           <div class="col-md-2 col-sm-4">

@@ -16,6 +16,7 @@ export class BroadcastService {
 
   fetchUrlBase = environment.backendAppUrl + "/api/broadcast/fetch/";
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
+  imageUploadUrl = environment.backendAppUrl + "/api/broadcast/create/image/upload";
 
   private createRequest: BroadcastRequest = new BroadcastRequest();
 
@@ -94,8 +95,10 @@ export class BroadcastService {
       emailContent: this.createRequest.emailContent,
       facebookPost: this.createRequest.facebookContent,
       facebookLink: this.createRequest.facebookLink,
+      facebookImageKey: this.createRequest.facebookImageKey,
       twitterPost: this.createRequest.twitterContent,
-      twitterLink: this.createRequest.twitterLink
+      twitterLink: this.createRequest.twitterLink,
+      twitterImageKey: this.createRequest.twitterImageKey
     }
   }
 
@@ -105,9 +108,12 @@ export class BroadcastService {
     this.createRequest.emailContent = content.emailContent;
     this.createRequest.facebookContent = content.facebookPost;
     this.createRequest.facebookLink = content.facebookLink;
+    this.createRequest.facebookImageKey = content.facebookImageKey;
     this.createRequest.twitterContent = content.twitterPost;
     this.createRequest.twitterLink = content.twitterLink;
+    this.createRequest.twitterImageKey = content.twitterImageKey;
     this.saveBroadcast();
+    console.log("saved fb image key: ", this.createRequest.facebookImageKey);
   }
 
   getMembers(): BroadcastMembers {
@@ -169,7 +175,12 @@ export class BroadcastService {
   }
 
   private getFbDisplayName(fbUserId: string): string {
-    return this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName;
+    console.log("no really");
+    if (this._createParams.facebookPages && fbUserId) {
+      return this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName
+    } else {
+      return "";
+    }
   }
 
   sendBroadcast() {
@@ -239,6 +250,11 @@ export class BroadcastService {
       this.latestStep = nextPage;
       localStorage.setItem('broadcastCreateStep', this.latestStep.toString());
     }
+  }
+
+  uploadImage(image): Observable<any> {
+    const fullUrl = this.imageUploadUrl;
+    return this.httpClient.post(fullUrl, image, { responseType: 'text' });
   }
 
   getGroupBroadcasts(groupUid: string, broadcastSchedule: string, pageNo: number, pageSize: number): Observable<BroadcastPage>{

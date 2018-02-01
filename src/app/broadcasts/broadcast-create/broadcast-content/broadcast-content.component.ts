@@ -1,13 +1,10 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {BroadcastContent, BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
+import {BroadcastParams} from "../../model/broadcast-params";
 
-/*
-todo : add these back when can figure out CLI weirdness
-'https://cdn.quilljs.com/1.2.2/quill.snow.css', 'https://cdn.quilljs.com/1.2.2/quill.bubble.css',
- */
 @Component({
   selector: 'app-broadcast-content',
   templateUrl: './broadcast-content.component.html',
@@ -17,6 +14,8 @@ todo : add these back when can figure out CLI weirdness
 export class BroadcastContentComponent implements OnInit {
 
   types: BroadcastTypes;
+  params: BroadcastParams;
+
   content: BroadcastContent;
   contentForm: FormGroup;
 
@@ -27,13 +26,18 @@ export class BroadcastContentComponent implements OnInit {
   public fbCharsLeft: number = this.MAX_SOCIAL_LENGTH;
   public twCharsLeft: number = this.MAX_SOCIAL_LENGTH;
 
+  private fbImageKey: string = "";
+  private twitterImageKey: string = "";
+
   constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService) {
     this.contentForm = formBuilder.group(new BroadcastContent());
   }
 
   ngOnInit() {
     this.types = this.broadcastService.getTypes();
-    this.contentForm.setValue(this.broadcastService.getContent());
+    this.params = this.broadcastService.getCreateParams();
+    this.content = this.broadcastService.getContent();
+    this.contentForm.setValue(this.content);
     this.setUpValidation();
   }
 
@@ -62,7 +66,7 @@ export class BroadcastContentComponent implements OnInit {
     if (!this.contentForm.valid) {
       return false;
     }
-    this.broadcastService.setContent(this.contentForm.value);
+    this.saveContent();
     console.log("stashed content for this broadcast, value = ", this.broadcastService.getContent());
     return true;
   }
@@ -76,12 +80,40 @@ export class BroadcastContentComponent implements OnInit {
 
   back() {
     // we don't care if it's valid or not, but do want to stash it
-    this.broadcastService.setContent(this.contentForm.value);
+    this.broadcastService.setContent(this.content);
     this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(), this.broadcastService.parentId(), 'types']);
+  }
+
+  saveContent() {
+    this.content = this.contentForm.value;
+    this.content.facebookImageKey = this.fbImageKey;
+    this.content.twitterImageKey = this.twitterImageKey;
+    this.broadcastService.setContent(this.content);
   }
 
   cancel() {
     this.broadcastService.cancelCurrentCreate();
+  }
+
+  uploadImage(event, providerId) {
+    let images = event.target.files;
+
+    if (images.length > 0) {
+      let image = images[0];
+      let formData: FormData = new FormData();
+      formData.append("image", image, image.name);
+      this.broadcastService.uploadImage(formData).
+      subscribe(response => {
+          if (providerId == 'facebook') {
+            this.fbImageKey = response;
+          } else if (providerId == 'twitter') {
+            this.twitterImageKey = response;
+          }
+        },
+        error => {
+          console.log("error uploading image, error: ", error);
+        })
+    }
   }
 
 }

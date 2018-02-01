@@ -11,6 +11,7 @@
 
           <app-member-filter *ngIf="group" [taskTeams]="group.subGroups"
                              [topics]="group.topics"
+                             [campaigns]="groupCampaigns"
                              (filterChanged)="membersFilterChanged($event)">
           </app-member-filter>
         </div>

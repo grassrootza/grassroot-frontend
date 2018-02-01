@@ -4,6 +4,7 @@ import {UserProvince} from '../../user/model/user-province.enum';
 import {MembersFilter} from "./filter.model";
 import {GroupRef} from "../model/group-ref.model";
 import {GroupJoinMethod} from "../model/join-method";
+import {CampaignInfo} from "../../campaigns/model/campaign-info";
 
 declare var $: any;
 
@@ -19,6 +20,9 @@ export class MemberFilterComponent implements OnInit {
 
   @Input()
   taskTeams: GroupRef[] = [];
+
+  @Input()
+  campaigns: CampaignInfo[] = [];
 
   @Input()
   topics: string[] = [];
@@ -44,6 +48,7 @@ export class MemberFilterComponent implements OnInit {
     $(".task-teams-multi-select").select2({placeholder: "Select task teams"});
     $(".topics-multi-select").select2({placeholder: "Select topics"});
     $(".join-methods-multi-select").select2({placeholder: "Select sources"});
+    $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
 
     $(".provinces-multi-select").on('change.select2', function () {
       var data = $('.provinces-multi-select').select2('data');
@@ -66,6 +71,12 @@ export class MemberFilterComponent implements OnInit {
     $(".join-methods-multi-select").on('change.select2', function () {
       var data = $('.join-methods-multi-select').select2('data');
       this.filter.joinSources = data.length > 0 ? data.map(tt => tt.id) : null;
+      this.fireFilterChange();
+    }.bind(this));
+
+    $(".campaigns-multi-select").on('change.select2', function () {
+      var data = $('.campaigns-multi-select').select2('data');
+      this.filter.campaigns = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
 

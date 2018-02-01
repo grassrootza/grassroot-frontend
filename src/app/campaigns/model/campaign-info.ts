@@ -1,5 +1,5 @@
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
-import moment = require("moment");
+import * as moment from "moment";
 
 export class CampaignInfo {
 

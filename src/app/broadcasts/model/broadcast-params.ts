@@ -13,4 +13,7 @@ export class BroadcastParams {
 
   allMemberCount: number = 0; // may also have in group, but want precisely most recent
 
+  joinLinks: string[] = [];
+  campaignLinks: string[] = [];
+
 }
