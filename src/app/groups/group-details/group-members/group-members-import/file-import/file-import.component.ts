@@ -54,7 +54,7 @@ export class FileImportComponent implements OnInit {
   checkColumns(cells:String[]){
       for(var i = 0; i < cells.length;i++){
         if(cells[i].toLowerCase().startsWith("email")){
-            this.emailColumn = 0;
+            this.emailColumn = 2;
         }
         if(cells[i].toLowerCase().startsWith("province")){
             this.provinceColumn = 0;
@@ -63,7 +63,7 @@ export class FileImportComponent implements OnInit {
             this.roleColumn = 0;
         }
         if(cells[i].toLowerCase().startsWith("phone")){
-            this.phoneColumn = 0;
+            this.phoneColumn = 1;
         }
         if(cells[i].toLowerCase().startsWith("name") || cells[i].toLowerCase().startsWith("firstname")){
             this.nameColumn = 0;
