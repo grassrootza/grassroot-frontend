@@ -281,7 +281,7 @@
           "title": "Bulk remove members",
           "question": "Are you sure you want to remove the following members ?",
           "questionAdditionalInfo": "All of their contact details will be deleted and they will no longer be a part of this group",
-          "noButton": "No, Cancal",
+          "noButton": "No, Cancel",
           "yesButton": "Yes, Remove members",
           "table":{
             "name": "Name",
@@ -359,6 +359,7 @@
       },
       "edit":{
         "title": "Edit member",
+        "restriction": "* After a user has set their details themselves, only they can edit them",
         "notAllowed": {
           "title": "Can't edit details",
           "body": "You are not allowed to edit details for this user"

@@ -154,13 +154,9 @@ export class GroupDetailsComponent implements OnInit {
       this.clipboardService.copy(this.joinWordCbString);
       this.justCopied = true;
       joinWord.copied = true;
-      setTimeout(() => joinWord.copied = false, 1500);
+      setTimeout(() => joinWord.copied = false, 2000);
     });
     return false;
-  }
-
-  showCopiedString() {
-
   }
 
 }
