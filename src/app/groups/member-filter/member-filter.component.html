@@ -115,7 +115,17 @@
         </div>
       </div>
     </div>
+  </div>
 
+
+  <div class="col-sm-3 col-lg-2 filter-item">
+    <label for="joinMethods" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.nameOrPhone'">Joined
+      source</label>
+  </div>
+  <div class=" col-sm-9 col-lg-10 filter-item">
+    <input id="nameOrPhone" class="form-control"
+           placeholder="{{ 'group.allMembers.filterMembers.nameOrPhonePlaceHolder' | translate}}"
+           (keyup)="nameOrPhoneChanged($event.target.value)"/>
   </div>
 
 

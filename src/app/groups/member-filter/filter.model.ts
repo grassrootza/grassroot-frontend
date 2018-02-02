@@ -11,6 +11,7 @@ export class MembersFilter {
   campaigns: string[] = null;
   joinDate: Moment = null;
   joinDaysAgo: number = null;
-  joinDateCondition: JoinDateCondition = null
+  joinDateCondition: JoinDateCondition = null;
+  namePhoneOrEmail: string = null;
 
 }

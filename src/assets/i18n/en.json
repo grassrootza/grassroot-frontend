@@ -319,6 +319,8 @@
         "petitions": "Join via petition",
         "joinDate": "Joined",
         "joinDateAny": "Any time",
+        "nameOrPhone": "Name",
+        "nameOrPhonePlaceHolder": "Filter by name, phone number or email",
         "update": "Update",
         "DATE-EXACT": "on",
         "DATE-BEFORE": "before",

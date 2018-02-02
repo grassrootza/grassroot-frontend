@@ -138,6 +138,11 @@ export class MemberFilterComponent implements OnInit {
     this.fireFilterChange();
   }
 
+  nameOrPhoneChanged(value) {
+    this.filter.namePhoneOrEmail = value;
+    this.fireFilterChange();
+  }
+
   daysAgoChanged(value) {
     console.log("Days ago changed: ", value);
     this.filter.joinDaysAgo = value;

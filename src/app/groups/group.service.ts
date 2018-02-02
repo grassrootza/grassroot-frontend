@@ -570,6 +570,10 @@ export class GroupService {
       params = params.set("joinDaysAgoCondition", filter.joinDateCondition)
     }
 
+    if (filter.namePhoneOrEmail != null && filter.namePhoneOrEmail.trim().length > 0) {
+      params = params.set("namePhoneOrEmail", filter.namePhoneOrEmail);
+    }
+
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
       .map(resp => resp.map(m => Membership.createInstance(m)))
   }
