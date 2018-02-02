@@ -30,13 +30,14 @@ export class MemberFilterComponent implements OnInit {
   @Input()
   topics: string[] = [];
 
+  @Input()
+  affiliations: string[] = [];
+
   joinDateConditions: string[] = ["DAYS_AGO-EXACT", "DAYS_AGO-BEFORE", "DAYS_AGO-AFTER", "DATE-EXACT", "DATE-BEFORE", "DATE-AFTER"];
 
   joinDateConditionType = null;
 
   public filterForm: FormGroup;
-
-
 
   private filter: MembersFilter = new MembersFilter();
 
@@ -60,9 +61,10 @@ export class MemberFilterComponent implements OnInit {
   }
 
   setupSelect2() {
-    $(".provinces-multi-select").select2({placeholder: "Select a state"});
+    $(".provinces-multi-select").select2({placeholder: "Select a province"});
     $(".task-teams-multi-select").select2({placeholder: "Select task teams"});
     $(".topics-multi-select").select2({placeholder: "Select topics"});
+    $(".affiliations-multi-select").select2({placeholder: "Select affiliations (organizations)"});
     $(".join-methods-multi-select").select2({placeholder: "Select sources"});
     $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
 
@@ -83,6 +85,12 @@ export class MemberFilterComponent implements OnInit {
       const data = $('.topics-multi-select').select2('data');
       this.filter.topics = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
+    }.bind(this));
+
+    $(".affiliations-multi-select").on('change.select2', function() {
+      const data = $('.affiliations-multi-select').select2('data');
+      this.filter.affiliations = data.length > 0 ? data.map(tt => tt.id) : null;
+      this.fireFilterChange()
     }.bind(this));
 
     $(".join-methods-multi-select").on('change.select2', function () {

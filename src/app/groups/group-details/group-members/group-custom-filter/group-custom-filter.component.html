@@ -12,6 +12,7 @@
           <app-member-filter *ngIf="group" [taskTeams]="group.subGroups"
                              [topics]="group.topics"
                              [campaigns]="groupCampaigns"
+                             [affiliations]="group.affiliations"
                              (filterChanged)="membersFilterChanged($event)">
           </app-member-filter>
         </div>

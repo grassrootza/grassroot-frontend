@@ -12,7 +12,7 @@ import {Membership, MembersPage} from './model/membership.model';
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
-import {GroupRef} from './model/group-ref.model';
+import {getGroupMembersList, GroupRef} from './model/group-ref.model';
 import {JoinCodeInfo} from './model/join-code-info';
 import {GroupPermissionsByRole} from './model/permission.model';
 import {GroupRelatedUserResponse} from './model/group-related-user.model';
@@ -43,6 +43,8 @@ export class GroupService {
   groupFetchMemberActivityUrl = environment.backendAppUrl + '/api/group/fetch/members/activity';
   groupMemberChangeRoleUrl = environment.backendAppUrl + '/api/group/modify/members/modify/role';
   groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
+  groupMemberChangeAssignmentsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/assignments';
+
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
   groupUploadImageUrl = environment.backendAppUrl + "/api/group/modify/image/upload";
@@ -142,8 +144,9 @@ export class GroupService {
             gr.paidFor,
             gr.userPermissions,
             gr.userRole,
-            gr.subGroups,
+            getGroupMembersList(gr.subGroups),
             gr.topics,
+            gr.affiliations,
             gr.joinWords,
             gr.joinWordsLeft,
             gr.reminderMinutes,
@@ -516,6 +519,18 @@ export class GroupService {
       })
   }
 
+  updateGroupMemberAssignments(groupUid: string, memberUid: string, taskTeams: string[], affiliations: string[], topics: string[]) {
+    const fullUrl = this.groupMemberChangeAssignmentsUrl + '/' + groupUid;
+    let params = new HttpParams()
+      .set("memberUid", memberUid)
+      .set('taskTeams', taskTeams.toString())
+      .set("affiliations", affiliations.toString())
+      .set("topics", topics.toString());
+
+    return this.httpClient.post(fullUrl, null, {params: params});
+
+  }
+
   filterGroupMembers(groupUid: string,
                      filter: MembersFilter): Observable<Membership[]> {
 
@@ -534,6 +549,10 @@ export class GroupService {
       params = params.set("topics", filter.topics.join(","));
     }
 
+    if (filter.affiliations != null) {
+      params = params.set("affiliations", filter.affiliations.join(","));
+    }
+
     if (filter.joinSources != null) {
       params = params.set("joinMethods", filter.joinSources.join(","));
     }
@@ -550,7 +569,6 @@ export class GroupService {
       params = params.set("joinDaysAgo", filter.joinDaysAgo.toString());
       params = params.set("joinDaysAgoCondition", filter.joinDateCondition)
     }
-
 
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
       .map(resp => resp.map(m => Membership.createInstance(m)))

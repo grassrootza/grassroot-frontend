@@ -1,6 +1,6 @@
 import {DatePipe} from "@angular/common";
 import {MembershipInfo} from "./membership.model";
-import {GroupRef} from "./group-ref.model";
+import {GroupMembersRef} from "./group-ref.model";
 import {JoinCodeInfo} from "./join-code-info";
 
 export class Group {
@@ -24,8 +24,9 @@ export class Group {
               public paidFor: boolean,
               public userPermissions: string[],
               public userRole: string,
-              public subGroups: GroupRef[],
+              public subGroups: GroupMembersRef[],
               public topics: string[],
+              public affiliations: string[],
               public joinWords: JoinCodeInfo[],
               public joinWordsLeft: number,
               public reminderMinutes: number,
