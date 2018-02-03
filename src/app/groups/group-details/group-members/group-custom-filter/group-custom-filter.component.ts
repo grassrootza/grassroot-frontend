@@ -22,6 +22,9 @@ export class GroupCustomFilterComponent implements OnInit {
 
   groupCampaigns: CampaignInfo[] = [];
 
+  private loading = false;
+  private loadStart = 0;
+
 
   constructor(private groupService: GroupService,
               private campaignService: CampaignService,
@@ -62,13 +65,18 @@ export class GroupCustomFilterComponent implements OnInit {
 
     console.log("Members filter change, loading members... filter: ", filter);
 
+    this.loading = true;
     this.groupService.filterGroupMembers(this.group.groupUid, filter)
       .subscribe(
         members => {
+          this.loading = false;
           console.log("Fetched filtered members: ", members);
           this.currentPage = new MembersPage(0, 1, members.length, members.length, true, true, members);
         },
-        error => console.log("Error fetching members", error)
+        error => {
+          this.loading = false;
+          console.log("Error fetching members", error);
+        }
       );
   }
 

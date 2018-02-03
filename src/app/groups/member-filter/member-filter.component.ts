@@ -8,6 +8,7 @@ import {CampaignInfo} from "../../campaigns/model/campaign-info";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import * as moment from "moment";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 declare var $: any;
 
@@ -58,6 +59,14 @@ export class MemberFilterComponent implements OnInit {
       'date': [DateTimeUtils.dateFromDate(new Date())],
       'daysAgo': 1
     });
+
+    this.nameInputSubject.asObservable().debounceTime(300)
+      .subscribe(
+        value => {
+          this.filter.namePhoneOrEmail = value;
+          this.fireFilterChange()
+        }
+      )
   }
 
   setupSelect2() {
@@ -139,9 +148,10 @@ export class MemberFilterComponent implements OnInit {
     this.fireFilterChange();
   }
 
+
+  private nameInputSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   nameOrPhoneChanged(value) {
-    this.filter.namePhoneOrEmail = value;
-    this.fireFilterChange();
+    this.nameInputSubject.next(value);
   }
 
   daysAgoChanged(value) {
