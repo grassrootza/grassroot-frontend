@@ -24,7 +24,8 @@
       <div *ngIf="currentPage" class="row">
 
         <div class="col-9">
-          <h3>Matching members</h3>
+          <h3 class="float-left">Matching members</h3>
+          <img src="assets/small-spinner-bars.gif" *ngIf="loading"/>
         </div>
 
         <div class="col-3">
@@ -47,6 +48,7 @@
         </div>
 
       </div>
+
 
       <div class="row" *ngIf="group && currentPage">
         <div class="col">
