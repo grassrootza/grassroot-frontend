@@ -86,6 +86,7 @@ export class MemberFilterComponent implements OnInit {
 
     $(".task-teams-multi-select").on('change.select2', function () {
       const data = $('.task-teams-multi-select').select2('data');
+      console.log("data entity: ", data);
       this.filter.taskTeams = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
