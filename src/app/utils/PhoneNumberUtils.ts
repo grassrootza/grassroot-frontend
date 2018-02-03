@@ -26,7 +26,7 @@ export class PhoneNumberUtils {
   }
 
   public static convertIfPhone(username: string): string {
-    if (isValidNumber(username, "ZA")) {
+    if (username && isValidNumber(username, "ZA")) {
       username = PhoneNumberUtils.convertToSystem(username);
     }
     return username;

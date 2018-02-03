@@ -52,7 +52,9 @@
   <div class="form-group row">
     <label for="phone-select" [translate]="'group.import.file.phoneNumbers'">Phone numbers select</label>
     <select class="form-control" id="phone-select" [(ngModel)]="phoneColumn" name="phone-select">
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+      <option [value]="-1" [translate]="'group.import.file.none'" >None</option>
+      <option *ngFor="let row of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i"
+              [selected]="row.toLowerCase().startsWith('phone') || row.toLowerCase().startsWith('cell')">{{row}}</option>
     </select>
   </div>
 
@@ -60,13 +62,39 @@
     <label for="email-select" [translate]="'group.import.file.email'">Email select</label>
     <select class="form-control" id="email-select" name="email-select" [(ngModel)]="emailColumn">
       <option [value]="-1" [translate]="'group.import.file.none'" >None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">
+        {{rows}}</option>
     </select>
   </div>
 
   <div class="form-group row">
     <label for="province-select" [translate]="'group.import.file.province'">Province select</label>
     <select class="form-control" id="province-select" [(ngModel)]="provinceColumn" name="province-select">
+      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
+      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+    </select>
+  </div>
+
+  <div class="form-group row">
+    <label for="province-select" [translate]="'group.import.file.affiliations'">Affiliation select</label>
+    <select class="form-control" id="affiliation-select" [(ngModel)]="affilColumn" name="affiliation-select">
+      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
+      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index"
+              [ngValue]="i">{{rows}}</option>
+    </select>
+  </div>
+
+  <div class="form-group row">
+    <label for="province-select" [translate]="'group.import.file.firstname'">First name select</label>
+    <select class="form-control" id="firstname-select" [(ngModel)]="firstNameColumn" name="firstname-select">
+      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
+      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+    </select>
+  </div>
+
+  <div class="form-group row">
+    <label for="province-select" [translate]="'group.import.file.surname'">Surname select</label>
+    <select class="form-control" id="surname-select" [(ngModel)]="surnameColumn" name="surname-select">
       <option [value]="-1" [translate]="'group.import.file.none'">None</option>
       <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
     </select>
@@ -83,6 +111,10 @@
   <div class="row">
     <button type="button" class="btn btn-success" [translate]="'action.save'" (click)="saveColumnOrder()">Change file to upload</button>
   </div>
+</div>
+
+<div *ngIf="fileImportResult?.errorFilePath">
+  <button (click)="downloadErrors()">Download errors</button>
 </div>
 
 <div *ngIf="groupAddMembersInfo.length > 0">
@@ -113,11 +145,11 @@
         </div>
 
         <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
-          <input type="text" class="form-control" [(ngModel)]="member.memberMsisdn">
+          <input type="text" class="form-control" [(ngModel)]="member.phoneNumber">
         </div>
 
         <div *ngIf="emailColumn != -1" class="col-2">
-          <input type="text" class="form-control" [(ngModel)]="member.emailAddress">
+          <input type="text" class="form-control" [(ngModel)]="member.memberEmail">
         </div>
 
         <div *ngIf="provinceColumn != -1" class="col-2">

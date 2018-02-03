@@ -62,7 +62,7 @@ export class MemberListComponent implements OnInit {
     this.memberRemoved = new EventEmitter<any>();
     this.shouldReloadList = new EventEmitter<boolean>();
     this.sortUserList = new EventEmitter<string[]>();
-    this.editMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("emailAddress", "memberMsisdn")});
+    this.editMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("memberEmail", "phoneNUmber")});
     this.provinceKeys = Object.keys(this.province);
     this.roleKeys = Object.keys(GroupRole);
     this.setupEditFormProperties();
@@ -71,12 +71,12 @@ export class MemberListComponent implements OnInit {
   private setupEditFormProperties() {
     this.editMemberForm.controls['displayName'].setValidators([Validators.required]);
     this.editMemberForm.controls['roleName'].setValidators([Validators.required]);
-    this.editMemberForm.controls['emailAddress'].setValidators(optionalEmailValidator);
-    this.editMemberForm.controls['memberMsisdn'].setValidators(optionalPhoneValidator);
+    this.editMemberForm.controls['memberEmail'].setValidators(optionalEmailValidator);
+    this.editMemberForm.controls['phoneNumber'].setValidators(optionalPhoneValidator);
 
     this.protectedEditControls = this.fb.array([this.editMemberForm.controls['displayName'],
-      this.editMemberForm.controls['memberMsisdn'],
-      this.editMemberForm.controls['emailAddress'],
+      this.editMemberForm.controls['phoneNumber'],
+      this.editMemberForm.controls['memberEmail'],
       this.editMemberForm.controls['province']]);
   }
 
@@ -135,8 +135,8 @@ export class MemberListComponent implements OnInit {
     $('#member-edit-modal').modal('show');
     this.editMemberForm.controls['displayName'].setValue(member.user.displayName);
     this.editMemberForm.controls['roleName'].setValue(member.roleName);
-    this.editMemberForm.controls['memberMsisdn'].setValue(member.user.phoneNumber != null ? member.user.phoneNumber : "");
-    this.editMemberForm.controls['emailAddress'].setValue(member.user.email != null ? member.user.email : "");
+    this.editMemberForm.controls['phoneNumber'].setValue(member.user.phoneNumber != null ? member.user.phoneNumber : "");
+    this.editMemberForm.controls['memberEmail'].setValue(member.user.email != null ? member.user.email : "");
     this.editMemberForm.controls['province'].setValue(member.user.province);
     this.editMemberForm.controls['affiliations'].setValue(member.affiliations.join(","));
     this.editMemberForm.controls['taskTeams'].setValue(member.group.subGroups != null ? member.group.subGroups : "");
@@ -247,8 +247,8 @@ export class MemberListComponent implements OnInit {
 
     let memberUid = this.singleMemberManage.user.uid.toString();
     let name = this.editMemberForm.controls['displayName'].value;
-    let email = this.editMemberForm.controls['emailAddress'].value;
-    let phone = this.editMemberForm.controls['memberMsisdn'].value;
+    let email = this.editMemberForm.controls['memberEmail'].value;
+    let phone = this.editMemberForm.controls['phoneNumber'].value;
     let province = this.editMemberForm.controls['province'].value;
 
     let shouldReload = false;

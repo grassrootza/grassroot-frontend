@@ -45,20 +45,20 @@
 
           <div class="form-group row">
             <div class="col-md-6 col-sm-12">
-              <label for="phone" class="grassroot-label-em">{{ 'group.allMembers.addMember.phone' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="phone" name="phone" [formControl]="addMemberForm.controls['memberMsisdn']">
+              <label for="phoneNumber" class="grassroot-label-em">{{ 'group.allMembers.addMember.phone' | translate }}</label>
+              <input type="text" class="form-control form-control-em" id="phoneNumber" name="phoneNumber" [formControl]="addMemberForm.controls['phoneNumber']">
             </div>
             <div class="col-md-6 col-sm-12">
-              <label for="role" class="grassroot-label-em">{{ 'group.allMembers.addMember.email' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="email" name="email" [formControl]="addMemberForm.controls['emailAddress']">
+              <label for="memberEmail" class="grassroot-label-em">{{ 'group.allMembers.addMember.email' | translate }}</label>
+              <input type="text" class="form-control form-control-em" id="memberEmail" name="memberEmail" [formControl]="addMemberForm.controls['memberEmail']">
             </div>
           </div>
           <div class="form-group row footnote">
             <div class="col-12">
-              <div class="error">
+              <div class="error" *ngIf="!addMemberForm.valid && addMemberForm.controls['phoneNumber'].touched
+                  && addMemberForm.controls['memberEmail'].touched && addMemberForm.errors?.emailAndPhoneBlank">
                 {{ 'registration.footnote' | translate }}
               </div>
-            <!--<p class="footnote">{{ 'registration.footnote' | translate }}</p>-->
             </div>
           </div>
 
@@ -73,8 +73,8 @@
               </select>
             </div>
             <div class="col-md-6 col-sm-12">
-              <label for="affiliation" class="grassroot-label-em">{{ 'group.allMembers.addMember.affiliation' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="affiliation" name="affiliation" [formControl]="addMemberForm.controls['affiliations']">
+              <label for="affiliations" class="grassroot-label-em">{{ 'group.allMembers.addMember.affiliation' | translate }}</label>
+              <input type="text" class="form-control form-control-em" id="affiliations" name="affiliations" [formControl]="addMemberForm.controls['affiliations']">
             </div>
           </div>
 

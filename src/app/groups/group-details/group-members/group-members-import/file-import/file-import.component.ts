@@ -4,6 +4,7 @@ import {GroupService} from '../../../../group.service';
 import {GroupMembersImportExcelSheetAnalysis} from '../../../../model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from '../../../../model/group-add-member-info.model';
 import {GroupModifiedResponse} from '../../../../model/group-modified-response.model';
+import {FileImportResult} from "./file-import-result";
 
 declare var $: any;
 
@@ -28,11 +29,16 @@ export class FileImportComponent implements OnInit {
   phoneColumn = 0;
   emailColumn = -1;
   provinceColumn = -1;
+  affilColumn = -1;
+  firstNameColumn = -1;
+  surnameColumn = -1;
   roleColumn = -1;
 
   groupMembersImportExcelSheetAnalysis: GroupMembersImportExcelSheetAnalysis = null;
+  fileImportResult: FileImportResult;
   groupAddMembersInfo: GroupAddMemberInfo[] = [];
   groupModifiedResponse: GroupModifiedResponse = null;
+  importErrorUrl: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -59,11 +65,20 @@ export class FileImportComponent implements OnInit {
       emailColumn: this.emailColumn,
       provinceColumn: this.provinceColumn,
       roleColumn: this.roleColumn,
+      firstNameColumn: this.firstNameColumn,
+      surnameColumn: this.surnameColumn,
+      affiliationColumn: this.affilColumn,
       header: this.sheetHasHeader
     };
 
     this.groupService.importAnalyzeMembers(params).subscribe(resp => {
-      this.groupAddMembersInfo = resp;
+      console.log("mapped response: {}", resp);
+      this.fileImportResult = resp;
+      this.groupAddMembersInfo = resp.processedMembers;
+      if (this.fileImportResult.errorFilePath) {
+        this.importErrorUrl = this.groupService.groupImportErrorsDownloadUrl + "?"
+          + encodeURIComponent(this.fileImportResult.errorFilePath);
+      }
     })
   }
 
@@ -86,6 +101,16 @@ export class FileImportComponent implements OnInit {
     this.groupService.confirmAddMembersToGroup(this.groupUid, this.groupAddMembersInfo).subscribe(resp => {
       this.groupModifiedResponse = resp;
       $('#group-modified-response-modal').modal('show');
+    })
+  }
+
+  downloadErrors() {
+    this.groupService.downloadImportErrors(this.fileImportResult.errorFilePath).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      let url = window.URL.createObjectURL(blob);
+      window.open(url);
+    }, error => {
+      console.log("error getting the file: ", error);
     })
   }
 

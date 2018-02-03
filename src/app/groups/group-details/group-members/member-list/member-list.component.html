@@ -362,11 +362,11 @@
           <div class="form-group row">
             <div class="col-md-6 col-sm-12">
               <label for="phone" class="grassroot-label-em">{{ 'group.allMembers.addMember.phone' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="phone" name="phone" [formControl]="editMemberForm.controls['memberMsisdn']" (change)="coreDetailsChangedTrigger()">
+              <input type="text" class="form-control form-control-em" id="phone" name="phone" [formControl]="editMemberForm.controls['phoneNumber']" (change)="coreDetailsChangedTrigger()">
             </div>
             <div class="col-md-6 col-sm-12">
               <label for="role" class="grassroot-label-em">{{ 'group.allMembers.addMember.email' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="email" name="email" [formControl]="editMemberForm.controls['emailAddress']" (change)="coreDetailsChangedTrigger()">
+              <input type="text" class="form-control form-control-em" id="email" name="email" [formControl]="editMemberForm.controls['memberEmail']" (change)="coreDetailsChangedTrigger()">
             </div>
           </div>
           <div class="form-group row footnote">

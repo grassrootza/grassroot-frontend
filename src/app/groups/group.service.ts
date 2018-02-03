@@ -10,7 +10,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {DateTimeUtils} from '../utils/DateTimeUtils';
 import {Membership, MembersPage} from './model/membership.model';
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
-import {GroupAddMemberInfo} from './model/group-add-member-info.model';
+import {getAddMemberInfo, GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
 import {getGroupMembersList, GroupRef} from './model/group-ref.model';
 import {JoinCodeInfo} from './model/join-code-info';
@@ -18,6 +18,8 @@ import {GroupPermissionsByRole} from './model/permission.model';
 import {GroupRelatedUserResponse} from './model/group-related-user.model';
 import {GroupMemberActivity} from './model/group-member-activity';
 import {MembersFilter} from "./member-filter/filter.model";
+import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
+import {FileImportResult} from "./group-details/group-members/group-members-import/file-import/file-import-result";
 
 @Injectable()
 export class GroupService {
@@ -35,6 +37,8 @@ export class GroupService {
   groupAssignTopicsToMembersUrl = environment.backendAppUrl + "/api/group/modify/members/add/topics";
   groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
   groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
+  groupImportErrorsDownloadUrl = environment.backendAppUrl + "/api/group/import/errors/xls";
+
   groupUpdateSettingsUrl = environment.backendAppUrl + "/api/group/modify/settings";
   groupFetchPermissionsForRoleUrl = environment.backendAppUrl + "/api/group/fetch/permissions";
   groupFetchPermissionsDisplayedUrl = environment.backendAppUrl + "/api/group/fetch/permissions-displayed";
@@ -297,25 +301,23 @@ export class GroupService {
       );
   }
 
-  importAnalyzeMembers(params): Observable<GroupAddMemberInfo[]>{
-    return this.httpClient.post<GroupAddMemberInfo[]>(this.groupImportMembersConfirmUrl, null, {params: params})
-      .map(
-        data => {
-          console.log("members back: ", data);
-          return data.map(
-            gami => new GroupAddMemberInfo(gami.memberMsisdn,
-              gami.displayName,
-              gami.roleName,
-              gami.alernateNumbers,
-              gami.emailAddress,
-              gami.province)
-          )
+  importAnalyzeMembers(params): Observable<FileImportResult>{
+    return this.httpClient.post<FileImportResult>(this.groupImportMembersConfirmUrl, null, {params: params})
+      .map(data => {
+          console.log("import result back: ", data);
+          return new FileImportResult(data.processedMembers.map(getAddMemberInfo), data.errorRows, data.errorFilePath);
         }
       )
   }
 
+  downloadImportErrors(errorPath: string) {
+    return this.httpClient.get(this.groupImportErrorsDownloadUrl, { params: { errorFilePath: errorPath }, responseType: 'blob' });
+  }
+
   confirmAddMembersToGroup(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[]):Observable<GroupModifiedResponse>{
     const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
+    membersInfoToAdd.forEach(member => member.phoneNumber = PhoneNumberUtils.convertIfPhone(member.phoneNumber));
+    console.log("posting members: ", membersInfoToAdd);
     return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd)
       .map(resp => {
         return resp;

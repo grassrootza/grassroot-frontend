@@ -58,7 +58,7 @@ export const emailOrPhoneEntered = (emailFieldName: string = "email", phoneField
     let email = form.get(emailFieldName);
     let phone = form.get(phoneFieldName);
 
-    if ((!email.value) && (!phone.value)) {
+    if ((email) && (!email.value) && (phone) && (!phone.value)) {
       // console.log("fire error!");
       return {emailAndPhoneBlank: true}
     }

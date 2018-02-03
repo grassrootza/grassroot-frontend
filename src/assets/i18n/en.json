@@ -425,6 +425,9 @@
         "phoneNumbers": "Column with phone numbers",
         "email": "Column with emails (optional)",
         "province": "Column with provinces (optional)",
+        "affiliations": "Column with affiliations (optional)",
+        "firstname": "Column with first name (optional, if fullname set)",
+        "surname": "Column with surname (optional, if surname set)",
         "role": "Column with roles (optional)",
         "none": "None",
         "memberTable":{
@@ -432,7 +435,10 @@
           "phone": "Phone",
           "email": "Email",
           "province": "Province",
-          "role": "Role"
+          "role": "Role",
+          "firstName": "First name",
+          "surname": "Surname",
+          "affiliations": "Affiliations"
         },
         "responseModal": {
           "title": "Members added to group",

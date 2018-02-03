@@ -49,7 +49,7 @@ export class GroupAddMemberComponent implements OnInit {
   constructor(private groupService: GroupService, private fb: FormBuilder) {
     this.provinceKeys = Object.keys(this.province);
     this.roleKeys = Object.keys(GroupRole);
-    this.addMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("emailAddress", "memberMsisdn")});
+    this.addMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("memberEmail", "phoneNumber")});
     this.setupValidation();
     console.log("alright, ready to work");
 
@@ -58,8 +58,8 @@ export class GroupAddMemberComponent implements OnInit {
   private setupValidation() {
     this.addMemberForm.controls['displayName'].setValidators([Validators.required]);
     this.addMemberForm.controls['roleName'].setValidators([Validators.required]);
-    this.addMemberForm.controls['emailAddress'].setValidators(optionalEmailValidator);
-    this.addMemberForm.controls['memberMsisdn'].setValidators(optionalPhoneValidator);
+    this.addMemberForm.controls['memberEmail'].setValidators(optionalEmailValidator);
+    this.addMemberForm.controls['phoneNumber'].setValidators(optionalPhoneValidator);
   }
 
   ngOnInit() {
@@ -90,21 +90,19 @@ export class GroupAddMemberComponent implements OnInit {
   pickedItem(pickedUser: GroupRelatedUserResponse){
     this.addMemberForm.controls['displayName'].setValue(pickedUser.name);
     this.addMemberForm.controls['roleName'].setValue(GroupRole.ROLE_ORDINARY_MEMBER);
-    this.addMemberForm.controls['memberMsisdn'].setValue(pickedUser.phone);
+    this.addMemberForm.controls['phoneNumber'].setValue(pickedUser.phone);
     this.addMemberForm.controls['emailAddress'].setValue(pickedUser.email);
     this.addMemberForm.controls['province'].setValue(pickedUser.province);
 
   }
 
   postMember() {
-    console.log("okay, posting member ...");
     if(this.addMemberForm.controls['affiliations'].value != null){
       let affiliations = this.addMemberForm.controls['affiliations'].value.split(",");
       this.addMemberForm.controls['affiliations'].setValue(affiliations);
     }
 
     this.groupService.confirmAddMembersToGroup(this.groupUid, [this.addMemberForm.value]).subscribe(result => {
-      console.log("got this result back: ", result);
       $('#add-member-modal').modal("hide");
       this.onMemberAdded.emit(result);
     }, error => {
