@@ -27,7 +27,8 @@
       "ZA_FS": "Free State",
       "ZA_MP": "Mpumalanga",
       "INTL": "International",
-      "UNKNOWN": "Unknown"
+      "UNKNOWN": "Unknown",
+      "null":"Unknown"
     },
     "GroupJoinMethod": {
       "ADDED_BY_SYS_ADMIN": "Added by admin",

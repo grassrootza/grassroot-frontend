@@ -15,6 +15,7 @@ declare var $: any;
 export class FileImportComponent implements OnInit {
 
   private groupUid: string = "";
+  private temp:String = "";
 
   errors: Array<string> =[];
   dragAreaClass: string = 'dragarea';
@@ -51,7 +52,46 @@ export class FileImportComponent implements OnInit {
     this.groupAddMembersInfo = [];
   }
 
+
+
+  checkColumnIndexes(cells:String[]){
+
+      for(var i = 0; i < cells.length;i++){
+          if(cells[i].toLowerCase().startsWith("phone")){
+              this.temp = cells[i];
+              this.phoneColumn = cells.indexOf(this.temp);
+              this.temp = "";
+          }
+
+          if(cells[i].toLowerCase().startsWith("email")){
+              this.temp = cells[i];
+              this.emailColumn = cells.indexOf(this.temp);
+              this.temp = "";
+          }
+
+          if(cells[i].toLowerCase().startsWith("province")){
+              this.temp = cells[i];
+              this.provinceColumn = cells.indexOf(this.temp);
+              this.temp = "";
+          }
+
+          if(cells[i].toLowerCase().startsWith("role")){
+              this.temp = cells[i];
+              this.roleColumn = 0;
+              this.temp = "";
+          }
+
+          if(cells[i].toLowerCase().startsWith("name") || cells[i].toLowerCase().startsWith("firstname")){
+              this.temp = cells[i];
+              this.nameColumn = cells.indexOf(this.temp);
+              this.temp = "";
+          }
+      }
+  }
+
   saveColumnOrder(){
+    this.checkColumnIndexes(this.groupMembersImportExcelSheetAnalysis.firstRowCells);
+
     const params = {
       tempPath: this.groupMembersImportExcelSheetAnalysis.tmpFilePath,
       nameColumn: this.nameColumn,
@@ -61,11 +101,12 @@ export class FileImportComponent implements OnInit {
       roleColumn: this.roleColumn,
       header: this.sheetHasHeader
     };
-
+    
     this.groupService.importAnalyzeMembers(params).subscribe(resp => {
       this.groupAddMembersInfo = resp;
     })
   }
+
 
   backToExcelAnalysis(){
     this.groupAddMembersInfo = [];
