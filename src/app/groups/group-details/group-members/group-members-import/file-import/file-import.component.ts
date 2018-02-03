@@ -4,6 +4,7 @@ import {GroupService} from '../../../../group.service';
 import {GroupMembersImportExcelSheetAnalysis} from '../../../../model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from '../../../../model/group-add-member-info.model';
 import {GroupModifiedResponse} from '../../../../model/group-modified-response.model';
+import {DEFAULT_COL_ORDER, FileImportColumns} from "./file-import-columns";
 
 declare var $: any;
 
@@ -15,7 +16,6 @@ declare var $: any;
 export class FileImportComponent implements OnInit {
 
   private groupUid: string = "";
-  private temp:String = "";
 
   errors: Array<string> =[];
   dragAreaClass: string = 'dragarea';
@@ -25,13 +25,19 @@ export class FileImportComponent implements OnInit {
   @Output() uploadStatus = new EventEmitter();
 
   sheetHasHeader = true;
+
+  columnCount = 0;
   nameColumn = 0;
   phoneColumn = 0;
   emailColumn = -1;
   provinceColumn = -1;
   roleColumn = -1;
 
-  groupMembersImportExcelSheetAnalysis: GroupMembersImportExcelSheetAnalysis = null;
+  stdColumns = Object.keys(DEFAULT_COL_ORDER);
+  columnOrder: FileImportColumns = new FileImportColumns();
+  columnClass = "col-2";
+
+  sheetAnalysis: GroupMembersImportExcelSheetAnalysis = null;
   groupAddMembersInfo: GroupAddMemberInfo[] = [];
   groupModifiedResponse: GroupModifiedResponse = null;
 
@@ -48,72 +54,54 @@ export class FileImportComponent implements OnInit {
   }
 
   changeFile() {
-    this.groupMembersImportExcelSheetAnalysis = null;
+    this.sheetAnalysis = null;
     this.groupAddMembersInfo = [];
   }
 
-
-
   checkColumnIndexes(cells:String[]){
+    this.sheetHasHeader = false;
+    this.columnCount = cells.length;
 
-      for(var i = 0; i < cells.length;i++){
-          if(cells[i].toLowerCase().startsWith("phone")){
-              this.temp = cells[i];
-              this.phoneColumn = cells.indexOf(this.temp);
-              this.temp = "";
-          }
+    console.log("prior to checking: ", this.columnOrder);
 
-          if(cells[i].toLowerCase().startsWith("email")){
-              this.temp = cells[i];
-              this.emailColumn = cells.indexOf(this.temp);
-              this.temp = "";
-          }
+    Object.keys(this.columnOrder).forEach(key => {
+      this.columnOrder[key] = cells.findIndex(cell => cell.toLowerCase().startsWith(key.toLowerCase()));
+    });
 
-          if(cells[i].toLowerCase().startsWith("province")){
-              this.temp = cells[i];
-              this.provinceColumn = cells.indexOf(this.temp);
-              this.temp = "";
-          }
+    if (this.columnOrder['phone'] == -1) {
+      this.columnOrder['phone'] = cells.findIndex(cell => cell.toLowerCase().startsWith("cell") ||
+        cell.toLowerCase().startsWith("mobile"));
+    }
 
-          if(cells[i].toLowerCase().startsWith("role")){
-              this.temp = cells[i];
-              this.roleColumn = 0;
-              this.temp = "";
-          }
+    if (this.columnOrder['email'] == -1) {
+      this.columnOrder['email'] = cells.findIndex(cell => cell.toLowerCase().startsWith("e-mail"));
+    }
 
-          if(cells[i].toLowerCase().startsWith("name") || cells[i].toLowerCase().startsWith("firstname")){
-              this.temp = cells[i];
-              this.nameColumn = cells.indexOf(this.temp);
-              this.temp = "";
-          }
-      }
+    console.log("column orders: ", this.columnOrder);
   }
 
-  saveColumnOrder(){
-    this.checkColumnIndexes(this.groupMembersImportExcelSheetAnalysis.firstRowCells);
+  guessColumnOrderAndFetchRows() {
+    this.checkColumnIndexes(this.sheetAnalysis.firstRowCells);
+    this.columnClass = this.sheetAnalysis.firstRowCells.length > 5 ? "col-1" : "col-2";
 
     const params = {
-      tempPath: this.groupMembersImportExcelSheetAnalysis.tmpFilePath,
-      nameColumn: this.nameColumn,
-      phoneColumn: this.phoneColumn,
-      emailColumn: this.emailColumn,
-      provinceColumn: this.provinceColumn,
-      roleColumn: this.roleColumn,
+      tempPath: this.sheetAnalysis.tmpFilePath,
       header: this.sheetHasHeader
     };
-    
-    this.groupService.importAnalyzeMembers(params).subscribe(resp => {
-      this.groupAddMembersInfo = resp;
-    })
-  }
 
+    console.log("params: {}", params);
+
+    // this.groupService.importAnalyzeMembers(params).subscribe(resp => {
+    //   this.groupAddMembersInfo = resp;
+    // })
+  }
 
   backToExcelAnalysis(){
     this.groupAddMembersInfo = [];
   }
 
   cancelImport(){
-    this.groupMembersImportExcelSheetAnalysis = null;
+    this.sheetAnalysis = null;
     this.groupAddMembersInfo = [];
     this.sheetHasHeader = true;
     this.nameColumn = 0;
@@ -138,6 +126,7 @@ export class FileImportComponent implements OnInit {
   onFileChange(event){
     let files = event.target.files;
     this.saveFiles(files);
+    event.preventDefault();
   }
 
   @HostListener('dragover', ['$event']) onDragOver(event) {
@@ -186,7 +175,9 @@ export class FileImportComponent implements OnInit {
 
       this.groupService.importHeaderAnalyze(formData, params).
         subscribe(response => {
-          this.groupMembersImportExcelSheetAnalysis = response;
+          console.log("file analysis response: ", response);
+          this.sheetAnalysis = response;
+          this.guessColumnOrderAndFetchRows();
       },
         error => {
           console.log("error file upload")

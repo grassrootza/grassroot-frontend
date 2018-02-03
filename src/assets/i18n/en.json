@@ -429,11 +429,15 @@
         "role": "Column with roles (optional)",
         "none": "None",
         "memberTable":{
+          "unknown": "(Ignore)",
           "name": "Name",
           "phone": "Phone",
           "email": "Email",
           "province": "Province",
-          "role": "Role"
+          "role": "Role",
+          "affiliation": "Affiliation",
+          "firstName": "First name",
+          "surname": "Surname"
         },
         "responseModal": {
           "title": "Members added to group",

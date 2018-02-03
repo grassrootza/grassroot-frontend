@@ -1,4 +1,4 @@
-<div *ngIf="!groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0">
+<div *ngIf="!sheetAnalysis && groupAddMembersInfo.length == 0">
   <div draggable="true" ngClass="{{dragAreaClass}}">
     <div class="row">
       <div class="col-md-12 text-center" >
@@ -23,76 +23,7 @@
   </ul>
 </div>
 
-<!-- <div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-8 mx-auto">
-  <div class="row">
-    <button type="button" class="btn btn-success" [translate]="'group.import.file.changeFile'" (click)="changeFile()">Change file to upload</button>
-  </div>
-  <div class="row">
-    <div class="form-check form-check-inline">
-      <label class="form-check-label">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="has-header-row"
-        [value]="true" [(ngModel)]="sheetHasHeader" [translate]="'group.import.file.hasHeader'"> Sheet has header row
-      </label>
-    </div>
-    <div class="form-check form-check-inline">
-      <label class="form-check-label">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="no-header-row"
-        [value]="false" [(ngModel)]="sheetHasHeader" [translate]="'group.import.file.noHeader'"> No header row
-      </label>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="names-select" [translate]="'group.import.file.memberNames'">Names select</label>
-    <select class="form-control" id="names-select" [(ngModel)]="nameColumn" name="name-select">
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="phone-select" [translate]="'group.import.file.phoneNumbers'">Phone numbers select</label>
-    <select class="form-control" id="phone-select" [(ngModel)]="phoneColumn" name="phone-select">
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="email-select" [translate]="'group.import.file.email'">Email select</label>
-    <select class="form-control" id="email-select" name="email-select" [(ngModel)]="emailColumn">
-      <option [value]="-1" [translate]="'group.import.file.none'" >None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="province-select" [translate]="'group.import.file.province'">Province select</label>
-    <select class="form-control" id="province-select" [(ngModel)]="provinceColumn" name="province-select">
-      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="role-select" [translate]="'group.import.file.role'">Role select</label>
-    <select class="form-control" id="role-select" [(ngModel)]="roleColumn" name="role-select">
-      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="row">
-    <button type="button" class="btn btn-success" [translate]="'action.save'" (click)="saveColumnOrder()">Change file to upload</button>
-  </div>
-</div> -->
-
-  <div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-12 mx-auto">
-      <div>
-        {{saveColumnOrder()}}
-      </div>
-  </div>
-
-
-<div *ngIf="groupAddMembersInfo.length > 0">
+<div *ngIf="(sheetAnalysis)">
   <div class="row btn-actions">
     <div class="col-3 mx-auto">
       <button type="button" class="btn btn-secondary" [translate]="'action.back'" (click)="backToExcelAnalysis()">Back</button>
@@ -105,70 +36,14 @@
     <div class="row">
       <div>Line</div>
 
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
-          <select class="form-control">
-              <option>None</option>
-              <option>Name</option>
-              <option>Surname</option>
-              <option>Cellphone</option>
-              <option>Email</option>
-              <option>Province</option>
-              <option>Organisation/Affiliation</option>
-              <option>Role</option>
-          </select>
+      <div [ngClass]="columnClass" *ngFor="let column of sheetAnalysis.firstRowCells; let i = index">
+        <select class="form-control">
+          <option *ngFor="let col of stdColumns" [value]="col" [selected]="columnOrder[col] == i">
+            {{ 'group.import.file.memberTable.' + col | translate }}
+          </option>
+        </select>
       </div>
 
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
-          <select class="form-control">
-              <option>None</option>
-              <option>Name</option>
-              <option>Surname</option>
-              <option selected="true">Cellphone</option>
-              <option>Email</option>
-              <option>Province</option>
-              <option>Organisation/Affiliation</option>
-              <option>Role</option>
-          </select>
-      </div>
-
-      <div *ngIf="emailColumn != -1" class="col-2">
-          <select class="form-control">
-              <option>None</option>
-              <option>Name</option>
-              <option>Surname</option>
-              <option>Cellphone</option>
-              <option selected="true">Email</option>
-              <option>Province</option>
-              <option>Organisation/Affiliation</option>
-              <option>Role</option>
-          </select>
-      </div>
-
-      <div *ngIf="provinceColumn != -1" class="col-2">
-          <select class="form-control">
-              <option>None</option>
-              <option>Name</option>
-              <option>Surname</option>
-              <option>Cellphone</option>
-              <option>Email</option>
-              <option selected="true">Province</option>
-              <option>Organisation/Affiliation</option>
-              <option>Role</option>
-          </select>
-      </div>
-      
-      <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-2':'col-2'">
-          <select class="form-control">
-              <option>None</option>
-              <option>Name</option>
-              <option>Surname</option>
-              <option>Cellphone</option>
-              <option>Email</option>
-              <option>Province</option>
-              <option>Organisation/Affiliation</option>
-              <option selected="true">Role</option>
-          </select>
-      </div>
     </div>
   </div>
   <div *ngFor="let member of groupAddMembersInfo | slice:0:7;let i = index">

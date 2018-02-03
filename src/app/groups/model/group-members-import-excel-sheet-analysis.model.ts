@@ -6,7 +6,7 @@ import {GroupRef} from "./group-ref.model";
 export class GroupMembersImportExcelSheetAnalysis {
 
 
-  constructor(public tmpFilePath: String,
-              public firstRowCells: String[]) {
+  constructor(public tmpFilePath: String = "",
+              public firstRowCells: String[] = []) {
   }
 }
