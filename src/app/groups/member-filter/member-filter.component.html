@@ -25,7 +25,7 @@
   </div>
   <div class=" col-sm-9 col-lg-10 filter-item">
     <select id="taskTeams" class="form-control task-teams-multi-select" multiple="multiple" style="width: 100%">
-      <option *ngFor="let tt of taskTeams" [value]="tt.id">{{tt.name}}</option>
+      <option *ngFor="let tt of taskTeams" [value]="tt.groupUid">{{tt.name}}</option>
     </select>
   </div>
 
