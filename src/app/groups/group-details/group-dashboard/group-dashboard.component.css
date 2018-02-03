@@ -55,6 +55,10 @@ h5 img {
   vertical-align: middle;
 }
 
+.event-new {
+  cursor: pointer;
+}
+
 .card-footer {
   background-color: white;
 }

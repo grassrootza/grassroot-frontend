@@ -22,8 +22,7 @@ export class LoginComponent {
     this.message = '';
     this.loginForm = new FormGroup({
         username: new FormControl('',[Validators.required, Validators.minLength(3), eitherEmailOrPhoneValid]),
-        password:new FormControl('',Validators.required)
-    }, { updateOn: 'blur' });
+        password:new FormControl('',Validators.required)});
     this.showForceLogoutReason = this.userService.showForceLogoutReason;
   }
 

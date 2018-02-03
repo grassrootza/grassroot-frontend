@@ -314,10 +314,23 @@
         "province": "Province",
         "taskTeam": "Task team",
         "topics": "Topics",
-        "joinMethods": "Joined source",
-        "campaigns": "Joined via campaign",
-        "petitions": "Joined via petition",
-        "update": "Update"
+        "affiliations": "Affiliations",
+        "joinMethods": "Join source",
+        "campaigns": "Join via campaign",
+        "petitions": "Join via petition",
+        "joinDate": "Joined",
+        "joinDateAny": "Any time",
+        "nameOrPhone": "Name",
+        "nameOrPhonePlaceHolder": "Filter by name, phone number or email",
+        "update": "Update",
+        "DATE-EXACT": "on",
+        "DATE-BEFORE": "before",
+        "DATE-AFTER": "after",
+        "DAYS_AGO-EXACT": "exactly",
+        "DAYS_AGO-BEFORE": "more then",
+        "DAYS_AGO-AFTER": "less then",
+        "DAYS_AGO_SUFIX": "days ago"
+
       },
       "manage":{
         "manage": "Manage",
@@ -373,7 +386,28 @@
       "phone": "Phone: ",
       "email": "Email: ",
       "province": "Province: ",
-      "taggedWithTopics": "Tagged with topics: "
+      "taggedWithTopics": "Tagged with topics: ",
+      "logs": {
+        "GROUP_MEMBER_ADDED": "Added a group member",
+        "GROUP_MEMBER_REMOVED": "Removed a group member",
+        "GROUP_MEMBER_ADDED_AT_CREATION": "Added a group member while creating group",
+        "GROUP_MEMBER_ROLE_CHANGED": "Changed a member's role",
+        "GROUP_MEMBER_ADDED_VIA_JOIN_CODE": "Joined group via join code",
+        "MEETING_RSVP": "Responded to meeting",
+        "VOTE_VOTE_OPTION_RESPONSE": "Voted",
+        "IMAGE_RECORDED": "Posted an image",
+        "IMAGE_REMOVED": "Removed an image",
+        "MEETING_CANCELLED": "Cancelled meeting",
+        "VOTE_CANCELLED": "Cancelled a vote",
+        "TODO_CANCELLED": "Cancelled a todo",
+        "MEETING_CREATED": "Called a meeting",
+        "VOTE_CREATED": "Called a vote",
+        "TODO_CREATED": "Recorded an action todo",
+        "MADE_PRIVATE": "Made a meeting private",
+        "MADE_PUBLIC": "Switched a meeting to public",
+        "RESPONDED": "Responded to a todo",
+        "EXTENDED": "Extended to a todo"
+      }
     },
     "import": {
       "nav": {

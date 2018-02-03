@@ -182,3 +182,7 @@ h6 {
   border: 1px solid #2CBC4C;
   background: white;
 }
+
+.dropdown-toggle {
+  cursor: pointer;
+}

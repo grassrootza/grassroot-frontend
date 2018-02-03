@@ -6,6 +6,7 @@ export class GroupMemberActivity {
   constructor(public groupUid: string,
               public memberUid: string,
               public actionLogType: string,
+              public taskType: string,
               public logSubType: string,
               public nameOfRelatedEntity: string,
               public auxField: string,
@@ -25,14 +26,19 @@ export class GroupMemberActivity {
       return "assets/add-user.png";
     else if(this.logSubType === "GROUP_MEMBER_REMOVED")
       return "assets/remove-user.png";
+    else if(this.logSubType && this.logSubType.startsWith("MEETING"))
+      return "assets/icon_meeting.png";
+    else if(this.logSubType && this.logSubType.startsWith("VOTE"))
+      return "assets/icon_vote.png";
+    else if(this.actionLogType === "TODO_LOG")
+      return "assets/icon_todo.png";
   }
 
   getActionDescription(): string{
-    if(this.logSubType === "GROUP_MEMBER_ADDED")
-      return "Group member added";
-    else if(this.logSubType === "GROUP_MEMBER_REMOVED")
-      return "Group member removed";
-    else if(this.logSubType === "GROUP_MEMBER_ADDED_AT_CREATION")
-      return "Group member added at creation";
+    if (this.logSubType === "CREATED" || this.logSubType === "CANCELLED") {
+      return this.logSubType + "." + this.taskType;
+    } else {
+      return this.logSubType;
+    }
   }
 }

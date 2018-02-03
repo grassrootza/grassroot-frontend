@@ -96,20 +96,19 @@
 
       <div class="col-md-1">
         <div class="float-right">
-          <div class="dropdown">
+          <div class="dropdown" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
             <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" [disabled]=""
                     aria-haspopup="true" aria-expanded="false" [translate]="'group.allMembers.manage.manage'">
               Manage
             </button>
             <div class="dropdown-menu">
               <a class="dropdown-item" routerLink="../{{member.user.uid}}" [translate]="'group.allMembers.manage.view'">View</a>
-              <a class="dropdown-item disabled" (click)="showEditModal(member)"
-                 [translate]="'group.allMembers.manage.edit'">Edit</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.topics'"
+              <a class="dropdown-item" (click)="showEditModal(member)" [translate]="'group.allMembers.manage.edit'">Edit</a>
+              <a class="dropdown-item" [translate]="'group.allMembers.manage.topics'"
                   (click)="showAssignTopicToMemberModal(member)">Assign topic</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.taskTeam'"
+              <a class="dropdown-item" [translate]="'group.allMembers.manage.taskTeam'"
                  (click)="showAddMemberToTaskTeamModal(member)">Add to task team</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showMemberRemoveModal(member)">Remove</a>
+              <a class="dropdown-item" [translate]="'group.allMembers.manage.remove'" (click)="showMemberRemoveModal(member)">Remove</a>
             </div>
           </div>
         </div>
@@ -120,7 +119,7 @@
 
 
 <!--modals-->
-<div class="modal fade" tabindex="-1" role="dialog" id="add-member-to-task-team" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="add-member-to-task-team" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -180,7 +179,7 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="no-task-teams-for-group" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="no-task-teams-for-group" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -202,7 +201,7 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="member-assign-topics" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="member-assign-topics" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -226,7 +225,7 @@
               {{singleMemberManage.user.displayName}}
             </div>
             <div class="col-3">
-              {{singleMemberManage.roleName}}
+              {{'enums.groupRole.' + singleMemberManage.roleName | translate }}
             </div>
             <div class="col-3">
               {{singleMemberManage.user.phoneNumber}}
@@ -280,7 +279,7 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="confirm-user-removal-modal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="confirm-user-removal-modal" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -332,7 +331,7 @@
   </div>
 </div>
 
-<div id="member-edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+<div id="member-edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -388,8 +387,8 @@
               </select>
             </div>
             <div class="col-md-6 col-sm-12">
-              <label for="affiliation" class="grassroot-label-em">{{ 'group.allMembers.addMember.affiliation' | translate }}</label>
-              <input type="text" class="form-control form-control-em" id="affiliation" name="affiliation" [formControl]="editMemberForm.controls['affiliations']" (change)="withinGroupDetailsChangedTrigger()">
+              <label for="affiliations" class="grassroot-label-em">{{ 'group.allMembers.addMember.affiliation' | translate }}</label>
+              <input type="text" class="form-control form-control-em" id="affiliations" name="affiliations" [formControl]="editMemberForm.controls['affiliations']" (change)="withinGroupDetailsChangedTrigger()">
             </div>
           </div>
 
@@ -397,7 +396,7 @@
             <div class="col-md-6 col-sm-12" *ngIf="group.subGroups.length > 0">
               <label for="task-teams" class="grassroot-label-em">{{ 'group.allMembers.addMember.taskTeam' | translate }}</label>
               <select id="task-teams" [formControl]="editMemberForm.controls['taskTeams']" class="form-control" multiple (change)="withinGroupDetailsChangedTrigger()">
-                <option *ngFor="let g of group.subGroups" [value]="g.groupUid">{{ g.name }}</option>
+                <option *ngFor="let g of group.subGroups" [value]="g.groupUid" [selected]="g.hasMember(singleMemberManage?.user?.uid)">{{ g.name }}</option>
               </select>
             </div>
             <div class="col-md-6 col-sm-12" *ngIf="group.topics.length > 0">

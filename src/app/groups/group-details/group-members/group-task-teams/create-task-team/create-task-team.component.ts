@@ -70,7 +70,7 @@ export class CreateTaskTeamComponent implements OnInit {
 
     console.log("Members filter change, loading members...");
 
-    this.groupService.filterGroupMembers(this.group.groupUid, filter.provinces, filter.taskTeams, filter.topics, filter.joinSources, filter.campaigns)
+    this.groupService.filterGroupMembers(this.group.groupUid, filter)
       .subscribe(
         members => {
           console.log("Fetched filtered members: ", members);

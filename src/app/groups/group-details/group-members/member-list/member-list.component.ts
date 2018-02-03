@@ -40,6 +40,7 @@ export class MemberListComponent implements OnInit {
   showEmailFilter: number = 0;
 
   singleMemberManage: Membership = null;
+  currentTaskTeams: string[] = null;
   selectedTaskTeam: GroupRef = null;
   selectedTopics: string[] = [];
 
@@ -147,6 +148,7 @@ export class MemberListComponent implements OnInit {
     }
 
     this.singleMemberManage = member;
+    this.currentTaskTeams = this.group.subGroups.filter(g => g.hasMember(member.user.uid)).map(g => g.groupUid);
   }
 
   selectTaskTeam(taskTeam: GroupRef){
@@ -241,11 +243,6 @@ export class MemberListComponent implements OnInit {
 
 
   saveEditMember() {
-    if(this.editMemberForm.controls['affiliations'].value != null){
-      let affiliations = this.editMemberForm.controls['affiliations'].value.split(",");
-      this.editMemberForm.controls['affiliations'].setValue(affiliations);
-    }
-
     console.log("have core details changed?: ", this.coreDetailsChanged);
 
     let memberUid = this.singleMemberManage.user.uid.toString();
@@ -254,38 +251,79 @@ export class MemberListComponent implements OnInit {
     let phone = this.editMemberForm.controls['memberMsisdn'].value;
     let province = this.editMemberForm.controls['province'].value;
 
+    let shouldReload = false;
+
+    if(!this.coreDetailsChanged && !this.roleChanged && !this.withinGroupAttrsChanged){
+      console.log("Nothing changed in form not submiting it");
+      this.clearEditModal();
+      return;
+    }
+
     if (this.roleChanged) {
       this.groupService.updateGroupMemberRole(this.group.groupUid, memberUid,
         this.editMemberForm.controls['roleName'].value).subscribe(resp => {
-
-        this.roleChanged = false;
-
-        if(this.coreDetailsChanged){
-
-          this.groupService.updateGroupMemberDetails(this.group.groupUid, memberUid, name, email, phone, province)
-            .subscribe(resp => {
-              console.log(resp);
-              this.coreDetailsChanged = false;
-            })
-        }
-        this.shouldReloadList.emit(true);
-        $('#member-edit-modal').modal('hide');
-        this.singleMemberManage = null;
+        shouldReload = true;
       })
-    } else if(this.coreDetailsChanged && !this.roleChanged){
+    }
+
+    if (this.coreDetailsChanged) {
       this.groupService.updateGroupMemberDetails(this.group.groupUid, memberUid, name, email, phone, province)
         .subscribe(resp => {
           console.log(resp);
-          this.coreDetailsChanged = false;
-          $('#member-edit-modal').modal('hide');
-          this.singleMemberManage = null;
-          this.shouldReloadList.emit(true);
+          shouldReload = true;
         })
-    } else if(!this.coreDetailsChanged && !this.roleChanged){
-      console.log("Nothing changed in form not submiting it");
-      $('#member-edit-modal').modal('hide');
-      this.singleMemberManage = null;
     }
+
+    console.log("multi select options: ", this.editMemberForm.controls['taskTeams']);
+    console.log("stashed task teams: ", this.currentTaskTeams);
+    if (this.withinGroupAttrsChanged) {
+      let taskTeams = this.editMemberForm.controls['taskTeams'].pristine ?
+        this.currentTaskTeams : this.editMemberForm.controls['taskTeams'].value;
+      console.log("task team values to submit: ", taskTeams);
+      console.log("and affiliations: ", this.splitAffiliations());
+
+      let topics = this.editMemberForm.controls['topics'].pristine ?
+        this.singleMemberManage.topics : this.editMemberForm.controls['topics'].value;
+      console.log("topics: ", topics);
+
+      this.groupService.updateGroupMemberAssignments(this.group.groupUid, memberUid, taskTeams, this.splitAffiliations(), topics)
+        .subscribe(resp => {
+          shouldReload = true;
+          this.clearEditModal();
+        });
+    }
+
+    if (shouldReload) {
+      this.shouldReloadList.emit(true);
+      this.clearEditModal();
+    }
+
+    return false;
+  }
+
+  private clearEditModal() {
+    $('#member-edit-modal').modal('hide');
+    this.singleMemberManage = null;
+    this.roleChanged = false;
+    this.coreDetailsChanged = false;
+    this.withinGroupAttrsChanged = false;
+    this.currentTaskTeams = [];
+    Object.keys(this.editMemberForm.controls).forEach(field => {
+      this.editMemberForm.controls[field].markAsPristine({onlySelf: true});
+      this.editMemberForm.controls[field].markAsUntouched({onlySelf: false});
+    });
+  }
+
+  private splitAffiliations(): string[] {
+    if (this.editMemberForm.controls['affiliations'].pristine) {
+      return this.singleMemberManage.affiliations;
+    }
+
+    if (this.editMemberForm.controls['affiliations'].value) {
+      return this.editMemberForm.controls['affiliations'].value.split(", ").map(s => s.trim());
+    }
+
+    return [];
   }
 
 }

@@ -12,11 +12,12 @@ import {Membership, MembersPage} from './model/membership.model';
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
-import {GroupRef} from './model/group-ref.model';
+import {getGroupMembersList, GroupRef} from './model/group-ref.model';
 import {JoinCodeInfo} from './model/join-code-info';
 import {GroupPermissionsByRole} from './model/permission.model';
 import {GroupRelatedUserResponse} from './model/group-related-user.model';
 import {GroupMemberActivity} from './model/group-member-activity';
+import {MembersFilter} from "./member-filter/filter.model";
 
 @Injectable()
 export class GroupService {
@@ -42,6 +43,8 @@ export class GroupService {
   groupFetchMemberActivityUrl = environment.backendAppUrl + '/api/group/fetch/members/activity';
   groupMemberChangeRoleUrl = environment.backendAppUrl + '/api/group/modify/members/modify/role';
   groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
+  groupMemberChangeAssignmentsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/assignments';
+
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
   groupUploadImageUrl = environment.backendAppUrl + "/api/group/modify/image/upload";
@@ -141,8 +144,9 @@ export class GroupService {
             gr.paidFor,
             gr.userPermissions,
             gr.userRole,
-            gr.subGroups,
+            getGroupMembersList(gr.subGroups),
             gr.topics,
+            gr.affiliations,
             gr.joinWords,
             gr.joinWordsLeft,
             gr.reminderMinutes,
@@ -476,6 +480,7 @@ export class GroupService {
           a.groupUid,
           a.memberUid,
           a.actionLogType,
+          a.taskType,
           a.logSubType,
           a.nameOfRelatedEntity,
           a.auxField,
@@ -514,36 +519,60 @@ export class GroupService {
       })
   }
 
+  updateGroupMemberAssignments(groupUid: string, memberUid: string, taskTeams: string[], affiliations: string[], topics: string[]) {
+    const fullUrl = this.groupMemberChangeAssignmentsUrl + '/' + groupUid;
+    let params = new HttpParams()
+      .set("memberUid", memberUid)
+      .set('taskTeams', taskTeams.toString())
+      .set("affiliations", affiliations.toString())
+      .set("topics", topics.toString());
+
+    return this.httpClient.post(fullUrl, null, {params: params});
+
+  }
+
   filterGroupMembers(groupUid: string,
-                     provinces: string[],
-                     taskTeams: string[],
-                     topics: string[],
-                     joinMethods: string[],
-                     joinedCampaignsUids: string[]): Observable<Membership[]> {
+                     filter: MembersFilter): Observable<Membership[]> {
 
     let params = new HttpParams()
       .set("groupUid", groupUid);
 
-    if(provinces != null){
-      params = params.set("provinces", provinces.join(","));
+    if (filter.provinces != null) {
+      params = params.set("provinces", filter.provinces.join(","));
     }
 
-    if(taskTeams != null){
-      params = params.set("taskTeams", taskTeams.join(","));
+    if (filter.taskTeams != null) {
+      params = params.set("taskTeams", filter.taskTeams.join(","));
     }
 
-    if(topics != null){
-      params = params.set("topics", topics.join(","));
+    if (filter.topics != null) {
+      params = params.set("topics", filter.topics.join(","));
     }
 
-    if (joinMethods != null) {
-      params = params.set("joinMethods", joinMethods.join(","));
+    if (filter.affiliations != null) {
+      params = params.set("affiliations", filter.affiliations.join(","));
     }
 
-    if (joinedCampaignsUids != null) {
-      params = params.set("joinedCampaignsUids", joinedCampaignsUids.join(","));
+    if (filter.joinSources != null) {
+      params = params.set("joinMethods", filter.joinSources.join(","));
     }
 
+    if (filter.campaigns != null) {
+      params = params.set("joinedCampaignsUids", filter.campaigns.join(","));
+    }
+
+    if (filter.joinDate != null) {
+      params = params.set("joinDate", filter.joinDate.format("YYYY-MM-DD"));
+      params = params.set("joinDaysAgoCondition", filter.joinDateCondition)
+    }
+    else if (filter.joinDaysAgo != null) {
+      params = params.set("joinDaysAgo", filter.joinDaysAgo.toString());
+      params = params.set("joinDaysAgoCondition", filter.joinDateCondition)
+    }
+
+    if (filter.namePhoneOrEmail != null && filter.namePhoneOrEmail.trim().length > 0) {
+      params = params.set("namePhoneOrEmail", filter.namePhoneOrEmail);
+    }
 
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
       .map(resp => resp.map(m => Membership.createInstance(m)))

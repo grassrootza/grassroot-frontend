@@ -48,6 +48,8 @@ export class GroupCustomFilterComponent implements OnInit {
                 }
               );
 
+            this.membersFilterChanged(new MembersFilter()); //load all members (empty filter)
+
           },
           error => {
             console.log("Error loading groups", error.status)
@@ -58,9 +60,9 @@ export class GroupCustomFilterComponent implements OnInit {
 
   membersFilterChanged(filter: MembersFilter) {
 
-    console.log("Members filter change, loading members...");
+    console.log("Members filter change, loading members... filter: ", filter);
 
-    this.groupService.filterGroupMembers(this.group.groupUid, filter.provinces, filter.taskTeams, filter.topics, filter.joinSources, filter.campaigns)
+    this.groupService.filterGroupMembers(this.group.groupUid, filter)
       .subscribe(
         members => {
           console.log("Fetched filtered members: ", members);

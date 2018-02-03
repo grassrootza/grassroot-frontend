@@ -6,7 +6,7 @@
       </div>
       <div class="col-3">
         <div class="float-right">
-          <div class="dropdown">
+          <div class="dropdown" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
             <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" [disabled]="bulkManageCheckNumberOfSelectedMembers() < 2"
                     aria-haspopup="true" aria-expanded="false" [translate]="'group.allMembers.bulkManage.bulkManage'">
 
@@ -24,7 +24,6 @@
       </div>
     </div>
 
-
     <app-member-list [currentPage]="currentPage" [group]="group"  (memberRemoved)="memberRemoved()"
                      (shouldReloadList)="goToPage(0, [])" (sortUserList)="goToPage(0, $event)"></app-member-list>
 
@@ -36,7 +35,7 @@
 </div>
 
 <!--modals-->
-<div class="modal fade" tabindex="-1" role="dialog" id="bulk-remove-members-modal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="bulk-remove-members-modal" aria-hidden="true" *ngIf="(group)">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
