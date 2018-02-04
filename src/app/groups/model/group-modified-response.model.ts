@@ -1,6 +1,7 @@
 export class GroupModifiedResponse {
 
-  constructor(public membersAdded: number,
+  constructor(public groupName: string,
+              public membersAdded: number,
               public invalidNumbers: String[]) {
   }
 }

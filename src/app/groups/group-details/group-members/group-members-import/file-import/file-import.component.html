@@ -1,4 +1,17 @@
-<div *ngIf="!groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0">
+<div *ngIf="uploadComplete">
+  <div class="row">
+    <div class="col-12">
+      <div class="success-import">
+        <p class="header text-center" [translate]="'group.import.file.importComplete.title'"
+          [translateParams]="{value: groupModifiedResponse?.membersAdded}"></p>
+        <p class="text-center">{{ 'group.import.file.importComplete.subtitle' | translate:groupModifiedResponse }}</p>
+        <p class="text-center"><a href="" (click)="exit()">Back to group</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="(!sheetAnalysis && groupAddMembersInfo.length == 0) || uploadComplete">
   <div draggable="true" ngClass="{{dragAreaClass}}">
     <div class="row">
       <div class="col-md-12 text-center" >
@@ -23,180 +36,230 @@
   </ul>
 </div>
 
-<div *ngIf="groupMembersImportExcelSheetAnalysis && groupAddMembersInfo.length == 0" class="col-8 mx-auto">
+<div *ngIf="sheetAnalysis && groupAddMembersInfo.length == 0 && !uploadComplete" class="col-8 mx-auto">
   <div class="row">
-    <button type="button" class="btn btn-success" [translate]="'group.import.file.changeFile'" (click)="changeFile()">Change file to upload</button>
-  </div>
-  <div class="row">
-    <div class="form-check form-check-inline">
-      <label class="form-check-label">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="has-header-row"
-        [value]="true" [(ngModel)]="sheetHasHeader" [translate]="'group.import.file.hasHeader'"> Sheet has header row
-      </label>
-    </div>
-    <div class="form-check form-check-inline">
-      <label class="form-check-label">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="no-header-row"
-        [value]="false" [(ngModel)]="sheetHasHeader" [translate]="'group.import.file.noHeader'"> No header row
-      </label>
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <label for="names-select" [translate]="'group.import.file.memberNames'">Names select</label>
-    <select class="form-control" id="names-select" [(ngModel)]="nameColumn" name="name-select">
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="phone-select" [translate]="'group.import.file.phoneNumbers'">Phone numbers select</label>
-    <select class="form-control" id="phone-select" [(ngModel)]="phoneColumn" name="phone-select">
-      <option [value]="-1" [translate]="'group.import.file.none'" >None</option>
-      <option *ngFor="let row of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i"
-              [selected]="row.toLowerCase().startsWith('phone') || row.toLowerCase().startsWith('cell')">{{row}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="email-select" [translate]="'group.import.file.email'">Email select</label>
-    <select class="form-control" id="email-select" name="email-select" [(ngModel)]="emailColumn">
-      <option [value]="-1" [translate]="'group.import.file.none'" >None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">
-        {{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="province-select" [translate]="'group.import.file.province'">Province select</label>
-    <select class="form-control" id="province-select" [(ngModel)]="provinceColumn" name="province-select">
-      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="province-select" [translate]="'group.import.file.affiliations'">Affiliation select</label>
-    <select class="form-control" id="affiliation-select" [(ngModel)]="affilColumn" name="affiliation-select">
-      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index"
-              [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="province-select" [translate]="'group.import.file.firstname'">First name select</label>
-    <select class="form-control" id="firstname-select" [(ngModel)]="firstNameColumn" name="firstname-select">
-      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="province-select" [translate]="'group.import.file.surname'">Surname select</label>
-    <select class="form-control" id="surname-select" [(ngModel)]="surnameColumn" name="surname-select">
-      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="form-group row">
-    <label for="role-select" [translate]="'group.import.file.role'">Role select</label>
-    <select class="form-control" id="role-select" [(ngModel)]="roleColumn" name="role-select">
-      <option [value]="-1" [translate]="'group.import.file.none'">None</option>
-      <option *ngFor="let rows of groupMembersImportExcelSheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
-    </select>
-  </div>
-
-  <div class="row">
-    <button type="button" class="btn btn-success" [translate]="'action.save'" (click)="saveColumnOrder()">Change file to upload</button>
-  </div>
-</div>
-
-<div *ngIf="fileImportResult?.errorFilePath">
-  <button (click)="downloadErrors()">Download errors</button>
-</div>
-
-<div *ngIf="groupAddMembersInfo.length > 0">
-  <div class="row btn-actions">
-    <div class="col-3 mx-auto">
-      <button type="button" class="btn btn-secondary" [translate]="'action.back'" (click)="backToExcelAnalysis()">Back</button>
-      <button type="button" class="btn btn-secondary" [translate]="'action.cancel'" (click)="cancelImport()">Cancel</button>
-      <button type="button" class="btn btn-success" [translate]="'action.confirm'" (click)="confirmImport()">Confirm</button>
-    </div>
-  </div>
-
-  <div class="container group-info-header d-none d-md-block">
-    <div class="row">
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'"
-           [translate]="'group.import.file.memberTable.name'">Name</div>
-      <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'"
-           [translate]="'group.import.file.memberTable.phone'">phone</div>
-      <div *ngIf="emailColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.email'">email</div>
-      <div *ngIf="provinceColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.province'">Province</div>
-      <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'" [translate]="'group.import.file.memberTable.role'">Role</div>
-    </div>
-  </div>
-  <div *ngFor="let member of groupAddMembersInfo">
-    <div class="container group-info-row">
-      <div class="row flex flex-wrap">
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
-          <input type="text" class="form-control" [(ngModel)]="member.displayName">
-        </div>
-
-        <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
-          <input type="text" class="form-control" [(ngModel)]="member.phoneNumber">
-        </div>
-
-        <div *ngIf="emailColumn != -1" class="col-2">
-          <input type="text" class="form-control" [(ngModel)]="member.memberEmail">
-        </div>
-
-        <div *ngIf="provinceColumn != -1" class="col-2">
-          {{ 'enum.UserProvince.' + member.province | translate }}
-        </div>
-
-        <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
-          {{member.getFormattedRoleName()}}
-        </div>
-
+    <div class="col-md-9 col-sm-12">
+      <div class="form-check form-check-inline">
+        <label class="form-check-label grassroot-label-em">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="has-header-row"
+          [value]="true" [(ngModel)]="sheetHasHeader" [translate]="'group.import.file.hasHeader'"> Sheet has header row
+        </label>
       </div>
+      <div class="form-check form-check-inline">
+        <label class="form-check-label grassroot-label-em">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="no-header-row"
+          [value]="false" [(ngModel)]="sheetHasHeader" [translate]="'group.import.file.noHeader'"> No header row
+        </label>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-12">
+      <button type="button" class="btn btn-secondary float-right" [translate]="'group.import.file.changeFile'" (click)="changeFile()">Change file to upload</button>
+    </div>
+  </div>
+
+  <div class="form-group row mt-3">
+    <div class="col-md-6 col-12">
+      <label class="grassroot-label-em" for="names-select" [translate]="'group.import.file.memberNames'">Names select</label>
+    </div>
+    <div class="col-md-6 col-12">
+      <select class="form-control form-control-em" id="names-select" [(ngModel)]="nameColumn" name="name-select">
+        <option *ngFor="let rows of sheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+      </select>
+      </div>
+  </div>
+
+  <div class="form-group row mt-3">
+    <div class="col-md-6 col-12"><label class="grassroot-label-em" for="phone-select" [translate]="'group.import.file.phoneNumbers'">Phone numbers select</label></div>
+    <div class="col-md-6 col-12">
+      <select class="form-control form-control-em" id="phone-select" [(ngModel)]="phoneColumn" name="phone-select">
+        <option [value]="-1" [translate]="'group.import.file.none'" >None</option>
+        <option *ngFor="let row of sheetAnalysis.firstRowCells; let i = index" [ngValue]="i"
+                selected="{{ row.toLowerCase().startsWith('phone') || row.toLowerCase().startsWith('cell') ? true : null }}">{{row}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row mt-3">
+    <div class="col-md-6 col-12"><label class="grassroot-label-em" for="email-select" [translate]="'group.import.file.email'">Email select</label></div>
+    <div class="col-md-6 col-12">
+      <select class="form-control form-control-em" id="email-select" name="email-select" [(ngModel)]="emailColumn">
+        <option [value]="-1" [translate]="'group.import.file.none'" >(None)</option>
+        <option *ngFor="let rows of sheetAnalysis.firstRowCells; let i = index" [ngValue]="i"
+                selected="{{ rows.toLowerCase().startsWith('emai') ? true : null }}">
+          {{rows}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row mt-3">
+    <div class="col-md-6 col-12"><label class="grassroot-label-em" for="province-select" [translate]="'group.import.file.province'">Province select</label></div>
+    <div class="col-md-6 col-12">
+      <select class="form-control form-control-em" id="province-select" [(ngModel)]="provinceColumn" name="province-select">
+        <option [value]="-1" [translate]="'group.import.file.none'">None</option>
+        <option *ngFor="let rows of sheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row mt-3">
+    <div class="col-md-6 col-12"><label class="grassroot-label-em" for="province-select" [translate]="'group.import.file.affiliations'">Affiliation select</label></div>
+    <div class="col-md-6 col-12">
+      <select class="form-control form-control-em" id="affiliation-select" [(ngModel)]="affilColumn" name="affiliation-select">
+        <option [value]="-1" [translate]="'group.import.file.none'">None</option>
+        <option *ngFor="let rows of sheetAnalysis.firstRowCells; let i = index"
+                [ngValue]="i">{{rows}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row mt-3">
+    <div class="col-md-6 col-12"><label class="grassroot-label-em" for="province-select" [translate]="'group.import.file.firstname'">First name select</label></div>
+    <div class="col-md-6 col-12">
+      <select class="form-control form-control-em" id="firstname-select" [(ngModel)]="firstNameColumn" name="firstname-select">
+        <option [value]="-1" [translate]="'group.import.file.none'">None</option>
+        <option *ngFor="let rows of sheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row mt-3">
+    <div class="col-md-6 col-12"><label class="grassroot-label-em" for="province-select" [translate]="'group.import.file.surname'">Surname select</label></div>
+    <div class="col-md-6 col-12">
+      <select class="form-control form-control-em" id="surname-select" [(ngModel)]="surnameColumn" name="surname-select">
+        <option [value]="-1" [translate]="'group.import.file.none'">None</option>
+        <option *ngFor="let rows of sheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row mt-3">
+    <div class="col-md-6 col-12"><label class="grassroot-label-em" for="role-select" [translate]="'group.import.file.role'">Role select</label></div>
+    <div class="col-md-6 col-12">
+      <select class="form-control form-control-em" id="role-select" [(ngModel)]="roleColumn" name="role-select">
+        <option [value]="-1" [translate]="'group.import.file.none'">None</option>
+        <option *ngFor="let rows of sheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="col-sm-4">
+      <button type="button" (click)="cancelImport()" class="btn btn-secondary cancel-button">
+        {{ 'action.cancel' | translate }}</button>
+    </div>
+
+    <div class="col-sm-8">
+      <button type="submit" (click)="saveColumnOrder()" class="btn btn-primary save-button float-right">
+        {{ 'action.next' | translate }}
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="!!fileImportResult && !uploadComplete">
+  <div class="row">
+    <div class="col-12">
+      <h3 class="text-center">{{ (fileImportResult?.errorRows?.length > 0 ? 'group.import.file.confirm.headingHasErrors' : 'group.import.file.confirm.headingNoErrors') | translate }}</h3>
     </div>
   </div>
   <div class="row btn-actions">
-    <div class="col-3 mx-auto">
-      <button type="button" class="btn btn-secondary" [translate]="'action.back'" (click)="backToExcelAnalysis()">Back</button>
-      <button type="button" class="btn btn-secondary" [translate]="'action.cancel'" (click)="cancelImport()">Cancel</button>
-      <button type="button" class="btn btn-success" [translate]="'action.confirm'" (click)="confirmImport()">Confirm</button>
+    <div class="col-6">
+      <button type="button" class="btn btn-secondary cancel-button" [translate]="'action.back'" (click)="backToExcelAnalysis()">Back</button>
+      <button type="button" class="btn btn-secondary cancel-button" [translate]="'action.cancel'" (click)="cancelImport()">Cancel</button>
+    </div>
+    <div class="col-6 pull-right">
+      <button type="button" class="btn btn-primary float-right save-button" [translate]="'action.confirm'" (click)="confirmImport()">Confirm</button>
     </div>
   </div>
-</div>
 
-
-<!--modals-->
-<div class="modal fade" tabindex="-1" role="dialog" id="group-modified-response-modal" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" [translate]="'group.import.file.responseModal.title'">Members added to group</h5>
-        <button type="button" class="close" (click)="closeResponseModal()" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3 class="success-import" [translate]="'group.import.file.responseModal.success'" [translateParams]="{value: groupModifiedResponse?.membersAdded}"></h3>
-        <div *ngIf="groupModifiedResponse?.invalidNumbers.length > 0">
-          <h3 class="error-import" [translate]="'group.import.file.responseModal.error'" [translateParams]="{value: groupModifiedResponse?.invalidNumbers.length}"></h3>
-          <span *ngFor="let number of groupModifiedResponse.invalidNumbers">
-            {{number}} <br/>
-          </span>
+  <div class="row" >
+    <div class="col-sm-12 import-errors" *ngIf="fileImportResult?.errorRows?.length > 0">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-table-header" [translate]="'group.import.file.confirm.errorHeading'"
+              [translateParams]="{errorCount: (fileImportResult?.errorRows.length - 1)}" *ngIf="fileImportResult?.errorFilePath"></span>
+            <button class="btn-secondary float-right pull-right" (click)="downloadErrorFile()">
+              <i class="fas fa-download"></i> {{ 'group.import.file.confirm.downloadFile' | translate }}</button>
+        </div>
+        <div class="card-body">
+          <table class="table table-border table-hover">
+            <tr *ngFor="let row of fileImportResult?.errorRows">
+              <td *ngFor="let cell of row">{{ cell }}</td>
+            </tr>
+          </table>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="closeResponseModal()">
-          {{ 'action.ok' | translate }}
-        </button>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-sm-12 import-confirm">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-table-header" [translate]="'group.import.file.confirm.confirmHeading'"
+              [translateParams]="{value: fileImportResult?.processedMembers?.length}"></span>
+        </div>
+        <div class="card-body">
+          <div class="container group-info-header d-none d-md-block">
+            <div class="row">
+              <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'"
+                   [translate]="'group.import.file.memberTable.name'">Name</div>
+              <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'"
+                   [translate]="'group.import.file.memberTable.phone'">phone</div>
+              <div *ngIf="emailColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.email'">email</div>
+              <div *ngIf="provinceColumn != -1" class="col-2" [translate]="'group.import.file.memberTable.province'">Province</div>
+              <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'" [translate]="'group.import.file.memberTable.role'">Role</div>
+            </div>
+          </div>
+          <div *ngFor="let member of groupAddMembersInfo">
+            <div class="container group-info-row">
+              <div class="row flex flex-wrap">
+                <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
+                  <input type="text" class="form-control" [(ngModel)]="member.displayName">
+                </div>
+
+                <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">
+                  <input type="text" class="form-control" [(ngModel)]="member.phoneNumber">
+                </div>
+
+                <div *ngIf="emailColumn != -1" class="col-2">
+                  <input type="text" class="form-control" [(ngModel)]="member.memberEmail">
+                </div>
+
+                <div *ngIf="provinceColumn != -1" class="col-2">
+                  {{ 'enum.UserProvince.' + member.province | translate }}
+                </div>
+
+                <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'">
+                  {{member.getFormattedRoleName()}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-6">
+      <label for="task-team" class="grassroot-label-em">Save selection as new task team:</label>
+      <input id="task-team" type="text" class="form-control" />
+    </div>
+    <div class="col-6">
+      <label for="topics" class="grassroot-label-em">Assign topic(s) to these members:</label>
+      <input id="topics" type="text" class="form-control" />
+    </div>
+  </div>
+
+  <div class="row btn-actions mt-3">
+    <div class="col-6">
+      <button type="button" class="btn btn-secondary cancel-button" [translate]="'action.back'" (click)="backToExcelAnalysis()">Back</button>
+      <button type="button" class="btn btn-secondary cancel-button" [translate]="'action.cancel'" (click)="cancelImport()">Cancel</button>
+    </div>
+    <div class="col-6 pull-right">
+      <button type="button" class="btn btn-primary float-right save-button" [translate]="'action.confirm'" (click)="confirmImport()">Confirm</button>
     </div>
   </div>
 </div>

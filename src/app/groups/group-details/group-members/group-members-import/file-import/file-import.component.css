@@ -7,6 +7,7 @@
   background-color: #fff;
   color: #bbb;
 }
+
 .droparea{
   font-size: 24px;
   border: 3px dashed #bbb;
@@ -55,14 +56,42 @@ a:hover {
   margin-bottom: 0.2rem;
 }
 
-.btn-actions{
+.btn-actions {
   margin-bottom: 1rem;
 }
 
-.success-import{
-  color: #2CBC4C;
+.success-import {
+  border: 1px solid #2CBC4C;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  font-size: 1.2em;
 }
 
-.error-import{
+.success-import .header {
+  font-weight: bold;
+}
+
+.error-import {
   color: #FFA106;
+}
+
+.import-errors .card-header {
+  background-color: #FFA106;
+  color: white;
+  padding: 5px 15px 0;
+}
+
+.card-table-header {
+  font-size: 1.1em;
+  color: white;
+}
+
+.import-errors .card-body, .import-confirm .card-body {
+  padding: 0;
+}
+
+.import-confirm .card-header {
+  background-color: #2CBC4C;
+  color: white;
+  padding: 5px 15px;
 }

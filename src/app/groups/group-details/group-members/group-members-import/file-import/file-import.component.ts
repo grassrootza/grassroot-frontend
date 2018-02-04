@@ -22,7 +22,9 @@ export class FileImportComponent implements OnInit {
   @Input() fileExt: string = "xls, xlsx, csv";
   @Input() maxFiles: number = 1;
   @Input() maxSize: number = 5; // 5MB
+
   @Output() uploadStatus = new EventEmitter();
+  uploadComplete: boolean = false;
 
   sheetHasHeader = true;
   nameColumn = 0;
@@ -34,11 +36,10 @@ export class FileImportComponent implements OnInit {
   surnameColumn = -1;
   roleColumn = -1;
 
-  groupMembersImportExcelSheetAnalysis: GroupMembersImportExcelSheetAnalysis = null;
+  sheetAnalysis: GroupMembersImportExcelSheetAnalysis = null;
   fileImportResult: FileImportResult;
   groupAddMembersInfo: GroupAddMemberInfo[] = [];
   groupModifiedResponse: GroupModifiedResponse = null;
-  importErrorUrl: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -53,13 +54,30 @@ export class FileImportComponent implements OnInit {
   }
 
   changeFile() {
-    this.groupMembersImportExcelSheetAnalysis = null;
+    this.sheetAnalysis = null;
     this.groupAddMembersInfo = [];
+    this.uploadComplete = false;
+  }
+
+  analyzeHeaders(formData: FormData, params: any) {
+    this.groupService.importHeaderAnalyze(formData, params).
+    subscribe(response => {
+      this.sheetAnalysis = response;
+      this.nameColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("name"));
+      this.phoneColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("phone") || cell.toLowerCase().startsWith("cell"));
+      this.emailColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("email"));
+      this.provinceColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("province"));
+      this.affilColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("affil"));
+      this.firstNameColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("first"));
+      this.surnameColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("surname") || cell.toLowerCase().startsWith("last name"));
+    }, error => {
+      console.log("error file upload")
+    })
   }
 
   saveColumnOrder(){
     const params = {
-      tempPath: this.groupMembersImportExcelSheetAnalysis.tmpFilePath,
+      tempPath: this.sheetAnalysis.tmpFilePath,
       nameColumn: this.nameColumn,
       phoneColumn: this.phoneColumn,
       emailColumn: this.emailColumn,
@@ -71,23 +89,24 @@ export class FileImportComponent implements OnInit {
       header: this.sheetHasHeader
     };
 
+    this.analyzeMembers(params);
+  }
+
+  analyzeMembers(params: any) {
     this.groupService.importAnalyzeMembers(params).subscribe(resp => {
       console.log("mapped response: {}", resp);
       this.fileImportResult = resp;
       this.groupAddMembersInfo = resp.processedMembers;
-      if (this.fileImportResult.errorFilePath) {
-        this.importErrorUrl = this.groupService.groupImportErrorsDownloadUrl + "?"
-          + encodeURIComponent(this.fileImportResult.errorFilePath);
-      }
     })
   }
 
-  backToExcelAnalysis(){
+  backToExcelAnalysis() {
     this.groupAddMembersInfo = [];
   }
 
   cancelImport(){
-    this.groupMembersImportExcelSheetAnalysis = null;
+    this.sheetAnalysis = null;
+    this.fileImportResult = null;
     this.groupAddMembersInfo = [];
     this.sheetHasHeader = true;
     this.nameColumn = 0;
@@ -97,14 +116,20 @@ export class FileImportComponent implements OnInit {
     this.roleColumn = -1;
   }
 
+  exit() {
+    this.cancelImport();
+    this.router.navigate(['/group', this.groupUid, 'members']);
+    return false;
+  }
+
   confirmImport(){
     this.groupService.confirmAddMembersToGroup(this.groupUid, this.groupAddMembersInfo).subscribe(resp => {
       this.groupModifiedResponse = resp;
-      $('#group-modified-response-modal').modal('show');
+      this.uploadComplete = true;
     })
   }
 
-  downloadErrors() {
+  downloadErrorFile() {
     this.groupService.downloadImportErrors(this.fileImportResult.errorFilePath).subscribe(data => {
       let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       let url = window.URL.createObjectURL(blob);
@@ -112,11 +137,6 @@ export class FileImportComponent implements OnInit {
     }, error => {
       console.log("error getting the file: ", error);
     })
-  }
-
-  closeResponseModal(){
-    $('#group-modified-response-modal').modal('hide');
-    this.router.navigate(['group/' + this.groupUid + '/members']);
   }
 
   onFileChange(event){
@@ -153,6 +173,7 @@ export class FileImportComponent implements OnInit {
   }
 
   saveFiles(files){
+    this.uploadComplete = false; // clear, in case user is doing multiple
     this.errors = []; // Clear error
     // Validate file size and allowed extensions
     if (files.length > 0 && (!this.isValidFiles(files))) {
@@ -167,14 +188,7 @@ export class FileImportComponent implements OnInit {
       const params = {
         groupUid: this.groupUid
       };
-
-      this.groupService.importHeaderAnalyze(formData, params).
-        subscribe(response => {
-          this.groupMembersImportExcelSheetAnalysis = response;
-      },
-        error => {
-          console.log("error file upload")
-        })
+      this.analyzeHeaders(formData, params);
     }
   }
 
