@@ -123,7 +123,7 @@ export class FileImportComponent implements OnInit {
   }
 
   confirmImport(){
-    this.groupService.confirmAddMembersToGroup(this.groupUid, this.groupAddMembersInfo).subscribe(resp => {
+    this.groupService.confirmAddMembersToGroup(this.groupUid, this.groupAddMembersInfo, "FILE_IMPORT").subscribe(resp => {
       this.groupModifiedResponse = resp;
       this.uploadComplete = true;
     })

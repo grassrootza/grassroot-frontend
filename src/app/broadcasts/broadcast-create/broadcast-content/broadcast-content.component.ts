@@ -4,6 +4,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 import {BroadcastParams} from "../../model/broadcast-params";
+import {optionalUrlValidator} from "../../../utils/CustomValidators";
+import {environment} from "../../../../environments/environment";
+import {Ng2ImgMaxService} from "ng2-img-max";
+import {AlertService} from "../../../utils/alert.service";
+
+declare var $: any;
 
 @Component({
   selector: 'app-broadcast-content',
@@ -27,10 +33,34 @@ export class BroadcastContentComponent implements OnInit {
   public twCharsLeft: number = this.MAX_SOCIAL_LENGTH;
 
   private fbImageKey: string = "";
-  private twitterImageKey: string = "";
+  public fbImageUrl: string = "";
+  public fbLink: string = "";
+  private fbLinkCaption: string = "";
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService) {
+  private twitterImageKey: string = "";
+  public twitterImageUrl: string = "";
+  public twitterLink: string = "";
+  private twitterLinkCaption: string = "";
+
+  private lastLinkInserted: string = "";
+  private lastLinkCaption: string = "";
+
+  linkForm: FormGroup;
+  insertingLinkType: string;
+
+  IMG_MAX = {'facebook': 476, 'twitter': 506};
+
+  constructor(private router: Router,
+              private formBuilder: FormBuilder,
+              private broadcastService: BroadcastService,
+              private ng2ImgMax: Ng2ImgMaxService,
+              private alertService: AlertService) {
     this.contentForm = formBuilder.group(new BroadcastContent());
+    this.linkForm = formBuilder.group({
+      'linkType': ['GROUP', Validators.required],
+      'url': ['', optionalUrlValidator],
+      'caption': ['', Validators.required]
+    });
   }
 
   ngOnInit() {
@@ -86,8 +116,15 @@ export class BroadcastContentComponent implements OnInit {
 
   saveContent() {
     this.content = this.contentForm.value;
+
     this.content.facebookImageKey = this.fbImageKey;
+    this.content.facebookLink = this.fbLink;
+    this.content.facebookLinkCaption = this.fbLinkCaption;
+
     this.content.twitterImageKey = this.twitterImageKey;
+    this.content.twitterLink = this.twitterLink;
+    this.content.twitterLinkCaption = this.twitterLinkCaption;
+
     this.broadcastService.setContent(this.content);
   }
 
@@ -95,24 +132,80 @@ export class BroadcastContentComponent implements OnInit {
     this.broadcastService.cancelCurrentCreate();
   }
 
+  chooseLink(contentType: string) {
+    this.insertingLinkType = contentType;
+    $("#insert-link-modal").modal("show");
+  }
+
+  insertLink() {
+    this.lastLinkCaption = this.linkForm.controls['caption'].value;
+
+    let linkType = this.linkForm.controls['linkType'].value;
+    console.log("link type: ", linkType);
+    if (linkType === "URL") {
+      this.lastLinkInserted = this.linkForm.controls['url'].value;
+    } else if (linkType === "GROUP") {
+      this.lastLinkInserted = this.broadcastService.inboundGroupUrl(this.broadcastService.parentId());
+    }
+
+    console.log("link inserted = ", this.lastLinkInserted);
+
+    switch (this.insertingLinkType) {
+      case 'email':
+        this.addLinkToEmail(this.lastLinkInserted, this.lastLinkCaption);
+        break;
+      case 'facebook':
+        this.addFbLink(this.lastLinkInserted, this.lastLinkCaption);
+        break;
+      case 'twitter':
+        this.addTwitterLink(this.lastLinkInserted, this.lastLinkCaption);
+    }
+
+    $("#insert-link-modal").modal("hide");
+    this.linkForm.reset();
+  }
+
+  addLinkToEmail(linkUrl: string, linkCaption: string) {
+    let patchLink = `<a href="${linkUrl}">${linkCaption}</a>`;
+    this.contentForm.controls['emailContent'].patchValue(`${this.contentForm.controls['emailContent'].value} ${patchLink}`)
+  }
+
+  addFbLink(fbLink: string, fbLinkCaption: string) {
+    this.fbLink = fbLink;
+    this.fbLinkCaption = fbLinkCaption;
+  }
+
+  addTwitterLink(twLink: string, twLinkCaption: string) {
+    this.twitterLink = twLink;
+    this.twitterLinkCaption = twLinkCaption;
+  }
+
   uploadImage(event, providerId) {
     let images = event.target.files;
 
     if (images.length > 0) {
       let image = images[0];
-      let formData: FormData = new FormData();
-      formData.append("image", image, image.name);
-      this.broadcastService.uploadImage(formData).
-      subscribe(response => {
+      this.alertService.showLoading();
+      this.ng2ImgMax.resizeImage(image, this.IMG_MAX[providerId], this.IMG_MAX['providerId'], true).subscribe(result => {
+        let formData: FormData = new FormData();
+        let resizedImage = new File([result], result.name);
+        formData.append("image", resizedImage, image.name);
+        this.broadcastService.uploadImage(formData).subscribe(response => {
+          this.alertService.hideLoadingDelayed(); // so img can pop upt
+          console.log(`for provider id : ${providerId}, response: ${response}`);
           if (providerId == 'facebook') {
             this.fbImageKey = response;
+            this.fbImageUrl = environment.backendAppUrl + "/image/broadcast/" + response;
           } else if (providerId == 'twitter') {
             this.twitterImageKey = response;
+            this.twitterImageUrl = environment.backendAppUrl + "/image/broadcast/" + response;
           }
-        },
-        error => {
+        }, error => {
+          this.alertService.hideLoading();
           console.log("error uploading image, error: ", error);
         })
+
+      });
     }
   }
 

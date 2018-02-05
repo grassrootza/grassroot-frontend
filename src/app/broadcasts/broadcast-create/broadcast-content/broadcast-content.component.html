@@ -23,9 +23,9 @@
           </div>
         </div>
 
-        <hr/>
+        <hr *ngIf="types.shortMessage"/>
 
-        <div class="form-row mt-md-3">
+        <div class="form-row mt-md-3" *ngIf="types.shortMessage">
           <h3>{{ 'broadcasts.create.content.smsSection' | translate }}</h3>
         </div>
         <div class="form-row">
@@ -46,11 +46,12 @@
         </div>
         <div class="form-row mb-md-3">
           <div class="form-group col-sm-12" *ngIf="types.email">
-            <quill-editor class="form-control" formControlName="emailContent">
-            </quill-editor>
-            <button *ngIf="(params.joinLinks)" class="email-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.join' | translate }}</button>
-            <button *ngIf="(params.campaignLinks)" class="email-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.campaign' | translate }}</button>
-            {{ 'broadcasts.create.content.merge.label' | translate }}
+            <quill-editor #emailEditor [style]="{height: '180px'}" [formControlName]="'emailContent'"></quill-editor>
+            <button (click)="chooseLink('email')" class="email-link"><i class="fas fa-link"></i>
+              {{ 'broadcasts.create.content.link.join' | translate }}</button>
+            <button *ngIf="!!lastLinkInserted" class="insertion-link" (click)="addLinkToEmail(lastLinkInserted, lastLinkCaption)">
+              <i class="fas fa-link"></i> reuse last inserted link
+            </button>
             <select>
               <option value="none">{{ 'broadcasts.create.content.merge.select' | translate }}</option>
               <option value="name">{{ 'broadcasts.create.content.merge.name' | translate }}</option>
@@ -71,17 +72,33 @@
           <div class="form-group col-md-8 col-sm-12">
             <textarea (keyup)="fbKeyUp($event)" formControlName="facebookPost" class="form-control"></textarea>
             {{ fbCharsLeft }} characters left
+            <img *ngIf="!!fbImageUrl" src="{{ fbImageUrl }}" class="img-thumbnail" />
           </div>
           <div class="col-md-4">
-            <button *ngIf="(params.joinLinks)" data-target="#group-join-links" data-toggle="modal" class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.join' | translate }}</button>
-            <button (click)="fbFile.click()" class="insertion-link"><i class="fas fa-images"></i>
-              {{ 'broadcasts.create.content.link.file' | translate }}</button>
-            <button *ngIf="(params.campaignLinks)" class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.campaign' | translate }}</button>
+            <button (click)="chooseLink('facebook')" data-toggle="modal" class="insertion-link">
+              <i class="fas fa-link"></i> {{ 'broadcasts.create.content.link' + (!!fbLink ? '.change' : '.join') | translate }}
+            </button>
+            <button *ngIf="!!fbLink" class="insertion-link" (click)="addFbLink(null, null)">
+              <i class="fas fa-unlink"></i> {{ 'broadcasts.create.content.link.remove' | translate }}
+            </button>
+            <button *ngIf="!!twitterLink" class="insertion-link" (click)="addFbLink(twitterLink, twitterLinkCaption)">
+              <i class="fas fa-unlink"></i> {{ 'broadcasts.create.content.link.copyTwitter' | translate }}
+            </button>
+            <button *ngIf="!!lastLinkInserted && !fbLink" class="insertion-link" (click)="addFbLink(lastLinkInserted, lastLinkCaption)">
+              <i class="fas fa-link"></i> reuse last inserted link
+            </button>
+            <button (click)="fbFile.click()" class="insertion-link">
+              <i class="fas fa-images"></i>{{ 'broadcasts.create.content.link.file' | translate }}</button>
             <input type="file" #fbFile
                    [multiple]="false"
                    accept="image/*"
                    (change) = "uploadImage($event, 'facebook')"
                    style="display:none" />
+          </div>
+        </div>
+        <div class="row" *ngIf="!!fbLink">
+          <div class="col-12">
+            {{ 'broadcasts.create.content.link.inserted' | translate }} <a href="{{fbLink}}" target="_blank" class="grassroot-link">{{ fbLinkCaption }}</a>
           </div>
         </div>
         <div class="error" [hidden]="contentForm.controls['facebookPost'].valid || contentForm.controls['facebookPost'].untouched">
@@ -99,14 +116,27 @@
             {{ twCharsLeft }} characters left
           </div>
           <div class="col-md-4">
-            <button class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.join' | translate }}</button>
+            <button (click)="chooseLink('twitter')" class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.join' | translate }}</button>
+            <button *ngIf="!!fbLink" class="insertion-link" (click)="addTwitterLink(fbLink, fbLinkCaption)">
+              <i class="fas fa-unlink"></i> {{ 'broadcasts.create.content.link.copyFacebook' | translate }}
+            </button>
             <button (click)="twitterFile.click()" class="insertion-link"><i class="fas fa-images"></i> {{ 'broadcasts.create.content.link.file' | translate }}</button>
-            <button *ngIf="(params.campaignLinks)" class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.campaign' | translate }}</button>
+            <button *ngIf="!!lastLinkInserted && !twitterLink" class="insertion-link" (click)="addTwitterLink(lastLinkInserted, lastLinkCaption)">
+              <i class="fas fa-link"></i> reuse last inserted link
+            </button>
             <input type="file" #twitterFile
                    [multiple]="false"
                    accept="image/*"
                    (change) = "uploadImage($event, 'twitter')"
                    style="display:none" />
+          </div>
+        </div>
+        <div class="row" *ngIf="!!twitterImageUrl">
+          <div class="col-md-8 col-sm-12"><img src="{{ twitterImageUrl }}" class="img-thumbnail" /></div>
+        </div>
+        <div class="row" *ngIf="!!twitterLink">
+          <div class="col-12">
+            {{ 'broadcasts.create.content.link.inserted' | translate }} <a href="{{twitterLink}}" target="_blank" class="grassroot-link">{{ twitterLinkCaption }}</a>
           </div>
         </div>
         <div class="error" [hidden]="contentForm.controls['twitterPost'].valid || contentForm.controls['twitterPost'].untouched">
@@ -135,24 +165,66 @@
       </form>
     </div>
   </div>
-
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="group-join-links" aria-hidden="true" *ngIf="(params.joinLinks)">
-  <div class="modal-dialog modal" role="document">
+
+<div class="modal fade" tabindex="-1" role="dialog" id="insert-link-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h3 class="modal-title">Select join word</h3>
+        <h5 class="modal-title">{{ 'broadcasts.create.content.modal.title' | translate }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <ul class="list-group">
-          <li class="list-group-item" *ngFor="let link of params.joinLinks">
-            {{ link }}
-          </li>
-        </ul>
+        <div class="col-12">
+        <form [formGroup]="linkForm">
+          <div class="form-row">
+            <div class="form-group col-md-4 col-sm-12">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label grassroot-label-em">
+                  <input class="form-check-input" type="radio" checked value="GROUP" name="linkType" [formControl]="linkForm.controls['linkType']">
+                  {{ 'broadcasts.create.content.modal.group' | translate }}
+                </label>
+              </div>
+            </div>
+            <div class="form-group col-md-4 col-sm-12" *ngIf="!!params.campaignLinks">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label grassroot-label-em">
+                  <input class="form-check-input" type="radio" value="CAMPAIGN" name="linkType" [formControl]="linkForm.controls['linkType']">
+                  {{ 'broadcasts.create.content.modal.campaign' | translate }}
+                </label>
+              </div>
+            </div>
+            <div class="form-group col-md-4 col-sm-12">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label grassroot-label-em">
+                  <input class="form-check-input" type="radio" value="OWN" name="linkType" [formControl]="linkForm.controls['linkType']">
+                  {{ 'broadcasts.create.content.modal.own' | translate }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row" *ngIf="linkForm.controls['linkType']?.value === 'OWN'">
+            <div class="form-group col-md-12 col-sm-12">
+              <input class="form-control form-control-em" type="text" [formControl]="linkForm.controls['url']"
+                placeholder="{{ 'broadcasts.create.content.modal.urlPlace' | translate }}"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-12 col-sm-12">
+              <label class="grassroot-label-em">{{ 'broadcasts.create.content.modal.captionLabel' | translate }}</label>
+              <input class="form-control form-control-em" type="text" [formControl]="linkForm.controls['caption']"
+                placeholder="{{ 'broadcasts.create.content.modal.captionPlace' | translate }}"/>
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="insertLink()" [disabled]="!linkForm.valid" type="button" class="btn btn-primary save-button">{{ 'action.insert' | translate }}</button>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
       </div>
     </div>
   </div>

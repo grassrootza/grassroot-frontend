@@ -6,7 +6,7 @@ import {
   BroadcastTypes
 } from "./model/broadcast-request";
 import {DateTimeUtils} from "../utils/DateTimeUtils";
-import {BroadcastParams} from "./model/broadcast-params";
+import {BroadcastParams, getBroadcastParams} from "./model/broadcast-params";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage} from './model/broadcast';
@@ -34,15 +34,11 @@ export class BroadcastService {
     this.loadBroadcast();
   }
 
-  fetchBroadcasts(type: String, entityUid: String, clearCache: boolean) {
-    const fullUrl = this.fetchUrlBase + type + "/" + entityUid;
-  }
-
   fetchCreateParams(type: string, entityUid: string): Observable<BroadcastParams> {
     const fullUrl = this.createUrlBase + type + "/info/" + entityUid;
     return this.httpClient.get<BroadcastParams>(fullUrl).map(result => {
       console.log("create fetch result: ", result);
-      this._createParams = result as BroadcastParams; // note: because JS typing is such a disaster, this doesn't seem to work
+      this._createParams = getBroadcastParams(result);
       this.createParams.emit(this._createParams);
       return result;
     });
@@ -62,6 +58,8 @@ export class BroadcastService {
       }
       this.createRequest.type = type;
       this.createRequest.parentId = parentId;
+      this.createRequest.broadcastId = this._createParams.broadcastId;
+      console.log("create request done, broadcastId = ", this.createRequest.broadcastId);
       this.latestStep = 1;
     }
   }
@@ -71,7 +69,7 @@ export class BroadcastService {
       shortMessage: this.createRequest.sendShortMessages,
       email: this.createRequest.sendEmail,
       facebook: this.createRequest.postToFacebook,
-      facebookPage: this.createRequest.facebookPage,
+      facebookPages: this.createRequest.facebookPages,
       twitter: this.createRequest.postToTwitter,
       twitterAccount: this.createRequest.twitterAccount
     };
@@ -82,7 +80,7 @@ export class BroadcastService {
     this.createRequest.sendShortMessages = types.shortMessage;
     this.createRequest.sendEmail = types.email;
     this.createRequest.postToFacebook = types.facebook;
-    this.createRequest.facebookPage = types.facebookPage;
+    this.createRequest.facebookPages = types.facebookPages;
     this.createRequest.postToTwitter = types.twitter;
     this.createRequest.twitterAccount = types.twitterAccount;
     this.saveBroadcast();
@@ -95,9 +93,11 @@ export class BroadcastService {
       emailContent: this.createRequest.emailContent,
       facebookPost: this.createRequest.facebookContent,
       facebookLink: this.createRequest.facebookLink,
+      facebookLinkCaption: this.createRequest.facebookLinkCaption,
       facebookImageKey: this.createRequest.facebookImageKey,
       twitterPost: this.createRequest.twitterContent,
       twitterLink: this.createRequest.twitterLink,
+      twitterLinkCaption: this.createRequest.twitterLinkCaption,
       twitterImageKey: this.createRequest.twitterImageKey
     }
   }
@@ -154,7 +154,7 @@ export class BroadcastService {
     cn.sendShortMessage = this.createRequest.sendShortMessages;
     cn.sendEmail = this.createRequest.sendEmail;
     cn.postFacebook = this.createRequest.postToFacebook;
-    cn.fbPageName = this.getFbDisplayName(this.createRequest.facebookPage);
+    cn.fbPageNames = this.getFbDisplayNames(this.createRequest.facebookPages);
     cn.postTwitter = this.createRequest.postToTwitter;
     cn.twitterAccount = this.createRequest.twitterAccount;
 
@@ -174,12 +174,11 @@ export class BroadcastService {
     return cn;
   }
 
-  private getFbDisplayName(fbUserId: string): string {
-    console.log("no really");
-    if (this._createParams.facebookPages && fbUserId) {
-      return this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName
+  private getFbDisplayNames(fbUserIds: string[]): string[] {
+    if (this._createParams.facebookPages && fbUserIds) {
+      return fbUserIds.map(fbUserId => this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName);
     } else {
-      return "";
+      return [];
     }
   }
 
@@ -202,17 +201,21 @@ export class BroadcastService {
     return false; // in case called on an anchor tag
   }
 
-  currentType(): String {
+  currentType(): string {
     return this.createRequest.type;
   }
 
-  parentId(): String {
+  parentId(): string {
     return this.createRequest.parentId;
   }
 
   parentViewRoute(): string {
     return (this.createRequest) ? (this.createRequest.type == 'campaign' ? '/campaign/' : '/group/') + this.createRequest.parentId :
       '/home';
+  }
+
+  inboundGroupUrl(groupId: string): string {
+    return environment.frontendAppUrl + "/join/group/" + groupId + "?broadcastId=" + this.createRequest.broadcastId;
   }
 
   /*

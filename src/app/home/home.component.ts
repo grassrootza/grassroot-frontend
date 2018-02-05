@@ -4,7 +4,7 @@ import {UserService} from "../user/user.service";
 import {DatePipe} from "@angular/common";
 import {GroupService} from "../groups/group.service";
 import {GroupInfo} from "../groups/model/group-info.model";
-import {MembersPage} from "../groups/model/membership.model";
+import {Membership, MembersPage} from "../groups/model/membership.model";
 import {DayTasks} from "./day-task.model";
 
 import * as moment from 'moment';
@@ -15,7 +15,7 @@ import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
 import {TodoType} from "../task/todo-type";
-import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
+import {AlertService} from "../utils/alert.service";
 
 declare var $: any;
 
@@ -31,6 +31,7 @@ export class HomeComponent implements OnInit {
   public pinnedGroups: GroupInfo[] = [];
   public activeCampaigns: CampaignInfo[] = [];
   public newMembersPage: MembersPage = null;
+  public newMembersListRendered: Membership[];
 
   public agendaBaseDate: Moment;
 
@@ -42,12 +43,11 @@ export class HomeComponent implements OnInit {
   private newMembersLoadFinished = false;
   private groupsLoadFinished = false;
 
-
   constructor(private taskService: TaskService,
               private userService: UserService,
               private groupService: GroupService,
               private router: Router,
-              private spinnerService: Ng4LoadingSpinnerService) {
+              private alertService: AlertService) {
     this.agendaBaseDate = moment().startOf('day');
   }
 
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
 
     if (!this.tasksLoadFinished || !this.newMembersLoadFinished || !this.newMembersLoadFinished) {
       console.log("Showing spinner");
-      this.spinnerService.show();
+      this.alertService.showLoading();
     }
 
     this.taskService.upcomingTasks
@@ -80,14 +80,16 @@ export class HomeComponent implements OnInit {
     );
 
 
-    this.groupService.newMembersInMyGroups
-      .subscribe(newMembersPage => {
+    this.groupService.newMembersInMyGroups.subscribe(newMembersPage => {
         if (newMembersPage) {
           this.newMembersPage = newMembersPage;
+          this.newMembersListRendered = newMembersPage.content.slice(0, 20); // otherwise if a big entrance lately, mammoth render time
           this.newMembersLoadFinished = true;
           this.hideSpinnerIfAllLoaded();
         }
       });
+
+    // this.newMembersPage = this.groupService.newMembersInMyGroups.map(membersPage => membersPage.content);
 
 
     this.groupService.newMembersInMyGroupsError
@@ -125,15 +127,15 @@ export class HomeComponent implements OnInit {
       );
 
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
-    this.groupService.fetchNewMembers(7, 0, 1000);
+    this.groupService.fetchNewMembers(7, 0, 500);
     this.groupService.loadGroups();
 
   }
 
-
   private hideSpinnerIfAllLoaded() {
+    console.log("about to hide spinner, just checking this ... ", this.tasksLoadFinished, this.newMembersLoadFinished, this.groupsLoadFinished);
     if (this.tasksLoadFinished && this.newMembersLoadFinished && this.groupsLoadFinished) {
-      this.spinnerService.hide();
+      this.alertService.hideLoading();
     }
   }
 
@@ -166,7 +168,8 @@ export class HomeComponent implements OnInit {
   }
 
   formatTaskDate(date: Date): string {
-    return this.getDayName(date) + ", " + new DatePipe("en").transform(date, "dd MMM yyyy");
+    const dayName = this.getDayName(date);
+    return dayName + (dayName ? ", " : "") + new DatePipe("en").transform(date, "dd MMM yyyy");
   }
 
   getDayName(date: Date): string {
@@ -176,7 +179,7 @@ export class HomeComponent implements OnInit {
       return "Today";
     else if (moment(date).week() == moment(today).week())
       return new DatePipe("en").transform(date, "EEEE");
-    else return new DatePipe("en").transform(date, "dd MMM yyyy");
+    else return "";
   }
 
   increaseAgendaBaseDate() {
@@ -238,6 +241,10 @@ export class HomeComponent implements OnInit {
     return false;
   }
 
+  showGroup(group: GroupInfo) {
+    console.log("home page, showing spinner, maybe");
+    this.router.navigate(["/group", group.groupUid]);
+  }
 
   showCreateMeetingModal(group: GroupInfo) {
     console.log("Show create meeting modal for group: " + group.groupUid);
@@ -247,6 +254,7 @@ export class HomeComponent implements OnInit {
 
   meetingSaved(saveResponse) {
     console.log(saveResponse);
+    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
     $("#create-meeting-modal").modal("hide");
   }
 
@@ -257,6 +265,7 @@ export class HomeComponent implements OnInit {
 
   voteSaved(saveResponse) {
     console.log(saveResponse);
+    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
     $("#create-vote-modal").modal("hide");
   }
 
@@ -267,6 +276,7 @@ export class HomeComponent implements OnInit {
 
   todoSaved(saveResponse) {
     console.log(saveResponse);
+    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
     $("#create-todo-modal").modal("hide");
   }
 

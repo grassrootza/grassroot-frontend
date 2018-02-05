@@ -29,10 +29,10 @@
     <div class="col-md-4">
       <div class="card">
         <div class="card-body events-box">
-          <h5>
+          <h4>
             <img src="assets/icon_vote.png"/>
             <span [translate]="'group.dashboard.votes'">Votes</span>
-          </h5>
+          </h4>
           <div *ngFor="let vote of votes" class="votes-event">
             <div class="float-left event-date">
               <span class="day">{{vote.deadlineDate | date:'dd'}}</span>

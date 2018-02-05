@@ -1,9 +1,3 @@
-<ng4-loading-spinner
-  [loadingText]="'home.loading' | translate"
-  [threshold]="500"
-></ng4-loading-spinner>
-
-
 <div class="container">
 
 
@@ -44,7 +38,7 @@
               </div>
               <div *ngFor="let task of dayTasks.tasks" class="day-task">
                 <div>
-                  <a (click)="handleTaskClick(task)">
+                  <a class="task-name" (click)="handleTaskClick(task)">
                     <img src="assets/{{task.getEventIconName()}}"/>
                     {{task.title}}
                   </a>
@@ -86,12 +80,15 @@
 
           <div class="new-members-body">
             <div *ngIf="newMembersPage">
-              <div *ngFor="let member of newMembersPage.content" class="member-row">
-                <h4>{{member.user.displayName}}</h4>
-                <div><span>Group: </span> {{member.group.name}}</div>
-                <!-- this is generating a 'object changed after checked error, and might be better to do via
-                     string concat of key for translate (and also param passing is being weird), but this is the idea -->
-                <div>{{ member.joinMethodKey() | translate:member }}</div>
+              <div *ngFor="let member of newMembersListRendered" class="row member-row">
+                <div class="col-1 justify-content-center new-members-icon">
+                  <span style="padding-left: 8px"><i [class]="member.iconClass()"></i></span>
+                </div>
+                <div class="col-8">
+                  <h4>{{member.user.displayName}}</h4>
+                  <div><span>Group: </span> {{member.group.name}}</div>
+                  <div>{{ member.joinMethodKey() | translate:member }}</div>
+                </div>
               </div>
             </div>
 
@@ -112,6 +109,7 @@
         <div class="card-body">
           <app-group-info *ngFor="let gr of pinnedGroups"
                           [group]="gr"
+                          (onGroupClicked)="showGroup($event)"
                           (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
                           (onTriggerCreateVote)="showCreateVoteModal($event)"
                           (onTriggerCreateTodo)="showCreateTodoModal($event)"

@@ -43,6 +43,7 @@ import {CampaignService} from "./campaigns/campaign.service";
 
 import {ClipboardModule} from 'ng2-clipboard';
 import {BroadcastService} from "./broadcasts/broadcast.service";
+import {ANIMATION_TYPES, LoadingModule} from "ngx-loading";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -57,7 +58,7 @@ const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
-  {path: 'join/:groupId/:code', component: JoinComponent},
+  {path: 'join/group/:groupId', component: JoinComponent},
   {path: 'forgot', component: PasswordResetComponent,
     children: [
       {path: '', redirectTo: 'initiate', pathMatch: 'full'},
@@ -123,6 +124,10 @@ const routes: Routes = [
     HttpClientModule,
     ClipboardModule,
     Ng4LoadingSpinnerModule,
+    LoadingModule.forRoot({
+      animationType: ANIMATION_TYPES.circleSwish, backdropBackgroundColour: 'rgba(0,0,0,0.2)',
+        backdropBorderRadius: '4px', primaryColour: '#26A041', secondaryColour: '#2CBC4C'}
+      ),
     RouterModule.forRoot(routes), // <-- routes
     TranslateModule.forRoot({
       loader: {

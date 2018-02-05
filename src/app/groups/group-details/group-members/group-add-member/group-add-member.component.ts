@@ -102,7 +102,7 @@ export class GroupAddMemberComponent implements OnInit {
       this.addMemberForm.controls['affiliations'].setValue(affiliations);
     }
 
-    this.groupService.confirmAddMembersToGroup(this.groupUid, [this.addMemberForm.value]).subscribe(result => {
+    this.groupService.confirmAddMembersToGroup(this.groupUid, [this.addMemberForm.value], "ADDED_BY_OTHER_MEMBER").subscribe(result => {
       $('#add-member-modal').modal("hide");
       this.onMemberAdded.emit(result);
     }, error => {

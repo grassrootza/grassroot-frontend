@@ -27,7 +27,8 @@
         "../node_modules/jquery/dist/jquery.min.js",
         "../node_modules/popper.js/dist/umd/popper.min.js",
         "../node_modules/bootstrap/dist/js/bootstrap.min.js",
-        "../node_modules/select2/dist/js/select2.min.js"
+        "../node_modules/select2/dist/js/select2.min.js",
+        "../node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

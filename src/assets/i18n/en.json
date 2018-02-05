@@ -142,6 +142,11 @@
         "public": "Public",
         "private": "Private"
       },
+      "groupVisibility": {
+        "title": "Pin group?",
+        "pinned": "Yes",
+        "normal": "No, leave normal"
+      },
       "reminders": {
         "title": "When will reminders be sent?",
         "twoDays":"Two days ahead",
@@ -763,7 +768,23 @@
         "link": {
           "file": "attach image or file",
           "join": "insert a join link",
-          "campaign": "insert a campaign link"
+          "campaign": "insert a campaign link",
+          "insert": "insert a link",
+          "change": "change link",
+          "remove": "remove link",
+          "inserted": "Post will link to: ",
+          "copyTwitter": "copy twitter link",
+          "copyFacebook": "copy facebook link",
+          "copyLast": "reuse last inserted link"
+        },
+        "modal": {
+          "title": "Select a link to insert",
+          "group": "Group join page",
+          "campaign": "Campaign link",
+          "own": "Type in your own link:",
+          "urlPlace": "Type the link here",
+          "captionLabel": "Link text (caption): ",
+          "captionPlace": "Click here!"
         },
         "merge": {
           "label": "insert merge field: ",
@@ -955,7 +976,8 @@
     "no": "No",
     "copy": "Copy",
     "copied": "Copied",
-    "done": "Done"
+    "done": "Done",
+    "insert": "Insert"
   },
   "general": {
     "charsRemaining": "Characters remaining"

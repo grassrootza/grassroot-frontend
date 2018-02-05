@@ -10,6 +10,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {JoinCodeInfo} from "../model/join-code-info";
 
 import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
+import {AlertService} from "../../utils/alert.service";
 
 declare var $: any;
 
@@ -41,13 +42,13 @@ export class GroupDetailsComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private translateService: TranslateService,
+              private alertService: AlertService,
               private spinnerService: Ng4LoadingSpinnerService,
               private clipboardService:ClipboardService) {
 
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
         if (this.group != null) {
-
           let uri = ev.urlAfterRedirects;
           let startIndex = uri.indexOf(this.group.groupUid) + this.group.groupUid.length + 1;
           this.currentTab = uri.substring(startIndex);
@@ -73,6 +74,7 @@ export class GroupDetailsComponent implements OnInit {
             this.flyerUrlJpg = this.baseUrl + "/api/group/fetch/flyer?typeOfFile=JPEG&groupUid=" + groupUid + "&color=true&language=en";
             this.flyerUrlPDF = this.baseUrl + "/api/group/fetch/flyer?typeOfFile=PDF&groupUid=" + groupUid + "&color=true&language=en";
             this.setupJoinParams();
+            this.alertService.hideLoading();
           },
           error => {
             console.log("Error loading groups", error.status)
@@ -115,9 +117,7 @@ export class GroupDetailsComponent implements OnInit {
   // more efficient, but possibly more fragile. watch closely.
   addJoinWord() {
     let word: string = this.addJoinWordForm.get('joinWord').value;
-    this.spinnerService.show();
     this.groupService.addGroupJoinWord(this.group.groupUid, word).subscribe(result => {
-      this.spinnerService.hide();
       this.group.joinWords.push(result);
       this.group.joinWordsLeft--;
       this.addJoinWordForm.get('joinWord').reset('');

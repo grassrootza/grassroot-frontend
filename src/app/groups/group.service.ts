@@ -161,7 +161,8 @@ export class GroupService {
   }
 
 
-  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string): Observable<GroupRef> {
+  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string,
+              pinGroup: boolean = true): Observable<GroupRef> {
 
     const fullUrl = this.groupCreateUrl;
 
@@ -170,7 +171,9 @@ export class GroupService {
       .set('description', description)
       .set('permissionTemplate', permissionTemplate)
       .set('reminderMinutes', reminderMinutes.toString())
-      .set('discoverable', discoverable);
+      .set('discoverable', discoverable)
+      .set('defaultAddToAccount', 'true')
+      .set("pinGroup", pinGroup.toString());
 
     return this.httpClient.post<GroupRef>(fullUrl, null, {params: params});
   }
@@ -208,7 +211,8 @@ export class GroupService {
     let params = new HttpParams()
       .set('howRecentInDays', howRecentlyJoinedInDays.toString())
       .set('page', pageNo.toString())
-      .set('size', pageSize.toString());
+      .set('size', pageSize.toString())
+      .set('sort', 'joinTime,desc');
 
     this.httpClient.get<MembersPage>(this.newMembersLIstUrl, {params: params})
       .map(
@@ -314,11 +318,12 @@ export class GroupService {
     return this.httpClient.get(this.groupImportErrorsDownloadUrl, { params: { errorFilePath: errorPath }, responseType: 'blob' });
   }
 
-  confirmAddMembersToGroup(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[]):Observable<GroupModifiedResponse>{
+  confirmAddMembersToGroup(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[], joinMethod: string):Observable<GroupModifiedResponse>{
     const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
+    const params = new HttpParams().set("joinMethod", joinMethod);
     membersInfoToAdd.forEach(member => member.phoneNumber = PhoneNumberUtils.convertIfPhone(member.phoneNumber));
     console.log("posting members: ", membersInfoToAdd);
-    return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd)
+    return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd, { params: params })
       .map(resp => {
         return resp;
       })
@@ -333,7 +338,7 @@ export class GroupService {
   addGroupJoinWord(groupUid: string, joinWord: string): Observable<JoinCodeInfo> {
     const fullUrl = this.groupJoinWordAddUrl + "/" + groupUid;
     // nb : must always mirror inbound routing
-    const inboundUrl = environment.frontendAppUrl + "/" + groupUid + "/" + joinWord;
+    const inboundUrl = environment.frontendAppUrl + "/join/group/" + groupUid + "?code=" + joinWord;
     return this.httpClient.post<JoinCodeInfo>(fullUrl, null, { params: {
       "joinWord": joinWord, "longJoinUrl": inboundUrl
     }});
@@ -401,12 +406,6 @@ export class GroupService {
       .set("groupUid", groupUid);
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
-
-
-
-
-
-
 
   updateGroupSettings(groupUid: string, name: string, description: string, isPublic: boolean, reminderInMinutes: number): Observable<boolean> {
     const fullUrl = this.groupUpdateSettingsUrl + '/' + groupUid;

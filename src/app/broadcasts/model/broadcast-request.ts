@@ -3,6 +3,7 @@ import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 
 export class BroadcastRequest {
 
+  broadcastId: string;
   type: string;
   parentId: string;
 
@@ -15,15 +16,17 @@ export class BroadcastRequest {
   emailContent: string = "";
 
   postToFacebook: boolean = false;
-  facebookPage: string = "";
+  facebookPages: string[] = [];
   facebookContent: string = "";
   facebookLink: string = "";
+  facebookLinkCaption: string = "";
   facebookImageKey: string = "";
 
   postToTwitter: boolean = false;
   twitterAccount: string = "";
   twitterContent: string = "";
   twitterLink: string = "";
+  twitterLinkCaption: string = "";
   twitterImageKey: string = "";
 
   selectionType: string = "ALL_MEMBERS";
@@ -47,7 +50,7 @@ export class BroadcastRequest {
     this.sendEmail = false;
     this.emailContent = "";
     this.postToFacebook = false;
-    this.facebookPage = "";
+    this.facebookPages = [];
     this.facebookContent = "";
     this.facebookLink = "";
     this.postToTwitter = false;
@@ -63,7 +66,7 @@ export class BroadcastTypes {
   shortMessage: boolean = false;
   email: boolean = false;
   facebook: boolean = false;
-  facebookPage: string = "";
+  facebookPages: string[] = [];
   twitter: boolean = false;
   twitterAccount: string = "";
 }
@@ -74,11 +77,12 @@ export class BroadcastContent {
   emailContent: string = "";
   facebookPost: string = "";
   facebookLink: string = "";
+  facebookLinkCaption: string = "";
   facebookImageKey: string = "";
   twitterPost: string = "";
   twitterLink: string = "";
+  twitterLinkCaption: string = "";
   twitterImageKey: string = "";
-
 }
 
 export class BroadcastMembers {
@@ -111,7 +115,7 @@ export class BroadcastConfirmation {
   sendEmail: boolean;
   sendEmailCount: number;
   postFacebook: boolean;
-  fbPageName: string;
+  fbPageNames: string[];
   postTwitter: boolean;
   twitterAccount: string;
 
