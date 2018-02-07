@@ -20,7 +20,7 @@
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="form-row" *ngIf="group?.subGroups?.length > 0">
           <div class="form-group col-sm-12">
             <div class="form-check form-check-inline">
               <label class="form-check-label grassroot-label-em">
@@ -28,6 +28,15 @@
                 {{ 'broadcasts.create.members.taskTeams' | translate }}
               </label>
             </div>
+          </div>
+        </div>
+
+        <div class="form-row" *ngIf="memberForm.controls['selectionType']?.value == 'TASK_TEAMS'">
+          <div class="form-group">
+            <select multiple id="task-teams" [formControl]="memberForm.controls['taskTeams']" class="form-control"
+                    (change)="taskTeamSelectChanged()">
+              <option *ngFor="let g of group.subGroups" [value]="g.groupUid">{{ g.name }}</option>
+            </select>
           </div>
         </div>
 
@@ -42,11 +51,18 @@
           </div>
         </div>
 
+        <app-member-filter *ngIf="group && memberForm.controls['selectionType']?.value == 'CUSTOM_SELECTION'"
+                           [taskTeams]="group.subGroups"
+                           [topics]="group.topics"
+                           [affiliations]="group.affiliations"
+                           (filterChanged)="membersFilterChanged($event)">
+        </app-member-filter>
+
         <div class="form-row mt-md-3 mb-md-5">
           <div class="col-md-6 offset-md-6 review-block">
             <p class="text-center review-block-header">Review costs</p>
-            <span>{{ 'broadcasts.create.members.smsCount' | translate:countParams }}</span>
-            <span class="float-right">{{ 'broadcasts.create.members.costEstimate' | translate:countParams }}</span>
+            <span>{{ 'broadcasts.create.members.smsCount' | translate }}{{ countParams.smsNumber }}</span>
+            <span class="float-right">{{ 'broadcasts.create.members.costEstimate' | translate }}{{ countParams.broadcastCost }}</span>
           </div>
         </div>
 

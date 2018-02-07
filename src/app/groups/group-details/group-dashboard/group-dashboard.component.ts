@@ -46,7 +46,8 @@ export class GroupDashboardComponent implements OnInit {
       console.log("Activated route params: ", params);
       this.groupUid = params['id'];
 
-      this.groupService.loadGroupDetails(this.groupUid)
+      console.log("fetching group in dashboard");
+      this.groupService.loadGroupDetailsCached(this.groupUid, true)
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
@@ -64,7 +65,7 @@ export class GroupDashboardComponent implements OnInit {
       this.loadOrganisationsStats();
       this.loadMemberDetailsStats();
       this.loadTopicInterestsStats();
-    }); 
+    });
   }
 
   private loadTasks() {

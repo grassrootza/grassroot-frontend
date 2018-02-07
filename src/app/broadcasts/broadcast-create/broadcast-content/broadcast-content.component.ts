@@ -137,6 +137,17 @@ export class BroadcastContentComponent implements OnInit {
     $("#insert-link-modal").modal("show");
   }
 
+  insertMergeFieldEmail(event) {
+    console.log("event: ", event);
+    this.contentForm.controls['emailContent'].patchValue(`${this.contentForm.controls['emailContent'].value} ${event.target.value}`);
+    this.contentForm.controls['emailMergeField'].reset('', {onlySelf: true});
+  }
+
+  insertMergeFieldSms(mergeField: string) {
+    this.contentForm.controls['shortMessage'].patchValue(`${this.contentForm.controls['shortMessage'].value} ${mergeField}`);
+    this.contentForm.controls['smsMergeField'].reset('', {onlySelf: true});
+  }
+
   insertLink() {
     this.lastLinkCaption = this.linkForm.controls['caption'].value;
 

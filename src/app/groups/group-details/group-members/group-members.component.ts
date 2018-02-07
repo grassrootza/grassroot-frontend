@@ -39,7 +39,7 @@ export class GroupMembersComponent implements OnInit {
 
   loadGroup(groupUid: string = "") {
     let id = (groupUid) ? groupUid : this.group.groupUid;
-    this.groupService.loadGroupDetails(id)
+    this.groupService.loadGroupDetailsCached(id, false)
       .subscribe(
         groupDetails => {
           this.group = groupDetails;

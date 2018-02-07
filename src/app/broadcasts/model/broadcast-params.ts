@@ -16,6 +16,7 @@ export class BroadcastParams {
   allMemberCount: number = 0; // may also have in group, but want precisely most recent
 
   campaignLinks: Map<String, String> = new Map();
+  mergeFields: string[];
 
 }
 
@@ -29,5 +30,6 @@ export const getBroadcastParams = (bp: BroadcastParams): BroadcastParams => {
   params.twitterConnected = bp.twitterConnected;
   params.allMemberCount = bp.allMemberCount;
   params.campaignLinks = bp.campaignLinks;
+  params.mergeFields = bp.mergeFields;
   return params;
 };

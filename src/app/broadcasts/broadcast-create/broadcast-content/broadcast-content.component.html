@@ -28,11 +28,25 @@
         <div class="form-row mt-md-3" *ngIf="types.shortMessage">
           <h3>{{ 'broadcasts.create.content.smsSection' | translate }}</h3>
         </div>
-        <div class="form-row">
-          <div class="form-group col-sm-12" *ngIf="types.shortMessage">
+        <div class="form-row" *ngIf="types.shortMessage">
+          <div class="form-group col-sm-12">
             <textarea (keyup)="keyUpShortMessage($event)" formControlName="shortMessage"
                       class="form-control" maxlength="160"></textarea>
+          </div>
+        </div>
+        <div class="row" *ngIf="types.shortMessage">
+          <div class="col-md-5 col-sm-12">
             {{ smsCharsLeft }} characters remaining
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <span class="text-right">{{ 'broadcasts.create.content.merge.label' | translate }}</span>
+          </div>
+          <div class="col-md-4 col-sm-9">
+            <select class="form-control form-control-sm" (change)="insertMergeFieldSms($event.target.value)" [formControlName]="'smsMergeField'">
+              <option value="">{{ 'broadcasts.create.content.merge.select' | translate }}</option>
+              <option *ngFor="let field of params?.mergeFields" [value]="field"
+                      [translate]="'broadcasts.create.content.merge.' + field"></option>
+            </select>
           </div>
         </div>
         <div class="error" [hidden]="contentForm.controls['shortMessage'].valid || contentForm.controls['shortMessage'].untouched">
@@ -44,20 +58,31 @@
         <div class="form-row mt-md-3" *ngIf="types.email">
           <h3>{{ 'broadcasts.create.content.emailSection' | translate }}</h3>
         </div>
-        <div class="form-row mb-md-3">
-          <div class="form-group col-sm-12" *ngIf="types.email">
+        <div class="form-row mb-md-3" *ngIf="types.email">
+          <div class="form-group col-sm-12">
             <quill-editor #emailEditor [style]="{height: '180px'}" [formControlName]="'emailContent'"></quill-editor>
+          </div>
+        </div>
+        <div class="row" *ngIf="types.email">
+          <div class="col-md-5 col-sm-12">
             <button (click)="chooseLink('email')" class="email-link"><i class="fas fa-link"></i>
               {{ 'broadcasts.create.content.link.join' | translate }}</button>
             <button *ngIf="!!lastLinkInserted" class="insertion-link" (click)="addLinkToEmail(lastLinkInserted, lastLinkCaption)">
               <i class="fas fa-link"></i> reuse last inserted link
             </button>
-            <select>
-              <option value="none">{{ 'broadcasts.create.content.merge.select' | translate }}</option>
-              <option value="name">{{ 'broadcasts.create.content.merge.name' | translate }}</option>
-              <option value="province">{{ 'broadcasts.create.content.merge.province' | translate }}</option>
+          </div>
+          <div class="col-md-3 col-sm-3">
+            <span class="text-right">{{ 'broadcasts.create.content.merge.label' | translate }}</span>
+          </div>
+          <div class="col-md-4 col-sm-9">
+            <select class="form-control form-control-sm" (change)="insertMergeFieldEmail($event)" [formControlName]="'emailMergeField'">
+              <option value="">{{ 'broadcasts.create.content.merge.select' | translate }}</option>
+              <option *ngFor="let field of params?.mergeFields" [value]="field"
+                [translate]="'broadcasts.create.content.merge.' + field"></option>
             </select>
           </div>
+        </div>
+        <div class="row">
           <div class="error" [hidden]="contentForm.controls['emailContent'].valid || contentForm.controls['emailContent'].untouched">
             {{ 'broadcasts.create.content.errors.email' | translate }}
           </div>

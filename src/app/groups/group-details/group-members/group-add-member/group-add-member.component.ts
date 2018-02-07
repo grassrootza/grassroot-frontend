@@ -63,10 +63,9 @@ export class GroupAddMemberComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.groupService.loadGroupDetails(this.groupUid).subscribe(gr => {
+    this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(gr => {
         this.group = gr
-    }
-    )
+    })
   }
 
   search = (text$: Observable<string>) =>

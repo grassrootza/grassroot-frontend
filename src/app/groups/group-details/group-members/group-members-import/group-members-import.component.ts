@@ -36,7 +36,7 @@ export class GroupMembersImportComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       let groupUid = params['id'];
-      this.groupService.loadGroupDetails(groupUid)
+      this.groupService.loadGroupDetailsCached(groupUid, false)
         .subscribe(
           groupDetails => {
             this.group = groupDetails;

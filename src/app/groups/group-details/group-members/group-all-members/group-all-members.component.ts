@@ -5,9 +5,9 @@ import {GroupService} from '../../../group.service';
 import {Membership, MembersPage} from '../../../model/membership.model';
 import {Group} from '../../../model/group.model';
 import {GroupRef} from '../../../model/group-ref.model';
+import {AlertService} from "../../../../utils/alert.service";
 
 declare var $: any;
-
 
 @Component({
   selector: 'app-group-all-members',
@@ -28,16 +28,18 @@ export class GroupAllMembersComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
-              private groupService: GroupService) {
+              private groupService: GroupService,
+              private alertService: AlertService) {
   }
 
   ngOnInit() {
 
     this.route.parent.parent.params.subscribe((params: Params) => {
       this.groupUid = params['id'];
-      this.groupService.loadGroupDetails(this.groupUid)
+      this.groupService.loadGroupDetailsCached(this.groupUid, false)
         .subscribe(
           groupDetails => {
+            console.log("got a result on group details: ", groupDetails);
             this.group = groupDetails;
           },
           error => {
@@ -57,14 +59,19 @@ export class GroupAllMembersComponent implements OnInit {
 
 
   goToPage(page: number, sort: string[]){
+    if (!this.currentPage) {
+      this.alertService.showLoading();
+    }
     this.filterMembersPage = sort;
     this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort)
       .subscribe(
         membersPage => {
           console.log(membersPage);
           this.currentPage = membersPage;
+          this.alertService.hideLoading();
         },
         error => {
+          this.alertService.hideLoading();
           console.log('Error loading group members', error.status);
         }
       )

@@ -27,7 +27,8 @@
       "ZA_FS": "Free State",
       "ZA_MP": "Mpumalanga",
       "INTL": "International",
-      "UNKNOWN": "Unknown"
+      "UNKNOWN": "Unknown",
+      "null": "Unknown"
     },
     "GroupJoinMethod": {
       "ADDED_BY_SYS_ADMIN": "Added by admin",
@@ -451,6 +452,7 @@
           "errorHeading": "{{ errorCount }} errors",
           "downloadFile": "Download error file",
           "confirmHeading": "Preview entries for importing ({{ value }})",
+          "confirmMax": "only first {{ value }} shown as sample",
           "saveAsTaskTeam": "Save selection as task team",
           "topics": "Assign topic(s) to these members:"
         },
@@ -790,7 +792,11 @@
           "label": "insert merge field: ",
           "select": "(Select)",
           "name": "Name",
-          "province": "Province"
+          "province": "Province",
+          "{__name__}": "Receiver's name",
+          "{__contact__}": "Their contact details",
+          "{__date__}": "Date of sending",
+          "{__province__}": "Their province"
         },
         "errors": {
           "title": "Please enter a title for this broadcast",
@@ -805,8 +811,8 @@
         "allMembers": "All members ({{allMemberCount}})",
         "taskTeams": "Selected task teams",
         "customSelection": "Custom selection",
-        "smsCount": "SMS's: {{ smsNumber }}",
-        "costEstimate": "Estimated cost: R{{ broadcastCost }}"
+        "smsCount": "SMS's: ",
+        "costEstimate": "Estimated cost: R"
       },
       "schedule": {
         "title": "When would you like to send it?",

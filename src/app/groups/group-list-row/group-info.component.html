@@ -46,7 +46,7 @@
     </div>
 
     <div class="col-6 order-2 text-right col-md-1 order-md-6 col-lg-1 chevron">
-        <img src="assets/chevron_right.png" (click)="handleChevronPicked()"/>
+        <img src="{{ extendedInfoVisible ? 'assets/chevron-down.png' : 'assets/chevron_right.png' }}" (click)="handleChevronPicked()"/>
     </div>
   </div>
 

@@ -10,6 +10,7 @@ import {BroadcastParams, getBroadcastParams} from "./model/broadcast-params";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage} from './model/broadcast';
+import {GroupInfo} from "../groups/model/group-info.model";
 
 @Injectable()
 export class BroadcastService {
@@ -22,6 +23,9 @@ export class BroadcastService {
 
   private _createParams: BroadcastParams = new BroadcastParams();
   public createParams: EventEmitter<BroadcastParams> = new EventEmitter(null);
+
+  private _group: GroupInfo;
+  private group: EventEmitter<GroupInfo> = new EventEmitter<GroupInfo>(null);
 
   public pages: string[] = ['types', 'content', 'members', 'schedule'];
   public latestStep: number = 1; // in case we go backwards
@@ -98,7 +102,9 @@ export class BroadcastService {
       twitterPost: this.createRequest.twitterContent,
       twitterLink: this.createRequest.twitterLink,
       twitterLinkCaption: this.createRequest.twitterLinkCaption,
-      twitterImageKey: this.createRequest.twitterImageKey
+      twitterImageKey: this.createRequest.twitterImageKey,
+      smsMergeField: "",
+      emailMergeField: ""
     }
   }
 
@@ -226,11 +232,12 @@ export class BroadcastService {
   }
 
   loadBroadcast() {
+    this.createRequest = new BroadcastRequest();
     let storedString = localStorage.getItem('broadcastCreateRequest');
     console.log("stored string: ", storedString);
     if (storedString) {
-      this.createRequest = JSON.parse(storedString);
-      this.loadedFromCache = true;
+      let cachedRequest = JSON.parse(storedString);
+      this.createRequest.copyFields(cachedRequest);
     } else {
       console.log("nothing in cache, just return new empty");
       this.createRequest = new BroadcastRequest();
@@ -241,7 +248,7 @@ export class BroadcastService {
   }
 
   clearBroadcast() {
-    this.createRequest = new BroadcastRequest();
+    this.createRequest.clear();
     localStorage.removeItem('broadcastCreateRequest');
     localStorage.removeItem('broadcastCreateStep');
   }

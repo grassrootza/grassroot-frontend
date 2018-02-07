@@ -36,7 +36,7 @@ export class GroupCustomFilterComponent implements OnInit {
 
     this.route.parent.parent.params.subscribe((params: Params) => {
       const groupUid = params['id'];
-      this.groupService.loadGroupDetails(groupUid)
+      this.groupService.loadGroupDetailsCached(groupUid, false)
         .subscribe(
           groupDetails => {
             this.group = groupDetails;

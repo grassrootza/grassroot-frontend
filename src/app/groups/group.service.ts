@@ -1,10 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {environment} from '../../environments/environment';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/first';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/concat';
+
+import {environment} from '../../environments/environment';
 import {GroupInfo} from './model/group-info.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {UserService} from '../user/user.service';
 import {Group} from './model/group.model';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {DateTimeUtils} from '../utils/DateTimeUtils';
@@ -20,6 +24,7 @@ import {GroupMemberActivity} from './model/group-member-activity';
 import {MembersFilter} from "./member-filter/filter.model";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {FileImportResult} from "./group-details/group-members/group-members-import/file-import/file-import-result";
+
 
 @Injectable()
 export class GroupService {
@@ -71,6 +76,8 @@ export class GroupService {
   private groupInfoListError_: BehaviorSubject<any> = new BehaviorSubject(null);
   public groupInfoListError: Observable<any> = this.groupInfoListError_.asObservable();
 
+  private groupFullRetrieved_: Group[] = [];
+
   private groupMemberAdded_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public groupMemberAdded: Observable<boolean> = this.groupMemberAdded_.asObservable();
 
@@ -85,7 +92,7 @@ export class GroupService {
   private NEW_MEMBERS_DATA_CACHE = "NEW_MEMBERS_DATA_CACHE";
   private MY_GROUPS_DATA_CACHE = "MY_GROUPS_DATA_CACHE";
 
-  constructor(private httpClient: HttpClient, private userService: UserService) {
+  constructor(private httpClient: HttpClient) {
 
     let cachedMyGroups = localStorage.getItem(this.MY_GROUPS_DATA_CACHE);
     if (cachedMyGroups) {
@@ -105,9 +112,7 @@ export class GroupService {
   }
 
   loadGroups() {
-
     const fullUrl = this.groupListUrl;
-
     return this.httpClient.get<GroupInfo[]>(fullUrl)
       .map(
         data => data.map(gr => GroupInfo.createInstance(gr))
@@ -123,14 +128,29 @@ export class GroupService {
         });
   }
 
-  loadGroupDetails(groupUid: string): Observable<Group> {
-    const fullUrl = this.groupDetailsUrl + "/" + groupUid;
+  loadGroupDetailsCached(groupUid: string, checkServerAfter: boolean = true): Observable<Group> {
+    console.log("currently have groups in memory: ", this.groupFullRetrieved_);
+    let concatObs = Observable.concat(
+      this.checkGroupCache(groupUid),
+      this.loadGroupDetailsFromServer(groupUid));
+    return checkServerAfter ? concatObs : concatObs.first();
+  }
 
+  checkGroupCache(groupUid: string): Observable<Group> {
+    return Observable.from(this.groupFullRetrieved_).filter(grp => grp.groupUid == groupUid)
+      .map(grp => {
+        console.log("found a group in cache!", grp);
+        return grp;
+      });
+  }
+
+  loadGroupDetailsFromServer(groupUid: string): Observable<Group> {
+    const fullUrl = this.groupDetailsUrl + "/" + groupUid;
+    console.log("retrieving group details from server");
     return this.httpClient.get<Group>(fullUrl)
       .map(
         gr => {
-          console.log("Group details loaded : ", gr);
-          return new Group(
+          let group = new Group(
             gr.groupUid,
             gr.name,
             gr.description,
@@ -156,6 +176,13 @@ export class GroupService {
             gr.reminderMinutes,
             gr.profileImageUrl
           );
+          let existingIndex = this.groupFullRetrieved_.findIndex(grp => grp.groupUid == group.groupUid);
+          if (existingIndex != -1) {
+            this.groupFullRetrieved_[existingIndex] = group;
+          } else {
+            this.groupFullRetrieved_.push(group);
+          }
+          return group;
         }
       );
   }
@@ -308,7 +335,6 @@ export class GroupService {
   importAnalyzeMembers(params): Observable<FileImportResult>{
     return this.httpClient.post<FileImportResult>(this.groupImportMembersConfirmUrl, null, {params: params})
       .map(data => {
-          console.log("import result back: ", data);
           return new FileImportResult(data.processedMembers.map(getAddMemberInfo), data.errorRows, data.errorFilePath);
         }
       )
@@ -322,7 +348,6 @@ export class GroupService {
     const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
     const params = new HttpParams().set("joinMethod", joinMethod);
     membersInfoToAdd.forEach(member => member.phoneNumber = PhoneNumberUtils.convertIfPhone(member.phoneNumber));
-    console.log("posting members: ", membersInfoToAdd);
     return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd, { params: params })
       .map(resp => {
         return resp;

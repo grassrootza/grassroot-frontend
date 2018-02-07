@@ -67,7 +67,8 @@ export class GroupDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       let groupUid = params['id'];
-      this.groupService.loadGroupDetails(groupUid)
+      this.alertService.showLoading();
+      this.groupService.loadGroupDetailsCached(groupUid, true)
         .subscribe(
           groupDetails => {
             this.group = groupDetails;

@@ -42,8 +42,10 @@ export class BroadcastRequest {
 
   sendDateTimeMillis: number;
 
-  // todo : probably reuse this instead of recreating if we cancel and re-enter
   clear() {
+    this.broadcastId = "";
+    this.type = "";
+    this.parentId = "";
     this.title = "";
     this.sendShortMessages = false;
     this.shortMessageString = "";
@@ -57,9 +59,53 @@ export class BroadcastRequest {
     this.twitterContent = "";
     this.provinces = [];
     this.topics = [];
+
+    this.selectionType = "ALL_MEMBERS";
+    this.subgroups = [];
+    this.provinces = [];
+    this.topics = [];
+
+    this.sendType = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
+    this.sendNow = true;
+    this.sendOnJoin = false;
+    this.sendAtTime = false;
+    this.sendDate = Date();
+
+    this.sendDateTimeMillis = 0;
   }
 
+  copyFields(br: BroadcastRequest) {
+    this.broadcastId = br.broadcastId;
+    this.type = br.type;
+    this.parentId = br.parentId;
 
+    this.title = br.title;
+    this.sendShortMessages = br.sendShortMessages;
+    this.shortMessageString = br.shortMessageString;
+    this.sendEmail = br.sendEmail;
+    this.emailContent = br.emailContent;
+    this.postToFacebook = br.postToFacebook;
+    this.facebookPages = br.facebookPages;
+    this.facebookContent = br.facebookContent;
+    this.facebookLink = br.facebookLink;
+    this.postToTwitter = br.postToTwitter;
+    this.twitterContent = br.twitterContent;
+    this.provinces = br.provinces;
+    this.topics = br.topics;
+
+    this.selectionType = br.selectionType;
+    this.subgroups = br.subgroups;
+    this.provinces = br.provinces;
+    this.topics = br.topics;
+
+    this.sendType = br.sendType; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
+    this.sendNow = br.sendNow;
+    this.sendOnJoin = br.sendOnJoin;
+    this.sendAtTime = br.sendAtTime;
+    this.sendDate = br.sendDate;
+
+    this.sendDateTimeMillis = br.sendDateTimeMillis;
+}
 }
 
 export class BroadcastTypes {
@@ -83,6 +129,9 @@ export class BroadcastContent {
   twitterLink: string = "";
   twitterLinkCaption: string = "";
   twitterImageKey: string = "";
+
+  smsMergeField: string = "";
+  emailMergeField: string = "";
 }
 
 export class BroadcastMembers {
@@ -95,7 +144,9 @@ export class BroadcastMembers {
 }
 
 export class BroadcastCost {
+  totalNumber: number = 999;
   smsNumber: number = 999;
+  emailNumber: number = 999;
   broadcastCost: string = "0.00";
 }
 

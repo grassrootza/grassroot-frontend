@@ -97,6 +97,7 @@
     <app-group-info *ngFor="let gr of filteredGroupsPage"
                     [group]="gr"
                     (pinToggled)="toggleGroupPin($event)"
+                    (onGroupClicked)="showGroup($event)"
                     (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
                     (onTriggerCreateVote)="showCreateVoteModal($event)"
                     (onTriggerCreateTodo)="showCreateTodoModal($event)">
