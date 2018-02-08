@@ -47,7 +47,6 @@ export class GroupTaskTeamsComponent implements OnInit {
     this.loadMembersPage(0, []);
   }
 
-
   loadMembersPage(pageNo: number, sort: string []) {
     this.groupService.fetchGroupMembers(this.selectedSubGroup.groupUid, pageNo, 10, sort)
       .subscribe(
@@ -65,5 +64,21 @@ export class GroupTaskTeamsComponent implements OnInit {
 
   closeModal(){
     $("#create-task-team-modal").modal("hide");
+  }
+
+  initiateTaskTeamRemoval() {
+    $("#confirm-task-team-removal").modal("show");
+  }
+
+  confirmTaskTeamRemoval() {
+    console.log("selected sub group: ", this.selectedSubGroup);
+    this.groupService.removeTaskTeam(this.group.groupUid, this.selectedSubGroup.groupUid).subscribe(group => {
+      this.selectedSubGroup = null;
+      this.group = group;
+      $("#confirm-task-team-removal").modal("hide");
+    }, error => {
+      console.log("well, that didn't work, show an alert");
+      $("#confirm-task-team-removal").modal("hide");
+    })
   }
 }

@@ -34,6 +34,9 @@ export class MemberFilterComponent implements OnInit {
   @Input()
   affiliations: string[] = [];
 
+  @Input()
+  includeNameFilter: boolean = true;
+
   joinDateConditions: string[] = ["DAYS_AGO-EXACT", "DAYS_AGO-BEFORE", "DAYS_AGO-AFTER", "DATE-EXACT", "DATE-BEFORE", "DATE-AFTER"];
 
   joinDateConditionType = null;
@@ -44,7 +47,6 @@ export class MemberFilterComponent implements OnInit {
 
   @Output()
   public filterChanged: EventEmitter<MembersFilter> = new EventEmitter();
-
 
   constructor(private formBuilder: FormBuilder) {
     this.provinceKeys = Object.keys(UserProvince);
@@ -60,13 +62,16 @@ export class MemberFilterComponent implements OnInit {
       'daysAgo': 1
     });
 
-    this.nameInputSubject.asObservable().debounceTime(300)
-      .subscribe(
-        value => {
-          this.filter.namePhoneOrEmail = value;
-          this.fireFilterChange()
-        }
-      )
+    if (this.includeNameFilter) {
+      this.nameInputSubject.asObservable().debounceTime(300)
+        .subscribe(
+          value => {
+            this.filter.namePhoneOrEmail = value;
+            this.fireFilterChange()
+          }
+        )
+    }
+
   }
 
   setupSelect2() {

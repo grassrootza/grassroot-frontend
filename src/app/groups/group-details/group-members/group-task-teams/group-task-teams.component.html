@@ -17,9 +17,16 @@
 
   <div class="card" *ngIf="selectedSubGroup">
     <div class="card-header task-team-header">
-      <h3 class="d-inline-block">Task Team</h3>
-      <div class="task-team-count d-inline-block">/// {{selectedSubGroup.memberCount}}</div>
-      <div class="task-team-label d-inline-block">{{selectedSubGroup.name}}</div>
+      <div class="row">
+        <div class="col-md-9 col-sm-9">
+          <h3 class="d-inline-block">Task Team</h3>
+          <div class="task-team-count d-inline-block">/// {{selectedSubGroup.memberCount}}</div>
+          <div class="task-team-label d-inline-block">{{selectedSubGroup.name}}</div>
+        </div>
+        <div class="col-md-3 col-sm-3 pull-right">
+          <button class="btn btn-secondary float-right" (click)="initiateTaskTeamRemoval()">Remove task team</button>
+        </div>
+      </div>
     </div>
 
     <div *ngIf="currentPage">
@@ -32,6 +39,30 @@
 
   <app-create-task-team [group]="group" (taskTeamSaved)="closeModal()"></app-create-task-team>
 
+</div>
+
+<div *ngIf="selectedSubGroup" class="modal fade" tabindex="-1" role="dialog" id="confirm-task-team-removal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.taskTeam.removeTitle' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {{ 'group.taskTeam.removeBody' | translate }}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="confirmTaskTeamRemoval()">
+          {{ 'action.confirm' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'group.allMembers.bulkManage.bulkRemoveModal.noButton' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 

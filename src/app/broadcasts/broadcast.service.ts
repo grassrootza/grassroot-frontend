@@ -2,7 +2,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {
-  BroadcastConfirmation, BroadcastContent, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
+  BroadcastConfirmation, BroadcastContent, BroadcastCost, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
   BroadcastTypes
 } from "./model/broadcast-request";
 import {DateTimeUtils} from "../utils/DateTimeUtils";
@@ -10,7 +10,6 @@ import {BroadcastParams, getBroadcastParams} from "./model/broadcast-params";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage} from './model/broadcast';
-import {GroupInfo} from "../groups/model/group-info.model";
 
 @Injectable()
 export class BroadcastService {
@@ -20,12 +19,10 @@ export class BroadcastService {
   imageUploadUrl = environment.backendAppUrl + "/api/broadcast/create/image/upload";
 
   private createRequest: BroadcastRequest = new BroadcastRequest();
+  private createCounts: BroadcastCost = new BroadcastCost();
 
   private _createParams: BroadcastParams = new BroadcastParams();
   public createParams: EventEmitter<BroadcastParams> = new EventEmitter(null);
-
-  private _group: GroupInfo;
-  private group: EventEmitter<GroupInfo> = new EventEmitter<GroupInfo>(null);
 
   public pages: string[] = ['types', 'content', 'members', 'schedule'];
   public latestStep: number = 1; // in case we go backwards
@@ -125,18 +122,20 @@ export class BroadcastService {
   getMembers(): BroadcastMembers {
     return {
       selectionType: this.createRequest.selectionType,
-      taskTeams: this.createRequest.subgroups,
-      provinces: this.createRequest.provinces,
-      topics: this.createRequest.topics
+      taskTeams: this.createRequest.taskTeams,
+      memberFilter: this.createRequest.getMemberFilter()
     }
   }
 
   setMembers(members: BroadcastMembers) {
     this.createRequest.selectionType = members.selectionType;
-    this.createRequest.subgroups = members.taskTeams;
-    this.createRequest.provinces = members.provinces;
-    this.createRequest.topics = members.topics;
+    this.createRequest.taskTeams = members.taskTeams;
+    this.createRequest.setMemberFilter(members.selectionType, members.memberFilter);
     this.saveBroadcast();
+  }
+
+  setMessageCounts(costs: BroadcastCost) {
+    this.createCounts = costs;
   }
 
   getSchedule(): BroadcastSchedule {
@@ -154,7 +153,6 @@ export class BroadcastService {
     this.saveBroadcast(); // since we remain on this step
   }
 
-  // todo : populate fields like number messages etc by querying back end
   getConfirmationFields(): BroadcastConfirmation {
     let cn = new BroadcastConfirmation();
     cn.sendShortMessage = this.createRequest.sendShortMessages;
@@ -164,18 +162,18 @@ export class BroadcastService {
     cn.postTwitter = this.createRequest.postToTwitter;
     cn.twitterAccount = this.createRequest.twitterAccount;
 
-    cn.smsNumber = this.createRequest.sendShortMessages ? this._createParams.allMemberCount : 0;
-
-    cn.totalMemberCount = this._createParams.allMemberCount;
-    // cn.sendEmailCount = 50;
+    console.log("stored count: ", this.createCounts.totalNumber);
+    cn.totalMemberCount = this.createCounts.totalNumber;
+    console.log("total member count: ", cn.totalMemberCount);
+    cn.smsNumber = this.createCounts.smsNumber;
+    cn.sendEmailCount = this.createCounts.emailNumber;
+    cn.broadcastCost = this.createCounts.broadcastCost;
 
     cn.provinces = this.createRequest.provinces;
     cn.topics = this.createRequest.topics;
 
     cn.sendTimeDescription = this.createRequest.sendType;
     cn.sendTime = this.createRequest.sendDate; // todo: format
-
-    cn.broadcastCost = (cn.smsNumber * this._createParams.smsCostCents / 100).toFixed(2);
 
     return cn;
   }
@@ -272,6 +270,7 @@ export class BroadcastService {
     let params = new HttpParams()
       .set('page', pageNo.toString())
       .set('size', pageSize.toString())
+      .set('sort', 'creationTime,desc')
       .set('broadcastSchedule', broadcastSchedule);
     const fullUrl = this.fetchUrlBase + 'group/' + groupUid;
 
@@ -287,7 +286,7 @@ export class BroadcastService {
               bc.emailSent,
               bc.smsCount,
               bc.emailCount,
-              bc.fbPage != null ? bc.fbPage : "",
+              bc.fbPages,
               bc.twitterAccount != null ? bc.twitterAccount : "",
               bc.dateTimeSent != null ? DateTimeUtils.getDateFromJavaInstant(bc.dateTimeSent) : null,
               bc.scheduledSendTime != null ? DateTimeUtils.getDateFromJavaInstant(bc.scheduledSendTime) : null,
@@ -296,6 +295,7 @@ export class BroadcastService {
               bc.emailContent,
               bc.fbPost,
               bc.twitterPost,
+              bc.hasFilter,
               bc.smsCount + bc.emailCount,
               bc.provinces,
               bc.topics

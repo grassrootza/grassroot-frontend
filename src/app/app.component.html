@@ -1,14 +1,14 @@
 <ngx-loading [show]="loadingModule" [config]="{ backdropBackgroundColour: 'rgba(255,255,255,0.3)'}"></ngx-loading>
 <div class="container-fluid">
 
-  <div class="container-fluid bg-white">
+  <div class="container-fluid bg-white fixed-top">
 
     <div class="container">
 
       <!-- navbar for logged in user -->
-      <nav class="navbar navbar-expand-lg navbar-light " *ngIf="loggedInUser">
+      <nav class="navbar navbar-expand-lg navbar-light" *ngIf="loggedInUser">
 
-        <a class="navbar-brand" [routerLink]="['/']"> <!-- will alter to home page when that is built -->
+        <a class="navbar-brand" [routerLink]="['/']">
           <img src="assets/grassroot-01.png"/>
         </a>
 
@@ -145,14 +145,14 @@
       </nav>
 
     </div>
-  </div>
 
-  <div id="snackbar" [ngClass]="{'alert alert-info alert-dismissible grassroot-snackbar': true}" *ngIf="(alertMessage)">
-    {{ alertMessage | translate }}
-    <a href="#" class="close" data-dismiss="alert" aria-label="close"
-       (click)="clearAlert()"><i class="fas fa-times" aria-hidden="true"></i></a>
-  </div>
+    <div id="snackbar" [ngClass]="{'alert alert-info alert-dismissible grassroot-snackbar': true}" *ngIf="(alertMessage)">
+      {{ alertMessage | translate }}
+      <a href="#" class="close" data-dismiss="alert" aria-label="close"
+         (click)="clearAlert()"><i class="fas fa-times" aria-hidden="true"></i></a>
+    </div>
 
+  </div>
 
   <div class="container main-content">
 

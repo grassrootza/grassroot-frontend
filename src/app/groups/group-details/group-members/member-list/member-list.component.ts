@@ -8,6 +8,7 @@ import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} fro
 import {GroupAddMemberInfo} from '../../../model/group-add-member-info.model';
 import {GroupRole} from '../../../model/group-role';
 import {UserProvince} from '../../../../user/model/user-province.enum';
+import {AlertService} from "../../../../utils/alert.service";
 
 declare var $: any;
 
@@ -57,7 +58,10 @@ export class MemberListComponent implements OnInit {
   public coreDetailsChanged: boolean = false;
   public withinGroupAttrsChanged: boolean = false;
 
+  private editComplete = new EventEmitter<boolean>();
+
   constructor(private groupService: GroupService,
+              private alertService: AlertService,
               private fb: FormBuilder) {
     this.memberRemoved = new EventEmitter<any>();
     this.shouldReloadList = new EventEmitter<boolean>();
@@ -253,6 +257,13 @@ export class MemberListComponent implements OnInit {
 
     let shouldReload = false;
 
+    this.editComplete.subscribe(succeeded => {
+      console.log("finished? ", succeeded);
+      this.clearEditModal();
+      this.alertService.alert("group.allMembers.edit.completed");
+      this.shouldReloadList.emit(succeeded);
+    });
+
     if(!this.coreDetailsChanged && !this.roleChanged && !this.withinGroupAttrsChanged){
       console.log("Nothing changed in form not submiting it");
       this.clearEditModal();
@@ -262,7 +273,8 @@ export class MemberListComponent implements OnInit {
     if (this.roleChanged) {
       this.groupService.updateGroupMemberRole(this.group.groupUid, memberUid,
         this.editMemberForm.controls['roleName'].value).subscribe(resp => {
-        shouldReload = true;
+        console.log("edit copmlete, emitting true");
+        this.editComplete.emit(true);
       })
     }
 
@@ -270,7 +282,7 @@ export class MemberListComponent implements OnInit {
       this.groupService.updateGroupMemberDetails(this.group.groupUid, memberUid, name, email, phone, province)
         .subscribe(resp => {
           console.log(resp);
-          shouldReload = true;
+          this.editComplete.emit(true);
         })
     }
 
@@ -288,13 +300,12 @@ export class MemberListComponent implements OnInit {
 
       this.groupService.updateGroupMemberAssignments(this.group.groupUid, memberUid, taskTeams, this.splitAffiliations(), topics)
         .subscribe(resp => {
-          shouldReload = true;
-          this.clearEditModal();
+          this.editComplete.emit(true);
         });
     }
 
     if (shouldReload) {
-      this.shouldReloadList.emit(true);
+
       this.clearEditModal();
     }
 

@@ -382,7 +382,8 @@
         "notAllowed": {
           "title": "Can't edit details",
           "body": "You are not allowed to edit details for this user"
-        }
+        },
+        "completed": "Done! Member details updated"
       }
     },
     "memberProfile":{
@@ -593,7 +594,9 @@
       "title": "Create new task team",
       "name": "Give this task team a name",
       "numberOfMembers": "Number of members that will be added:",
-      "selectMembers": "Select members based on custom filter"
+      "selectMembers": "Select members based on custom filter",
+      "removeTitle": "Confirm removal",
+      "removeBody": "Removing a task team cannot be undone. Are you sure?"
     }
   },
   "campaigns": {

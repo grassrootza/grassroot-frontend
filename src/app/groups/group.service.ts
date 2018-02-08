@@ -56,6 +56,7 @@ export class GroupService {
 
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
+  groupRemoveTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/deactivate/taskteam";
   groupUploadImageUrl = environment.backendAppUrl + "/api/group/modify/image/upload";
 
   groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
@@ -615,6 +616,12 @@ export class GroupService {
       .map(resp => {
         return resp;
       })
+  }
+
+  removeTaskTeam(parentUid: string, taskTeamUid: string): Observable<Group> {
+    const fullUrl = this.groupRemoveTaskTeamUrl + "/" + parentUid;
+    let params = new HttpParams().set("taskTeamUid", taskTeamUid);
+    return this.httpClient.post<Group>(fullUrl, null, {params: params});
   }
 
   groupMemberAddedSuccess(success: boolean){

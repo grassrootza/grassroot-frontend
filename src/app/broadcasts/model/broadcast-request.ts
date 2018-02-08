@@ -1,5 +1,8 @@
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
+import {MembersFilter} from "../../groups/member-filter/filter.model";
+import {JoinDateCondition} from "../../groups/member-filter/joindatecondition.enum";
+import * as moment from 'moment';
 
 export class BroadcastRequest {
 
@@ -30,9 +33,13 @@ export class BroadcastRequest {
   twitterImageKey: string = "";
 
   selectionType: string = "ALL_MEMBERS";
-  subgroups: string[] = [];
+  taskTeams: string[] = [];
   provinces: string[] = [];
+  affiliations: string[] = null;
+  joinMethods: string[] = null;
   topics: string[] = [];
+  joinDate: string = null;
+  joinDateCondition: JoinDateCondition = null;
 
   sendType: string = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
   sendNow: boolean = true;
@@ -61,9 +68,13 @@ export class BroadcastRequest {
     this.topics = [];
 
     this.selectionType = "ALL_MEMBERS";
-    this.subgroups = [];
+    this.taskTeams = [];
     this.provinces = [];
     this.topics = [];
+    this.affiliations = [];
+    this.joinMethods = [];
+    this.joinDate = null;
+    this.joinDateCondition = null;
 
     this.sendType = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
     this.sendNow = true;
@@ -94,7 +105,7 @@ export class BroadcastRequest {
     this.topics = br.topics;
 
     this.selectionType = br.selectionType;
-    this.subgroups = br.subgroups;
+    this.taskTeams = br.taskTeams;
     this.provinces = br.provinces;
     this.topics = br.topics;
 
@@ -105,7 +116,30 @@ export class BroadcastRequest {
     this.sendDate = br.sendDate;
 
     this.sendDateTimeMillis = br.sendDateTimeMillis;
-}
+  }
+
+  setMemberFilter(selectionType: string, filter: MembersFilter) {
+    this.selectionType = selectionType;
+    this.topics = filter.topics;
+    this.provinces = filter.provinces;
+    this.taskTeams = filter.taskTeams;
+    this.affiliations = filter.affiliations;
+    this.joinMethods = filter.joinSources;
+    this.joinDateCondition = filter.joinDateCondition;
+    this.joinDate = !!(filter.joinDate) ? filter.joinDate.format("YYYY-MM-DD") : null;
+  }
+
+  getMemberFilter(): MembersFilter {
+    let filter = new MembersFilter();
+    filter.topics = this.topics;
+    filter.provinces = this.provinces;
+    filter.taskTeams = this.taskTeams;
+    filter.affiliations = this.affiliations;
+    filter.joinSources = this.joinMethods;
+    filter.joinDateCondition = this.joinDateCondition;
+    filter.joinDate = moment(this.joinDate, "YYYY-MM-DD");
+    return filter;
+  }
 }
 
 export class BroadcastTypes {
@@ -138,8 +172,7 @@ export class BroadcastMembers {
 
   selectionType: string = "ALL_MEMBERS";
   taskTeams: string[] = [];
-  provinces: string[] = [];
-  topics: string[] = [];
+  memberFilter: MembersFilter;
 
 }
 
@@ -162,6 +195,7 @@ export class BroadcastSchedule {
 export class BroadcastConfirmation {
 
   sendShortMessage: boolean;
+
   smsNumber: number;
   sendEmail: boolean;
   sendEmailCount: number;

@@ -8,12 +8,17 @@ export class MembershipInfo {
 
   constructor(public memberUid: string,
               public phoneNumber: string,
+              public memberEmail: string,
+              public province: string,
               public nationalFormattedNumber: string,
               public displayName: string,
               public roleName: GroupRole) {
   }
 }
 
+export const getUserFromMembershipInfo = (memb: MembershipInfo): User => {
+  return new User(memb.memberUid, memb.displayName, memb.phoneNumber, memb.memberEmail, "", "", "true", "", memb.province);
+};
 
 export class Membership {
 

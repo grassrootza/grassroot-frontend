@@ -20,8 +20,7 @@
   </div>
 
   <div class="col-sm-3 col-lg-2 filter-item">
-    <label for="taskTeams" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.taskTeam' | translate
-      }}</label>
+    <label for="taskTeams" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.taskTeam' | translate }}</label>
   </div>
   <div class=" col-sm-9 col-lg-10 filter-item">
     <select id="taskTeams" class="form-control task-teams-multi-select" multiple="multiple" style="width: 100%">
@@ -122,7 +121,8 @@
     <label for="joinMethods" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.nameOrPhone'">Joined
       source</label>
   </div>
-  <div class=" col-sm-9 col-lg-10 filter-item">
+
+  <div class=" col-sm-9 col-lg-10 filter-item" *ngIf="includeNameFilter">
     <input id="nameOrPhone" class="form-control"
            placeholder="{{ 'group.allMembers.filterMembers.nameOrPhonePlaceHolder' | translate}}"
            (keyup)="nameOrPhoneChanged($event.target.value)"/>
@@ -130,6 +130,3 @@
 
 
 </div>
-
-
-<!--<button type="button" class="btn btn-primary" style="margin-top: 1rem;" (click)="filterData()">{{ 'group.allMembers.filterMembers.update' | translate }}</button>-->

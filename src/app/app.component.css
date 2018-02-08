@@ -1,5 +1,5 @@
 .main-content {
-  padding-top: 3rem;
+  padding-top: 90px;
 }
 
 .navbar {
@@ -7,10 +7,15 @@
 }
 
 .navbar-brand {
-  margin-right: 3rem;
   margin-bottom: 0.5rem;
 }
 
+
+@media (min-width: 768px) {
+  .navbar-brand {
+    margin-right: 3rem;
+  }
+}
 
 .navbar-light .navbar-nav.main-nav .nav-link {
   margin-left: 2rem !important;
