@@ -45,7 +45,6 @@ export class GroupAddMemberComponent implements OnInit {
   searchFailed = false;
   hideSearchingWhenUnsubscribed = new Observable(() => () => this.searching = false);
 
-
   constructor(private groupService: GroupService, private fb: FormBuilder) {
     this.provinceKeys = Object.keys(this.province);
     this.roleKeys = Object.keys(GroupRole);
@@ -87,10 +86,11 @@ export class GroupAddMemberComponent implements OnInit {
   }
 
   pickedItem(pickedUser: GroupRelatedUserResponse){
+    console.log("picked user: ", pickedUser);
     this.addMemberForm.controls['displayName'].setValue(pickedUser.name);
     this.addMemberForm.controls['roleName'].setValue(GroupRole.ROLE_ORDINARY_MEMBER);
     this.addMemberForm.controls['phoneNumber'].setValue(pickedUser.phone);
-    this.addMemberForm.controls['emailAddress'].setValue(pickedUser.email);
+    this.addMemberForm.controls['memberEmail'].setValue(pickedUser.email);
     this.addMemberForm.controls['province'].setValue(pickedUser.province);
 
   }
@@ -103,6 +103,7 @@ export class GroupAddMemberComponent implements OnInit {
 
     this.groupService.confirmAddMembersToGroup(this.groupUid, [this.addMemberForm.value], "ADDED_BY_OTHER_MEMBER").subscribe(result => {
       $('#add-member-modal').modal("hide");
+      this.addMemberForm.reset();
       this.onMemberAdded.emit(result);
     }, error => {
       console.log("well that didn't work: ", error);

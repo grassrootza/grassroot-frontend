@@ -311,6 +311,7 @@ export class GroupService {
       'memberUids': membersUids,
       'topics': topics
     };
+    console.log("posting topic assignment ...");
 
     return this.httpClient.post(fullUrl, null, {params: params})
       .map(response => {

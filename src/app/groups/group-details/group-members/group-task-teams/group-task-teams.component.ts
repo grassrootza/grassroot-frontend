@@ -5,6 +5,7 @@ import {UserService} from "../../../../user/user.service";
 import {GroupService} from "../../../group.service";
 import {MembersPage} from "../../../model/membership.model";
 import {GroupRef} from "../../../model/group-ref.model";
+import {AlertService} from "../../../../utils/alert.service";
 
 declare var $:any;
 
@@ -21,8 +22,8 @@ export class GroupTaskTeamsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
-              private groupService: GroupService) {
-  }
+              private groupService: GroupService,
+              private alertService: AlertService) { }
 
   ngOnInit() {
 
@@ -30,16 +31,20 @@ export class GroupTaskTeamsComponent implements OnInit {
       let groupUid = params['id'];
 
       console.log("calling group fetch in task teams");
-      this.groupService.loadGroupDetailsCached(groupUid, true)
-        .subscribe(
-          groupDetails => {
-            this.group = groupDetails;
-          },
-          error => {
-            console.log("Error loading groups", error.status)
-          }
-        );
+      this.loadGroup(groupUid);
     });
+  }
+
+  loadGroup(groupUid: string) {
+    this.groupService.loadGroupDetailsCached(groupUid, true)
+      .subscribe(
+        groupDetails => {
+          this.group = groupDetails;
+        },
+        error => {
+          console.log("Error loading groups", error.status)
+        }
+      );
   }
 
   loadMembers(group: GroupRef) {
@@ -64,6 +69,8 @@ export class GroupTaskTeamsComponent implements OnInit {
 
   closeModal(){
     $("#create-task-team-modal").modal("hide");
+    this.alertService.alert("group.taskTeam.createTeamDone");
+    this.loadGroup(this.group.groupUid);
   }
 
   initiateTaskTeamRemoval() {
@@ -76,6 +83,7 @@ export class GroupTaskTeamsComponent implements OnInit {
       this.selectedSubGroup = null;
       this.group = group;
       $("#confirm-task-team-removal").modal("hide");
+      this.alertService.alert("group.taskTeam.removeTeamDone");
     }, error => {
       console.log("well, that didn't work, show an alert");
       $("#confirm-task-team-removal").modal("hide");

@@ -44,9 +44,9 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="createTaskTeam()" [disabled]="!createTaskTeamForm.valid">{{'action.save' | translate }}
+        <button type="button" class="btn btn-primary save-button" (click)="createTaskTeam()" [disabled]="!createTaskTeamForm.valid">{{'action.save' | translate }}
         </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
       </div>
 
     </div>

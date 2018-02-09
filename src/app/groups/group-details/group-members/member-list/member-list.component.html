@@ -70,7 +70,13 @@
       </div>
 
       <div class="col-md-2">
-        {{member.user.displayName}}
+        <p class="member-name">{{member.user.displayName}}</p>
+        <p class="affiliation-subtitle" *ngIf="hasAffiliations(member)">
+          {{ 'group.allMembers.table.affiliation' | translate }}{{ member.affiliations.join(', ')}}
+        </p>
+        <p class="affiliation-subtitle" *ngIf="member?.topics?.length > 0">
+          Topics: {{member.topics.join(', ')}}
+        </p>
       </div>
 
       <div class="col-md-2">
@@ -143,10 +149,10 @@
               {{singleMemberManage.user.displayName}}
             </div>
             <div class="col-3">
-              {{singleMemberManage.roleName}}
+              {{'enum.GroupRole.' + singleMemberManage.roleName | translate}}
             </div>
             <div class="col-3">
-              {{singleMemberManage.user.phoneNumber}}
+              {{singleMemberManage.nationalNumber()}}
             </div>
             <div class="col-3">
               {{singleMemberManage.user.email}}
@@ -155,46 +161,43 @@
         </div>
 
         <div class="container">
-          <span [translate]="'group.allMembers.addToTaskTeam.addToTaskTeamLabel'">Add to task team:</span>
-          <div class="dropdown">
-            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="add-member-to-task-team-dropdown-button"
-                    aria-haspopup="true" aria-expanded="false" >
-              {{'group.allMembers.addToTaskTeam.pickTaskTeam' | translate}}
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item disabled" *ngFor="let taskTeam of group.subGroups" (click)="selectTaskTeam(taskTeam)">{{taskTeam.name}}</a>
+          <div class="row mt-3" *ngIf="group.subGroups && group.subGroups.length > 0 && !creatingTaskTeam">
+            <div class="col-md-4 col-sm-12">
+              <h4 [translate]="'group.allMembers.addToTaskTeam.addToTaskTeamLabel'">Add to task team:</h4>
+            </div>
+            <div class="col-md-5 col-sm-12">
+              <select class="form-control form-control-em">
+                <option>{{'group.allMembers.addToTaskTeam.pickTaskTeam' | translate}}</option>
+                <option class="dropdown-item task-team-name" *ngFor="let taskTeam of group.subGroups"
+                        (click)="selectTaskTeam(taskTeam)">{{taskTeam.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-3 col-sm-12 pull-right">
+              <a [routerLink]="['../task-teams']" data-dismiss="modal" class="grassroot-link pull-right">
+                {{ 'group.allMembers.addToTaskTeam.manageTeams' | translate }}
+              </a>
             </div>
           </div>
+
+          <div class="row mt-3">
+            <div class="col-md-4 col-sm-12">
+              <button [ngClass]="['btn', (creatingTaskTeam ? 'btn-primary' : 'btn-secondary'), 'create-team']"
+                      (click)="toggleNewTeamInput()"><i class="fas fa-plus"></i> {{ 'group.allMembers.addToTaskTeam.addTeam' | translate }}</button>
+            </div>
+            <div class="col-md-8 col-sm-12 pull-left text-left" *ngIf="creatingTaskTeam">
+              <input class="form-control form-control-em" type="text" placeholder="{{ 'group.allMembers.addToTaskTeam.addTeamPlace' | translate }}"
+                (keyup)="createMemberAndAddToTeam($event)" />
+            </div>
+          </div>
+
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="saveAddMemberToTaskTeam()" [disabled]="!selectedTaskTeam">
+        <button type="button" class="btn btn-primary save-button" (click)="saveAddMemberToTaskTeam()" [disabled]="!selectedTaskTeam && !newTaskTeamName">
           {{ 'action.save' | translate }}
         </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
           {{ 'action.cancel' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="no-task-teams-for-group" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.addToTaskTeam.noTaskTeamsForGroup.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3>{{ 'group.allMembers.addToTaskTeam.noTaskTeamsForGroup.body' | translate}}</h3>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          {{ 'action.ok' | translate }}
         </button>
       </div>
     </div>
@@ -210,7 +213,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" *ngIf="singleMemberManage">
+      <div class="modal-body">
         <div class="container group-info-header d-none d-md-block">
           <div class="row">
             <div class="col-3" [translate]="'group.allMembers.assignTopic.table.name'">Name</div>
@@ -220,15 +223,15 @@
           </div>
         </div>
         <div class="container group-info-row">
-          <div class="row flex flex-wrap">
+          <div class="row flex flex-wrap" *ngIf="singleMemberManage">
             <div class="col-3">
               {{singleMemberManage.user.displayName}}
             </div>
             <div class="col-3">
-              {{'enums.groupRole.' + singleMemberManage.roleName | translate }}
+              {{ ('enum.GroupRole.' + singleMemberManage.roleName) | translate }}
             </div>
             <div class="col-3">
-              {{singleMemberManage.user.phoneNumber}}
+              {{singleMemberManage.nationalNumber()}}
             </div>
             <div class="col-3">
               {{singleMemberManage.user.email}}
@@ -238,8 +241,8 @@
 
         <div class="container">
           <span [translate]="'group.allMembers.assignTopic.assignTopicLabel'">Assign topics:</span>
-          <select class="form-control" id="names-select" [(ngModel)]="selectedTopics" name="name-select" multiple>
-            <option *ngFor="let topic of group.topics" [ngValue]="topic">
+          <select class="form-control form-control-em topics-multi-select" id="topics-select" multiple="multiple" style="width: 100%">
+            <option *ngFor="let topic of group.topics" [value]="topic">
               {{topic}}
             </option>
           </select>
@@ -251,28 +254,6 @@
         </button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           {{ 'action.cancel' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="no-topics-for-group" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.assignTopic.noTopicsForGroup.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3>{{ 'group.allMembers.assignTopic.noTopicsForGroup.body' | translate}}</h3>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          {{ 'action.ok' | translate }}
         </button>
       </div>
     </div>
@@ -307,7 +288,7 @@
               {{singleMemberManage?.user.displayName}}
             </div>
             <div class="col-3">
-              {{singleMemberManage?.roleName}}
+              {{'enums.groupRole.' + singleMemberManage?.roleName | translate }}
             </div>
             <div class="col-3">
               {{singleMemberManage?.user.phoneNumber}}
@@ -412,28 +393,6 @@
           <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" >{{ 'action.cancel' | translate }}</button>
         </div>
       </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="cant-edit-details" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.edit.notAllowed.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3>{{ 'group.allMembers.edit.notAllowed.body' | translate}}</h3>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          {{ 'action.ok' | translate }}
-        </button>
-      </div>
     </div>
   </div>
 </div>

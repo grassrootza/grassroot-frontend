@@ -266,6 +266,7 @@
       "title": "All members ",
       "table":{
         "name": "Name",
+        "affiliation": "Affiliation: ",
         "role": "Role",
         "province": "Province",
         "phone": "Phone",
@@ -326,14 +327,14 @@
         "joinDate": "Joined",
         "joinDateAny": "Any time",
         "nameOrPhone": "Name",
-        "nameOrPhonePlaceHolder": "Filter by name, phone number or email",
+        "nameOrPhonePlaceHolder": "Filter by name, phone number or email (separate multiple by comma)",
         "update": "Update",
         "DATE-EXACT": "on",
         "DATE-BEFORE": "before",
         "DATE-AFTER": "after",
         "DAYS_AGO-EXACT": "exactly",
-        "DAYS_AGO-BEFORE": "more then",
-        "DAYS_AGO-AFTER": "less then",
+        "DAYS_AGO-BEFORE": "more than",
+        "DAYS_AGO-AFTER": "less than",
         "DAYS_AGO_SUFIX": "days ago"
 
       },
@@ -355,10 +356,11 @@
         },
         "addToTaskTeamLabel": "Add to task team:",
         "pickTaskTeam": "Pick task team to add member to",
-        "noTaskTeamsForGroup":{
-          "title": "No task teams",
-          "body": "This group does not have any task team"
-        }
+        "manageTeams": "Manage task teams",
+        "addTeam": "Create task team",
+        "addTeamPlace": "Give the task team a name",
+        "createdDone": "Task team created. Keep adding members or manage under 'task teams'",
+        "addedDone": "Done, member added to task team"
       },
       "assignTopic":{
         "modalTitle": "Assign topic to member",
@@ -370,11 +372,7 @@
         },
         "assignTopicLabel": "Assign topic:",
         "pickTopic": "Pick topic to assign to member",
-        "noTopicsForGroup":{
-          "title": "No topics",
-          "body": "This group does not have any topics"
-        }
-
+        "assigned": "Done, topics assigned to member"
       },
       "edit":{
         "title": "Edit member",
@@ -596,7 +594,9 @@
       "numberOfMembers": "Number of members that will be added:",
       "selectMembers": "Select members based on custom filter",
       "removeTitle": "Confirm removal",
-      "removeBody": "Removing a task team cannot be undone. Are you sure?"
+      "removeBody": "Removing a task team cannot be undone. Are you sure?",
+      "createTeamDone": "Done, task team created",
+      "removeTeamDone": "Done, task team removed"
     }
   },
   "campaigns": {

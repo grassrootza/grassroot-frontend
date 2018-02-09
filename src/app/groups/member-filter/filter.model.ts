@@ -14,4 +14,9 @@ export class MembersFilter {
   joinDateCondition: JoinDateCondition = null;
   namePhoneOrEmail: string = null;
 
+  hasContent(): boolean {
+    return !!this.provinces || !!this.taskTeams || !!this.topics || !!this.affiliations || !!this.joinSources ||
+      !!this.campaigns || !!this.joinDate || !!this.joinDaysAgo || !!this.joinDateCondition || !!this.namePhoneOrEmail;
+  }
+
 }

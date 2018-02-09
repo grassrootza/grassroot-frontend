@@ -43,6 +43,9 @@ export class MemberListComponent implements OnInit {
   singleMemberManage: Membership = null;
   currentTaskTeams: string[] = null;
   selectedTaskTeam: GroupRef = null;
+  creatingTaskTeam: boolean = false;
+  newTaskTeamName: string = null;
+
   selectedTopics: string[] = [];
 
   public editMemberForm: FormGroup;
@@ -85,6 +88,7 @@ export class MemberListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.setupTopicSelect();
   }
 
   selectMember(member: Membership) {
@@ -114,25 +118,46 @@ export class MemberListComponent implements OnInit {
   }
 
   showAddMemberToTaskTeamModal(member: Membership){
-    if(this.group.subGroups.length > 0){
-      this.singleMemberManage = member;
-      $('#add-member-to-task-team').modal('show');
-    }else{
-      $('#no-task-teams-for-group').modal('show');
+    this.singleMemberManage = member;
+    $('#add-member-to-task-team').modal('show');
+  }
+
+  toggleNewTeamInput() {
+    this.creatingTaskTeam = !this.creatingTaskTeam;
+    if (!this.creatingTaskTeam) {
+      this.newTaskTeamName = null;
+    } else {
+      this.selectedTaskTeam = null;
     }
   }
 
+  createMemberAndAddToTeam(event) {
+    this.newTaskTeamName = event.target.value;
+  }
+
   showAssignTopicToMemberModal(member: Membership){
-    if(this.group.topics.length > 0){
-      this.singleMemberManage = member;
-      this.selectedTopics = [];
-      for(let i=0;i<member.topics.length;i++){
-        this.selectedTopics.push(member.topics[i]);
-      }
-      $('#member-assign-topics').modal('show');
-    }else{
-      $('#no-topics-for-group').modal('show');
+    this.singleMemberManage = member;
+    this.selectedTopics = [];
+    for(let i=0;i<member.topics.length;i++){
+      this.selectedTopics.push(member.topics[i]);
     }
+    $('#member-assign-topics').modal('show');
+    $(".topics-multi-select").val(this.selectedTopics);
+    this.setupTopicSelect();
+  }
+
+  setupTopicSelect() {
+    $(".topics-multi-select").select2({
+      placeholder: "Select topics, or type and hit enter for a new one)",
+      allowClear: true,
+      dropdownParent: $('#member-assign-topics'),
+      tags: true
+    });
+    $(".topics-multi-select").on('change.select2', function () {
+      const data = $('.topics-multi-select').select2('data');
+      this.selectedTopics = data.length > 0 ? data.map(tt => tt.id) : [];
+      console.log("topics: ", this.selectedTopics);
+    }.bind(this));
   }
 
   showEditModal(member: Membership){
@@ -163,16 +188,34 @@ export class MemberListComponent implements OnInit {
   saveAddMemberToTaskTeam(){
     let memberUids: string[] = [];
     memberUids.push(this.singleMemberManage.user.uid.toString());
-    this.groupService.addMembersToTaskTeam(this.group.groupUid, this.selectedTaskTeam.groupUid, memberUids).subscribe(response => {
-      $('#add-member-to-task-team').modal('hide');
-    })
+    if (this.creatingTaskTeam) {
+      this.groupService.createTaskTeam(this.group.groupUid, this.newTaskTeamName, memberUids).subscribe(response => {
+        this.closeTaskTeamModal("group.allMembers.addToTaskTeam.createdDone");
+      })
+    } else {
+      this.groupService.addMembersToTaskTeam(this.group.groupUid, this.selectedTaskTeam.groupUid, memberUids).subscribe(response => {
+        this.closeTaskTeamModal("group.allMembers.addToTaskTeam.addedDone");
+      })
+    }
+  }
+
+  closeTaskTeamModal(alertMessage: string) {
+    if (alertMessage) {
+      this.alertService.alert(alertMessage);
+    }
+    $('#add-member-to-task-team').modal('hide');
   }
 
   saveAssignTopicToMember(){
     let memberUids: string[] = [];
     memberUids.push(this.singleMemberManage.user.uid.toString());
+    console.log("assigning topics to member: ", this.selectedTopics);
     this.groupService.assignTopicToMember(this.group.groupUid, memberUids, this.selectedTopics).subscribe(response => {
+      this.singleMemberManage.topics = this.selectedTopics;
+      this.alertService.alert("group.allMembers.assignTopic.assigned");
       $('#member-assign-topics').modal('hide');
+    }, error => {
+      console.log("well that didn't work");
     })
   }
 
@@ -186,6 +229,11 @@ export class MemberListComponent implements OnInit {
 
   withinGroupDetailsChangedTrigger() {
     this.withinGroupAttrsChanged = true;
+  }
+
+  hasAffiliations(member: Membership) {
+    return member && member.affiliations && member.affiliations.length > 0 &&
+      !member.affiliations.every(s => !s);
   }
 
   filterData(fieldToFilter: string){

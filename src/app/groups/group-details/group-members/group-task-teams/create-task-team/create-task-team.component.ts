@@ -36,7 +36,6 @@ export class CreateTaskTeamComponent implements OnInit {
               private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-
     this.campaignService.loadGroupCampaigns(this.group.groupUid)
       .subscribe(
         campaigns => {
@@ -52,36 +51,27 @@ export class CreateTaskTeamComponent implements OnInit {
       'membersCount': [0, Validators.min(1)]
     });
 
-    this.groupService.fetchGroupMembers(this.group.groupUid, 0, 1, [])
-      .subscribe(
-        membersPage => {
-          console.log(membersPage);
-          this.currentPage = membersPage;
-          this.createTaskTeamForm.controls['membersCount'].setValue(this.currentPage.totalElements);
-
-        },
-        error => {
-          console.log('Error loading group members', error.status);
-        }
-      )
   }
 
   membersFilterChanged(filter: MembersFilter) {
-
-    console.log("Members filter change, loading members...");
-
-    this.groupService.filterGroupMembers(this.group.groupUid, filter)
-      .subscribe(
-        members => {
-          console.log("Fetched filtered members: ", members);
-          this.filteredMembers = members;
-          this.createTaskTeamForm.controls['membersCount'].setValue(members.length);
-        },
-        error => console.log("Error fetching members", error)
-      );
+    console.log("Members filter change, loading members... filter has content: ", filter.hasContent());
+    if (filter.hasContent()) {
+      this.groupService.filterGroupMembers(this.group.groupUid, filter)
+        .subscribe(
+          members => {
+            console.log("Fetched filtered members: ", members);
+            this.filteredMembers = members;
+            this.createTaskTeamForm.controls['membersCount'].setValue(members.length);
+          },
+          error => console.log("Error fetching members", error)
+        );
+    } else {
+      this.filteredMembers = [];
+      this.createTaskTeamForm.controls['membersCount'].setValue(0);
+    }
   }
 
-  createTaskTeam(){
+  createTaskTeam() {
     let memberUids: string[] = [];
     if (this.filteredMembers.length > 0){
       this.filteredMembers.forEach(fm => memberUids.push(fm.user.uid.toString()));
