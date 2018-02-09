@@ -5,6 +5,9 @@ import "rxjs/add/operator/map";
 import {Task} from "./task.model";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {LiveWireAlertType} from "../livewire/live-wire-alert-type.enum";
+import {LiveWireAlertDestType} from "../livewire/live-wire-alert-dest-type.enum";
+import {MediaFunction} from "../media/media-function.enum";
 
 @Injectable()
 export class TaskService {
@@ -19,6 +22,9 @@ export class TaskService {
   private groupRespondeTodoUrl = environment.backendAppUrl + '/api/task/respond/todo/information';
 
   private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
+
+  private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
+  private uploadImageUrl = environment.backendAppUrl + "/api/media/store";
 
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
@@ -162,5 +168,55 @@ export class TaskService {
     return this.httpClient.get<string>(url, {params: params})
 
   }
+
+  uploadAlertImage(file:File,userUid: string,image):Observable<any>{
+    console.log("UserUid",userUid);
+    let uploadFullUrl = this.uploadImageUrl + "/" + userUid;
+
+    let params = new HttpParams()
+      .set("imageKey",null)
+      .set("mediaFunction",MediaFunction.LIVEWIRE_MEDIA)
+      .set("mimeType",null)
+      .set("file",file + "");
+    return this.httpClient.post(uploadFullUrl,image,{params:params});
+  }
+
+  createLiveWireAlert(userUid:string,headline:string,alertType:LiveWireAlertType,groupUid:string,taskUid:string,
+                      destination:LiveWireAlertDestType,description:string,addLocation:boolean,contactPerson:string,
+                      contactPersonName:string,contactPersonNumber:string):Observable<any>{
+
+    let fullUrl = this.createLiveWireAlertUrl + "/" + userUid;
+    let params;
+
+    params = new HttpParams()
+      .set("headline",headline)
+      .set("description",description)
+      .set("type",alertType)
+      .set("groupUid",groupUid)
+      .set("addLocation",addLocation + "")
+      .set("destType",destination)
+      .set("taskUid",taskUid);
+
+      if(contactPerson === "someone"){
+      params = new HttpParams()
+        .set("headline",headline)
+        .set("description",description)
+        .set("type",alertType)
+        .set("groupUid",groupUid)
+        .set("addLocation",addLocation + "")
+        .set("destType",destination)
+        .set("taskUid",taskUid)
+        .set("contactNumber",contactPersonNumber)
+        .set("contactName",contactPersonName);
+      }
+
+   if(alertType === "MEETING"){
+      console.log("Is a meeting man...........................");
+    }
+
+    return this.httpClient.post(fullUrl,null,{params:params});
+  }
+
+
 
 }

@@ -1,0 +1,5 @@
+export enum LiveWireAlertDestType {
+  SINGLE_AND_PUBLIC = "SINGLE_AND_PUBLIC",
+  PUBLIC_LIST = "PUBLIC_LIST",
+  SINGLE_LIST = "SINGLE_LIST"
+}

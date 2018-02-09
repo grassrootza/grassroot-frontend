@@ -215,4 +215,10 @@ export class GroupsComponent implements OnInit {
     $("#create-todo-modal").modal("hide");
   }
 
+  showCreateLivewireAlertModal(group: GroupInfo){
+      console.log("Create livewire alert**********");
+      this.createTaskGroupUid = group.groupUid;
+      $("#create-livewire-alert-modal").modal("show");
+  }
+
 }

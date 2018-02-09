@@ -40,6 +40,10 @@
             </a>
             <!-- todo : implement some form of permission control here -->
             <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{ 'groups.row.action.broadcast' | translate }}</a>
+
+            <a class="dropdown-item" (click)="triggerCreateLivewireAlert()">
+              {{'groups.livewire.create' | translate}}
+            </a>
           </div>
         </div>
 

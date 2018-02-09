@@ -7,6 +7,7 @@ import {TranslateModule, TranslatePipe} from "@ngx-translate/core";
 import {CreateTodoComponent} from "./groups/group-details/group-activity/create-todo/create-todo.component";
 import {CreateVoteComponent} from "./groups/group-details/group-activity/create-vote/create-vote.component";
 import {CreateMeetingComponent} from "./groups/group-details/group-activity/create-meeting/create-meeting.component";
+import {CreateLivewireComponent} from './groups/group-details/group-activity/create-livewire/create-livewire.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {PaginationComponent} from "./pagination/pagination.component";
 import {MemberFilterComponent} from "./groups/member-filter/member-filter.component";
@@ -24,17 +25,19 @@ import {MemberFilterComponent} from "./groups/member-filter/member-filter.compon
     CreateMeetingComponent,
     CreateVoteComponent,
     CreateTodoComponent,
+    CreateLivewireComponent,
     PaginationComponent,
     MemberFilterComponent
   ],
   entryComponents: [
     CreateMeetingComponent,
     CreateVoteComponent,
-    CreateTodoComponent
+    CreateTodoComponent,
+    CreateLivewireComponent
   ],
   exports: [
     RouterModule, FormsModule, ReactiveFormsModule, TranslateModule,
-    CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, PaginationComponent, MemberFilterComponent // todo: move into LoggedInShared
+    CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, PaginationComponent, MemberFilterComponent,CreateLivewireComponent // todo: move into LoggedInShared
   ]
 })
 export class SharedModule {
