@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../campaign.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 import {DateTimeUtils, epochMillisFromDate} from "../../utils/DateTimeUtils";
 import {optionalUrlValidator, urlValidator} from "../../utils/CustomValidators";
 import {CampaignRequest} from "./campaign-request";
@@ -28,8 +27,7 @@ export class CampaignCreateComponent implements OnInit {
               private groupService: GroupService,
               private formBuilder: FormBuilder,
               private router: Router,
-              private alertService: AlertService,
-              private spinnerService: Ng4LoadingSpinnerService) {
+              private alertService: AlertService) {
 
     this.createCampaignForm = this.formBuilder.group({
       'name': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
@@ -82,15 +80,15 @@ export class CampaignCreateComponent implements OnInit {
       return false;
     }
 
-    this.spinnerService.show();
+    this.alertService.showLoading();
     this.campaignService.createCampaign(this.getRequestFromForm()).subscribe(result => {
       this.alertService.alert("campaign.create.complete.success");
-      this.spinnerService.hide();
+      this.alertService.hideLoading();
       this.router.navigate(['/campaign/' + result.campaignUid + '/messages']);
     }, error2 => {
       // todo : proper error messages
       console.log("error creating campaign! : ", error2);
-      this.spinnerService.hide();
+      this.alertService.hideLoading();
     });
   }
 

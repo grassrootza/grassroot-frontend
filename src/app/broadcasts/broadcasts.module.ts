@@ -10,16 +10,18 @@ import {BroadcastConfirmComponent} from "./broadcast-create/broadcast-confirm/br
 import {BroadcastWorkflowGuard} from "./broadcast-create/create-workflow-guard.guard";
 import {BroadcastCreateComponent} from "./broadcast-create/broadcast-create.component";
 import {BroadcastContentComponent} from "./broadcast-create/broadcast-content/broadcast-content.component";
-import {SharedModule} from "../shared.module";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {RouterModule} from "@angular/router";
 import {QuillModule} from "ngx-quill";
 import {Ng2ImgMaxModule} from "ng2-img-max";
+import {LoggedInServicesModule} from "../logged-in-services.module";
+import {SharedModule} from "../shared.module";
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
+    LoggedInServicesModule,
     NgbModule,
     QuillModule,
     Ng2ImgMaxModule,

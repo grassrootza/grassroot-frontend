@@ -5,7 +5,6 @@ import {Group} from "../model/group.model";
 import {environment} from "../../../environments/environment";
 import {UserService} from "../../user/user.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
 import {TranslateService} from "@ngx-translate/core";
 import {JoinCodeInfo} from "../model/join-code-info";
 
@@ -43,7 +42,6 @@ export class GroupDetailsComponent implements OnInit {
               private groupService: GroupService,
               private translateService: TranslateService,
               private alertService: AlertService,
-              private spinnerService: Ng4LoadingSpinnerService,
               private clipboardService:ClipboardService) {
 
     this.router.events.subscribe(ev => {

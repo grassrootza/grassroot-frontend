@@ -1,33 +1,24 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {Ng4LoadingSpinnerModule} from 'ng4-loading-spinner';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import {AppComponent} from './app.component';
-import {GroupsComponent} from './groups/group-list/groups.component';
 import {LoginComponent} from './login/login.component';
 import {LoggedInGuard} from './logged-in.guard';
 import {GroupService} from "./groups/group.service";
 import {RegistrationComponent} from './registration/registration.component';
 import {UserService} from "./user/user.service";
-import {HomeComponent} from './home/home.component';
 import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from "@angular/common";
-import {GroupInfoComponent} from './groups/group-list-row/group-info.component';
 import {TaskService} from "./task/task.service";
 import {JwtModule} from "@auth0/angular-jwt";
 import {GroupMembersImportComponent} from './groups/group-details/group-members/group-members-import/group-members-import.component';
 import {FileImportComponent} from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
-import {GoogleImportComponent} from './groups/group-details/group-members/group-members-import/google-import/google-import.component';
-import {TwitterImportComponent} from './groups/group-details/group-members/group-members-import/twitter-import/twitter-import.component';
-import {FacebookImportComponent} from './groups/group-details/group-members/group-members-import/facebook-import/facebook-import.component';
 import {IntegrationsService} from "./user/integrations/integrations.service";
 import {IntegrationConnectComponent} from './user/integrations/integration-connect/integration-connect.component';
 import {JoinComponent} from './join/join.component';
 import {JoinService} from "./join/join.service";
 import {AlertService} from "./utils/alert.service";
-import {CreateGroupComponent} from './groups/create-group/create-group.component';
-import {ToDoRespondComponent} from './task/todo-respond/todo-respond.component';
 import {PwdResetInitiateComponent} from './login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component';
 import {PwdResetValidateComponent} from './login/password-reset/pwd-reset-validate/pwd-reset-validate.component';
 import {PwdResetNewComponent} from './login/password-reset/pwd-reset-new/pwd-reset-new.component';
@@ -39,9 +30,6 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NotificationService} from "./user/notification.service";
 import {CampaignService} from "./campaigns/campaign.service";
-
-
-import {ClipboardModule} from 'ng2-clipboard';
 import {BroadcastService} from "./broadcasts/broadcast.service";
 import {ANIMATION_TYPES, LoadingModule} from "ngx-loading";
 
@@ -55,7 +43,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 const routes: Routes = [
 
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
@@ -66,8 +54,8 @@ const routes: Routes = [
       {path: 'validate', component: PwdResetValidateComponent},
       {path: 'reset', component: PwdResetNewComponent}
     ]},
-  {path: 'home', component: HomeComponent, canActivate: [LoggedInGuard]},
-  {path: 'groups', component: GroupsComponent, canActivate: [LoggedInGuard]},
+  {path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [LoggedInGuard]},
+  {path: 'groups', loadChildren: './groups/groups.module#GroupsModule', canActivate: [LoggedInGuard]},
   {
     path: 'group/:id', loadChildren: './groups/group-details.module#GroupDetailsModule', canActivate: [LoggedInGuard]
   },
@@ -76,9 +64,6 @@ const routes: Routes = [
     children:[
       {path: '', redirectTo: 'file', pathMatch: 'full'},
       {path: 'file', component: FileImportComponent, canActivate: [LoggedInGuard]},
-      {path: 'google', component: GoogleImportComponent, canActivate: [LoggedInGuard]},
-      {path: 'twitter', component: TwitterImportComponent, canActivate: [LoggedInGuard]},
-      {path: 'facebook', component: GoogleImportComponent, canActivate: [LoggedInGuard]},
     ]
   },
   {
@@ -100,20 +85,12 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    GroupsComponent,
     LoginComponent,
     RegistrationComponent,
-    HomeComponent,
-    GroupInfoComponent,
     GroupMembersImportComponent,
     FileImportComponent,
-    GoogleImportComponent,
-    TwitterImportComponent,
-    FacebookImportComponent,
     IntegrationConnectComponent,
     JoinComponent,
-    CreateGroupComponent,
-    ToDoRespondComponent,
     PwdResetInitiateComponent,
     PwdResetValidateComponent,
     PwdResetNewComponent,
@@ -122,8 +99,6 @@ const routes: Routes = [
   imports: [
     BrowserModule,
     HttpClientModule,
-    ClipboardModule,
-    Ng4LoadingSpinnerModule,
     LoadingModule.forRoot({
       animationType: ANIMATION_TYPES.circleSwish, backdropBackgroundColour: 'rgba(0,0,0,0.2)',
         backdropBorderRadius: '4px', primaryColour: '#26A041', secondaryColour: '#2CBC4C'}

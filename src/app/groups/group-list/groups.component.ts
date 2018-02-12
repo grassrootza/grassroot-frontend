@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {GroupService} from "../group.service";
 import {GroupInfo} from "../model/group-info.model";
-import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 import {GroupRef} from "../model/group-ref.model";
 import {Router} from "@angular/router";
+import {AlertService} from "../../utils/alert.service";
 
 declare var $: any;
 
@@ -30,19 +30,19 @@ export class GroupsComponent implements OnInit {
   public createTaskGroupUid: string = null;
 
   constructor(private groupService: GroupService,
-              private spinnerService: Ng4LoadingSpinnerService,
+              private alertService: AlertService,
               private router: Router) {
   }
 
   ngOnInit() {
 
-    this.spinnerService.show();
+    this.alertService.showLoading();
 
     this.groupService.groupInfoList.subscribe(
       groupList => {
         if (groupList) {
           console.log("Groups loaded: ", groupList);
-          this.spinnerService.hide();
+          this.alertService.hideLoadingDelayed();
 
           this.groups = groupList;
           this.resolvePinnedGroups();
@@ -62,7 +62,7 @@ export class GroupsComponent implements OnInit {
         error => {
           if (error) {
             console.log("Failed to fetch group list!", error);
-            this.spinnerService.hide();
+            this.alertService.hideLoadingDelayed();
           }
         }
       );
@@ -188,7 +188,7 @@ export class GroupsComponent implements OnInit {
 
   showGroup(group: GroupInfo) {
     console.log("showing spinner");
-    this.spinnerService.show();
+    this.alertService.showLoading();
     this.router.navigate(["/group", group.groupUid]);
   }
 

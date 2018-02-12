@@ -36,7 +36,6 @@
     "moment": "^2.20.1",
     "ng2-clipboard": "^1.0.35",
     "ng2-img-max": "^2.1.15",
-    "ng4-loading-spinner": "^1.1.1",
     "ngx-loading": "^1.0.14",
     "ngx-quill": "^2.1.1",
     "popper.js": "^1.13.0",

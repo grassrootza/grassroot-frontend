@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IntegrationsService} from "./integrations.service";
 import {IntegrationSettingsList, ManagedPage} from "../model/integration-settings";
-import {Ng4LoadingSpinnerService} from "ng4-loading-spinner";
+import {AlertService} from "../../utils/alert.service";
 
 @Component({
   selector: 'app-integrations',
@@ -14,19 +14,19 @@ export class IntegrationsComponent implements OnInit {
 
   settingsList: IntegrationSettingsList = new IntegrationSettingsList();
 
-  constructor(private intService: IntegrationsService, private spinnerService: Ng4LoadingSpinnerService) {}
+  constructor(private intService: IntegrationsService, private alertService: AlertService) {}
 
   ngOnInit() {
     // fetch the current status: note, thought about using a router here, but don't want
     // user to have to go back if something goes wrong with getting connection status, etc.
     // and we can display the list of services while getting pages
-    this.spinnerService.show();
+    this.alertService.showLoading();
     this.intService.fetchCurrentConnections().subscribe(settingsList => {
       this.settingsList = settingsList;
-      this.spinnerService.hide();
+      this.alertService.hideLoadingDelayed();
     }, error => {
       console.log("error!", error);
-      this.spinnerService.hide();
+      this.alertService.hideLoadingDelayed();
     });
   }
 
@@ -61,14 +61,14 @@ export class IntegrationsComponent implements OnInit {
 
   removeAccount(provider: string, page: ManagedPage) {
     console.log("removing: ", provider);
-    this.spinnerService.show();
+    this.alertService.showLoading();
     this.intService.removeProviderPage(provider, page.providerUserId).subscribe(settingsList => {
       console.log("settings list received: ", settingsList);
       this.settingsList = settingsList;
-      this.spinnerService.hide();
+      this.alertService.hideLoadingDelayed();
     }, error => {
       console.log("whoops, didn't work: ", error);
-      this.spinnerService.hide();
+      this.alertService.hideLoadingDelayed();
     });
     return false;
   }
