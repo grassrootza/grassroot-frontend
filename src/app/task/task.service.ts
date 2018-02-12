@@ -24,7 +24,7 @@ export class TaskService {
   private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
 
   private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
-  private uploadImageUrl = environment.backendAppUrl + "/api/media/store";
+  private uploadImageUrl = environment.backendAppUrl + "/api/media/storeImage";
 
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
@@ -169,21 +169,14 @@ export class TaskService {
 
   }
 
-  uploadAlertImage(file:File,userUid: string,image):Observable<any>{
-    console.log("UserUid",userUid);
-    let uploadFullUrl = this.uploadImageUrl + "/" + userUid;
-
-    let params = new HttpParams()
-      .set("imageKey",null)
-      .set("mediaFunction",MediaFunction.LIVEWIRE_MEDIA)
-      .set("mimeType",null)
-      .set("file",file + "");
-    return this.httpClient.post(uploadFullUrl,image,{params:params});
+  uploadAlertImage(image):Observable<any>{
+    let uploadFullUrl = this.uploadImageUrl + "/" + MediaFunction.LIVEWIRE_MEDIA;
+    return this.httpClient.post(uploadFullUrl, image,{ responseType: 'text' });
   }
 
   createLiveWireAlert(userUid:string,headline:string,alertType:LiveWireAlertType,groupUid:string,taskUid:string,
                       destination:LiveWireAlertDestType,description:string,addLocation:boolean,contactPerson:string,
-                      contactPersonName:string,contactPersonNumber:string):Observable<any>{
+                      contactPersonName:string,contactPersonNumber:string,mediaKeys:Set<string>):Observable<any>{
 
     let fullUrl = this.createLiveWireAlertUrl + "/" + userUid;
     let params;
@@ -195,7 +188,8 @@ export class TaskService {
       .set("groupUid",groupUid)
       .set("addLocation",addLocation + "")
       .set("destType",destination)
-      .set("taskUid",taskUid);
+      .set("taskUid",taskUid)
+      .set("mediaFileKeys",mediaKeys + "");
 
       if(contactPerson === "someone"){
       params = new HttpParams()
@@ -207,8 +201,11 @@ export class TaskService {
         .set("destType",destination)
         .set("taskUid",taskUid)
         .set("contactNumber",contactPersonNumber)
-        .set("contactName",contactPersonName);
+        .set("contactName",contactPersonName)
+        .set("mediaFileKeys",mediaKeys + "");;
       }
+
+
 
    if(alertType === "MEETING"){
       console.log("Is a meeting man...........................");
