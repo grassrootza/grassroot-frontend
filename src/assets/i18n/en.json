@@ -168,7 +168,8 @@
         "meeting": "Call meeting",
         "vote": "Take vote",
         "create": "Create action",
-        "broadcast": "Send broadcast"
+        "broadcast": "Send broadcast",
+        "livewire": "Issue LiveWire"
       },
       "taskTeam":{
         "title": "Task Teams",
@@ -179,7 +180,6 @@
       },
       "viewGroup": "View Group"
     }
-
   },
   "group": {
     "creationLabel": "Created by ",
@@ -503,6 +503,43 @@
           "confirmingMembers": "Confirming members"
 
         }
+      },
+      "livewireModal":{
+          "title": "Create livewire alert",
+          "subject": {
+            "label":"Headline",
+            "placeholder":"Enter a short description of the alert"
+          },
+          "contactPerson": "Contact person",
+          "alertType": "Alert type",
+          "contactSomeone": {
+            "label":"Contact name",
+            "placeholder":"Enter name of the contact person"
+          },
+          "contactSomeoneNumber":{
+            "label": "Contact number",
+            "placeholder": "Enter phone number of the contact person"
+          },
+          "publicGathering":{
+            "label":"Meeting"
+          },
+          "group": {
+            "label": "Group"
+          },
+          "destination": {
+            "label": "Destination",
+            "both": "Both my list and public editors",
+            "public": "Public news desk",
+            "myMediaList": "Just my media list"
+          },
+          "articleText": {
+            "label": "Add article text",
+            "placeholder": "100-150 words"
+          },
+          "image":{
+            "label":"Image (optional)",
+            "placeholder": "Upload image"
+          }
       }
     },
     "broadcast": {

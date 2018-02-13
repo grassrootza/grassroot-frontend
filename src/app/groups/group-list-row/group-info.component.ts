@@ -28,6 +28,9 @@ export class GroupInfoComponent implements OnInit {
   @Output()
   public onTriggerCreateTodo: EventEmitter<GroupInfo> = new EventEmitter();
 
+  @Output()
+  public onTriggerCreateLivewireAlert: EventEmitter<GroupInfo> = new EventEmitter();
+
 
   @Input()
   public extendedInfoVisible = false;
@@ -62,6 +65,11 @@ export class GroupInfoComponent implements OnInit {
 
   triggerCreateTodoAction() {
     this.onTriggerCreateTodo.emit(this.group)
+  }
+
+  triggerCreateLivewireAlert(){
+    console.log("############",this.group.groupUid + "");
+    this.onTriggerCreateLivewireAlert.emit(this.group);
   }
 
 }
