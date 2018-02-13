@@ -16,6 +16,18 @@
   font-size: 16px;
 }
 
+.role-badge {
+  height: 30px;
+  width: 86px;
+  border-radius: 2px;
+  background-color: #2CBC4C;
+  color: #FFFFFF;
+  font-family: Nunito;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 19px;
+}
+
 .group-info-row img {
   margin-right: 0.5rem;
   margin-bottom: 0.2rem;

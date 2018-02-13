@@ -2,13 +2,21 @@
 
 
   <div class="row">
-    <div class="col-12">
+    <div class="col-md-7 col-sm-12">
+      <div class="input-group">
+        <input type="text" class="form-control search-bar" />
+        <span class="input-group-btn">
+          <button class="btn btn-link search-addon"><i class="fa fa-search"></i> Search</button>
+        </span>
+      </div>
+    </div>
+    <div class="col-md-5 col-sm-12">
       <div class="dropdown float-right">
         <button id="create-dropdown" class="btn btn-primary dropdown-toggle create-button" type="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-plus"></i> {{ 'home.create.title' | translate }}
+          {{ 'home.create.title' | translate }}
         </button>
-        <div class="dropdown-menu">
+        <div class="dropdown-menu create-dropdown">
           <a href="#" class="dropdown-item" [translate]="'home.create.group'"
              (click)="showCreateGroupDialog()">Group</a>
           <a class="dropdown-item" [translate]="'home.create.campaign'"
@@ -28,37 +36,37 @@
 
           <div class="my-agenda-body">
 
-            <div class="day-task" *ngIf="baseDateFilteredTasks.length == 0">
-              <p>No upcoming tasks for you currently</p>
+            <div class="my-agenda-tasks">
+              <div class="day-task" *ngIf="baseDateFilteredTasks.length == 0">
+                <p>No upcoming tasks for you currently</p>
+              </div>
+              <div *ngFor="let dayTasks of baseDateFilteredTasks" class="day">
+                <div class="col-sm-8 day-label">
+                  {{formatTaskDate(dayTasks.date)}}
+                </div>
+                <div *ngFor="let task of dayTasks.tasks" class="day-task">
+                  <div>
+                    <a class="task-name" (click)="handleTaskClick(task)">
+                      <img src="assets/{{task.getEventIconName()}}"/>
+                      {{task.title}}
+                    </a>
+                  </div>
+                  <div>
+                    <span [translate]="'home.my-agenda.group-label'"> Group </span>: <b>{{task.ancestorGroupName}}</b>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div *ngFor="let dayTasks of baseDateFilteredTasks" class="day">
-              <div class="col-sm-8 day-label">
-                {{formatTaskDate(dayTasks.date)}}
-              </div>
-              <div *ngFor="let task of dayTasks.tasks" class="day-task">
-                <div>
-                  <a class="task-name" (click)="handleTaskClick(task)">
-                    <img src="assets/{{task.getEventIconName()}}"/>
-                    {{task.title}}
-                  </a>
+            <hr class="agenda-line">
+
+            <div class="my-agenda-nav">
+              <div class="row">
+                <div class="col-12 text-center">
+                  <button class="btn btn-secondary btn-agenda-nav agenda-arrow" (click)="decreaseAgendaBaseDate()"><i class="fas fa-arrow-left"></i></button>
+                  <button class="btn btn-secondary btn-agenda-nav">{{getDayName(agendaBaseDate.toDate())}}</button>
+                  <button class="btn btn-secondary btn-agenda-nav agenda-arrow" (click)="increaseAgendaBaseDate()"><i class="fas fa-arrow-right"></i></button>
                 </div>
-                <div>
-                  <span [translate]="'home.my-agenda.group-label'"> Group </span>: <b>{{task.ancestorGroupName}}</b>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="my-agenda-footer">
-            <div class="row">
-              <div class="col-3">
-                <button class="btn btn-secondary" (click)="decreaseAgendaBaseDate()">&lt;</button>
-              </div>
-              <div class="col-6 text-center">
-                <button class="btn btn-secondary">{{getDayName(agendaBaseDate.toDate())}}</button>
-              </div>
-              <div class="col-3">
-                <button class="btn btn-secondary" (click)="increaseAgendaBaseDate()">&gt;</button>
               </div>
             </div>
           </div>
@@ -104,7 +112,8 @@
     <div class="col-sm-12 stared-groups">
       <div class="card">
         <div class="card-header">
-          <span class="card-title h5" [translate]="'home.starred-groups.title'">Starred groups</span>
+          <span class="card-title h5">
+            <i class="fas fa-star"></i> {{ 'home.starred-groups.title' | translate }}</span>
         </div>
         <div class="card-body">
           <app-group-info *ngFor="let gr of pinnedGroups"
@@ -129,7 +138,7 @@
     <div class="col-sm-12 active-campaigns">
       <div class="card">
         <div class="card-header">
-          <span class="card-title h5" [translate]="'home.active-campaigns.title'">Active campaigns</span>
+          <span class="card-title h5"><i class="fas fa-star"></i> {{ 'home.active-campaigns.title' | translate }}</span>
         </div>
         <div class="card-body">
 
