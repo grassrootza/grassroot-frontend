@@ -49,22 +49,6 @@
   width: 100%;
 }
 
-.task-team-name {
-  font-size: 1.1em;
-  width: 100%;
-}
-
-.create-team {
-  padding: 10px 20px;
-  font-size: 1.1em;
-}
-
-.create-team:hover {
-  cursor: pointer;
-  background: #26A041;
-  color: white;
-}
-
 .member-name {
   font-weight: 600;
   margin-bottom: 0;
@@ -73,5 +57,5 @@
 
 .affiliation-subtitle {
   padding: 0;
-  margin: 0;
+  margin: 4px 0 0;
 }

@@ -132,6 +132,11 @@ h6 {
   text-decoration: underline;
 }
 
+.grassroot-breadcrumb {
+  color: #2CBC4C;
+  padding: 10px 0;
+}
+
 .grassroot-label-em {
   font-size: 1.1em;
 }

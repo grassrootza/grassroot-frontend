@@ -15,9 +15,11 @@ import {GroupAddMemberComponent} from "./group-details/group-members/group-add-m
 import {MemberListComponent} from "./group-details/group-members/member-list/member-list.component";
 import {GroupBroadcastComponent} from "./group-details/group-broadcast/group-broadcast.component";
 import {CreateTaskTeamComponent} from "./group-details/group-members/group-task-teams/create-task-team/create-task-team.component";
+import {AddToTaskTeamComponent} from "./group-details/group-members/group-task-teams/add-to-task-team/add-to-task-team.component";
 import {RouterModule} from "@angular/router";
 import {LoggedInServicesModule} from "../logged-in-services.module";
 import {SharedModule} from "../shared.module";
+import {MemberTopicsManageComponent} from "./group-details/group-members/member-topics-manage/member-topics-manage.component";
 
 @NgModule({
   imports: [
@@ -40,7 +42,9 @@ import {SharedModule} from "../shared.module";
     GroupMembersProfileComponent,
     GroupSettingsComponent,
     GroupAddMemberComponent,
-    CreateTaskTeamComponent
+    CreateTaskTeamComponent,
+    AddToTaskTeamComponent,
+    MemberTopicsManageComponent
   ]
 })
 export class GroupDetailsModule {

@@ -79,5 +79,9 @@ export class MembersPage {
               public content: Membership[]) {
   }
 
+  public getSelectedMembers(): Membership[] {
+    return this.content.filter(membership => membership.selected);
+  }
+
 }
 

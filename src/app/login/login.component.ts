@@ -43,7 +43,7 @@ export class LoginComponent implements AfterViewInit {
         if (authResponse.errorCode == null) {
           let afterLoginUrl = localStorage.getItem("afterLoginUrl");
           if (!afterLoginUrl)
-            afterLoginUrl = "/";
+            afterLoginUrl = "/home";
 
           let afterLoginParams = localStorage.getItem("afterLoginParams");
           localStorage.removeItem("afterLoginUrl");

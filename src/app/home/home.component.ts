@@ -173,7 +173,6 @@ export class HomeComponent implements OnInit {
   }
 
   getDayName(date: Date): string {
-
     let today = moment().startOf('day');
     if (moment(date).startOf('day').isSame(today))
       return "Today";

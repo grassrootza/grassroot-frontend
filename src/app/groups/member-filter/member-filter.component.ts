@@ -75,9 +75,11 @@ export class MemberFilterComponent implements OnInit {
   }
 
   setupSelect2() {
+    console.log("in member filter, topics: ", this.topics);
+
     $(".provinces-multi-select").select2({placeholder: "Select a province"});
     $(".task-teams-multi-select").select2({placeholder: "Select task teams"});
-    $(".topics-multi-select").select2({placeholder: "Select topics"});
+    $(".topics-multi-select-filter").select2({placeholder: "Select topics"});
     $(".affiliations-multi-select").select2({placeholder: "Select affiliations (organizations)"});
     $(".join-methods-multi-select").select2({placeholder: "Select sources"});
     $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
@@ -91,13 +93,12 @@ export class MemberFilterComponent implements OnInit {
 
     $(".task-teams-multi-select").on('change.select2', function () {
       const data = $('.task-teams-multi-select').select2('data');
-      console.log("data entity: ", data);
       this.filter.taskTeams = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
 
-    $(".topics-multi-select").on('change.select2', function () {
-      const data = $('.topics-multi-select').select2('data');
+    $(".topics-multi-select-filter").on('change.select2', function () {
+      const data = $('.topics-multi-select-filter').select2('data');
       this.filter.topics = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));

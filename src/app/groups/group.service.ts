@@ -9,7 +9,7 @@ import 'rxjs/add/observable/concat';
 import {environment} from '../../environments/environment';
 import {GroupInfo} from './model/group-info.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Group} from './model/group.model';
+import {getGroupEntity, Group} from './model/group.model';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {DateTimeUtils} from '../utils/DateTimeUtils';
 import {Membership, MembersPage} from './model/membership.model';
@@ -31,6 +31,7 @@ export class GroupService {
 
   groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
   groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
+  taskTeamDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details/taskteam";
   groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
   newMembersLIstUrl = environment.backendAppUrl + "/api/group/fetch/members/new";
   groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
@@ -40,6 +41,7 @@ export class GroupService {
   groupRemoveMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove";
   groupAddMembersToTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/members/add/taskteam";
   groupAssignTopicsToMembersUrl = environment.backendAppUrl + "/api/group/modify/members/add/topics";
+  groupRemoveTopicsFromMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove/topics";
   groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
   groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
   groupImportErrorsDownloadUrl = environment.backendAppUrl + "/api/group/import/errors/xls";
@@ -57,6 +59,7 @@ export class GroupService {
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
   groupRemoveTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/deactivate/taskteam";
+  groupRenametaskTeamUrl = environment.backendAppUrl + "/api/group/modify/rename/taskteam";
   groupUploadImageUrl = environment.backendAppUrl + "/api/group/modify/image/upload";
 
   groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
@@ -130,7 +133,6 @@ export class GroupService {
   }
 
   loadGroupDetailsCached(groupUid: string, checkServerAfter: boolean = true): Observable<Group> {
-    console.log("currently have groups in memory: ", this.groupFullRetrieved_);
     let concatObs = Observable.concat(
       this.checkGroupCache(groupUid),
       this.loadGroupDetailsFromServer(groupUid));
@@ -140,43 +142,16 @@ export class GroupService {
   checkGroupCache(groupUid: string): Observable<Group> {
     return Observable.from(this.groupFullRetrieved_).filter(grp => grp.groupUid == groupUid)
       .map(grp => {
-        console.log("found a group in cache!", grp);
         return grp;
       });
   }
 
   loadGroupDetailsFromServer(groupUid: string): Observable<Group> {
     const fullUrl = this.groupDetailsUrl + "/" + groupUid;
-    console.log("retrieving group details from server");
     return this.httpClient.get<Group>(fullUrl)
       .map(
         gr => {
-          let group = new Group(
-            gr.groupUid,
-            gr.name,
-            gr.description,
-            gr.groupCreatorUid,
-            gr.groupCreatorName,
-            gr.groupCreationTimeMillis,
-            new Date(gr.groupCreationTimeMillis),
-            gr.discoverable,
-            gr.memberCount,
-            gr.joinCode,
-            gr.lastChangeDescription,
-            gr.lastChangeType,
-            gr.lastMajorChangeMillis,
-            gr.members,
-            gr.paidFor,
-            gr.userPermissions,
-            gr.userRole,
-            getGroupMembersList(gr.subGroups),
-            gr.topics,
-            gr.affiliations,
-            gr.joinWords,
-            gr.joinWordsLeft,
-            gr.reminderMinutes,
-            gr.profileImageUrl
-          );
+          let group = getGroupEntity(gr);
           let existingIndex = this.groupFullRetrieved_.findIndex(grp => grp.groupUid == group.groupUid);
           if (existingIndex != -1) {
             this.groupFullRetrieved_[existingIndex] = group;
@@ -188,6 +163,12 @@ export class GroupService {
       );
   }
 
+  loadTaskTeamDetails(parentUid: string, taskTeamUid: string): Observable<Group> {
+    const fullUrl = this.taskTeamDetailsUrl + "/" + parentUid;
+    let params = new HttpParams().set("taskTeamUid", taskTeamUid);
+    // don't cache it, for the moment, as rare, and no need to crowd
+    return this.httpClient.get<Group>(fullUrl, {params: params}).map(getGroupEntity);
+  }
 
   createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string,
               pinGroup: boolean = true): Observable<GroupRef> {
@@ -305,11 +286,14 @@ export class GroupService {
       });
   }
 
-  assignTopicToMember(groupUid: string, membersUids: string[], topics: string[]): Observable<boolean> {
+  // onlyAdd: if set to false, the passed topics will overwrite the prior topics for the members; if set to true, the
+  // members will retain their existing topics
+  assignTopicToMember(groupUid: string, membersUids: string[], topics: string[], onlyAdd: boolean = false): Observable<boolean> {
     const fullUrl = this.groupAssignTopicsToMembersUrl + "/" + groupUid;
     const params = {
       'memberUids': membersUids,
-      'topics': topics
+      'topics': topics,
+      'onlyAdd': onlyAdd.toString()
     };
     console.log("posting topic assignment ...");
 
@@ -318,6 +302,12 @@ export class GroupService {
         console.log(response);
         return true;
       })
+  }
+
+  removeTopicFromMembers(groupUid: string, memberUids: string[], topics: string[]): Observable<any> {
+    const fullUrl = this.groupRemoveTopicsFromMembersUrl + "/" + groupUid;
+    const params = {'memberUids': memberUids, 'topics': topics};
+    return this.httpClient.post(fullUrl, null, {params: params});
   }
 
   uploadGroupImage(groupUid, image): Observable<any> {
@@ -623,6 +613,12 @@ export class GroupService {
     const fullUrl = this.groupRemoveTaskTeamUrl + "/" + parentUid;
     let params = new HttpParams().set("taskTeamUid", taskTeamUid);
     return this.httpClient.post<Group>(fullUrl, null, {params: params});
+  }
+
+  renameTaskTeam(parentUid: string, taskTeamUid: string, newName: string): Observable<any> {
+    const fullUrl = this.groupRenametaskTeamUrl + "/" + parentUid;
+    let params = new HttpParams().set("taskTeamUid", taskTeamUid).set("newName", newName);
+    return this.httpClient.post(fullUrl, null, {params: params});
   }
 
   groupMemberAddedSuccess(success: boolean){

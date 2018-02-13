@@ -31,24 +31,22 @@
         <div class="col-3">
           <div class="float-right">
             <div class="dropdown">
-              <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" [disabled]="false"
-                      aria-haspopup="true" aria-expanded="false" [translate]="'group.allMembers.bulkManage.bulkManage'">
+              <button class="btn dropdown-toggle" type="button" data-toggle="dropdown"
+                      [disabled]="!(currentPage?.getSelectedMembers()?.length > 1)" aria-haspopup="true" aria-expanded="false" [translate]="'group.allMembers.bulkManage.bulkManage'">
 
               </button>
               <div class="dropdown-menu">
                 <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.meeting'">Call a meeting</a>-->
                 <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.broadcast'">Send broadcast</a>-->
-                <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.topics'" (click)="showBulkAssignTopicsModal()">Assign topic</a>-->
-                <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.taskTeam'" (click)="showBulkAddToTaskTeamModal()">Add to task team</a>-->
+                <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.taskTeam'" (click)="addFilteredMembersToTaskTeam()">Assign topic</a>
+                <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.topics'" (click)="bulkManageTopics()">Add to task team</a>
                 <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.role'">Change role</a>-->
                 <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showBulkRemoveModal()">Remove</a>-->
               </div>
             </div>
           </div>
         </div>
-
       </div>
-
 
       <div class="row" *ngIf="group && currentPage">
         <div class="col">
@@ -57,12 +55,13 @@
       </div>
 
     </div>
-
-
   </div>
-
-
 </div>
 
+<app-add-to-task-team *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+                      [group]="group" [members]="membersToManage" [modalId]="'filtered-add-to-task-team'"
+                      (membersAdded)="refreshGroupDetails()"></app-add-to-task-team>
 
-
+<app-member-topics-manage #bulkTopicManageModal *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+                          [group]="group" [members]="membersToManage" [modalId]="'bulk-member-assign-topics'" [selectId]="'bulk-topics-multi-select'"
+                          (topicsAssigned)="refreshGroupDetails()"></app-member-topics-manage>

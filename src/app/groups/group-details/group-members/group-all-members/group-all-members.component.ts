@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {UserService} from '../../../../user/user.service';
 import {GroupService} from '../../../group.service';
 import {Membership, MembersPage} from '../../../model/membership.model';
 import {Group} from '../../../model/group.model';
-import {GroupRef} from '../../../model/group-ref.model';
 import {AlertService} from "../../../../utils/alert.service";
+import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 
 declare var $: any;
 
@@ -16,12 +16,13 @@ declare var $: any;
 })
 export class GroupAllMembersComponent implements OnInit {
 
+  @ViewChild('bulkMemberManageModal')
+  private bulkTopicManage: MemberTopicsManageComponent;
 
   public currentPage:MembersPage = new MembersPage(0,0, 0,0, true, false, []);
   private groupUid: string = '';
   public group: Group = null;
-  selectedTaskTeam: GroupRef = null;
-  selectedTopics: string[] = [];
+  bulkSelectedTopics: string[] = [];
 
   bulkManageMembers: Membership[] = [];
   filterMembersPage: string[] = [];
@@ -30,10 +31,11 @@ export class GroupAllMembersComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private alertService: AlertService) {
+    console.log("constructing all members component");
   }
 
   ngOnInit() {
-
+    console.log("initiating all members component");
     this.route.parent.parent.params.subscribe((params: Params) => {
       this.groupUid = params['id'];
       this.groupService.loadGroupDetailsCached(this.groupUid, false)
@@ -80,9 +82,13 @@ export class GroupAllMembersComponent implements OnInit {
   showBulkAssignTopicsModal(){
     if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
       $('#bulk-manage-no-members-selected').modal('show');
-    }else if(this.group.topics.length == 0){
-      $('#no-topics-for-group').modal('show');
-    }else{
+    } else {
+      this.bulkSelectedTopics = this.group.topics.filter(topic => {
+        // js type weirdness makes this unpredictable if made into more elegant single line
+        let topicsContained = this.bulkManageMembers.map(member => member.topics.indexOf(topic) != -1);
+        return topicsContained.reduce((prior, current) => prior && current);
+      });
+      this.bulkTopicManage.setupTopicSelect(this.bulkSelectedTopics);
       $('#bulk-member-assign-topics').modal('show');
     }
   }
@@ -91,40 +97,15 @@ export class GroupAllMembersComponent implements OnInit {
   showBulkAddToTaskTeamModal(){
     if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
       $('#bulk-manage-no-members-selected').modal('show');
-    }else if(this.group.subGroups.length == 0){
-      $('#no-task-teams-for-group').modal('show');
-    }else{
-      $('#bulk-add-members-to-task-team-modal').modal('show');
+    } else {
+      console.log("bulk manage members: ", this.bulkManageMembers);
+      $('#bulk-add-to-task-team').modal('show');
     }
   }
 
-  selectTaskTeam(taskTeam: GroupRef){
-    this.selectedTaskTeam = taskTeam;
-    $('#add-member-to-task-team-dropdown-button').html(taskTeam.name);
+  goToFirstPage() {
+    this.goToPage(0, []);
   }
-
-  saveAddMembersToTaskTeam(){
-    let memberUids: string[] = [];
-    this.bulkManageMembers.forEach(m => {
-      memberUids.push(m.user.uid.toString());
-    });
-    this.groupService.addMembersToTaskTeam(this.group.groupUid, this.selectedTaskTeam.groupUid, memberUids).subscribe(response => {
-      $('#bulk-add-members-to-task-team-modal').modal('hide');
-      this.goToPage(0, []);
-    })
-  }
-
-  bulkSaveAssignTopicToMember(){
-    let memberUids: string[] = [];
-    this.bulkManageMembers.forEach(m => {
-      memberUids.push(m.user.uid.toString());
-    });
-    this.groupService.assignTopicToMember(this.group.groupUid, memberUids, this.selectedTopics).subscribe(response => {
-      $('#bulk-member-assign-topics').modal('hide');
-      this.goToPage(0, []);
-    })
-  }
-
 
   showBulkRemoveModal(){
     if(this.bulkManageCheckNumberOfSelectedMembers() > 0){
@@ -149,15 +130,8 @@ export class GroupAllMembersComponent implements OnInit {
   }
 
   bulkManageCheckNumberOfSelectedMembers(): number{
-    let numberOfSelected: number = 0;
-    this.bulkManageMembers = [];
-    this.currentPage.content.forEach(m => {
-      if(m.selected){
-        numberOfSelected ++;
-        this.bulkManageMembers.push(m);
-      }
-    });
-    return numberOfSelected;
+    this.bulkManageMembers = this.currentPage.getSelectedMembers();
+    return this.bulkManageMembers.length;
   }
 
 }

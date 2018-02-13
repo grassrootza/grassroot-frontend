@@ -21,11 +21,11 @@
 
 
   <div class="col-sm-3 col-lg-2 filter-item">
-    <label for="topics" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.topics'">Topics</label>
+    <label class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.topics'">Topics</label>
   </div>
   <div class=" col-sm-9 col-lg-10 filter-item">
-    <select id="topics" class="form-control topics-multi-select" multiple="multiple" style="width: 100%">
-      <option *ngFor="let tp of topics" [value]="tp">Topic</option>
+    <select class="form-control topics-multi-select-filter" multiple="multiple" style="width: 100%">
+      <option *ngFor="let tp of topics" [value]="tp">{{ tp }}</option>
     </select>
   </div>
 

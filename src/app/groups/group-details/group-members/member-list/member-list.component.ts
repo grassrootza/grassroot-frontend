@@ -1,14 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Membership, MembersPage} from '../../../model/membership.model';
 import {GroupService} from '../../../group.service';
 import {Group} from '../../../model/group.model';
-import {GroupRef} from '../../../model/group-ref.model';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
 import {GroupAddMemberInfo} from '../../../model/group-add-member-info.model';
 import {GroupRole} from '../../../model/group-role';
 import {UserProvince} from '../../../../user/model/user-province.enum';
 import {AlertService} from "../../../../utils/alert.service";
+import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 
 declare var $: any;
 
@@ -19,20 +19,16 @@ declare var $: any;
 })
 export class MemberListComponent implements OnInit {
 
-  @Input()
-  public currentPage: MembersPage = null;
+  @Input() public currentPage: MembersPage = null;
+  @Input() public group: Group = null;
+  @Input() public isTaskTeam: boolean = false;
 
-  @Input()
-  public group: Group = null;
+  @Output() memberRemoved: EventEmitter<any>;
+  @Output() shouldReloadList: EventEmitter<boolean>;
+  @Output() sortUserList: EventEmitter<string[]>;
 
-  @Output()
-  memberRemoved: EventEmitter<any>;
-
-  @Output()
-  shouldReloadList: EventEmitter<boolean>;
-
-  @Output()
-  sortUserList: EventEmitter<string[]>;
+  @ViewChild('singleMemberTopicModal')
+  private memberTopicManage: MemberTopicsManageComponent;
 
   showNameFilter: number = 0;
   showRoleFilter: number = 0;
@@ -41,12 +37,9 @@ export class MemberListComponent implements OnInit {
   showEmailFilter: number = 0;
 
   singleMemberManage: Membership = null;
-  currentTaskTeams: string[] = null;
-  selectedTaskTeam: GroupRef = null;
-  creatingTaskTeam: boolean = false;
-  newTaskTeamName: string = null;
 
-  selectedTopics: string[] = [];
+  membersManage: Membership[] = [];
+  currentTaskTeams: string[] = null;
 
   public editMemberForm: FormGroup;
   public protectedEditControls: FormArray;
@@ -88,7 +81,11 @@ export class MemberListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setupTopicSelect();
+  }
+
+  refreshGroupAndList() {
+    this.groupService.loadGroupDetailsFromServer(this.group.groupUid).subscribe(group => this.group = group);
+    this.shouldReloadList.emit();
   }
 
   selectMember(member: Membership) {
@@ -119,45 +116,15 @@ export class MemberListComponent implements OnInit {
 
   showAddMemberToTaskTeamModal(member: Membership){
     this.singleMemberManage = member;
+    this.membersManage = [member];
     $('#add-member-to-task-team').modal('show');
-  }
-
-  toggleNewTeamInput() {
-    this.creatingTaskTeam = !this.creatingTaskTeam;
-    if (!this.creatingTaskTeam) {
-      this.newTaskTeamName = null;
-    } else {
-      this.selectedTaskTeam = null;
-    }
-  }
-
-  createMemberAndAddToTeam(event) {
-    this.newTaskTeamName = event.target.value;
   }
 
   showAssignTopicToMemberModal(member: Membership){
     this.singleMemberManage = member;
-    this.selectedTopics = [];
-    for(let i=0;i<member.topics.length;i++){
-      this.selectedTopics.push(member.topics[i]);
-    }
+    this.membersManage = [member];
+    this.memberTopicManage.setupTopicSelect(member.topics);
     $('#member-assign-topics').modal('show');
-    $(".topics-multi-select").val(this.selectedTopics);
-    this.setupTopicSelect();
-  }
-
-  setupTopicSelect() {
-    $(".topics-multi-select").select2({
-      placeholder: "Select topics, or type and hit enter for a new one)",
-      allowClear: true,
-      dropdownParent: $('#member-assign-topics'),
-      tags: true
-    });
-    $(".topics-multi-select").on('change.select2', function () {
-      const data = $('.topics-multi-select').select2('data');
-      this.selectedTopics = data.length > 0 ? data.map(tt => tt.id) : [];
-      console.log("topics: ", this.selectedTopics);
-    }.bind(this));
   }
 
   showEditModal(member: Membership){
@@ -178,45 +145,6 @@ export class MemberListComponent implements OnInit {
 
     this.singleMemberManage = member;
     this.currentTaskTeams = this.group.subGroups.filter(g => g.hasMember(member.user.uid)).map(g => g.groupUid);
-  }
-
-  selectTaskTeam(taskTeam: GroupRef){
-    this.selectedTaskTeam = taskTeam;
-    $('#add-member-to-task-team-dropdown-button').html(taskTeam.name);
-  }
-
-  saveAddMemberToTaskTeam(){
-    let memberUids: string[] = [];
-    memberUids.push(this.singleMemberManage.user.uid.toString());
-    if (this.creatingTaskTeam) {
-      this.groupService.createTaskTeam(this.group.groupUid, this.newTaskTeamName, memberUids).subscribe(response => {
-        this.closeTaskTeamModal("group.allMembers.addToTaskTeam.createdDone");
-      })
-    } else {
-      this.groupService.addMembersToTaskTeam(this.group.groupUid, this.selectedTaskTeam.groupUid, memberUids).subscribe(response => {
-        this.closeTaskTeamModal("group.allMembers.addToTaskTeam.addedDone");
-      })
-    }
-  }
-
-  closeTaskTeamModal(alertMessage: string) {
-    if (alertMessage) {
-      this.alertService.alert(alertMessage);
-    }
-    $('#add-member-to-task-team').modal('hide');
-  }
-
-  saveAssignTopicToMember(){
-    let memberUids: string[] = [];
-    memberUids.push(this.singleMemberManage.user.uid.toString());
-    console.log("assigning topics to member: ", this.selectedTopics);
-    this.groupService.assignTopicToMember(this.group.groupUid, memberUids, this.selectedTopics).subscribe(response => {
-      this.singleMemberManage.topics = this.selectedTopics;
-      this.alertService.alert("group.allMembers.assignTopic.assigned");
-      $('#member-assign-topics').modal('hide');
-    }, error => {
-      console.log("well that didn't work");
-    })
   }
 
   roleChangedTrigger(){

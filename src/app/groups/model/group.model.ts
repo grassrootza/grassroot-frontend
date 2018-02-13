@@ -1,6 +1,6 @@
 import {DatePipe} from "@angular/common";
 import {MembershipInfo} from "./membership.model";
-import {GroupMembersRef} from "./group-ref.model";
+import {getGroupMembersList, GroupMembersRef} from "./group-ref.model";
 import {JoinCodeInfo} from "./join-code-info";
 
 export class Group {
@@ -49,3 +49,31 @@ export class Group {
 
 }
 
+export const getGroupEntity = (gr: Group): Group => {
+  return new Group(
+    gr.groupUid,
+    gr.name,
+    gr.description,
+    gr.groupCreatorUid,
+    gr.groupCreatorName,
+    gr.groupCreationTimeMillis,
+    new Date(gr.groupCreationTimeMillis),
+    gr.discoverable,
+    gr.memberCount,
+    gr.joinCode,
+    gr.lastChangeDescription,
+    gr.lastChangeType,
+    gr.lastMajorChangeMillis,
+    gr.members,
+    gr.paidFor,
+    gr.userPermissions,
+    gr.userRole,
+    getGroupMembersList(gr.subGroups),
+    gr.topics,
+    gr.affiliations,
+    gr.joinWords,
+    gr.joinWordsLeft,
+    gr.reminderMinutes,
+    gr.profileImageUrl
+  );
+};

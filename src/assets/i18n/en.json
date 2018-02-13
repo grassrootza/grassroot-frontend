@@ -336,7 +336,6 @@
         "DAYS_AGO-BEFORE": "more than",
         "DAYS_AGO-AFTER": "less than",
         "DAYS_AGO_SUFIX": "days ago"
-
       },
       "manage":{
         "manage": "Manage",
@@ -360,7 +359,7 @@
         "addTeam": "Create task team",
         "addTeamPlace": "Give the task team a name",
         "createdDone": "Task team created. Keep adding members or manage under 'task teams'",
-        "addedDone": "Done, member added to task team"
+        "addedDone": "Done, member(s) added to task team"
       },
       "assignTopic":{
         "modalTitle": "Assign topic to member",
