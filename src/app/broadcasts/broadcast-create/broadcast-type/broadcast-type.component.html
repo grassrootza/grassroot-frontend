@@ -53,10 +53,11 @@
           </div>
           <div class="col-md-4 col-sm-8">
             <p class="type-header">{{ 'broadcasts.create.types.fbLabel' | translate }}</p>
-            <!-- todo : fix these controls and add link new / change account settings -->
-            <select *ngIf="createParams.fbConnected" (change)="debugFb()" class="form-control fb-select" formControlName="facebookPage">
-              <option *ngFor="let page of createParams.facebookPages; let i = index"
-                      value="{{ page.providerUserId }}" selected="{{ i == 0 }}">
+            <select *ngIf="createParams.fbConnected && typesForm.controls['facebook']?.value == true"
+                    multiple [size]="createParams?.facebookPages?.length + 1"
+                    class="form-control fb-select" [formControl]="typesForm.controls['facebookPages']">
+              <option selected value="" [disabled]="!!(typesForm.controls['facebookPages'])"> -- Select page(s) -- </option>
+              <option *ngFor="let page of createParams.facebookPages; let i = index" value="{{ page.providerUserId }}">
                 {{ page.displayName }}
               </option>
             </select>

@@ -14,6 +14,9 @@ export class GroupInfoComponent implements OnInit {
   public group: GroupInfo = null;
 
   @Output()
+  public onGroupClicked: EventEmitter<GroupInfo> = new EventEmitter();
+
+  @Output()
   public pinToggled: EventEmitter<GroupInfo> = new EventEmitter();
 
   @Output()
@@ -44,6 +47,11 @@ export class GroupInfoComponent implements OnInit {
 
   handleChevronPicked(){
     this.extendedInfoVisible = !this.extendedInfoVisible;
+  }
+
+  triggerViewGroup() {
+    this.onGroupClicked.emit(this.group);
+    return false;
   }
 
   triggerCreateMeetingAction() {

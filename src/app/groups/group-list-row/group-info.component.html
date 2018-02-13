@@ -3,10 +3,10 @@
     <div class="order-1 col-6 col-md-2 order-md-1 col-lg-3 group-name">
       <img *ngIf="!group.pinned" class="pin" src="assets/star_empty.png" (click)="handlePinClick()"/>
       <img *ngIf="group.pinned" class="pin" src="assets/star_full.png" (click)="handlePinClick()"/>
-      <a href="#" [routerLink]="['/group', group.groupUid]">{{group.name}}</a>
+      <a href="" (click)="triggerViewGroup()">{{group.name}}</a>
     </div>
     <div class="col-md-2 order-md-2 col-lg-2 d-none d-md-block">
-          <span class="badge badge-success" [translate]="'enum.GroupRole.' + group.userRole">
+          <span class="badge badge-success role-badge" [translate]="'enum.GroupRole.' + group.userRole">
             Group role
           </span>
     </div>
@@ -42,7 +42,7 @@
             <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{ 'groups.row.action.broadcast' | translate }}</a>
 
             <a class="dropdown-item" (click)="triggerCreateLivewireAlert()">
-              {{'groups.livewire.create' | translate}}
+              {{'groups.row.action.livewire' | translate}}
             </a>
           </div>
         </div>
@@ -50,7 +50,7 @@
     </div>
 
     <div class="col-6 order-2 text-right col-md-1 order-md-6 col-lg-1 chevron">
-        <img src="assets/chevron_right.png" (click)="handleChevronPicked()"/>
+        <img src="{{ extendedInfoVisible ? 'assets/chevron-down.png' : 'assets/chevron_right.png' }}" (click)="handleChevronPicked()"/>
     </div>
   </div>
 

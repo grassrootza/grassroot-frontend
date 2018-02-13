@@ -1,8 +1,3 @@
-<ng4-loading-spinner
-  [loadingText]="'groups.loading' | translate"
-  [threshold]="500"
-> </ng4-loading-spinner>
-
 <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#create-group-modal">
   {{ 'groups.create' | translate }}
 </button>
@@ -30,6 +25,7 @@
     <app-group-info *ngFor="let gr of pinnedGroups"
                     [group]="gr"
                     [extendedInfoVisible]="pinnedGroups.length == 1"
+                    (onGroupClicked)="showGroup($event)"
                     (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
                     (onTriggerCreateVote)="showCreateVoteModal($event)"
                     (onTriggerCreateTodo)="showCreateTodoModal($event)"
@@ -97,6 +93,7 @@
     <app-group-info *ngFor="let gr of filteredGroupsPage"
                     [group]="gr"
                     (pinToggled)="toggleGroupPin($event)"
+                    (onGroupClicked)="showGroup($event)"
                     (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
                     (onTriggerCreateVote)="showCreateVoteModal($event)"
                     (onTriggerCreateTodo)="showCreateTodoModal($event)"

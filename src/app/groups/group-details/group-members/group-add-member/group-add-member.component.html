@@ -11,7 +11,7 @@
         <div class="form-group row">
           <div class="col-12">
             <ng-template #rt let-r="result" let-t="term">
-              {{'group.allMembers.addMember.name' | translate}}: {{r.name}}, {{'group.allMembers.addMember.phone' | translate}}: {{r.phone}}
+              {{r.name}}
             </ng-template>
             <input id="typeahead-basic" type="text" class="form-control form-control-em" [ngbTypeahead]="search"
                    [resultTemplate]="rt" [inputFormatter]="formatter"

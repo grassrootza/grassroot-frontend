@@ -21,3 +21,10 @@
   border: solid 0.1rem #EFF1F7;
   padding: 0.5rem;
 }
+
+.cancel-inline:hover {
+  cursor: pointer;
+  color: #4A4A4A;
+  border: 1px solid #4A4A4A;
+  background: white;
+}

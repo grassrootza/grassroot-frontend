@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {Router} from "@angular/router";
 import {UserService} from "../user/user.service";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {eitherEmailOrPhoneValid} from "../utils/CustomValidators";
 import {TranslateService} from "@ngx-translate/core";
+import {AlertService} from "../utils/alert.service";
 
 @Component({
   selector: 'app-login',
@@ -11,19 +12,24 @@ import {TranslateService} from "@ngx-translate/core";
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
 
   message: string;
   loginForm:FormGroup;
 
   showForceLogoutReason = false;
 
-  constructor(public userService: UserService, private router: Router, private translate: TranslateService) {
+  constructor(public userService: UserService, private router: Router, private translate: TranslateService,
+              private alertService: AlertService) {
     this.message = '';
     this.loginForm = new FormGroup({
         username: new FormControl('',[Validators.required, Validators.minLength(3), eitherEmailOrPhoneValid]),
         password:new FormControl('',Validators.required)});
     this.showForceLogoutReason = this.userService.showForceLogoutReason;
+  }
+
+  ngAfterViewInit() {
+    this.alertService.hideLoadingDelayed();
   }
 
   login(username: string, password: string): boolean {
@@ -37,7 +43,7 @@ export class LoginComponent {
         if (authResponse.errorCode == null) {
           let afterLoginUrl = localStorage.getItem("afterLoginUrl");
           if (!afterLoginUrl)
-            afterLoginUrl = "/";
+            afterLoginUrl = "/home";
 
           let afterLoginParams = localStorage.getItem("afterLoginParams");
           localStorage.removeItem("afterLoginUrl");

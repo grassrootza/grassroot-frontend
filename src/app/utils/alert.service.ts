@@ -11,6 +11,8 @@ export class AlertService {
   private subject = new Subject<string>();
   private keepAfterRouteChange = false;
 
+  public loading = new Subject<boolean>();
+
   constructor(private router: Router, private translate: TranslateService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationStart && !this.keepAfterRouteChange)
@@ -28,6 +30,18 @@ export class AlertService {
     setTimeout(()=>{
       this.clear();
     },3000); // remove it after 3 seconds
+  }
+
+  showLoading() {
+    this.loading.next(true);
+  }
+
+  hideLoading() {
+    this.loading.next(false);
+  }
+
+  hideLoadingDelayed() {
+    setTimeout(() => this.hideLoading(), 300);
   }
 
   clear() {

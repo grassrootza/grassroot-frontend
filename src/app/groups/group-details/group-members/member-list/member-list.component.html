@@ -1,6 +1,6 @@
 <div class="container group-info-header d-none d-md-block">
   <div class="row">
-    <div class="col-1">
+    <div class="col-1" *ngIf="!isTaskTeam">
       <input type="checkbox" class="checkbox-shape" (click)="selectAllOnPage($event)"/>
     </div>
 
@@ -65,12 +65,17 @@
 <div *ngFor="let member of currentPage.content">
   <div class="container group-info-row">
     <div class="row flex flex-wrap">
-      <div class="col-md-1">
+      <div class="col-md-1" *ngIf="!isTaskTeam">
         <input type="checkbox" [checked]="member.selected" (click)="selectMember(member)" class="checkbox-shape">
       </div>
 
       <div class="col-md-2">
-        {{member.user.displayName}}
+        <p class="member-name">{{member.user.displayName}}</p>
+        <p class="affiliation-subtitle text-nowrap">
+          <span *ngIf="hasAffiliations(member)">{{ 'group.allMembers.table.affiliation' | translate }}{{ member.affiliations.join(', ')}}</span>
+          <span *ngIf="hasAffiliations(member) && member?.topics?.length > 0">; </span>
+          <span *ngIf="member?.topics?.length > 0">Topics: {{member.topics.join(', ')}}</span>
+        </p>
       </div>
 
       <div class="col-md-2">
@@ -106,7 +111,7 @@
               <a class="dropdown-item" (click)="showEditModal(member)" [translate]="'group.allMembers.manage.edit'">Edit</a>
               <a class="dropdown-item" [translate]="'group.allMembers.manage.topics'"
                   (click)="showAssignTopicToMemberModal(member)">Assign topic</a>
-              <a class="dropdown-item" [translate]="'group.allMembers.manage.taskTeam'"
+              <a class="dropdown-item" *ngIf="!isTaskTeam" [translate]="'group.allMembers.manage.taskTeam'"
                  (click)="showAddMemberToTaskTeamModal(member)">Add to task team</a>
               <a class="dropdown-item" [translate]="'group.allMembers.manage.remove'" (click)="showMemberRemoveModal(member)">Remove</a>
             </div>
@@ -119,165 +124,11 @@
 
 
 <!--modals-->
-<div class="modal fade" tabindex="-1" role="dialog" id="add-member-to-task-team" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.addToTaskTeam.modalTitle' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" *ngIf="singleMemberManage">
-        <div class="container group-info-header d-none d-md-block">
-          <div class="row">
-            <div class="col-3" [translate]="'group.allMembers.addToTaskTeam.table.name'">Name</div>
-            <div class="col-3" [translate]="'group.allMembers.addToTaskTeam.table.role'">Role</div>
-            <div class="col-3" [translate]="'group.allMembers.addToTaskTeam.table.phone'">Phone</div>
-            <div class="col-3" [translate]="'group.allMembers.addToTaskTeam.table.email'">email</div>
-          </div>
-        </div>
-        <div class="container group-info-row">
-          <div class="row flex flex-wrap">
-            <div class="col-3">
-              {{singleMemberManage.user.displayName}}
-            </div>
-            <div class="col-3">
-              {{singleMemberManage.roleName}}
-            </div>
-            <div class="col-3">
-              {{singleMemberManage.user.phoneNumber}}
-            </div>
-            <div class="col-3">
-              {{singleMemberManage.user.email}}
-            </div>
-          </div>
-        </div>
+<app-add-to-task-team *ngIf="!isTaskTeam && group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+  [group]="group" [members]="membersManage" (membersAdded)="refreshGroupAndList()"></app-add-to-task-team>
 
-        <div class="container">
-          <span [translate]="'group.allMembers.addToTaskTeam.addToTaskTeamLabel'">Add to task team:</span>
-          <div class="dropdown">
-            <button class="btn dropdown-toggle" type="button" data-toggle="dropdown" id="add-member-to-task-team-dropdown-button"
-                    aria-haspopup="true" aria-expanded="false" >
-              {{'group.allMembers.addToTaskTeam.pickTaskTeam' | translate}}
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item disabled" *ngFor="let taskTeam of group.subGroups" (click)="selectTaskTeam(taskTeam)">{{taskTeam.name}}</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="saveAddMemberToTaskTeam()" [disabled]="!selectedTaskTeam">
-          {{ 'action.save' | translate }}
-        </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          {{ 'action.cancel' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="no-task-teams-for-group" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.addToTaskTeam.noTaskTeamsForGroup.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3>{{ 'group.allMembers.addToTaskTeam.noTaskTeamsForGroup.body' | translate}}</h3>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          {{ 'action.ok' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="member-assign-topics" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.assignTopic.modalTitle' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body" *ngIf="singleMemberManage">
-        <div class="container group-info-header d-none d-md-block">
-          <div class="row">
-            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.name'">Name</div>
-            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.role'">Role</div>
-            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.phone'">Phone</div>
-            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.email'">email</div>
-          </div>
-        </div>
-        <div class="container group-info-row">
-          <div class="row flex flex-wrap">
-            <div class="col-3">
-              {{singleMemberManage.user.displayName}}
-            </div>
-            <div class="col-3">
-              {{'enums.groupRole.' + singleMemberManage.roleName | translate }}
-            </div>
-            <div class="col-3">
-              {{singleMemberManage.user.phoneNumber}}
-            </div>
-            <div class="col-3">
-              {{singleMemberManage.user.email}}
-            </div>
-          </div>
-        </div>
-
-        <div class="container">
-          <span [translate]="'group.allMembers.assignTopic.assignTopicLabel'">Assign topics:</span>
-          <select class="form-control" id="names-select" [(ngModel)]="selectedTopics" name="name-select" multiple>
-            <option *ngFor="let topic of group.topics" [ngValue]="topic">
-              {{topic}}
-            </option>
-          </select>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="saveAssignTopicToMember()" [disabled]="selectedTopics.length == 0">
-          {{ 'action.save' | translate }}
-        </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          {{ 'action.cancel' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="no-topics-for-group" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.assignTopic.noTopicsForGroup.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3>{{ 'group.allMembers.assignTopic.noTopicsForGroup.body' | translate}}</h3>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          {{ 'action.ok' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-member-topics-manage #singleMemberTopicModal *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+  [group]="group" [members]="membersManage" (topicsAssigned)="refreshGroupAndList()"></app-member-topics-manage>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="confirm-user-removal-modal" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
   <div class="modal-dialog modal-lg" role="document">
@@ -307,7 +158,7 @@
               {{singleMemberManage?.user.displayName}}
             </div>
             <div class="col-3">
-              {{singleMemberManage?.roleName}}
+              {{'enum.GroupRole.' + singleMemberManage?.roleName | translate }}
             </div>
             <div class="col-3">
               {{singleMemberManage?.user.phoneNumber}}
@@ -412,28 +263,6 @@
           <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" >{{ 'action.cancel' | translate }}</button>
         </div>
       </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" tabindex="-1" role="dialog" id="cant-edit-details" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.edit.notAllowed.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3>{{ 'group.allMembers.edit.notAllowed.body' | translate}}</h3>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          {{ 'action.ok' | translate }}
-        </button>
-      </div>
     </div>
   </div>
 </div>

@@ -1,11 +1,15 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {environment} from '../../environments/environment';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/first';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/observable/concat';
+
+import {environment} from '../../environments/environment';
 import {GroupInfo} from './model/group-info.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {UserService} from '../user/user.service';
-import {Group} from './model/group.model';
+import {getGroupEntity, Group} from './model/group.model';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {DateTimeUtils} from '../utils/DateTimeUtils';
 import {Membership, MembersPage} from './model/membership.model';
@@ -21,11 +25,13 @@ import {MembersFilter} from "./member-filter/filter.model";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {FileImportResult} from "./group-details/group-members/group-members-import/file-import/file-import-result";
 
+
 @Injectable()
 export class GroupService {
 
   groupListUrl = environment.backendAppUrl + "/api/group/fetch/list";
   groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
+  taskTeamDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details/taskteam";
   groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
   newMembersLIstUrl = environment.backendAppUrl + "/api/group/fetch/members/new";
   groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
@@ -35,6 +41,7 @@ export class GroupService {
   groupRemoveMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove";
   groupAddMembersToTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/members/add/taskteam";
   groupAssignTopicsToMembersUrl = environment.backendAppUrl + "/api/group/modify/members/add/topics";
+  groupRemoveTopicsFromMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove/topics";
   groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
   groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
   groupImportErrorsDownloadUrl = environment.backendAppUrl + "/api/group/import/errors/xls";
@@ -51,6 +58,8 @@ export class GroupService {
 
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
+  groupRemoveTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/deactivate/taskteam";
+  groupRenametaskTeamUrl = environment.backendAppUrl + "/api/group/modify/rename/taskteam";
   groupUploadImageUrl = environment.backendAppUrl + "/api/group/modify/image/upload";
 
   groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
@@ -71,6 +80,8 @@ export class GroupService {
   private groupInfoListError_: BehaviorSubject<any> = new BehaviorSubject(null);
   public groupInfoListError: Observable<any> = this.groupInfoListError_.asObservable();
 
+  private groupFullRetrieved_: Group[] = [];
+
   private groupMemberAdded_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public groupMemberAdded: Observable<boolean> = this.groupMemberAdded_.asObservable();
 
@@ -85,7 +96,7 @@ export class GroupService {
   private NEW_MEMBERS_DATA_CACHE = "NEW_MEMBERS_DATA_CACHE";
   private MY_GROUPS_DATA_CACHE = "MY_GROUPS_DATA_CACHE";
 
-  constructor(private httpClient: HttpClient, private userService: UserService) {
+  constructor(private httpClient: HttpClient) {
 
     let cachedMyGroups = localStorage.getItem(this.MY_GROUPS_DATA_CACHE);
     if (cachedMyGroups) {
@@ -105,9 +116,7 @@ export class GroupService {
   }
 
   loadGroups() {
-
     const fullUrl = this.groupListUrl;
-
     return this.httpClient.get<GroupInfo[]>(fullUrl)
       .map(
         data => data.map(gr => GroupInfo.createInstance(gr))
@@ -123,45 +132,46 @@ export class GroupService {
         });
   }
 
-  loadGroupDetails(groupUid: string): Observable<Group> {
-    const fullUrl = this.groupDetailsUrl + "/" + groupUid;
+  loadGroupDetailsCached(groupUid: string, checkServerAfter: boolean = true): Observable<Group> {
+    let concatObs = Observable.concat(
+      this.checkGroupCache(groupUid),
+      this.loadGroupDetailsFromServer(groupUid));
+    return checkServerAfter ? concatObs : concatObs.first();
+  }
 
+  checkGroupCache(groupUid: string): Observable<Group> {
+    return Observable.from(this.groupFullRetrieved_).filter(grp => grp.groupUid == groupUid)
+      .map(grp => {
+        return grp;
+      });
+  }
+
+  loadGroupDetailsFromServer(groupUid: string): Observable<Group> {
+    const fullUrl = this.groupDetailsUrl + "/" + groupUid;
     return this.httpClient.get<Group>(fullUrl)
       .map(
         gr => {
-          console.log("Group details loaded : ", gr);
-          return new Group(
-            gr.groupUid,
-            gr.name,
-            gr.description,
-            gr.groupCreatorUid,
-            gr.groupCreatorName,
-            gr.groupCreationTimeMillis,
-            new Date(gr.groupCreationTimeMillis),
-            gr.discoverable,
-            gr.memberCount,
-            gr.joinCode,
-            gr.lastChangeDescription,
-            gr.lastChangeType,
-            gr.lastMajorChangeMillis,
-            gr.members,
-            gr.paidFor,
-            gr.userPermissions,
-            gr.userRole,
-            getGroupMembersList(gr.subGroups),
-            gr.topics,
-            gr.affiliations,
-            gr.joinWords,
-            gr.joinWordsLeft,
-            gr.reminderMinutes,
-            gr.profileImageUrl
-          );
+          let group = getGroupEntity(gr);
+          let existingIndex = this.groupFullRetrieved_.findIndex(grp => grp.groupUid == group.groupUid);
+          if (existingIndex != -1) {
+            this.groupFullRetrieved_[existingIndex] = group;
+          } else {
+            this.groupFullRetrieved_.push(group);
+          }
+          return group;
         }
       );
   }
 
+  loadTaskTeamDetails(parentUid: string, taskTeamUid: string): Observable<Group> {
+    const fullUrl = this.taskTeamDetailsUrl + "/" + parentUid;
+    let params = new HttpParams().set("taskTeamUid", taskTeamUid);
+    // don't cache it, for the moment, as rare, and no need to crowd
+    return this.httpClient.get<Group>(fullUrl, {params: params}).map(getGroupEntity);
+  }
 
-  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string): Observable<GroupRef> {
+  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string,
+              pinGroup: boolean = true): Observable<GroupRef> {
 
     const fullUrl = this.groupCreateUrl;
 
@@ -170,7 +180,9 @@ export class GroupService {
       .set('description', description)
       .set('permissionTemplate', permissionTemplate)
       .set('reminderMinutes', reminderMinutes.toString())
-      .set('discoverable', discoverable);
+      .set('discoverable', discoverable)
+      .set('defaultAddToAccount', 'true')
+      .set("pinGroup", pinGroup.toString());
 
     return this.httpClient.post<GroupRef>(fullUrl, null, {params: params});
   }
@@ -208,7 +220,8 @@ export class GroupService {
     let params = new HttpParams()
       .set('howRecentInDays', howRecentlyJoinedInDays.toString())
       .set('page', pageNo.toString())
-      .set('size', pageSize.toString());
+      .set('size', pageSize.toString())
+      .set('sort', 'joinTime,desc');
 
     this.httpClient.get<MembersPage>(this.newMembersLIstUrl, {params: params})
       .map(
@@ -273,18 +286,28 @@ export class GroupService {
       });
   }
 
-  assignTopicToMember(groupUid: string, membersUids: string[], topics: string[]): Observable<boolean> {
+  // onlyAdd: if set to false, the passed topics will overwrite the prior topics for the members; if set to true, the
+  // members will retain their existing topics
+  assignTopicToMember(groupUid: string, membersUids: string[], topics: string[], onlyAdd: boolean = false): Observable<boolean> {
     const fullUrl = this.groupAssignTopicsToMembersUrl + "/" + groupUid;
     const params = {
       'memberUids': membersUids,
-      'topics': topics
+      'topics': topics,
+      'onlyAdd': onlyAdd.toString()
     };
+    console.log("posting topic assignment ...");
 
     return this.httpClient.post(fullUrl, null, {params: params})
       .map(response => {
         console.log(response);
         return true;
       })
+  }
+
+  removeTopicFromMembers(groupUid: string, memberUids: string[], topics: string[]): Observable<any> {
+    const fullUrl = this.groupRemoveTopicsFromMembersUrl + "/" + groupUid;
+    const params = {'memberUids': memberUids, 'topics': topics};
+    return this.httpClient.post(fullUrl, null, {params: params});
   }
 
   uploadGroupImage(groupUid, image): Observable<any> {
@@ -304,7 +327,6 @@ export class GroupService {
   importAnalyzeMembers(params): Observable<FileImportResult>{
     return this.httpClient.post<FileImportResult>(this.groupImportMembersConfirmUrl, null, {params: params})
       .map(data => {
-          console.log("import result back: ", data);
           return new FileImportResult(data.processedMembers.map(getAddMemberInfo), data.errorRows, data.errorFilePath);
         }
       )
@@ -314,11 +336,11 @@ export class GroupService {
     return this.httpClient.get(this.groupImportErrorsDownloadUrl, { params: { errorFilePath: errorPath }, responseType: 'blob' });
   }
 
-  confirmAddMembersToGroup(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[]):Observable<GroupModifiedResponse>{
+  confirmAddMembersToGroup(groupUid: string, membersInfoToAdd: GroupAddMemberInfo[], joinMethod: string):Observable<GroupModifiedResponse>{
     const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
+    const params = new HttpParams().set("joinMethod", joinMethod);
     membersInfoToAdd.forEach(member => member.phoneNumber = PhoneNumberUtils.convertIfPhone(member.phoneNumber));
-    console.log("posting members: ", membersInfoToAdd);
-    return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd)
+    return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd, { params: params })
       .map(resp => {
         return resp;
       })
@@ -333,7 +355,7 @@ export class GroupService {
   addGroupJoinWord(groupUid: string, joinWord: string): Observable<JoinCodeInfo> {
     const fullUrl = this.groupJoinWordAddUrl + "/" + groupUid;
     // nb : must always mirror inbound routing
-    const inboundUrl = environment.frontendAppUrl + "/" + groupUid + "/" + joinWord;
+    const inboundUrl = environment.frontendAppUrl + "/join/group/" + groupUid + "?code=" + joinWord;
     return this.httpClient.post<JoinCodeInfo>(fullUrl, null, { params: {
       "joinWord": joinWord, "longJoinUrl": inboundUrl
     }});
@@ -401,12 +423,6 @@ export class GroupService {
       .set("groupUid", groupUid);
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
-
-
-
-
-
-
 
   updateGroupSettings(groupUid: string, name: string, description: string, isPublic: boolean, reminderInMinutes: number): Observable<boolean> {
     const fullUrl = this.groupUpdateSettingsUrl + '/' + groupUid;
@@ -591,6 +607,18 @@ export class GroupService {
       .map(resp => {
         return resp;
       })
+  }
+
+  removeTaskTeam(parentUid: string, taskTeamUid: string): Observable<Group> {
+    const fullUrl = this.groupRemoveTaskTeamUrl + "/" + parentUid;
+    let params = new HttpParams().set("taskTeamUid", taskTeamUid);
+    return this.httpClient.post<Group>(fullUrl, null, {params: params});
+  }
+
+  renameTaskTeam(parentUid: string, taskTeamUid: string, newName: string): Observable<any> {
+    const fullUrl = this.groupRenametaskTeamUrl + "/" + parentUid;
+    let params = new HttpParams().set("taskTeamUid", taskTeamUid).set("newName", newName);
+    return this.httpClient.post(fullUrl, null, {params: params});
   }
 
   groupMemberAddedSuccess(success: boolean){

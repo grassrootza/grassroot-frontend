@@ -66,10 +66,10 @@
               <select class="form-control" name="reminderMinutes"
                       [formControl]="createGroupForm.controls['reminderMinutes']">
                 <option value="2880">{{ 'groups.createNewModal.reminders.twoDays' | translate }}</option>
-                <option value="1440">{{ 'groups.createNewModal.reminders.oneDay' | translate }}</option>
+                <option value="1440" selected>{{ 'groups.createNewModal.reminders.oneDay' | translate }}</option>
                 <option value="720">{{ 'groups.createNewModal.reminders.halfDay' | translate }}</option>
                 <option value="60">{{ 'groups.createNewModal.reminders.oneHour' | translate }}</option>
-                <option value="0" selected>{{ 'groups.createNewModal.reminders.noReminders' | translate }}</option>
+                <option value="0">{{ 'groups.createNewModal.reminders.noReminders' | translate }}</option>
               </select>
             </div>
           </div>
@@ -87,15 +87,42 @@
             </div>
           </div>
 
+          <div class="form-row">
+            <div class="form-group col-sm-2">
+              <label>{{ 'groups.createNewModal.groupVisibility.title' | translate }}</label>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" checked value="true"
+                         name="visibility" [formControl]="createGroupForm.controls['pinGroup']">
+                  {{ 'groups.createNewModal.groupVisibility.pinned' | translate }}
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" value="false"
+                         name="visibility" [formControl]="createGroupForm.controls['pinGroup']">
+                  {{ 'groups.createNewModal.groupVisibility.normal' | translate }}
+                </label>
+              </div>
+            </div>
+
+          </div>
+
         </form>
 
 
       </div>
       <div class="modal-footer">
-        <button [disabled]="!createGroupForm.valid" type="button" class="btn btn-primary" (click)="createGroup()">{{
+        <button [disabled]="!createGroupForm.valid" type="button" class="btn btn-primary save-button" (click)="createGroup()">{{
           'action.save' | translate }}
         </button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
       </div>
     </div>
   </div>

@@ -1,6 +1,16 @@
 <div class="row">
 
   <div class="col-sm-3 col-lg-2 filter-item">
+    <label for="joinMethods" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.nameOrPhone'">Name or phone</label>
+  </div>
+
+  <div class=" col-sm-9 col-lg-10 filter-item" *ngIf="includeNameFilter">
+    <input id="nameOrPhone" class="form-control"
+           placeholder="{{ 'group.allMembers.filterMembers.nameOrPhonePlaceHolder' | translate}}"
+           (keyup)="nameOrPhoneChanged($event.target.value)"/>
+  </div>
+
+  <div class="col-sm-3 col-lg-2 filter-item">
     <label for="province" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.province' | translate }}</label>
   </div>
   <div class=" col-sm-9 col-lg-10 filter-item">
@@ -11,17 +21,16 @@
 
 
   <div class="col-sm-3 col-lg-2 filter-item">
-    <label for="topics" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.topics'">Topics</label>
+    <label class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.topics'">Topics</label>
   </div>
   <div class=" col-sm-9 col-lg-10 filter-item">
-    <select id="topics" class="form-control topics-multi-select" multiple="multiple" style="width: 100%">
-      <option *ngFor="let tp of topics" [value]="tp">Topic</option>
+    <select class="form-control topics-multi-select-filter" multiple="multiple" style="width: 100%">
+      <option *ngFor="let tp of topics" [value]="tp">{{ tp }}</option>
     </select>
   </div>
 
   <div class="col-sm-3 col-lg-2 filter-item">
-    <label for="taskTeams" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.taskTeam' | translate
-      }}</label>
+    <label for="taskTeams" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.taskTeam' | translate }}</label>
   </div>
   <div class=" col-sm-9 col-lg-10 filter-item">
     <select id="taskTeams" class="form-control task-teams-multi-select" multiple="multiple" style="width: 100%">
@@ -118,18 +127,5 @@
   </div>
 
 
-  <div class="col-sm-3 col-lg-2 filter-item">
-    <label for="joinMethods" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.nameOrPhone'">Joined
-      source</label>
-  </div>
-  <div class=" col-sm-9 col-lg-10 filter-item">
-    <input id="nameOrPhone" class="form-control"
-           placeholder="{{ 'group.allMembers.filterMembers.nameOrPhonePlaceHolder' | translate}}"
-           (keyup)="nameOrPhoneChanged($event.target.value)"/>
-  </div>
-
 
 </div>
-
-
-<!--<button type="button" class="btn btn-primary" style="margin-top: 1rem;" (click)="filterData()">{{ 'group.allMembers.filterMembers.update' | translate }}</button>-->

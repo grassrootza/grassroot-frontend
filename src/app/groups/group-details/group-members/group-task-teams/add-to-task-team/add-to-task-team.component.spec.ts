@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TwitterImportComponent } from './twitter-import.component';
+import { AddToTaskTeamComponent } from './add-to-task-team.component';
 
-describe('TwitterImportComponent', () => {
-  let component: TwitterImportComponent;
-  let fixture: ComponentFixture<TwitterImportComponent>;
+describe('AddToTaskTeamComponent', () => {
+  let component: AddToTaskTeamComponent;
+  let fixture: ComponentFixture<AddToTaskTeamComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TwitterImportComponent ]
+      declarations: [ AddToTaskTeamComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TwitterImportComponent);
+    fixture = TestBed.createComponent(AddToTaskTeamComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

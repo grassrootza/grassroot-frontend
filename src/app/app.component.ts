@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from "./user/user.service";
-import {NavigationEnd, Router} from "@angular/router";
+import {NavigationEnd, RouteConfigLoadStart, Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
 import {environment} from "../environments/environment";
 import {TranslateService} from '@ngx-translate/core';
@@ -16,7 +16,6 @@ declare var $: any;
   styleUrls: ['./app.component.css']
 })
 
-
 export class AppComponent implements OnInit {
 
   loggedInUser: AuthenticatedUser = null;
@@ -26,6 +25,8 @@ export class AppComponent implements OnInit {
   notifications: Notification[] = [];
 
   popupNotification: Notification = null;
+
+  loadingModule: boolean = false;
 
   private newNotifications: Notification[] = [];
   private currentPopupNotificationIndex = 0;
@@ -47,8 +48,15 @@ export class AppComponent implements OnInit {
     this.loggedInUser = this.userService.getLoggedInUser();
 
     this.router.events.subscribe(ev => {
-      if (ev instanceof NavigationEnd)
+      if (ev instanceof RouteConfigLoadStart) {
+        console.log("start routing to lazy module, navigating");
+        this.loadingModule = true;
+      }
+
+      if (ev instanceof NavigationEnd) {
+        console.log("navigation has ended");
         this.currentUrl = ev.url;
+      }
     });
 
     this.userService.loggedInUser.subscribe(user => {
@@ -60,6 +68,10 @@ export class AppComponent implements OnInit {
       this.alertMessage = message;
     });
 
+    this.alertService.loading.subscribe(loading => {
+      this.loadingModule = loading;
+    });
+
     translateService.addLangs(['en']);
     translateService.setDefaultLang('en');
     const browserLang = translateService.getBrowserLang();
@@ -68,10 +80,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     $(".ntf-popup").hide();
-    this.pullNotifications();
-    setInterval(() => {
-      this.pullNotifications()
-    }, 10000);
+    // this.pullNotifications();
+    // setInterval(() => {
+    //   this.pullNotifications()
+    // }, 10000);
   }
 
   private pullNotifications() {

@@ -44,3 +44,18 @@
 .dropdown-item {
   cursor: pointer;
 }
+
+.task-teams {
+  width: 100%;
+}
+
+.member-name {
+  font-weight: 600;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.affiliation-subtitle {
+  padding: 0;
+  margin: 4px 0 0;
+}

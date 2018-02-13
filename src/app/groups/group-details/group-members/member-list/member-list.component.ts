@@ -1,13 +1,14 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {Membership, MembersPage} from '../../../model/membership.model';
 import {GroupService} from '../../../group.service';
 import {Group} from '../../../model/group.model';
-import {GroupRef} from '../../../model/group-ref.model';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
 import {GroupAddMemberInfo} from '../../../model/group-add-member-info.model';
 import {GroupRole} from '../../../model/group-role';
 import {UserProvince} from '../../../../user/model/user-province.enum';
+import {AlertService} from "../../../../utils/alert.service";
+import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 
 declare var $: any;
 
@@ -18,20 +19,16 @@ declare var $: any;
 })
 export class MemberListComponent implements OnInit {
 
-  @Input()
-  public currentPage: MembersPage = null;
+  @Input() public currentPage: MembersPage = null;
+  @Input() public group: Group = null;
+  @Input() public isTaskTeam: boolean = false;
 
-  @Input()
-  public group: Group = null;
+  @Output() memberRemoved: EventEmitter<any>;
+  @Output() shouldReloadList: EventEmitter<boolean>;
+  @Output() sortUserList: EventEmitter<string[]>;
 
-  @Output()
-  memberRemoved: EventEmitter<any>;
-
-  @Output()
-  shouldReloadList: EventEmitter<boolean>;
-
-  @Output()
-  sortUserList: EventEmitter<string[]>;
+  @ViewChild('singleMemberTopicModal')
+  private memberTopicManage: MemberTopicsManageComponent;
 
   showNameFilter: number = 0;
   showRoleFilter: number = 0;
@@ -40,9 +37,9 @@ export class MemberListComponent implements OnInit {
   showEmailFilter: number = 0;
 
   singleMemberManage: Membership = null;
+
+  membersManage: Membership[] = [];
   currentTaskTeams: string[] = null;
-  selectedTaskTeam: GroupRef = null;
-  selectedTopics: string[] = [];
 
   public editMemberForm: FormGroup;
   public protectedEditControls: FormArray;
@@ -57,7 +54,10 @@ export class MemberListComponent implements OnInit {
   public coreDetailsChanged: boolean = false;
   public withinGroupAttrsChanged: boolean = false;
 
+  private editComplete = new EventEmitter<boolean>();
+
   constructor(private groupService: GroupService,
+              private alertService: AlertService,
               private fb: FormBuilder) {
     this.memberRemoved = new EventEmitter<any>();
     this.shouldReloadList = new EventEmitter<boolean>();
@@ -81,6 +81,11 @@ export class MemberListComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  refreshGroupAndList() {
+    this.groupService.loadGroupDetailsFromServer(this.group.groupUid).subscribe(group => this.group = group);
+    this.shouldReloadList.emit();
   }
 
   selectMember(member: Membership) {
@@ -110,25 +115,16 @@ export class MemberListComponent implements OnInit {
   }
 
   showAddMemberToTaskTeamModal(member: Membership){
-    if(this.group.subGroups.length > 0){
-      this.singleMemberManage = member;
-      $('#add-member-to-task-team').modal('show');
-    }else{
-      $('#no-task-teams-for-group').modal('show');
-    }
+    this.singleMemberManage = member;
+    this.membersManage = [member];
+    $('#add-member-to-task-team').modal('show');
   }
 
   showAssignTopicToMemberModal(member: Membership){
-    if(this.group.topics.length > 0){
-      this.singleMemberManage = member;
-      this.selectedTopics = [];
-      for(let i=0;i<member.topics.length;i++){
-        this.selectedTopics.push(member.topics[i]);
-      }
-      $('#member-assign-topics').modal('show');
-    }else{
-      $('#no-topics-for-group').modal('show');
-    }
+    this.singleMemberManage = member;
+    this.membersManage = [member];
+    this.memberTopicManage.setupTopicSelect(member.topics);
+    $('#member-assign-topics').modal('show');
   }
 
   showEditModal(member: Membership){
@@ -151,27 +147,6 @@ export class MemberListComponent implements OnInit {
     this.currentTaskTeams = this.group.subGroups.filter(g => g.hasMember(member.user.uid)).map(g => g.groupUid);
   }
 
-  selectTaskTeam(taskTeam: GroupRef){
-    this.selectedTaskTeam = taskTeam;
-    $('#add-member-to-task-team-dropdown-button').html(taskTeam.name);
-  }
-
-  saveAddMemberToTaskTeam(){
-    let memberUids: string[] = [];
-    memberUids.push(this.singleMemberManage.user.uid.toString());
-    this.groupService.addMembersToTaskTeam(this.group.groupUid, this.selectedTaskTeam.groupUid, memberUids).subscribe(response => {
-      $('#add-member-to-task-team').modal('hide');
-    })
-  }
-
-  saveAssignTopicToMember(){
-    let memberUids: string[] = [];
-    memberUids.push(this.singleMemberManage.user.uid.toString());
-    this.groupService.assignTopicToMember(this.group.groupUid, memberUids, this.selectedTopics).subscribe(response => {
-      $('#member-assign-topics').modal('hide');
-    })
-  }
-
   roleChangedTrigger(){
     this.roleChanged = true;
   }
@@ -182,6 +157,11 @@ export class MemberListComponent implements OnInit {
 
   withinGroupDetailsChangedTrigger() {
     this.withinGroupAttrsChanged = true;
+  }
+
+  hasAffiliations(member: Membership) {
+    return member && member.affiliations && member.affiliations.length > 0 &&
+      !member.affiliations.every(s => !s);
   }
 
   filterData(fieldToFilter: string){
@@ -253,6 +233,13 @@ export class MemberListComponent implements OnInit {
 
     let shouldReload = false;
 
+    this.editComplete.subscribe(succeeded => {
+      console.log("finished? ", succeeded);
+      this.clearEditModal();
+      this.alertService.alert("group.allMembers.edit.completed");
+      this.shouldReloadList.emit(succeeded);
+    });
+
     if(!this.coreDetailsChanged && !this.roleChanged && !this.withinGroupAttrsChanged){
       console.log("Nothing changed in form not submiting it");
       this.clearEditModal();
@@ -262,7 +249,8 @@ export class MemberListComponent implements OnInit {
     if (this.roleChanged) {
       this.groupService.updateGroupMemberRole(this.group.groupUid, memberUid,
         this.editMemberForm.controls['roleName'].value).subscribe(resp => {
-        shouldReload = true;
+        console.log("edit copmlete, emitting true");
+        this.editComplete.emit(true);
       })
     }
 
@@ -270,7 +258,7 @@ export class MemberListComponent implements OnInit {
       this.groupService.updateGroupMemberDetails(this.group.groupUid, memberUid, name, email, phone, province)
         .subscribe(resp => {
           console.log(resp);
-          shouldReload = true;
+          this.editComplete.emit(true);
         })
     }
 
@@ -288,13 +276,12 @@ export class MemberListComponent implements OnInit {
 
       this.groupService.updateGroupMemberAssignments(this.group.groupUid, memberUid, taskTeams, this.splitAffiliations(), topics)
         .subscribe(resp => {
-          shouldReload = true;
-          this.clearEditModal();
+          this.editComplete.emit(true);
         });
     }
 
     if (shouldReload) {
-      this.shouldReloadList.emit(true);
+
       this.clearEditModal();
     }
 

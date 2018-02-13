@@ -2,11 +2,11 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {
-  BroadcastConfirmation, BroadcastContent, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
+  BroadcastConfirmation, BroadcastContent, BroadcastCost, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
   BroadcastTypes
 } from "./model/broadcast-request";
 import {DateTimeUtils} from "../utils/DateTimeUtils";
-import {BroadcastParams} from "./model/broadcast-params";
+import {BroadcastParams, getBroadcastParams} from "./model/broadcast-params";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage} from './model/broadcast';
@@ -19,6 +19,7 @@ export class BroadcastService {
   imageUploadUrl = environment.backendAppUrl + "/api/broadcast/create/image/upload";
 
   private createRequest: BroadcastRequest = new BroadcastRequest();
+  private createCounts: BroadcastCost = new BroadcastCost();
 
   private _createParams: BroadcastParams = new BroadcastParams();
   public createParams: EventEmitter<BroadcastParams> = new EventEmitter(null);
@@ -34,15 +35,11 @@ export class BroadcastService {
     this.loadBroadcast();
   }
 
-  fetchBroadcasts(type: String, entityUid: String, clearCache: boolean) {
-    const fullUrl = this.fetchUrlBase + type + "/" + entityUid;
-  }
-
   fetchCreateParams(type: string, entityUid: string): Observable<BroadcastParams> {
     const fullUrl = this.createUrlBase + type + "/info/" + entityUid;
     return this.httpClient.get<BroadcastParams>(fullUrl).map(result => {
       console.log("create fetch result: ", result);
-      this._createParams = result as BroadcastParams; // note: because JS typing is such a disaster, this doesn't seem to work
+      this._createParams = getBroadcastParams(result);
       this.createParams.emit(this._createParams);
       return result;
     });
@@ -62,6 +59,8 @@ export class BroadcastService {
       }
       this.createRequest.type = type;
       this.createRequest.parentId = parentId;
+      this.createRequest.broadcastId = this._createParams.broadcastId;
+      console.log("create request done, broadcastId = ", this.createRequest.broadcastId);
       this.latestStep = 1;
     }
   }
@@ -71,7 +70,7 @@ export class BroadcastService {
       shortMessage: this.createRequest.sendShortMessages,
       email: this.createRequest.sendEmail,
       facebook: this.createRequest.postToFacebook,
-      facebookPage: this.createRequest.facebookPage,
+      facebookPages: this.createRequest.facebookPages,
       twitter: this.createRequest.postToTwitter,
       twitterAccount: this.createRequest.twitterAccount
     };
@@ -82,7 +81,7 @@ export class BroadcastService {
     this.createRequest.sendShortMessages = types.shortMessage;
     this.createRequest.sendEmail = types.email;
     this.createRequest.postToFacebook = types.facebook;
-    this.createRequest.facebookPage = types.facebookPage;
+    this.createRequest.facebookPages = types.facebookPages;
     this.createRequest.postToTwitter = types.twitter;
     this.createRequest.twitterAccount = types.twitterAccount;
     this.saveBroadcast();
@@ -95,10 +94,14 @@ export class BroadcastService {
       emailContent: this.createRequest.emailContent,
       facebookPost: this.createRequest.facebookContent,
       facebookLink: this.createRequest.facebookLink,
+      facebookLinkCaption: this.createRequest.facebookLinkCaption,
       facebookImageKey: this.createRequest.facebookImageKey,
       twitterPost: this.createRequest.twitterContent,
       twitterLink: this.createRequest.twitterLink,
-      twitterImageKey: this.createRequest.twitterImageKey
+      twitterLinkCaption: this.createRequest.twitterLinkCaption,
+      twitterImageKey: this.createRequest.twitterImageKey,
+      smsMergeField: "",
+      emailMergeField: ""
     }
   }
 
@@ -119,18 +122,20 @@ export class BroadcastService {
   getMembers(): BroadcastMembers {
     return {
       selectionType: this.createRequest.selectionType,
-      taskTeams: this.createRequest.subgroups,
-      provinces: this.createRequest.provinces,
-      topics: this.createRequest.topics
+      taskTeams: this.createRequest.taskTeams,
+      memberFilter: this.createRequest.getMemberFilter()
     }
   }
 
   setMembers(members: BroadcastMembers) {
     this.createRequest.selectionType = members.selectionType;
-    this.createRequest.subgroups = members.taskTeams;
-    this.createRequest.provinces = members.provinces;
-    this.createRequest.topics = members.topics;
+    this.createRequest.taskTeams = members.taskTeams;
+    this.createRequest.setMemberFilter(members.selectionType, members.memberFilter);
     this.saveBroadcast();
+  }
+
+  setMessageCounts(costs: BroadcastCost) {
+    this.createCounts = costs;
   }
 
   getSchedule(): BroadcastSchedule {
@@ -148,20 +153,21 @@ export class BroadcastService {
     this.saveBroadcast(); // since we remain on this step
   }
 
-  // todo : populate fields like number messages etc by querying back end
   getConfirmationFields(): BroadcastConfirmation {
     let cn = new BroadcastConfirmation();
     cn.sendShortMessage = this.createRequest.sendShortMessages;
     cn.sendEmail = this.createRequest.sendEmail;
     cn.postFacebook = this.createRequest.postToFacebook;
-    cn.fbPageName = this.getFbDisplayName(this.createRequest.facebookPage);
+    cn.fbPageNames = this.getFbDisplayNames(this.createRequest.facebookPages);
     cn.postTwitter = this.createRequest.postToTwitter;
     cn.twitterAccount = this.createRequest.twitterAccount;
 
-    cn.smsNumber = this.createRequest.sendShortMessages ? this._createParams.allMemberCount : 0;
-
-    cn.totalMemberCount = this._createParams.allMemberCount;
-    // cn.sendEmailCount = 50;
+    console.log("stored count: ", this.createCounts.totalNumber);
+    cn.totalMemberCount = this.createCounts.totalNumber;
+    console.log("total member count: ", cn.totalMemberCount);
+    cn.smsNumber = this.createCounts.smsNumber;
+    cn.sendEmailCount = this.createCounts.emailNumber;
+    cn.broadcastCost = this.createCounts.broadcastCost;
 
     cn.provinces = this.createRequest.provinces;
     cn.topics = this.createRequest.topics;
@@ -169,17 +175,14 @@ export class BroadcastService {
     cn.sendTimeDescription = this.createRequest.sendType;
     cn.sendTime = this.createRequest.sendDate; // todo: format
 
-    cn.broadcastCost = (cn.smsNumber * this._createParams.smsCostCents / 100).toFixed(2);
-
     return cn;
   }
 
-  private getFbDisplayName(fbUserId: string): string {
-    console.log("no really");
-    if (this._createParams.facebookPages && fbUserId) {
-      return this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName
+  private getFbDisplayNames(fbUserIds: string[]): string[] {
+    if (this._createParams.facebookPages && fbUserIds) {
+      return fbUserIds.map(fbUserId => this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName);
     } else {
-      return "";
+      return [];
     }
   }
 
@@ -202,17 +205,21 @@ export class BroadcastService {
     return false; // in case called on an anchor tag
   }
 
-  currentType(): String {
+  currentType(): string {
     return this.createRequest.type;
   }
 
-  parentId(): String {
+  parentId(): string {
     return this.createRequest.parentId;
   }
 
   parentViewRoute(): string {
     return (this.createRequest) ? (this.createRequest.type == 'campaign' ? '/campaign/' : '/group/') + this.createRequest.parentId :
       '/home';
+  }
+
+  inboundGroupUrl(groupId: string): string {
+    return environment.frontendAppUrl + "/join/group/" + groupId + "?broadcastId=" + this.createRequest.broadcastId;
   }
 
   /*
@@ -223,11 +230,12 @@ export class BroadcastService {
   }
 
   loadBroadcast() {
+    this.createRequest = new BroadcastRequest();
     let storedString = localStorage.getItem('broadcastCreateRequest');
     console.log("stored string: ", storedString);
     if (storedString) {
-      this.createRequest = JSON.parse(storedString);
-      this.loadedFromCache = true;
+      let cachedRequest = JSON.parse(storedString);
+      this.createRequest.copyFields(cachedRequest);
     } else {
       console.log("nothing in cache, just return new empty");
       this.createRequest = new BroadcastRequest();
@@ -238,7 +246,7 @@ export class BroadcastService {
   }
 
   clearBroadcast() {
-    this.createRequest = new BroadcastRequest();
+    this.createRequest.clear();
     localStorage.removeItem('broadcastCreateRequest');
     localStorage.removeItem('broadcastCreateStep');
   }
@@ -262,6 +270,7 @@ export class BroadcastService {
     let params = new HttpParams()
       .set('page', pageNo.toString())
       .set('size', pageSize.toString())
+      .set('sort', 'creationTime,desc')
       .set('broadcastSchedule', broadcastSchedule);
     const fullUrl = this.fetchUrlBase + 'group/' + groupUid;
 
@@ -277,7 +286,7 @@ export class BroadcastService {
               bc.emailSent,
               bc.smsCount,
               bc.emailCount,
-              bc.fbPage != null ? bc.fbPage : "",
+              bc.fbPages,
               bc.twitterAccount != null ? bc.twitterAccount : "",
               bc.dateTimeSent != null ? DateTimeUtils.getDateFromJavaInstant(bc.dateTimeSent) : null,
               bc.scheduledSendTime != null ? DateTimeUtils.getDateFromJavaInstant(bc.scheduledSendTime) : null,
@@ -286,6 +295,7 @@ export class BroadcastService {
               bc.emailContent,
               bc.fbPost,
               bc.twitterPost,
+              bc.hasFilter,
               bc.smsCount + bc.emailCount,
               bc.provinces,
               bc.topics

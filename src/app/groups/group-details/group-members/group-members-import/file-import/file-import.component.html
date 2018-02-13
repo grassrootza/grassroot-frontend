@@ -36,7 +36,7 @@
   </ul>
 </div>
 
-<div *ngIf="sheetAnalysis && groupAddMembersInfo.length == 0 && !uploadComplete" class="col-8 mx-auto">
+<div *ngIf="sheetAnalysis && !fileImportResult && !uploadComplete" class="col-8 mx-auto">
   <div class="row">
     <div class="col-md-9 col-sm-12">
       <div class="form-check form-check-inline">
@@ -63,6 +63,7 @@
     </div>
     <div class="col-md-6 col-12">
       <select class="form-control form-control-em" id="names-select" [(ngModel)]="nameColumn" name="name-select">
+        <option [value]="-1" [translate]="'group.import.file.none'" >None</option>
         <option *ngFor="let rows of sheetAnalysis.firstRowCells; let i = index" [ngValue]="i">{{rows}}</option>
       </select>
       </div>
@@ -199,6 +200,8 @@
         <div class="card-header">
           <span class="card-table-header" [translate]="'group.import.file.confirm.confirmHeading'"
               [translateParams]="{value: fileImportResult?.processedMembers?.length}"></span>
+          (<span class="card-table-header" *ngIf="fileImportResult?.processedMembers?.length > MAX_NON_ERROR_DISPLAY"
+                [translate]="'group.import.file.confirm.confirmMax'" [translateParams]="{value: MAX_NON_ERROR_DISPLAY}"></span>)
         </div>
         <div class="card-body">
           <div class="container group-info-header d-none d-md-block">
@@ -212,7 +215,7 @@
               <div *ngIf="roleColumn != -1" [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-2'" [translate]="'group.import.file.memberTable.role'">Role</div>
             </div>
           </div>
-          <div *ngFor="let member of groupAddMembersInfo">
+          <div *ngFor="let member of displayedAddMembers">
             <div class="container group-info-row">
               <div class="row flex flex-wrap">
                 <div [ngClass]="(emailColumn==-1 && provinceColumn==-1)?'col-4':'col-3'">

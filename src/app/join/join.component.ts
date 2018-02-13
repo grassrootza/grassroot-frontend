@@ -18,6 +18,7 @@ export class JoinComponent implements OnInit {
 
   groupUid: string;
   code: string;
+  broadcastId: string;
 
   province = UserProvince;
   provinceKeys: string[];
@@ -42,20 +43,22 @@ export class JoinComponent implements OnInit {
   ngOnInit() {
     this.isUserLoggedIn = this.userService.isLoggedIn();
     this.route.params.subscribe((params: Params) => {
-      console.log("params: ", params);
       this.groupUid = params['groupId'];
-      this.code = params['code'];
-      this.joinService.initiateJoinSequence(this.groupUid, this.code).subscribe((result: JoinInfo) => {
-        console.log("retrieved this join info: ", result);
-        this.joinInfo = result;
+      this.route.queryParams.subscribe((qParams: Params) => {
+        this.code = qParams['code'];
+        this.broadcastId = qParams['broadcastId'];
+        this.joinService.initiateJoinSequence(this.groupUid, this.code, this.broadcastId).subscribe((result: JoinInfo) => {
+          console.log("retrieved this join info: ", result);
+          this.joinInfo = result;
+        });
       });
-    })
+    });
   }
 
   submitJoin() {
     console.log("join form value: ", this.joinForm.value);
     console.log("our object dynamically updated? ", this.joinRequest);
-    this.joinService.completeJoinSequence(this.groupUid, this.code, this.joinForm.value)
+    this.joinService.completeJoinSequence(this.groupUid, this.code, this.broadcastId, this.joinForm.value)
       .subscribe(result => {
         console.log("result = ", result);
         if (result == 'HAS_PASSWORD') {

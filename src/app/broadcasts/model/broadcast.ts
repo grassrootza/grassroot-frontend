@@ -1,5 +1,4 @@
 import {DatePipe} from '@angular/common';
-import {Membership} from '../../groups/model/membership.model';
 
 export class Broadcast {
   constructor(public title: string,
@@ -7,7 +6,7 @@ export class Broadcast {
               public emailSent: boolean,
               public smsCount:number,
               public emailCount: number,
-              public fbPage: string,
+              public fbPages: string[],
               public twitterAccount: string,
               public dateTimeSent: Date,
               public scheduledSendTime: Date,
@@ -16,6 +15,7 @@ export class Broadcast {
               public emailContent: string,
               public fbPost: string,
               public twitterPost: string,
+              public hasFilter: boolean,
               public totalSent: number,
               public provinces: string [],
               public topics: string[]){

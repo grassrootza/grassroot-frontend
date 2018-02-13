@@ -26,7 +26,8 @@ export class CreateGroupComponent implements OnInit {
       'description': '',
       'discoverable': 'true',
       'permissionTemplate': 'DEFAULT_GROUP',
-      'reminderMinutes': [0, Validators.pattern("[0-9]+")]
+      'reminderMinutes': [1440, Validators.pattern("[0-9]+")],
+      'pinGroup': 'true'
     });
   }
 
@@ -42,6 +43,7 @@ export class CreateGroupComponent implements OnInit {
       let groupPermission: string = this.createGroupForm.get("permissionTemplate").value;
       let reminderMinutes: number = this.createGroupForm.get("reminderMinutes").value;
       let discoverable: string = this.createGroupForm.get("discoverable").value;
+      let pinGroup: boolean = this.createGroupForm.get("pinGroup").value;
       this.groupService.createGroup(groupName, groupDescription, groupPermission, reminderMinutes, discoverable)
         .subscribe(
           groupRef => {

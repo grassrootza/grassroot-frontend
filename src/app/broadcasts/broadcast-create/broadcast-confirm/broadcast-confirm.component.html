@@ -16,7 +16,7 @@
         <li class="list-group-item" *ngIf="confirmFields.sendEmail">{{ 'broadcasts.create.confirm.emailLabel' | translate }}
           <span class="badge badge-primary badge-pill">{{ confirmFields.sendEmailCount }}</span></li>
         <li class="list-group-item" *ngIf="confirmFields.postFacebook">{{ 'broadcasts.create.types.fbLabel' | translate }}
-          <span class="badge badge-primary badge-pill">{{ confirmFields.fbPageName }}</span></li>
+          <span class="badge badge-primary badge-pill">{{ confirmFields.fbPageNames?.join(", ") }}</span></li>
         <li class="list-group-item" *ngIf="confirmFields.postTwitter">{{ 'broadcasts.create.types.twitterLabel' | translate }}
           <span class="badge badge-primary badge-pill">{{ confirmFields.twitterAccount }}</span></li>
       </ul>
@@ -76,8 +76,8 @@
   <div class="row">
     <div class="col-md-8 offset-md-4">
       <p class="text-center">Review costs</p>
-      <span>{{ 'broadcasts.create.members.smsCount' | translate:confirmFields }}</span>
-      <span class="float-right">{{ 'broadcasts.create.members.costEstimate' | translate:confirmFields }}</span>
+      <span>{{ 'broadcasts.create.members.smsCount' | translate }}{{ confirmFields.smsNumber }}</span>
+      <span class="float-right">{{ 'broadcasts.create.members.costEstimate' | translate }}{{ confirmFields.broadcastCost }}</span>
     </div>
   </div>
 </div>

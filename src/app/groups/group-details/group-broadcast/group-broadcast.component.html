@@ -115,7 +115,7 @@
                 </div>
 
                 <div class="col-3">
-                  {{broadcast.provinces}}
+                  {{broadcast.hasFilter ? "Sent to filtered members" : "Sent to everyone in group"}}
                 </div>
 
                 <div class="col-1">
@@ -137,7 +137,7 @@
                 <div class="col-1">
                   <div class="dropdown">
                     <a class="dropdown-toggle" id="sentActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    </a>
+                      <i class="fas fa-ellipsis-v"></i></a>
                     <div class="dropdown-menu" aria-labelledby="sentActionsDropdown">
                       <a class="dropdown-item" (click)="showViewModal(broadcast)">{{'group.broadcast.table.sentActions.view' | translate}}</a>
                       <a class="dropdown-item">{{'group.broadcast.table.sentActions.resend' | translate}}</a>
@@ -167,9 +167,6 @@
 
 <!--modals-->
 <div class="modal fade" tabindex="-1" role="dialog" id="broadcast-view-modal" aria-hidden="true">
-  <ng4-loading-spinner
-    [loadingText]="'action.working' | translate"
-    [threshold]="300"> </ng4-loading-spinner>
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">

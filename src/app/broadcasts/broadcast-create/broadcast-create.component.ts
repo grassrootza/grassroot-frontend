@@ -1,19 +1,21 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {BroadcastService} from "../broadcast.service";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
+import {AlertService} from "../../utils/alert.service";
 
 @Component({
   selector: 'app-broadcast-create',
   templateUrl: './broadcast-create.component.html',
   styleUrls: ['./broadcast-create.component.css']
 })
-export class BroadcastCreateComponent implements OnInit {
+export class BroadcastCreateComponent implements OnInit, AfterViewInit {
 
   type: string;
   parentId: string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
+              private alertService: AlertService,
               private broadcastService: BroadcastService) {
   }
 
@@ -39,6 +41,13 @@ export class BroadcastCreateComponent implements OnInit {
         this.broadcastService.currentStep = this.broadcastService.pages.indexOf(this.currentTab) + 1;
       }
     });
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.alertService.hideLoading()
+    }, 300);
+
   }
 
   getCurrentStep(): number {

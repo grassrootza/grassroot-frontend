@@ -1,17 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {UserService} from "../user.service";
 import {NavigationEnd, Router} from "@angular/router";
+import {AlertService} from "../../utils/alert.service";
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
-export class UserProfileComponent implements OnInit {
+export class UserProfileComponent implements OnInit, AfterViewInit {
 
   public currentTab: string = "profile";
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private userService: UserService, private router: Router, private alertService: AlertService) { }
 
   ngOnInit() {
     this.router.events.subscribe(ev => {
@@ -20,6 +21,10 @@ export class UserProfileComponent implements OnInit {
         this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this.alertService.hideLoadingDelayed();
   }
 
   logout() {

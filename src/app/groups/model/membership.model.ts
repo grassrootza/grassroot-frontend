@@ -8,12 +8,17 @@ export class MembershipInfo {
 
   constructor(public memberUid: string,
               public phoneNumber: string,
+              public memberEmail: string,
+              public province: string,
               public nationalFormattedNumber: string,
               public displayName: string,
               public roleName: GroupRole) {
   }
 }
 
+export const getUserFromMembershipInfo = (memb: MembershipInfo): User => {
+  return new User(memb.memberUid, memb.displayName, memb.phoneNumber, memb.memberEmail, "", "", "true", "", memb.province);
+};
 
 export class Membership {
 
@@ -30,6 +35,19 @@ export class Membership {
 
   public joinMethodKey(): string {
     return 'group.joinMethods.descriptors.' + this.joinMethod;
+  }
+
+  public iconClass(): string {
+    switch (this.joinMethod) {
+      case "BULK_IMPORT": return "fas fa-upload";
+      case "ADDED_AT_CREATION": return "fas fa-users";
+      case "ADDED_BY_OTHER_MEMBER": return "fas fa-user-plus";
+      case "CAMPAIGN_GENERAL": return "fas fa-location-arrow";
+      case "CAMPAIGN_PETITION": return "fas fa-location-arrow";
+      case "FILE_IMPORT": return "fas fa-upload";
+      case "COPIED_INTO_GROUP": return "fas fa-upload";
+      default: return "fas fa-mobile-alt";
+    }
   }
 
   public formattedProvince(): string {
@@ -59,6 +77,10 @@ export class MembersPage {
               public first: boolean,
               public last: boolean,
               public content: Membership[]) {
+  }
+
+  public getSelectedMembers(): Membership[] {
+    return this.content.filter(membership => membership.selected);
   }
 
 }

@@ -5,6 +5,7 @@ import {GroupMembersImportExcelSheetAnalysis} from '../../../../model/group-memb
 import {GroupAddMemberInfo} from '../../../../model/group-add-member-info.model';
 import {GroupModifiedResponse} from '../../../../model/group-modified-response.model';
 import {FileImportResult} from "./file-import-result";
+import {AlertService} from "../../../../../utils/alert.service";
 
 declare var $: any;
 
@@ -14,6 +15,8 @@ declare var $: any;
   styleUrls: ['./file-import.component.css']
 })
 export class FileImportComponent implements OnInit {
+
+  public MAX_NON_ERROR_DISPLAY = 100;
 
   private groupUid: string = "";
 
@@ -38,12 +41,15 @@ export class FileImportComponent implements OnInit {
 
   sheetAnalysis: GroupMembersImportExcelSheetAnalysis = null;
   fileImportResult: FileImportResult;
+
   groupAddMembersInfo: GroupAddMemberInfo[] = [];
+  displayedAddMembers: GroupAddMemberInfo[] = [];
   groupModifiedResponse: GroupModifiedResponse = null;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private groupService: GroupService) {
+              private groupService: GroupService,
+              private alertService: AlertService) {
 
   }
 
@@ -60,8 +66,8 @@ export class FileImportComponent implements OnInit {
   }
 
   analyzeHeaders(formData: FormData, params: any) {
-    this.groupService.importHeaderAnalyze(formData, params).
-    subscribe(response => {
+    this.alertService.showLoading();
+    this.groupService.importHeaderAnalyze(formData, params).subscribe(response => {
       this.sheetAnalysis = response;
       this.nameColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("name"));
       this.phoneColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("phone") || cell.toLowerCase().startsWith("cell"));
@@ -70,7 +76,9 @@ export class FileImportComponent implements OnInit {
       this.affilColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("affil"));
       this.firstNameColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("first"));
       this.surnameColumn = this.sheetAnalysis.firstRowCells.findIndex(cell => cell.toLowerCase().startsWith("surname") || cell.toLowerCase().startsWith("last name"));
+      this.alertService.hideLoading();
     }, error => {
+      this.alertService.hideLoading();
       console.log("error file upload")
     })
   }
@@ -93,10 +101,13 @@ export class FileImportComponent implements OnInit {
   }
 
   analyzeMembers(params: any) {
+    this.alertService.showLoading();
     this.groupService.importAnalyzeMembers(params).subscribe(resp => {
-      console.log("mapped response: {}", resp);
       this.fileImportResult = resp;
       this.groupAddMembersInfo = resp.processedMembers;
+      this.displayedAddMembers = this.groupAddMembersInfo.length > this.MAX_NON_ERROR_DISPLAY ?
+        this.groupAddMembersInfo.slice(0, this.MAX_NON_ERROR_DISPLAY) : this.groupAddMembersInfo;
+      this.alertService.hideLoading();
     })
   }
 
@@ -122,8 +133,8 @@ export class FileImportComponent implements OnInit {
     return false;
   }
 
-  confirmImport(){
-    this.groupService.confirmAddMembersToGroup(this.groupUid, this.groupAddMembersInfo).subscribe(resp => {
+  confirmImport() {
+    this.groupService.confirmAddMembersToGroup(this.groupUid, this.groupAddMembersInfo, "FILE_IMPORT").subscribe(resp => {
       this.groupModifiedResponse = resp;
       this.uploadComplete = true;
     })

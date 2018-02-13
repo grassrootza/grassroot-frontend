@@ -1,5 +1,4 @@
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
-import {UserProvince} from "./model/user-province.enum";
 
 export class User {
   constructor(public uid: string,
@@ -14,9 +13,7 @@ export class User {
   }
 }
 
-
 export class AuthorizationResponse {
-
   constructor(public user: AuthenticatedUser, public errorCode: string) {
   }
 }

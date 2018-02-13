@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GoogleImportComponent } from './google-import.component';
+import { MemberTopicsManageComponent } from './member-topics-manage.component';
 
-describe('GoogleImportComponent', () => {
-  let component: GoogleImportComponent;
-  let fixture: ComponentFixture<GoogleImportComponent>;
+describe('MemberTopicsManageComponent', () => {
+  let component: MemberTopicsManageComponent;
+  let fixture: ComponentFixture<MemberTopicsManageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GoogleImportComponent ]
+      declarations: [ MemberTopicsManageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GoogleImportComponent);
+    fixture = TestBed.createComponent(MemberTopicsManageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
