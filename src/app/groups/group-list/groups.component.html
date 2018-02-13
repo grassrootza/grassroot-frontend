@@ -137,4 +137,5 @@
 <app-create-todo [groupUid]="createTaskGroupUid"
                  (todoSaved)="todoSaved($event)"></app-create-todo>
 
-<app-create-livewire [groupUid]="createTaskGroupUid"></app-create-livewire>
+<app-create-livewire [groupUid]="createTaskGroupUid"
+                  (alertSaved)="alertSaved($event)"></app-create-livewire>

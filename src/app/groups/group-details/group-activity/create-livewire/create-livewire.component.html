@@ -74,24 +74,14 @@
               <label for="meetings">{{ 'group.activity.livewireModal.publicGathering.label' | translate }}</label>
             </div>
             <div class="col-sm-8">
-              <select id="meetings" class="form-control" name="selectMeeting"
+              <select class="form-control" id="meetings" name="selectMeeting"
                       [formControl]="createLivewireForm.controls['selectMeeting']"
                       (change)="onChangeSelectMeeting($event.target.value)">
-                <option *ngFor="let meeting of meetings" [value]="meeting.taskUid">{{meeting.title}}</option>
+                <option *ngFor="let meeting of meetings" [ngValue]="meeting.taskUid">{{meeting.title}}</option>
               </select>
             </div>
           </div>
 
-<!--          <div class="form-group row">
-            <div class="col-sm-4 col-form-label text-right">
-              <label for="groups">{{ 'group.activity.livewireModal.group.label' | translate }}</label>
-            </div>
-            <div class="col-sm-8">
-              <select id="groups" class="form-control">
-                <option *ngFor="let group of groups" [ngValue]="group.groupUid">{{group.name}}</option>
-              </select>
-            </div>
-          </div>-->
 
           <!--Image upload-->
           <div class="form-group row">
@@ -110,7 +100,7 @@
               <label for="destination">{{ 'group.activity.livewireModal.destination.label' | translate }}</label>
             </div>
             <div class="col-sm-8">
-              <select id="destination" class="form-control" name="destination"
+              <select class="form-control" id="destination" name="destination"
                       [formControl]="createLivewireForm.controls['destination']"
                       (change)="selectDest($event.target.value)">
                 <option value="SINGLE_AND_PUBLIC">{{'group.activity.livewireModal.destination.both' | translate}}</option>

@@ -171,7 +171,7 @@ export class TaskService {
 
   uploadAlertImage(image):Observable<any>{
     let uploadFullUrl = this.uploadImageUrl + "/" + MediaFunction.LIVEWIRE_MEDIA;
-    return this.httpClient.post(uploadFullUrl, image,{ responseType: 'text' });
+    return this.httpClient.post(uploadFullUrl, image,{ responseType: 'json' });
   }
 
   createLiveWireAlert(userUid:string,headline:string,alertType:LiveWireAlertType,groupUid:string,taskUid:string,
@@ -190,6 +190,7 @@ export class TaskService {
       .set("destType",destination)
       .set("taskUid",taskUid)
       .set("mediaFileKeys",mediaKeys + "");
+      
 
       if(contactPerson === "someone"){
       params = new HttpParams()

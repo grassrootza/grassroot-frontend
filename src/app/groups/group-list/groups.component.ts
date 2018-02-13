@@ -221,4 +221,9 @@ export class GroupsComponent implements OnInit {
       $("#create-livewire-alert-modal").modal("show");
   }
 
+  alertSaved(saveResponse){
+    console.log("Save Resp..................",saveResponse);
+    $("#create-livewire-alert-modal").modal("hide");
+  }
+
 }
