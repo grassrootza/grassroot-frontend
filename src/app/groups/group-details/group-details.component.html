@@ -2,7 +2,7 @@
 
   <div class="row mb-3">
     <div class="col-12">
-      <a [routerLink]="['/groups']" class="grassroot-breadcrumb">< Back to groups</a>
+      <a [routerLink]="['/groups']" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i> {{ 'group.back' | translate }}</a>
     </div>
   </div>
 
@@ -28,7 +28,7 @@
               </div>
 
               <div class="group-info creation-info">
-                <strong>{{'group.creationLabel' | translate}}</strong>
+                <span class="grassroot-link">//</span> <strong>{{'group.creationLabel' | translate}}</strong>
                 <span>{{'group.creationInfo' | translate:group}}</span>
               </div>
 

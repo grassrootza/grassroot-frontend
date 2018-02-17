@@ -4,7 +4,7 @@ export class BroadcastParams {
 
   broadcastId: string = "";
 
-  isSmsAllowed: boolean = true;
+  smsAllowed: boolean = true;
   smsCostCents: number = 0;
 
   fbConnected: boolean = true;
@@ -23,7 +23,7 @@ export class BroadcastParams {
 export const getBroadcastParams = (bp: BroadcastParams): BroadcastParams => {
   let params = new BroadcastParams();
   params.broadcastId = bp.broadcastId;
-  params.isSmsAllowed = bp.isSmsAllowed;
+  params.smsAllowed = bp.smsAllowed;
   params.smsCostCents = bp.smsCostCents;
   params.fbConnected = bp.fbConnected;
   params.facebookPages = bp.facebookPages;

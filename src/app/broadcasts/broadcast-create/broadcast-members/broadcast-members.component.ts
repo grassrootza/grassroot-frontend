@@ -22,7 +22,8 @@ export class BroadcastMembersComponent implements OnInit {
 
   public createParams: BroadcastParams;
   public countParams: BroadcastCost;
-  private types: BroadcastTypes;
+  public types: BroadcastTypes;
+  private skipSmsIfEmail: boolean = false; // we may need to use this X000 times repeatedly, so stashing it as well as in-form
 
   public memberCount: number;
 
@@ -35,16 +36,17 @@ export class BroadcastMembersComponent implements OnInit {
               private alertService: AlertService) {
     this.countParams = new BroadcastCost();
     this.createParams = this.broadcastService.getCreateParams();
-    console.log("on construction, create params: ", this.createParams);
+    // console.log("on construction, create params: ", this.createParams);
     this.memberForm = formBuilder.group({
       'selectionType': ['ALL_MEMBERS', Validators.required],
-      'taskTeams': []
+      'taskTeams': [],
+      'skipSmsIfEmail': [false],
     }, {validator: ttSelectedIfTTs });
   }
 
   ngOnInit() {
     let storedEntity = this.broadcastService.getMembers();
-    console.log("stored entity: ", storedEntity);
+    // console.log("stored entity: ", storedEntity);
     if (storedEntity.selectionType != 'ALL_MEMBERS') {
       this.memberForm.controls['selectionType'].setValue(storedEntity.selectionType);
       if (storedEntity.taskTeams) {
@@ -67,6 +69,7 @@ export class BroadcastMembersComponent implements OnInit {
       }
     });
 
+    this.setupDefaultCounts();
     this.setUpSelectChangeReaction();
   }
 
@@ -75,6 +78,7 @@ export class BroadcastMembersComponent implements OnInit {
     this.types = this.broadcastService.getTypes();
     this.countParams.totalNumber = this.createParams.allMemberCount;
     this.countParams.smsNumber = this.types.shortMessage ? this.createParams.allMemberCount : 0;
+
     this.calculateCosts();
   }
 
@@ -103,9 +107,6 @@ export class BroadcastMembersComponent implements OnInit {
     this.memberFilter = filter;
     this.groupService.filterGroupMembers(this.group.groupUid, filter)
       .subscribe(members => {
-          // this.countParams.totalNumber = members.length;
-          // this.countParams.smsNumber = members.reduce((total,m) => m.user.phoneNumber ? total+1 : total, 0);
-          // this.countParams.emailNumber = members.reduce((total, m) => m.user.email ? total+1 : total, 0);
           this.calculateCosts(members.map(m => m.user));
         },
         error => {
@@ -115,12 +116,22 @@ export class BroadcastMembersComponent implements OnInit {
       );
   }
 
+  // todo: think through caching etc in here
+  skipEmailToggled() {
+    this.membersFilterChanged(this.memberFilter);
+  }
+
   calculateCosts(members: User[] = []) {
+    this.skipSmsIfEmail = this.memberForm.controls['skipSmsIfEmail'].value;
     this.countParams.totalNumber = members.length;
-    this.countParams.smsNumber = members.reduce((total,m) => m.phoneNumber ? total+1 : total, 0);
+    this.countParams.smsNumber = members.reduce((total,m) => this.includeMemberInSms(m) ? total+1 : total, 0);
     this.countParams.emailNumber = members.reduce((total, m) => m.email ? total+1 : total, 0);
     this.countParams.broadcastCost = (this.countParams.smsNumber * this.createParams.smsCostCents / 100).toFixed(2);
     console.log("fetched members, count params now: ", this.countParams);
+  }
+
+  includeMemberInSms(member: User): boolean {
+    return member && member.phoneNumber && (!this.skipSmsIfEmail || !member.email);
   }
 
   saveMemberSelection() {
@@ -128,6 +139,7 @@ export class BroadcastMembersComponent implements OnInit {
       return false;
     }
     let entity: BroadcastMembers = this.memberForm.value;
+    console.log("members entity: ", entity);
     entity.memberFilter = this.memberFilter;
     this.broadcastService.setMembers(entity);
     this.broadcastService.setMessageCounts(this.countParams);

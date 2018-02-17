@@ -8,6 +8,9 @@
           <h5>
             <img src="assets/icon_meeting.png"/>
             <span [translate]="'group.dashboard.meetings'">Meetings</span>
+            <a [routerLink]="['../activity']" class="float-right view-all-link">
+              {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
+            </a>
           </h5>
           <div *ngFor="let meeting of meetings" class="meeting-event">
             <div class="float-left event-date">
@@ -17,6 +20,9 @@
             <div class="event-text">
               <span>{{meeting.title}}</span>
             </div>
+          </div>
+          <div *ngIf="meetings?.length == 0">
+            {{ 'group.dashboard.no-meetings' | translate }}
           </div>
         </div>
         <div class="card-footer">
@@ -29,10 +35,13 @@
     <div class="col-md-4">
       <div class="card">
         <div class="card-body events-box">
-          <h4>
+          <h5>
             <img src="assets/icon_vote.png"/>
             <span [translate]="'group.dashboard.votes'">Votes</span>
-          </h4>
+            <a [routerLink]="['../activity']" class="float-right view-all-link">
+              {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
+            </a>
+          </h5>
           <div *ngFor="let vote of votes" class="votes-event">
             <div class="float-left event-date">
               <span class="day">{{vote.deadlineDate | date:'dd'}}</span>
@@ -41,6 +50,9 @@
             <div class="event-text">
               <span>{{vote.title}}</span>
             </div>
+          </div>
+          <div *ngIf="votes?.length == 0">
+            {{ 'group.dashboard.no-votes' | translate }}
           </div>
         </div>
         <div class="card-footer">
@@ -56,6 +68,9 @@
           <h5>
             <img src="assets/icon_todo.png"/>
             <span [translate]="'group.dashboard.todos'">Action items</span>
+            <a [routerLink]="['../activity']" class="float-right view-all-link">
+              {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
+            </a>
           </h5>
           <div *ngFor="let todo of todos" class="action-items-event">
             <div class="float-left event-date">
@@ -65,6 +80,9 @@
             <div class="event-text">
               <span>{{todo.title}}</span>
             </div>
+          </div>
+          <div *ngIf="todos?.length == 0">
+            {{ 'group.dashboard.no-todos' | translate }}
           </div>
         </div>
         <div class="card-footer">

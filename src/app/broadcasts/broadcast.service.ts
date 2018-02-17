@@ -10,6 +10,7 @@ import {BroadcastParams, getBroadcastParams} from "./model/broadcast-params";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage} from './model/broadcast';
+import * as moment from 'moment';
 
 @Injectable()
 export class BroadcastService {
@@ -123,7 +124,8 @@ export class BroadcastService {
     return {
       selectionType: this.createRequest.selectionType,
       taskTeams: this.createRequest.taskTeams,
-      memberFilter: this.createRequest.getMemberFilter()
+      memberFilter: this.createRequest.getMemberFilter(),
+      skipSmsIfEmail: this.createRequest.skipSmsIfEmail
     }
   }
 
@@ -131,6 +133,7 @@ export class BroadcastService {
     this.createRequest.selectionType = members.selectionType;
     this.createRequest.taskTeams = members.taskTeams;
     this.createRequest.setMemberFilter(members.selectionType, members.memberFilter);
+    this.createRequest.skipSmsIfEmail = members.skipSmsIfEmail;
     this.saveBroadcast();
   }
 
@@ -141,7 +144,9 @@ export class BroadcastService {
   getSchedule(): BroadcastSchedule {
     return  {
       sendType: this.createRequest.sendType,
-      sendDate: this.createRequest.sendDate,
+      sendMoment: moment(this.createRequest.sendDateTimeMillis),
+      sendDateTimeMillis: this.createRequest.sendDateTimeMillis,
+      sendDateString: moment(this.createRequest.sendDateTimeMillis).format("HH:mm, ddd MM YYYY"),
       dateEpochMillis: DateTimeUtils.dateFromDate(new Date()),
       timeEpochMillis: DateTimeUtils.timeFromDate(new Date())
     }
@@ -149,7 +154,9 @@ export class BroadcastService {
 
   setSchedule(schedule: BroadcastSchedule) {
     this.createRequest.sendType = schedule.sendType;
-    this.createRequest.sendDate = schedule.sendDate;
+    this.createRequest.sendDateString = schedule.sendDateString;
+    this.createRequest.sendDateTimeMillis = schedule.sendDateTimeMillis;
+    console.log("okay, sed send date time millis  = ", this.createRequest.sendDateTimeMillis);
     this.saveBroadcast(); // since we remain on this step
   }
 
@@ -173,7 +180,7 @@ export class BroadcastService {
     cn.topics = this.createRequest.topics;
 
     cn.sendTimeDescription = this.createRequest.sendType;
-    cn.sendTime = this.createRequest.sendDate; // todo: format
+    cn.sendDateString = this.createRequest.sendDateString;
 
     return cn;
   }
@@ -187,13 +194,8 @@ export class BroadcastService {
   }
 
   sendBroadcast() {
-    if (this.createRequest.sendType == "FUTURE") {
-      console.log("converting future date time : ", this.createRequest.sendDate);
-      this.createRequest.sendDateTimeMillis = DateTimeUtils.convertDateStringToEpochMilli(this.createRequest.sendDate);
-      console.log("converted epoch millis : ", this.createRequest.sendDateTimeMillis);
-    }
-
     const fullUrl = this.createUrlBase + this.createRequest.type + "/" + this.createRequest.parentId;
+    console.log("sending broadcast, send date time millis = ", this.createRequest.sendDateTimeMillis);
     return this.httpClient.post(fullUrl, this.createRequest);
   }
 

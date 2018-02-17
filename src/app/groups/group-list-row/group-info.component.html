@@ -38,8 +38,8 @@
                (click)="triggerCreateTodoAction()">
               {{ 'groups.row.action.create' | translate }}
             </a>
-            <!-- todo : implement some form of permission control here -->
-            <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{ 'groups.row.action.broadcast' | translate }}</a>
+            <a *ngIf="group.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+              class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{ 'groups.row.action.broadcast' | translate }}</a>
 
             <a class="dropdown-item" (click)="triggerCreateLivewireAlert()">
               {{'groups.row.action.livewire' | translate}}

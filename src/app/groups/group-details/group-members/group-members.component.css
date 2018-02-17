@@ -1,7 +1,16 @@
 .rectangle-23 {
-  height: 70px;
+  height: 80px;
   width: 175px;
   border-radius: 2px;
+  border: 1px solid #EBEDF0;
+  line-height: 24px;
+  font-size: 1.1em;
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.btn-secondary {
+  color: #7A7D8C;
 }
 
 .rectangle {
@@ -14,4 +23,15 @@
   cursor: pointer;
   background: #26A041;
   color: white;
+}
+
+.view {
+  height: 0.79%;
+  width: 3.43%;
+  color: #4A4A4A;
+  font-family: Nunito;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 16px;
+  text-transform: uppercase;
 }

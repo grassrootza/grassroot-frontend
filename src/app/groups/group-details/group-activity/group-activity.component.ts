@@ -28,8 +28,6 @@ export class GroupActivityComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private taskService: TaskService) {
-
-
   }
 
 

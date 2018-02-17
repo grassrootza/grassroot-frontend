@@ -44,7 +44,7 @@
           <div class="form-group col-sm-12">
             <div class="form-check form-check-inline">
               <label class="form-check-label grassroot-label-em">
-                <input class="form-check-input" type="radio" value="CUSTOM_SELECTION" formControlName="selectionType">
+                <input class="form-check-input" type="radio" value="CUSTOM_SELECTION" formControlName="selectionType" />
                 {{ 'broadcasts.create.members.customSelection' | translate }}
               </label>
             </div>
@@ -59,7 +59,18 @@
                            (filterChanged)="membersFilterChanged($event)">
         </app-member-filter>
 
-        <div class="form-row mt-md-3 mb-md-5">
+        <div class="form-row" *ngIf="types?.shortMessage && types?.email">
+          <div class="form-group col-sm-12">
+            <div class="form-check form-check-inline">
+              <label class="form-check-label grassroot-label-em">
+                <input class="form-check-input" type="checkbox" formControlName="skipSmsIfEmail" (change)="skipEmailToggled()"/>
+                {{ 'broadcasts.create.members.skipSmsIfEmail' | translate }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row mt-md-3 mb-md-5" *ngIf="types?.shortMessage">
           <div class="col-md-6 offset-md-6 review-block">
             <p class="text-center review-block-header">Review costs</p>
             <span>{{ 'broadcasts.create.members.smsCount' | translate }}{{ countParams.smsNumber }}</span>
