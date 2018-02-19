@@ -55,6 +55,7 @@ export class CampaignCreateComponent implements OnInit {
       console.log("error fetching codes: ", error);
     });
     this.groupService.groupInfoList.subscribe(result => this.loadGroupSelector(result));
+    this.alertService.hideLoadingDelayed();
   }
 
   loadGroupSelector(groups: GroupInfo[]) {

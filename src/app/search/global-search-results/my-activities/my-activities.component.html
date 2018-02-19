@@ -1,0 +1,36 @@
+<div *ngIf="userTasksFiltered.length > 0" class="card">
+  <h5>{{userTasksFiltered.length}} Activities found</h5>
+  <div class="card-body">
+
+    <div class="container activity-info-header">
+      <div class="row">
+        <div class="col-md-2 col-lg-2 d-block">Type</div>
+        <div class="col-md-4 col-lg-4 d-none d-md-block">Title</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">Group</div>
+        <div class="col-md-4 col-lg-4 d-none d-md-block">When</div>
+      </div>
+    </div>
+
+    <div class="container activity-info-row">
+      <div *ngFor="let task of userTasksFiltered" class="row flex flex-wrap">
+        <div class="col-2 col-lg-2">
+          <span class="font-weight-bold">
+            <img [src]="'assets/' + task.getEventIconName() "/>&nbsp;&nbsp;
+            {{task.type}}&nbsp;
+          </span>
+        </div>
+        <div class="col-4 col-lg-4">
+          <a href="#">{{task.title}}</a>
+        </div>
+        <div class="col-2 col-lg-2">
+          {{task.parentName}}
+        </div>
+        <div class="col-4 col-lg-4">
+          {{task.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>

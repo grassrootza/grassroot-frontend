@@ -279,5 +279,8 @@ export class HomeComponent implements OnInit {
     $("#create-todo-modal").modal("hide");
   }
 
-
+  searchGlobaly(searchTerm:string){
+    console.log("Search Term............>>>>>>>>",searchTerm);
+    this.router.navigate(["/search",searchTerm]);
+  }
 }
