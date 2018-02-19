@@ -25,11 +25,6 @@ export class DateTimeUtils {
     return moment.unix(instant.epochSecond);
   }
 
-  public static convertDateStringToEpochMilli(dateString: string) {
-    let date = new Date(dateString);
-    return date.getTime();
-  }
-
   public static dateFromDate(date): NgbDateStruct {
     if (date) {
       return {year: date.getFullYear(), month: date.getMonth() + 1, day: date.getDate()};

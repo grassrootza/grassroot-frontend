@@ -3,6 +3,7 @@ import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {MembersFilter} from "../../groups/member-filter/filter.model";
 import {JoinDateCondition} from "../../groups/member-filter/joindatecondition.enum";
 import * as moment from 'moment';
+import {Moment} from 'moment';
 
 export class BroadcastRequest {
 
@@ -40,14 +41,15 @@ export class BroadcastRequest {
   topics: string[] = [];
   joinDate: string = null;
   joinDateCondition: JoinDateCondition = null;
+  skipSmsIfEmail: boolean = false;
 
   sendType: string = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
   sendNow: boolean = true;
   sendOnJoin: boolean = false;
   sendAtTime: boolean = false;
-  sendDate: string = Date();
 
-  sendDateTimeMillis: number;
+  sendDateString: string = "";
+  sendDateTimeMillis: number = moment().valueOf();
 
   clear() {
     this.broadcastId = "";
@@ -75,14 +77,15 @@ export class BroadcastRequest {
     this.joinMethods = [];
     this.joinDate = null;
     this.joinDateCondition = null;
+    this.skipSmsIfEmail = false;
 
     this.sendType = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
     this.sendNow = true;
     this.sendOnJoin = false;
     this.sendAtTime = false;
-    this.sendDate = Date();
+    this.sendDateString = "";
 
-    this.sendDateTimeMillis = 0;
+    this.sendDateTimeMillis = moment().valueOf();
   }
 
   copyFields(br: BroadcastRequest) {
@@ -113,7 +116,7 @@ export class BroadcastRequest {
     this.sendNow = br.sendNow;
     this.sendOnJoin = br.sendOnJoin;
     this.sendAtTime = br.sendAtTime;
-    this.sendDate = br.sendDate;
+    this.sendDateString = br.sendDateString;
 
     this.sendDateTimeMillis = br.sendDateTimeMillis;
   }
@@ -173,6 +176,7 @@ export class BroadcastMembers {
   selectionType: string = "ALL_MEMBERS";
   taskTeams: string[] = [];
   memberFilter: MembersFilter;
+  skipSmsIfEmail: boolean = false;
 
 }
 
@@ -186,7 +190,11 @@ export class BroadcastCost {
 export class BroadcastSchedule {
 
   sendType: string = "IMMEDIATE";
-  sendDate: string = Date();
+
+  sendMoment: Moment = null;
+  sendDateString: string = null;
+  sendDateTimeMillis: number = null;
+
   dateEpochMillis: NgbDateStruct = DateTimeUtils.dateFromDate(new Date());
   timeEpochMillis: NgbTimeStruct = DateTimeUtils.timeFromDate(new Date());
 
@@ -209,7 +217,7 @@ export class BroadcastConfirmation {
   provinces: string[];
 
   sendTimeDescription: string;
-  sendTime: string;
+  sendDateString: string;
 
   broadcastCost: string;
 

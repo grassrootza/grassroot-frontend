@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {BroadcastSchedule} from "../../model/broadcast-request";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {BroadcastConfirmComponent} from "../broadcast-confirm/broadcast-confirm.component";
+import {DateTimeUtils} from "../../../utils/DateTimeUtils";
 
 @Component({
   selector: 'app-broadcast-schedule',
@@ -14,17 +15,10 @@ import {BroadcastConfirmComponent} from "../broadcast-confirm/broadcast-confirm.
 export class BroadcastScheduleComponent implements OnInit {
 
   scheduleForm: FormGroup;
-  confirmationForm: FormGroup; // for modal prior to sending
 
   constructor(private broadcastService: BroadcastService, private formBuilder: FormBuilder,
               private modalService: NgbModal, private router: Router) {
     this.scheduleForm = formBuilder.group(new BroadcastSchedule());
-    this.confirmationForm = formBuilder.group({
-      'smsContent': '',
-      'emailContent': '',
-      'facebookContent': '',
-      'twitterContent': ''
-    });
   }
 
   ngOnInit() {
@@ -32,13 +26,11 @@ export class BroadcastScheduleComponent implements OnInit {
   }
 
   next() {
-    console.log("checking if schedule form is valid");
     if (!this.scheduleForm.valid) {
       return;
     }
-    this.broadcastService.setSchedule(this.scheduleForm.value);
+    this.storeSchedule();
     this.broadcastService.setPageCompleted('schedule');
-    // this.confirmationForm.setValue(this.broadcastService.getConfirmationFields());
     console.log("about to open modal ...");
     this.modalService.open(BroadcastConfirmComponent).result.then((result) => {
       console.log("closed with result", result);
@@ -48,8 +40,20 @@ export class BroadcastScheduleComponent implements OnInit {
   }
 
   back() {
-    this.broadcastService.setSchedule(this.scheduleForm.value);
+    this.storeSchedule();
     this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(), this.broadcastService.parentId(), 'members']);
+  }
+
+  storeSchedule() {
+    let entity: BroadcastSchedule = this.scheduleForm.value;
+    console.log("entity: ", entity);
+    if (entity.sendType == 'FUTURE') {
+      entity.sendMoment = DateTimeUtils.momentFromNgbStruct(entity.dateEpochMillis, entity.timeEpochMillis);
+      entity.sendDateString = entity.sendMoment.format("h:mm a [on] dddd, MMMM Do YYYY");
+      entity.sendDateTimeMillis = entity.sendMoment.valueOf();
+    }
+    console.log("well, this is the entity: ", entity);
+    this.broadcastService.setSchedule(entity);
   }
 
   cancel() {

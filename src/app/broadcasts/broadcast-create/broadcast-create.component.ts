@@ -27,6 +27,7 @@ export class BroadcastCreateComponent implements OnInit, AfterViewInit {
       this.type = params["type"];
       this.parentId = params["parentId"];
       this.broadcastService.fetchCreateParams(this.type, this.parentId).subscribe(createParams => {
+        console.log("received params: ", createParams);
         this.broadcastService.initCreate(this.type, this.parentId);
       }, error => {
         console.log("failed, error: ", error);

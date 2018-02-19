@@ -22,6 +22,7 @@ export class BroadcastTypeComponent implements OnInit {
   ngOnInit() {
     this.typesForm.setValue(this.broadcastService.getTypes());
     this.broadcastService.createParams.subscribe(createParams => {
+      console.log("create params received: ", this.createParams);
       this.createParams = createParams;
     })
   }

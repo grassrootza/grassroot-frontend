@@ -167,6 +167,7 @@
 
   .my-agenda-tasks {
     height: 18rem;
+    overflow: auto;
   }
 
 }

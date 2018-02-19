@@ -133,8 +133,17 @@ h6 {
 }
 
 .grassroot-breadcrumb {
-  color: #2CBC4C;
+  color: #7A7D8C;
+  text-transform: uppercase;
   padding: 10px 0;
+  font-weight: 600;
+  line-height: 16px;
+  font-size: 14px;
+}
+
+.grassroot-breadcrumb:hover {
+  color: #7A7D8C;
+  text-decoration: underline;
 }
 
 .grassroot-label-em {
@@ -190,4 +199,24 @@ h6 {
 
 .dropdown-toggle {
   cursor: pointer;
+}
+
+.broadcast-btn {
+  width: 100%;
+  border-radius: 100px;
+  font-size: 1.1em;
+  padding: 15px 0;
+  background-color: #2CBC4C;
+}
+
+.view-all-link {
+  color: #2CBC4C;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.view-all-link:hover {
+  color: #2CBC4C;
+  cursor: pointer;
+  text-decoration: underline;
 }
