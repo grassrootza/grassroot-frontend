@@ -49,6 +49,11 @@
       "FILE_IMPORT": "File import",
       "ADDED_SUBGROUP": "Subgroup",
       "COPIED_INTO_GROUP": "Copied"
+    },
+    "CampaignType": {
+      "PETITION": "Petition",
+      "ACQUISITION": "Acquisition",
+      "INFORMATION": "Information"
     }
   },
 
@@ -651,7 +656,7 @@
       "masterGroup": "Master Group: ",
       "engaged": "engaged with this campaign",
       "joined": "joined group",
-      "viewCampaign": "View"
+      "viewCampaign": "View Campaign"
     }
   },
   "campaign": {
@@ -731,9 +736,12 @@
       "title": "Customize your message responses for: ",
       "actions": {
         "options": "Response options: ",
-        "sign": "Sign petition",
-        "more": "More info",
-        "exit": "Exit",
+        "SIGN_PETITION": "Sign petition",
+        "JOIN_GROUP": "Join us",
+        "TAG_ME": "Choose interests",
+        "MORE_INFO": "More info",
+        "EXIT_POSITIVE": "Exit",
+        "EXIT_NEGATIVE": "Exit",
         "info": "Information requested from user",
         "name": "Name",
         "province": "Province",
@@ -749,13 +757,33 @@
         "modal-sub": "Choose up to 5 languages",
         "error": "Please select at least one language"
       },
+      "titles": {
+        "OPENING": "Initial Response",
+        "MORE_INFO": "More Info",
+        "SIGN_PETITION": "Sign Petition",
+        "JOIN_GROUP": "Join Us",
+        "TAG_ME": "Choose Interests",
+        "SHARE": "Share Screen",
+        "EXIT_POSITIVE": "Positive Exit",
+        "EXIT_NEGATIVE": "Negative Exit"
+      },
+      "placeholders": {
+        "OPENING": "The SA National Department of Health (NDOH) is establishing the National Health Insurance (NHI) to achieve universal access to quality health care for all who live in South Africa.",
+        "MORE_INFO": "We welcome the commitment from the NDOH to a NHI based on principles of equity, health as a right and redress of past inequalities.",
+        "SIGN_PETITION": "Thanks for participating. Let's get your details to tell you about future events and campaigns",
+        "JOIN_GROUP": "Thanks for joining us. Let's get your details to tell you about future events and campaigns",
+        "TAG_ME": "Thanks for participating. Let's get your details to tell you about future events and campaigns",
+        "SHARE": "Thank you for joining forces with us. If you want to share this with others please type their number",
+        "EXIT_POSITIVE": "Thank you for joining forces with us! We hope to see you soon at one of our events",
+        "EXIT_NEGATIVE": "Thank you for engaging our campaign, and we hope you will join us in the future"
+      },
       "initial": {
         "title": "Initial Response",
-        "placeholder": "The SA National Department of Health (NDOH) is establishing the National Health Insurance (NHI) to achieve universal access to quality health care for all who live in South Africa."
+        "placeholder": ""
       },
       "more": {
         "title": "More Info",
-        "placeholder": "We welcome the commitment from the NDOH to a NHI based on principles of equity, health as a right and redress of past inequalities"
+        "placeholder": ""
       },
       "join": {
         "title": "Join Us",

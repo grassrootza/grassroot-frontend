@@ -5,7 +5,7 @@ import {environment} from "../../environments/environment";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CampaignInfo, getCampaignEntity} from "./model/campaign-info";
 import {Observable} from "rxjs/Observable";
-import {CampaignMsgRequest, CampaignMsgServerReq, CampaignRequest} from "./campaign-create/campaign-request";
+import {CampaignMsgRequest, CampaignMsgServerDTO, CampaignRequest} from "./campaign-create/campaign-request";
 
 @Injectable()
 export class CampaignService {
@@ -22,7 +22,6 @@ export class CampaignService {
   campaignMsgActionUrl = environment.backendAppUrl + "/api/campaign/manage/add/message/action";
   campaignViewUrl = environment.backendAppUrl + "/api/campaign/manage/view";
 
-
   private _campaigns: CampaignInfo[];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
   public campaignInfoList: Observable<CampaignInfo[]> = this.campaignInfoList_.asObservable();
@@ -32,12 +31,10 @@ export class CampaignService {
   loadCampaigns() {
 
     this.httpClient.get<CampaignInfo[]>(this.campaignListUrl)
-      .map(
-        data => {
+      .map(data => {
           console.log("Campaign json object from server: ", data);
           return data.map(cp => getCampaignEntity(cp))
-        }
-      )
+        })
       .subscribe(
         campaigns => {
           this._campaigns = campaigns;
@@ -50,7 +47,6 @@ export class CampaignService {
   }
 
   loadGroupCampaigns(groupUid: string): Observable<CampaignInfo[]> {
-
     const params = new HttpParams()
       .set("groupUid", groupUid);
 
@@ -69,8 +65,8 @@ export class CampaignService {
   setCampaignMessages(campaignUid: string, messageRequests: CampaignMsgRequest[]): Observable<CampaignInfo> {
     console.log("sending message requests: ", messageRequests);
     let fullUrl = this.campaignMessageSetUrl + "/" + campaignUid;
-    let serverMsgRequests: CampaignMsgServerReq[] = messageRequests.map(req =>
-      new CampaignMsgServerReq(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags));
+    let serverMsgRequests: CampaignMsgServerDTO[] = messageRequests.map(req =>
+      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags));
     console.log("server msg requests: ", serverMsgRequests);
     // console.log("message request, messages: ", messageRequests.map(mr => mr.messages));
     return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests);

@@ -6,6 +6,7 @@ import {CampaignService} from "../../campaign.service";
 import {AlertService} from "../../../utils/alert.service";
 import {ActivatedRoute} from "@angular/router";
 import * as moment from "moment";
+import {CampaignInfo} from "../../model/campaign-info";
 
 declare var $: any;
 
@@ -16,8 +17,27 @@ declare var $: any;
 })
 export class CampaignMessagesComponent implements OnInit {
 
-  // todo: alter for campaign types etc
-  private typeList = ['OPENING', 'MORE_INFO', 'SIGN_PETITION', 'SHARE', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'];
+  public campaign: CampaignInfo;
+
+  public messageTypes = {
+    'PETITION': ['OPENING', 'MORE_INFO', 'SIGN_PETITION', 'SHARE', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
+    'ACQUISITION': ['OPENING', 'MORE_INFO', 'JOIN_GROUP', 'SHARE', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
+    'INFORMATION': ['OPENING', 'MORE_INFO', 'TAG_ME', 'SHARE', 'EXIT_POSITIVE']
+  };
+
+  public messageSequences = {
+    'PETITION': {
+      'OPENING': ['SIGN_PETITION', 'MORE_INFO'], 'MORE_INFO': ['SIGN_PETITION', 'EXIT_NEGATIVE'], 'SIGN_PETITION': ['name', 'province'],
+
+    },
+    'ACQUISITION': {
+      'OPENING': ['JOIN_GROUP', 'MORE_INFO'], 'MORE_INFO': ['JOIN_GROUP', 'EXIT_NEGATIVE'], 'JOIN_GROUP': ['name', 'province']
+    },
+    'INFORMATION': {
+      'OPENING': ['TAG_ME', 'MORE_INFO'], 'MORE_INFO': ['TAG_ME', 'EXIT_NEGATIVE']
+    }
+  };
+
   private typeIndexes = {};
   private typeMsgIds = {};
 
@@ -26,44 +46,66 @@ export class CampaignMessagesComponent implements OnInit {
   public languageForm: FormGroup;
 
   private campaignUid: string;
-  private _storedMessages: CampaignMsgRequest[];
+
+  // possibly cleaner to use one list, but might get very tricky to manage input changes, flow, etc
+  public existingMessages: boolean = false;
+  public priorMessages: CampaignMsgRequest[] = [];
+
+  private _currentMessages: CampaignMsgRequest[];
 
   constructor(private campaignService: CampaignService,
               private alertService: AlertService,
               private fb: FormBuilder,
               private route: ActivatedRoute) {
     this.selectedLanguages = [ENGLISH]; // start with this as default
-    this._storedMessages = [];
+    this._currentMessages = [];
   }
 
   ngOnInit() {
     this.languageForm = this.fb.group({});
+
     this.availableLanguages.forEach(language => {
       this.languageForm.addControl(language.threeDigitCode,
         this.fb.control(!(this.selectedLanguages.indexOf(language))));
     });
-    this.route.parent.params.subscribe(params => this.campaignUid = params['id']);
-    this.setUpMessages();
+
+    this.route.parent.params.subscribe(params => {
+      this.campaignUid = params['id'];
+      this.campaignService.loadCampaign(this.campaignUid).subscribe(campaign => {
+        this.campaign = campaign;
+        this.setUpMessages();
+      });
+    });
   }
 
-  // todo : alter for campaign types, and generally make less hideous
   setUpMessages() {
-    this.typeList.forEach((type, index) => {
-      let msgId = "message_" + moment().valueOf() + "_" + index;
-      this._storedMessages.push(new CampaignMsgRequest(msgId, type));
+    this.existingMessages = this.campaign.campaignMessages && this.campaign.campaignMessages.length > 0;
+    this.messageTypes[this.campaign.campaignType].forEach((type, index) => {
       this.typeIndexes[type] = index;
+
+      let existingMsgIndex = this.existingMessages ? this.campaign.campaignMessages.findIndex(msg => msg.linkedActionType === type) : -1;
+      let msgId = existingMsgIndex != -1 ? this.campaign.campaignMessages[existingMsgIndex].messageId : "message_" + moment().valueOf() + "_" + index;
+      let msgRequest = new CampaignMsgRequest(msgId, type,
+        existingMsgIndex != -1 ? this.campaign.campaignMessages[existingMsgIndex].getMessageMap() : new Map<string, string>());
+
       this.typeMsgIds[type] = msgId;
+      this._currentMessages.push(msgRequest);
+      this.priorMessages[type] = msgRequest;
     });
 
-    this._storedMessages[this.typeIndexes['OPENING']].nextMsgIds = [this.typeMsgIds['SIGN_PETITION'],
-      this.typeMsgIds['MORE_INFO']];
-    this._storedMessages[this.typeIndexes['MORE_INFO']].nextMsgIds = [this.typeMsgIds['SIGN_PETITION'],
-      this.typeMsgIds['EXIT_NEGATIVE']];
-    this._storedMessages[this.typeIndexes['SIGN_PETITION']].nextMsgIds = [this.typeMsgIds['SHARE'],
-      this.typeMsgIds['EXIT_POSITIVE']];
-    // share, and the exits, have no 'next'
+    console.log("prior messages: ", this.priorMessages);
 
-    console.log("messages now: ", this._storedMessages);
+    // have to do a quick second loop because msg IDs may not have been set
+    this._currentMessages
+      .filter(msg => !!this.messageSequences[this.campaign.campaignType][msg.linkedActionType])
+      .forEach(msg => {
+        console.log("hooking up this message: ", msg);
+        msg.nextMsgIds = this.messageSequences[this.campaign.campaignType][msg.linkedActionType]
+          .filter(mt => this.typeMsgIds[mt] != undefined)
+          .map(mt => this.typeMsgIds[mt]);
+        console.log("okay, next IDs: ", msg.nextMsgIds);
+    });
+
   }
 
   updateLanguages() {
@@ -77,17 +119,13 @@ export class CampaignMessagesComponent implements OnInit {
   }
 
   storeMessages(event: object, actionType: string) {
-    if (!this._storedMessages.find(msg => msg.linkedActionType == actionType)) {
-      let msgRequest = new CampaignMsgRequest("message_" + moment().valueOf() + "_" + this._storedMessages.length,
-        actionType);
-      console.log("msgRequest: ", msgRequest);
-      this._storedMessages.push(msgRequest);
-    }
-    this._storedMessages.find(msg => msg.linkedActionType == actionType).messages = event as Map<string, string>;
+    this._currentMessages.find(msg => msg.linkedActionType == actionType).messages = event as Map<string, string>;
+    // console.log("current messages: ", this._currentMessages);
   }
 
   setMessages() {
-    this.campaignService.setCampaignMessages(this.campaignUid, this._storedMessages).subscribe(campaignInfo => {
+    console.log("okay, trying to save messages: {}", this._currentMessages);
+    this.campaignService.setCampaignMessages(this.campaignUid, this._currentMessages).subscribe(campaignInfo => {
       this.alertService.alert("campaign.messages.done.success");
     }, error => {
       console.log("well that didn't work: ", error);

@@ -3,7 +3,7 @@ import {CampaignInfo} from "../model/campaign-info";
 import {environment} from "../../../environments/environment";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {CampaignService} from "../campaign.service";
-import {UserService} from "../../user/user.service";
+import {AlertService} from "../../utils/alert.service";
 
 @Component({
   selector: 'app-campaign-dashboard',
@@ -20,17 +20,18 @@ export class CampaignDashboardComponent implements OnInit {
   constructor(private campaignService: CampaignService,
               private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService) {
+              private alertService: AlertService) {
   }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       let campaignUid = params['id'];
       this.campaignService.loadCampaign(campaignUid).subscribe(campaignInfo => {
-        console.log("result: ", campaignInfo);
         this.campaign = campaignInfo;
+        this.alertService.hideLoadingDelayed();
       }, error2 => {
-        console.log("Error loading campaign", error2.status)
+        console.log("Error loading campaign", error2.status);
+        this.alertService.hideLoadingDelayed();
       })
     });
   }

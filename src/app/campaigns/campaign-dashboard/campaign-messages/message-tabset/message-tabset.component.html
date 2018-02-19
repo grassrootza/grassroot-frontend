@@ -17,9 +17,11 @@
         </ng-template>
         <ng-template ngbTabContent>
           <textarea class="form-control boxsizingBorder" rows="4"
+                    value = "{{ priorMessages?.get(language.threeDigitCode) }}"
                     placeholder="{{ placeHolderKey | translate }}"
-                    formControlName="{{ language.threeDigitCode }}"></textarea>
-          <p class="character-count">{{ 'general.charsRemaining' | translate }}: 0</p>
+                    formControlName="{{ language.threeDigitCode }}"
+                    (keyup)="updateCharCount($event, language.threeDigitCode)"></textarea>
+          <p class="character-count">{{ 'general.charsRemaining' | translate }}: {{ charsLeft[language.threeDigitCode] }}</p>
         </ng-template>
       </ngb-tab>
     </ngb-tabset>
@@ -36,7 +38,7 @@
     <ul class="list-group">
       <li class="list-group-item" *ngFor="let option of responseOptions; let i = index">
         <span class="badge badge-pill badge-secondary action-enum">{{i + 1}}.</span>
-        {{ option | translate }}
+        {{ 'campaign.messages.actions.' + option | translate }}
       </li>
     </ul>
   </div>

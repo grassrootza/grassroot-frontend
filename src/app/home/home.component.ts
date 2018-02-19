@@ -16,6 +16,7 @@ import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
 import {TodoType} from "../task/todo-type";
 import {AlertService} from "../utils/alert.service";
+import {CampaignService} from "../campaigns/campaign.service";
 
 declare var $: any;
 
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit {
   constructor(private taskService: TaskService,
               private userService: UserService,
               private groupService: GroupService,
+              private campaignService: CampaignService,
               private router: Router,
               private alertService: AlertService) {
     this.agendaBaseDate = moment().startOf('day');
@@ -126,16 +128,21 @@ export class HomeComponent implements OnInit {
         }
       );
 
+    this.campaignService.campaignInfoList.subscribe(campaignList => {
+      this.activeCampaigns = campaignList.filter(cp => cp.isActive());
+    });
+
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
     this.groupService.fetchNewMembers(7, 0, 500);
     this.groupService.loadGroups();
 
   }
 
+  // campaigns are heavy, and bottom of page, so load them last
   private hideSpinnerIfAllLoaded() {
-    console.log("about to hide spinner, just checking this ... ", this.tasksLoadFinished, this.newMembersLoadFinished, this.groupsLoadFinished);
     if (this.tasksLoadFinished && this.newMembersLoadFinished && this.groupsLoadFinished) {
-      this.alertService.hideLoading();
+      this.alertService.hideLoadingDelayed();
+      this.campaignService.loadCampaigns();
     }
   }
 

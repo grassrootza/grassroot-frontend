@@ -1,17 +1,17 @@
 <div class="container campaign-info-row">
   <div class="row flex flex-wrap">
     <div class="order-1 col-8 col-md-8 order-md-1 col-lg-8 campaign-name">
-      {{ campaign.name }}
+      {{ 'enum.CampaignType.' + campaign.campaignType | translate}}: {{ campaign.name }}
     </div>
-    <div class="order-2 col-4 col-md-4 order-md-2 col-lg-4">
-      {{ 'campaigns.row.ends' | translate }} {{ campaign.campaignEndDate | date: 'dd MMM yyyy' }}
+    <div class="order-2 col-4 col-md-4 order-md-2 col-lg-4 campaign-ends">
+      <i class="far fa-clock"></i> {{ 'campaigns.row.ends' | translate }} {{ campaign.campaignEndDate | date: 'dd MMM yyyy' }}
     </div>
   </div>
   <div class="row flex flex-wrap campaign-details">
     <div class="order-1 col-8 col-md-8 order-md-1 col-lg-8">
       <div class="row master-group-name">
         <div class="col">
-          {{ 'campaigns.row.masterGroup' | translate }} {{ campaign.masterGroupName }}
+          <span class="master-group-prefix">{{ 'campaigns.row.masterGroup' | translate }}</span> {{ campaign.masterGroupName }}
         </div>
       </div>
       <div *ngIf="campaign.description" class="row campaign-description">
@@ -21,15 +21,25 @@
       </div>
       <div class="row">
         <div class="col">
-          <button [routerLink]="['/campaign', campaign.campaignUid]" class="btn btn-success view-campaign-btn float-left">
+          <button [routerLink]="['/campaign', campaign.campaignUid]" class="btn btn-secondary view-campaign-btn float-left">
             {{ 'campaigns.row.viewCampaign' | translate }}
           </button>
         </div>
       </div>
     </div>
     <div class="order-2 col-4 col-md-4 order-md-4 col-lg-4">
-      {{ campaign.totalEngaged  != null ? campaign.totalEngaged : "0" }} {{ 'campaigns.row.engaged' | translate }},
-      {{ campaign.totalJoined != null ? campaign.totalJoined : "0" }} {{ 'campaigns.row.joined' | translate }}
+      <div class="row">
+        <div class="col campaign-stats">
+          <span class="count">{{ campaign.totalJoined != null ? campaign.totalJoined : "0" }}</span>
+          <span class="desc">{{ 'campaigns.row.joined' | translate }}</span>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col campaign-stats">
+          <span class="count">{{ campaign.totalEngaged  != null ? campaign.totalEngaged : "0" }}</span>
+          <span class="desc">{{ 'campaigns.row.engaged' | translate }}</span>
+        </div>
+      </div>
     </div>
   </div>
 </div>

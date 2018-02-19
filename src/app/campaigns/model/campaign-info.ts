@@ -1,5 +1,6 @@
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import * as moment from "moment";
+import {CampaignMsgServerDTO, getCampaignMsg} from "../campaign-create/campaign-request";
 
 export class CampaignInfo {
 
@@ -17,13 +18,13 @@ export class CampaignInfo {
               public creatingUserUid: string,
               public createdDate: any,
               public campaignCode: number,
-              public campaignTags: string[]) {
+              public campaignTags: string[],
+              public campaignMessages: CampaignMsgServerDTO[]) {
   }
 
   public isActive(): boolean {
     return this.campaignEndDate.isAfter(moment());
   }
-
 }
 
 export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
@@ -42,6 +43,7 @@ export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
     cp.creatingUserUid,
     DateTimeUtils.getMomentFromJavaInstant(cp.createdDate),
     cp.campaignCode,
-    cp.campaignTags
+    cp.campaignTags,
+    cp.campaignMessages ? cp.campaignMessages.map(getCampaignMsg) : []
   );
 };

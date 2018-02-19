@@ -14,6 +14,7 @@ import {GroupInfoComponent} from "./groups/group-list-row/group-info.component";
 import {CreateGroupComponent} from "./groups/create-group/create-group.component";
 import {ToDoRespondComponent} from "./task/todo-respond/todo-respond.component";
 import {CreateLivewireComponent} from "./groups/group-details/group-activity/create-livewire/create-livewire.component";
+import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row/campaign-info.component";
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import {CreateLivewireComponent} from "./groups/group-details/group-activity/cre
   ],
   declarations: [
     GroupInfoComponent,
+    CampaignInfoComponent,
     CreateGroupComponent,
     CreateMeetingComponent,
     CreateVoteComponent,
@@ -38,6 +40,7 @@ import {CreateLivewireComponent} from "./groups/group-details/group-activity/cre
   ],
   entryComponents: [
     GroupInfoComponent,
+    CampaignInfoComponent,
     CreateGroupComponent,
     CreateMeetingComponent,
     CreateVoteComponent,
@@ -46,7 +49,8 @@ import {CreateLivewireComponent} from "./groups/group-details/group-activity/cre
     ToDoRespondComponent
   ],
   exports: [
-    GroupInfoComponent, CreateGroupComponent, CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, CreateLivewireComponent,
+    GroupInfoComponent, CampaignInfoComponent,
+    CreateGroupComponent, CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, CreateLivewireComponent,
     ToDoRespondComponent, PaginationComponent, MemberFilterComponent
   ]
 })
