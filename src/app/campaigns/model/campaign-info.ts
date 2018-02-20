@@ -19,7 +19,10 @@ export class CampaignInfo {
               public createdDate: any,
               public campaignCode: number,
               public campaignTags: string[],
-              public campaignMessages: CampaignMsgServerDTO[]) {
+              public campaignMessages: CampaignMsgServerDTO[],
+              public smsSharingEnabled: boolean,
+              public smsSharingBudget: number,
+              public smsSharingCost: number) {
   }
 
   public isActive(): boolean {
@@ -44,6 +47,9 @@ export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
     DateTimeUtils.getMomentFromJavaInstant(cp.createdDate),
     cp.campaignCode,
     cp.campaignTags,
-    cp.campaignMessages ? cp.campaignMessages.map(getCampaignMsg) : []
+    cp.campaignMessages ? cp.campaignMessages.map(getCampaignMsg) : [],
+    cp.smsSharingEnabled,
+    cp.smsSharingBudget,
+    cp.smsSharingCost
   );
 };

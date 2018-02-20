@@ -777,38 +777,29 @@
         "EXIT_POSITIVE": "Thank you for joining forces with us! We hope to see you soon at one of our events",
         "EXIT_NEGATIVE": "Thank you for engaging our campaign, and we hope you will join us in the future"
       },
-      "initial": {
-        "title": "Initial Response",
-        "placeholder": ""
-      },
-      "more": {
-        "title": "More Info",
-        "placeholder": ""
-      },
-      "join": {
-        "title": "Join Us",
-        "placeholder": "Thanks for participating. Let's get your details to tell you about future events and campaigns"
-      },
-      "sign": {
-        "title": "Sign Petition",
-        "placeholder": "Thanks for participating. Let's get your details to tell you about future events and campaigns"
-      },
-      "share": {
-        "title": "Share Screen",
-        "placeholder": "Thank you for joining forces with us. If you want to share this with others please type their number"
-      },
-      "exit_positive": {
-        "title": "Positive exit",
-        "placeholder": "Thank you for joining forces with us! We hope to see you soon at one of our events"
-      },
-      "exit_negative": {
-        "title": "Negative exit",
-        "placeholder": "Thank you for engaging our campaign, and we hope you will join us in the future"
-      },
       "done": {
         "success": "Done! The messages have been set",
         "error": "Sorry, there was an error updating"
       }
+    },
+    "settings": {
+      "title": "Update Campaign Settings",
+      "name": "Campaign Name/Title",
+      "description": "Description",
+      "image": "Campaign Image (optional)",
+      "image_remove": "Remove image",
+      "starts": "Campaign Ends: ",
+      "ends": "Ends: ",
+      "type": "Campaign Type:",
+      "group": "Master Group:",
+      "new": "Change to new group",
+      "existing": "Change to existing group",
+      "petition": "Amandla petition URL: ",
+      "sms_sharing": "Allow SMS sharing: ",
+      "sms_limit": "SMS limit",
+      "cost": "Estimated cost: R ",
+      "landing": "Landing page: ",
+      "url": "URL"
     }
   },
   "broadcasts": {

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CampaignInfo} from "../model/campaign-info";
-import {environment} from "../../../environments/environment";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {CampaignService} from "../campaign.service";
 import {AlertService} from "../../utils/alert.service";
 
@@ -14,8 +13,6 @@ export class CampaignDashboardComponent implements OnInit {
 
   public campaign: CampaignInfo = null;
   public currentTab: string = "messages";
-
-  public baseUrl: string = environment.backendAppUrl;
 
   constructor(private campaignService: CampaignService,
               private router: Router,
@@ -33,6 +30,18 @@ export class CampaignDashboardComponent implements OnInit {
         console.log("Error loading campaign", error2.status);
         this.alertService.hideLoadingDelayed();
       })
+    });
+
+    this.router.events.subscribe(ev => {
+      if (ev instanceof NavigationEnd) {
+        if (this.campaign != null) {
+          let uri = ev.urlAfterRedirects;
+          let startIndex = uri.indexOf(this.campaign.campaignUid) + this.campaign.campaignUid.length + 1;
+          this.currentTab = uri.substring(startIndex);
+          if (this.currentTab.indexOf("/") >= 0)
+            this.currentTab = this.currentTab.substring(0, this.currentTab.indexOf("/"));
+        }
+      }
     });
   }
 
