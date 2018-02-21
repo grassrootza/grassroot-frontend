@@ -732,6 +732,43 @@
       "creationInfo": "{{ creatingUserName }} on {{ createdDate }}",
       "typeLabel": "Campaign type: "
     },
+    "statistics": {
+      "members": {
+        "title": "Members opting in to group through campaign",
+        "prior": "Prior members",
+        "opted_out": "Opted out of joining",
+        "joined": "Joined",
+        "engaged": "Interacted",
+        "conversion": "{{ conversionRate }}% Conversion"
+      },
+      "engagement": {
+        "title": "Campaign Engagement",
+        "topic": "Topic Interest: {{ channel }}",
+        "count_total": "People Engaged",
+        "count_spec": "People via {{ desc }}",
+        "view": "View by: ",
+        "channels": "Channels",
+        "provinces": "Provinces"
+      },
+      "activity": {
+        "title": "Activity",
+        "select_channel": "By channel",
+        "select_province": "By province",
+        "time": {
+          "this_week": "This week",
+          "last_week": "Last week",
+          "last_month": "Last month",
+          "all_time": "All time",
+          "custom": "Custom"
+        }
+      },
+      "petition": {
+        "title": "Petition Results",
+        "conversion": "Conversion",
+        "signed": "Signed Petition",
+        "progress": "of {{ target }} signatures"
+      }
+    },
     "messages": {
       "title": "Customize your message responses for: ",
       "actions": {

@@ -12,7 +12,7 @@ import {AlertService} from "../../utils/alert.service";
 export class CampaignDashboardComponent implements OnInit {
 
   public campaign: CampaignInfo = null;
-  public currentTab: string = "messages";
+  public currentTab: string = "analyze";
 
   constructor(private campaignService: CampaignService,
               private router: Router,

@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {UserService} from "../user/user.service";
 import {environment} from "../../environments/environment";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CampaignInfo, getCampaignEntity} from "./model/campaign-info";
@@ -18,15 +17,14 @@ export class CampaignService {
 
   campaignMessageSetUrl = environment.backendAppUrl + "/api/campaign/manage/messages/set";
 
-  campaignTagUrl = environment.backendAppUrl + "/api/campaign/manage/add/tag";
-  campaignMsgActionUrl = environment.backendAppUrl + "/api/campaign/manage/add/message/action";
-  campaignViewUrl = environment.backendAppUrl + "/api/campaign/manage/view";
+  statsMemberGrowthUrl = environment.backendAppUrl + "/api/campaign/stats/member-growth";
+
 
   private _campaigns: CampaignInfo[];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
   public campaignInfoList: Observable<CampaignInfo[]> = this.campaignInfoList_.asObservable();
 
-  constructor(private httpClient: HttpClient, private userService: UserService) { }
+  constructor(private httpClient: HttpClient) { }
 
   loadCampaigns() {
 
@@ -81,5 +79,23 @@ export class CampaignService {
       return this.httpClient.get<CampaignInfo>(fullUrl).map(cp => getCampaignEntity(cp));
     }
   }
+
+  fetchMemberGrowthStats(campaignUid: string, year: number, month: number): Observable<any> {
+
+    const fullUrl = this.statsMemberGrowthUrl;
+    let params = new HttpParams()
+      .set("campaignUid", campaignUid);
+
+    if (year)
+      params = params.set("year", year.toString());
+
+    if (month)
+      params = params.set("month", month.toString());
+
+    return this.httpClient.get<any>(fullUrl, {params: params});
+
+  }
+
+
 
 }

@@ -1,3 +1,101 @@
-<p>
-  campaign-stats works!
-</p>
+<div class="container">
+
+  <div class="row stats-panel">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-sm-12">
+                <h5 [translate]="'campaign.statistics.members.title'">Members growth</h5>
+                <canvas id="memberGrowthChart" height="200" width="400"></canvas>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <canvas id="conversionRatesChart" height="200" width="200"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row stats-panel">
+    <div class="col-md-8 col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-sm-12">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <h5 [translate]="'campaign.statistics.engagement.title'">Campaign Engagement</h5>
+                    <canvas id="engagementPieChart" height="200" width="200"></canvas>
+                  </div>
+                  <div class="col-sm-6">
+                    <h5 [translate]="'campaign.statistics.engagement.topic'">Topic Interest: </h5>
+                    <!-- todo : add complex little bars -->
+                    <h5 [translate]="'campaign.statistics.engagement.view'">View by: </h5>
+                    <button>{{ 'campaign.statistics.engagement.channels' | translate }}</button>
+                    <button>{{ 'campaign.statistics.engagement.provinces' | translate }}</button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <canvas id="activityColumnChart" height="200" width="200"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <h5 [translate]="'campaign.statistics.activity.title'">Activity</h5>
+                <select>
+                  <option [translate]="'campaign.statistics.activity.select_channel'"></option>
+                  <option [translate]="'campaign.statistics.activity.select_province'"></option>
+                </select>
+                <select>
+                  <option [translate]="'campaign.statistics.activity.this_week'">This week</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row stats-panel">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8 col-sm-12">
+                <!-- todo: amandla.mobi chart -->
+                <h5 [translate]="'campaign.statistics.petition.title'">Members growth</h5>
+                <canvas id="petitionTimeChart" height="200" width="400"></canvas>
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <h5 [translate]="'campaign.statistics.petition.conversion'">Conversion</h5>
+                <canvas id="petitionPieChart" height="200" width="200"></canvas>
+              </div>
+            </div>
+            <div class="row">
+              <!-- todo : static progress bar -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
