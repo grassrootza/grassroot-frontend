@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SearchService} from "../../search.service";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {UserService} from "../../../user/user.service";
 import {GroupInfo} from "../../../groups/model/group-info.model";
 import {Group} from "../../../groups/model/group.model";
@@ -19,15 +19,22 @@ export class MyGroupsComponent implements OnInit {
   public groups:Group[] = [];
   public group:Group = null;
 
+  @Output()
+  public onGroupClicked: EventEmitter<GroupInfo> = new EventEmitter();
+
+  @Input()
+  public groupInfo: GroupInfo = null;
+
   constructor(private userService:UserService,
               private route:ActivatedRoute,
-              private searchService:SearchService) { }
+              private searchService:SearchService,
+              private router:Router) { }
 
   ngOnInit() {
     this.userUid = this.userService.getLoggedInUser().userUid;
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
-      this.loadUserGroupsWithSearchTerm(this.searchTerm);
+
       this.loadUserGroups(this.searchTerm);
     });
   }
@@ -48,5 +55,12 @@ export class MyGroupsComponent implements OnInit {
     },error => {
       console.log("Error.........",error)
     })
+  }
+
+  triggerViewGroup(groupInfo:GroupInfo){
+    console.log("View group details....................",groupInfo);
+
+    this.router.navigate(["/group", groupInfo.groupUid]);
+    return false;
   }
 }

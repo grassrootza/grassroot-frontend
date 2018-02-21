@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserService} from "../../../user/user.service";
 import {ActivatedRoute, Params} from "@angular/router";
 import {Task} from 'app/task/task.model';
 import {SearchService} from "../../search.service";
+declare var $: any;
 
 @Component({
   selector: 'app-my-activities',
@@ -14,6 +15,8 @@ export class MyActivitiesComponent implements OnInit {
   private userUid:string = "";
   private searchTerm:string = "";
   public userTasksFiltered: Task[] = [];
+
+  public taskToView:Task = null;
 
   constructor(private userService:UserService,
               private route:ActivatedRoute,
@@ -34,6 +37,28 @@ export class MyActivitiesComponent implements OnInit {
         this.userTasksFiltered = resp;
     });
   }
+
+  triggerViewTask(task:Task){
+    this.taskToView = task;
+    console.log("Task Var...",this.taskToView);
+    console.log("Task...",task);
+    console.log("Task to view........",task.taskUid);
+
+    switch (task.type){
+      case "MEETING":
+        $("#view-meeting-modal").modal("show");
+        break;
+      case "VOTE":
+        $("#view-vote-modal").modal("show");
+        break;
+      case "TODO":
+        $("#view-todo-modal").modal("show");
+        break;
+    }
+
+    return false;
+  }
+
 
 /*  loadUserGroupsUsingSearchTerm(searchTerm:string){
     this.groupService.groupInfoList.subscribe(groups => {

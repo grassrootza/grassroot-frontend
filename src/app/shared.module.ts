@@ -5,6 +5,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ModuleWithProviders} from "@angular/compiler/src/core";
 import {TranslateModule, TranslatePipe} from "@ngx-translate/core";
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,7 +16,8 @@ import {TranslateModule, TranslatePipe} from "@ngx-translate/core";
   ],
   exports: [
     RouterModule, FormsModule, ReactiveFormsModule, TranslateModule
-  ]
+  ],
+  declarations: []
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {

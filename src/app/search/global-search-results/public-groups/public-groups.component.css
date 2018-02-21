@@ -1,0 +1,32 @@
+.group-info-row {
+  border-top: none;
+  border-bottom: none;
+  background-color: #F5F6FA;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 12px;
+  line-height: 16px;
+  vertical-align: middle;
+  border-top: solid #ECEEF1 1px;
+}
+
+.group-info-row img {
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+
+}
+
+.group-info-row a {
+  color: #4A4A4A;
+}
+
+.group-name {
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.group-info-header {
+  background: #929292;
+  font-style: inherit;
+  color: #ffffff;
+}

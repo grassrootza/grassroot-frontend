@@ -13,8 +13,8 @@
 
   <div class="container group-info-row">
     <div *ngFor="let group of groups" class="row flex flex-wrap">
-      <div class="col-4 col-lg-4">
-        <a href="#">{{group.name}}</a>
+      <div class="col-4 col-lg-4 group-name">
+        <a href="" (click)="triggerViewGroup(group)">{{group.name}}</a>
       </div>
 
       <div class="col-2 col-lg-2">
@@ -34,10 +34,20 @@
         </div>
       </div>
 
-      <div class="col-2 col-lg-2">
+      <div class="col-2 col-lg-2 font-weight-bold">
         {{"*134*1994*" +group.joinCode + "#"}}
       </div>
     </div>
+    <br/>
   </div>
 
 </div>
+
+<div *ngIf="groups.length === 0" class="card">
+  <h5>{{groups.length}} Groups found</h5>
+</div>
+
+<!--===========-->
+
+
+

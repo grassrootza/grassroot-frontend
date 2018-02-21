@@ -17,3 +17,9 @@
 .activity-info-row a {
   color: #4A4A4A;
 }
+
+.activity-info-header {
+  background: #929292;
+  font-style: inherit;
+  color: #ffffff;
+}

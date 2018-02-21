@@ -11,6 +11,7 @@ import {MyCampaignsComponent} from "./global-search-results/my-campaigns/my-camp
 import {PublicMeetingsComponent} from "./global-search-results/public-meetings/public-meetings.component";
 import {PublicGroupsComponent} from "./global-search-results/public-groups/public-groups.component";
 
+
 export const SEARCH_ROUTE: Routes = [
   {path:'',component:GlobalSearchResultsComponent,canActivate:[LoggedInGuard],children:[
     {path:'',redirectTo:'my-activities',pathMatch:'full'},
