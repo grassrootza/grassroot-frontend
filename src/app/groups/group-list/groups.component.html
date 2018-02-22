@@ -14,10 +14,24 @@
 
     <div class="container group-info-header">
       <div class="row">
-        <div class="col-sm-3  d-block">{{ 'groups.pinnedGroups.name' | translate }}</div>
-        <div class="col-sm-2 d-none d-md-block">{{ 'groups.pinnedGroups.role' | translate }}</div>
-        <div class="col-sm-3 d-none d-md-block">{{ 'groups.pinnedGroups.upNext' | translate }}</div>
-        <div class="col-sm-2 d-none d-md-block">{{ 'groups.pinnedGroups.members' | translate }}</div>
+        <div class="col-sm-3  d-block" (click)="sortByGroupName(true)">{{ 'groups.pinnedGroups.name' | translate }}
+          <span id="pinnedSortByNamePlaceHolder">
+            <i class="fa fa-sort"></i>
+          </span></div>
+        <div class="col-sm-2 d-none d-md-block" (click)="sortByRoleName(true)">{{ 'groups.pinnedGroups.role' | translate }}
+          <span id="pinnedSortByRolePlaceHolder">
+            <i class="fa fa-sort"></i>
+          </span></div>
+        <div class="col-sm-3 d-none d-md-block" (click)="sortByUpNext(true)">{{ 'groups.pinnedGroups.upNext' | translate }}
+          <span id="pinnedSortByUpNextPlaceHolder">
+            <i class="fa fa-sort"></i>
+          </span>
+        </div>
+        <div class="col-sm-2 d-none d-md-block" (click)="sortByMembersCount(true)">{{ 'groups.pinnedGroups.members' | translate }}
+          <span id="pinnedSortByMembersCountPlaceHolder">
+            <i class="fa fa-sort"></i>
+          </span>
+        </div>
         <div class="col-sm-2 d-none d-md-block"></div>
       </div>
     </div>
@@ -54,9 +68,9 @@
         {{ 'groups.filter.selectRole' | translate }}
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" (click)="filterGroupsByRole('Commitee')">{{ 'groups.filter.commitee' | translate }}</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('Member')">{{ 'groups.filter.member' | translate }}</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('Organizer')">{{ 'groups.filter.organizer' | translate }}</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_COMMITTEE_MEMBER')">{{ 'groups.filter.commitee' | translate }}</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_ORDINARY_MEMBER')">{{ 'groups.filter.member' | translate }}</a>
+        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_GROUP_ORGANIZER')">{{ 'groups.filter.organizer' | translate }}</a>
       </div>
     </div>
 
@@ -81,10 +95,26 @@
 
     <div class="container group-info-header">
       <div class="row">
-        <div class="col-md-2 col-lg-3 d-block">{{ 'groups.allGroups.name' | translate }}</div>
-        <div class="col-md-2 col-lg-2 d-none d-md-block">{{ 'groups.allGroups.role' | translate }}</div>
-        <div class="col-md-3 col-lg-3 d-none d-md-block">{{ 'groups.allGroups.upNext' | translate }}</div>
-        <div class="col-md-2 col-lg-2 d-none d-md-block">{{ 'groups.allGroups.members' | translate }}</div>
+        <div class="col-md-2 col-lg-3 d-block" (click)="sortByGroupName(false)">{{ 'groups.allGroups.name' | translate }}
+          <span id="sortByNamePlaceHolder">
+            <i class="fa fa-sort"></i>
+          </span>
+        </div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block" (click)="sortByRoleName(false)">{{ 'groups.allGroups.role' | translate }}
+          <span id="sortByRolePlaceHolder">
+            <i class="fa fa-sort"></i>
+          </span>
+        </div>
+        <div class="col-md-3 col-lg-3 d-none d-md-block" (click)="sortByUpNext(false)">{{ 'groups.allGroups.upNext' | translate }}
+          <span id="sortByUpNextPlaceHolder">
+            <i class="fa fa-sort"></i>
+          </span>
+        </div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block" (click)="sortByMembersCount(false)">{{ 'groups.allGroups.members' | translate }}
+          <span id="sortByMembersCountPlaceHolder">
+            <i class="fa fa-sort"></i>
+          </span>
+        </div>
         <div class="col-md-2 col-lg-1 d-none d-md-block"></div>
         <div class="col-md-1 col-lg-1 d-none d-md-block"></div>
       </div>
