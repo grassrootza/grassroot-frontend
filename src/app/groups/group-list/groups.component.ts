@@ -167,17 +167,20 @@ export class GroupsComponent implements OnInit {
   }
 
   resetPinnedSortIcons(): void {
-    $('#pinnedSortByNamePlaceHolder').children()[0].remove();
-    $('#pinnedSortByNamePlaceHolder').append('<i class="fa fa-sort"></i>');
+    if(this.pinnedGroups.length > 0){
+      $('#pinnedSortByNamePlaceHolder').children()[0].remove();
+      $('#pinnedSortByNamePlaceHolder').append('<i class="fa fa-sort"></i>');
 
-    $('#pinnedSortByRolePlaceHolder').children()[0].remove();
-    $('#pinnedSortByRolePlaceHolder').append('<i class="fa fa-sort"></i>');
+      $('#pinnedSortByRolePlaceHolder').children()[0].remove();
+      $('#pinnedSortByRolePlaceHolder').append('<i class="fa fa-sort"></i>');
 
-    $('#pinnedSortByUpNextPlaceHolder').children()[0].remove();
-    $('#pinnedSortByUpNextPlaceHolder').append('<i class="fa fa-sort"></i>');
+      $('#pinnedSortByUpNextPlaceHolder').children()[0].remove();
+      $('#pinnedSortByUpNextPlaceHolder').append('<i class="fa fa-sort"></i>');
 
-    $('#pinnedSortByMembersCountPlaceHolder').children()[0].remove();
-    $('#pinnedSortByMembersCountPlaceHolder').append('<i class="fa fa-sort"></i>');
+      $('#pinnedSortByMembersCountPlaceHolder').children()[0].remove();
+      $('#pinnedSortByMembersCountPlaceHolder').append('<i class="fa fa-sort"></i>');
+    }
+
   }
 
   sortByGroupName(pinned: boolean): void {
@@ -238,10 +241,6 @@ export class GroupsComponent implements OnInit {
       this.currentPage = 1;
       this.generatePageList(this.numberOfPages);
     }
-
-    console.log(this.filteredGroups);
-    console.log(sortedList);
-
   }
 
   sortByRoleName(pinned: boolean): void {
