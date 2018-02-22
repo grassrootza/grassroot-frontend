@@ -15,6 +15,8 @@ export class SearchService {
   private userPublicGroupsUrl = environment.backendAppUrl + "/api/search/publicGroups";
   private publicMeetingsUrl = environment.backendAppUrl + "/api/search/publicMeetings";
 
+  private joinGroupUrl = environment.backendAppUrl + "/api/search/join"
+
   constructor(private httpClient: HttpClient,
               private userService:UserService) {
   }
@@ -51,5 +53,15 @@ export class SearchService {
     console.log("Full meetings url...",fullUrl);
     return this.httpClient.get<Task[]>(fullUrl)
       .map(resp => resp.map(task => Task.createInstanceFromData(task)));
+  }
+
+  askToJoinGroup(groupUid:string,word:string):Observable<any>{
+    let fullUrl = this.joinGroupUrl + "/" +groupUid;
+
+    let params = new HttpParams()
+      .set("joinWord",word)
+      .set("requestorUid",this.userService.getLoggedInUser().userUid);
+
+    return this.httpClient.post(fullUrl,null,{params:params});
   }
 }

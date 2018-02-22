@@ -19,6 +19,13 @@ export class MyGroupsComponent implements OnInit {
   public groups:Group[] = [];
   public group:Group = null;
 
+  protected pageSize: number = 4;
+  protected numberOfPages: number = 1;
+  protected totalCount: number = 0;
+  public pagesList: number[] = [];
+  protected filteredGroupsPage: Group[] = [];
+  protected currentPage: number = 1;
+
   @Output()
   public onGroupClicked: EventEmitter<GroupInfo> = new EventEmitter();
 
@@ -36,6 +43,7 @@ export class MyGroupsComponent implements OnInit {
       this.searchTerm = params['searchTerm'];
 
       this.loadUserGroups(this.searchTerm);
+
     });
   }
 
@@ -52,6 +60,14 @@ export class MyGroupsComponent implements OnInit {
     this.searchService.loadUserGroups(this.userUid,searchTerm).subscribe(grps =>{
       this.groups = grps;
       console.log("Groups............",this.groups);
+
+      this.filteredGroupsPage = this.groups.slice(0,this.pageSize);
+      this.totalCount = this.groups.length;
+      this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+      this.currentPage = 1;
+      this.generatePageList(this.numberOfPages);
+
+      console.log("Pages.....",this.numberOfPages)
     },error => {
       console.log("Error.........",error)
     })
@@ -62,5 +78,31 @@ export class MyGroupsComponent implements OnInit {
 
     this.router.navigate(["/group", groupInfo.groupUid]);
     return false;
+  }
+
+  generatePageList(numberOfPages: number){
+    this.pagesList = [];
+    for(let i=1;i<=numberOfPages;i++){
+      this.pagesList.push(i);
+    }
+  }
+
+  goToPage(page: number){
+    this.currentPage = page;
+    this.filteredGroupsPage = this.groups.slice(this.pageSize*(page-1), this.pageSize*page);
+  }
+
+  previousPage(){
+    if(this.currentPage != 1){
+      this.currentPage = this.currentPage-1;
+      this.goToPage(this.currentPage);
+    }
+  }
+
+  nextPage(){
+    if(this.currentPage != this.numberOfPages){
+      this.currentPage = this.currentPage+1;
+      this.goToPage(this.currentPage);
+    }
   }
 }

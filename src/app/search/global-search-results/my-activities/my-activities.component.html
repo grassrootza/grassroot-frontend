@@ -1,7 +1,6 @@
 <div *ngIf="userTasksFiltered.length > 0" class="card">
-  <h5>{{userTasksFiltered.length}} Activities found</h5>
   <div class="card-body">
-
+    <span>{{userTasksFiltered.length}} Activities found</span>
     <div class="container activity-info-header">
       <div class="row">
         <div class="col-md-2 col-lg-2 d-block">Type</div>
@@ -11,8 +10,8 @@
       </div>
     </div>
 
-    <div class="container activity-info-row">
-      <div *ngFor="let task of userTasksFiltered" class="row flex flex-wrap">
+    <div class="container">
+      <div *ngFor="let task of filteredTasksPage" class="row flex flex-wrap activity-info-row">
         <div class="col-2 col-lg-2">
           <span class="font-weight-bold">
             <img [src]="'assets/' + task.getEventIconName() "/>&nbsp;&nbsp;
@@ -29,23 +28,40 @@
           {{task.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
         </div>
       </div>
-
     </div>
-
-
   </div>
 
+  <nav aria-label="Group list navigation" *ngIf="pagesList.length > 0">
+    <ul class="pagination justify-content-end">
+      <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
+        <a class="page-indicator " (click)="previousPage()">
+          <img src="../../../assets/arrow-left.png">Previous
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let page of pagesList">
+        <a class="page-indicator " [ngClass]="(page==currentPage)?'page-selected':''" (click)="goToPage(page)">{{page}}</a>
+      </li>
+      <li class="page-item" [ngClass]="(currentPage==pagesList.length)?'disabled':''">
+        <a class="page-indicator " (click)="nextPage()">
+          Next <img src="../../../assets/arrow-right.png">
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>
 
 <div *ngIf="userTasksFiltered.length === 0" class="card">
-  <h5>{{userTasksFiltered.length}} Activities found</h5>
+  <div class="card-body">
+    <span>{{userTasksFiltered.length}} Activities found</span>
+  </div>
 </div>
 <!--Modals-->
 
-<!--<app-view-meeting (onTrgiggerVieweMeeting)="showViewMeetingModal($event)"></app-view-meeting>
-<app-view-todo (onTriggerViewTodo)="showViewTodoModal($event)"></app-view-todo>
-<app-view-vote (onTriggerViewVote)="showViewVoteModal($event)"></app-view-vote>-->
+<app-view-meeting [taskToView]="taskToView"></app-view-meeting>
+<app-view-todo [taskToView]="taskToView"></app-view-todo>
+<app-view-vote [taskToView]="taskToView"></app-view-vote>
 
+<!--
 <div class="modal fade" tabindex="-1" role="dialog" id="view-meeting-modal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -130,9 +146,10 @@
 
       </div>
       <div class="modal-footer">
-        <button  type="button" class="btn btn-primary save-button" (click)="createGroup()">Save
-        </button>
-        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">Cancel</button>
+        <div class="float-left">
+          <a href="">View all attendees</a>
+        </div>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
@@ -259,4 +276,5 @@
     </div>
   </div>
 </div>
+-->
 

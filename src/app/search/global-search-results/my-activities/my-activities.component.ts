@@ -3,6 +3,7 @@ import {UserService} from "../../../user/user.service";
 import {ActivatedRoute, Params} from "@angular/router";
 import {Task} from 'app/task/task.model';
 import {SearchService} from "../../search.service";
+import {TaskService} from "../../../task/task.service";
 declare var $: any;
 
 @Component({
@@ -18,9 +19,17 @@ export class MyActivitiesComponent implements OnInit {
 
   public taskToView:Task = null;
 
+  protected pageSize: number = 4;
+  protected numberOfPages: number = 1;
+  protected totalCount: number = 0;
+  public pagesList: number[] = [];
+  protected filteredTasksPage: Task[] = [];
+  protected currentPage: number = 1;
+
   constructor(private userService:UserService,
               private route:ActivatedRoute,
-              private searchService:SearchService) { }
+              private searchService:SearchService,
+              private taskService:TaskService) { }
 
   ngOnInit() {
     this.userUid = this.userService.getLoggedInUser().userUid;
@@ -35,6 +44,12 @@ export class MyActivitiesComponent implements OnInit {
     this.searchService.loadUserTasksUsingSearchTerm(this.userUid,searchTerm).subscribe(resp => {
         console.log("Response....................",resp);
         this.userTasksFiltered = resp;
+
+        this.filteredTasksPage = this.userTasksFiltered.slice(0,this.pageSize);
+        this.totalCount = this.userTasksFiltered.length;
+        this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+        this.currentPage = 1;
+        this.generatePageList(this.numberOfPages);
     });
   }
 
@@ -57,6 +72,32 @@ export class MyActivitiesComponent implements OnInit {
     }
 
     return false;
+  }
+
+  generatePageList(numberOfPages: number){
+    this.pagesList = [];
+    for(let i=1;i<=numberOfPages;i++){
+      this.pagesList.push(i);
+    }
+  }
+
+  goToPage(page: number){
+    this.currentPage = page;
+    this.filteredTasksPage = this.userTasksFiltered.slice(this.pageSize*(page-1), this.pageSize*page);
+  }
+
+  previousPage(){
+    if(this.currentPage != 1){
+      this.currentPage = this.currentPage-1;
+      this.goToPage(this.currentPage);
+    }
+  }
+
+  nextPage(){
+    if(this.currentPage != this.numberOfPages){
+      this.currentPage = this.currentPage+1;
+      this.goToPage(this.currentPage);
+    }
   }
 
 

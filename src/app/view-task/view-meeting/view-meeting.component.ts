@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Task} from "../../task/task.model";
 
 @Component({
   selector: 'app-view-meeting',
@@ -6,6 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./view-meeting.component.css']
 })
 export class ViewMeetingComponent implements OnInit {
+
+  @Input()
+  public taskToView:Task;
 
   constructor() { }
 
