@@ -4,6 +4,8 @@ import {ActivatedRoute, Params} from "@angular/router";
 import * as moment from 'moment';
 import {Chart} from 'chart.js';
 
+const CHART_COLORS = ["#c45850", "#3e95cd", "#3cba9f", "#8e5ea2", "#e8c3b9"];
+
 @Component({
   selector: 'app-campaign-stats',
   templateUrl: './campaign-stats.component.html',
@@ -13,6 +15,8 @@ export class CampaignStatsComponent implements OnInit {
 
   private campaignUid: string = null;
 
+  public selectedChannel: string = null;
+
   constructor(private campaignService: CampaignService,
               private route: ActivatedRoute) { }
 
@@ -20,6 +24,8 @@ export class CampaignStatsComponent implements OnInit {
     this.route.parent.params.subscribe((params: Params) => {
         this.campaignUid = params['id'];
         this.loadMemberJoinStats(moment().year(), moment().month() + 1);
+        this.loadConversionRates();
+        this.loadChannelEngagement();
     });
 
   }
@@ -35,7 +41,6 @@ export class CampaignStatsComponent implements OnInit {
       timeUnits.forEach(
         tu => values.push(results[tu])
       );
-
       const chart = new Chart('memberGrowthChart', {
         type: 'line',
 
@@ -65,6 +70,132 @@ export class CampaignStatsComponent implements OnInit {
         }
       });
     });
+  }
+
+  public loadConversionRates() {
+
+    this.campaignService.fetchConversionStats(this.campaignUid).subscribe(results => {
+      console.log("conversion rates: ", results);
+
+      let funnelStages = Object.keys(results);
+      let stageNames = [];
+      let counts: number[] = [];
+      let colors: string[] = [];
+
+      let i = 0;
+      funnelStages.forEach(fs => {
+          counts.push(results[fs]);
+          colors.push(CHART_COLORS[i % CHART_COLORS.length]);
+          // let pName = UserProvince[tu];
+          // pName = pName ? pName : "Other";
+          stageNames.push(fs);
+          i++;
+        }
+      );
+
+
+      const chart = new Chart('conversionRatesChart', {
+        type: 'doughnut',
+
+        data: {
+          labels: stageNames,
+          datasets: [
+            {
+              data: counts,
+              backgroundColor: colors,
+            }
+          ]
+        },
+        options: {
+          legend: {
+            position: 'bottom',
+            display: true
+          }
+        }
+      });
+    })
+  }
+
+  public loadChannelEngagement() {
+    this.campaignService.fetchChannelStats(this.campaignUid).subscribe(results => {
+      console.log("engagement channels: ", results);
+      let channels = Object.keys(results);
+      let channelNames = [];
+      let counts: number[] = [];
+      let colors: string[] = [];
+
+      let i = 0;
+      channels.forEach(channel => {
+          counts.push(results[channel]);
+          colors.push(CHART_COLORS[i % CHART_COLORS.length]);
+          // let pName = UserProvince[tu];
+          // pName = pName ? pName : "Other";
+          channelNames.push(channel);
+          i++;
+        }
+      );
+
+      const chart = new Chart('engagementPieChart', {
+        type: 'doughnut',
+
+        data: {
+          labels: channelNames,
+          datasets: [
+            {
+              data: counts,
+              backgroundColor: colors,
+            }
+          ]
+        },
+        options: {
+          legend: {
+            position: 'bottom',
+            display: true
+          }
+        }
+      });
+    })
+  }
+
+  public loadProvinceEngagement() {
+    this.campaignService.fetchProvinceStats(this.campaignUid).subscribe(results => {
+      console.log("province stats: ", results);
+      let provinces = Object.keys(results);
+      let provinceNames = [];
+      let counts: number[] = [];
+      let colors: string[] = [];
+
+      let i = 0;
+      provinces.forEach(province => {
+          counts.push(results[province]);
+          colors.push(CHART_COLORS[i % CHART_COLORS.length]);
+          // let pName = UserProvince[tu];
+          // pName = pName ? pName : "Other";
+          provinceNames.push(province);
+          i++;
+        }
+      );
+
+      const chart = new Chart('engagementPieChart', {
+        type: 'doughnut',
+
+        data: {
+          labels: provinceNames,
+          datasets: [
+            {
+              data: counts,
+              backgroundColor: colors,
+            }
+          ]
+        },
+        options: {
+          legend: {
+            position: 'bottom',
+            display: true
+          }
+        }
+      });
+    })
   }
 
 }

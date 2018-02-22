@@ -18,6 +18,10 @@ export class CampaignService {
   campaignMessageSetUrl = environment.backendAppUrl + "/api/campaign/manage/messages/set";
 
   statsMemberGrowthUrl = environment.backendAppUrl + "/api/campaign/stats/member-growth";
+  statsConversionUrl = environment.backendAppUrl + "/api/campaign/stats/conversion";
+  statsChannelsUrl = environment.backendAppUrl + "/api/campaign/stats/channels";
+  statsProvincesUrl = environment.backendAppUrl + "/api/campaign/stats/provinces";
+  statsEngagementUrl = environment.backendAppUrl + "/api/campaign/stats/engagement";
 
 
   private _campaigns: CampaignInfo[];
@@ -81,10 +85,8 @@ export class CampaignService {
   }
 
   fetchMemberGrowthStats(campaignUid: string, year: number, month: number): Observable<any> {
-
     const fullUrl = this.statsMemberGrowthUrl;
-    let params = new HttpParams()
-      .set("campaignUid", campaignUid);
+    let params = new HttpParams().set("campaignUid", campaignUid);
 
     if (year)
       params = params.set("year", year.toString());
@@ -93,9 +95,30 @@ export class CampaignService {
       params = params.set("month", month.toString());
 
     return this.httpClient.get<any>(fullUrl, {params: params});
-
   }
 
+  fetchConversionStats(campaignUid: string) {
+    const fullUrl = this.statsConversionUrl;
+    let params = new HttpParams().set("campaignUid", campaignUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
 
+  fetchChannelStats(campaignUid: string) {
+    const fullUrl = this.statsChannelsUrl;
+    let params = new HttpParams().set("campaignUid", campaignUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
+  fetchProvinceStats(campaignUid: string) {
+    const fullUrl = this.statsProvincesUrl;
+    let params = new HttpParams().set("campaignUid", campaignUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
+  fetchActivityStats(campaignUid: string) {
+    const fullUrl = this.statsChannelsUrl;
+    let params = new HttpParams().set("campaignUid", campaignUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
 
 }
