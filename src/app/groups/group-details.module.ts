@@ -20,6 +20,7 @@ import {RouterModule} from "@angular/router";
 import {LoggedInServicesModule} from "../logged-in-services.module";
 import {SharedModule} from "../shared.module";
 import {MemberTopicsManageComponent} from "./group-details/group-members/member-topics-manage/member-topics-manage.component";
+import {GroupCopyMembersComponent} from "./group-details/group-members/group-copy-members/group-copy-members.component";
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import {MemberTopicsManageComponent} from "./group-details/group-members/member-
     GroupAddMemberComponent,
     CreateTaskTeamComponent,
     AddToTaskTeamComponent,
-    MemberTopicsManageComponent
+    MemberTopicsManageComponent,
+    GroupCopyMembersComponent
   ]
 })
 export class GroupDetailsModule {

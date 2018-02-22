@@ -1,0 +1,65 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="{{ modalId }}" aria-hidden="true" *ngIf="groups">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.allMembers.copyMembers.modalTitle' | translate }}</h5>
+        <button type="button" class="close" (click)="cancelOrClose()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="members">
+        <div class="container group-info-header d-none d-md-block">
+          <div class="row">
+            <div class="col-3" [translate]="'group.allMembers.copyMembers.table.name'">Name</div>
+            <div class="col-3" [translate]="'group.allMembers.copyMembers.table.role'">Role</div>
+            <div class="col-3" [translate]="'group.allMembers.copyMembers.table.phone'">Phone</div>
+            <div class="col-3" [translate]="'group.allMembers.copyMembers.table.email'">email</div>
+          </div>
+        </div>
+        <div class="container group-info-row" *ngFor="let member of members">
+          <div class="row flex flex-wrap">
+            <div class="col-3">
+              {{member.user.displayName}}
+            </div>
+            <div class="col-3">
+              {{'enum.GroupRole.' + member.roleName | translate}}
+            </div>
+            <div class="col-3">
+              {{member.nationalNumber()}}
+            </div>
+            <div class="col-3">
+              {{member.user.email}}
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div class="row mt-3" *ngIf="groups.length > 0">
+            <div class="col-md-6 col-sm-12">
+              <h4 [translate]="'group.allMembers.copyMembers.copyToGroupLabel'">Copy to group:</h4>
+            </div>
+          </div>
+
+          <div class="row mt=3" *ngIf="groups.length > 0">
+            <div class="col-md-6 col-sm-12">
+              <select class="form-control form-control-em" [(ngModel)]="selectedGroup">
+                <option [ngValue]="null">{{'group.allMembers.copyMembers.pickGroup' | translate}}</option>
+                <option class="dropdown-item group-name" *ngFor="let group of groups" [ngValue]="group">{{group.name}}</option>
+              </select>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary save-button" (click)="saveCopyMemberToGroup()"
+                [disabled]="!selectedGroup">
+          {{ 'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary cancel-button" (click)="cancelOrClose()">
+          {{ 'action.cancel' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

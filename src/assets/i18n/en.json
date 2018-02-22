@@ -288,6 +288,7 @@
         "broadcast": "Send a broadcast",
         "topics": "Assign topics",
         "taskTeam": "Add to task team",
+        "copyToGroup": "Copy to group",
         "role": "Change role",
         "remove": "Remove",
         "noMembersSelectedModal": {
@@ -354,6 +355,18 @@
         "topics" : "Assign topic(s)",
         "taskTeam": "Add to task team",
         "remove": "Remove"
+      },
+      "copyMembers": {
+        "modalTitle": "Copy members to group",
+        "table":{
+          "name": "Name",
+          "role": "Role",
+          "phone": "Phone",
+          "email": "Email"
+        },
+        "copyToGroupLabel": "Copy to a group:",
+        "pickGroup": "Pick group to copy members to",
+        "addedDone": "Done, member(s) copied to group"
       },
       "addToTaskTeam":{
         "modalTitle": "Add member to task team",

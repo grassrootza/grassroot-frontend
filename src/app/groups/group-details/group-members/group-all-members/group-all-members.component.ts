@@ -6,6 +6,7 @@ import {Membership, MembersPage} from '../../../model/membership.model';
 import {Group} from '../../../model/group.model';
 import {AlertService} from "../../../../utils/alert.service";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
+import {GroupInfo} from "../../../model/group-info.model";
 
 declare var $: any;
 
@@ -26,6 +27,7 @@ export class GroupAllMembersComponent implements OnInit {
 
   bulkManageMembers: Membership[] = [];
   filterMembersPage: string[] = [];
+  groupsToCopyMembersTo: GroupInfo[] = [];
 
   constructor(private route: ActivatedRoute,
               private userService: UserService,
@@ -100,6 +102,19 @@ export class GroupAllMembersComponent implements OnInit {
     } else {
       console.log("bulk manage members: ", this.bulkManageMembers);
       $('#bulk-add-to-task-team').modal('show');
+    }
+  }
+
+  showBulkCopyToGroupModal(){
+    if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
+      $('#bulk-manage-no-members-selected').modal('show');
+    } else {
+      console.log("copy members to group: ", this.bulkManageMembers);
+      this.groupService.groupInfoList.subscribe(groups => {
+        this.groupsToCopyMembersTo = groups.filter(g => g.hasPermission("GROUP_PERMISSION_ADD_GROUP_MEMBER"));
+        $('#bulk-copy-members-to-group').modal('show');
+      });
+
     }
   }
 
