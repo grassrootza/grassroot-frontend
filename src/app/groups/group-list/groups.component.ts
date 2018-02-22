@@ -181,11 +181,11 @@ export class GroupsComponent implements OnInit {
   }
 
   sortByGroupName(pinned: boolean): void {
-    let sortedList: any[];
+    let sortedList: GroupInfo[] = [];
     if(pinned){
-      sortedList = this.pinnedGroups;
+      this.pinnedGroups.forEach(pg => sortedList.push(pg));
     } else {
-      sortedList = this.filteredGroups;
+      this.filteredGroups.forEach(ft => sortedList.push(ft));
     }
     this.resetPinnedSortIcons();
     this.resetSortIcons();
@@ -239,14 +239,17 @@ export class GroupsComponent implements OnInit {
       this.generatePageList(this.numberOfPages);
     }
 
+    console.log(this.filteredGroups);
+    console.log(sortedList);
+
   }
 
   sortByRoleName(pinned: boolean): void {
-    let sortedList: any[];
+    let sortedList: GroupInfo[] = [];
     if(pinned){
-      sortedList = this.pinnedGroups;
+      this.pinnedGroups.forEach(pg => sortedList.push(pg));
     } else {
-      sortedList = this.filteredGroups;
+      this.filteredGroups.forEach(ft => sortedList.push(ft));
     }
     this.resetPinnedSortIcons();
     this.resetSortIcons();
@@ -298,11 +301,11 @@ export class GroupsComponent implements OnInit {
   }
 
   sortByUpNext(pinned: boolean): void {
-    let sortedList: any[];
+    let sortedList: GroupInfo[] = [];
     if(pinned){
-      sortedList = this.pinnedGroups;
+      this.pinnedGroups.forEach(pg => sortedList.push(pg));
     } else {
-      sortedList = this.filteredGroups;
+      this.filteredGroups.forEach(ft => sortedList.push(ft));
     }
     this.resetPinnedSortIcons();
     this.resetSortIcons();
@@ -350,14 +353,16 @@ export class GroupsComponent implements OnInit {
       this.currentPage = 1;
       this.generatePageList(this.numberOfPages);
     }
+    console.log(this.filteredGroups);
+    console.log(sortedList);
   }
 
   sortByMembersCount(pinned: boolean): void {
-    let sortedList: any[];
+    let sortedList: GroupInfo[] = [];
     if(pinned){
-      sortedList = this.pinnedGroups;
+      this.pinnedGroups.forEach(pg => sortedList.push(pg));
     } else {
-      sortedList = this.filteredGroups;
+      this.filteredGroups.forEach(ft => sortedList.push(ft));
     }
     this.resetPinnedSortIcons();
     this.resetSortIcons();
@@ -415,8 +420,11 @@ export class GroupsComponent implements OnInit {
     this.currentPage = 1;
     this.pickedRoleFilter = '';
     this.generatePageList(this.numberOfPages);
-    $("#dropdownMenuButton").html('Select role');
+    $("#dropdownMenuButton").html('Select a role');
     $("#inlineKeywordPick").val("");
+
+    this.resetSortIcons();
+    this.resetPinnedSortIcons();
 
   }
 
