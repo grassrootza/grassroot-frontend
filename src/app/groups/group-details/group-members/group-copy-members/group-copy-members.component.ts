@@ -46,7 +46,7 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
         member.user.lastName,
         GroupRole.ROLE_ORDINARY_MEMBER,
         member.user.email,
-        UserProvince.ZA_EC,
+        UserProvince[member.user.province],
         member.affiliations,
         [],
         member.topics
@@ -60,7 +60,7 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
 
   }
 
-  alertAndCleanUp(alertMessage: string) {
+   alertAndCleanUp(alertMessage: string) {
     if (alertMessage) {
       this.alertService.alert(alertMessage);
     }

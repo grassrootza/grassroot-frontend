@@ -40,6 +40,7 @@
                 <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.broadcast'">Send broadcast</a>-->
                 <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.taskTeam'" (click)="addFilteredMembersToTaskTeam()">Assign topic</a>
                 <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.topics'" (click)="bulkManageTopics()">Add to task team</a>
+                <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.copyToGroup'" (click)="showBulkCopyToGroupModal()">Copy to group</a>
                 <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.role'">Change role</a>-->
                 <!--<a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showBulkRemoveModal()">Remove</a>-->
               </div>
@@ -65,3 +66,7 @@
 <app-member-topics-manage #bulkTopicManageModal *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
                           [group]="group" [members]="membersToManage" [modalId]="'bulk-member-assign-topics'" [selectId]="'bulk-topics-multi-select'"
                           (topicsAssigned)="refreshGroupDetails()"></app-member-topics-manage>
+
+<app-group-copy-members *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+                        [groups]="groupsToCopyMembersTo"  [members]="membersToManage" [modalId]="'bulk-copy-members-to-group'"
+                        (membersAdded)="refreshGroupDetails()"></app-group-copy-members>
