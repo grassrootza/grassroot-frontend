@@ -18,7 +18,7 @@ export class PublicMeetingsComponent implements OnInit {
   public meetings: Task[] = [];
   public taskToView: Task;
 
-  protected pageSize: number = 4;
+  protected pageSize: number = 10;
   protected numberOfPages: number = 1;
   protected totalCount: number = 0;
   public pagesList: number[] = [];

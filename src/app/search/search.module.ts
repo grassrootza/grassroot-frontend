@@ -13,6 +13,7 @@ import {PublicGroupsComponent} from "./global-search-results/public-groups/publi
 import {ViewMeetingComponent} from "../view-task/view-meeting/view-meeting.component";
 import {ViewTodoComponent} from "../view-task/view-todo/view-todo.component";
 import {ViewVoteComponent} from "../view-task/view-vote/view-vote.component";
+import {SharedModule} from "../shared.module";
 
 
 export const SEARCH_ROUTE: Routes = [
@@ -30,6 +31,7 @@ export const SEARCH_ROUTE: Routes = [
   imports: [
     CommonModule,
     LoggedInServicesModule,
+    SharedModule,
     NgbModule,
     RouterModule.forChild(SEARCH_ROUTE)
   ],
@@ -40,9 +42,7 @@ export const SEARCH_ROUTE: Routes = [
     MyCampaignsComponent,
     PublicGroupsComponent,
     PublicMeetingsComponent,
-    ViewMeetingComponent,
-    ViewTodoComponent,
-    ViewVoteComponent
+    ViewTodoComponent
   ]
 })
 export class SearchModule { }

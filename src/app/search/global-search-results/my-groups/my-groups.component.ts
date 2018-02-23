@@ -19,15 +19,12 @@ export class MyGroupsComponent implements OnInit {
   public groups:Group[] = [];
   public group:Group = null;
 
-  protected pageSize: number = 4;
+  protected pageSize: number = 10;
   protected numberOfPages: number = 1;
   protected totalCount: number = 0;
   public pagesList: number[] = [];
   protected filteredGroupsPage: Group[] = [];
   protected currentPage: number = 1;
-
-  @Output()
-  public onGroupClicked: EventEmitter<GroupInfo> = new EventEmitter();
 
   @Input()
   public groupInfo: GroupInfo = null;

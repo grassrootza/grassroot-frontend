@@ -6,6 +6,7 @@ import {ModuleWithProviders} from "@angular/compiler/src/core";
 import {TranslateModule, TranslatePipe} from "@ngx-translate/core";
 
 
+
 @NgModule({
   imports: [
     CommonModule,

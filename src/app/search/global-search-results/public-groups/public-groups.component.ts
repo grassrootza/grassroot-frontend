@@ -17,7 +17,7 @@ export class PublicGroupsComponent implements OnInit {
   public groups:Group[] = [];
 
 
-  protected pageSize: number = 4;
+  protected pageSize: number = 10;
   protected numberOfPages: number = 1;
   protected totalCount: number = 0;
   public pagesList: number[] = [];
