@@ -17,6 +17,13 @@ export class CampaignStatsComponent implements OnInit {
 
   public selectedChannel: string = null;
 
+  public activityDataDivision = "by_channel";
+  public activityTimePeriod = "this_week";
+
+  public timeUnitOptions = ['this_week', 'this_month', 'last_week', 'last_month', 'all_time'];
+
+  activityChart: any;
+
   constructor(private campaignService: CampaignService,
               private route: ActivatedRoute) { }
 
@@ -26,6 +33,7 @@ export class CampaignStatsComponent implements OnInit {
         this.loadMemberJoinStats(moment().year(), moment().month() + 1);
         this.loadConversionRates();
         this.loadChannelEngagement();
+        this.loadActivityStats();
     });
 
   }
@@ -196,6 +204,47 @@ export class CampaignStatsComponent implements OnInit {
         }
       });
     })
+  }
+
+  public loadActivityStats() {
+    this.campaignService.fetchActivityStats(this.campaignUid, this.activityDataDivision, this.activityTimePeriod).subscribe(result => {
+      console.log("result: ", result);
+
+      let timeUnits = result['TIME_UNITS'];
+      let i = 0;
+      let dataSets = [];
+
+      Object.keys(result).filter(dataType => dataType != 'TIME_UNITS').forEach(dataType => {
+        let dataset = {
+          label: dataType,
+          backgroundColor: CHART_COLORS[i % CHART_COLORS.length],
+          data: timeUnits.map(tu => result[dataType][tu])
+        };
+        dataSets.push(dataset);
+        i++;
+      });
+
+      console.log("data sets from result: ", dataSets);
+
+      let barChartData = {
+        labels: timeUnits,
+        datasets: dataSets
+      };
+
+      this.activityChart = new Chart('activityStackedChart', {
+        type: 'bar',
+        data: barChartData,
+        options: {
+          responsive: true,
+          scales: {
+            xAxes: [{stacked: true}],
+            yAxes: [{stacked: true}]
+          }
+        }
+      });
+
+    });
+
   }
 
 }

@@ -22,7 +22,8 @@ export class CampaignInfo {
               public campaignMessages: CampaignMsgServerDTO[],
               public smsSharingEnabled: boolean,
               public smsSharingBudget: number,
-              public smsSharingCost: number) {
+              public smsSharingCost: number,
+              public petitionConnected: boolean) {
   }
 
   public isActive(): boolean {
@@ -50,6 +51,7 @@ export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
     cp.campaignMessages ? cp.campaignMessages.map(getCampaignMsg) : [],
     cp.smsSharingEnabled,
     cp.smsSharingBudget,
-    cp.smsSharingCost
+    cp.smsSharingCost,
+    cp.petitionConnected
   );
 };

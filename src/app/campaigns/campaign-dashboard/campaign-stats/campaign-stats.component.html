@@ -48,15 +48,17 @@
         <div class="card-body">
           <div class="container">
             <div class="row">
-              <div class="col-12">
-                <h5 [translate]="'campaign.statistics.activity.title'">Activity</h5>
-                <select class="form-control-sm">
-                  <option [translate]="'campaign.statistics.activity.select_channel'"></option>
-                  <option [translate]="'campaign.statistics.activity.select_province'"></option>
+              <div class="col-12 form-inline">
+                <span [translate]="'campaign.statistics.activity.title'">Activity</span>
+                <select class="form-control-sm" [(ngModel)]="activityDataDivision" (ngModelChange)="loadActivityStats()">
+                  <option [translate]="'campaign.statistics.activity.select_channel'" [value]="'by_channel'"></option>
+                  <option [translate]="'campaign.statistics.activity.select_province'" [value]="'by_province'"></option>
                 </select>
-                <select class="form-control-sm">
-                  <option [translate]="'campaign.statistics.activity.time.this_week'">This week</option>
+                <select class="form-control-sm" [(ngModel)]="activityTimePeriod" (ngModelChange)="loadActivityStats()">
+                  <option *ngFor="let option of timeUnitOptions"
+                          [translate]="'campaign.statistics.activity.time.' + option" [value]="option">This week</option>
                 </select>
+                <canvas id="activityStackedChart" height="200" width="200"></canvas>
               </div>
             </div>
           </div>
@@ -65,14 +67,14 @@
     </div>
   </div>
 
-  <div class="row stats-panel">
+  <div class="row stats-panel" *ngIf="campaign?.petitionConnected">
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
           <div class="container">
             <div class="row">
               <div class="col-md-8 col-sm-12">
-                <!-- todo: amandla.mobi chart -->
+                <!-- todo: amandla.mobi chart & progress bar -->
                 <h5 [translate]="'campaign.statistics.petition.title'">Members growth</h5>
                 <canvas id="petitionTimeChart" height="200" width="400"></canvas>
               </div>
@@ -82,7 +84,7 @@
               </div>
             </div>
             <div class="row">
-              <!-- todo : static progress bar -->
+              <!-- progress bar -->
             </div>
           </div>
         </div>

@@ -21,7 +21,7 @@ export class CampaignService {
   statsConversionUrl = environment.backendAppUrl + "/api/campaign/stats/conversion";
   statsChannelsUrl = environment.backendAppUrl + "/api/campaign/stats/channels";
   statsProvincesUrl = environment.backendAppUrl + "/api/campaign/stats/provinces";
-  statsEngagementUrl = environment.backendAppUrl + "/api/campaign/stats/engagement";
+  statsActivityUrl = environment.backendAppUrl + "/api/campaign/stats/activity";
 
 
   private _campaigns: CampaignInfo[];
@@ -115,9 +115,10 @@ export class CampaignService {
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
 
-  fetchActivityStats(campaignUid: string) {
-    const fullUrl = this.statsChannelsUrl;
-    let params = new HttpParams().set("campaignUid", campaignUid);
+  fetchActivityStats(campaignUid: string, datasetDivision: string, timePeriod: string) {
+    const fullUrl = this.statsActivityUrl;
+    let params = new HttpParams().set("campaignUid", campaignUid)
+      .set("datasetDivision", datasetDivision).set("timePeriod", timePeriod);
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
 

@@ -769,6 +769,7 @@
         "select_province": "By province",
         "time": {
           "this_week": "This week",
+          "this_month": "This month",
           "last_week": "Last week",
           "last_month": "Last month",
           "all_time": "All time",
