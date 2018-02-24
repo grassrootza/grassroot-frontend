@@ -7,36 +7,42 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" *ngIf="members">
-        <div class="container group-info-header d-none d-md-block">
-          <div class="row">
-            <div class="col-3" [translate]="'group.allMembers.copyMembers.table.name'">Name</div>
-            <div class="col-3" [translate]="'group.allMembers.copyMembers.table.role'">Role</div>
-            <div class="col-3" [translate]="'group.allMembers.copyMembers.table.phone'">Phone</div>
-            <div class="col-3" [translate]="'group.allMembers.copyMembers.table.email'">email</div>
-          </div>
-        </div>
-        <div class="container group-info-row" *ngFor="let member of members">
-          <div class="row flex flex-wrap">
-            <div class="col-3">
-              {{member.user.displayName}}
-            </div>
-            <div class="col-3">
-              {{'enum.GroupRole.' + member.roleName | translate}}
-            </div>
-            <div class="col-3">
-              {{member.nationalNumber()}}
-            </div>
-            <div class="col-3">
-              {{member.user.email}}
+      <div class="modal-body">
+        <div *ngIf="members.length <= 5">
+          <div class="container group-info-header d-none d-md-block">
+            <div class="row">
+              <div class="col-3" [translate]="'group.allMembers.copyMembers.table.name'">Name</div>
+              <div class="col-3" [translate]="'group.allMembers.copyMembers.table.role'">Role</div>
+              <div class="col-3" [translate]="'group.allMembers.copyMembers.table.phone'">Phone</div>
+              <div class="col-3" [translate]="'group.allMembers.copyMembers.table.email'">email</div>
             </div>
           </div>
+          <div class="container group-info-row" *ngFor="let member of members">
+            <div class="row flex flex-wrap">
+              <div class="col-3">
+                {{member.user.displayName}}
+              </div>
+              <div class="col-3">
+                {{'enum.GroupRole.' + member.roleName | translate}}
+              </div>
+              <div class="col-3">
+                {{member.nationalNumber()}}
+              </div>
+              <div class="col-3">
+                {{member.user.email}}
+              </div>
+            </div>
+          </div>
+
         </div>
+
 
         <div class="container">
           <div class="row mt-3" *ngIf="groups.length > 0">
             <div class="col-md-6 col-sm-12">
-              <h4 [translate]="'group.allMembers.copyMembers.copyToGroupLabel'">Copy to group:</h4>
+              <h4 *ngIf="members.length <= 5" [translate]="'group.allMembers.copyMembers.copyToGroupLabel'">Copy to group:</h4>
+              <h4 *ngIf="members.length > 5" [translate]="'group.allMembers.copyMembers.copyCountMembers'"
+                  [translateParams]="{count: members.length}">Copy X members to group:</h4>
             </div>
           </div>
 

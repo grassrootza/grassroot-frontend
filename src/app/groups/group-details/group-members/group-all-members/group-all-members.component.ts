@@ -111,7 +111,8 @@ export class GroupAllMembersComponent implements OnInit {
     } else {
       console.log("copy members to group: ", this.bulkManageMembers);
       this.groupService.groupInfoList.subscribe(groups => {
-        this.groupsToCopyMembersTo = groups.filter(g => g.hasPermission("GROUP_PERMISSION_ADD_GROUP_MEMBER"));
+        this.groupsToCopyMembersTo = groups.filter(g => g.hasPermission("GROUP_PERMISSION_ADD_GROUP_MEMBER")
+          && g.groupUid !== this.group.groupUid);
         $('#bulk-copy-members-to-group').modal('show');
       });
 

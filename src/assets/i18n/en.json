@@ -366,6 +366,7 @@
         },
         "copyToGroupLabel": "Copy to a group:",
         "pickGroup": "Pick group to copy members to",
+        "copyCountMembers": "Copy {{count}} members to group",
         "addedDone": "Done, member(s) copied to group"
       },
       "addToTaskTeam":{
@@ -648,6 +649,9 @@
     },
     "taskTeam": {
       "addNew": "Add task team",
+      "rename": "Rename",
+      "copyMembers": "Copy members",
+      "remove": "Remove task team",
       "title": "Create new task team",
       "name": "Give this task team a name",
       "numberOfMembers": "Number of members that will be added:",

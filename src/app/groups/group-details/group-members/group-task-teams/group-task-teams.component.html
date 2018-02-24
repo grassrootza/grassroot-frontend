@@ -22,7 +22,8 @@
           <h3 class="d-inline-block">Task Team</h3>
           <div class="task-team-count d-inline-block">/// {{selectedSubGroup.memberCount}}</div>
           <div class="task-team-label d-inline-block" *ngIf="!editingName">{{selectedSubGroup.name}}</div>
-          <div class="btn btn-secondary d-inline-block" *ngIf="!editingName" (click)="initiateTaskTeamRename()">Rename</div>
+          <div class="btn btn-secondary d-inline-block" *ngIf="!editingName" (click)="initiateTaskTeamRename()">{{ 'group.taskTeam.rename' | translate }}</div>
+          <div class="btn btn-secondary d-inline-block" *ngIf="!editingName" (click)="initiateTaskTeamCopyMembers()">{{ 'group.taskTeam.copyMembers' | translate }}</div>
           <div class="form-inline d-inline-block" *ngIf="editingName" >
             <div class="input-group">
               <input class="form-control" type="text" [(ngModel)]="editedName" value="{{selectedSubGroup.name}}"
@@ -36,7 +37,7 @@
           </div>
         </div>
         <div class="col-md-3 col-sm-3 pull-right">
-          <button class="btn btn-secondary float-right" (click)="initiateTaskTeamRemoval()">Remove task team</button>
+          <button class="btn btn-secondary float-right" (click)="initiateTaskTeamRemoval()">{{ 'group.taskTeam.remove' | translate }}</button>
         </div>
       </div>
     </div>
@@ -77,5 +78,8 @@
     </div>
   </div>
 </div>
+
+<app-group-copy-members *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+                        [groups]="groupsToCopyMembersTo"  [members]="membersToManage" [modalId]="'bulk-copy-members-to-group'"></app-group-copy-members>
 
 

@@ -3,9 +3,9 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {Group} from "../../../model/group.model";
 import {UserService} from "../../../../user/user.service";
 import {GroupService} from "../../../group.service";
-import {MembersPage} from "../../../model/membership.model";
-import {GroupRef} from "../../../model/group-ref.model";
+import {Membership, MembersPage} from "../../../model/membership.model";
 import {AlertService} from "../../../../utils/alert.service";
+import {GroupInfo} from "../../../model/group-info.model";
 
 declare var $:any;
 
@@ -19,6 +19,10 @@ export class GroupTaskTeamsComponent implements OnInit {
   public group: Group = null;
   public selectedSubGroup: Group = null;
   public currentPage: MembersPage = null;
+  groupsToCopyMembersTo: GroupInfo[] = [];
+  membersToManage: Membership[] = [];
+
+
 
   public editingName: boolean = false;
   public editedName: string = "";
@@ -90,6 +94,26 @@ export class GroupTaskTeamsComponent implements OnInit {
   initiateTaskTeamRename() {
     this.editedName = this.selectedSubGroup.name;
     this.editingName = true;
+  }
+
+  initiateTaskTeamCopyMembers() {
+    // TODO: change fetching all task team members, should implement method on server side for copy all members
+    this.groupService.fetchGroupMembers(this.selectedSubGroup.groupUid, 0, 1000, [])
+      .subscribe(
+        result => {
+          this.membersToManage = result.content;
+          console.log("copy members to group: " + this.membersToManage.length);
+          this.groupService.groupInfoList.subscribe(groups => {
+            this.groupsToCopyMembersTo = groups.filter(g => g.hasPermission("GROUP_PERMISSION_ADD_GROUP_MEMBER")
+              && g.groupUid !== this.group.groupUid && g.groupUid !== this.selectedSubGroup.groupUid);
+            $('#bulk-copy-members-to-group').modal('show');
+          });
+        }, error => {
+          console.log("Failed to load group members: ", error);
+          this.membersToManage = [];
+          this.alertService.hideLoading();
+        }
+      );
   }
 
   cancelTaskTeamRename() {
