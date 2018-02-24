@@ -11,11 +11,11 @@ import {UserService} from "../user/user.service";
 export class SearchService {
 
   private allUserTasksUrl = environment.backendAppUrl + "/api/search/userTasks";
-  private allUserGroupsUrl = environment.backendAppUrl + "/api/search/groups";
-  private userPublicGroupsUrl = environment.backendAppUrl + "/api/search/publicGroups";
+  private allUserGroupsUrl = environment.backendAppUrl + "/api/search/groups/private";
+  private userPublicGroupsUrl = environment.backendAppUrl + "/api/search/groups/public";
   private publicMeetingsUrl = environment.backendAppUrl + "/api/search/publicMeetings";
 
-  private joinGroupUrl = environment.backendAppUrl + "/api/search/join"
+  private joinGroupUrl = environment.backendAppUrl + "/api/search/join";
 
   constructor(private httpClient: HttpClient,
               private userService:UserService) {
@@ -28,23 +28,23 @@ export class SearchService {
       .map(resp => resp.map(task => Task.createInstanceFromData(task)));
   }
 
-  loadUserGroupsUsingSearchTerm(userUid:string,searchTerm:string):Observable<GroupInfo[]>{
-    let fullUrl = this.allUserGroupsUrl + "/" + userUid + "/" + searchTerm;
-    return this.httpClient.get<GroupInfo[]>(fullUrl)
+  loadUserGroupsUsingSearchTerm(searchTerm:string):Observable<GroupInfo[]>{
+    let fullUrl = this.allUserGroupsUrl;
+    let params = new HttpParams().set("searchTerm", searchTerm);
+    return this.httpClient.get<GroupInfo[]>(fullUrl, {params: params})
       .map(resp => resp.map(groupInfo => GroupInfo.createInstance(groupInfo)));
   }
 
-  loadUserGroups(userUid:string,searchTerm:string):Observable<Group[]>{
-    let fullUrl = this.allUserGroupsUrl + "/" + userUid + "/" + searchTerm;
-    return this.httpClient.get<Group[]>(fullUrl).map(resp => resp.map(grp => getGroupEntity(grp)));
+  loadUserGroups(searchTerm:string):Observable<Group[]>{
+    let fullUrl = this.allUserGroupsUrl;
+    let params = new HttpParams().set("searchTerm", searchTerm);
+    return this.httpClient.get<Group[]>(fullUrl, {params: params}).map(resp => resp.map(grp => getGroupEntity(grp)));
   }
 
-  loadPublicGroups(userUid:string,searchTerm:string):Observable<Group[]>{
-    let fullUrl = this.userPublicGroupsUrl + "/" + userUid + "/" + searchTerm;
-
-    let params = new HttpParams()
+  loadPublicGroups(searchTerm:string):Observable<Group[]>{
+    let fullUrl = this.userPublicGroupsUrl;
+    let params = new HttpParams().set("searchTerm", searchTerm)
       .set('searchByLocation',true + "");
-
     return this.httpClient.get<Group[]>(fullUrl,{params:params}).map(resp => resp.map(grp => getGroupEntity(grp)));
   }
 

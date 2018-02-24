@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SearchService} from "../../search.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {UserService} from "../../../user/user.service";
@@ -40,7 +40,7 @@ export class PublicGroupsComponent implements OnInit {
   }
 
   loadPublicGroups(searchTerm:string){
-    this.searchService.loadPublicGroups(this.userUid,this.searchTerm).subscribe(grps=>{
+    this.searchService.loadPublicGroups(this.searchTerm).subscribe(grps=>{
       console.log("Public Groups...................",grps);
       this.groups = grps;
 
