@@ -170,8 +170,12 @@ export class GroupService {
     return this.httpClient.get<Group>(fullUrl, {params: params}).map(getGroupEntity);
   }
 
-  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string,
-              pinGroup: boolean = true): Observable<GroupRef> {
+  createGroup(name: string,
+              description: string = "",
+              permissionTemplate: string = "CLOSED_GROUP",
+              reminderMinutes: number = 1440,
+              discoverable: string = "false",
+              pinGroup: boolean = false): Observable<GroupRef> {
 
     const fullUrl = this.groupCreateUrl;
 

@@ -9,7 +9,7 @@ import {CampaignBroadcastsComponent} from "./campaign-broadcasts/campaign-broadc
 export const CAMPAIGN_DASHBOARD_ROUTES: Routes = [
   {path: '', component: CampaignDashboardComponent, canActivate: [LoggedInGuard],
     children: [
-      {path: '', redirectTo:'messages', pathMatch: 'full'},
+      {path: '', redirectTo:'analyze', pathMatch: 'full'},
       {path: 'analyze', component: CampaignStatsComponent, canActivate: [LoggedInGuard]},
       {path: 'messages', component: CampaignMessagesComponent, canActivate: [LoggedInGuard]},
       {path: 'broadcasts', component: CampaignBroadcastsComponent, canActivate: [LoggedInGuard]},

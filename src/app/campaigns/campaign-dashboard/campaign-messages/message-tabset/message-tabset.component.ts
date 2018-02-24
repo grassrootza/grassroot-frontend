@@ -11,25 +11,35 @@ import "rxjs/add/operator/debounceTime"
 })
 export class MessageTabsetComponent implements OnInit, OnChanges {
 
+  private MAX_MESSAGE_LENGTH = 160;
+
   @Input() titleKey: string;
   @Input() blockIndex: number;
   @Input() placeHolderKey: string;
   @Input() responseOptions: string[];
 
   @Input() languages: Language[];
+  @Input() priorMessages: Map<string, string>;
 
   private _campaignMsgs: Map<string, string>;
   @Output() messagesUpdated = new EventEmitter<Map<string, string>>();
 
   formGroup: FormGroup;
+  formGroupSetup: boolean = false;
+  public charsLeft: number[] = [];
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this._campaignMsgs = new Map<string, string>();
     this.formGroup = this.fb.group({});
-    this.languages.forEach(language =>
-      this.formGroup.addControl(language.threeDigitCode, this.fb.control('', Validators.required))
+
+    this.languages.forEach(language => {
+        let value = (this.priorMessages && this.priorMessages.has(language.threeDigitCode)) ? this.priorMessages.get(language.threeDigitCode) : '';
+        this.formGroup.addControl(language.threeDigitCode, this.fb.control(value, Validators.required));
+        this.charsLeft[language.threeDigitCode] = this.MAX_MESSAGE_LENGTH - value.length;
+        this.formGroupSetup = true;
+      }
     );
 
     this.formGroup.valueChanges.debounceTime(300)
@@ -39,7 +49,7 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!changes['languages'].firstChange) {
+    if (changes['languages'] && !changes['languages'].firstChange) {
       let oldLanguages = changes['languages'].previousValue;
       let removedLanguages = oldLanguages.filter(lang => this.languages.indexOf(lang) == -1);
       let addedLanguages = this.languages.filter(lang => oldLanguages.indexOf(lang) == -1);
@@ -51,11 +61,28 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
         this._campaignMsgs.delete(lang.threeDigitCode);
       });
     }
+
+    if (changes['priorMessages'] && !changes['priorMessages'].firstChange && this.formGroupSetup) {
+      this.setMessages(this.priorMessages);
+    }
+  }
+
+  private setMessages(messages: Map<string, string>) {
+    this.languages.forEach(language => {
+        let value = (this.priorMessages && this.priorMessages.has(language.threeDigitCode)) ? this.priorMessages.get(language.threeDigitCode) : '';
+        this.formGroup.controls[language.threeDigitCode].setValue(value);
+        this.charsLeft[language.threeDigitCode] = this.MAX_MESSAGE_LENGTH - value.length;
+      }
+    );
   }
 
   private emitMessages(values: any) {
     Object.keys(values).forEach(key => this._campaignMsgs.set(key, values[key]));
     this.messagesUpdated.emit(this._campaignMsgs);
+  }
+
+  updateCharCount(event, languageCode) {
+    this.charsLeft[languageCode] = this.MAX_MESSAGE_LENGTH - event.target.value.length;
   }
 
 }

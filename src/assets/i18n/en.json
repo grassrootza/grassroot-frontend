@@ -49,6 +49,11 @@
       "FILE_IMPORT": "File import",
       "ADDED_SUBGROUP": "Subgroup",
       "COPIED_INTO_GROUP": "Copied"
+    },
+    "CampaignType": {
+      "PETITION": "Petition",
+      "ACQUISITION": "Acquisition",
+      "INFORMATION": "Information"
     }
   },
 
@@ -283,6 +288,7 @@
         "broadcast": "Send a broadcast",
         "topics": "Assign topics",
         "taskTeam": "Add to task team",
+        "copyToGroup": "Copy to group",
         "role": "Change role",
         "remove": "Remove",
         "noMembersSelectedModal": {
@@ -349,6 +355,22 @@
         "topics" : "Assign topic(s)",
         "taskTeam": "Add to task team",
         "remove": "Remove"
+      },
+      "copyMembers": {
+        "modalTitle": "Copy members to group",
+        "table":{
+          "name": "Name",
+          "role": "Role",
+          "phone": "Phone",
+          "email": "Email"
+        },
+        "copyToGroupLabel": "Copy to a group:",
+        "pickGroup": "Pick group to copy members to",
+        "copyCountMembers": "Copy {{count}} members to group",
+        "addedDone": "Done, member(s) copied to group",
+        "copyToNewGroup": "Create group",
+        "newGroupName": "Enter group name",
+        "error": "Sorry, there was an error copying the members, please try again later"
       },
       "addToTaskTeam":{
         "modalTitle": "Add member to task team",
@@ -630,6 +652,9 @@
     },
     "taskTeam": {
       "addNew": "Add task team",
+      "rename": "Rename",
+      "copyMembers": "Copy members",
+      "remove": "Remove task team",
       "title": "Create new task team",
       "name": "Give this task team a name",
       "numberOfMembers": "Number of members that will be added:",
@@ -651,7 +676,7 @@
       "masterGroup": "Master Group: ",
       "engaged": "engaged with this campaign",
       "joined": "joined group",
-      "viewCampaign": "View"
+      "viewCampaign": "View Campaign"
     }
   },
   "campaign": {
@@ -727,13 +752,54 @@
       "creationInfo": "{{ creatingUserName }} on {{ createdDate }}",
       "typeLabel": "Campaign type: "
     },
+    "statistics": {
+      "members": {
+        "title": "Members opting in to group through campaign",
+        "prior": "Prior members",
+        "opted_out": "Opted out of joining",
+        "joined": "Joined",
+        "engaged": "Interacted",
+        "conversion": "{{ conversionRate }}% Conversion"
+      },
+      "engagement": {
+        "title": "Campaign Engagement",
+        "topic": "Topic Interest: {{ channel }}",
+        "count_total": "People Engaged",
+        "count_spec": "People via {{ desc }}",
+        "view": "View by: ",
+        "channels": "Channels",
+        "provinces": "Provinces"
+      },
+      "activity": {
+        "title": "Activity",
+        "select_channel": "By channel",
+        "select_province": "By province",
+        "time": {
+          "this_week": "This week",
+          "this_month": "This month",
+          "last_week": "Last week",
+          "last_month": "Last month",
+          "all_time": "All time",
+          "custom": "Custom"
+        }
+      },
+      "petition": {
+        "title": "Petition Results",
+        "conversion": "Conversion",
+        "signed": "Signed Petition",
+        "progress": "of {{ target }} signatures"
+      }
+    },
     "messages": {
       "title": "Customize your message responses for: ",
       "actions": {
         "options": "Response options: ",
-        "sign": "Sign petition",
-        "more": "More info",
-        "exit": "Exit",
+        "SIGN_PETITION": "Sign petition",
+        "JOIN_GROUP": "Join us",
+        "TAG_ME": "Choose interests",
+        "MORE_INFO": "More info",
+        "EXIT_POSITIVE": "Exit",
+        "EXIT_NEGATIVE": "Exit",
         "info": "Information requested from user",
         "name": "Name",
         "province": "Province",
@@ -749,38 +815,49 @@
         "modal-sub": "Choose up to 5 languages",
         "error": "Please select at least one language"
       },
-      "initial": {
-        "title": "Initial Response",
-        "placeholder": "The SA National Department of Health (NDOH) is establishing the National Health Insurance (NHI) to achieve universal access to quality health care for all who live in South Africa."
+      "titles": {
+        "OPENING": "Initial Response",
+        "MORE_INFO": "More Info",
+        "SIGN_PETITION": "Sign Petition",
+        "JOIN_GROUP": "Join Us",
+        "TAG_ME": "Choose Interests",
+        "SHARE": "Share Screen",
+        "EXIT_POSITIVE": "Positive Exit",
+        "EXIT_NEGATIVE": "Negative Exit"
       },
-      "more": {
-        "title": "More Info",
-        "placeholder": "We welcome the commitment from the NDOH to a NHI based on principles of equity, health as a right and redress of past inequalities"
-      },
-      "join": {
-        "title": "Join Us",
-        "placeholder": "Thanks for participating. Let's get your details to tell you about future events and campaigns"
-      },
-      "sign": {
-        "title": "Sign Petition",
-        "placeholder": "Thanks for participating. Let's get your details to tell you about future events and campaigns"
-      },
-      "share": {
-        "title": "Share Screen",
-        "placeholder": "Thank you for joining forces with us. If you want to share this with others please type their number"
-      },
-      "exit_positive": {
-        "title": "Positive exit",
-        "placeholder": "Thank you for joining forces with us! We hope to see you soon at one of our events"
-      },
-      "exit_negative": {
-        "title": "Negative exit",
-        "placeholder": "Thank you for engaging our campaign, and we hope you will join us in the future"
+      "placeholders": {
+        "OPENING": "The SA National Department of Health (NDOH) is establishing the National Health Insurance (NHI) to achieve universal access to quality health care for all who live in South Africa.",
+        "MORE_INFO": "We welcome the commitment from the NDOH to a NHI based on principles of equity, health as a right and redress of past inequalities.",
+        "SIGN_PETITION": "Thanks for participating. Let's get your details to tell you about future events and campaigns",
+        "JOIN_GROUP": "Thanks for joining us. Let's get your details to tell you about future events and campaigns",
+        "TAG_ME": "Thanks for participating. Let's get your details to tell you about future events and campaigns",
+        "SHARE": "Thank you for joining forces with us. If you want to share this with others please type their number",
+        "EXIT_POSITIVE": "Thank you for joining forces with us! We hope to see you soon at one of our events",
+        "EXIT_NEGATIVE": "Thank you for engaging our campaign, and we hope you will join us in the future"
       },
       "done": {
         "success": "Done! The messages have been set",
         "error": "Sorry, there was an error updating"
       }
+    },
+    "settings": {
+      "title": "Update Campaign Settings",
+      "name": "Campaign Name/Title",
+      "description": "Description",
+      "image": "Campaign Image (optional)",
+      "image_remove": "Remove image",
+      "starts": "Campaign Ends: ",
+      "ends": "Ends: ",
+      "type": "Campaign Type:",
+      "group": "Master Group:",
+      "new": "Change to new group",
+      "existing": "Change to existing group",
+      "petition": "Amandla petition URL: ",
+      "sms_sharing": "Allow SMS sharing: ",
+      "sms_limit": "SMS limit",
+      "cost": "Estimated cost: R ",
+      "landing": "Landing page: ",
+      "url": "URL"
     }
   },
   "broadcasts": {

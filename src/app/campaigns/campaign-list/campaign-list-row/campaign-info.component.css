@@ -1,30 +1,81 @@
 .campaign-info-row {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: 1rem 30px 0.5rem 10px;
   vertical-align: middle;
-  border-top: solid #ECEEF1 1px;
 }
 
 .campaign-name {
-  font-size: 20px;
+  font-size: 22px;
+  color: #4A4A4A;
+  font-family: Nunito;
+}
+
+.campaign-ends {
+  color: #4A4A4A;
+  font-family: Nunito;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 19px;
 }
 
 .campaign-details {
   font-size: 15px;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   padding-bottom: 1rem;
   border-top: none;
 }
 
 .campaign-details .master-group-name {
-  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.campaign-details .master-group-prefix {
+  font-weight: 600;
 }
 
 .campaign-details .campaign-description {
-  padding-top: 0.3rem
+  padding-top: 0.3rem;
+  color: #7A7D8C;
+  font-family: Nunito;
+  font-size: 15px;
+  line-height: 20px;
 }
 
 .campaign-details .view-campaign-btn {
   cursor: pointer;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  border: 1px solid #929BAF;
+  border-radius: 100px;
+  padding: 15px 40px;
+}
+
+.campaign-details .view-campaign-btn:hover {
+  background-color: #2CBC4C;
+  color: white;
+}
+
+.campaign-details .campaign-stats {
+  border: 1px solid #EBEDF0;
+  border-radius: 2px;
+  background-color: #F5F6FA;
+  padding: 10px;
+}
+
+.campaign-details .campaign-stats .count {
+  color: #2CBC4C;
+  font-family: Nunito;
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 32px;
+  text-align: center;
+}
+
+.campaign-details .campaign-stats .desc {
+  height: 16px;
+  color: #4A4A4A;
+  font-family: Nunito;
+  font-size: 14px;
+  font-weight: 600;
+  vertical-align: center;
+  padding-left: 8px;
+  text-transform: uppercase;
 }
