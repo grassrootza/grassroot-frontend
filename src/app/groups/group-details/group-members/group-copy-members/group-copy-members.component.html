@@ -36,7 +36,6 @@
 
         </div>
 
-
         <div class="container">
           <div class="row mt-3" *ngIf="groups.length > 0">
             <div class="col-md-6 col-sm-12">
@@ -46,7 +45,7 @@
             </div>
           </div>
 
-          <div class="row mt=3" *ngIf="groups.length > 0">
+          <div class="row mt-3" *ngIf="groups.length > 0">
             <div class="col-md-6 col-sm-12">
               <select class="form-control form-control-em" [(ngModel)]="selectedGroup">
                 <option [ngValue]="null">{{'group.allMembers.copyMembers.pickGroup' | translate}}</option>
@@ -55,11 +54,22 @@
             </div>
           </div>
 
+          <div class="row mt-3">
+            <div class="col-md-4 col-sm-12">
+              <button [ngClass]="['btn', (createNewGroup ? 'btn-primary' : 'btn-secondary'), 'create-group']"
+                      (click)="toggleCreateNewGroup()"><i class="fas fa-plus"></i> {{ 'group.allMembers.copyMembers.copyToNewGroup' | translate }}</button>
+            </div>
+            <div class="col-md-8 col-sm-12 pull-left text-left" *ngIf="createNewGroup">
+              <input class="form-control form-control-em" type="text" placeholder="{{ 'group.allMembers.copyMembers.newGroupName' | translate }}"
+                  [(ngModel)]="newGroupName" />
+            </div>
+          </div>
+
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary save-button" (click)="saveCopyMemberToGroup()"
-                [disabled]="!selectedGroup">
+        <button type="button" class="btn btn-primary save-button" (click)="performCopy()"
+                [disabled]="!selectedGroup && !newGroupName">
           {{ 'action.save' | translate }}
         </button>
         <button type="button" class="btn btn-secondary cancel-button" (click)="cancelOrClose()">

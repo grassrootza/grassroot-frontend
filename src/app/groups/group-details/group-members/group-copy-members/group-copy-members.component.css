@@ -1,19 +1,19 @@
-.create-team {
+.manage-link {
+  font-size: 1.1em;
+  text-decoration: underline;
+  text-align: right;
+}
+
+.create-group {
   padding: 5px 10px;
 }
 
-.create-team:hover {
+.create-group:hover {
   cursor: pointer;
   background: #26A041;
   color: white;
 }
 
-.task-team-name {
+.new-group-name {
   width: 100%;
-}
-
-.manage-link {
-  font-size: 1.1em;
-  text-decoration: underline;
-  text-align: right;
 }

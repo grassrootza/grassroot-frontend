@@ -367,7 +367,10 @@
         "copyToGroupLabel": "Copy to a group:",
         "pickGroup": "Pick group to copy members to",
         "copyCountMembers": "Copy {{count}} members to group",
-        "addedDone": "Done, member(s) copied to group"
+        "addedDone": "Done, member(s) copied to group",
+        "copyToNewGroup": "Create group",
+        "newGroupName": "Enter group name",
+        "error": "Sorry, there was an error copying the members, please try again later"
       },
       "addToTaskTeam":{
         "modalTitle": "Add member to task team",

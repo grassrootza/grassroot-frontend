@@ -25,6 +25,9 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
 
   selectedGroup: Group = null;
 
+  createNewGroup: boolean = false;
+  newGroupName: string = "";
+
   constructor(private groupService: GroupService,
               private alertService: AlertService) { }
 
@@ -36,7 +39,26 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
     // console.log("add to task team changed, members now: ", this.members);
   }
 
-  saveCopyMemberToGroup(){
+  toggleCreateNewGroup() {
+    this.createNewGroup = !this.createNewGroup;
+  }
+
+  performCopy() {
+    if (this.createNewGroup) {
+      // can take a bit longer, hence
+      this.alertService.showLoading();
+      this.groupService.createGroup(this.newGroupName).subscribe(group => {
+        this.saveCopyMemberToGroup(group.groupUid);
+      }, error2 => {
+        console.log("error creating new group, error body: ", error2);
+        this.alertAndCleanUp("group.allMembers.copyMembers.error");
+      })
+    } else {
+      this.saveCopyMemberToGroup();
+    }
+  }
+
+  saveCopyMemberToGroup(groupUid: string = null){
     let groupAddMemberInfo: GroupAddMemberInfo[] = [];
     this.members.forEach(member => {
       const memberInfo = new GroupAddMemberInfo(
@@ -53,14 +75,17 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
       );
       groupAddMemberInfo.push(memberInfo);
     });
-    this.groupService.confirmAddMembersToGroup(this.selectedGroup.groupUid, groupAddMemberInfo, "COPIED_INTO_GROUP").subscribe(resp => {
+    this.groupService.confirmAddMembersToGroup(groupUid ? groupUid : this.selectedGroup.groupUid, groupAddMemberInfo, "COPIED_INTO_GROUP").subscribe(resp => {
       console.log(resp);
       this.alertAndCleanUp("group.allMembers.copyMembers.addedDone");
+    }, error => {
+      this.alertAndCleanUp("group.allMembers.copyMembers.error");
     });
 
   }
 
    alertAndCleanUp(alertMessage: string) {
+    this.alertService.hideLoading();
     if (alertMessage) {
       this.alertService.alert(alertMessage);
     }
@@ -77,6 +102,7 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
 
   resetValues() {
     this.selectedGroup = null;
+    this.createNewGroup = false;
     this.members = [];
   }
 
