@@ -33,6 +33,8 @@ import {CampaignService} from "./campaigns/campaign.service";
 import {BroadcastService} from "./broadcasts/broadcast.service";
 import {ANIMATION_TYPES, LoadingModule} from "ngx-loading";
 import {SearchService} from "./search/search.service";
+import {MeetingDetailsComponent} from "./task/meeting-details/meeting-details.component";
+import {LoggedInServicesModule} from "./logged-in-services.module";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -82,7 +84,8 @@ const routes: Routes = [
   },
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
   /*{path: 'search/global/:userUid',component:GlobalSearchResultsComponent},*/
-  {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]}
+  {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
+  {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]}
 ];
 
 @NgModule({
@@ -97,11 +100,13 @@ const routes: Routes = [
     PwdResetInitiateComponent,
     PwdResetValidateComponent,
     PwdResetNewComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    MeetingDetailsComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    LoggedInServicesModule,
     LoadingModule.forRoot({
       animationType: ANIMATION_TYPES.circleSwish, backdropBackgroundColour: 'rgba(0,0,0,0.2)',
         backdropBorderRadius: '4px', primaryColour: '#26A041', secondaryColour: '#2CBC4C'}

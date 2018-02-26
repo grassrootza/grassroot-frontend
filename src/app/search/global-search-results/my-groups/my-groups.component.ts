@@ -54,7 +54,7 @@ export class MyGroupsComponent implements OnInit {
   }
 
   loadUserGroups(searchTerm:string){
-    this.searchService.loadUserGroups(this.userUid,searchTerm).subscribe(grps =>{
+    this.searchService.loadUserGroups(searchTerm).subscribe(grps =>{
       this.groups = grps;
       console.log("Groups............",this.groups);
 

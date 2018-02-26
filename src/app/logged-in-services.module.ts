@@ -20,7 +20,6 @@ import {ViewVoteComponent} from "./view-task/view-vote/view-vote.component";
 
 import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row/campaign-info.component";
 
-
 @NgModule({
   imports: [
     CommonModule,

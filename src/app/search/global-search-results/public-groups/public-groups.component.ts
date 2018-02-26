@@ -40,7 +40,7 @@ export class PublicGroupsComponent implements OnInit {
   }
 
   loadPublicGroups(searchTerm:string){
-    this.searchService.loadPublicGroups(this.userUid,this.searchTerm).subscribe(grps=>{
+    this.searchService.loadPublicGroups(searchTerm).subscribe(grps=>{
       console.log("Public Groups...................",grps);
       this.groups = grps;
 
