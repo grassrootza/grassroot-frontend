@@ -1,0 +1,30 @@
+.navbar {
+  padding: 0 !important;
+  margin-bottom: 2rem;
+  /*border-bottom: solid #cccccc 2px !important;*/
+  margin-top: 2em;
+}
+
+.navbar-light .navbar-nav.main-nav .nav-link {
+  margin-right: 3rem !important;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  font-size: 20px;
+  font-weight: 300;
+  border-bottom: solid #cccccc 2px !important;
+}
+
+.navbar-light .navbar-nav .active > .nav-link {
+  color: #2CBC4C !important;
+  border-bottom: solid #2CBC4C 2px !important;
+}
+
+
+
+
+
+
+
+
+
+

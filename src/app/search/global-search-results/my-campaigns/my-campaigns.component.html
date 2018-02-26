@@ -1,0 +1,42 @@
+<div *ngIf="filteredCampaigns.length > 0" class="card">
+  <div class="card-body">
+    <span>{{filteredCampaigns.length}} Campaigns found</span>
+    <div class="container campaign-info-header">
+      <div class="row">
+        <div class="col-md-2 col-lg-2 d-block">Type</div>
+        <div class="col-md-4 col-lg-4 d-none d-md-block">Title</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">Group</div>
+        <div class="col-md-4 col-lg-4 d-none d-md-block">Ends</div>
+      </div>
+    </div>
+
+    <div class="container ">
+      <div *ngFor="let campaign of filteredCampaigns" class="row flex flex-wrap campaign-info-row">
+        <div class="col-2 col-lg-2">
+          <span class="font-weight-bold">
+            {{campaign.campaignType}}&nbsp;
+          </span>
+        </div>
+        <div class="col-4 col-lg-4">
+          <a href="" (click)="triggerViewTask(campaign)">{{campaign.description}}</a>
+        </div>
+        <div class="col-2 col-lg-2">
+          {{campaign.masterGroupName}}
+        </div>
+
+        <div class="col-4 col-lg-4">
+          {{campaign.campaignEndDate | date: 'hh:mm a on dd MMM yy'}}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="filteredCampaigns.length === 0" class="card">
+  <div class="card-body">
+    <span>{{filteredCampaigns.length}} Campaigns found</span>
+  </div>
+</div>
+
+

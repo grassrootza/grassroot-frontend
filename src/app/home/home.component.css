@@ -90,6 +90,7 @@
 .day-task .task-name {
   font-size: 1.2em;
   font-weight: bolder;
+  cursor: pointer;
 }
 
 .stared-groups, .active-campaigns {

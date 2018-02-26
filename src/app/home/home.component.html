@@ -4,9 +4,9 @@
   <div class="row">
     <div class="col-md-7 col-sm-12">
       <div class="input-group">
-        <input type="text" class="form-control search-bar" />
+        <input #searchTerm type="text" class="form-control search-bar" />
         <span class="input-group-btn">
-          <button class="btn btn-link search-addon"><i class="fa fa-search"></i> Search</button>
+          <button class="btn btn-link search-addon" (click)="searchGlobaly(searchTerm.value)"><i class="fa fa-search"></i> Search</button>
         </span>
       </div>
     </div>
@@ -170,3 +170,7 @@
 
 <app-create-todo [groupUid]="createTaskGroupUid"
                  (todoSaved)="todoSaved($event)"></app-create-todo>
+
+<app-view-meeting [taskToView]="taskToView"></app-view-meeting>
+
+<app-view-vote [taskToView]="taskToView"></app-view-vote>

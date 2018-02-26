@@ -44,6 +44,8 @@ export class HomeComponent implements OnInit {
   private newMembersLoadFinished = false;
   private groupsLoadFinished = false;
 
+  public taskToView:Task;
+
   constructor(private taskService: TaskService,
               private userService: UserService,
               private groupService: GroupService,
@@ -234,6 +236,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleTaskClick(task: Task): boolean {
+    this.taskToView = task;
     if (
       task.type == TaskType.TODO
       && task.todoType != TodoType.ACTION_REQUIRED
@@ -243,6 +246,15 @@ export class HomeComponent implements OnInit {
 
       this.toDoToRespond = task;
       $('#respond-todo-modal').modal("show");
+    }
+
+    switch (task.type){
+      case TaskType.MEETING:
+        $('#view-meeting-modal').modal("show");
+        break;
+      case TaskType.VOTE:
+        $('#view-vote-modal').modal("show");
+        break;
     }
     return false;
   }
@@ -286,5 +298,8 @@ export class HomeComponent implements OnInit {
     $("#create-todo-modal").modal("hide");
   }
 
-
+  searchGlobaly(searchTerm:string){
+    console.log("Search Term............>>>>>>>>",searchTerm);
+    this.router.navigate(["/search",searchTerm]);
+  }
 }

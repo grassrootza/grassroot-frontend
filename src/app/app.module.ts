@@ -32,6 +32,7 @@ import {NotificationService} from "./user/notification.service";
 import {CampaignService} from "./campaigns/campaign.service";
 import {BroadcastService} from "./broadcasts/broadcast.service";
 import {ANIMATION_TYPES, LoadingModule} from "ngx-loading";
+import {SearchService} from "./search/search.service";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -79,7 +80,9 @@ const routes: Routes = [
   {
     path: 'user', loadChildren: './user/user-profile.module#UserProfileModule', canActivate: [LoggedInGuard]
   },
-  {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]}
+  {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
+  /*{path: 'search/global/:userUid',component:GlobalSearchResultsComponent},*/
+  {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]}
 ];
 
 @NgModule({
@@ -135,7 +138,8 @@ const routes: Routes = [
     JoinService,
     IntegrationsService,
     TaskService,
-    PasswordResetService
+    PasswordResetService,
+    SearchService
   ],
   bootstrap: [AppComponent]
 })

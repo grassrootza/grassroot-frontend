@@ -1,0 +1,73 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="view-vote-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">VOTE</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div id="vote" class="ax_default label">
+          <div id="vote_div" class=""></div>
+          <div id="vote_text" class="text ">
+            <p style="font-size:14px;">
+              <span class="font-weight-bold">
+                <img [src]="'assets/' + taskToView?.getEventIconName() "/>&nbsp;&nbsp;
+              </span>
+              <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">{{taskToView?.createdByUserName + " called a vote: "}}</span>
+              <span style="font-family:'OpenSans', 'Open Sans';font-weight:400;color:#000000;">{{taskToView?.title}}</span></p>
+          </div>
+        </div>
+
+        <div id="group-name" class="ax_default label">
+          <div id="group-name-div" class=""></div>
+          <div id="group-name-text" class="text ">
+            <p><span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">Group: </span><span style="font-family:'OpenSans', 'Open Sans';font-weight:400;">{{taskToView?.parentName}}</span></p>
+          </div>
+        </div>
+
+        <div id="vote-date" class="ax_default label">
+          <div id="vote-date-div" class=""></div>
+          <div id="vote-date-text" class="text ">
+            <p><span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">Due: </span><span style="font-family:'OpenSans', 'Open Sans';font-weight:400;">{{taskToView?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}</span></p>
+          </div>
+        </div>
+
+        <div id="description" class="ax_default paragraph">
+          <div id="description-div" class=""></div>
+          <div id="description-text" class="text ">
+            <p>
+              <span>
+                {{taskToView?.description}}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div id="cast" class="ax_default label">
+          <div id="cast-div" class=""></div>
+          <div id="cast-text" class="text ">
+            <p>
+              <span>Cast your vote:</span>
+              <select>
+                <option>Yes</option>
+                <option>No</option>
+                <option>Abstain</option>
+              </select>
+            </p>
+          </div>
+        </div>
+
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">Cancel</button>
+        <button  type="button" class="btn btn-primary save-button" (click)="createGroup()">Cast vote
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
