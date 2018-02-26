@@ -9,6 +9,9 @@
       </div>
       <div class="modal-body">
 
+        <form [formGroup]="castVoteForm"
+              (ngSubmut)="castVote()">
+
         <div id="vote" class="ax_default label">
           <div id="vote_div" class=""></div>
           <div id="vote_text" class="text ">
@@ -46,27 +49,41 @@
           </div>
         </div>
 
-        <div id="cast" class="ax_default label">
+        <div *ngIf="!taskToView?.hasResponded" id="cast" class="ax_default label">
           <div id="cast-div" class=""></div>
           <div id="cast-text" class="text ">
             <p>
               <span>Cast your vote:</span>
-              <select>
-                <option>Yes</option>
-                <option>No</option>
-                <option>Abstain</option>
+              <select name="response" id="response"
+                      [formControl]="castVoteForm.controls['response']"
+                      (change)="selectResponse($event.target.value)">
+                <option value="YES">Yes</option>
+                <option value="NO">No</option>
+                <option value="ABSTAIN">Abstain</option>
               </select>
             </p>
           </div>
         </div>
 
+          <div *ngIf="taskToView?.hasResponded" id="responded" class="ax_default label">
+            <div id="responded-div" class=""></div>
+            <div id="responded-text" class="text ">
+              <p>
+                <span>You voted: {{voteResponse}}</span>
+
+              </p>
+            </div>
+          </div>
 
 
+
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">Cancel</button>
-        <button  type="button" class="btn btn-primary save-button" (click)="createGroup()">Cast vote
-        </button>
+        <div *ngIf="!taskToView?.hasResponded">
+          <button  type="button" class="btn btn-primary save-button" (click)="castVote()">Cast vote</button>
+        </div>
       </div>
     </div>
   </div>
