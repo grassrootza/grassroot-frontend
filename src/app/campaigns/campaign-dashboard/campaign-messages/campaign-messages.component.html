@@ -1,4 +1,4 @@
-<div class="col-12">
+<div class="col-12" *ngIf="campaign">
   <div class="row mb-md-3">
     <div class="col-md-5 col-sm-12 text-left" >
       <h3>{{ 'campaign.messages.title' | translate }}</h3>
@@ -6,43 +6,21 @@
         {{ 'campaign.messages.languages.link' | translate }}</button>
     </div>
     <div class="col-md-3 col-sm-12">
-      <h3>Petition</h3>
+      <h3>{{ 'enum.CampaignType.' + campaign.campaignType | translate }}</h3>
     </div>
     <div class="col-md-4 col-sm-12">
       <button class="btn btn-secondary preview-button float-right">{{ 'action.preview' | translate }}</button>
       <button class="btn btn-primary save-button float-right">{{ 'action.save' | translate }}</button>
     </div>
   </div>
-  <campaign-message-tabset blockIndex="1" titleKey="campaign.messages.initial.title" placeHolderKey="campaign.messages.initial.placeholder"
-                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'OPENING')"
-                           [responseOptions]="['campaign.messages.actions.sign', 'campaign.messages.actions.more']"></campaign-message-tabset>
 
-  <hr class="section-separator">
-
-  <campaign-message-tabset blockIndex="2" titleKey="campaign.messages.more.title" placeHolderKey="campaign.messages.more.placeholder"
-                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'MORE_INFO')"
-                           [responseOptions]="['campaign.messages.actions.sign', 'campaign.messages.actions.exit']"></campaign-message-tabset>
-
-  <hr class="section-separator">
-
-  <campaign-message-tabset blockIndex="3" titleKey="campaign.messages.sign.title" placeHolderKey="campaign.messages.sign.placeholder"
-                          [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'SIGN_PETITION')"
-                          [responseOptions]="['campaign.messages.actions.name', 'campaign.messages.actions.province']"></campaign-message-tabset>
-
-  <hr class="section-separator">
-
-  <campaign-message-tabset blockIndex="4" titleKey="campaign.messages.share.title" placeHolderKey="campaign.messages.share.placeholder"
-                          [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'SHARE')"></campaign-message-tabset>
-
-  <hr class="section-separator">
-
-  <campaign-message-tabset blockIndex="5" titleKey="campaign.messages.exit_positive.title" placeHolderKey="campaign.messages.share.placeholder"
-                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'EXIT_POSITIVE')"></campaign-message-tabset>
-
-  <hr class="section-separator">
-
-  <campaign-message-tabset blockIndex="6" titleKey="campaign.messages.exit_negative.title" placeHolderKey="campaign.messages.share.placeholder"
-                           [languages]="selectedLanguages" (messagesUpdated)="storeMessages($event, 'EXIT_NEGATIVE')"></campaign-message-tabset>
+  <div *ngFor="let type of messageTypes[campaign.campaignType]; let i = index">
+    <hr *ngIf="i > 0" class="section-separator" />
+    <campaign-message-tabset [blockIndex]="i+1" [languages]="selectedLanguages" [responseOptions]="messageSequences[this.campaign.campaignType][type]"
+                             (messagesUpdated)="storeMessages($event, type)" [priorMessages]="priorMessages[type]?.messages"
+                             [titleKey]="'campaign.messages.titles.' + type" [placeHolderKey]="'campaign.messages.placeholders.' + type">
+    </campaign-message-tabset>
+  </div>
 
   <div class="row mt-md-3">
     <div class="col-sm-12">

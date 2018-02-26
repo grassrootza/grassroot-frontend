@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {CampaignInfo} from "../model/campaign-info";
-import {environment} from "../../../environments/environment";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {CampaignService} from "../campaign.service";
-import {UserService} from "../../user/user.service";
+import {AlertService} from "../../utils/alert.service";
 
 @Component({
   selector: 'app-campaign-dashboard',
@@ -13,25 +12,36 @@ import {UserService} from "../../user/user.service";
 export class CampaignDashboardComponent implements OnInit {
 
   public campaign: CampaignInfo = null;
-  public currentTab: string = "messages";
-
-  public baseUrl: string = environment.backendAppUrl;
+  public currentTab: string = "analyze";
 
   constructor(private campaignService: CampaignService,
               private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService) {
+              private alertService: AlertService) {
   }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
       let campaignUid = params['id'];
       this.campaignService.loadCampaign(campaignUid).subscribe(campaignInfo => {
-        console.log("result: ", campaignInfo);
         this.campaign = campaignInfo;
+        this.alertService.hideLoadingDelayed();
       }, error2 => {
-        console.log("Error loading campaign", error2.status)
+        console.log("Error loading campaign", error2.status);
+        this.alertService.hideLoadingDelayed();
       })
+    });
+
+    this.router.events.subscribe(ev => {
+      if (ev instanceof NavigationEnd) {
+        if (this.campaign != null) {
+          let uri = ev.urlAfterRedirects;
+          let startIndex = uri.indexOf(this.campaign.campaignUid) + this.campaign.campaignUid.length + 1;
+          this.currentTab = uri.substring(startIndex);
+          if (this.currentTab.indexOf("/") >= 0)
+            this.currentTab = this.currentTab.substring(0, this.currentTab.indexOf("/"));
+        }
+      }
     });
   }
 

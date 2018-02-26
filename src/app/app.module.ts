@@ -44,7 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 const routes: Routes = [
 
-  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [LoggedInGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
