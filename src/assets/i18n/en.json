@@ -1032,7 +1032,18 @@
       "mismatch": "Sorry, your passwords do not match"
     },
     "account": {
-      "title": "Under construction"
+      "title": "Account settings",
+      "name": "Account name",
+      "billingEmail": "Billing email address",
+      "subscriptionOption": "Subscription option",
+      "billingPeriod": "Billing period",
+      "completed": "Done, your account has been updated",
+      "billingEmailNote": "* Invoices will be sent to billing user's email address",
+      "pastInvoices": "Past invoices",
+      "modal": {
+        "header": "Close account",
+        "body": "Are you sure you want to close this account?"
+      }
     },
     "integrations": {
       "title": "Integration settings",
@@ -1119,7 +1130,9 @@
     "copied": "Copied",
     "done": "Done",
     "insert": "Insert",
-    "view": "View"
+    "view": "View",
+    "download": "Download",
+    "closeAccount": "Close account"
   },
   "general": {
     "charsRemaining": "Characters remaining"

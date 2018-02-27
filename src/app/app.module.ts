@@ -32,6 +32,7 @@ import {NotificationService} from "./user/notification.service";
 import {CampaignService} from "./campaigns/campaign.service";
 import {BroadcastService} from "./broadcasts/broadcast.service";
 import {ANIMATION_TYPES, LoadingModule} from "ngx-loading";
+import {AccountService} from "./user/account.service";
 import {SearchService} from "./search/search.service";
 
 export function getJwtToken(): string {
@@ -139,6 +140,7 @@ const routes: Routes = [
     IntegrationsService,
     TaskService,
     PasswordResetService,
+    AccountService,
     SearchService
   ],
   bootstrap: [AppComponent]
