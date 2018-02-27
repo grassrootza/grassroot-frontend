@@ -83,7 +83,6 @@ const routes: Routes = [
     path: 'user', loadChildren: './user/user-profile.module#UserProfileModule', canActivate: [LoggedInGuard]
   },
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
-  /*{path: 'search/global/:userUid',component:GlobalSearchResultsComponent},*/
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
   {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]}
 ];

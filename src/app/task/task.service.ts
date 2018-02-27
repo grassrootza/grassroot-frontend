@@ -28,6 +28,8 @@ export class TaskService {
 
   private castVoteUrl = environment.backendAppUrl + "/api/vote/do";
   private viewVoteUrl = environment.backendAppUrl + "/api/vote/view";
+  private viewMeetingUrl = environment.backendAppUrl + "/api/meeting/view";
+  private meetingRsvpsUrl = environment.backendAppUrl + "/api/meeting/rsvps";
 
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
@@ -230,6 +232,15 @@ export class TaskService {
     return this.httpClient.get(fullUrl);
   }
 
+  viewMeeting(id:string,phoneNumber:string):Observable<any>{
+    let fullUrl = this.viewMeetingUrl + "/" + id + "/" + phoneNumber + "/+27";
+    return this.httpClient.get(fullUrl);
+  }
+
+  meetingRsvps(phoneNumber:string,id:string):Observable<any>{
+    let fullUrl = this.meetingRsvpsUrl + "/" + phoneNumber + "/+27/" + id;
+    return this.httpClient.get(fullUrl);
+  }
 
 
 }

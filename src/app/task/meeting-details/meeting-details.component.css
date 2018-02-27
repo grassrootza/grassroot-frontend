@@ -1,0 +1,42 @@
+.attendence-info-header {
+  background: #929292;
+  font-style: inherit;
+  color: #ffffff;
+  margin-top: 5%;
+}
+
+.attendence-info-row {
+  border-top: none;
+  border-bottom: none;
+  background-color: #F5F6FA;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 15px;
+  line-height: 16px;
+}
+
+.attendee-name{
+  font-weight: bold;
+}
+
+.meeting-title{
+  margin-bottom: 5%;
+}
+
+.assigned-members{
+  margin-top: 5%;
+  font-weight: bold;
+}
+
+.responses{
+  margin-top: 3%;
+  background-color: #E5E9F2;
+}
+
+.responses .header{
+  font-weight: bold;
+}
+
+.attendence-header{
+  margin-top: 5%;
+}

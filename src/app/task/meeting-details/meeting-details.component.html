@@ -1,7 +1,115 @@
 <div >
   <div class="card">
     <div class="card-body">
-      <h3>Meeting Details</h3>
+
+      <div id="title" class="meeting-title">
+        <h3>
+        <span>
+          <img [src]="'assets/' + meeting?.getEventIconName() "/>&nbsp;
+        </span>
+          <span>
+          Meeting:
+        </span>
+          <span>
+          {{meeting?.title}}
+        </span>
+        </h3>
+      </div>
+
+      <div id="date">
+        <p>
+          <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">
+            When:
+          </span>
+          <span>
+            {{meeting?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+          </span>
+        </p>
+      </div>
+
+      <div id="location">
+        <p>
+          <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">
+            Where:
+          </span>
+          <span>
+            {{meeting?.location}}
+          </span>
+        </p>
+      </div>
+
+      <div id="reminder">
+        <p>
+          <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">
+            Reminder:
+          </span>
+          <span>
+
+          </span>
+        </p>
+      </div>
+
+      <div id="description">
+        {{meeting?.description}}
+      </div>
+
+      <div class="row assigned-members">
+        <div class="col-md-6">Sent to({{assignedMembers}} Members)</div>
+      </div>
+
+      <div class="row responses">
+        <div class="col-md-3 header">Responses</div>
+        <div class="col-md-3"></div>
+        <div class="col-md-3"></div>
+        <div class="col-md-2"><img src="assets/members.png"/>{{assignedMembers}}</div>
+      </div>
+
+      <div class="container row">
+        <div class="col-3">
+          <div>Yes</div>
+          <div>No</div>
+          <div>Maybe</div>
+          <div>No Response</div>
+        </div>
+        <div class="col-3">
+
+        </div>
+        <div class="col-3">
+          <div>{{responseYes | number:'1.1-1'}}%</div>
+          <div>{{responsesNo | number:'1.1-1'}}%</div>
+          <div>{{responseMaybe | number:'1.1-1'}}%</div>
+          <div>{{noResponse | number:'1.1-1'}}%</div>
+        </div>
+        <div class="col-3">
+          <div class="col-md">{{totalYes}}</div>
+          <div class="col-md">{{totalNo}}</div>
+          <div class="col-md">{{totalMaybe}}</div>
+          <div class="col-md">{{totalNoResponse}}</div>
+        </div>
+      </div>
+
+      <div class="container attendence-header">
+        <h3>Attendence</h3>
+        <div class="container attendence-info-header">
+          <div class="row">
+            <div class="col-md-4 col-lg-4 d-block">Members</div>
+            <div class="col-md-2 col-lg-2 d-none d-md-block"></div>
+            <div class="col-md-2 col-lg-2 d-none d-md-block"></div>
+            <div class="col-md-4 col-lg-4 d-none d-md-block">Response</div>
+          </div>
+        </div>
+
+        <div class="container">
+          <div *ngFor="let rsvp of rsvps; let i = index" class="row attendence-info-row">
+            <div class="col-4 attendee-name">{{rsvp}}</div>
+            <div class="col-2"></div>
+            <div class="col-2"></div>
+            <div class="col-4">{{values[i]}}</div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 </div>
