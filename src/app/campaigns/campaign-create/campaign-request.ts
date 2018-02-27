@@ -15,6 +15,7 @@ export class CampaignRequest {
   smsLimit: number;
   landingPage: string = "";
   landingUrl: string = "";
+  joinTopics: string[] = [];
 
   imageKey: string = "";
 }

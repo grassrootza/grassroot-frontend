@@ -79,6 +79,14 @@
           </div>
         </div>
 
+        <div id="send-broadcast">
+          Send a broadcast message:
+          <div class="form-group">
+            <textarea class="form-control" [(ngModel)]="broadcastMessage"></textarea>
+            <button class="btn btn-secondary" (click)="sendBroadcastMessage()" [disabled]="!broadcastMessage">Send</button>
+          </div>
+        </div>
+
 
       </div>
       <div class="modal-footer">

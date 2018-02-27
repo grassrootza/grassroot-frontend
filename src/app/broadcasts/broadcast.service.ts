@@ -2,7 +2,12 @@ import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {
-  BroadcastConfirmation, BroadcastContent, BroadcastCost, BroadcastMembers, BroadcastRequest, BroadcastSchedule,
+  BroadcastConfirmation,
+  BroadcastContent,
+  BroadcastCost,
+  BroadcastMembers,
+  BroadcastRequest,
+  BroadcastSchedule,
   BroadcastTypes
 } from "./model/broadcast-request";
 import {DateTimeUtils} from "../utils/DateTimeUtils";
@@ -314,6 +319,12 @@ export class BroadcastService {
           )
         }
       )
+  }
+
+  sendMeetingBroadcast(meetingUid: string, message: string) {
+    const fullUrl = this.createUrlBase + "task/MEETING/" + meetingUid;
+    let params = new HttpParams().set("message", message);
+    return this.httpClient.post(fullUrl, null, {params: params});
   }
 
 }

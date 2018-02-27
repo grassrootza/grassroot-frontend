@@ -32,6 +32,11 @@
   border: #2CBC4C 2px solid;
 }
 
-.warning-symbol {
-  color: #ff0000;
+.warning-symbol-inactive {
+  color: red;
+}
+
+.warning-symbol-active {
+  color: yellow;
+  font-weight: 700;
 }

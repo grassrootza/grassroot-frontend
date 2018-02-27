@@ -17,7 +17,8 @@ export class GroupInfo {
               public nextEventType: TaskType,
               public pinned: boolean,
               public comingUpEvents: TaskInfo[],
-              public subGroups: GroupRef[]) {
+              public subGroups: GroupRef[],
+              public topics: string[]) {
   }
 
 
@@ -56,7 +57,8 @@ export class GroupInfo {
       groupInfoData.nextEventType != null ? TaskType[<string>groupInfoData.nextEventType] : null,
       groupInfoData.pinned,
       groupInfoData.comingUpEvents.map(e => TaskInfo.createInstance(e)),
-      groupInfoData.subGroups
+      groupInfoData.subGroups,
+      groupInfoData.topics
     )
   }
 

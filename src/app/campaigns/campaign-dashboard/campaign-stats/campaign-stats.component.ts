@@ -3,6 +3,7 @@ import {CampaignService} from "../../campaign.service";
 import {ActivatedRoute, Params} from "@angular/router";
 import * as moment from 'moment';
 import {Chart} from 'chart.js';
+import {CampaignInfo} from "../../model/campaign-info";
 
 const CHART_COLORS = ["#c45850", "#3e95cd", "#3cba9f", "#8e5ea2", "#e8c3b9"];
 
@@ -14,6 +15,7 @@ const CHART_COLORS = ["#c45850", "#3e95cd", "#3cba9f", "#8e5ea2", "#e8c3b9"];
 export class CampaignStatsComponent implements OnInit {
 
   private campaignUid: string = null;
+  public campaign: CampaignInfo;
 
   public selectedChannel: string = null;
 
@@ -30,6 +32,7 @@ export class CampaignStatsComponent implements OnInit {
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
         this.campaignUid = params['id'];
+        this.campaignService.loadCampaign(this.campaignUid).subscribe(campaign => this.campaign = campaign);
         this.loadMemberJoinStats(moment().year(), moment().month() + 1);
         this.loadConversionRates();
         this.loadChannelEngagement();
