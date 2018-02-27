@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AlertService} from "../../utils/alert.service";
 import {NavigationEnd, Router} from "@angular/router";
-import {CampaignService} from "../../campaigns/campaign.service";
 
 @Component({
   selector: 'app-global-search-results',
@@ -17,8 +16,7 @@ export class GlobalSearchResultsComponent implements OnInit {
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
         let uri = ev.urlAfterRedirects;
-        let nextTab = uri.substring(uri.lastIndexOf('/') + 1);
-        this.currentTab = nextTab;
+        this.currentTab = uri.substring(uri.lastIndexOf('/') + 1);
       }
     });
   }

@@ -1,10 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {SearchService} from "../../search.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {UserService} from "../../../user/user.service";
 import {GroupInfo} from "../../../groups/model/group-info.model";
 import {Group} from "../../../groups/model/group.model";
-import {GroupService} from "../../../groups/group.service";
 
 @Component({
   selector: 'app-my-groups',
@@ -45,7 +44,7 @@ export class MyGroupsComponent implements OnInit {
   }
 
   loadUserGroupsWithSearchTerm(searchTerm:string){
-    this.searchService.loadUserGroupsUsingSearchTerm(this.userUid,searchTerm).subscribe(groups =>{
+    this.searchService.loadUserGroupsUsingSearchTerm(searchTerm).subscribe(groups =>{
       this.filteredGroups = groups;
       console.log("User groups...........",this.filteredGroups);
     },error => {
