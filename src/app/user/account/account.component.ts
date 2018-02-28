@@ -8,6 +8,7 @@ import {AccountType} from "../model/account-type.enum";
 import {Account} from "../model/account.model";
 import {AccountBillingCycle} from "../model/account-billing-cycle.enum";
 import {AccountBillingRecords} from "../model/account-billing-records.model";
+import { saveAs } from 'file-saver/FileSaver';
 
 declare var $: any;
 
@@ -84,8 +85,7 @@ export class AccountComponent implements OnInit {
     const selectedInvoiceId = $('#pastInvoices').find(":selected").val();
     this.accountService.downloadPastInvoice(selectedInvoiceId, this.account.uid).subscribe(data => {
       let blob = new Blob([data], { type: 'application/pdf' });
-      let url = window.URL.createObjectURL(blob);
-      window.open(url);
+      saveAs(blob, "statement.pdf");
     }, error => {
       console.log("error getting the file: ", error);
     })

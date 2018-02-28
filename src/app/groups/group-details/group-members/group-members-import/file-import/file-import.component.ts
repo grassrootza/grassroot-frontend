@@ -6,6 +6,7 @@ import {GroupAddMemberInfo} from '../../../../model/group-add-member-info.model'
 import {GroupModifiedResponse} from '../../../../model/group-modified-response.model';
 import {FileImportResult} from "./file-import-result";
 import {AlertService} from "../../../../../utils/alert.service";
+import { saveAs } from 'file-saver/FileSaver';
 
 declare var $: any;
 
@@ -143,8 +144,7 @@ export class FileImportComponent implements OnInit {
   downloadErrorFile() {
     this.groupService.downloadImportErrors(this.fileImportResult.errorFilePath).subscribe(data => {
       let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-      let url = window.URL.createObjectURL(blob);
-      window.open(url);
+      saveAs(blob, "import-errors.xls");
     }, error => {
       console.log("error getting the file: ", error);
     })
