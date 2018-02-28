@@ -3,6 +3,7 @@ import {SearchService} from "../../search.service";
 import {ActivatedRoute, Params} from "@angular/router";
 import {UserService} from "../../../user/user.service";
 import {Task} from "../../../task/task.model";
+import {TaskInfo} from "../../../task/task-info.model";
 
 declare var $: any;
 
@@ -15,14 +16,14 @@ export class PublicMeetingsComponent implements OnInit {
 
   private userUid:string = "";
   private searchTerm:string = "";
-  public meetings: Task[] = [];
+  public meetings: TaskInfo[] = [];
   public taskToView: Task;
 
   protected pageSize: number = 10;
   protected numberOfPages: number = 1;
   protected totalCount: number = 0;
   public pagesList: number[] = [];
-  protected filteredMeetingsPage: Task[] = [];
+  protected filteredMeetingsPage: TaskInfo[] = [];
   protected currentPage: number = 1;
 
   constructor(private userService:UserService,
@@ -38,7 +39,7 @@ export class PublicMeetingsComponent implements OnInit {
   }
 
   loadPublicMeetings(searchTerm:string){
-    this.searchService.loadPublicMeetings(this.userUid,searchTerm).subscribe(mtgs =>{
+    this.searchService.loadPublicMeetings(searchTerm).subscribe(mtgs =>{
       this.meetings = mtgs;
       console.log("Public Meetings..........",this.meetings);
 

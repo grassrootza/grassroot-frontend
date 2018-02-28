@@ -26,6 +26,11 @@ export class TaskService {
   private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
   private uploadImageUrl = environment.backendAppUrl + "/api/media/storeImage";
 
+  private castVoteUrl = environment.backendAppUrl + "/api/vote/do";
+  private viewVoteUrl = environment.backendAppUrl + "/api/vote/view";
+  private viewMeetingUrl = environment.backendAppUrl + "/api/meeting/view";
+  private meetingRsvpsUrl = environment.backendAppUrl + "/api/meeting/rsvps";
+
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
   private upcomingTasksErrorSubject: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -215,6 +220,27 @@ export class TaskService {
     return this.httpClient.post(fullUrl,null,{params:params});
   }
 
+  castVote(id:string,phoneNumber:string,response:string):Observable<any>{
+    let fullUrl = this.castVoteUrl + "/" + id + "/" + phoneNumber + "/+27";
+    let params = new HttpParams().set("response",response);
+
+    return this.httpClient.get(fullUrl,{params:params});
+  }
+
+  viewVote(id:string,phoneNumber:string):Observable<any>{
+    let fullUrl = this.viewVoteUrl + "/" + id + "/" + phoneNumber + "/+27";
+    return this.httpClient.get(fullUrl);
+  }
+
+  viewMeeting(id:string,phoneNumber:string):Observable<any>{
+    let fullUrl = this.viewMeetingUrl + "/" + id + "/" + phoneNumber + "/+27";
+    return this.httpClient.get(fullUrl);
+  }
+
+  meetingRsvps(phoneNumber:string,id:string):Observable<any>{
+    let fullUrl = this.meetingRsvpsUrl + "/" + phoneNumber + "/+27/" + id;
+    return this.httpClient.get(fullUrl);
+  }
 
 
 }

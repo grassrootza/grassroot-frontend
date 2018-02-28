@@ -40,10 +40,10 @@ export class PublicGroupsComponent implements OnInit {
   }
 
   loadPublicGroups(searchTerm:string){
+
     this.searchService.loadPublicGroups(this.searchTerm).subscribe(grps=>{
       console.log("Public Groups...................",grps);
       this.groups = grps;
-
       this.filteredPublicGroupsPage = this.groups.slice(0,this.pageSize);
       this.totalCount = this.groups.length;
       this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);

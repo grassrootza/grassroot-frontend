@@ -4,6 +4,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {Task} from 'app/task/task.model';
 import {SearchService} from "../../search.service";
 import {TaskService} from "../../../task/task.service";
+import {TaskType} from "../../../task/task-type";
 declare var $: any;
 
 @Component({
@@ -18,6 +19,8 @@ export class MyActivitiesComponent implements OnInit {
   public userTasksFiltered: Task[] = [];
 
   public taskToView:Task = null;
+
+  public voteResponse:string = "";
 
   protected pageSize: number = 10;
   protected numberOfPages: number = 1;
@@ -41,7 +44,7 @@ export class MyActivitiesComponent implements OnInit {
   }
 
   loadUserTasksWithSearchTerm(searchTerm:string){
-    this.searchService.loadUserTasksUsingSearchTerm(this.userUid,searchTerm).subscribe(resp => {
+    this.searchService.loadUserTasksUsingSearchTerm(searchTerm).subscribe(resp => {
         console.log("Response....................",resp);
         this.userTasksFiltered = resp;
 
@@ -58,6 +61,15 @@ export class MyActivitiesComponent implements OnInit {
     console.log("Task Var...",this.taskToView);
     console.log("Task...",task);
     console.log("Task to view........",task.taskUid);
+
+    if(task.type == TaskType.VOTE){
+      this.taskService.viewVote(this.taskToView.taskUid,this.userService.getLoggedInUser().msisdn).subscribe(resp =>{
+        console.log("View vote response.....",resp.data.reply);
+        this.voteResponse = resp.data.reply;
+      },error =>{
+        console.log("Error viewing vote ......",error);
+      });
+    }
 
     switch (task.type){
       case "MEETING":

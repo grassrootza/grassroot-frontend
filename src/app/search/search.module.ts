@@ -10,9 +10,7 @@ import {MyActivitiesComponent} from "./global-search-results/my-activities/my-ac
 import {MyCampaignsComponent} from "./global-search-results/my-campaigns/my-campaigns.component";
 import {PublicMeetingsComponent} from "./global-search-results/public-meetings/public-meetings.component";
 import {PublicGroupsComponent} from "./global-search-results/public-groups/public-groups.component";
-import {ViewMeetingComponent} from "../view-task/view-meeting/view-meeting.component";
 import {ViewTodoComponent} from "../view-task/view-todo/view-todo.component";
-import {ViewVoteComponent} from "../view-task/view-vote/view-vote.component";
 import {SharedModule} from "../shared.module";
 
 

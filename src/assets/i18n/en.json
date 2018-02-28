@@ -1161,5 +1161,15 @@
       "meetings": "Public Meetings",
       "public-groups": "Public Groups"
     }
+  },
+  "search": {
+    "title": "Search Results",
+    "nav": {
+      "activities": "My Activities",
+      "groups": "My Groups",
+      "campaigns": "My Campaigns",
+      "meetings": "Public Meetings",
+      "public-groups": "Public Groups"
+    }
   }
 }

@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs/Observable";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Task} from 'app/task/task.model';
-import {GroupInfo} from "../groups/model/group-info.model";
 import {getGroupEntity, Group} from "../groups/model/group.model";
 import {UserService} from "../user/user.service";
+import {TaskInfo} from "../task/task-info.model";
 
 @Injectable()
 export class SearchService {
 
-  private allUserTasksUrl = environment.backendAppUrl + "/api/search/userTasks";
+  private allUserTasksUrl = environment.backendAppUrl + "/api/search/tasks/user";
   private allUserGroupsUrl = environment.backendAppUrl + "/api/search/groups/private";
   private userPublicGroupsUrl = environment.backendAppUrl + "/api/search/groups/public";
-  private publicMeetingsUrl = environment.backendAppUrl + "/api/search/publicMeetings";
+  private publicMeetingsUrl = environment.backendAppUrl + "/api/search/meetings/public";
 
   private joinGroupUrl = environment.backendAppUrl + "/api/search/join";
 
@@ -21,18 +21,10 @@ export class SearchService {
               private userService:UserService) {
   }
 
-  loadUserTasksUsingSearchTerm(userUid:string,searchTerm:string):Observable<Task[]>{
-    let fullUrl = this.allUserTasksUrl + "/" + userUid + "/" + searchTerm;
-    console.log("Full tasks url...",fullUrl);
-    return this.httpClient.get<Task[]>(fullUrl)
-      .map(resp => resp.map(task => Task.createInstanceFromData(task)));
-  }
-
-  loadUserGroupsUsingSearchTerm(searchTerm:string):Observable<GroupInfo[]>{
-    let fullUrl = this.allUserGroupsUrl;
+  loadUserTasksUsingSearchTerm(searchTerm:string):Observable<Task[]>{
     let params = new HttpParams().set("searchTerm", searchTerm);
-    return this.httpClient.get<GroupInfo[]>(fullUrl, {params: params})
-      .map(resp => resp.map(groupInfo => GroupInfo.createInstance(groupInfo)));
+    return this.httpClient.get<Task[]>(this.allUserTasksUrl, {params: params})
+      .map(resp => resp.map(task => Task.createInstanceFromData(task)));
   }
 
   loadUserGroups(searchTerm:string):Observable<Group[]>{
@@ -48,15 +40,14 @@ export class SearchService {
     return this.httpClient.get<Group[]>(fullUrl,{params:params}).map(resp => resp.map(grp => getGroupEntity(grp)));
   }
 
-  loadPublicMeetings(userUid:string,searchTerm:string):Observable<Task[]>{
-    let fullUrl = this.publicMeetingsUrl + "/" + userUid + "/" + searchTerm;
-    console.log("Full meetings url...",fullUrl);
-    return this.httpClient.get<Task[]>(fullUrl)
-      .map(resp => resp.map(task => Task.createInstanceFromData(task)));
+  loadPublicMeetings(searchTerm:string):Observable<TaskInfo[]>{
+    let params = new HttpParams().set("searchTerm", searchTerm);
+    return this.httpClient.get<TaskInfo[]>(this.publicMeetingsUrl, {params: params})
+      .map(resp => resp.map(task => TaskInfo.createInstance(task)));
   }
 
   askToJoinGroup(groupUid:string,word:string):Observable<any>{
-    let fullUrl = this.joinGroupUrl + "/" +groupUid;
+    let fullUrl = this.joinGroupUrl + "/" + groupUid;
 
     let params = new HttpParams()
       .set("joinWord",word)
