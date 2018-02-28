@@ -44,7 +44,7 @@ export class MyActivitiesComponent implements OnInit {
   }
 
   loadUserTasksWithSearchTerm(searchTerm:string){
-    this.searchService.loadUserTasksUsingSearchTerm(this.userUid,searchTerm).subscribe(resp => {
+    this.searchService.loadUserTasksUsingSearchTerm(searchTerm).subscribe(resp => {
         console.log("Response....................",resp);
         this.userTasksFiltered = resp;
 

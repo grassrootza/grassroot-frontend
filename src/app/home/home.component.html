@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-md-7 col-sm-12">
       <div class="input-group">
-        <input #searchTerm type="text" class="form-control search-bar" />
+        <input #searchTerm type="text" class="form-control search-bar" (keyup.enter)="searchGlobaly(searchTerm.value)"/>
         <span class="input-group-btn">
           <button class="btn btn-link search-addon" (click)="searchGlobaly(searchTerm.value)"><i class="fa fa-search"></i> Search</button>
         </span>

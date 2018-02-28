@@ -39,7 +39,7 @@ export class PublicMeetingsComponent implements OnInit {
   }
 
   loadPublicMeetings(searchTerm:string){
-    this.searchService.loadPublicMeetings(this.userUid,searchTerm).subscribe(mtgs =>{
+    this.searchService.loadPublicMeetings(searchTerm).subscribe(mtgs =>{
       this.meetings = mtgs;
       console.log("Public Meetings..........",this.meetings);
 
