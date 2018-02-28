@@ -6,7 +6,8 @@ export class TaskInfo {
   constructor(public taskUid: string,
               public title: string,
               public taskType: TaskType,
-              public deadlineTime: Date) {
+              public deadlineTime: Date,
+              public parentName:string) {
   }
 
   public getEventIconName(): string {
@@ -27,7 +28,8 @@ export class TaskInfo {
       e.taskUid,
       e.title,
       TaskType[<string>e.taskType],
-      DateTimeUtils.parseDate(e.deadlineTime)
+      DateTimeUtils.parseDate(e.deadlineTime),
+      e.parentName
     );
   }
 
