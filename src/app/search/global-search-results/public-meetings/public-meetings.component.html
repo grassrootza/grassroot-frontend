@@ -16,7 +16,7 @@
         <div class="col-2 col-lg-2">
           <span class="font-weight-bold">
             <img [src]="'assets/' + meeting.getEventIconName() "/>&nbsp;&nbsp;
-            {{meeting.type}}&nbsp;
+            {{meeting.taskType}}&nbsp;
           </span>
         </div>
         <div class="col-4 col-lg-4">
@@ -26,7 +26,7 @@
           {{meeting.parentName}}
         </div>
         <div class="col-4 col-lg-4">
-          {{meeting.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+          {{meeting.deadlineTime | date: 'hh:mm a on dd MMM yy'}}
         </div>
       </div>
     </div>
