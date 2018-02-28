@@ -23,6 +23,7 @@ export class CampaignService {
   statsProvincesUrl = environment.backendAppUrl + "/api/campaign/stats/provinces";
   statsActivityUrl = environment.backendAppUrl + "/api/campaign/stats/activity";
 
+  changeTypeUrl = environment.backendAppUrl + "/api/campaign/manage/update/type";
 
   private _campaigns: CampaignInfo[];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
@@ -120,6 +121,15 @@ export class CampaignService {
     let params = new HttpParams().set("campaignUid", campaignUid)
       .set("datasetDivision", datasetDivision).set("timePeriod", timePeriod);
     return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
+  /*
+  Modification section
+   */
+  updateCampaignType(campaignUid: string, newType: string) {
+    const fullUrl = this.changeTypeUrl + "/" + campaignUid;
+    let params = new HttpParams().set("campaignType", newType);
+    return this.httpClient.post<any>(fullUrl, null, {params: params});
   }
 
 }

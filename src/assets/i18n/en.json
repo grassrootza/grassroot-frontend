@@ -821,7 +821,8 @@
         "SIGN_PETITION": "Sign Petition",
         "JOIN_GROUP": "Join Us",
         "TAG_ME": "Choose Interests",
-        "SHARE": "Share Screen",
+        "SHARE_PROMPT": "Share Screen",
+        "SHARE_SEND": "Share Message",
         "EXIT_POSITIVE": "Positive Exit",
         "EXIT_NEGATIVE": "Negative Exit"
       },
@@ -831,9 +832,21 @@
         "SIGN_PETITION": "Thanks for participating. Let's get your details to tell you about future events and campaigns",
         "JOIN_GROUP": "Thanks for joining us. Let's get your details to tell you about future events and campaigns",
         "TAG_ME": "Thanks for participating. Let's get your details to tell you about future events and campaigns",
-        "SHARE": "Thank you for joining forces with us. If you want to share this with others please type their number",
+        "SHARE_PROMPT": "Thank you for joining forces with us. If you want to share this with others please type their number",
+        "SHARE_SEND": "Join us! {__name__} has just joined the campaign, {__entity_name__}, and wants to share it with you. Dial *134*1994*{__inbound__}# to join them!",
         "EXIT_POSITIVE": "Thank you for joining forces with us! We hope to see you soon at one of our events",
         "EXIT_NEGATIVE": "Thank you for engaging our campaign, and we hope you will join us in the future"
+      },
+      "explanations": {
+        "OPENING": "This is the first message that a user will see when they enter the code or text a campaign trigger word",
+        "MORE_INFO": "An optional screen that allows a second message elaborating on the first",
+        "SIGN_PETITION": "The screen that shows after the user has already chosen to sign the petition. The system will automatically ask for any information it doesn't know",
+        "JOIN_GROUP": "The screen that shows after a user has opted into joining the campaign's group, opting in for further information",
+        "TAG_ME": "The screen that shows after a user has selected a topic that they are interested in",
+        "SHARE_PROMPT": "The screen that prompts a user to enter someone else's number in order for the campaign to be shared",
+        "SHARE_SEND": "The template for the sharing SMS that goes out. You can leave this blank and we will use the default",
+        "EXIT_POSITIVE": "The goodbye message after a user has signed or joined",
+        "EXIT_NEGATIVE": "The goodbye message after a user has declined to sign or join"
       },
       "done": {
         "success": "Done! The messages have been set",
@@ -1119,6 +1132,21 @@
         "validate-action-label": "Is the action complete?",
         "volunteers-needed-label": "Do you volunteer?"
       }
+    },
+    "meeting": {
+      "broadcast": {
+        "done": "Done! Message sent to all members who responded"
+      }
+    }
+  },
+  "search": {
+    "title": "Search Results",
+    "nav": {
+      "activities": "My Activities",
+      "groups": "My Groups",
+      "campaigns": "My Campaigns",
+      "meetings": "Public Meetings",
+      "public-groups": "Public Groups"
     }
   },
   "search": {

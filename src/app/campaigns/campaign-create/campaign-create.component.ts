@@ -10,6 +10,8 @@ import {AlertService} from "../../utils/alert.service";
 import {Router} from "@angular/router";
 import {isNumeric} from "rxjs/util/isNumeric";
 
+declare var $: any;
+
 @Component({
   selector: 'app-campaign-create',
   templateUrl: './campaign-create.component.html',
@@ -22,6 +24,8 @@ export class CampaignCreateComponent implements OnInit {
 
   public takenCodes: string[] = [];
   public availableGroups: GroupInfo[] = [];
+  public possibleTopics: string[] = [];
+  private selectedTopics: string[] = []; // select 2 and form control don't seem to play nice together, hence
 
   constructor(private campaignService: CampaignService,
               private groupService: GroupService,
@@ -56,10 +60,20 @@ export class CampaignCreateComponent implements OnInit {
     });
     this.groupService.groupInfoList.subscribe(result => this.loadGroupSelector(result));
     this.alertService.hideLoadingDelayed();
+    this.setUpTopicSelector();
   }
 
   loadGroupSelector(groups: GroupInfo[]) {
     this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_UPDATE_GROUP_DETAILS"));
+    this.createCampaignForm.controls['groupUid'].valueChanges.subscribe(value => {
+      console.log("selected this group: ", value);
+      let selectedGroupTopics = this.availableGroups.find(grp => grp.groupUid === value).topics;
+      if (selectedGroupTopics) {
+        this.possibleTopics = selectedGroupTopics;
+        console.log("possible topics now  = ", this.possibleTopics);
+        // this.setUpTopicSelector();
+      }
+    });
   }
 
   checkCodeAvailability(control: FormControl) {
@@ -68,6 +82,21 @@ export class CampaignCreateComponent implements OnInit {
       return { codeTaken: true }
     }
     return null;
+  }
+
+  setUpTopicSelector() {
+    let component = $("#join-topic-select");
+    component.select2({
+      placeholder: "Topics user will be asked to select after signing, joining or engaging",
+      tags: true,
+      allowClear: true,
+    });
+
+    component.on('change.select2', function () {
+      const data = component.select2('data');
+      this.selectedTopics = data.length > 0 ? data.map(tt => tt.id) : [];
+    }.bind(this));
+
   }
 
   createCampaign() {
@@ -81,6 +110,7 @@ export class CampaignCreateComponent implements OnInit {
       return false;
     }
 
+    console.log("constructed form: ", this.getRequestFromForm());
     this.alertService.showLoading();
     this.campaignService.createCampaign(this.getRequestFromForm()).subscribe(result => {
       this.alertService.alert("campaign.create.complete.success");
@@ -123,7 +153,7 @@ export class CampaignCreateComponent implements OnInit {
       request.groupName = this.createCampaignForm.controls.groupName.value;
     }
 
-    console.log("and, here is our campaign request: ", request);
+    request.joinTopics = this.selectedTopics;
 
     return request;
   }

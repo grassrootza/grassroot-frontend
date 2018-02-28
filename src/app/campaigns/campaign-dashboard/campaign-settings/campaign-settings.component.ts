@@ -53,6 +53,17 @@ export class CampaignSettingsComponent implements OnInit {
       'landingPage': ['GRASSROOT'],
       'landingUrl': ['', hasValidLandingUrlIfNeeded]
     }, { validate: 'onBlur' });
+
+    this.campaignSettingsForm.controls['type'].valueChanges.subscribe(value => this.alterCampaignType(value))
+  }
+
+  alterCampaignType(newType: string) {
+    console.log("selected: ", newType);
+    this.campaignService.updateCampaignType(this.campaign.campaignUid, newType).subscribe(result => {
+      console.log("done!: ", result);
+    }, error => {
+      console.log("nope, error: ", error);
+    })
   }
 
 }

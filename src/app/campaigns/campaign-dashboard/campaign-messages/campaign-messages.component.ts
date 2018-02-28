@@ -20,9 +20,9 @@ export class CampaignMessagesComponent implements OnInit {
   public campaign: CampaignInfo;
 
   public messageTypes = {
-    'PETITION': ['OPENING', 'MORE_INFO', 'SIGN_PETITION', 'SHARE', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
-    'ACQUISITION': ['OPENING', 'MORE_INFO', 'JOIN_GROUP', 'SHARE', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
-    'INFORMATION': ['OPENING', 'MORE_INFO', 'TAG_ME', 'SHARE', 'EXIT_POSITIVE']
+    'PETITION': ['OPENING', 'MORE_INFO', 'SIGN_PETITION', 'SHARE_PROMPT', 'SHARE_SEND', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
+    'ACQUISITION': ['OPENING', 'MORE_INFO', 'JOIN_GROUP', 'SHARE_PROMPT', 'SHARE_SEND', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
+    'INFORMATION': ['OPENING', 'MORE_INFO', 'TAG_ME', 'SHARE_PROMPT', 'EXIT_POSITIVE']
   };
 
   public messageSequences = {
@@ -37,6 +37,8 @@ export class CampaignMessagesComponent implements OnInit {
       'OPENING': ['TAG_ME', 'MORE_INFO'], 'MORE_INFO': ['TAG_ME', 'EXIT_NEGATIVE']
     }
   };
+
+  public currentTypes: string[] = [];
 
   private typeIndexes = {};
   private typeMsgIds = {};
@@ -80,7 +82,13 @@ export class CampaignMessagesComponent implements OnInit {
 
   setUpMessages() {
     this.existingMessages = this.campaign.campaignMessages && this.campaign.campaignMessages.length > 0;
-    this.messageTypes[this.campaign.campaignType].forEach((type, index) => {
+    this.currentTypes = this.messageTypes[this.campaign.campaignType];
+    if (!this.campaign.smsSharingEnabled) {
+      console.log("slicing out share prompt ...");
+      this.sliceOutMessageType('SHARE_PROMPT');
+      this.sliceOutMessageType('SHARE_SEND');
+    }
+    this.currentTypes.forEach((type, index) => {
       this.typeIndexes[type] = index;
 
       let existingMsgIndex = this.existingMessages ? this.campaign.campaignMessages.findIndex(msg => msg.linkedActionType === type) : -1;
@@ -106,6 +114,13 @@ export class CampaignMessagesComponent implements OnInit {
         console.log("okay, next IDs: ", msg.nextMsgIds);
     });
 
+  }
+
+  sliceOutMessageType(type: string) {
+    let index = this.currentTypes.indexOf(type);
+    if (index != -1) {
+      this.currentTypes.splice(index, 1);
+    }
   }
 
   updateLanguages() {

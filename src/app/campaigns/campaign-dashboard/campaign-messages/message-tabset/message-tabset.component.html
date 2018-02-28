@@ -8,15 +8,17 @@
 <div class="row" *ngIf="((languages))" [formGroup]="formGroup">
   <div class="col-md-7 col-sm-12">
     {{ 'campaign.messages.message' | translate }}
-    <ngb-tabset class="content-tabset">
-      <ngb-tab *ngFor="let language of languages">
+    <ngb-tabset class="content-tabset" (tabChange)="tabChange($event)">
+      <ngb-tab *ngFor="let language of languages" [id]="blockIndex + language.threeDigitCode">
         <ng-template ngbTabTitle>
           {{ language.shortName }}
-          <!-- todo: fix color coordination -->
-          <span class="warning-symbol" *ngIf="formGroup.get(language.threeDigitCode)?.errors?.required">*</span>
+          <!-- likely a more elegant way to do this class conditional, but lost too much time on it, so leaving a little ugly -->
+          <span [ngClass]="{'warning-symbol-active': currentTabId == blockIndex + language.threeDigitCode,
+            'warning-symbol-inactive': currentTabId != blockIndex + language.threeDigitCode}"
+                *ngIf="formGroup.get(language.threeDigitCode)?.errors?.required">*</span>
         </ng-template>
         <ng-template ngbTabContent>
-          <textarea class="form-control boxsizingBorder" rows="4"
+          <textarea class="form-control boxsizingBorder" rows="3"
                     value = "{{ priorMessages?.get(language.threeDigitCode) }}"
                     placeholder="{{ placeHolderKey | translate }}"
                     formControlName="{{ language.threeDigitCode }}"
@@ -27,8 +29,9 @@
     </ngb-tabset>
   </div>
   <div class="col-md-4 offset-md-1 col-sm-12">
-    <label class="form-label">{{ 'campaign.messages.tag' | translate }}</label>
-    <input type="text" class="form-control form-control-em" />
+    <p class="form-label">
+      {{ explanationKey | translate }}
+    </p>
   </div>
 </div>
 

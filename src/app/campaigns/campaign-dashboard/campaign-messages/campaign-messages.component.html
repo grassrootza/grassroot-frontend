@@ -10,15 +10,16 @@
     </div>
     <div class="col-md-4 col-sm-12">
       <button class="btn btn-secondary preview-button float-right">{{ 'action.preview' | translate }}</button>
-      <button class="btn btn-primary save-button float-right">{{ 'action.save' | translate }}</button>
+      <button (click)="setMessages()" class="btn btn-primary save-button float-right">{{ 'action.save' | translate }}</button>
     </div>
   </div>
 
-  <div *ngFor="let type of messageTypes[campaign.campaignType]; let i = index">
+  <div *ngFor="let type of currentTypes; let i = index">
     <hr *ngIf="i > 0" class="section-separator" />
     <campaign-message-tabset [blockIndex]="i+1" [languages]="selectedLanguages" [responseOptions]="messageSequences[this.campaign.campaignType][type]"
                              (messagesUpdated)="storeMessages($event, type)" [priorMessages]="priorMessages[type]?.messages"
-                             [titleKey]="'campaign.messages.titles.' + type" [placeHolderKey]="'campaign.messages.placeholders.' + type">
+                             [titleKey]="'campaign.messages.titles.' + type"
+                             [placeHolderKey]="'campaign.messages.placeholders.' + type" [explanationKey]="'campaign.messages.explanations.' + type">
     </campaign-message-tabset>
   </div>
 
