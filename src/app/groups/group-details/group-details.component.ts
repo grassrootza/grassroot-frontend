@@ -11,6 +11,8 @@ import {JoinCodeInfo} from "../model/join-code-info";
 import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
 import {AlertService} from "../../utils/alert.service";
 
+import {saveAs} from 'file-saver/FileSaver';
+
 declare var $: any;
 
 @Component({
@@ -26,6 +28,7 @@ export class GroupDetailsComponent implements OnInit {
   public baseUrl: string = environment.backendAppUrl;
   public flyerUrlJpg: string = "";
   public flyerUrlPDF: string = "";
+  public xlsDownloadUrl: string = "";
 
   public joinMethodParams: any;
   public addJoinWordForm: FormGroup;
@@ -80,6 +83,16 @@ export class GroupDetailsComponent implements OnInit {
           }
       );
     });
+  }
+
+  exportGroupMembers() {
+    this.groupService.downloadGroupMembers(this.group.groupUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/xls' });
+      saveAs(blob, this.group.name + ".xlsx");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
+    return false;
   }
 
   setupJoinParams() {

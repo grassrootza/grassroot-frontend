@@ -48,7 +48,7 @@
           <div class="form-group col-sm-12">
             <label class="form-label" for="subscriptionOption">{{ 'user.account.subscriptionOption' | translate }}</label>
             <select id="subscriptionOption" formControlName="type" class="form-control">
-              <option *ngFor="let t of typesKeys" [value]="t">{{ types[t] }} (R{{accountFees[t] / 100}} / month)</option>
+              <option *ngFor="let t of typesKeys" [value]="t">{{ types[t] | titlecase }} (R{{accountFees[t] / 100}} / month)</option>
             </select>
           </div>
         </div>
@@ -57,46 +57,47 @@
           <div class="form-group col-sm-12">
             <label class="form-label" for="billingCycle">{{ 'user.account.billingPeriod' | translate }}</label>
             <select id="billingCycle" formControlName="billingCycle" class="form-control">
-              <option *ngFor="let bc of billingCyclesKeys" [value]="bc">{{ billingCycles[bc] }}</option>
+              <option *ngFor="let bc of billingCyclesKeys" [value]="bc">{{ billingCycles[bc] | titlecase }}</option>
             </select>
           </div>
         </div>
 
         <div class="card mb-3 w-100">
           <div class="card-body">
-            <h5 class="card-title">Next charge</h5>
-            <p class="card-text">{{account.nextBillingDateMilli | date: 'd LLLL, yyyy'}}</p>
-          </div>
-        </div>
-
-        <div class="card mb-3 w-100">
-          <div class="card-body">
-            <h5 class="card-title">Message cost since last bill</h5>
-            <p class="card-text">R{{costSinceLastBill}}</p>
+            <p class="bill-summary">
+              <span class="field-name">Next charge: </span>
+              {{account.nextBillingDateMilli | date: 'd LLLL, yyyy'}}
+            </p>
+            <p class="bill-summary">
+              <span class="field-name">Message cost since last bill: </span>
+              {{costSinceLastBill | currency: 'ZAR':'symbol-narrow'}}
+            </p>
           </div>
         </div>
 
         <div class="form-row">
-          <div class="form-group col-sm-6">
+          <div class="form-group col-sm-3">
             <label class="form-label" for="pastInvoices">{{ 'user.account.pastInvoices' | translate }}</label>
+          </div>
+          <div class="form-group col-sm-6">
             <select id="pastInvoices" class="form-control">
               <option *ngFor="let abr of accountBillingRecords" [value]="abr.paymentId">{{abr.createdDateTime | date: 'LLLL, yyyy'}}</option>
             </select>
           </div>
-          <div class="form-group col-sm-6">
-            <label class="form-label" for="downloadPastInvoicesButton">&nbsp;</label>
+          <div class="form-group col-sm-3">
             <div id="downloadPastInvoicesButton">
-              <button type="button" class="btn btn-success" (click)="downloadSelectedInvoice()">{{ 'action.download' | translate }}</button>
+              <button type="button" class="btn btn-outline-secondary hover-primary" (click)="downloadSelectedInvoice()">
+                <i class="fas fa-download"></i> {{ 'action.download' | translate }}</button>
             </div>
           </div>
         </div>
 
-        <div class="form-row">
+        <div class="form-row mt-md-3">
           <div class="form-group col-sm-6">
-            <button type="button" class="btn btn-danger" (click)="showCloseModal()">{{ 'action.closeAccount' | translate}}</button>
+            <button type="button" class="btn btn-secondary hover-danger close-button" (click)="showCloseModal()">{{ 'action.closeAccount' | translate}}</button>
           </div>
           <div class="form-group col-sm-6">
-            <button type="submit" class="btn btn-success float-right" [disabled]="accountForm.invalid">{{ 'action.save' | translate }}
+            <button type="submit" class="btn btn-primary save-button float-right" [disabled]="accountForm.invalid">{{ 'action.save' | translate }}
             </button>
           </div>
         </div>

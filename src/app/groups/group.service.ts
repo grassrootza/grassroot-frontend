@@ -33,6 +33,7 @@ export class GroupService {
   groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
   taskTeamDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details/taskteam";
   groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
+  groupMemberExportUrl = environment.backendAppUrl + "/api/group/fetch/export";
   newMembersLIstUrl = environment.backendAppUrl + "/api/group/fetch/members/new";
   groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
@@ -217,6 +218,11 @@ export class GroupService {
           )
         }
       );
+  }
+
+  downloadGroupMembers(groupUid: string) {
+    const fullUrl = this.groupMemberExportUrl + "/" + groupUid;
+    return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
 
   fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number) {

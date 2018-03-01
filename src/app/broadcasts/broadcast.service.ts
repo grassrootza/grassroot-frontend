@@ -24,7 +24,7 @@ export class BroadcastService {
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
   imageUploadUrl = environment.backendAppUrl + "/api/broadcast/create/image/upload";
 
-  private createRequest: BroadcastRequest = new BroadcastRequest();
+  public createRequest: BroadcastRequest = new BroadcastRequest();
   private createCounts: BroadcastCost = new BroadcastCost();
 
   private _createParams: BroadcastParams = new BroadcastParams();
@@ -158,14 +158,15 @@ export class BroadcastService {
   }
 
   setSchedule(schedule: BroadcastSchedule) {
+    console.log("broadcast now looks like: ", this.createRequest);
     this.createRequest.sendType = schedule.sendType;
     this.createRequest.sendDateString = schedule.sendDateString;
     this.createRequest.sendDateTimeMillis = schedule.sendDateTimeMillis;
-    console.log("okay, sed send date time millis  = ", this.createRequest.sendDateTimeMillis);
     this.saveBroadcast(); // since we remain on this step
   }
 
   getConfirmationFields(): BroadcastConfirmation {
+    console.log("getting confirmation fields, request: ", this.createRequest);
     let cn = new BroadcastConfirmation();
     cn.sendShortMessage = this.createRequest.sendShortMessages;
     cn.sendEmail = this.createRequest.sendEmail;
@@ -200,7 +201,7 @@ export class BroadcastService {
 
   sendBroadcast() {
     const fullUrl = this.createUrlBase + this.createRequest.type + "/" + this.createRequest.parentId;
-    console.log("sending broadcast, send date time millis = ", this.createRequest.sendDateTimeMillis);
+    console.log("sending broadcast, create request = ", this.createRequest);
     return this.httpClient.post(fullUrl, this.createRequest);
   }
 

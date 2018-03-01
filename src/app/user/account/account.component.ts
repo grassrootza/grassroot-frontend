@@ -71,7 +71,7 @@ export class AccountComponent implements OnInit {
         this.accountForm.get('billingCycle').setValue(account.billingCycle);
 
         this.accountService.getCostSinceLastBill(this.account.uid).subscribe(resp => {
-          this.costSinceLastBill = resp;
+          this.costSinceLastBill = resp / 100;
         });
 
         this.accountService.getPastPayments(this.account.uid).subscribe(abr => {

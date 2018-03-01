@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import * as moment from "moment";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import "rxjs/add/operator/debounceTime";
 
 declare var $: any;
 

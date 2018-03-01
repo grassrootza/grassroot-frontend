@@ -220,3 +220,16 @@ h6 {
   cursor: pointer;
   text-decoration: underline;
 }
+
+.hover-primary:hover {
+  cursor: pointer;
+  background: #26A041;
+  color: white;
+}
+
+.hover-danger:hover {
+  cursor: pointer;
+  background: #ff0000;
+  border-color: #ff0000;
+  color: white;
+}
