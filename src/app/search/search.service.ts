@@ -6,6 +6,8 @@ import {Task} from 'app/task/task.model';
 import {getGroupEntity, Group} from "../groups/model/group.model";
 import {UserService} from "../user/user.service";
 import {TaskInfo} from "../task/task-info.model";
+import {GroupRef,GroupMembersRef} from "../groups/model/group-ref.model";
+import {GroupService} from "../groups/group.service";
 
 @Injectable()
 export class SearchService {
@@ -16,9 +18,12 @@ export class SearchService {
   private publicMeetingsUrl = environment.backendAppUrl + "/api/search/meetings/public";
 
   private joinGroupUrl = environment.backendAppUrl + "/api/search/join";
+  private findGroupUrl = environment.backendAppUrl + "/api/search/group";
+  private joinGroupWithCodeUrl = environment.backendAppUrl + "/api/search/group/join";
 
   constructor(private httpClient: HttpClient,
-              private userService:UserService) {
+              private userService:UserService,
+              private groupService:GroupService) {
   }
 
   loadUserTasksUsingSearchTerm(searchTerm:string):Observable<Task[]>{
@@ -55,4 +60,29 @@ export class SearchService {
 
     return this.httpClient.post(fullUrl,null,{params:params});
   }
+
+  checkSearchTerm(searchTerm:string):string{
+    let code = null;
+    if(searchTerm.match("[0-9]+") && searchTerm.length === 4){
+      code = searchTerm;
+    }else if(searchTerm.length === 15 && searchTerm.indexOf("*") != -1 && searchTerm.indexOf("#") != -1){
+      code = searchTerm.substring(searchTerm.lastIndexOf("*") +1,searchTerm.indexOf("#"));
+    }
+    return code;
+  }
+
+  findGroup(joinCode:string):Observable<any>{
+    let params = new HttpParams().set("joinCode",joinCode);
+    return this.httpClient.get<GroupRef>(this.findGroupUrl,{params:params})
+        .map(resp => (resp) ? new GroupRef(resp.groupUid,resp.name,resp.memberCount) : resp);
+  }
+
+  joinWithCode(groupUid:string,joinCode:string):Observable<any>{
+    let params = new HttpParams()
+        .set("groupUid",groupUid)
+        .set("joinCode",joinCode);
+
+    return this.httpClient.post(this.joinGroupWithCodeUrl,null,{params:params});
+  }
+  
 }

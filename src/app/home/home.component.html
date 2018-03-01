@@ -157,6 +157,35 @@
 
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" id="join-group-modal" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Do you want to join this group?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">
+            Group name:
+          </span>
+          <span>
+            {{groupRef?.name}}
+          </span>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary save-button" (click)="joinGroup(groupRef?.groupUid,searchTerm.value)">
+          Join
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
 

@@ -6,10 +6,11 @@ import {GroupService} from "../groups/group.service";
 import {GroupInfo} from "../groups/model/group-info.model";
 import {Membership, MembersPage} from "../groups/model/membership.model";
 import {DayTasks} from "./day-task.model";
+import {Group} from "../groups/model/group.model";
 
 import * as moment from 'moment';
 import {Moment} from 'moment';
-import {GroupRef} from "../groups/model/group-ref.model";
+import {GroupRef,GroupMembersRef} from "../groups/model/group-ref.model";
 import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
@@ -17,6 +18,7 @@ import {TaskType} from "../task/task-type";
 import {TodoType} from "../task/todo-type";
 import {AlertService} from "../utils/alert.service";
 import {CampaignService} from "../campaigns/campaign.service";
+import {SearchService} from "../search/search.service";
 
 declare var $: any;
 
@@ -47,13 +49,15 @@ export class HomeComponent implements OnInit {
   public taskToView:Task;
 
   public voteResponse:string;
+  public groupRef:GroupRef;
 
   constructor(private taskService: TaskService,
               private userService: UserService,
               private groupService: GroupService,
               private campaignService: CampaignService,
               private router: Router,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private searchService:SearchService) {
     this.agendaBaseDate = moment().startOf('day');
   }
 
@@ -310,6 +314,34 @@ export class HomeComponent implements OnInit {
 
   searchGlobaly(searchTerm:string){
     console.log("Search Term............>>>>>>>>",searchTerm);
-    this.router.navigate(["/search",searchTerm]);
+    if(this.searchService.checkSearchTerm(searchTerm) != null){
+      console.log("Search for code............." + this.searchService.checkSearchTerm(searchTerm));
+      this.searchService.findGroup(this.searchService.checkSearchTerm(searchTerm)).subscribe(resp =>{
+        console.log("Group found............",resp);
+        if(resp === null){
+          this.router.navigate(["/search",searchTerm]);
+        }
+        this.groupRef = resp;
+
+        $("#join-group-modal").modal("show");
+      },error => {
+        console.log("Error trying to find group...........",error);
+      });
+    }else{
+      console.log("Search globaly..................");
+      this.router.navigate(["/search",searchTerm]);
+    }
+    
+  }
+
+  joinGroup(groupUid:string,joinCode:string){
+     console.log("Group uid..............",groupUid);
+     console.log("Join code...............",joinCode);
+     this.searchService.joinWithCode(groupUid,joinCode).subscribe(resp => {
+       console.log("Response from server..............",resp);
+       $("#join-group-modal").modal("hide");
+     },error => {
+       console.log("Error joining group.........................",error);
+     });
   }
 }
