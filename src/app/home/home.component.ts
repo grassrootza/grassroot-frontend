@@ -50,6 +50,8 @@ export class HomeComponent implements OnInit {
 
   public voteResponse:string;
   public groupRef:GroupRef;
+  public isMemberPartOfGroup:boolean = false;
+  public groupMembersRef:GroupMembersRef;
 
   constructor(private taskService: TaskService,
               private userService: UserService,
@@ -313,35 +315,54 @@ export class HomeComponent implements OnInit {
   }
 
   searchGlobaly(searchTerm:string){
-    console.log("Search Term............>>>>>>>>",searchTerm);
-    if(this.searchService.checkSearchTerm(searchTerm) != null){
-      console.log("Search for code............." + this.searchService.checkSearchTerm(searchTerm));
-      this.searchService.findGroup(this.searchService.checkSearchTerm(searchTerm)).subscribe(resp =>{
+    if(this.searchService.isSearchTermJoinCode(searchTerm) != null){
+      console.log("Search for code............." + this.searchService.isSearchTermJoinCode(searchTerm));
+      this.loadGroupWithJoinCode(searchTerm);
+    }else{
+      console.log("Searching globaly..................");
+      this.router.navigate(["/search",searchTerm]);
+    }
+  }
+  
+  loadGroupWithJoinCode(joinCode:string){
+    this.searchService.findGroupWithJoinCode(this.searchService.isSearchTermJoinCode(joinCode)).subscribe(resp =>{
         console.log("Group found............",resp);
         if(resp === null){
-          this.router.navigate(["/search",searchTerm]);
+          this.router.navigate(["/search",joinCode]);
+        }else{
+          this.groupRef = resp;
+          this.memberPartOfGroup(this.groupRef.groupUid,this.userService.getLoggedInUser().userUid);
+          $("#join-group-modal").modal("show");
         }
-        this.groupRef = resp;
-
-        $("#join-group-modal").modal("show");
       },error => {
         console.log("Error trying to find group...........",error);
       });
-    }else{
-      console.log("Search globaly..................");
-      this.router.navigate(["/search",searchTerm]);
-    }
-    
   }
 
   joinGroup(groupUid:string,joinCode:string){
-     console.log("Group uid..............",groupUid);
-     console.log("Join code...............",joinCode);
      this.searchService.joinWithCode(groupUid,joinCode).subscribe(resp => {
        console.log("Response from server..............",resp);
        $("#join-group-modal").modal("hide");
+       this.router.navigate(["/group",groupUid]);//Viewing group joined.
      },error => {
        console.log("Error joining group.........................",error);
      });
+  }
+  
+  memberPartOfGroup(groupUid:string,memberUid:string){
+    this.groupService.loadGroupDetailsFromServer(groupUid).subscribe(group =>{
+      this.groupMembersRef = new GroupMembersRef(group.groupUid,group.name,group.memberCount,group.members);
+      if(this.groupMembersRef.hasMember(memberUid)){
+        this.isMemberPartOfGroup = true;
+      }
+    },error =>{
+      console.log("Error loading group..........",error);
+    });
+  }
+  
+  viewGroup(groupUid:string){
+    $("#join-group-modal").modal("hide");
+    this.router.navigate(["/group",groupUid]);
+    return false;
   }
 }

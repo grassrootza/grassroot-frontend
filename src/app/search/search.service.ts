@@ -61,7 +61,7 @@ export class SearchService {
     return this.httpClient.post(fullUrl,null,{params:params});
   }
 
-  checkSearchTerm(searchTerm:string):string{
+  isSearchTermJoinCode(searchTerm:string):string{
     let code = null;
     if(searchTerm.match("[0-9]+") && searchTerm.length === 4){
       code = searchTerm;
@@ -71,7 +71,7 @@ export class SearchService {
     return code;
   }
 
-  findGroup(joinCode:string):Observable<any>{
+  findGroupWithJoinCode(joinCode:string):Observable<any>{
     let params = new HttpParams().set("joinCode",joinCode);
     return this.httpClient.get<GroupRef>(this.findGroupUrl,{params:params})
         .map(resp => (resp) ? new GroupRef(resp.groupUid,resp.name,resp.memberCount) : resp);

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CampaignService} from "../../../campaigns/campaign.service";
 import {CampaignInfo} from "../../../campaigns/model/campaign-info";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {UserService} from "../../../user/user.service";
 
 @Component({
@@ -18,7 +18,8 @@ export class MyCampaignsComponent implements OnInit {
 
   constructor(private campaignService: CampaignService,
               private userService:UserService,
-              private route:ActivatedRoute) { }
+              private route:ActivatedRoute,
+              private router:Router) { }
 
   ngOnInit() {
     this.userUid = this.userService.getLoggedInUser().userUid;
@@ -35,6 +36,11 @@ export class MyCampaignsComponent implements OnInit {
                         cp.description.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
       console.log("Filtered campaigns..............",this.filteredCampaigns);
     })
+  }
+  
+  triggerViewTask(campaign:CampaignInfo){
+    this.router.navigate(["/campaign",campaign.campaignUid]);
+    return false;
   }
 
 }
