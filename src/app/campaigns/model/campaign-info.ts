@@ -17,13 +17,14 @@ export class CampaignInfo {
               public creatingUserName: string,
               public creatingUserUid: string,
               public createdDate: any,
-              public campaignCode: number,
+              public campaignCode: string,
               public topics: string[],
               public campaignMessages: CampaignMsgServerDTO[],
               public smsSharingEnabled: boolean,
               public smsSharingBudget: number,
               public smsSharingCost: number,
-              public petitionConnected: boolean) {
+              public petitionConnected: boolean,
+              public campaignImageKey: string) {
   }
 
   public isActive(): boolean {
@@ -52,6 +53,7 @@ export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
     cp.smsSharingEnabled,
     cp.smsSharingBudget,
     cp.smsSharingCost,
-    cp.petitionConnected
+    cp.petitionConnected,
+    cp.campaignImageKey
   );
 };

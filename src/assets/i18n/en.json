@@ -56,7 +56,6 @@
       "INFORMATION": "Information"
     }
   },
-
   "menu": {
     "home": "HOME",
     "groups": "GROUPS",
@@ -858,14 +857,15 @@
       "name": "Campaign Name/Title",
       "description": "Description",
       "image": "Campaign Image (optional)",
+      "image_add": "Click to add",
       "image_remove": "Remove image",
       "starts": "Campaign Ends: ",
       "ends": "Ends: ",
-      "type": "Campaign Type:",
+      "type": "Campaign Type: ",
       "group": "Master Group:",
       "new": "Change to new group",
       "existing": "Change to existing group",
-      "petition": "Amandla petition URL: ",
+      "petition": "Amandla URL: ",
       "sms_sharing": "Allow SMS sharing: ",
       "sms_limit": "SMS limit",
       "cost": "Estimated cost: R ",
@@ -1132,7 +1132,8 @@
     "insert": "Insert",
     "view": "View",
     "download": "Download",
-    "closeAccount": "Close account"
+    "closeAccount": "Close account",
+    "change": "Change"
   },
   "general": {
     "charsRemaining": "Characters remaining"
@@ -1150,16 +1151,6 @@
       "broadcast": {
         "done": "Done! Message sent to all members who responded"
       }
-    }
-  },
-  "search": {
-    "title": "Search Results",
-    "nav": {
-      "activities": "My Activities",
-      "groups": "My Groups",
-      "campaigns": "My Campaigns",
-      "meetings": "Public Meetings",
-      "public-groups": "Public Groups"
     }
   },
   "search": {

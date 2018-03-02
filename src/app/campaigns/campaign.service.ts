@@ -14,6 +14,7 @@ export class CampaignService {
   campaignCreateUrl = environment.backendAppUrl + "/api/campaign/manage/create";
   campaignFetchUrl = environment.backendAppUrl + "/api/campaign/manage/fetch";
   campaignActiveCodesUrl = environment.backendAppUrl + "/api/campaign/manage/codes/list/active";
+  checkCodeAvaliabilityUrl = environment.backendAppUrl + "/api/campaign/manage/codes/check";
 
   campaignMessageSetUrl = environment.backendAppUrl + "/api/campaign/manage/messages/set";
 
@@ -24,6 +25,7 @@ export class CampaignService {
   statsActivityUrl = environment.backendAppUrl + "/api/campaign/stats/activity";
 
   changeTypeUrl = environment.backendAppUrl + "/api/campaign/manage/update/type";
+  changeImageUrl = environment.backendAppUrl + "/api/campaign/manage/update/image";
 
   private _campaigns: CampaignInfo[];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
@@ -130,6 +132,18 @@ export class CampaignService {
     const fullUrl = this.changeTypeUrl + "/" + campaignUid;
     let params = new HttpParams().set("campaignType", newType);
     return this.httpClient.post<any>(fullUrl, null, {params: params});
+  }
+
+  updateCampaignImage(campaignUid: string, imageKey: string) {
+    const fullUrl = this.changeImageUrl + "/" + campaignUid;
+    let params = new HttpParams().set("mediaFileUid", imageKey);
+    return this.httpClient.post<any>(fullUrl, null, {params: params});
+  }
+
+  checkCodeAvailability(campaignCode: string): Observable<boolean> {
+    const fullUrl = this.checkCodeAvaliabilityUrl;
+    let params = new HttpParams().set("code", campaignCode);
+    return this.httpClient.get<boolean>(fullUrl, {params: params});
   }
 
 }
