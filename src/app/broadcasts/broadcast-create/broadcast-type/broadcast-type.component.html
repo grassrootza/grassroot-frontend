@@ -24,6 +24,7 @@
               {{ 'broadcasts.create.types.smsLabel' | translate }}
             </p>
             <p *ngIf="createParams.smsAllowed">{{ 'broadcasts.create.types.smsCosts' | translate:createParams }}</p>
+            <p *ngIf="createParams.smsAllowed">{{ 'broadcasts.create.types.smsCostsThisMonth' | translate}} {{costThisMonth | currency: 'ZAR':'symbol-narrow'}}</p>
           </div>
 
           <div class="col-md-2 col-sm-4">

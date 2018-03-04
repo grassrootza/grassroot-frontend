@@ -23,6 +23,7 @@ export class BroadcastService {
   fetchUrlBase = environment.backendAppUrl + "/api/broadcast/fetch/";
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
   imageUploadUrl = environment.backendAppUrl + "/api/broadcast/create/image/upload";
+  costThisMonthUrl = environment.backendAppUrl + "/api/broadcast/cost-this-month";
 
   public createRequest: BroadcastRequest = new BroadcastRequest();
   private createCounts: BroadcastCost = new BroadcastCost();
@@ -326,6 +327,13 @@ export class BroadcastService {
     const fullUrl = this.createUrlBase + "task/MEETING/" + meetingUid;
     let params = new HttpParams().set("message", message);
     return this.httpClient.post(fullUrl, null, {params: params});
+  }
+
+  getCostThisMonth(): Observable<number> {
+    return this.httpClient.get<number>(this.costThisMonthUrl)
+      .map(resp => {
+        return resp;
+      })
   }
 
 }
