@@ -630,6 +630,8 @@
       "groupPublic": "Public",
       "groupPrivate": "Private",
       "advancedPermissions": "Advanced permissions",
+      "topics": "Topics",
+      "createNewTopicLabel": "Create new topic",
       "reminderInMinutes": "When will reminders be sent?",
       "reminders": {
         "noReminder": "No reminder",
@@ -1134,7 +1136,8 @@
     "view": "View",
     "download": "Download",
     "closeAccount": "Close account",
-    "change": "Change"
+    "change": "Change",
+    "add": "Add"
   },
   "general": {
     "charsRemaining": "Characters remaining"

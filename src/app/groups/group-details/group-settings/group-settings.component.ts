@@ -8,6 +8,8 @@ import {Permission} from '../../model/permission.model';
 import {AlertService} from "../../../utils/alert.service";
 import {GroupRole} from "../../model/group-role";
 
+declare var $:any;
+
 @Component({
   selector: 'app-group-settings',
   templateUrl: './group-settings.component.html',
@@ -22,6 +24,9 @@ export class GroupSettingsComponent implements OnInit {
   public committeeMemberPermissions: Permission[] = [];
   public groupOrganizerPermissions: Permission[] = [];
   public permissionsToDisplay: string[] = [];
+  public topicInterestsStats: any;
+  public topicInterestInFirstColumn: number;
+  public newTopicName: string = "";
 
   public roles: string[] = [GroupRole.ROLE_GROUP_ORGANIZER, GroupRole.ROLE_COMMITTEE_MEMBER, GroupRole.ROLE_ORDINARY_MEMBER];
 
@@ -50,12 +55,20 @@ export class GroupSettingsComponent implements OnInit {
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
+            this.topicInterestInFirstColumn = Math.ceil(groupDetails.topics.length / 2);
 
             this.getPermissionsForRole(this.group.groupUid);
             this.populateFormData(this.group, [], [], []);
           },
           error => {
             console.log("Error loading groups", error.status)
+          }
+        );
+
+      this.groupService.fetchRawTopicInterestsStats(groupUid)
+        .subscribe(
+          results => {
+            this.topicInterestsStats = results;
           }
         );
     });
@@ -260,6 +273,40 @@ export class GroupSettingsComponent implements OnInit {
     let size = Math.round(fileSizeinMB * 100) / 100; // convert upto 2 decimal place
     if (size > this.MAX_IMAGE_SIZE)
       this.imageErrors.push("Error (file size): " + image.name + ": exceed file size limit of " + this.MAX_IMAGE_SIZE + "MB ( " + size + "MB )");
+  }
+
+  public getNumberOfMembersWithTopic(topic) {
+    if(this.topicInterestsStats) {
+      let count = this.topicInterestsStats[topic];
+      return count !== undefined ? count : 0;
+    }
+
+  }
+
+  public deleteTopic(topic: string) {
+    let topics:string[] = this.group.topics;
+    let indexOfTopicToRemove: number = topics.indexOf(topic);
+    if(indexOfTopicToRemove != -1) {
+      topics.splice(indexOfTopicToRemove, 1);
+    }
+    this.groupService.setGroupTopics(this.group.groupUid, topics).subscribe(resp => {
+      this.topicInterestInFirstColumn = Math.ceil(topics.length / 2)
+    });
+  }
+
+  newTopicNameChanged(event) {
+    this.newTopicName = event.target.value;
+  }
+
+  addNewTopic() {
+    let topics = this.group.topics;
+    topics.push(this.newTopicName);
+    this.groupService.setGroupTopics(this.group.groupUid, topics).subscribe(resp => {
+      this.topicInterestInFirstColumn = Math.ceil(topics.length / 2)
+      this.newTopicName = "";
+      $("#newTopicNameInput").val("");
+
+    });
   }
 
 }
