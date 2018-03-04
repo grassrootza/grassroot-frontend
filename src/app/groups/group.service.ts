@@ -73,8 +73,10 @@ export class GroupService {
   statsOrganisationsUrl = environment.backendAppUrl + "/api/group/stats/organisations";
   statsMemberDetailsUrl = environment.backendAppUrl + "/api/group/stats/member-details";
   statsTopicInterestsUrl = environment.backendAppUrl + "/api/group/stats/topic-interests";
+  rawStatsTopicInterestsUrl = environment.backendAppUrl + "/api/group/stats/raw-topic-interests";
 
   groupSearchUserByTermUrl = environment.backendAppUrl + "/api/user/related/user/names";
+  groupSetTopicsUrl = environment.backendAppUrl + "/api/group/modify/topics/set";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -434,6 +436,14 @@ export class GroupService {
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
 
+  fetchRawTopicInterestsStats(groupUid: string): Observable<any> {
+
+    const fullUrl = this.rawStatsTopicInterestsUrl;
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
   updateGroupSettings(groupUid: string, name: string, description: string, isPublic: boolean, reminderInMinutes: number): Observable<boolean> {
     const fullUrl = this.groupUpdateSettingsUrl + '/' + groupUid;
 
@@ -617,6 +627,17 @@ export class GroupService {
       .map(resp => {
         return resp;
       })
+  }
+
+  setGroupTopics(groupUid: string, topics: string[]): Observable<any> {
+    const fullUrl = this.groupSetTopicsUrl + "/" + groupUid;
+
+    let params = new HttpParams()
+      .set("topics", topics.join(","));
+
+    return this.httpClient.post<any>(fullUrl, null, {params: params}).map(resp => {
+      return resp;
+    })
   }
 
   removeTaskTeam(parentUid: string, taskTeamUid: string): Observable<Group> {

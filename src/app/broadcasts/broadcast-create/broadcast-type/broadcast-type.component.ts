@@ -14,6 +14,7 @@ export class BroadcastTypeComponent implements OnInit {
 
   public typesForm: FormGroup;
   public createParams: BroadcastParams = new BroadcastParams();
+  public costThisMonth: number = 0;
 
   constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService) {
     this.typesForm = this.formBuilder.group(new BroadcastTypes(), {validator: Validators.compose([oneItemSelected, fbPageSelectedIfFb])});
@@ -27,6 +28,10 @@ export class BroadcastTypeComponent implements OnInit {
     }, error => {
       console.log("failed, error: ", error);
     });
+
+    this.broadcastService.getCostThisMonth().subscribe(resp => {
+      this.costThisMonth = resp/100;
+    })
   }
 
   saveTypes(): boolean {
