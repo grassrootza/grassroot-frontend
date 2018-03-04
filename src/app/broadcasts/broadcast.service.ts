@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {
@@ -16,6 +16,7 @@ import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage} from './model/broadcast';
 import * as moment from 'moment';
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class BroadcastService {
@@ -28,7 +29,7 @@ export class BroadcastService {
   private createCounts: BroadcastCost = new BroadcastCost();
 
   private _createParams: BroadcastParams = new BroadcastParams();
-  public createParams: EventEmitter<BroadcastParams> = new EventEmitter(null);
+  public createParams: BehaviorSubject<BroadcastParams> = new BehaviorSubject<BroadcastParams>(null);
 
   public pages: string[] = ['types', 'content', 'members', 'schedule'];
   public latestStep: number = 1; // in case we go backwards
@@ -41,12 +42,13 @@ export class BroadcastService {
     this.loadBroadcast();
   }
 
-  fetchCreateParams(type: string, entityUid: string): Observable<BroadcastParams> {
+  fetchCreateParams(type: string, entityUid: string) {
     const fullUrl = this.createUrlBase + type + "/info/" + entityUid;
-    return this.httpClient.get<BroadcastParams>(fullUrl).map(result => {
+    this.httpClient.get<BroadcastParams>(fullUrl).subscribe(result => {
       console.log("create fetch result: ", result);
       this._createParams = getBroadcastParams(result);
-      this.createParams.emit(this._createParams);
+      console.log("after transform: ", this._createParams);
+      this.createParams.next(getBroadcastParams(result));
       return result;
     });
   }

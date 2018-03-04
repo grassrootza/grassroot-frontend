@@ -91,6 +91,8 @@ export class CampaignMessagesComponent implements OnInit {
     this.currentTypes.forEach((type, index) => {
       this.typeIndexes[type] = index;
 
+      // the message group IDs are only unique within campaign, and only used in set up, so can use timestamp without
+      // worrying about matching values if two users doing this for two different campaigns at once
       let existingMsgIndex = this.existingMessages ? this.campaign.campaignMessages.findIndex(msg => msg.linkedActionType === type) : -1;
       let msgId = existingMsgIndex != -1 ? this.campaign.campaignMessages[existingMsgIndex].messageId : "message_" + moment().valueOf() + "_" + index;
       let msgRequest = new CampaignMsgRequest(msgId, type,
@@ -139,11 +141,11 @@ export class CampaignMessagesComponent implements OnInit {
   }
 
   setMessages() {
-    console.log("okay, trying to save messages: {}", this._currentMessages);
+    // console.log("okay, trying to save messages: {}", this._currentMessages);
     this.campaignService.setCampaignMessages(this.campaignUid, this._currentMessages).subscribe(campaignInfo => {
       this.alertService.alert("campaign.messages.done.success");
     }, error => {
-      console.log("well that didn't work: ", error);
+      // console.log("well that didn't work: ", error);
       this.alertService.alert("campaign.messages.done.error");
     });
     return false;

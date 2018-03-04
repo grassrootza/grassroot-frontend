@@ -197,6 +197,14 @@ h6 {
   background: white;
 }
 
+.calendar-disabled {
+  background: #ECEEF1;
+  font-weight: 600;
+  border: 1px solid #929BAF;
+  border-radius: 5px;
+  color: #4A4A4A;
+}
+
 .dropdown-toggle {
   cursor: pointer;
 }

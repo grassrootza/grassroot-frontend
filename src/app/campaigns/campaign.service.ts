@@ -4,7 +4,12 @@ import {environment} from "../../environments/environment";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {CampaignInfo, getCampaignEntity} from "./model/campaign-info";
 import {Observable} from "rxjs/Observable";
-import {CampaignMsgRequest, CampaignMsgServerDTO, CampaignRequest} from "./campaign-create/campaign-request";
+import {
+  CampaignMsgRequest,
+  CampaignMsgServerDTO,
+  CampaignRequest,
+  CampaignUpdateParams
+} from "./campaign-create/campaign-request";
 
 @Injectable()
 export class CampaignService {
@@ -25,7 +30,8 @@ export class CampaignService {
   statsActivityUrl = environment.backendAppUrl + "/api/campaign/stats/activity";
 
   changeTypeUrl = environment.backendAppUrl + "/api/campaign/manage/update/type";
-  changeImageUrl = environment.backendAppUrl + "/api/campaign/manage/update/image";
+  changeBasicSettingsUrl = environment.backendAppUrl + "/api/campaign/manage/update/settings";
+  changeSmsSharingUrl = environment.backendAppUrl + "/api/campaign/manage/update/sharing";
 
   private _campaigns: CampaignInfo[];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
@@ -134,16 +140,61 @@ export class CampaignService {
     return this.httpClient.post<any>(fullUrl, null, {params: params});
   }
 
-  updateCampaignImage(campaignUid: string, imageKey: string) {
-    const fullUrl = this.changeImageUrl + "/" + campaignUid;
-    let params = new HttpParams().set("mediaFileUid", imageKey);
-    return this.httpClient.post<any>(fullUrl, null, {params: params});
-  }
-
-  checkCodeAvailability(campaignCode: string): Observable<boolean> {
+  checkCodeAvailability(campaignCode: string, campaignUid?: string): Observable<boolean> {
     const fullUrl = this.checkCodeAvaliabilityUrl;
     let params = new HttpParams().set("code", campaignCode);
+    if (campaignUid) {
+      params = params.set("currentCampaignUid", campaignUid);
+    }
     return this.httpClient.get<boolean>(fullUrl, {params: params});
+  }
+
+  changeCampaignSettings(campaignUid: string, updateParams: CampaignUpdateParams) {
+    const fullUrl = this.changeBasicSettingsUrl + "/" + campaignUid;
+    let params = new HttpParams();
+    if (updateParams.name)
+      params = params.set("name", updateParams.name);
+
+    if (updateParams.description)
+      params = params.set("description", updateParams.description);
+
+    if (updateParams.mediaFileUid)
+      params = params.set("mediaFileUid", updateParams.mediaFileUid);
+
+    if (updateParams.endDateMillis)
+      params = params.set("endDateMillis", "" + updateParams.endDateMillis);
+
+    if (updateParams.campaignType)
+      params = params.set("campaignType", updateParams.campaignType);
+
+    if (updateParams.newCode)
+      params = params.set("newCode", updateParams.newCode);
+
+    if (updateParams.joinTopics)
+      params = params.set("joinTopics", updateParams.joinTopics.join(","));
+
+    if (updateParams.landingUrl)
+      params = params.set("landingUrl", updateParams.landingUrl);
+
+    if (updateParams.petitionApi)
+      params = params.set("petitionApi", updateParams.petitionApi);
+
+    if (updateParams.removeImage)
+      params = params.set("removeImage", updateParams.removeImage.toString());
+
+    if (updateParams.newMasterGroupUid)
+      params = params.set("newMasterGroupUid", updateParams.newMasterGroupUid);
+
+    return this.httpClient.post<CampaignInfo>(fullUrl, null, {params: params}).map(getCampaignEntity);
+  }
+
+  changeCampaignSharing(campaignUid: string, sharingEnabled: boolean, smsLimit: number,
+                        sharingTemplates?: CampaignMsgRequest[]) {
+    const fullUrl = this.changeSmsSharingUrl + "/" + campaignUid;
+    let params = new HttpParams().set("sharingEnabled", sharingEnabled.toString()).set("smsLimit", smsLimit.toString());
+    let sharingMsgs:CampaignMsgServerDTO[] = sharingTemplates ? sharingTemplates.map(req =>
+      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags)) : null;
+    return this.httpClient.post<CampaignInfo>(fullUrl, sharingMsgs, { params: params }).map(getCampaignEntity);
   }
 
 }

@@ -1,4 +1,4 @@
-<div class="card-body" *ngIf="campaign">
+<div class="card-body">
   <div class="row mt-md-1 mb-md-3">
     <div class="d-flex col-12 justify-content-center">
       <h2>{{'campaign.settings.title' | translate}}</h2>
@@ -6,15 +6,34 @@
   </div>
   <div class="row">
     <div class="col-md-10 offset-md-1 col-sm-12 justify-content-center">
-      <form [formGroup]="campaignSettingsForm" novalidate>
+      <form [formGroup]="campaignSettingsForm" (submit)="updateCampaign()" novalidate>
 
         <div class="form-row">
-          <div class="form-group col-md-12 col-sm-12">
+          <div class="form-group col-md-8 col-sm-12">
             <label class="form-label grassroot-label-em" for="name">{{ 'campaign.settings.name' | translate }}</label>
             <input type="text" class="form-control form-control-em" id="name" [formControl]="campaignSettingsForm.controls['name']" />
             <div class="alert alert-danger alert-inline" role="alert"
                  *ngIf="campaignSettingsForm.controls.name?.errors?.required && (campaignSettingsForm.controls.name?.touched || campaignSettingsForm.controls.name?.dirty)">
               {{ 'campaign.create.errors.fieldRequired' | translate }}</div>
+          </div>
+          <div class="form-group col-md-4 col-sm-12">
+            <label class="form-label grassroot-label-em" for="code">{{ 'campaign.settings.code' | translate }}</label>
+            <input type = "text" class="form-control form-control-em" id="code" [disabled]="campaign?.isActive() || extendingCampaign"
+                   [formControl]="campaignSettingsForm.controls['code']"/>
+            <div class="alert alert-danger alert-inline mt-1" role="alert"
+                 *ngIf="campaignSettingsForm.controls.code?.errors?.codeTaken">
+              {{ 'campaign.create.errors.codeTaken' | translate }}
+            </div>
+            <div class="alert alert-danger alert-inline mt-1" role="alert"
+                 *ngIf="campaignSettingsForm.controls.code?.errors?.required && (campaignSettingsForm.controls.code?.touched || campaignSettingsForm.controls.code?.dirty)">
+              {{ 'campaign.create.errors.fieldRequired' | translate }}</div>
+            <div class="alert alert-danger alert-inline mt-1" role="alert"
+                 *ngIf="campaignSettingsForm.controls.code?.errors?.codeNumber">
+              {{ 'campaign.create.errors.codeFormat' | translate }}</div>
+            <div class="alert alert-danger alert-inline mt-1" role="alert"
+                 *ngIf="!campaignSettingsForm.controls.code?.errors?.codeNumber &&
+                   (campaignSettingsForm.controls.code?.errors?.minlength || campaignSettingsForm.controls.code?.errors?.maxlength)">
+              {{ 'campaign.create.errors.codeLength' | translate }}</div>
           </div>
         </div>
 
@@ -28,19 +47,29 @@
               {{ 'campaign.create.errors.fieldRequired' | translate }}</div>
           </div>
           <div class="form-group col-md-4 col-sm-12">
-            <label class="form-label grassroot-label-em">{{ 'campaign.settings.image' | translate }}</label>
-            <div draggable="true" class="dragarea">
-              <div class="col-md-12 text-center" >
+            <div class="row col-12">
+              <label class="form-label grassroot-label-em">{{ 'campaign.settings.image' | translate }}</label>
+            </div>
+            <div class="row">
+              <div class="col-12 text-center dragarea" draggable="true">
                 <img class="img-thumbnail" *ngIf="campaignImageUrl" [src]="campaignImageUrl" />
-                <a class="grassroot-link" href="javascript:void(0)" (click)="file.click()" >
-                  {{ 'campaign.settings.image_add' | translate}}</a>
-                <input type="file" #file
-                       [multiple]="false"
-                       (change) = "alterCampaignImage($event)"
-                       style="display:none" />
               </div>
             </div>
-            <label class="form-label" *ngIf="campaignImageUrl">{{ 'campaign.settings.image_remove' | translate }}</label>
+            <div class="row">
+              <div class="col-12 text-center">
+              <a class="text-center grassroot-link" href="javascript:void(0)"
+                 *ngIf="!campaignImageUrl" (click)="file.click()" [translate]="'campaign.settings.image_add'"></a>
+              <p class="image-links" *ngIf="campaignImageUrl">
+                <!-- doing i18n here will be tricky, not all that necessary -->
+                <a class="grassroot-link" href="javascript:void(0)" (click)="file.click()">Change</a>
+                or <a class="grassroot-link" href="" (click)="removeCampaignImage()">remove</a> image
+              </p>
+              <input type="file" #file
+                     [multiple]="false" accept="image/*"
+                     (change) = "alterCampaignImage($event)"
+                     style="display:none" />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -51,24 +80,20 @@
           <div class="col-md-3 col-sm-6">
             <div class="form-group">
               <div class="input-group">
-                <input class="form-control" placeholder="yyyy-mm-dd" id="campaign-end-date" [disabled]="!extendingCampaign"
+                <input class="form-control" placeholder="yyyy-mm-dd" id="campaign-end-date"
                        [formControl]="campaignSettingsForm.controls['endDate']" name="edp" ngbDatepicker #d="ngbDatepicker">
                 <div class="input-group-append">
-                  <button class="btn calendar-button" (click)="d.toggle()" type="button">
+                  <button type="button" [ngClass]="{'btn': true, 'calendar-disabled': !extendingCampaign, 'calendar-button': extendingCampaign}"
+                          [disabled]="!extendingCampaign" (click)="d.toggle()" type="button">
                     <i class="far fa-calendar"></i>
                   </button>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-md-3 col-sm-12">
-            <!-- blank unless needed for new code -->
-            <input *ngIf="needsNewCode" type="text" class="form-control" [value]="campaign.campaignCode"
-              [formControl]="campaignSettingsForm.controls['newCode']" />
-          </div>
-          <div class="col-md-3 col-sm-12 float-right">
+          <div class="col-md-6 col-sm-12 float-right">
             <button class="btn btn-secondary hover-primary float-right" (click)="alterEndDate()">
-              {{ campaign?.isActive() ? 'Extend' : 'Reactivate' }}
+              {{ (campaign?.isActive() ? 'action.change' : 'campaign.settings.reactivate') | translate }}
             </button>
           </div>
         </div>
@@ -78,10 +103,15 @@
             <label class="grassroot-label-em">{{ 'campaign.settings.type' | translate }}</label>
           </div>
           <div class="col-md-3 col-sm-6">
-            {{ 'enum.CampaignType.' + campaign.campaignType | translate }}
+            {{ 'enum.CampaignType.' + campaign?.campaignType | translate }}
           </div>
-          <div class="col-md-6 col-sm-12 float-right">
-            <button class="btn btn-secondary hover-primary float-right">{{ 'action.change' | translate }}</button>
+          <div class="col-md-4 col-sm-12" *ngIf="changingType">
+            <select *ngIf="changingType" class="form-control form-control-em" [formControl]="campaignSettingsForm.controls['campaignType']">
+              <option *ngFor="let type of availableTypes" [value]="type">{{ 'enum.CampaignType.' + type | translate }}</option>
+            </select>
+          </div>
+          <div [ngClass]="{'col-sm-6': true, 'float-right': true, 'col-md-6': !changingType, 'col-md-2': changingType}">
+            <button type="button" class="btn btn-secondary hover-primary float-right" (click)="alterCampaignType()">{{ 'action.change' | translate }}</button>
           </div>
         </div>
 
@@ -90,10 +120,16 @@
             <label class="grassroot-label-em">{{ 'campaign.settings.group' | translate }}</label>
           </div>
           <div class="form-group col-sm-3">
-            {{ campaign.masterGroupName }}
+            {{ campaign?.masterGroupName }}
           </div>
-          <div class="col-md-6  col-sm-6 float-right">
-            <button class="btn btn-secondary hover-primary float-right">{{ 'action.change' | translate }}</button>
+          <div class="col-md-4 col-sm-12" *ngIf="changingGroup">
+            <select *ngIf="changingGroup" class="form-control form-control-em" [formControl]="campaignSettingsForm.controls['masterGroup']">
+              <option>{{ 'campaign.create.master-group.existing-select' | translate }}</option>
+              <option *ngFor="let group of availableGroups" value="{{ group.groupUid }}">{{ group.name }}</option>
+            </select>
+          </div>
+          <div [ngClass]="{'col-sm-6': true, 'float-right': true, 'col-md-6': !changingGroup, 'col-md-2': changingGroup}">
+            <button type="button" class="btn btn-secondary hover-primary float-right" (click)="changingGroup = !changingGroup">{{ 'action.change' | translate }}</button>
           </div>
         </div>
 
@@ -104,7 +140,7 @@
           <div class="form-group col-sm-3">
             <div class="form-check form-check-inline">
               <label class="form-check-label grassroot-label-em">
-                <input class="form-check-input" type="radio" value="true" disabled
+                <input class="form-check-input" type="radio" value="true"
                        name="sms-share" [formControl]="campaignSettingsForm.controls['smsShare']">
                 {{ 'action.yes' | translate }}
               </label>
@@ -113,40 +149,46 @@
           <div class="form-group col-sm-3">
             <div class="form-check form-check-inline">
               <label class="form-check-label grassroot-label-em">
-                <input class="form-check-input" type="radio" value="false" disabled
+                <input class="form-check-input" type="radio" value="false"
                        name="sms-share" [formControl]="campaignSettingsForm.controls['smsShare']">
                 {{ 'action.no' | translate }}
               </label>
             </div>
           </div>
           <div class="form-group col-sm-3 float-right">
-            <button class="btn btn-secondary hover-primary float-right">Change</button>
+            <button type="button" class="btn btn-secondary hover-primary float-right" (click)="alterSmsShare()">
+              {{ 'action.change' | translate }}</button>
           </div>
         </div>
 
-        <!-- todo : pull message cost from server -->
-        <div class="row" *ngIf="campaignSettingsForm.controls.smsShare?.value == 'true'">
-          <div class="col-sm-3">
+        <div class="row mb-3" *ngIf="campaignSettingsForm.controls.smsShare?.value == 'true'">
+          <div class="col-md-3 col-sm-6">
             <label for="sms-limit" class="grassroot-label-em">{{ 'campaign.create.sms-share.sms-limit' | translate }}</label>
           </div>
-          <div class="col-sm-3">
+          <div class="col-md-3 col-sm-6">
             <input id="sms-limit" type="number" class="form-control" [formControl]="campaignSettingsForm.controls['smsLimit']"/>
           </div>
-          <div class="col-sm-3 text-left">
-            {{ 'campaign.create.sms-share.sms-cost' | translate }}
+          <div class="col-md-6 col-sm-12 text-left">
+            <span [translate]="'campaign.settings.budget_estimate'"
+                  [translateParams]="{budget: smsBudget}">Budget is X</span>
+            <span class="limit-warn" *ngIf="campaignSettingsForm.controls['smsLimit']?.errors?.minShare">
+              (sharing requires a minimum limit of 10 shares)</span>
+            <span *ngIf="campaign?.smsSharingEnabled" [translate]="'campaign.settings.cost_estimate'"
+                  [translateParams]="{spent: smsSpent}">You have spent X</span>
           </div>
         </div>
 
         <div class="row">
           <div class="col-md-3 col-sm-12">
-            <label for="join-words" class="grassroot-label-em">Join topics: </label>
+            <label for="join-topic-change-select" class="grassroot-label-em">Join topics: </label>
           </div>
           <div class="form-group col-md-9 col-sm-12">
-            <input id="join-words" class="form-control" type="text" />
+            <select class="form-control" id="join-topic-change-select" multiple="multiple">
+              <option *ngFor="let topic of campaign?.joinTopics" [value]="topic" selected="selected">{{ topic }}</option>
+            </select>
           </div>
         </div>
 
-        <!-- URL SETTING STARTS HERE -->
         <div class="row">
           <div class="form-group col-sm-3">
             <label for="amandla-url" class="grassroot-label-em">{{ 'campaign.settings.petition' | translate }}</label>
@@ -217,7 +259,7 @@
             </button>
           </div>
           <div class="col-sm-8 ">
-            <button type="submit" class="btn btn-lg btn-primary float-right save-button"> {{ 'action.save' |
+            <button type="submit" [disabled]="!campaignSettingsForm.valid" class="btn btn-lg btn-primary float-right save-button"> {{ 'action.save' |
               translate }}
             </button>
           </div>
@@ -229,6 +271,65 @@
 
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="create-group-modal" aria-hidden="true">
-
+<div class="modal fade" tabindex="-1" role="dialog" id="sharing-messages-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create sharing messages</h5>
+        <button type="button" class="close" aria-label="Close" (click)="cancelSharingMessages()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          To enable sharing, please enter messages below: one to prompt the user to share, and then the
+          template for the sharing message itself
+        </p>
+        <campaign-message-tabset *ngIf="campaignLanguages" [blockIndex]="1" [languages]="campaignLanguages"
+                                 (messagesUpdated)="storeSharingMessages($event, 'SHARE_PROMPT')"
+                                 [titleKey]="'campaign.messages.titles.SHARE_PROMPT'"
+                                 [placeHolderKey]="'campaign.messages.placeholders.SHARE_PROMPT'"
+                                 [explanationKey]="'campaign.messages.explanations.SHARE_PROMPT'">
+        </campaign-message-tabset>
+        <hr />
+        <campaign-message-tabset *ngIf="campaignLanguages" [blockIndex]="2" [languages]="campaignLanguages"
+                                 (messagesUpdated)="storeSharingMessages($event, 'SHARE_SEND')"
+                                 [titleKey]="'campaign.messages.titles.SHARE_SEND'"
+                                 [placeHolderKey]="'campaign.messages.placeholders.SHARE_SEND'"
+                                 [explanationKey]="'campaign.messages.explanations.SHARE_SEND'">
+        </campaign-message-tabset>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary save-button" [disabled]="!sharingMsgsComplete"
+          data-dismiss="modal">{{ 'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary cancel-button" (click)="cancelSharingMessages()">
+          {{ 'action.cancel' | translate }}</button>
+      </div>
+    </div>
+  </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="change-type-warning-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Warning: Changing type</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          NOTE: Changing campaign type will affect your campaign messages. After saving, we strongly suggest
+          reviewing and updating your response messages for the campaign.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary hover-danger" data-dismiss="modal">
+          Continue</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -11,6 +11,7 @@ export class MediaService {
   private uploadMediaUrl = environment.backendAppUrl + "/api/media/store/body";
   private fetchImageUrl = environment.backendAppUrl + "/image";
 
+
   constructor(private httpClient: HttpClient) { }
 
   uploadMedia(image: any, mediaFunction: MediaFunction, mimeType: string = ""): Observable<string>{
@@ -33,6 +34,5 @@ export class MediaService {
   getImageUrl(mediaFunction: MediaFunction, imageKey: string): string {
     return this.fetchImageUrl + "/" + mediaFunction + "/" + imageKey;
   }
-
 
 }

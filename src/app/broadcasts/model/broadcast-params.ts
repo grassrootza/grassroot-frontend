@@ -18,6 +18,10 @@ export class BroadcastParams {
   campaignLinks: Map<String, String> = new Map();
   mergeFields: string[];
 
+  getFbPageNames(): string[] {
+    return this.facebookPages.map(page => page.displayName);
+  }
+
 }
 
 export const getBroadcastParams = (bp: BroadcastParams): BroadcastParams => {
@@ -28,6 +32,7 @@ export const getBroadcastParams = (bp: BroadcastParams): BroadcastParams => {
   params.fbConnected = bp.fbConnected;
   params.facebookPages = bp.facebookPages;
   params.twitterConnected = bp.twitterConnected;
+  params.twitterAccount = bp.twitterAccount;
   params.allMemberCount = bp.allMemberCount;
   params.campaignLinks = bp.campaignLinks;
   params.mergeFields = bp.mergeFields;
