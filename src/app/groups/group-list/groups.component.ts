@@ -48,7 +48,7 @@ export class GroupsComponent implements OnInit {
     this.groupService.groupInfoList.subscribe(
       groupList => {
         if (groupList) {
-          console.log("Groups loaded: ", groupList);
+          // console.log("Groups loaded: ", groupList);
           this.alertService.hideLoadingDelayed();
 
           this.groups = groupList;

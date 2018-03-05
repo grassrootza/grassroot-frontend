@@ -25,7 +25,13 @@ export class CampaignMsgRequest {
               public linkedActionType: string,
               public messages: Map<string, string> = new Map<string, string>(),
               public nextMsgIds: string[] = [],
-              public tags: string[] = []) {}
+              public tags: string[] = []) {
+
+  }
+
+  messagesComplete(reqLanguages: Language[]) {
+    return reqLanguages.every(lang => this.messages.has(lang.threeDigitCode) && !!this.messages.get(lang.threeDigitCode));
+  }
 }
 
 export class CampaignMsgServerDTO {
@@ -46,16 +52,6 @@ export class CampaignMsgServerDTO {
     this.tags = tags;
     this.messages = Array.from(messageMap.keys()).map(key => new CampaignMsgPair(messageMap.get(key), key));
     this.nextMsgIds = nextMsgIds;
-  }
-
-  getMessage(lang: Language): string {
-    if (this.messages) {
-      let msgIndex = this.messages.findIndex(msg => msg.language == lang.threeDigitCode);
-      if (msgIndex != -1) {
-        return this.messages[msgIndex].message;
-      }
-    }
-    return '';
   }
 
   getMessageMap(): Map<string, string> {
@@ -84,3 +80,9 @@ export const getCampaignMsg = (cm: CampaignMsgServerDTO): CampaignMsgServerDTO =
   cmDTO.messages = cm.messages;
   return cmDTO;
 };
+
+export interface CampaignUpdateParams {
+  name?: string, description?: string, mediaFileUid?: string, removeImage?: boolean, campaignType?: string,
+  endDateMillis?: number, newCode?: string, newMasterGroupUid?: string, joinTopics?: string[],
+  landingUrl?: string, petitionApi?: string
+}

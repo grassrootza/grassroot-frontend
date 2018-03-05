@@ -36,6 +36,7 @@ import {AccountService} from "./user/account.service";
 import {SearchService} from "./search/search.service";
 import {MeetingDetailsComponent} from "./task/meeting-details/meeting-details.component";
 import {LoggedInServicesModule} from "./logged-in-services.module";
+import {MediaService} from "./media/media.service";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -145,7 +146,8 @@ const routes: Routes = [
     TaskService,
     PasswordResetService,
     AccountService,
-    SearchService
+    SearchService,
+    MediaService
   ],
   bootstrap: [AppComponent]
 })

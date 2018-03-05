@@ -65,7 +65,6 @@ export class AccountService {
       .set("paymentUid", paymentUid)
       .set("accountUid", accountUid);
     return this.httpClient.get(this.downloadAccountBillingRecordUrl, { params: params, responseType: 'blob' });
-
   }
 
   closeAccount(accountUid: string): Observable<any> {

@@ -1,4 +1,4 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {
@@ -16,6 +16,7 @@ import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage} from './model/broadcast';
 import * as moment from 'moment';
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class BroadcastService {
@@ -23,12 +24,13 @@ export class BroadcastService {
   fetchUrlBase = environment.backendAppUrl + "/api/broadcast/fetch/";
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
   imageUploadUrl = environment.backendAppUrl + "/api/broadcast/create/image/upload";
+  costThisMonthUrl = environment.backendAppUrl + "/api/broadcast/cost-this-month";
 
-  private createRequest: BroadcastRequest = new BroadcastRequest();
+  public createRequest: BroadcastRequest = new BroadcastRequest();
   private createCounts: BroadcastCost = new BroadcastCost();
 
   private _createParams: BroadcastParams = new BroadcastParams();
-  public createParams: EventEmitter<BroadcastParams> = new EventEmitter(null);
+  public createParams: BehaviorSubject<BroadcastParams> = new BehaviorSubject<BroadcastParams>(null);
 
   public pages: string[] = ['types', 'content', 'members', 'schedule'];
   public latestStep: number = 1; // in case we go backwards
@@ -41,12 +43,13 @@ export class BroadcastService {
     this.loadBroadcast();
   }
 
-  fetchCreateParams(type: string, entityUid: string): Observable<BroadcastParams> {
+  fetchCreateParams(type: string, entityUid: string) {
     const fullUrl = this.createUrlBase + type + "/info/" + entityUid;
-    return this.httpClient.get<BroadcastParams>(fullUrl).map(result => {
+    this.httpClient.get<BroadcastParams>(fullUrl).subscribe(result => {
       console.log("create fetch result: ", result);
       this._createParams = getBroadcastParams(result);
-      this.createParams.emit(this._createParams);
+      console.log("after transform: ", this._createParams);
+      this.createParams.next(getBroadcastParams(result));
       return result;
     });
   }
@@ -158,14 +161,15 @@ export class BroadcastService {
   }
 
   setSchedule(schedule: BroadcastSchedule) {
+    console.log("broadcast now looks like: ", this.createRequest);
     this.createRequest.sendType = schedule.sendType;
     this.createRequest.sendDateString = schedule.sendDateString;
     this.createRequest.sendDateTimeMillis = schedule.sendDateTimeMillis;
-    console.log("okay, sed send date time millis  = ", this.createRequest.sendDateTimeMillis);
     this.saveBroadcast(); // since we remain on this step
   }
 
   getConfirmationFields(): BroadcastConfirmation {
+    console.log("getting confirmation fields, request: ", this.createRequest);
     let cn = new BroadcastConfirmation();
     cn.sendShortMessage = this.createRequest.sendShortMessages;
     cn.sendEmail = this.createRequest.sendEmail;
@@ -200,7 +204,7 @@ export class BroadcastService {
 
   sendBroadcast() {
     const fullUrl = this.createUrlBase + this.createRequest.type + "/" + this.createRequest.parentId;
-    console.log("sending broadcast, send date time millis = ", this.createRequest.sendDateTimeMillis);
+    console.log("sending broadcast, create request = ", this.createRequest);
     return this.httpClient.post(fullUrl, this.createRequest);
   }
 
@@ -325,6 +329,13 @@ export class BroadcastService {
     const fullUrl = this.createUrlBase + "task/MEETING/" + meetingUid;
     let params = new HttpParams().set("message", message);
     return this.httpClient.post(fullUrl, null, {params: params});
+  }
+
+  getCostThisMonth(): Observable<number> {
+    return this.httpClient.get<number>(this.costThisMonthUrl)
+      .map(resp => {
+        return resp;
+      })
   }
 
 }

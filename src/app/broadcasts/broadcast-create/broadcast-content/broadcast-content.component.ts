@@ -8,6 +8,7 @@ import {optionalUrlValidator} from "../../../utils/CustomValidators";
 import {environment} from "../../../../environments/environment";
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {AlertService} from "../../../utils/alert.service";
+import {limitImageSizesInRichText} from "../../../utils/media-utils";
 
 declare var $: any;
 
@@ -48,6 +49,8 @@ export class BroadcastContentComponent implements OnInit {
   linkForm: FormGroup;
   insertingLinkType: string;
 
+  emailHtml: string = "";
+
   IMG_MAX = {'facebook': 476, 'twitter': 506};
 
   constructor(private router: Router,
@@ -74,6 +77,11 @@ export class BroadcastContentComponent implements OnInit {
   // todo : save things every few words
   keyUpShortMessage(event: any) {
     this.smsCharsLeft = this.MAX_SMS_LENGTH - event.target.value.length;
+  }
+
+  keyUpEmail(event: any) {
+    this.emailHtml = this.contentForm.controls['emailContent'].value;
+    this.emailHtml = limitImageSizesInRichText(this.emailHtml);
   }
 
   fbKeyUp(event: any) {
@@ -116,6 +124,9 @@ export class BroadcastContentComponent implements OnInit {
 
   saveContent() {
     this.content = this.contentForm.value;
+    if (this.types.email) {
+      this.content.emailContent = limitImageSizesInRichText(this.content.emailContent);
+    }
 
     this.content.facebookImageKey = this.fbImageKey;
     this.content.facebookLink = this.fbLink;

@@ -6,6 +6,7 @@
 
       <div class="row">
         <div class="col-md-4">
+          <img *ngIf="campaignImageUrl" class="img-fluid" [src]="campaignImageUrl" />
           <span>{{ campaign.campaignStartDate.format('DD MMM YYYY') }}</span> to
           <span>{{ campaign.campaignEndDate.format('DD MMM YYYY') }}</span>
         </div>

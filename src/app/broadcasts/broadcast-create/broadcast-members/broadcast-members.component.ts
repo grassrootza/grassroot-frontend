@@ -26,6 +26,7 @@ export class BroadcastMembersComponent implements OnInit {
   private skipSmsIfEmail: boolean = false; // we may need to use this X000 times repeatedly, so stashing it as well as in-form
 
   public memberCount: number;
+  public filteredMemberNames: string[];
 
   public group: Group;
   private memberFilter = new MembersFilter();
@@ -36,7 +37,6 @@ export class BroadcastMembersComponent implements OnInit {
               private alertService: AlertService) {
     this.countParams = new BroadcastCost();
     this.createParams = this.broadcastService.getCreateParams();
-    // console.log("on construction, create params: ", this.createParams);
     this.memberForm = formBuilder.group({
       'selectionType': ['ALL_MEMBERS', Validators.required],
       'taskTeams': [],
@@ -85,9 +85,10 @@ export class BroadcastMembersComponent implements OnInit {
   setUpSelectChangeReaction() {
     this.memberForm.controls['selectionType'].valueChanges.subscribe(value => {
       if (value === 'ALL_MEMBERS') {
+        this.filteredMemberNames = [];
         this.setupDefaultCounts();
       } else if (value == 'TASK_TEAMS') {
-        console.log("switched to task teams");
+        this.filteredMemberNames = [];
         this.taskTeamSelectChanged();
       } else if (value == 'CUSTOM_SELECTION') {
         this.membersFilterChanged(this.memberFilter);
@@ -107,7 +108,13 @@ export class BroadcastMembersComponent implements OnInit {
     this.memberFilter = filter;
     this.groupService.filterGroupMembers(this.group.groupUid, filter)
       .subscribe(members => {
-          this.calculateCosts(members.map(m => m.user));
+          let users = members.map(m => m.user);
+          this.calculateCosts(users);
+          if (users && users.length > 0 && users.length < 10) {
+            this.filteredMemberNames = users.map(user => user.displayName);
+          } else {
+            this.filteredMemberNames = [];
+          }
         },
         error => {
           this.alertService.hideLoading();

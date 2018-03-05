@@ -44,6 +44,10 @@
                   </span>
               </div>
 
+              <div class="group-info" *ngIf="group?.hasPermission('GROUP_PERMISSION_SEE_MEMBER_DETAILS')">
+                <a class="grassroot-link flyer-link" href="#" (click)="exportGroupMembers()">Export group to Excel</a>
+              </div>
+
             </div>
             <div class="col-md-5 text-right">
               <div class="group-info">

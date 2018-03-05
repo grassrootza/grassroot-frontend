@@ -63,6 +63,9 @@
             <quill-editor #emailEditor [style]="{height: '180px'}" [formControlName]="'emailContent'"></quill-editor>
           </div>
         </div>
+        <div class="form-row" *ngIf="types.email">
+          {{ emailHtml }}
+        </div>
         <div class="row" *ngIf="types.email">
           <div class="col-md-5 col-sm-12">
             <button (click)="chooseLink('email')" class="email-link"><i class="fas fa-link"></i>

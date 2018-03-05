@@ -88,6 +88,72 @@
             </div>
           </div>
 
+            <div id="topics-accordion" role="tablist" style="padding-bottom: 1rem !important;">
+              <div class="card">
+                <div class="card-header" role="tab" id="topics-accordion-header">
+                  <h5 class="mb-0">
+                    <a data-toggle="collapse" href="#topics-accordion-body" role="button" aria-expanded="true" aria-controls="topics-accordion-body">
+                      {{'group.settings.topics' | translate}}
+                    </a>
+                  </h5>
+                </div>
+
+                <div id="topics-accordion-body" class="collapse" role="tabpanel" aria-labelledby="topics-accordion-header" data-parent="#topics-accordion" >
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div *ngFor="let topic of group.topics; let i = index">
+                          <div *ngIf="i+1 <= topicInterestInFirstColumn" class="alert alert-secondary" role="alert">
+                            <div class="row">
+                              <div class="col-sm-8">
+                                {{topic}}
+                              </div>
+                              <div class="col-sm-2">
+                                {{getNumberOfMembersWithTopic(topic)}}
+                              </div>
+                              <div class="col-sm-2" (click)="deleteTopic(topic)">
+                                <i class="fas fa-trash-alt"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div *ngFor="let topic of group.topics; let i = index">
+                          <div *ngIf="i+1 > topicInterestInFirstColumn" class="alert alert-secondary" role="alert">
+                            <div class="row">
+                              <div class="col-sm-8">
+                                {{topic}}
+                              </div>
+                              <div class="col-sm-2">
+                                {{getNumberOfMembersWithTopic(topic)}}
+                              </div>
+                              <div class="col-sm-2" (click)="deleteTopic(topic)">
+                                <i class="fas fa-trash-alt"></i>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-12">
+                        <div class="form-group row">
+                          <label for="newTopicNameInput" class="col-sm-3 col-form-label">{{'group.settings.createNewTopicLabel' | translate}}</label>
+                          <div class="col-sm-5">
+                            <input type="text" class="form-control" id="newTopicNameInput" (keyup)="newTopicNameChanged($event)">
+                          </div>
+                          <button type="button" class="btn btn-primary col-sm-2" [disabled]="newTopicName.length == 0"
+                          (click)="addNewTopic()">{{'action.add' | translate}}</button>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
 
           <div id="accordion" role="tablist" *ngIf="shouldDisplayPermissionsTable()">
             <div class="card">

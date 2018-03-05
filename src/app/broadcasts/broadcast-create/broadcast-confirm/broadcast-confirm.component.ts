@@ -27,15 +27,13 @@ export class BroadcastConfirmComponent implements OnInit {
   }
 
   edit() {
-    console.log("edit clicked!");
     this.activeModal.dismiss('Edit clicked');
     this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(), this.broadcastService.parentId(), 'content']);
   }
 
   confirm() {
-    console.log("okay, here goes ...");
+    console.log("create request = ", this.broadcastService.createRequest);
     this.broadcastService.sendBroadcast().subscribe(result => {
-      console.log("it worked! result: ", result);
       let redirectRoute = this.broadcastService.parentViewRoute();
       this.broadcastService.clearBroadcast();
       this.activeModal.dismiss('Broadcast sent!');

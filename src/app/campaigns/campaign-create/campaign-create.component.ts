@@ -2,13 +2,18 @@ import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../campaign.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DateTimeUtils, epochMillisFromDate} from "../../utils/DateTimeUtils";
-import {optionalUrlValidator, urlValidator} from "../../utils/CustomValidators";
+import {optionalUrlValidator} from "../../utils/CustomValidators";
 import {CampaignRequest} from "./campaign-request";
 import {GroupService} from "../../groups/group.service";
 import {GroupInfo} from "../../groups/model/group-info.model";
 import {AlertService} from "../../utils/alert.service";
 import {Router} from "@angular/router";
-import {isNumeric} from "rxjs/util/isNumeric";
+import {
+  checkCodeIsNumber,
+  hasChosenGroupIfNeeded,
+  hasGroupNameIfNeeded,
+  hasValidLandingUrlIfNeeded, smsLimitAboveZero, ValidateCodeNotTaken
+} from "../utils/campaign-validators";
 
 declare var $: any;
 
@@ -37,7 +42,7 @@ export class CampaignCreateComponent implements OnInit {
       'name': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': ['', Validators.compose([Validators.required, Validators.minLength(10)])],
       'code': ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(3),
-        checkCodeIsNumber, this.checkCodeAvailability.bind(this)])],
+        checkCodeIsNumber]), ValidateCodeNotTaken.createValidator(this.campaignService)],
       'startDate': [DateTimeUtils.nowAsDateStruct(), Validators.required],
       'endDate': [DateTimeUtils.futureDateStruct(3, 0), Validators.required],
       'type': ['', Validators.required],
@@ -46,7 +51,7 @@ export class CampaignCreateComponent implements OnInit {
       'groupName': ['', hasGroupNameIfNeeded],
       'amandlaUrl': ['', optionalUrlValidator],
       'smsShare': ['false'],
-      'smsLimit': [0],
+      'smsLimit': [0, smsLimitAboveZero],
       'landingPage': ['GRASSROOT'],
       'landingUrl': ['', hasValidLandingUrlIfNeeded]
     }, { validate: 'onBlur' });
@@ -163,47 +168,3 @@ export class CampaignCreateComponent implements OnInit {
   }
 
 }
-
-export const hasGroupNameIfNeeded = (input: FormControl) => {
-  if (!input.root) {
-    return null;
-  }
-
-  if (input.root.get('groupType') && input.root.get('groupType').value == 'NEW') {
-    return Validators.required(input);
-  }
-
-  return null;
-};
-
-export const hasChosenGroupIfNeeded = (input: FormControl) => {
-  if (!input.root) {
-    return null;
-  }
-
-  if (input.root.get('groupType') && input.root.get('groupType').value == 'EXISTING') {
-    return Validators.required(input);
-  }
-
-  return null;
-};
-
-export const hasValidLandingUrlIfNeeded = (input: FormControl) => {
-  if (!input.root || !(input.root.get('landingPage'))) {
-    return null;
-  }
-
-  if (input.root.get('landingPage') && input.root.get('landingPage').value == 'OTHER') {
-    return urlValidator(input);
-  }
-
-  return null;
-};
-
-export const checkCodeIsNumber = (control: FormControl) => {
-  let code = control.value;
-  if ((code) && !isNumeric(code)) {
-    return { codeNumber: true }
-  }
-  return null;
-};

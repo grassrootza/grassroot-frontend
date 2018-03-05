@@ -56,7 +56,6 @@
       "INFORMATION": "Information"
     }
   },
-
   "menu": {
     "home": "HOME",
     "groups": "GROUPS",
@@ -631,6 +630,8 @@
       "groupPublic": "Public",
       "groupPrivate": "Private",
       "advancedPermissions": "Advanced permissions",
+      "topics": "Topics",
+      "createNewTopicLabel": "Create new topic",
       "reminderInMinutes": "When will reminders be sent?",
       "reminders": {
         "noReminder": "No reminder",
@@ -856,21 +857,28 @@
     "settings": {
       "title": "Update Campaign Settings",
       "name": "Campaign Name/Title",
+      "code": "Campaign code",
       "description": "Description",
       "image": "Campaign Image (optional)",
+      "image_add": "Click to add",
+      "image_change": "Change image",
       "image_remove": "Remove image",
-      "starts": "Campaign Ends: ",
-      "ends": "Ends: ",
+      "ends": "Campaign Ends: ",
+      "extend": "Extend",
+      "reactivate": "Reactivate",
+      "need_new": "Your campaign's old code has been taken. To reactivate it, please set a new one in the 'code' field",
       "type": "Campaign Type:",
       "group": "Master Group:",
       "new": "Change to new group",
       "existing": "Change to existing group",
-      "petition": "Amandla petition URL: ",
+      "petition": "Amandla URL: ",
       "sms_sharing": "Allow SMS sharing: ",
-      "sms_limit": "SMS limit",
-      "cost": "Estimated cost: R ",
+      "sms_limit": "SMS limit ",
+      "budget_estimate": "Budget estimate: {{ budget }}",
+      "cost_estimate": ". You have spent {{ spent }} to date",
       "landing": "Landing page: ",
-      "url": "URL"
+      "url": "URL",
+      "done": "Done! Campaign has been updated"
     }
   },
   "broadcasts": {
@@ -886,6 +894,7 @@
         "title": "How would you like to broadcast this message?",
         "smsLabel": "SMS",
         "smsCosts": "SMS costs: {{ smsCostCents }}c/message",
+        "smsCostsThisMonth" : "Costs this month: ",
         "emailLabel": "Email",
         "fbLabel": "Facebook",
         "twitterLabel": "Twitter",
@@ -1132,7 +1141,9 @@
     "insert": "Insert",
     "view": "View",
     "download": "Download",
-    "closeAccount": "Close account"
+    "closeAccount": "Close account",
+    "change": "Change",
+    "add": "Add"
   },
   "general": {
     "charsRemaining": "Characters remaining"

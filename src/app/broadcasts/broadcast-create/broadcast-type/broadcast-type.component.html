@@ -1,4 +1,4 @@
-<div class="col-md-10 offset-md-1 col-12">
+<div class="col-md-10 offset-md-1 col-12" *ngIf="createParams">
   <div class="row">
     <div class="col-md-12 text-center mb-md-3" >
       <h3>{{ 'broadcasts.create.types.title' | translate }}</h3>
@@ -24,6 +24,7 @@
               {{ 'broadcasts.create.types.smsLabel' | translate }}
             </p>
             <p *ngIf="createParams.smsAllowed">{{ 'broadcasts.create.types.smsCosts' | translate:createParams }}</p>
+            <p *ngIf="createParams.smsAllowed">{{ 'broadcasts.create.types.smsCostsThisMonth' | translate}} {{costThisMonth | currency: 'ZAR':'symbol-narrow'}}</p>
           </div>
 
           <div class="col-md-2 col-sm-4">
@@ -53,6 +54,7 @@
           </div>
           <div class="col-md-4 col-sm-8">
             <p class="type-header">{{ 'broadcasts.create.types.fbLabel' | translate }}</p>
+            <p class="type-desc" *ngIf="createParams.fbConnected && typesForm.controls['facebook']?.value != true">{{ createParams.getFbPageNames().join(", ") }}</p>
             <select *ngIf="createParams.fbConnected && typesForm.controls['facebook']?.value == true"
                     multiple [size]="createParams?.facebookPages?.length + 1"
                     class="form-control fb-select" [formControl]="typesForm.controls['facebookPages']">

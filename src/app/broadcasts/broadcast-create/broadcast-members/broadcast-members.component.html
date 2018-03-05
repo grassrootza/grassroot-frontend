@@ -48,6 +48,7 @@
                 {{ 'broadcasts.create.members.customSelection' | translate }}
                 <span *ngIf="memberForm.controls['selectionType']?.value == 'CUSTOM_SELECTION'">({{ countParams?.totalNumber }})</span>
               </label>
+              <p *ngIf="filteredMemberNames">{{ filteredMemberNames.join(", ") }}</p>
             </div>
           </div>
         </div>
