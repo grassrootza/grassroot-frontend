@@ -201,9 +201,9 @@ export class CampaignSettingsComponent implements OnInit {
     let moment = DateTimeUtils.momentFromNgbStruct(this.campaignSettingsForm.controls['endDate'].value);
     let changedDate = this.extendingCampaign && moment.unix() > 0 && moment != this.campaign.campaignEndDate;
     if (changedDate && (this.campaign.isActive() || !this.needsNewCode)) {
-      params.endDateMillis = moment.unix();
+      params.endDateMillis = moment.valueOf();
     } else if (changedDate && this.extendingCampaign && this.campaignSettingsForm.controls['newCode'].valid) { // so campaign must be disabled and require new code
-      params.endDateMillis = moment.unix();
+      params.endDateMillis = moment.valueOf();
       params.newCode = this.campaignSettingsForm.controls['newCode'].value;
     }
 

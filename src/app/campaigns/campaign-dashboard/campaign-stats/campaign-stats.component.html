@@ -33,7 +33,7 @@
               <div class="col-md-6 col-sm-6">
                 <h5 [translate]="'campaign.statistics.engagement.topic'"
                   [translateParams]="{ channel: !!selectedChannel ? selectedChannel : 'all'}">Topic Interest: </h5>
-                {{ campaign?.topics }}
+                {{ campaign?.joinTopics }}
                 <h5 [translate]="'campaign.statistics.engagement.view'">View by: </h5>
                 <button (click)="loadChannelEngagement()" class="btn btn-outline-primary">{{ 'campaign.statistics.engagement.channels' | translate }}</button>
                 <button (click)="loadProvinceEngagement()" class="btn btn-outline-primary">{{ 'campaign.statistics.engagement.provinces' | translate }}</button>

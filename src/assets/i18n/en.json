@@ -893,7 +893,7 @@
       "types": {
         "title": "How would you like to broadcast this message?",
         "smsLabel": "SMS",
-        "smsCosts": "SMS costs: {{ smsCostCents }}c/message",
+        "smsCosts": "{{ smsCostCents }}c/message",
         "smsCostsThisMonth" : "Costs this month: ",
         "emailLabel": "Email",
         "fbLabel": "Facebook",

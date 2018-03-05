@@ -57,6 +57,7 @@ export class BroadcastScheduleComponent implements OnInit {
   }
 
   cancel() {
+    console.log("cancelling");
     this.broadcastService.cancelCurrentCreate();
   }
 

@@ -4,6 +4,7 @@ import {BroadcastService} from "../../broadcast.service";
 import {BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BroadcastParams} from "../../model/broadcast-params";
+import {AlertService} from "../../../utils/alert.service";
 
 @Component({
   selector: 'app-broadcast-type',
@@ -16,22 +17,24 @@ export class BroadcastTypeComponent implements OnInit {
   public createParams: BroadcastParams = new BroadcastParams();
   public costThisMonth: number = 0;
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService) {
+  constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService,
+              private alertService: AlertService) {
+    this.alertService.showLoading();
     this.typesForm = this.formBuilder.group(new BroadcastTypes(), {validator: Validators.compose([oneItemSelected, fbPageSelectedIfFb])});
   }
 
   ngOnInit() {
     this.typesForm.setValue(this.broadcastService.getTypes());
-
     this.broadcastService.createParams.subscribe(createParams => {
       this.createParams = createParams;
+      this.alertService.hideLoading();
     }, error => {
       console.log("failed, error: ", error);
     });
 
-    this.broadcastService.getCostThisMonth().subscribe(resp => {
-      this.costThisMonth = resp/100;
-    })
+    // this.broadcastService.getCostThisMonth().subscribe(resp => {
+    //   this.costThisMonth = resp/100;
+    // })
   }
 
   saveTypes(): boolean {

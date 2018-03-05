@@ -23,7 +23,6 @@ export class BroadcastService {
 
   fetchUrlBase = environment.backendAppUrl + "/api/broadcast/fetch/";
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
-  imageUploadUrl = environment.backendAppUrl + "/api/broadcast/create/image/upload";
   costThisMonthUrl = environment.backendAppUrl + "/api/broadcast/cost-this-month";
 
   public createRequest: BroadcastRequest = new BroadcastRequest();
@@ -257,6 +256,7 @@ export class BroadcastService {
   }
 
   clearBroadcast() {
+    console.log("cancelling, exiting");
     this.createRequest.clear();
     localStorage.removeItem('broadcastCreateRequest');
     localStorage.removeItem('broadcastCreateStep');
@@ -269,11 +269,6 @@ export class BroadcastService {
       this.latestStep = nextPage;
       localStorage.setItem('broadcastCreateStep', this.latestStep.toString());
     }
-  }
-
-  uploadImage(image): Observable<any> {
-    const fullUrl = this.imageUploadUrl;
-    return this.httpClient.post(fullUrl, image, { responseType: 'text' });
   }
 
   getGroupBroadcasts(groupUid: string, broadcastSchedule: string, pageNo: number, pageSize: number): Observable<BroadcastPage>{

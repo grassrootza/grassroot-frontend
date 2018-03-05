@@ -9,6 +9,8 @@ import {environment} from "../../../../environments/environment";
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {AlertService} from "../../../utils/alert.service";
 import {limitImageSizesInRichText} from "../../../utils/media-utils";
+import {MediaService} from "../../../media/media.service";
+import {MediaFunction} from "../../../media/media-function.enum";
 
 declare var $: any;
 
@@ -29,9 +31,10 @@ export class BroadcastContentComponent implements OnInit {
   MAX_SMS_LENGTH: number = 160;
   public smsCharsLeft: number = this.MAX_SMS_LENGTH;
 
-  MAX_SOCIAL_LENGTH: number=  240; // using Twitter, but enforcing good posting practice on FB
-  public fbCharsLeft: number = this.MAX_SOCIAL_LENGTH;
-  public twCharsLeft: number = this.MAX_SOCIAL_LENGTH;
+  MAX_FB_LENGTH: number = 600;
+  MAX_TWITTER_LENGTH: number=  240; // using Twitter, but enforcing good posting practice on FB
+  public fbCharsLeft: number = this.MAX_FB_LENGTH;
+  public twCharsLeft: number = this.MAX_TWITTER_LENGTH;
 
   private fbImageKey: string = "";
   public fbImageUrl: string = "";
@@ -56,6 +59,7 @@ export class BroadcastContentComponent implements OnInit {
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private broadcastService: BroadcastService,
+              private mediaService: MediaService,
               private ng2ImgMax: Ng2ImgMaxService,
               private alertService: AlertService) {
     this.contentForm = formBuilder.group(new BroadcastContent());
@@ -79,17 +83,12 @@ export class BroadcastContentComponent implements OnInit {
     this.smsCharsLeft = this.MAX_SMS_LENGTH - event.target.value.length;
   }
 
-  keyUpEmail(event: any) {
-    this.emailHtml = this.contentForm.controls['emailContent'].value;
-    this.emailHtml = limitImageSizesInRichText(this.emailHtml);
-  }
-
   fbKeyUp(event: any) {
-    this.fbCharsLeft = this.MAX_SOCIAL_LENGTH - event.target.value.length;
+    this.fbCharsLeft = this.MAX_FB_LENGTH - event.target.value.length;
   }
 
   twKeyUp(event: any) {
-    this.twCharsLeft = this.MAX_SOCIAL_LENGTH - event.target.value.length;
+    this.twCharsLeft = this.MAX_TWITTER_LENGTH - event.target.value.length;
   }
 
   setUpValidation() {
@@ -209,10 +208,12 @@ export class BroadcastContentComponent implements OnInit {
       let image = images[0];
       this.alertService.showLoading();
       this.ng2ImgMax.resizeImage(image, this.IMG_MAX[providerId], this.IMG_MAX['providerId'], true).subscribe(result => {
+
         let formData: FormData = new FormData();
         let resizedImage = new File([result], result.name);
         formData.append("image", resizedImage, image.name);
-        this.broadcastService.uploadImage(formData).subscribe(response => {
+        // need to pass type in here as resize image passes it back with octet-stream
+        this.mediaService.uploadMedia(resizedImage, MediaFunction.BROADCAST_IMAGE, image.type).subscribe(response => {
           this.alertService.hideLoadingDelayed(); // so img can pop upt
           console.log(`for provider id : ${providerId}, response: ${response}`);
           if (providerId == 'facebook') {
@@ -225,7 +226,7 @@ export class BroadcastContentComponent implements OnInit {
         }, error => {
           this.alertService.hideLoading();
           console.log("error uploading image, error: ", error);
-        })
+        });
 
       });
     }

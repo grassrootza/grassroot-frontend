@@ -67,6 +67,12 @@ export class BroadcastMembersComponent implements OnInit {
       if (this.group) {
         this.calculateCosts(this.group.members.map(getUserFromMembershipInfo));
       }
+
+      let selectedTypes = this.broadcastService.getTypes();
+      if (!selectedTypes.shortMessage && !selectedTypes.email) {
+        this.next(true); // since there is no point
+      }
+
     });
 
     this.setupDefaultCounts();
@@ -154,8 +160,8 @@ export class BroadcastMembersComponent implements OnInit {
     return true;
   }
 
-  next() {
-    if (this.saveMemberSelection()) {
+  next(skipValidity = false) {
+    if (skipValidity || this.saveMemberSelection()) {
       this.broadcastService.setPageCompleted('members');
       this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(), this.broadcastService.parentId(), 'schedule']);
     }
