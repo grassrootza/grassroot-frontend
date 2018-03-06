@@ -7,6 +7,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from '../../model/permission.model';
 import {AlertService} from "../../../utils/alert.service";
 import {GroupRole} from "../../model/group-role";
+import {Observable} from "rxjs/Observable";
+import 'rxjs/add/observable/forkJoin';
+
 
 declare var $:any;
 
@@ -51,30 +54,22 @@ export class GroupSettingsComponent implements OnInit {
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
       let groupUid = params['id'];
-      this.groupService.loadGroupDetailsCached(groupUid, false)
-        .subscribe(
-          groupDetails => {
-            this.group = groupDetails;
-            this.topicInterestInFirstColumn = Math.ceil(groupDetails.topics.length / 2);
 
-            this.getPermissionsForRole(this.group.groupUid);
-            this.populateFormData(this.group, [], [], []);
-          },
-          error => {
-            console.log("Error loading groups", error.status)
-          }
-        );
+      Observable.forkJoin(
+        this.groupService.loadGroupDetailsCached(groupUid, false),
+        this.groupService.fetchRawTopicInterestsStats(groupUid),
+        this.groupService.fetchGroupPermissionsToDisplay()
+      ).subscribe(data => {
+        this.group = data[0];
+        this.topicInterestInFirstColumn = Math.ceil(data[0].topics.length / 2);
 
-      this.groupService.fetchRawTopicInterestsStats(groupUid)
-        .subscribe(
-          results => {
-            this.topicInterestsStats = results;
-          }
-        );
-    });
+        this.topicInterestsStats = data[1];
 
-    this.groupService.fetchGroupPermissionsToDisplay().subscribe(resp => {
-      this.permissionsToDisplay = resp;
+        this.permissionsToDisplay = data[2];
+
+        this.getPermissionsForRole(this.group.groupUid);
+        this.populateFormData(this.group);
+      });
     });
   }
 
@@ -111,14 +106,16 @@ export class GroupSettingsComponent implements OnInit {
 
   }
 
-  populateFormData(group: Group, ordinaryMemberPermissions: Permission[], committeeMemberPermissions: Permission[], groupOrganizerPermissions: Permission[]){
+  populateFormData(group: Group){
     if(group != null){
       this.groupForm.controls['name'].setValue(group.name);
       this.groupForm.controls['description'].setValue(group.description);
       this.groupForm.controls['privacy'].setValue(group.discoverable ? "PUBLIC" : "PRIVATE");
       this.groupForm.controls['reminderInMinutes'].setValue(group.reminderMinutes);
     }
+  }
 
+  populatePermissionsTableFormData(ordinaryMemberPermissions: Permission[], committeeMemberPermissions: Permission[], groupOrganizerPermissions: Permission[]) {
     for(let i = 0 ; i < this.permissionsToDisplay.length ; i++){
       if(ordinaryMemberPermissions.length > 0){
         this.groupForm.get("ordinaryMemberPermissions").get(this.permissionsToDisplay[i]).setValue(this.ordinaryMemberPermissions[i].permissionEnabled);
@@ -135,6 +132,7 @@ export class GroupSettingsComponent implements OnInit {
 
   getPermissionsForRole(groupUid: string){
     this.groupService.fetchGroupPermissionsForRole(groupUid, this.roles).subscribe( perms => {
+
       for (let role of this.roles) {
         if (role == GroupRole.ROLE_ORDINARY_MEMBER)
           this.ordinaryMemberPermissions = perms.getParameters(role);
@@ -143,7 +141,8 @@ export class GroupSettingsComponent implements OnInit {
         else if (role == GroupRole.ROLE_GROUP_ORGANIZER)
           this.groupOrganizerPermissions = perms.getParameters(role);
       }
-      this.populateFormData(null, this.ordinaryMemberPermissions, this.committeeMemberPermissions, this.groupOrganizerPermissions);
+      this.populatePermissionsTableFormData(this.ordinaryMemberPermissions, this.committeeMemberPermissions, this.groupOrganizerPermissions);
+
     });
   }
 
@@ -215,18 +214,17 @@ export class GroupSettingsComponent implements OnInit {
   }
 
   public updatePermissions(){
-    // removing until find source of strange emptying error on Firefox
-    // let updatedPermissionsByRole = {
-    //   "ROLE_ORDINARY_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_ORDINARY_MEMBER),
-    //   "ROLE_COMMITTEE_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_COMMITTEE_MEMBER),
-    //   "ROLE_GROUP_ORGANIZER": this.getPermissionForRoleFormValues(GroupRole.ROLE_GROUP_ORGANIZER)
-    // };
-    //
-    // this.groupService.updateGroupPermissionsForRole(updatedPermissionsByRole, this.group.groupUid).subscribe(resp => {
-    //   this.permissionsChanged = false;
-    //   this.getPermissionsForRole(this.group.groupUid);
-    //   this.alertService.alert("group.settings.updateDone");
-    // });
+    let updatedPermissionsByRole = {
+      "ROLE_ORDINARY_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_ORDINARY_MEMBER),
+      "ROLE_COMMITTEE_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_COMMITTEE_MEMBER),
+      "ROLE_GROUP_ORGANIZER": this.getPermissionForRoleFormValues(GroupRole.ROLE_GROUP_ORGANIZER)
+    };
+
+    this.groupService.updateGroupPermissionsForRole(updatedPermissionsByRole, this.group.groupUid).subscribe(resp => {
+      this.permissionsChanged = false;
+      this.getPermissionsForRole(this.group.groupUid);
+      this.alertService.alert("group.settings.updateDone");
+    });
   }
 
   onImageSelected(event) {
