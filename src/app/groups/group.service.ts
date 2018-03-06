@@ -613,6 +613,10 @@ export class GroupService {
       params = params.set("namePhoneOrEmail", filter.namePhoneOrEmail);
     }
 
+    if (filter.language != null) {
+      params = params.set("languages", filter.language.join(","));
+    }
+
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
       .map(resp => resp.map(m => Membership.createInstance(m)))
   }

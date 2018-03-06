@@ -347,7 +347,8 @@
         "DAYS_AGO-EXACT": "exactly",
         "DAYS_AGO-BEFORE": "more than",
         "DAYS_AGO-AFTER": "less than",
-        "DAYS_AGO_SUFIX": "days ago"
+        "DAYS_AGO_SUFIX": "days ago",
+        "userLanguage": "User language"
       },
       "manage":{
         "manage": "Manage",

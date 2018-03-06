@@ -13,10 +13,11 @@ export class MembersFilter {
   joinDaysAgo: number = null;
   joinDateCondition: JoinDateCondition = null;
   namePhoneOrEmail: string = null;
+  language: string[] = null;
 
   hasContent(): boolean {
     return !!this.provinces || !!this.taskTeams || !!this.topics || !!this.affiliations || !!this.joinSources ||
-      !!this.campaigns || !!this.joinDate || !!this.joinDaysAgo || !!this.joinDateCondition || !!this.namePhoneOrEmail;
+      !!this.campaigns || !!this.joinDate || !!this.joinDaysAgo || !!this.joinDateCondition || !!this.namePhoneOrEmail || !this.language;
   }
 
 }

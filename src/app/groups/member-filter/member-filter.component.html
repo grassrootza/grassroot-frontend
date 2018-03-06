@@ -69,6 +69,16 @@
     </select>
   </div>
 
+  <div class="col-sm-3 col-lg-2 filter-item">
+    <label for="userLanguage" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.userLanguage'">User
+      language</label>
+  </div>
+  <div class=" col-sm-9 col-lg-10 filter-item">
+    <select id="userLanguage" class="form-control language-multi-select" multiple="multiple" style="width: 100%">
+      <option *ngFor="let language of userLanguages" [value]="language.twoDigitCode"> {{language.fullName}}</option>
+    </select>
+  </div>
+
 
   <div class="col-sm-3 col-lg-2 filter-item">
     <label for="campaigns" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.joinDate'">Joined

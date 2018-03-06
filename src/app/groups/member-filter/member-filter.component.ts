@@ -10,6 +10,7 @@ import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import * as moment from "moment";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import "rxjs/add/operator/debounceTime";
+import {AFRIKAANS, ENGLISH, Language, SOTHO, XHOSA, ZULU} from "../../utils/language";
 
 declare var $: any;
 
@@ -22,6 +23,7 @@ export class MemberFilterComponent implements OnInit {
 
   provinceKeys: string[];
   joinMethods: string[];
+  userLanguages: Language[];
 
   @Input()
   taskTeams: GroupRef[] = [];
@@ -52,6 +54,8 @@ export class MemberFilterComponent implements OnInit {
   constructor(private formBuilder: FormBuilder) {
     this.provinceKeys = Object.keys(UserProvince);
     this.joinMethods = Object.keys(GroupJoinMethod);
+    this.userLanguages = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
+    console.log(this.userLanguages);
   }
 
   ngOnInit() {
@@ -84,6 +88,7 @@ export class MemberFilterComponent implements OnInit {
     $(".affiliations-multi-select").select2({placeholder: "Select affiliations (organizations)"});
     $(".join-methods-multi-select").select2({placeholder: "Select sources"});
     $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
+    $(".language-multi-select").select2({placeholder: "Select languages"});
 
 
     $(".provinces-multi-select").on('change.select2', function () {
@@ -122,7 +127,11 @@ export class MemberFilterComponent implements OnInit {
       this.fireFilterChange();
     }.bind(this));
 
-
+    $(".language-multi-select").on('change.select2', function () {
+      const data = $('.language-multi-select').select2('data');
+      this.filter.language = data.length > 0 ? data.map(tt => tt.id) : null;
+      this.fireFilterChange();
+    }.bind(this));
   }
 
   dateConditionTypeChanged(value) {
