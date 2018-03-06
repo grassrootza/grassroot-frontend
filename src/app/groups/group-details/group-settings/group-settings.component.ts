@@ -135,7 +135,6 @@ export class GroupSettingsComponent implements OnInit {
 
   getPermissionsForRole(groupUid: string){
     this.groupService.fetchGroupPermissionsForRole(groupUid, this.roles).subscribe( perms => {
-
       for (let role of this.roles) {
         if (role == GroupRole.ROLE_ORDINARY_MEMBER)
           this.ordinaryMemberPermissions = perms.getParameters(role);
@@ -145,7 +144,6 @@ export class GroupSettingsComponent implements OnInit {
           this.groupOrganizerPermissions = perms.getParameters(role);
       }
       this.populateFormData(null, this.ordinaryMemberPermissions, this.committeeMemberPermissions, this.groupOrganizerPermissions);
-
     });
   }
 
@@ -200,7 +198,11 @@ export class GroupSettingsComponent implements OnInit {
         let isPublic = this.groupForm.controls['privacy'].value == "PUBLIC";
         let reminderInMinutes = this.groupForm.controls['reminderInMinutes'].value;
         this.groupService.updateGroupSettings(this.group.groupUid, name, description, isPublic, reminderInMinutes).subscribe(resp => {
-          this.updatePermissions();
+          if (this.permissionsChanged) {
+            this.updatePermissions();
+          } else {
+            this.alertService.alert("group.settings.updateDone");
+          }
           this.settingsChanged = false;
         });
       }
@@ -213,17 +215,18 @@ export class GroupSettingsComponent implements OnInit {
   }
 
   public updatePermissions(){
-    let updatedPermissionsByRole = {
-      "ROLE_ORDINARY_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_ORDINARY_MEMBER),
-      "ROLE_COMMITTEE_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_COMMITTEE_MEMBER),
-      "ROLE_GROUP_ORGANIZER": this.getPermissionForRoleFormValues(GroupRole.ROLE_GROUP_ORGANIZER)
-    };
-
-    this.groupService.updateGroupPermissionsForRole(updatedPermissionsByRole, this.group.groupUid).subscribe(resp => {
-      this.permissionsChanged = false;
-      this.getPermissionsForRole(this.group.groupUid);
-      this.alertService.alert("group.settings.updateDone");
-    });
+    // removing until find source of strange emptying error on Firefox
+    // let updatedPermissionsByRole = {
+    //   "ROLE_ORDINARY_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_ORDINARY_MEMBER),
+    //   "ROLE_COMMITTEE_MEMBER": this.getPermissionForRoleFormValues(GroupRole.ROLE_COMMITTEE_MEMBER),
+    //   "ROLE_GROUP_ORGANIZER": this.getPermissionForRoleFormValues(GroupRole.ROLE_GROUP_ORGANIZER)
+    // };
+    //
+    // this.groupService.updateGroupPermissionsForRole(updatedPermissionsByRole, this.group.groupUid).subscribe(resp => {
+    //   this.permissionsChanged = false;
+    //   this.getPermissionsForRole(this.group.groupUid);
+    //   this.alertService.alert("group.settings.updateDone");
+    // });
   }
 
   onImageSelected(event) {

@@ -3,7 +3,9 @@
     <div class="row" *ngIf="!(joinInfo.groupImageUrl)">
       <div class="col-12 pl-md-5 pr-md-5">
           <h2 class="join-header text-center">{{ 'join.title' | translate:joinInfo }}</h2>
-          <h3 *ngIf="(joinInfo?.groupDescription)">{{ 'join.description' | translate:joinInfo }}</h3>
+          <p *ngIf="(joinInfo?.groupDescription)" class="lead"
+            [innerHtml]="descriptionText">
+          </p>
       </div>
     </div>
     <!-- would have used bootstrap media here but it is behaving strangely (huge image), because, css -->
@@ -13,7 +15,9 @@
       </div>
       <div class="col-md-8 pr-md-5 col-sm-12">
           <h2 class="join-header">{{ 'join.title' | translate:joinInfo }}</h2>
-          <h4 *ngIf="(joinInfo?.groupDescription)">{{ 'join.description' | translate:joinInfo }}</h4>
+          <p *ngIf="(joinInfo?.groupDescription)" class="lead"
+             [innerHtml]="descriptionText">
+          </p>
       </div>
     </div>
     <div class="card-body">
@@ -44,10 +48,10 @@
               <option *ngFor="let p of provinceKeys" [value]="p">{{ province[p] }}</option>
             </select>
           </div>
-          <div class="form-group" *ngIf="(joinInfo.groupTopics)">
+          <div class="form-group" *ngIf="(joinInfo?.groupJoinTopics)">
             <label for="topics">{{ 'join.topics' | translate }}</label>
             <select class="form-control" id="topics" name="topics" multiple>
-              <option *ngFor="let topic of joinInfo.groupTopics">
+              <option *ngFor="let topic of joinInfo?.groupJoinTopics">
                 {{topic}}
               </option>
             </select>

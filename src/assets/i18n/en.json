@@ -246,6 +246,8 @@
         "some": "You can add {{ joinWordsLeft }} more join words to this group: "
       },
       "joinWordTaken": "Sorry, that join word is already taken",
+      "joinTopicsLabel": "Join topics (displayed when a user hits the join page or dials the join code)",
+      "joinTopicsUpdated": "Done! Join topics updated",
       "descriptors": {
         "ADDED_BY_SYS_ADMIN": "Via: Added by Grassroot system admin",
         "SELF_JOINED": "Via: Used USSD join code in past",
@@ -751,7 +753,8 @@
       "code-specified": "*134*1994*{{campaignCode}}#",
       "creationLabel": "Created by: ",
       "creationInfo": "{{ creatingUserName }} on {{ createdDate }}",
-      "typeLabel": "Campaign type: "
+      "typeLabel": "Campaign type: ",
+      "groupLabel": "Linked group: "
     },
     "statistics": {
       "members": {

@@ -8,7 +8,7 @@ export class JoinInfo {
   groupDescription: string;
   groupImageUrl: string;
 
-  groupTopics: string[];
+  groupJoinTopics: string[];
 
 }
 

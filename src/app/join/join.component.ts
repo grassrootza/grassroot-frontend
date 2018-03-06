@@ -19,6 +19,7 @@ export class JoinComponent implements OnInit {
   groupUid: string;
   code: string;
   broadcastId: string;
+  descriptionText: string;
 
   province = UserProvince;
   provinceKeys: string[];
@@ -50,6 +51,8 @@ export class JoinComponent implements OnInit {
         this.joinService.initiateJoinSequence(this.groupUid, this.code, this.broadcastId).subscribe((result: JoinInfo) => {
           console.log("retrieved this join info: ", result);
           this.joinInfo = result;
+          this.descriptionText = this.joinInfo.groupDescription.replace(/\n/g, "</p><p class='lead'>");
+          console.log("description text: ", this.descriptionText);
         });
       });
     });

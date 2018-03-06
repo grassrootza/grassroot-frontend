@@ -19,13 +19,15 @@
                 <strong>{{'campaign.dashboard.creationLabel' | translate}}</strong>
                 <span translate [translateParams]="{
                   creatingUserName: campaign.creatingUserName,
-                  createdDate: campaign.createdDate.format('DD MMMM YYYY')
-                }">
+                  createdDate: campaign.createdDate.format('DD MMMM YYYY')}">
                   campaign.dashboard.creationInfo</span>
               </div>
               <div class="campaign-info">
                 {{ 'campaign.dashboard.typeLabel' | translate }}{{ 'campaign.types.' + campaign.campaignType | translate }}
               </div>
+              <div class="campaign-info">
+                {{ 'campaign.dashboard.groupLabel' | translate }}
+                <a [routerLink]="['/group', campaign.masterGroupUid]" class="grassroot-link">// {{ campaign.masterGroupName }}</a>
             </div>
             <div class="col-md-5 text-right">
               <div class="campaign-info">
@@ -44,7 +46,6 @@
                   </div>
                 </div>
               </div>
-              <!-- then the rest -->
             </div>
           </div>
         </div>

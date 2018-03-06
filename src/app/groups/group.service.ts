@@ -77,6 +77,7 @@ export class GroupService {
 
   groupSearchUserByTermUrl = environment.backendAppUrl + "/api/user/related/user/names";
   groupSetTopicsUrl = environment.backendAppUrl + "/api/group/modify/topics/set";
+  groupSetJoinTopicsUrl = environment.backendAppUrl + "/api/group/modify/topics/join";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -638,6 +639,12 @@ export class GroupService {
     return this.httpClient.post<any>(fullUrl, null, {params: params}).map(resp => {
       return resp;
     })
+  }
+
+  setJoinTopics(groupUid: string, joinTopics: string[]): Observable<any> {
+    const fullUrl = this.groupSetJoinTopicsUrl + "/" + groupUid;
+    let params = new HttpParams().set("joinTopics", joinTopics.join(","));
+    return this.httpClient.post<any>(fullUrl, null, {params: params});
   }
 
   removeTaskTeam(parentUid: string, taskTeamUid: string): Observable<Group> {

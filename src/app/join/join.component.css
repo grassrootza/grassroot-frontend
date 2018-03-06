@@ -16,3 +16,8 @@
   font-weight: 600;
   display: block !important;
 }
+
+.join-description {
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
