@@ -17,12 +17,7 @@ export class BroadcastCreateComponent implements OnInit, AfterViewInit {
               private route: ActivatedRoute,
               private alertService: AlertService,
               private broadcastService: BroadcastService) {
-  }
 
-  private currentTab: string = "types";
-
-  ngOnInit() {
-    console.log("Initiating new subscribe flow");
     this.route.params.subscribe(params => {
       this.type = params["type"];
       this.parentId = params["parentId"];
@@ -30,15 +25,20 @@ export class BroadcastCreateComponent implements OnInit, AfterViewInit {
       this.broadcastService.initCreate(this.type, this.parentId);
     });
 
-
-
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
         let uri = ev.urlAfterRedirects;
         this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
+        console.log("current tab: ", this.currentTab);
         this.broadcastService.currentStep = this.broadcastService.pages.indexOf(this.currentTab) + 1;
       }
     });
+  }
+
+  private currentTab: string = "types";
+
+  ngOnInit() {
+
   }
 
   ngAfterViewInit() {

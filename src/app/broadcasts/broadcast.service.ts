@@ -100,6 +100,7 @@ export class BroadcastService {
       title: this.createRequest.title,
       shortMessage: this.createRequest.shortMessageString,
       emailContent: this.createRequest.emailContent,
+      emailAttachmentKeys: this.createRequest.emailAttachmentKeys,
       facebookPost: this.createRequest.facebookContent,
       facebookLink: this.createRequest.facebookLink,
       facebookLinkCaption: this.createRequest.facebookLinkCaption,
@@ -117,6 +118,7 @@ export class BroadcastService {
     this.createRequest.title = content.title;
     this.createRequest.shortMessageString = content.shortMessage;
     this.createRequest.emailContent = content.emailContent;
+    this.createRequest.emailAttachmentKeys = content.emailAttachmentKeys;
     this.createRequest.facebookContent = content.facebookPost;
     this.createRequest.facebookLink = content.facebookLink;
     this.createRequest.facebookImageKey = content.facebookImageKey;
@@ -124,7 +126,7 @@ export class BroadcastService {
     this.createRequest.twitterLink = content.twitterLink;
     this.createRequest.twitterImageKey = content.twitterImageKey;
     this.saveBroadcast();
-    console.log("saved fb image key: ", this.createRequest.facebookImageKey);
+    // console.log("saved fb image key: ", this.createRequest.facebookImageKey);
   }
 
   getMembers(): BroadcastMembers {
@@ -258,6 +260,8 @@ export class BroadcastService {
   clearBroadcast() {
     console.log("cancelling, exiting");
     this.createRequest.clear();
+    this.currentStep = 1;
+    this.latestStep = 1;
     localStorage.removeItem('broadcastCreateRequest');
     localStorage.removeItem('broadcastCreateStep');
   }

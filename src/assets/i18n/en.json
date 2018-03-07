@@ -921,7 +921,8 @@
         "twitterSection": "Tweet",
         "charsRemaining": " characters remaining",
         "link": {
-          "file": "attach image or file",
+          "file": "attach file",
+          "image": "add an image",
           "join": "insert a join link",
           "campaign": "insert a campaign link",
           "insert": "insert a link",

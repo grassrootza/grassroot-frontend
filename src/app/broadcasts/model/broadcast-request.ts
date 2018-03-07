@@ -18,6 +18,7 @@ export class BroadcastRequest {
 
   sendEmail: boolean = false;
   emailContent: string = "";
+  emailAttachmentKeys: string[] = [];
 
   postToFacebook: boolean = false;
   facebookPages: string[] = [];
@@ -61,6 +62,7 @@ export class BroadcastRequest {
     this.shortMessageString = "";
     this.sendEmail = false;
     this.emailContent = "";
+    this.emailAttachmentKeys = [];
     this.postToFacebook = false;
     this.facebookPages = [];
     this.facebookContent = "";
@@ -100,6 +102,7 @@ export class BroadcastRequest {
     this.shortMessageString = br.shortMessageString;
     this.sendEmail = br.sendEmail;
     this.emailContent = br.emailContent;
+    this.emailAttachmentKeys = br.emailAttachmentKeys;
     this.postToFacebook = br.postToFacebook;
     this.facebookPages = br.facebookPages;
     this.facebookContent = br.facebookContent;
@@ -164,6 +167,7 @@ export class BroadcastContent {
   title: string = "";
   shortMessage: string = "";
   emailContent: string = "";
+  emailAttachmentKeys: string[] = [];
   facebookPost: string = "";
   facebookLink: string = "";
   facebookLinkCaption: string = "";

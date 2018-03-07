@@ -69,7 +69,7 @@ export class BroadcastMembersComponent implements OnInit {
       }
 
       let selectedTypes = this.broadcastService.getTypes();
-      if (!selectedTypes.shortMessage && !selectedTypes.email) {
+      if (this.broadcastService.currentStep == 3 && !selectedTypes.shortMessage && !selectedTypes.email) {
         this.next(true); // since there is no point
       }
 

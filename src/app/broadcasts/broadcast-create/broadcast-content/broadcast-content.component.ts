@@ -36,6 +36,8 @@ export class BroadcastContentComponent implements OnInit {
   public fbCharsLeft: number = this.MAX_FB_LENGTH;
   public twCharsLeft: number = this.MAX_TWITTER_LENGTH;
 
+  private emailAttachmentKeys: string[] = [];
+
   private fbImageKey: string = "";
   public fbImageUrl: string = "";
   public fbLink: string = "";
@@ -125,6 +127,7 @@ export class BroadcastContentComponent implements OnInit {
     this.content = this.contentForm.value;
     if (this.types.email) {
       this.content.emailContent = limitImageSizesInRichText(this.content.emailContent);
+      this.content.emailAttachmentKeys = this.emailAttachmentKeys;
     }
 
     this.content.facebookImageKey = this.fbImageKey;
@@ -201,6 +204,22 @@ export class BroadcastContentComponent implements OnInit {
     this.twitterLinkCaption = twLinkCaption;
   }
 
+  uploadEmailAttachments(event) {
+    let images = event.target.files;
+    if (images.length > 0) {
+      let image = images[0];
+      console.log("file name ? : ", image.name);
+      this.alertService.showLoading();
+      this.mediaService.uploadMedia(image, MediaFunction.BROADCAST_IMAGE, image.type).subscribe(response => {
+        this.alertService.hideLoadingDelayed(); // so img can pop upt
+        this.emailAttachmentKeys.push(response);
+      }, error => {
+        this.alertService.hideLoading();
+        console.log("error uploading image, error: ", error);
+      });
+    }
+  }
+
   uploadImage(event, providerId) {
     let images = event.target.files;
 
@@ -208,10 +227,7 @@ export class BroadcastContentComponent implements OnInit {
       let image = images[0];
       this.alertService.showLoading();
       this.ng2ImgMax.resizeImage(image, this.IMG_MAX[providerId], this.IMG_MAX['providerId'], true).subscribe(result => {
-
-        let formData: FormData = new FormData();
         let resizedImage = new File([result], result.name);
-        formData.append("image", resizedImage, image.name);
         // need to pass type in here as resize image passes it back with octet-stream
         this.mediaService.uploadMedia(resizedImage, MediaFunction.BROADCAST_IMAGE, image.type).subscribe(response => {
           this.alertService.hideLoadingDelayed(); // so img can pop upt
