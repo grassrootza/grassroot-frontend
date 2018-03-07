@@ -1,4 +1,22 @@
-<h1 class="main-title">Search Results</h1>
+<div class="row mb-3">
+  <div class="col-12">
+    <a [routerLink]="['/home']" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i> {{ 'search.back' | translate }}</a>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-sm-12">
+    <h1 class="main-title" [translate]="'search.title'">Search Results</h1>
+  </div>
+  <div class="col-md-6 col-sm-12">
+    <div class="input-group">
+      <input #searchTerm type="text" class="form-control search-bar" (keyup.enter)="searchAgain(searchTerm.value)"/>
+      <span class="input-group-btn">
+          <button class="btn btn-link search-addon" (click)="searchAgain(searchTerm.value)"><i class="fa fa-search"></i> {{ 'action.search' | translate }}</button>
+      </span>
+    </div>
+  </div>
+</div>
 
 <nav class="navbar navbar-expand-lg navbar-light">
 
@@ -11,23 +29,23 @@
     <ul class="main-nav navbar-nav mr-auto">
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'my-activities'}">
-        <a class="nav-link" href="#" [routerLink]="['my-activities']" [translate]="'search.nav.activities'"> My Activities </a>
+        <a class="nav-link" href="#" [routerLink]="['my-activities']" [translate]="'search.nav.activities'"> {{'search.nav.activities' | translate}} </a>
       </li>
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'my-groups'}">
-        <a class="nav-link" href="#" [routerLink]="['my-groups']" [translate]="'search.nav.groups'"> My Groups </a>
+        <a class="nav-link" href="#" [routerLink]="['my-groups']" [translate]="'search.nav.groups'"> {{'search.nav.groups' | translate}} </a>
       </li>
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'my-campaigns'}">
-        <a class="nav-link" href="#" [routerLink]="['my-campaigns']" [translate]="'search.nav.campaigns'"> My Campaigns </a>
+        <a class="nav-link" href="#" [routerLink]="['my-campaigns']" [translate]="'search.nav.campaigns'"> {{'search.nav.campaigns' | translate}} </a>
       </li>
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'public-meetings'}">
-        <a class="nav-link" href="#" [routerLink]="['public-meetings']" [translate]="'search.nav.meetings'"> Public Meetings </a>
+        <a class="nav-link" href="#" [routerLink]="['public-meetings']" [translate]="'search.nav.meetings'"> {{'search.nav.meetings' | translate}} </a>
       </li>
 
       <li class="nav-item" [ngClass]="{active: currentTab === 'public-groups'}">
-        <a class="nav-link" href="#" [routerLink]="['public-groups']" [translate]="'search.nav.public-groups'"> Public Groups </a>
+        <a class="nav-link" href="#" [routerLink]="['public-groups']" [translate]="'search.nav.public-groups'"> {{'search.nav.public-groups' | translate}} </a>
       </li>
 
     </ul>

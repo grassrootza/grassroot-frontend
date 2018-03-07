@@ -1,47 +1,48 @@
-<div *ngIf="groups.length > 0" class="card">
-  <div class="card-body">
-    <span>{{groups.length}} Public groups found</span>
+<div class="row" *ngIf="groups">
+  <div class="col-12 result-count">
+    <div>{{groups?.length}} public groups found</div>
+  </div>
+</div>
 
-    <div class="container group-info-header">
+<div *ngIf="groups?.length > 0" class="card">
+    <div class="card-header">
       <div class="row">
         <div class="col-md-4 col-lg-4 d-block">Group Name</div>
         <div class="col-md-2 col-lg-2 d-none d-md-block">Created on</div>
         <div class="col-md-2 col-lg-2 d-none d-md-block">Members</div>
-        <div class="col-md-2 col-lg-2 d-none d-md-block">Organised by</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">Organized by</div>
         <div class="col-md-2 col-lg-2 d-none d-md-block"></div>
       </div>
     </div>
 
-    <div class="container ">
-      <div *ngFor="let group of filteredPublicGroupsPage" class="row flex flex-wrap group-info-row">
-        <div class="col-4 col-lg-4 group-name">
-          {{group.name}}
-        </div>
-
-        <div class="col-2 col-lg-2">
-          {{group.groupCreationTime | date: 'dd MMM yy'}}
-        </div>
-
-        <div class="col-2 col-lg-2">
-          <img src="assets/members.png"/>
-          {{group.memberCount}}
-        </div>
-
-        <div class="col-2 col-lg-2">
-          {{group.groupCreatorName}}
-        </div>
-
-        <div class="col-2 col-lg-2 font-weight-bold">
-          <button type="button" class="btn btn-success" (click)="setGroup(group)" data-toggle="modal" data-target="#join-group-modal">
-            Ask to join
-          </button>
-        </div>
+  <div class="card-body">
+    <div *ngFor="let group of filteredPublicGroupsPage" class="row flex flex-wrap search-result-row">
+      <div class="col-4 col-lg-4 group-name">
+        {{group.name}}
       </div>
-      <br/>
+
+      <div class="col-2 col-lg-2">
+        {{group.groupCreationTime | date: 'dd MMM yy'}}
+      </div>
+
+      <div class="col-2 col-lg-2">
+        <img src="assets/members.png"/>
+        {{group.memberCount}}
+      </div>
+
+      <div class="col-2 col-lg-2">
+        {{group.groupCreatorName}}
+      </div>
+
+      <div class="col-2 col-lg-2 font-weight-bold">
+        <button type="button" class="btn btn-secondary hover-primary" (click)="setGroup(group)" data-toggle="modal" data-target="#join-group-modal">
+          Ask to join
+        </button>
+      </div>
     </div>
   </div>
 
-  <nav aria-label="Group list navigation" *ngIf="pagesList.length > 0">
+  <nav aria-label="Group list navigation" *ngIf="pagesList.length > 1">
     <ul class="pagination justify-content-end">
       <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
         <a class="page-indicator " (click)="previousPage()">
@@ -60,27 +61,21 @@
   </nav>
 </div>
 
-<div *ngIf="groups.length === 0" class="card">
-  <div class="card-body">
-    <span>{{groups.length}} Public groups found</span>
-  </div>
-</div>
-
 <!--Modals-->
 
 <div class="modal fade" tabindex="-1" role="dialog" id="join-group-modal" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Join group</h5>
+        <h5 class="modal-title">Ask to join group</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-
-        <label>Join message</label>
-        <textarea type="text" #joinWord placeholder="Enter a join request message"
+        <label>Please write a message to the group organizer so they know who you are and why
+        you want to join their group</label>
+        <textarea type="text" #joinWord placeholder="Enter a message to accompany join request"
                name="name" class="form-control">
         </textarea>
       </div>

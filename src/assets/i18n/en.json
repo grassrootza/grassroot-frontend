@@ -108,7 +108,13 @@
       "group": "Group",
       "campaign": "Campaign"
     },
-    "loading": "Fetching data ..."
+    "loading": "Fetching data ...",
+    "joinModal": {
+      "titleNotMember": "Do you want to join this group?",
+      "titleMember": "Already a member!",
+      "titleNoneFound": "Join code not found",
+      "bodyNoneFound": "It looks like you are searching by group join code, but we can't find any group matching that code ({{ code }}). Do you want to do a full text search or close and try again?"
+    }
   },
   "groups": {
     "title": "Groups",
@@ -1147,7 +1153,9 @@
     "download": "Download",
     "closeAccount": "Close account",
     "change": "Change",
-    "add": "Add"
+    "add": "Add",
+    "join": "Join",
+    "search": "Search"
   },
   "general": {
     "charsRemaining": "Characters remaining"
@@ -1169,6 +1177,7 @@
   },
   "search": {
     "title": "Search Results",
+    "back": "Back to Home",
     "nav": {
       "activities": "My Activities",
       "groups": "My Groups",

@@ -8,13 +8,13 @@ declare var $: any;
 @Component({
   selector: 'app-public-groups',
   templateUrl: './public-groups.component.html',
-  styleUrls: ['./public-groups.component.css']
+  styleUrls: ['./public-groups.component.css', '../global-search-results.component.css']
 })
 export class PublicGroupsComponent implements OnInit {
 
   private userUid:string = "";
   private searchTerm:string = "";
-  public groups:Group[] = [];
+  public groups: Group[];
 
 
   protected pageSize: number = 10;

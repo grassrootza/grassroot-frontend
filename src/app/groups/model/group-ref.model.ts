@@ -18,7 +18,7 @@ export class GroupMembersRef {
   }
 
   public hasMember(memberUid: string) {
-    return !!this.members && this.members.find(m => m.memberUid === memberUid);
+    return !!this.members && this.members.findIndex(m => m.memberUid === memberUid) != -1;
   }
 }
 

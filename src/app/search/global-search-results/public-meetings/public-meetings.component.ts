@@ -10,13 +10,13 @@ declare var $: any;
 @Component({
   selector: 'app-public-meetings',
   templateUrl: './public-meetings.component.html',
-  styleUrls: ['./public-meetings.component.css']
+  styleUrls: ['./public-meetings.component.css', '../global-search-results.component.css']
 })
 export class PublicMeetingsComponent implements OnInit {
 
   private userUid:string = "";
   private searchTerm:string = "";
-  public meetings: TaskInfo[] = [];
+  public meetings: TaskInfo[];
   public taskToView: Task;
 
   protected pageSize: number = 10;

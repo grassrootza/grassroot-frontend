@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserService} from "../../../user/user.service";
 import {ActivatedRoute, Params} from "@angular/router";
-import {Task} from 'app/task/task.model';
+import {Task} from '../../../task/task.model'
 import {SearchService} from "../../search.service";
 import {TaskService} from "../../../task/task.service";
 import {TaskType} from "../../../task/task-type";
@@ -10,13 +10,13 @@ declare var $: any;
 @Component({
   selector: 'app-my-activities',
   templateUrl: './my-activities.component.html',
-  styleUrls: ['./my-activities.component.css']
+  styleUrls: ['./my-activities.component.css', '../global-search-results.component.css']
 })
 export class MyActivitiesComponent implements OnInit {
 
   private userUid:string = "";
   private searchTerm:string = "";
-  public userTasksFiltered: Task[] = [];
+  public userTasksFiltered: Task[];
 
   public taskToView:Task = null;
 

@@ -8,14 +8,15 @@ import {Group} from "../../../groups/model/group.model";
 @Component({
   selector: 'app-my-groups',
   templateUrl: './my-groups.component.html',
-  styleUrls: ['./my-groups.component.css']
+  styleUrls: ['./my-groups.component.css', '../global-search-results.component.css']
 })
 export class MyGroupsComponent implements OnInit {
 
   private userUid:string = "";
   private searchTerm:string = "";
-  public filteredGroups:GroupInfo[] = [];
-  public groups:Group[] = [];
+
+  public groups: Group[];
+
   public group:Group = null;
 
   protected pageSize: number = 10;

@@ -1,8 +1,11 @@
-<div *ngIf="groups.length > 0" class="card">
-  <div class="card-body">
-    <span>{{groups.length}} Groups found that you belong to</span>
+<div class="row" *ngIf="groups">
+  <div class="col-12 result-count">
+    <div>{{groups?.length}} groups found that you belong to</div>
+  </div>
+</div>
 
-    <div class="container group-info-header">
+<div *ngIf="groups?.length > 0" class="card">
+    <div class="card-header">
       <div class="row">
         <div class="col-md-4 col-lg-4 d-block">Group Name</div>
         <div class="col-md-2 col-lg-2 d-none d-md-block">Created on</div>
@@ -12,10 +15,11 @@
       </div>
     </div>
 
-    <div class="container ">
-      <div *ngFor="let group of filteredGroupsPage" class="row flex flex-wrap group-info-row">
-        <div class="col-4 col-lg-4 group-name">
-          <a href="" (click)="triggerViewGroup(group)">{{group.name}}</a>
+  <div class="card-body">
+      <div *ngFor="let group of filteredGroupsPage" class="row flex flex-wrap search-result-row">
+        <div class="col-4 col-lg-4">
+          <a class="primary-entity-name-link font-weight-bold group-name"
+             href="" (click)="triggerViewGroup(group)">{{group.name}}</a>
         </div>
 
         <div class="col-2 col-lg-2">
@@ -38,11 +42,9 @@
         <div class="col-2 col-lg-2 font-weight-bold">
           {{"*134*1994*" +group.joinCode + "#"}}
         </div>
-      </div>
-      <br/>
     </div>
   </div>
-  <nav aria-label="Group list navigation" *ngIf="pagesList.length > 0">
+  <nav aria-label="Group list navigation" *ngIf="pagesList.length > 1">
     <ul class="pagination justify-content-end">
       <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
         <a class="page-indicator " (click)="previousPage()">
@@ -61,16 +63,3 @@
   </nav>
 
 </div>
-
-<div *ngIf="groups.length === 0" class="card">
-  <div class="card-body">
-    <span>{{groups.length}} Groups found</span>
-  </div>
-</div>
-
-
-
-<!--===========-->
-
-
-
