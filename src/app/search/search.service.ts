@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {Observable} from "rxjs/Observable";
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Task} from 'app/task/task.model';
+import {Task} from '../task/task.model';
 import {getGroupEntity, Group} from "../groups/model/group.model";
 import {UserService} from "../user/user.service";
 import {TaskInfo} from "../task/task-info.model";

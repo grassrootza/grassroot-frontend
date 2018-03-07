@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UserService} from "../../../user/user.service";
 import {ActivatedRoute, Params} from "@angular/router";
-import {Task} from 'app/task/task.model';
+import {Task} from '../../../task/task.model'
 import {SearchService} from "../../search.service";
 import {TaskService} from "../../../task/task.service";
 import {TaskType} from "../../../task/task-type";

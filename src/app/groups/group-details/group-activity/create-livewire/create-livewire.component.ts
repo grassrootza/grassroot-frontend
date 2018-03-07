@@ -4,7 +4,7 @@ import {GroupService} from "../../../group.service";
 import {GroupInfo} from "../../../model/group-info.model";
 import {Task} from "../../../../task/task.model";
 import {TaskService} from "../../../../task/task.service";
-import {TaskType} from 'app/task/task-type';
+import {TaskType} from '../../../../task/task-type';
 import {UserService} from "../../../../user/user.service";
 import {LiveWireAlertType} from "../../../../livewire/live-wire-alert-type.enum";
 import {LiveWireAlertDestType} from "../../../../livewire/live-wire-alert-dest-type.enum";
