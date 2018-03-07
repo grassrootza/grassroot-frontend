@@ -16,8 +16,6 @@ body {
   margin: 0 0 15rem;
 }
 
-
-
 h1 {
   color: #4A4A4A;
   font-size: 30px;
@@ -240,4 +238,22 @@ h6 {
   background: #ff0000;
   border-color: #ff0000;
   color: white;
+}
+
+.search-bar {
+  border: 1px solid #EBEDF0;
+  font-size: 1.2em;
+}
+
+.search-addon {
+  background-color: white;
+  color: #2CBC4C;
+  border: 1px solid #EBEDF0;
+  border-left: none;
+}
+
+.search-addon:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: #26A041;
 }

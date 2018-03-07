@@ -6,11 +6,10 @@ import {GroupService} from "../groups/group.service";
 import {GroupInfo} from "../groups/model/group-info.model";
 import {Membership, MembersPage} from "../groups/model/membership.model";
 import {DayTasks} from "./day-task.model";
-import {Group} from "../groups/model/group.model";
 
 import * as moment from 'moment';
 import {Moment} from 'moment';
-import {GroupRef,GroupMembersRef} from "../groups/model/group-ref.model";
+import {GroupMembersRef, GroupRef} from "../groups/model/group-ref.model";
 import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
@@ -49,9 +48,11 @@ export class HomeComponent implements OnInit {
   public taskToView:Task;
 
   public voteResponse:string;
-  public groupRef:GroupRef;
+
+  public joinCandidateGroup:GroupRef;
   public isMemberPartOfGroup:boolean = false;
   public groupMembersRef:GroupMembersRef;
+  public proposedSearchTerm: string = "";
 
   constructor(private taskService: TaskService,
               private userService: UserService,
@@ -316,22 +317,22 @@ export class HomeComponent implements OnInit {
 
   searchGlobaly(searchTerm:string){
     if(this.searchService.isSearchTermJoinCode(searchTerm) != null){
-      console.log("Search for code............." + this.searchService.isSearchTermJoinCode(searchTerm));
       this.loadGroupWithJoinCode(searchTerm);
     }else{
-      console.log("Searching globaly..................");
+      console.log("Searching globally ..................");
       this.router.navigate(["/search",searchTerm]);
     }
   }
-  
+
   loadGroupWithJoinCode(joinCode:string){
     this.searchService.findGroupWithJoinCode(this.searchService.isSearchTermJoinCode(joinCode)).subscribe(resp =>{
         console.log("Group found............",resp);
         if(resp === null){
-          this.router.navigate(["/search",joinCode]);
-        }else{
-          this.groupRef = resp;
-          this.memberPartOfGroup(this.groupRef.groupUid,this.userService.getLoggedInUser().userUid);
+          this.proposedSearchTerm = joinCode;
+          $("#join-code-not-found-modal").modal("show");
+        } else {
+          this.joinCandidateGroup = resp;
+          this.memberPartOfGroup(this.joinCandidateGroup.groupUid,this.userService.getLoggedInUser().userUid);
           $("#join-group-modal").modal("show");
         }
       },error => {
@@ -339,7 +340,7 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  joinGroup(groupUid:string,joinCode:string){
+  joinGroup(groupUid:string, joinCode:string){
      this.searchService.joinWithCode(groupUid,joinCode).subscribe(resp => {
        console.log("Response from server..............",resp);
        $("#join-group-modal").modal("hide");
@@ -348,7 +349,7 @@ export class HomeComponent implements OnInit {
        console.log("Error joining group.........................",error);
      });
   }
-  
+
   memberPartOfGroup(groupUid:string,memberUid:string){
     this.groupService.loadGroupDetailsFromServer(groupUid).subscribe(group =>{
       this.groupMembersRef = new GroupMembersRef(group.groupUid,group.name,group.memberCount,group.members);
@@ -359,7 +360,7 @@ export class HomeComponent implements OnInit {
       console.log("Error loading group..........",error);
     });
   }
-  
+
   viewGroup(groupUid:string){
     $("#join-group-modal").modal("hide");
     this.router.navigate(["/group",groupUid]);

@@ -7,14 +7,13 @@ import {UserService} from "../../../user/user.service";
 @Component({
   selector: 'app-my-campaigns',
   templateUrl: './my-campaigns.component.html',
-  styleUrls: ['./my-campaigns.component.css']
+  styleUrls: ['./my-campaigns.component.css', '../global-search-results.component.css']
 })
 export class MyCampaignsComponent implements OnInit {
 
   private userUid:string = "";
   private searchTerm:string = "";
-  public filteredCampaigns: CampaignInfo[] = [];
-
+  public filteredCampaigns: CampaignInfo[];
 
   constructor(private campaignService: CampaignService,
               private userService:UserService,
@@ -37,7 +36,7 @@ export class MyCampaignsComponent implements OnInit {
       console.log("Filtered campaigns..............",this.filteredCampaigns);
     })
   }
-  
+
   triggerViewTask(campaign:CampaignInfo){
     this.router.navigate(["/campaign",campaign.campaignUid]);
     return false;

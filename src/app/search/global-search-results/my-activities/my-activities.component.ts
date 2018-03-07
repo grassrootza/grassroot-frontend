@@ -10,13 +10,13 @@ declare var $: any;
 @Component({
   selector: 'app-my-activities',
   templateUrl: './my-activities.component.html',
-  styleUrls: ['./my-activities.component.css']
+  styleUrls: ['./my-activities.component.css', '../global-search-results.component.css']
 })
 export class MyActivitiesComponent implements OnInit {
 
   private userUid:string = "";
   private searchTerm:string = "";
-  public userTasksFiltered: Task[] = [];
+  public userTasksFiltered: Task[];
 
   public taskToView:Task = null;
 

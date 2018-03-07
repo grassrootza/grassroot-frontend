@@ -14,24 +14,6 @@
   box-shadow: 0 2px 7px 0 rgba(0,0,0,0.15);
 }
 
-.search-bar {
-  border: 1px solid #EBEDF0;
-  font-size: 1.2em;
-}
-
-.search-addon {
-  background-color: white;
-  color: #2CBC4C;
-  border: 1px solid #EBEDF0;
-  border-left: none;
-}
-
-.search-addon:hover {
-  cursor: pointer;
-  text-decoration: none;
-  color: #26A041;
-}
-
 .groups-content {
   padding: 3rem 1.5rem;
   text-align: center;

@@ -20,8 +20,13 @@ export class GlobalSearchResultsComponent implements OnInit {
       }
     });
   }
+
   ngOnInit() {
     this.alertService.hideLoadingDelayed();
+  }
+
+  searchAgain(term: string) {
+    this.router.navigate(["/search", term, this.currentTab]);
   }
 
 }

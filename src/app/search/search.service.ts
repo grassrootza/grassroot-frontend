@@ -12,18 +12,19 @@ import {GroupService} from "../groups/group.service";
 @Injectable()
 export class SearchService {
 
+  private joinCodeRegex = /^\*?[0-9]{4}#?$|\*134\*1994\*[0-9]{4}#/;
+  private codeNumbersRegex = /[0-9]{4}/g;
+
   private allUserTasksUrl = environment.backendAppUrl + "/api/search/tasks/user";
   private allUserGroupsUrl = environment.backendAppUrl + "/api/search/groups/private";
   private userPublicGroupsUrl = environment.backendAppUrl + "/api/search/groups/public";
   private publicMeetingsUrl = environment.backendAppUrl + "/api/search/meetings/public";
 
   private joinGroupUrl = environment.backendAppUrl + "/api/search/join";
-  private findGroupUrl = environment.backendAppUrl + "/api/search/group";
-  private joinGroupWithCodeUrl = environment.backendAppUrl + "/api/search/group/join";
+  private checkIfGroupJoinCodeUrl = environment.backendAppUrl + "/api/search/group/check";
+  private joinGroupUsingJoinCodeUrl = environment.backendAppUrl + "/api/search/group/join";
 
-  constructor(private httpClient: HttpClient,
-              private userService:UserService,
-              private groupService:GroupService) {
+  constructor(private httpClient: HttpClient) {
   }
 
   loadUserTasksUsingSearchTerm(searchTerm:string):Observable<Task[]>{
@@ -41,7 +42,7 @@ export class SearchService {
   loadPublicGroups(searchTerm:string):Observable<Group[]>{
     let fullUrl = this.userPublicGroupsUrl;
     let params = new HttpParams().set("searchTerm", searchTerm)
-      .set('searchByLocation',true + "");
+      .set('useLocation', true + "");
     return this.httpClient.get<Group[]>(fullUrl,{params:params}).map(resp => resp.map(grp => getGroupEntity(grp)));
   }
 
@@ -55,25 +56,24 @@ export class SearchService {
     let fullUrl = this.joinGroupUrl + "/" + groupUid;
 
     let params = new HttpParams()
-      .set("joinWord",word)
-      .set("requestorUid",this.userService.getLoggedInUser().userUid);
+      .set("message",word);
 
     return this.httpClient.post(fullUrl,null,{params:params});
   }
 
+
   isSearchTermJoinCode(searchTerm:string):string{
     let code = null;
-    if(searchTerm.match("[0-9]+") && searchTerm.length === 4){
-      code = searchTerm;
-    }else if(searchTerm.length === 15 && searchTerm.indexOf("*") != -1 && searchTerm.indexOf("#") != -1){
-      code = searchTerm.substring(searchTerm.lastIndexOf("*") +1,searchTerm.indexOf("#"));
+    if (this.joinCodeRegex.test(searchTerm)) {
+      let numMatches = searchTerm.match(this.codeNumbersRegex);
+      return numMatches[numMatches.length - 1];
     }
     return code;
   }
 
   findGroupWithJoinCode(joinCode:string):Observable<any>{
     let params = new HttpParams().set("joinCode",joinCode);
-    return this.httpClient.get<GroupRef>(this.findGroupUrl,{params:params})
+    return this.httpClient.get<GroupRef>(this.checkIfGroupJoinCodeUrl,{params:params})
         .map(resp => (resp) ? new GroupRef(resp.groupUid,resp.name,resp.memberCount) : resp);
   }
 
@@ -82,7 +82,7 @@ export class SearchService {
         .set("groupUid",groupUid)
         .set("joinCode",joinCode);
 
-    return this.httpClient.post(this.joinGroupWithCodeUrl,null,{params:params});
+    return this.httpClient.post(this.joinGroupUsingJoinCodeUrl,null,{params:params});
   }
-  
+
 }
