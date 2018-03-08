@@ -17,7 +17,7 @@ export class MembershipInfo {
 }
 
 export const getUserFromMembershipInfo = (memb: MembershipInfo): User => {
-  return new User(memb.memberUid, memb.displayName, memb.phoneNumber, memb.memberEmail, "", "", "true", "", memb.province);
+  return new User(memb.memberUid, memb.displayName, memb.phoneNumber, memb.memberEmail, "", "", "true", "", memb.province, false);
 };
 
 export class Membership {

@@ -1007,17 +1007,31 @@
   },
   "join": {
     "title": "Join \"{{ groupName }}\"",
-    "description": "About this group: {{ groupDescription }}",
     "intro": "Just enter your details below to join \"{{ groupName }}\". By joining, you are agreeing to give the details below to the group's organizer, through the Grassroot platform",
     "privacy": "privacy policy",
-    "name": "Your name (can be a nickname or alias)",
-    "phone": "* Your phone number",
-    "email": "* Your email address",
-    "province": "Your province (optional)",
-    "province-none": "Select",
-    "topics": "Topics of interest (optional)",
-    "footnote": "* You can enter either an email or a phone number, or both (but at least one)",
-    "submit": "Join!",
+    "name": "Your name (what people know you by)",
+    "phone": "Your mobile number",
+    "email": "Email address",
+    "province": "Province",
+    "province-none": "Select Province",
+    "language": "Preferred Language",
+    "language-none": "Select Language",
+    "submit": "Join",
+    "footnote": "* At least one of mobile number or email address are required",
+    "about-group": "About this group: ",
+    "topics": {
+      "title": "What are you interested in?",
+      "description": "Select topics that you would like to hear about:",
+      "skip": "Skip"
+    },
+    "done": {
+      "title": "Thanks for Joining!",
+      "body": "You've successfully join the \"{{ groupName }}\" group. You'll now be able to get involved with group activities, campaigns, and petitions.",
+      "register": "Register for Grassroot?",
+      "about": "Grassroot is a platform for organizing your community. <a href='/home' target='_blank' class='grassroot-link'>See what you can do with Grassroot here.</a> Just enter a password below, and your username will be your email orphone number.",
+      "pwd": "Set a password",
+      "registered": "Done! Welcome to the platform"
+    },
     "completed": {
       "hasPasswordAlert": "Done! You have joined the group",
       "signUpModal": {
@@ -1156,7 +1170,8 @@
     "change": "Change",
     "add": "Add",
     "join": "Join",
-    "search": "Search"
+    "search": "Search",
+    "register": "Register"
   },
   "general": {
     "charsRemaining": "Characters remaining"

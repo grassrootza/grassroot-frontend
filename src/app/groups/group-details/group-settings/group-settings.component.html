@@ -39,6 +39,7 @@
                   {{ 'group.settings.image.drag'  | translate}}
                   <input type="file" #file
                          [multiple]="false"
+                         accept="image/*"
                          (change) = "onImageSelected($event)"
                          style="display:none" />
                 </div>
