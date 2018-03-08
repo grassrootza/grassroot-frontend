@@ -120,10 +120,10 @@ export class CreateLivewireComponent implements OnInit {
     let type = this.createLivewireForm.get("alertType").value;
     let contactName = this.createLivewireForm.get("contactPersonName").value;
     let contactNumber = this.createLivewireForm.get("contactPersonNumber").value;
-    let mediaKeys = new Set<string>();
+    let mediaKeys:string[] = [];
 
     if(this.imageKey != null){
-      mediaKeys.add(this.imageKey);
+      mediaKeys.push(this.imageKey);
     }
 
     if(this.meetings.length > 0){

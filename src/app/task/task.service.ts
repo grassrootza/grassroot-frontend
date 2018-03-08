@@ -24,7 +24,7 @@ export class TaskService {
   private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
 
   private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
-  private uploadImageUrl = environment.backendAppUrl + "/api/media/storeImage";
+  private uploadImageUrl = environment.backendAppUrl + "/api/media/store/body";
 
   private castVoteUrl = environment.backendAppUrl + "/api/vote/do";
   private viewVoteUrl = environment.backendAppUrl + "/api/vote/view";
@@ -181,10 +181,15 @@ export class TaskService {
 
   createLiveWireAlert(userUid:string,headline:string,alertType:LiveWireAlertType,groupUid:string,taskUid:string,
                       destination:LiveWireAlertDestType,description:string,addLocation:boolean,contactPerson:string,
-                      contactPersonName:string,contactPersonNumber:string,mediaKeys:Set<string>):Observable<any>{
+                      contactPersonName:string,contactPersonNumber:string,mediaKeys:string[]):Observable<any>{
 
     let fullUrl = this.createLiveWireAlertUrl + "/" + userUid;
     let params;
+    
+    console.log("Media file keys..................................",mediaKeys);
+    
+    let mediaKeyArray: string[] = [];
+    
 
     params = new HttpParams()
       .set("headline",headline)
@@ -194,7 +199,7 @@ export class TaskService {
       .set("addLocation",addLocation + "")
       .set("destType",destination)
       .set("taskUid",taskUid)
-      .set("mediaFileKeys",mediaKeys + "");
+      .set("mediaFileKeys",mediaKeys.join(","));
 
 
       if(contactPerson === "someone"){
@@ -210,12 +215,6 @@ export class TaskService {
         .set("contactName",contactPersonName)
         .set("mediaFileKeys",mediaKeys + "");;
       }
-
-
-
-   if(alertType === "MEETING"){
-      console.log("Is a meeting man...........................");
-    }
 
     return this.httpClient.post(fullUrl,null,{params:params});
   }
