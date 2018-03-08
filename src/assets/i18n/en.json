@@ -209,6 +209,7 @@
       "activity": "Activity",
       "broadcast": "Broadcast",
       "members": "Members",
+      "inboundMessages": "Inbound messages",
       "settings": "Settings"
     },
     "dashboard": {
@@ -673,6 +674,26 @@
       "removeBody": "Removing a task team cannot be undone. Are you sure?",
       "createTeamDone": "Done, task team created",
       "removeTeamDone": "Done, task team removed"
+    },
+    "inboundMessages": {
+      "title": "Messages received",
+      "from": "From",
+      "dateReceived": "Date received",
+      "filter": {
+        "received": "Received",
+        "dateFrom": "Date from",
+        "dateTo": "Date to",
+        "keyword": "Keyword",
+        "keywordPlaceholder": "Type keyword to filter",
+        "anyTime": "Any time",
+        "thisWeek": "This week",
+        "lastWeek": "Last week",
+        "thisMonth": "This month",
+        "lastMonth": "Last month",
+        "custom": "Custom",
+        "clear": "Clear filters",
+        "filter": "Filter"
+      }
     }
   },
   "campaigns": {
