@@ -692,7 +692,8 @@
         "lastMonth": "Last month",
         "custom": "Custom",
         "clear": "Clear filters",
-        "filter": "Filter"
+        "filter": "Filter",
+        "exportMessages": "Export messages"
       }
     }
   },

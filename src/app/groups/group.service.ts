@@ -59,6 +59,7 @@ export class GroupService {
   groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
   groupMemberChangeAssignmentsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/assignments';
   groupFetchInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
+  groupDownloadInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
 
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
@@ -711,6 +712,25 @@ export class GroupService {
         );
       }
     );
+  }
+
+  exportInboundMessages(groupUid: string, from: Moment, to: Moment, keyword: string) {
+    const fullUrl = this.groupDownloadInboundMessagesUrl + '/' + groupUid + '/download';
+    let params = new HttpParams();
+
+    if(from != null) {
+      params = params.set('from', from.valueOf().toString());
+    }
+
+    if(to != null) {
+      params = params.set('to', to.valueOf().toString());
+    }
+
+    if(keyword != null) {
+      params = params.set('keyword', keyword);
+    }
+
+    return this.httpClient.get(fullUrl, { params: params, responseType: 'blob' });
   }
 }
 

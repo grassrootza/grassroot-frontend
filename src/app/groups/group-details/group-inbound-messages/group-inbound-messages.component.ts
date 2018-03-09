@@ -3,11 +3,10 @@ import {Group} from "../../model/group.model";
 import {ActivatedRoute, Params} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {GroupService} from "../../group.service";
-import {AlertService} from "../../../utils/alert.service";
 import {GroupLogPage} from "../../model/group-log.model";
 import * as moment from 'moment';
-import {Moment} from 'moment';
 import {DateTimeUtils} from "../../../utils/DateTimeUtils";
+import {saveAs} from 'file-saver/FileSaver';
 
 
 @Component({
@@ -117,6 +116,16 @@ export class GroupInboundMessagesComponent implements OnInit {
     this.filterInboundMessagesForm.get('keyword').setValue(this.keyword);
 
     this.goToPage(0);
+
+  }
+
+  exportMessages() {
+    this.groupService.exportInboundMessages(this.groupUid, this.dateFrom, this.dateTo, this.keyword).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "inbound-messages.xls");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
 
   }
 
