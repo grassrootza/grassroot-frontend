@@ -7,6 +7,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {CampaignService} from "../../../../campaigns/campaign.service";
 import {CampaignInfo} from "../../../../campaigns/model/campaign-info";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
+import {GroupInfo} from "../../../model/group-info.model";
 
 declare var $: any;
 
@@ -21,6 +22,8 @@ export class GroupCustomFilterComponent implements OnInit {
   currentFilter: MembersFilter = new MembersFilter();
   filteredMembers: Membership[] = [];
   membersToManage: Membership[] = [];
+  groupsToCopyMembersTo: GroupInfo[] = [];
+
 
   @Input() group: Group;
   groupCampaigns: CampaignInfo[] = [];
@@ -113,6 +116,17 @@ export class GroupCustomFilterComponent implements OnInit {
       this.renderGroupDetails(group);
       this.membersFilterChanged(this.currentFilter);
     });
+  }
+
+  showBulkCopyToGroupModal(){
+    this.setMembersToManage();
+    console.log("copy members to group: " + this.membersToManage.length);
+    this.groupService.groupInfoList.subscribe(groups => {
+      this.groupsToCopyMembersTo = groups.filter(g => g.hasPermission("GROUP_PERMISSION_ADD_GROUP_MEMBER")
+        && g.groupUid !== this.group.groupUid);
+      $('#bulk-copy-members-to-group').modal('show');
+    });
+
   }
 
 }

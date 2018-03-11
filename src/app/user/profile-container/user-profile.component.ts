@@ -12,15 +12,17 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
 
   public currentTab: string = "profile";
 
-  constructor(private userService: UserService, private router: Router, private alertService: AlertService) { }
-
-  ngOnInit() {
+  constructor(private userService: UserService, private router: Router, private alertService: AlertService) {
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
         let uri = ev.urlAfterRedirects;
         this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
       }
     });
+  }
+
+  ngOnInit() {
+
   }
 
   ngAfterViewInit() {

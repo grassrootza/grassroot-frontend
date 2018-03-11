@@ -12,7 +12,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let meeting of meetings" class="meeting-event">
+          <div *ngFor="let meeting of meetings" class="meeting-event" (click)="showViewMeeting(meeting)">
             <div class="float-left event-date">
               <span class="day">{{meeting.deadlineDate | date:'dd'}}</span>
               <span class="month">{{meeting.deadlineDate | date:'MMM'}}</span>
@@ -226,7 +226,7 @@
           <div class="container topic-interests">
             <div *ngFor="let mds of topicInterestsStats" class="rowt">
               <div class="col-sm-4 stats-label">
-                mds.name
+                {{mds.name}}
               </div>
               <div class="col-sm-8">
                 <div class="progress">
@@ -255,3 +255,6 @@
 
 <app-create-todo [groupUid]="createTaskGroupUid"
                  (todoSaved)="todoSaved($event)"></app-create-todo>
+
+<app-view-meeting [taskToView]="meetingToView"></app-view-meeting>
+

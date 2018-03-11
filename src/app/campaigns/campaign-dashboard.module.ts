@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, CurrencyPipe} from '@angular/common';
 import {SharedModule} from "../shared.module";
 import {CAMPAIGN_DASHBOARD_ROUTES} from "./campaign-dashboard/campaign-dashboard-routes";
 import {CampaignStatsComponent} from './campaign-dashboard/campaign-stats/campaign-stats.component';
@@ -25,6 +25,9 @@ import {RouterModule} from "@angular/router";
     CampaignBroadcastsComponent,
     CampaignSettingsComponent,
     MessageTabsetComponent
+  ],
+  providers: [
+    CurrencyPipe
   ]
 })
 export class CampaignDashboardModule {

@@ -195,6 +195,15 @@
           </div>
 
           <div class="form-row">
+            <div class="col-md-3 col-sm-12"><label class="grassroot-label-em">Join topics (optional): </label></div>
+            <div class="col-md-9 col-sm-12">
+              <select class="form-control" id="join-topic-select" multiple="multiple">
+                <option *ngFor="let topic of possibleTopics" [value]="topic">{{ topic }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
             <div class="col-md-12">
               <h4>{{ 'campaign.create.petition-link' | translate }}</h4>
             </div>
@@ -216,7 +225,6 @@
             <div class="col-sm-3">
               <label class="grassroot-label-em">{{ 'campaign.create.sms-share.allow-toggle' | translate }}</label>
             </div>
-            <!-- todo: migrate this to toggle when have time -->
             <div class="form-group col-sm-3">
               <div class="form-check form-check-inline">
                 <label class="form-check-label grassroot-label-em">

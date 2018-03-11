@@ -1,0 +1,7 @@
+.group-name {
+  text-transform: uppercase;
+}
+
+.group-name:hover {
+  text-decoration: none;
+}

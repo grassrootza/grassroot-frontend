@@ -1,0 +1,57 @@
+<div>
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <h3>
+            <img src="assets/icon_meeting.png"/>&nbsp;
+            Meeting: {{meeting?.title}}
+          </h3>
+        </div>
+      </div>
+      <div class="row pl-3 pr-3">
+        <div class="col-md-6 col-sm-12">
+          <p class="task-field-para">
+            <span class="task-field-name">When: </span>
+            {{meeting?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+          </p>
+          <p class="task-field-para">
+            <span class="task-field-name">Where: </span>
+            {{meeting?.location}}
+          </p>
+          <p class="task-field-para">
+            <span class="task-field-name">Reminder: </span>
+          </p>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <!-- insert image -->
+        </div>
+      </div>
+
+      <div class="row">
+        {{meeting?.description}}
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <app-meeting-responses [responses]="responses"></app-meeting-responses>
+        </div>
+      </div>
+
+      <div class="row mt-4 attendance">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Attendance</span>
+            </div>
+            <div class="card-body">
+              <div *ngFor="let response of responseArray" class="row info-row">
+                <div class="col-md-8 col-sm-6 attendee-name">{{response.memberName}}</div>
+                <div class="col-md-4 col-sm-6">{{ 'enum.MeetingResponse.' + response.response | translate }}</div>
+              </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>

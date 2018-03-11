@@ -80,10 +80,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     $(".ntf-popup").hide();
-    // this.pullNotifications();
-    // setInterval(() => {
-    //   this.pullNotifications()
-    // }, 10000);
+    this.pullNotifications();
+    setInterval(() => {
+      this.pullNotifications()
+    }, 10000);
   }
 
   private pullNotifications() {

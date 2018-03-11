@@ -1,0 +1,11 @@
+.bill-summary {
+  padding: 0;
+}
+
+.field-name {
+  font-weight: 600;
+}
+
+.close-button {
+  padding: 10px 20px;
+}

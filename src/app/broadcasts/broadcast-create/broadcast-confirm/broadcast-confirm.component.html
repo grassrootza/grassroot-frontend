@@ -59,7 +59,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-12">
+    <div class="col-12" *ngIf="confirmFields.sendShortMessage || confirmFields.sendEmail">
       <p class="section-title">
         {{ 'broadcasts.create.confirm.memberCount' | translate:confirmFields }}
       </p>
@@ -73,7 +73,7 @@
       </p>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="confirmFields.sendShortMessage">
     <div class="col-md-8 offset-md-4">
       <p class="text-center">Review costs</p>
       <span>{{ 'broadcasts.create.members.smsCount' | translate }}{{ confirmFields.smsNumber }}</span>

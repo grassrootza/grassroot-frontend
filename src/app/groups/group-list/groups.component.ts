@@ -4,6 +4,7 @@ import {GroupInfo} from "../model/group-info.model";
 import {GroupRef} from "../model/group-ref.model";
 import {Router} from "@angular/router";
 import {AlertService} from "../../utils/alert.service";
+import {TranslateService} from "@ngx-translate/core";
 
 declare var $: any;
 
@@ -27,11 +28,17 @@ export class GroupsComponent implements OnInit {
   protected filteredGroupsPage: GroupInfo[] = [];
   protected pickedRoleFilter: String = '';
 
+  private sortByNameAsc = true;
+  private sortByRoleNameAsc = true;
+  private sortByMemberCountAsc = true;
+  private sortByUpNextAsc = true;
+
   public createTaskGroupUid: string = null;
 
   constructor(private groupService: GroupService,
               private alertService: AlertService,
-              private router: Router) {
+              private router: Router,
+              private translateService: TranslateService) {
   }
 
   ngOnInit() {
@@ -41,7 +48,7 @@ export class GroupsComponent implements OnInit {
     this.groupService.groupInfoList.subscribe(
       groupList => {
         if (groupList) {
-          console.log("Groups loaded: ", groupList);
+          // console.log("Groups loaded: ", groupList);
           this.alertService.hideLoadingDelayed();
 
           this.groups = groupList;
@@ -117,10 +124,11 @@ export class GroupsComponent implements OnInit {
     this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
     this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
     this.currentPage = 1;
-    this.pickedRoleFilter = roleDisplayName;
-
+    this.translateService.get('enum.GroupRole.' + roleDisplayName).subscribe(translation => {
+      this.pickedRoleFilter = translation;
+      $("#dropdownMenuButton").html(translation);
+    });
     this.generatePageList(this.numberOfPages);
-    $("#dropdownMenuButton").html(roleDisplayName);
   }
 
   filterByKeyword(): void{
@@ -144,6 +152,265 @@ export class GroupsComponent implements OnInit {
     this.generatePageList(this.numberOfPages);
   }
 
+  resetSortIcons(): void {
+    $('#sortByNamePlaceHolder').children()[0].remove();
+    $('#sortByNamePlaceHolder').append('<i class="fa fa-sort"></i>');
+
+    $('#sortByRolePlaceHolder').children()[0].remove();
+    $('#sortByRolePlaceHolder').append('<i class="fa fa-sort"></i>');
+
+    $('#sortByUpNextPlaceHolder').children()[0].remove();
+    $('#sortByUpNextPlaceHolder').append('<i class="fa fa-sort"></i>');
+
+    $('#sortByMembersCountPlaceHolder').children()[0].remove();
+    $('#sortByMembersCountPlaceHolder').append('<i class="fa fa-sort"></i>');
+  }
+
+  resetPinnedSortIcons(): void {
+    if(this.pinnedGroups.length > 0){
+      $('#pinnedSortByNamePlaceHolder').children()[0].remove();
+      $('#pinnedSortByNamePlaceHolder').append('<i class="fa fa-sort"></i>');
+
+      $('#pinnedSortByRolePlaceHolder').children()[0].remove();
+      $('#pinnedSortByRolePlaceHolder').append('<i class="fa fa-sort"></i>');
+
+      $('#pinnedSortByUpNextPlaceHolder').children()[0].remove();
+      $('#pinnedSortByUpNextPlaceHolder').append('<i class="fa fa-sort"></i>');
+
+      $('#pinnedSortByMembersCountPlaceHolder').children()[0].remove();
+      $('#pinnedSortByMembersCountPlaceHolder').append('<i class="fa fa-sort"></i>');
+    }
+
+  }
+
+  sortByGroupName(pinned: boolean): void {
+    let sortedList: GroupInfo[] = [];
+    if(pinned){
+      this.pinnedGroups.forEach(pg => sortedList.push(pg));
+    } else {
+      this.filteredGroups.forEach(ft => sortedList.push(ft));
+    }
+    this.resetPinnedSortIcons();
+    this.resetSortIcons();
+
+    if(this.sortByNameAsc) {
+      this.sortByNameAsc = !this.sortByNameAsc;
+
+      if(pinned) {
+        $('#pinnedSortByNamePlaceHolder').children()[0].remove();
+        $('#pinnedSortByNamePlaceHolder').append('<i class="fa fa-sort-down"></i>');
+      } else {
+        $('#sortByNamePlaceHolder').children()[0].remove();
+        $('#sortByNamePlaceHolder').append('<i class="fa fa-sort-down"></i>');
+      }
+
+      sortedList.sort(function(a, b){
+        const nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase();
+        if (nameA < nameB)
+          return 1;
+        else if (nameA > nameB)
+          return -1;
+        else
+          return 0;
+      });
+    } else {
+      this.sortByNameAsc = !this.sortByNameAsc;
+
+      if(pinned) {
+        $('#pinnedSortByNamePlaceHolder').children()[0].remove();
+        $('#pinnedSortByNamePlaceHolder').append('<i class="fa fa-sort-up"></i>');
+      } else {
+        $('#sortByNamePlaceHolder').children()[0].remove();
+        $('#sortByNamePlaceHolder').append('<i class="fa fa-sort-up"></i>');
+      }
+      sortedList.sort(function(a, b){
+        const nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase();
+        if (nameA > nameB)
+          return 1;
+        else if (nameA < nameB)
+          return -1;
+        else
+          return 0;
+      });
+    }
+
+    if(!pinned) {
+      this.totalCount = sortedList.length;
+      this.filteredGroupsPage = sortedList.slice(0,this.pageSize);
+      this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+      this.currentPage = 1;
+      this.generatePageList(this.numberOfPages);
+    }
+  }
+
+  sortByRoleName(pinned: boolean): void {
+    let sortedList: GroupInfo[] = [];
+    if(pinned){
+      this.pinnedGroups.forEach(pg => sortedList.push(pg));
+    } else {
+      this.filteredGroups.forEach(ft => sortedList.push(ft));
+    }
+    this.resetPinnedSortIcons();
+    this.resetSortIcons();
+    if(this.sortByRoleNameAsc) {
+      this.sortByRoleNameAsc = !this.sortByRoleNameAsc;
+      if(pinned) {
+        $('#pinnedSortByRolePlaceHolder').children()[0].remove();
+        $('#pinnedSortByRolePlaceHolder').append('<i class="fa fa-sort-down"></i>');
+      } else {
+        $('#sortByRolePlaceHolder').children()[0].remove();
+        $('#sortByRolePlaceHolder').append('<i class="fa fa-sort-down"></i>');
+      }
+      sortedList.sort(function(a, b){
+        const roleA=a.userRole.toLowerCase(), roleB=b.userRole.toLowerCase();
+        if (roleA < roleB)
+          return 1;
+        else if (roleA > roleB)
+          return -1;
+        else
+          return 0;
+      });
+    } else {
+      this.sortByRoleNameAsc = !this.sortByRoleNameAsc;
+      if(pinned) {
+        $('#pinnedSortByRolePlaceHolder').children()[0].remove();
+        $('#pinnedSortByRolePlaceHolder').append('<i class="fa fa-sort-up"></i>');
+      } else {
+        $('#sortByRolePlaceHolder').children()[0].remove();
+        $('#sortByRolePlaceHolder').append('<i class="fa fa-sort-up"></i>');
+      }
+      sortedList.sort(function(a, b){
+        const roleA=a.userRole.toLowerCase(), roleB=b.userRole.toLowerCase();
+        if (roleA > roleB)
+          return 1;
+        else if (roleA < roleB)
+          return -1;
+        else
+          return 0;
+      });
+    }
+    if(!pinned) {
+      this.totalCount = sortedList.length;
+      this.filteredGroupsPage = sortedList.slice(0,this.pageSize);
+      this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+      this.currentPage = 1;
+      this.generatePageList(this.numberOfPages);
+    }
+
+  }
+
+  sortByUpNext(pinned: boolean): void {
+    let sortedList: GroupInfo[] = [];
+    if(pinned){
+      this.pinnedGroups.forEach(pg => sortedList.push(pg));
+    } else {
+      this.filteredGroups.forEach(ft => sortedList.push(ft));
+    }
+    this.resetPinnedSortIcons();
+    this.resetSortIcons();
+    if(this.sortByUpNextAsc) {
+      this.sortByUpNextAsc = !this.sortByUpNextAsc;
+      if(pinned){
+        $('#pinnedSortByUpNextPlaceHolder').children()[0].remove();
+        $('#pinnedSortByUpNextPlaceHolder').append('<i class="fa fa-sort-down"></i>');
+      }else{
+        $('#sortByUpNextPlaceHolder').children()[0].remove();
+        $('#sortByUpNextPlaceHolder').append('<i class="fa fa-sort-down"></i>');
+      }
+      sortedList.sort(function(a, b){
+        const event1=a.nextEventTime, event2=b.nextEventTime;
+        if (event1 < event2)
+          return 1;
+        else if (event1 > event2)
+          return -1;
+        else
+          return 0;
+      });
+    } else {
+      this.sortByUpNextAsc = !this.sortByUpNextAsc;
+      if(pinned){
+        $('#pinnedSortByUpNextPlaceHolder').children()[0].remove();
+        $('#pinnedSortByUpNextPlaceHolder').append('<i class="fa fa-sort-up"></i>');
+      }else{
+        $('#sortByUpNextPlaceHolder').children()[0].remove();
+        $('#sortByUpNextPlaceHolder').append('<i class="fa fa-sort-up"></i>');
+      }
+      sortedList.sort(function(a, b){
+        const event1=a.nextEventTime, event2=b.nextEventTime;
+        if (event1 > event2)
+          return 1;
+        else if (event1 < event2)
+          return -1;
+        else
+          return 0;
+      });
+    }
+    if(!pinned){
+      this.totalCount = sortedList.length;
+      this.filteredGroupsPage = sortedList.slice(0,this.pageSize);
+      this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+      this.currentPage = 1;
+      this.generatePageList(this.numberOfPages);
+    }
+    console.log(this.filteredGroups);
+    console.log(sortedList);
+  }
+
+  sortByMembersCount(pinned: boolean): void {
+    let sortedList: GroupInfo[] = [];
+    if(pinned){
+      this.pinnedGroups.forEach(pg => sortedList.push(pg));
+    } else {
+      this.filteredGroups.forEach(ft => sortedList.push(ft));
+    }
+    this.resetPinnedSortIcons();
+    this.resetSortIcons();
+    if(this.sortByMemberCountAsc) {
+      this.sortByMemberCountAsc = !this.sortByMemberCountAsc;
+      if(pinned){
+        $('#pinnedSortByMembersCountPlaceHolder').children()[0].remove();
+        $('#pinnedSortByMembersCountPlaceHolder').append('<i class="fa fa-sort-down"></i>');
+      }else{
+        $('#sortByMembersCountPlaceHolder').children()[0].remove();
+        $('#sortByMembersCountPlaceHolder').append('<i class="fa fa-sort-down"></i>');
+      }
+      sortedList.sort(function(a, b){
+        const count1=a.memberCount, count2=b.memberCount;
+        if (count1 < count2)
+          return 1;
+        else if (count1 > count2)
+          return -1;
+        else
+          return 0;
+      });
+    } else {
+      this.sortByMemberCountAsc = !this.sortByMemberCountAsc;
+      if(pinned){
+        $('#pinnedSortByMembersCountPlaceHolder').children()[0].remove();
+        $('#pinnedSortByMembersCountPlaceHolder').append('<i class="fa fa-sort-up"></i>');
+      }else{
+        $('#sortByMembersCountPlaceHolder').children()[0].remove();
+        $('#sortByMembersCountPlaceHolder').append('<i class="fa fa-sort-up"></i>');
+      }
+      sortedList.sort(function(a, b){
+        const count1=a.memberCount, count2=b.memberCount;
+        if (count1 > count2)
+          return 1;
+        else if (count1 < count2)
+          return -1;
+        else
+          return 0;
+      });
+    }
+    if(!pinned){
+      this.totalCount = sortedList.length;
+      this.filteredGroupsPage = sortedList.slice(0,this.pageSize);
+      this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
+      this.currentPage = 1;
+      this.generatePageList(this.numberOfPages);
+    }
+  }
+
   clearAllFilters(): void {
     this.filteredGroups = this.groups;
     this.filteredGroupsPage = this.filteredGroups.slice(0,this.pageSize);
@@ -152,8 +419,11 @@ export class GroupsComponent implements OnInit {
     this.currentPage = 1;
     this.pickedRoleFilter = '';
     this.generatePageList(this.numberOfPages);
-    $("#dropdownMenuButton").html('Select role');
+    $("#dropdownMenuButton").html('Select a role');
     $("#inlineKeywordPick").val("");
+
+    this.resetSortIcons();
+    this.resetPinnedSortIcons();
 
   }
 

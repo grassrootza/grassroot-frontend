@@ -27,18 +27,18 @@ export class BroadcastConfirmComponent implements OnInit {
   }
 
   edit() {
-    console.log("edit clicked!");
     this.activeModal.dismiss('Edit clicked');
     this.router.navigate(['/broadcast/create/', this.broadcastService.currentType(), this.broadcastService.parentId(), 'content']);
   }
 
   confirm() {
-    console.log("okay, here goes ...");
+    console.log("create request = ", this.broadcastService.createRequest);
+    this.alertService.showLoading();
     this.broadcastService.sendBroadcast().subscribe(result => {
-      console.log("it worked! result: ", result);
       let redirectRoute = this.broadcastService.parentViewRoute();
       this.broadcastService.clearBroadcast();
       this.activeModal.dismiss('Broadcast sent!');
+      this.alertService.hideLoading();
       this.alertService.alert('broadcasts.create.sent.' + this.confirmFields.sendTimeDescription, true);
       // maybe consider storing prior URL (though seems a non-trivial thing), but for now just go to view of parent
       this.router.navigate([redirectRoute]);

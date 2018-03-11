@@ -1,3 +1,6 @@
+import {Language} from "../utils/language";
+import {User} from "../user/user.model";
+
 export class JoinInfo {
 
   userLoggedIn: boolean;
@@ -8,7 +11,7 @@ export class JoinInfo {
   groupDescription: string;
   groupImageUrl: string;
 
-  groupTopics: string[];
+  groupJoinTopics: string[];
 
 }
 
@@ -18,6 +21,14 @@ export class JoinRequest {
   email: string = "";
   phone: string = "";
   province: string = "";
+  language: string = "";
   topics: string[] = [];
+
+}
+
+export class JoinResult {
+
+  validationCode: string;
+  user: User;
 
 }

@@ -29,6 +29,7 @@ export class Group {
               public affiliations: string[],
               public joinWords: JoinCodeInfo[],
               public joinWordsLeft: number,
+              public joinTopics: string[],
               public reminderMinutes: number,
               public profileImageUrl: string) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
@@ -45,6 +46,10 @@ export class Group {
 
   public joinWordsExtracted(): string[] {
     return this.joinWords.map(jw => jw.word);
+  }
+
+  public isJoinTopic(topic: string): boolean {
+    return this.joinTopics && this.joinTopics.length > 0 && this.joinTopics.indexOf(topic) != -1;
   }
 
 }
@@ -73,6 +78,7 @@ export const getGroupEntity = (gr: Group): Group => {
     gr.affiliations,
     gr.joinWords,
     gr.joinWordsLeft,
+    gr.joinTopics,
     gr.reminderMinutes,
     gr.profileImageUrl
   );

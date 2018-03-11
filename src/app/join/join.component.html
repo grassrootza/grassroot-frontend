@@ -1,97 +1,136 @@
-<div class="row">
-  <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12 bg-white padding-vertical">
-    <div class="row" *ngIf="!(joinInfo.groupImageUrl)">
-      <div class="col-12 pl-md-5 pr-md-5">
-          <h2 class="join-header text-center">{{ 'join.title' | translate:joinInfo }}</h2>
-          <h3 *ngIf="(joinInfo?.groupDescription)">{{ 'join.description' | translate:joinInfo }}</h3>
+<div class="card-body">
+  <div class="row">
+    <div [ngClass]="{'col-md-6 col-sm-12 pl-md-5 pr-md-5': true, 'hide-on-small': currentStep != 'START'}">
+      <div class="row">
+        <div class="col-12">
+          <h2 class="text-center group-name-title">{{ joinInfo?.groupName }}</h2>
+          <p class="privacy-statement">
+            {{ 'join.intro' | translate:joinInfo }}
+            (<a href="https://www.grassroot.org.za/privacy" target="_blank">{{ 'join.privacy' | translate }}</a>).
+          </p>
+        </div>
+      </div>
+      <!-- would have used bootstrap media here but it is behaving strangely (huge image), because, css -->
+      <div class="row" *ngIf="(joinInfo.groupImageUrl)">
+        <div class="col-12">
+            <img class="img-thumbnail group-image" alt="{{ joinInfo.groupName + ' profile image' }}" src="{{ joinInfo.groupImageUrl }}">
+        </div>
+      </div>
+      <div class="row" *ngIf="(joinInfo?.groupDescription)" >
+        <div class="col-2 hide-on-small">
+          <img src="assets/join_group_icon.png" />
+        </div>
+        <div class="col-md-10 col-sm-12">
+          <h3 class="group-description-title">{{ 'join.about-group' | translate }}</h3>
+          <p class="group-description-body" [innerHtml]="descriptionText"></p>
+        </div>
       </div>
     </div>
-    <!-- would have used bootstrap media here but it is behaving strangely (huge image), because, css -->
-    <div class="row" *ngIf="(joinInfo.groupImageUrl)">
-      <div class="col-md-4 pl-md-5 col-sm-12">
-          <img class="img-thumbnail" alt="{{ joinInfo.groupName + ' profile image' }}" src="{{ joinInfo.groupImageUrl }}">
-      </div>
-      <div class="col-md-8 pr-md-5 col-sm-12">
-          <h2 class="join-header">{{ 'join.title' | translate:joinInfo }}</h2>
-          <h4 *ngIf="(joinInfo?.groupDescription)">{{ 'join.description' | translate:joinInfo }}</h4>
-      </div>
-    </div>
-    <div class="card-body">
-      <div class="col-12">
-        <form [formGroup]="joinForm" (ngSubmit)="submitJoin()">
-          <div class="form-group">
-            <p>
-              {{ 'join.intro' | translate:joinInfo }}
-              (<a href="https://www.grassroot.org.za/privacy" target="_blank">{{ 'join.privacy' | translate }}</a>).
-            </p>
-          </div>
-          <div class="form-group">
+    <div class="col-md-6 col-sm-12" *ngIf="currentStep == 'START'">
+      <h3 class="text-center join-header">{{ 'action.join' | translate }}</h3>
+      <form [formGroup]="joinForm" (ngSubmit)="submitJoin()">
+        <div class="form-row mt-3">
+          <div class="form-group col-12">
             <label for="name">{{ 'join.name' | translate }}</label>
             <input type="text" class="form-control" formControlName="name" name="name" id="name" #username>
           </div>
-          <div class="form-group">
+        </div>
+        <div class="form-row mt-3">
+          <div class="form-group col-md-6 col-sm-12">
             <label for="phone">{{ 'join.phone' | translate }}</label>
             <input type="text" class="form-control" formControlName="phone" name="phone" id="phone" #username>
           </div>
-          <div class="form-group">
+          <div class="form-group col-md-6 col-sm-12">
             <label for="email">{{ 'join.email' | translate }}</label>
             <input type="text" class="form-control" formControlName="email" name="email" id="email" #username>
           </div>
-          <div class="form-group">
+        </div>
+        <div class="form-row">
+          <div class="form-group col-12 footnote-text">
+            <span>{{ 'join.footnote' | translate }}</span>
+          </div>
+        </div>
+        <div class="form-row mt-4">
+          <div class="form-group col-md-6 col-sm-12">
             <label for="province">{{ 'join.province' | translate }}</label>
             <select id="province" formControlName="province" class="form-control">
-              <option value="">Select</option>
-              <option *ngFor="let p of provinceKeys" [value]="p">{{ province[p] }}</option>
+              <option value="">{{ 'join.province-none' | translate }}</option>
+              <option *ngFor="let p of provinceKeys" [value]="p">{{ 'enum.UserProvince.' + p | translate }}</option>
             </select>
           </div>
-          <div class="form-group" *ngIf="(joinInfo.groupTopics)">
-            <label for="topics">{{ 'join.topics' | translate }}</label>
-            <select class="form-control" id="topics" name="topics" multiple>
-              <option *ngFor="let topic of joinInfo.groupTopics">
-                {{topic}}
-              </option>
+          <div class="form-group col-md-6 col-sm-12">
+            <label for="language">{{ 'join.language' | translate }}</label>
+            <select id="language" class="form-control" [formControlName]="'language'">
+              <option value="">{{ 'join.language-none' | translate }}</option>
+              <option *ngFor="let lang of languages" [value]="lang.threeDigitCode">{{ lang.fullName }}</option>
             </select>
           </div>
-          <div class="form-group">
-            <p class="form-label">{{ 'join.footnote' | translate }}</p>
-          </div>
-          <div class="form-group text-center">
-            <button type="submit" class="btn btn-primary join-button"> {{ 'join.submit' | translate }} </button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- todo : maybe just redirect them to register page with pre-filled values -->
-<div class="modal fade" tabindex="-1" role="dialog" id="signup-user-modal" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <form (submit)="signUpUser(password.value)">
-        <div class="modal-header">
-          <h5 class="modal-title">{{ 'join.completed.signUpModal.title' | translate }}</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <p>{{ 'join.completed.signUpModal.intro' | translate:joinInfo }}</p>
+        <div class="form-row mt-4">
+          <div class="form-group col-12 text-center">
+            <button type="submit" class="btn btn-primary join-button" [disabled]="!joinForm.valid"> {{ 'join.submit' | translate }} </button>
           </div>
-          <div class="form-group">
-            <input type="password" class="form-control" name="password" id="password" #password>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary"
-                  (click)="signUpUser(password.value)">{{ 'join.completed.signUpModal.signup' | translate }}</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            {{ 'join.completed.signUpModal.close' | translate }}
-          </button>
         </div>
       </form>
     </div>
+
+    <div class="col-md-6 col-sm-12" *ngIf="currentStep == 'TOPICS'">
+      <h3 class="text-center join-header">{{ 'join.topics.title' | translate }}</h3>
+      <p class="privacy-statement">{{ 'join.topics.description' | translate }}</p>
+      <div class="row" [formGroup]="joinTopicsForm">
+        <div class="col-12 topics-block" *ngIf="joinInfo?.groupJoinTopics">
+          <label *ngFor="let topic of joinInfo.groupJoinTopics"
+                 [ngClass]="{'topic-container': true, 'topic-selected': joinTopicsForm?.controls[topic]?.value}">{{ topic }}
+            <input type="checkbox" [formControlName]="topic">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+      </div>
+      <div class="form-row mt-4">
+        <div class="form-group col-12 text-right">
+          <button type="button" class="btn skip-button" (click)="skipTopics()">
+            {{ 'join.topics.skip' | translate }}
+          </button>
+          <button type="button" class="btn btn-primary join-button float-right" (click)="submitTopics()">
+            {{ 'action.done' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12" *ngIf="currentStep == 'DONE'">
+      <div class="row">
+        <div class="col-12 text-center">
+          <img src="assets/join_success_icon.png" />
+          <h3 class="text-center join-header">{{ 'join.done.title' | translate }}</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <p class="privacy-statement" [translate]="'join.done.body'" [translateParams]="{groupName: joinInfo.groupName}"></p>
+        </div>
+      </div>
+      <div class="row mt-3 mb-3 register-grassroot" *ngIf="joinedUser && !joinedUser.hasPassword">
+        <div class="col-12">
+          <h3 class="text-center join-header">{{ 'join.done.register' | translate }}</h3>
+          <p class="privacy-statement" [innerHtml]="'join.done.about' | translate">Grassroot is a platform for organizing your community. See what you
+          can do with Grassroot here. Just enter a password below, and your username will be your email or
+          phone number.</p>
+          <div class="row">
+              <div class="col-12"><label for="password" class="form-label">{{ 'join.done.pwd' | translate }}</label></div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-9 col-sm-12">
+              <input id="password" type="password" class="form-control form-control-em" #password />
+            </div>
+            <div class="col-md-3 col-sm-12 text-center">
+              <button class="btn btn-primary register-button"
+                      (click)="signUpUser(password.value)">{{ 'action.register' | translate }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

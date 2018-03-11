@@ -1,0 +1,65 @@
+<div class="row" *ngIf="groups">
+  <div class="col-12 result-count">
+    <div>{{groups?.length}} groups found that you belong to</div>
+  </div>
+</div>
+
+<div *ngIf="groups?.length > 0" class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-4 col-lg-4 d-block">Group Name</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">Created on</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">Members</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">SMS Join Words</div>
+        <div class="col-md-2 col-lg-2 d-none d-md-block">Join Code</div>
+      </div>
+    </div>
+
+  <div class="card-body">
+      <div *ngFor="let group of filteredGroupsPage" class="row flex flex-wrap search-result-row">
+        <div class="col-4 col-lg-4">
+          <a class="primary-entity-name-link font-weight-bold group-name"
+             href="" (click)="triggerViewGroup(group)">{{group.name}}</a>
+        </div>
+
+        <div class="col-2 col-lg-2">
+          {{group.groupCreationTime | date: 'dd MMM yy'}}
+        </div>
+
+        <div class="col-2 col-lg-2">
+          <img src="assets/members.png"/>
+          {{group.memberCount}}
+        </div>
+
+        <div class="col-2 col-lg-2">
+          <div *ngIf="group.joinWords.length > 0">
+            <div *ngFor="let wrd of group.joinWords">
+              {{wrd.word | uppercase}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-2 col-lg-2 font-weight-bold">
+          {{"*134*1994*" +group.joinCode + "#"}}
+        </div>
+    </div>
+  </div>
+  <nav aria-label="Group list navigation" *ngIf="pagesList.length > 1">
+    <ul class="pagination justify-content-end">
+      <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
+        <a class="page-indicator " (click)="previousPage()">
+          <img src="../../../assets/arrow-left.png">Previous
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let page of pagesList">
+        <a class="page-indicator " [ngClass]="(page==currentPage)?'page-selected':''" (click)="goToPage(page)">{{page}}</a>
+      </li>
+      <li class="page-item" [ngClass]="(currentPage==pagesList.length)?'disabled':''">
+        <a class="page-indicator " (click)="nextPage()">
+          Next <img src="../../../assets/arrow-right.png">
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+</div>

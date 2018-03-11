@@ -50,22 +50,13 @@ export class DateTimeUtils {
     return { year: date.year(), month: date.month() + 1, day: date.date() };
   }
 
-  public static fromNgbStruct(date: NgbDateStruct, time: NgbTimeStruct): number {
-    return new Date(date.year,
-      date.month-1,
-      date.day,
-      time.hour,
-      time.minute,
-      time.second).getTime();
-  }
-
-  public static momentFromNgbStruct(date: NgbDateStruct, time: NgbTimeStruct): Moment {
+  public static momentFromNgbStruct(date: NgbDateStruct, time?: NgbTimeStruct): Moment {
     return moment(
       [
         date.year,
         date.month - 1,
         date.day,
-        time ? time.hour : 0,
+        time ? time.hour : 12,
         time ? time.minute : 0,
         time ? time.second : 0,
         0
@@ -76,4 +67,8 @@ export class DateTimeUtils {
 
 export const epochMillisFromDate = (ngbDate: NgbDateStruct) => {
   return moment(ngbDate).valueOf()
+};
+
+export const ngbDateFromMoment = (date: Moment): NgbDateStruct => {
+  return { year: date.year(), month: date.month() + 1, day: date.date() }
 };

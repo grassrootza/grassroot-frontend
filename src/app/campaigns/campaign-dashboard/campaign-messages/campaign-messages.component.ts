@@ -20,9 +20,9 @@ export class CampaignMessagesComponent implements OnInit {
   public campaign: CampaignInfo;
 
   public messageTypes = {
-    'PETITION': ['OPENING', 'MORE_INFO', 'SIGN_PETITION', 'SHARE', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
-    'ACQUISITION': ['OPENING', 'MORE_INFO', 'JOIN_GROUP', 'SHARE', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
-    'INFORMATION': ['OPENING', 'MORE_INFO', 'TAG_ME', 'SHARE', 'EXIT_POSITIVE']
+    'PETITION': ['OPENING', 'MORE_INFO', 'SIGN_PETITION', 'SHARE_PROMPT', 'SHARE_SEND', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
+    'ACQUISITION': ['OPENING', 'MORE_INFO', 'JOIN_GROUP', 'SHARE_PROMPT', 'SHARE_SEND', 'EXIT_POSITIVE', 'EXIT_NEGATIVE'],
+    'INFORMATION': ['OPENING', 'MORE_INFO', 'TAG_ME', 'SHARE_PROMPT', 'EXIT_POSITIVE']
   };
 
   public messageSequences = {
@@ -37,6 +37,8 @@ export class CampaignMessagesComponent implements OnInit {
       'OPENING': ['TAG_ME', 'MORE_INFO'], 'MORE_INFO': ['TAG_ME', 'EXIT_NEGATIVE']
     }
   };
+
+  public currentTypes: string[] = [];
 
   private typeIndexes = {};
   private typeMsgIds = {};
@@ -80,9 +82,17 @@ export class CampaignMessagesComponent implements OnInit {
 
   setUpMessages() {
     this.existingMessages = this.campaign.campaignMessages && this.campaign.campaignMessages.length > 0;
-    this.messageTypes[this.campaign.campaignType].forEach((type, index) => {
+    this.currentTypes = this.messageTypes[this.campaign.campaignType];
+    if (!this.campaign.smsSharingEnabled) {
+      console.log("slicing out share prompt ...");
+      this.sliceOutMessageType('SHARE_PROMPT');
+      this.sliceOutMessageType('SHARE_SEND');
+    }
+    this.currentTypes.forEach((type, index) => {
       this.typeIndexes[type] = index;
 
+      // the message group IDs are only unique within campaign, and only used in set up, so can use timestamp without
+      // worrying about matching values if two users doing this for two different campaigns at once
       let existingMsgIndex = this.existingMessages ? this.campaign.campaignMessages.findIndex(msg => msg.linkedActionType === type) : -1;
       let msgId = existingMsgIndex != -1 ? this.campaign.campaignMessages[existingMsgIndex].messageId : "message_" + moment().valueOf() + "_" + index;
       let msgRequest = new CampaignMsgRequest(msgId, type,
@@ -108,6 +118,13 @@ export class CampaignMessagesComponent implements OnInit {
 
   }
 
+  sliceOutMessageType(type: string) {
+    let index = this.currentTypes.indexOf(type);
+    if (index != -1) {
+      this.currentTypes.splice(index, 1);
+    }
+  }
+
   updateLanguages() {
     this.selectedLanguages = Object.keys(this.languageForm.value).filter(key => this.languageForm.value[key])
       .map(key => this.getLanguage(key));
@@ -124,11 +141,11 @@ export class CampaignMessagesComponent implements OnInit {
   }
 
   setMessages() {
-    console.log("okay, trying to save messages: {}", this._currentMessages);
+    // console.log("okay, trying to save messages: {}", this._currentMessages);
     this.campaignService.setCampaignMessages(this.campaignUid, this._currentMessages).subscribe(campaignInfo => {
       this.alertService.alert("campaign.messages.done.success");
     }, error => {
-      console.log("well that didn't work: ", error);
+      // console.log("well that didn't work: ", error);
       this.alertService.alert("campaign.messages.done.error");
     });
     return false;

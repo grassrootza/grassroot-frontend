@@ -54,9 +54,14 @@
       "PETITION": "Petition",
       "ACQUISITION": "Acquisition",
       "INFORMATION": "Information"
+    },
+    "MeetingResponse": {
+      "YES": "Yes",
+      "NO": "No",
+      "MAYBE": "Maybe",
+      "NO_RESPONSE": "No Response"
     }
   },
-
   "menu": {
     "home": "HOME",
     "groups": "GROUPS",
@@ -109,7 +114,13 @@
       "group": "Group",
       "campaign": "Campaign"
     },
-    "loading": "Fetching data ..."
+    "loading": "Fetching data ...",
+    "joinModal": {
+      "titleNotMember": "Do you want to join this group?",
+      "titleMember": "Already a member!",
+      "titleNoneFound": "Join code not found",
+      "bodyNoneFound": "It looks like you are searching by group join code, but we can't find any group matching that code ({{ code }}). Do you want to do a full text search or close and try again?"
+    }
   },
   "groups": {
     "title": "Groups",
@@ -204,6 +215,7 @@
       "activity": "Activity",
       "broadcast": "Broadcast",
       "members": "Members",
+      "inboundMessages": "Inbound messages",
       "settings": "Settings"
     },
     "dashboard": {
@@ -247,6 +259,8 @@
         "some": "You can add {{ joinWordsLeft }} more join words to this group: "
       },
       "joinWordTaken": "Sorry, that join word is already taken",
+      "joinTopicsLabel": "Join topics (displayed when a user hits the join page or dials the join code)",
+      "joinTopicsUpdated": "Done! Join topics updated",
       "descriptors": {
         "ADDED_BY_SYS_ADMIN": "Via: Added by Grassroot system admin",
         "SELF_JOINED": "Via: Used USSD join code in past",
@@ -288,6 +302,7 @@
         "broadcast": "Send a broadcast",
         "topics": "Assign topics",
         "taskTeam": "Add to task team",
+        "copyToGroup": "Copy to group",
         "role": "Change role",
         "remove": "Remove",
         "noMembersSelectedModal": {
@@ -345,7 +360,8 @@
         "DAYS_AGO-EXACT": "exactly",
         "DAYS_AGO-BEFORE": "more than",
         "DAYS_AGO-AFTER": "less than",
-        "DAYS_AGO_SUFIX": "days ago"
+        "DAYS_AGO_SUFIX": "days ago",
+        "userLanguage": "User language"
       },
       "manage":{
         "manage": "Manage",
@@ -354,6 +370,22 @@
         "topics" : "Assign topic(s)",
         "taskTeam": "Add to task team",
         "remove": "Remove"
+      },
+      "copyMembers": {
+        "modalTitle": "Copy members to group",
+        "table":{
+          "name": "Name",
+          "role": "Role",
+          "phone": "Phone",
+          "email": "Email"
+        },
+        "copyToGroupLabel": "Copy to a group:",
+        "pickGroup": "Pick group to copy members to",
+        "copyCountMembers": "Copy {{count}} members to group",
+        "addedDone": "Done, member(s) copied to group",
+        "copyToNewGroup": "Create group",
+        "newGroupName": "Enter group name",
+        "error": "Sorry, there was an error copying the members, please try again later"
       },
       "addToTaskTeam":{
         "modalTitle": "Add member to task team",
@@ -614,6 +646,8 @@
       "groupPublic": "Public",
       "groupPrivate": "Private",
       "advancedPermissions": "Advanced permissions",
+      "topics": "Topics",
+      "createNewTopicLabel": "Create new topic",
       "reminderInMinutes": "When will reminders be sent?",
       "reminders": {
         "noReminder": "No reminder",
@@ -635,6 +669,9 @@
     },
     "taskTeam": {
       "addNew": "Add task team",
+      "rename": "Rename",
+      "copyMembers": "Copy members",
+      "remove": "Remove task team",
       "title": "Create new task team",
       "name": "Give this task team a name",
       "numberOfMembers": "Number of members that will be added:",
@@ -643,6 +680,27 @@
       "removeBody": "Removing a task team cannot be undone. Are you sure?",
       "createTeamDone": "Done, task team created",
       "removeTeamDone": "Done, task team removed"
+    },
+    "inboundMessages": {
+      "title": "Messages received",
+      "from": "From",
+      "dateReceived": "Date received",
+      "filter": {
+        "received": "Received",
+        "dateFrom": "Date from",
+        "dateTo": "Date to",
+        "keyword": "Keyword",
+        "keywordPlaceholder": "Type keyword to filter",
+        "anyTime": "Any time",
+        "thisWeek": "This week",
+        "lastWeek": "Last week",
+        "thisMonth": "This month",
+        "lastMonth": "Last month",
+        "custom": "Custom",
+        "clear": "Clear filters",
+        "filter": "Filter",
+        "exportMessages": "Export messages"
+      }
     }
   },
   "campaigns": {
@@ -730,7 +788,46 @@
       "code-specified": "*134*1994*{{campaignCode}}#",
       "creationLabel": "Created by: ",
       "creationInfo": "{{ creatingUserName }} on {{ createdDate }}",
-      "typeLabel": "Campaign type: "
+      "typeLabel": "Campaign type: ",
+      "groupLabel": "Linked group: "
+    },
+    "statistics": {
+      "members": {
+        "title": "Members opting in to group through campaign",
+        "prior": "Prior members",
+        "opted_out": "Opted out of joining",
+        "joined": "Joined",
+        "engaged": "Interacted",
+        "conversion": "{{ conversionRate }}% Conversion"
+      },
+      "engagement": {
+        "title": "Campaign Engagement",
+        "topic": "Topic Interest: {{ channel }}",
+        "count_total": "People Engaged",
+        "count_spec": "People via {{ desc }}",
+        "view": "View by: ",
+        "channels": "Channels",
+        "provinces": "Provinces"
+      },
+      "activity": {
+        "title": "Activity",
+        "select_channel": "By channel",
+        "select_province": "By province",
+        "time": {
+          "this_week": "This week",
+          "this_month": "This month",
+          "last_week": "Last week",
+          "last_month": "Last month",
+          "all_time": "All time",
+          "custom": "Custom"
+        }
+      },
+      "petition": {
+        "title": "Petition Results",
+        "conversion": "Conversion",
+        "signed": "Signed Petition",
+        "progress": "of {{ target }} signatures"
+      }
     },
     "messages": {
       "title": "Customize your message responses for: ",
@@ -763,7 +860,8 @@
         "SIGN_PETITION": "Sign Petition",
         "JOIN_GROUP": "Join Us",
         "TAG_ME": "Choose Interests",
-        "SHARE": "Share Screen",
+        "SHARE_PROMPT": "Share Screen",
+        "SHARE_SEND": "Share Message",
         "EXIT_POSITIVE": "Positive Exit",
         "EXIT_NEGATIVE": "Negative Exit"
       },
@@ -773,42 +871,52 @@
         "SIGN_PETITION": "Thanks for participating. Let's get your details to tell you about future events and campaigns",
         "JOIN_GROUP": "Thanks for joining us. Let's get your details to tell you about future events and campaigns",
         "TAG_ME": "Thanks for participating. Let's get your details to tell you about future events and campaigns",
-        "SHARE": "Thank you for joining forces with us. If you want to share this with others please type their number",
+        "SHARE_PROMPT": "Thank you for joining forces with us. If you want to share this with others please type their number",
+        "SHARE_SEND": "Join us! {__name__} has just joined the campaign, {__entity_name__}, and wants to share it with you. Dial *134*1994*{__inbound__}# to join them!",
         "EXIT_POSITIVE": "Thank you for joining forces with us! We hope to see you soon at one of our events",
         "EXIT_NEGATIVE": "Thank you for engaging our campaign, and we hope you will join us in the future"
       },
-      "initial": {
-        "title": "Initial Response",
-        "placeholder": ""
-      },
-      "more": {
-        "title": "More Info",
-        "placeholder": ""
-      },
-      "join": {
-        "title": "Join Us",
-        "placeholder": "Thanks for participating. Let's get your details to tell you about future events and campaigns"
-      },
-      "sign": {
-        "title": "Sign Petition",
-        "placeholder": "Thanks for participating. Let's get your details to tell you about future events and campaigns"
-      },
-      "share": {
-        "title": "Share Screen",
-        "placeholder": "Thank you for joining forces with us. If you want to share this with others please type their number"
-      },
-      "exit_positive": {
-        "title": "Positive exit",
-        "placeholder": "Thank you for joining forces with us! We hope to see you soon at one of our events"
-      },
-      "exit_negative": {
-        "title": "Negative exit",
-        "placeholder": "Thank you for engaging our campaign, and we hope you will join us in the future"
+      "explanations": {
+        "OPENING": "This is the first message that a user will see when they enter the code or text a campaign trigger word",
+        "MORE_INFO": "An optional screen that allows a second message elaborating on the first",
+        "SIGN_PETITION": "The screen that shows after the user has already chosen to sign the petition. The system will automatically ask for any information it doesn't know",
+        "JOIN_GROUP": "The screen that shows after a user has opted into joining the campaign's group, opting in for further information",
+        "TAG_ME": "The screen that shows after a user has selected a topic that they are interested in",
+        "SHARE_PROMPT": "The screen that prompts a user to enter someone else's number in order for the campaign to be shared",
+        "SHARE_SEND": "The template for the sharing SMS that goes out. You can leave this blank and we will use the default",
+        "EXIT_POSITIVE": "The goodbye message after a user has signed or joined",
+        "EXIT_NEGATIVE": "The goodbye message after a user has declined to sign or join"
       },
       "done": {
         "success": "Done! The messages have been set",
         "error": "Sorry, there was an error updating"
       }
+    },
+    "settings": {
+      "title": "Update Campaign Settings",
+      "name": "Campaign Name/Title",
+      "code": "Campaign code",
+      "description": "Description",
+      "image": "Campaign Image (optional)",
+      "image_add": "Click to add",
+      "image_change": "Change image",
+      "image_remove": "Remove image",
+      "ends": "Campaign Ends: ",
+      "extend": "Extend",
+      "reactivate": "Reactivate",
+      "need_new": "Your campaign's old code has been taken. To reactivate it, please set a new one in the 'code' field",
+      "type": "Campaign Type:",
+      "group": "Master Group:",
+      "new": "Change to new group",
+      "existing": "Change to existing group",
+      "petition": "Amandla URL: ",
+      "sms_sharing": "Allow SMS sharing: ",
+      "sms_limit": "SMS limit ",
+      "budget_estimate": "Budget estimate: {{ budget }}",
+      "cost_estimate": ". You have spent {{ spent }} to date",
+      "landing": "Landing page: ",
+      "url": "URL",
+      "done": "Done! Campaign has been updated"
     }
   },
   "broadcasts": {
@@ -823,7 +931,8 @@
       "types": {
         "title": "How would you like to broadcast this message?",
         "smsLabel": "SMS",
-        "smsCosts": "SMS costs: {{ smsCostCents }}c/message",
+        "smsCosts": "{{ smsCostCents }}c/message",
+        "smsCostsThisMonth" : "Costs this month: ",
         "emailLabel": "Email",
         "fbLabel": "Facebook",
         "twitterLabel": "Twitter",
@@ -840,7 +949,8 @@
         "twitterSection": "Tweet",
         "charsRemaining": " characters remaining",
         "link": {
-          "file": "attach image or file",
+          "file": "attach file",
+          "image": "add an image",
           "join": "insert a join link",
           "campaign": "insert a campaign link",
           "insert": "insert a link",
@@ -925,17 +1035,31 @@
   },
   "join": {
     "title": "Join \"{{ groupName }}\"",
-    "description": "About this group: {{ groupDescription }}",
     "intro": "Just enter your details below to join \"{{ groupName }}\". By joining, you are agreeing to give the details below to the group's organizer, through the Grassroot platform",
     "privacy": "privacy policy",
-    "name": "Your name (can be a nickname or alias)",
-    "phone": "* Your phone number",
-    "email": "* Your email address",
-    "province": "Your province (optional)",
-    "province-none": "Select",
-    "topics": "Topics of interest (optional)",
-    "footnote": "* You can enter either an email or a phone number, or both (but at least one)",
-    "submit": "Join!",
+    "name": "Your name (what people know you by)",
+    "phone": "Your mobile number",
+    "email": "Email address",
+    "province": "Province",
+    "province-none": "Select Province",
+    "language": "Preferred Language",
+    "language-none": "Select Language",
+    "submit": "Join",
+    "footnote": "* At least one of mobile number or email address are required",
+    "about-group": "About this group: ",
+    "topics": {
+      "title": "What are you interested in?",
+      "description": "Select topics that you would like to hear about:",
+      "skip": "Skip"
+    },
+    "done": {
+      "title": "Thanks for Joining!",
+      "body": "You've successfully join the \"{{ groupName }}\" group. You'll now be able to get involved with group activities, campaigns, and petitions.",
+      "register": "Register for Grassroot?",
+      "about": "Grassroot is a platform for organizing your community. <a href='/home' target='_blank' class='grassroot-link'>See what you can do with Grassroot here.</a> Just enter a password below, and your username will be your email orphone number.",
+      "pwd": "Set a password",
+      "registered": "Done! Welcome to the platform"
+    },
     "completed": {
       "hasPasswordAlert": "Done! You have joined the group",
       "signUpModal": {
@@ -970,7 +1094,18 @@
       "mismatch": "Sorry, your passwords do not match"
     },
     "account": {
-      "title": "Under construction"
+      "title": "Account settings",
+      "name": "Account name",
+      "billingEmail": "Billing email address",
+      "subscriptionOption": "Subscription option",
+      "billingPeriod": "Billing period",
+      "completed": "Done, your account has been updated",
+      "billingEmailNote": "* Invoices will be sent to billing user's email address",
+      "pastInvoices": "Past invoices",
+      "modal": {
+        "header": "Close account",
+        "body": "Are you sure you want to close this account?"
+      }
     },
     "integrations": {
       "title": "Integration settings",
@@ -1057,7 +1192,14 @@
     "copied": "Copied",
     "done": "Done",
     "insert": "Insert",
-    "view": "View"
+    "view": "View",
+    "download": "Download",
+    "closeAccount": "Close account",
+    "change": "Change",
+    "add": "Add",
+    "join": "Join",
+    "search": "Search",
+    "register": "Register"
   },
   "general": {
     "charsRemaining": "Characters remaining"
@@ -1070,6 +1212,22 @@
         "validate-action-label": "Is the action complete?",
         "volunteers-needed-label": "Do you volunteer?"
       }
+    },
+    "meeting": {
+      "broadcast": {
+        "done": "Done! Message sent to all members who responded"
+      }
+    }
+  },
+  "search": {
+    "title": "Search Results",
+    "back": "Back to Home",
+    "nav": {
+      "activities": "My Activities",
+      "groups": "My Groups",
+      "campaigns": "My Campaigns",
+      "meetings": "Public Meetings",
+      "public-groups": "Public Groups"
     }
   }
 }

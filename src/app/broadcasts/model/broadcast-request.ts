@@ -18,6 +18,7 @@ export class BroadcastRequest {
 
   sendEmail: boolean = false;
   emailContent: string = "";
+  emailAttachmentKeys: string[] = [];
 
   postToFacebook: boolean = false;
   facebookPages: string[] = [];
@@ -41,6 +42,7 @@ export class BroadcastRequest {
   topics: string[] = [];
   joinDate: string = null;
   joinDateCondition: JoinDateCondition = null;
+  filterNamePhoneEmail: string = "";
   skipSmsIfEmail: boolean = false;
 
   sendType: string = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
@@ -60,6 +62,7 @@ export class BroadcastRequest {
     this.shortMessageString = "";
     this.sendEmail = false;
     this.emailContent = "";
+    this.emailAttachmentKeys = [];
     this.postToFacebook = false;
     this.facebookPages = [];
     this.facebookContent = "";
@@ -77,6 +80,7 @@ export class BroadcastRequest {
     this.joinMethods = [];
     this.joinDate = null;
     this.joinDateCondition = null;
+    this.filterNamePhoneEmail = "";
     this.skipSmsIfEmail = false;
 
     this.sendType = "IMMEDIATE"; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
@@ -98,6 +102,7 @@ export class BroadcastRequest {
     this.shortMessageString = br.shortMessageString;
     this.sendEmail = br.sendEmail;
     this.emailContent = br.emailContent;
+    this.emailAttachmentKeys = br.emailAttachmentKeys;
     this.postToFacebook = br.postToFacebook;
     this.facebookPages = br.facebookPages;
     this.facebookContent = br.facebookContent;
@@ -111,6 +116,7 @@ export class BroadcastRequest {
     this.taskTeams = br.taskTeams;
     this.provinces = br.provinces;
     this.topics = br.topics;
+    this.filterNamePhoneEmail = br.filterNamePhoneEmail;
 
     this.sendType = br.sendType; // options: IMMEDIATE, FUTUREADDED_TO_GROUP
     this.sendNow = br.sendNow;
@@ -130,6 +136,8 @@ export class BroadcastRequest {
     this.joinMethods = filter.joinSources;
     this.joinDateCondition = filter.joinDateCondition;
     this.joinDate = !!(filter.joinDate) ? filter.joinDate.format("YYYY-MM-DD") : null;
+    this.filterNamePhoneEmail = filter.namePhoneOrEmail;
+    console.log("just set member filter, looks like: ", this);
   }
 
   getMemberFilter(): MembersFilter {
@@ -141,6 +149,7 @@ export class BroadcastRequest {
     filter.joinSources = this.joinMethods;
     filter.joinDateCondition = this.joinDateCondition;
     filter.joinDate = moment(this.joinDate, "YYYY-MM-DD");
+    filter.namePhoneOrEmail = this.filterNamePhoneEmail;
     return filter;
   }
 }
@@ -158,6 +167,7 @@ export class BroadcastContent {
   title: string = "";
   shortMessage: string = "";
   emailContent: string = "";
+  emailAttachmentKeys: string[] = [];
   facebookPost: string = "";
   facebookLink: string = "";
   facebookLinkCaption: string = "";

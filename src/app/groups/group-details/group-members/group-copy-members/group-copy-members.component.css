@@ -1,0 +1,19 @@
+.manage-link {
+  font-size: 1.1em;
+  text-decoration: underline;
+  text-align: right;
+}
+
+.create-group {
+  padding: 5px 10px;
+}
+
+.create-group:hover {
+  cursor: pointer;
+  background: #26A041;
+  color: white;
+}
+
+.new-group-name {
+  width: 100%;
+}

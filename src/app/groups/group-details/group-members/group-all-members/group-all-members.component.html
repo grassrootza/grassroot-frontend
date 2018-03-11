@@ -16,6 +16,7 @@
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.broadcast'">Send broadcast</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.topics'" (click)="showBulkAssignTopicsModal()">Assign topic</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.taskTeam'" (click)="showBulkAddToTaskTeamModal()">Add to task team</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.copyToGroup'" (click)="showBulkCopyToGroupModal()">Copy to group</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.role'">Change role</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showBulkRemoveModal()">Remove</a>
             </div>
@@ -117,6 +118,10 @@
 <app-member-topics-manage #bulkMemberManageModal *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
                           [group]="group" [members]="bulkManageMembers" [modalId]="'bulk-member-assign-topics'" [selectId]="'bulk-topics-multi-select'"
                           (topicsAssigned)="goToFirstPage()"></app-member-topics-manage>
+
+<app-group-copy-members *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+                        [groups]="groupsToCopyMembersTo"  [members]="bulkManageMembers" [modalId]="'bulk-copy-members-to-group'"
+                        (membersAdded)="goToFirstPage()"></app-group-copy-members>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="no-topics-for-group" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">

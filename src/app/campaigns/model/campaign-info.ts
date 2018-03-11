@@ -1,6 +1,7 @@
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import * as moment from "moment";
 import {CampaignMsgServerDTO, getCampaignMsg} from "../campaign-create/campaign-request";
+import {Language, MSG_LANGUAGES} from "../../utils/language";
 
 export class CampaignInfo {
 
@@ -11,19 +12,41 @@ export class CampaignInfo {
               public masterGroupUid: string,
               public description: string,
               public campaignStartDate: any,
-              public campaignEndDate: any,
+              public campaignEndDate: any, // this is a moment
               public totalEngaged: number,
               public totalJoined: number,
               public creatingUserName: string,
               public creatingUserUid: string,
               public createdDate: any,
-              public campaignCode: number,
-              public campaignTags: string[],
-              public campaignMessages: CampaignMsgServerDTO[]) {
+              public campaignCode: string,
+              public joinTopics: string[],
+              public campaignMessages: CampaignMsgServerDTO[],
+              public smsSharingEnabled: boolean,
+              public smsSharingLimit: number,
+              public smsSharingSpent: number,
+              public smsSharingUnitCost: number,
+              public petitionConnected: boolean,
+              public campaignUrl: string,
+              public petitionUrl: string,
+              public campaignImageKey: string) {
   }
 
   public isActive(): boolean {
     return this.campaignEndDate.isAfter(moment());
+  }
+
+  public getLanguages(): Language[] {
+    let languageCodes = new Set();
+    this.campaignMessages.forEach(msgDto => {
+      console.log("campaign message: ", msgDto);
+      msgDto.messages.forEach(msg => languageCodes.add(msg.language))
+    });
+    console.log("extracted language codes: ", languageCodes);
+    return MSG_LANGUAGES.filter(lang => languageCodes.has(lang.threeDigitCode));
+  }
+
+  public hasMessageType(messageType: string) {
+    return this.campaignMessages.findIndex(msg => msg.linkedActionType == messageType) != -1;
   }
 }
 
@@ -43,7 +66,15 @@ export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
     cp.creatingUserUid,
     DateTimeUtils.getMomentFromJavaInstant(cp.createdDate),
     cp.campaignCode,
-    cp.campaignTags,
-    cp.campaignMessages ? cp.campaignMessages.map(getCampaignMsg) : []
+    cp.joinTopics,
+    cp.campaignMessages ? cp.campaignMessages.map(getCampaignMsg) : [],
+    cp.smsSharingEnabled,
+    cp.smsSharingLimit,
+    cp.smsSharingSpent,
+    cp.smsSharingUnitCost,
+    cp.petitionConnected,
+    cp.campaignUrl,
+    cp.petitionUrl,
+    cp.campaignImageKey
   );
 };

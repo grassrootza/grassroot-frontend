@@ -9,7 +9,7 @@ import {DayTasks} from "./day-task.model";
 
 import * as moment from 'moment';
 import {Moment} from 'moment';
-import {GroupRef} from "../groups/model/group-ref.model";
+import {GroupMembersRef, GroupRef} from "../groups/model/group-ref.model";
 import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
@@ -17,6 +17,7 @@ import {TaskType} from "../task/task-type";
 import {TodoType} from "../task/todo-type";
 import {AlertService} from "../utils/alert.service";
 import {CampaignService} from "../campaigns/campaign.service";
+import {SearchService} from "../search/search.service";
 
 declare var $: any;
 
@@ -44,12 +45,22 @@ export class HomeComponent implements OnInit {
   private newMembersLoadFinished = false;
   private groupsLoadFinished = false;
 
+  public taskToView:Task;
+
+  public voteResponse:string;
+
+  public joinCandidateGroup:GroupRef;
+  public isMemberPartOfGroup:boolean = false;
+  public groupMembersRef:GroupMembersRef;
+  public proposedSearchTerm: string = "";
+
   constructor(private taskService: TaskService,
               private userService: UserService,
               private groupService: GroupService,
               private campaignService: CampaignService,
               private router: Router,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private searchService:SearchService) {
     this.agendaBaseDate = moment().startOf('day');
   }
 
@@ -234,6 +245,7 @@ export class HomeComponent implements OnInit {
   }
 
   handleTaskClick(task: Task): boolean {
+    this.taskToView = task;
     if (
       task.type == TaskType.TODO
       && task.todoType != TodoType.ACTION_REQUIRED
@@ -243,6 +255,23 @@ export class HomeComponent implements OnInit {
 
       this.toDoToRespond = task;
       $('#respond-todo-modal').modal("show");
+    }
+
+    if(task.type == TaskType.VOTE){
+      console.log("Is a vote.................");
+      this.taskService.viewVote(this.taskToView.taskUid,this.userService.getLoggedInUser().msisdn).subscribe(resp=>{
+        this.voteResponse = resp.data.reply;
+        console.log("Vote response...........",this.voteResponse);
+      })
+    }
+
+    switch (task.type){
+      case TaskType.MEETING:
+        $('#view-meeting-modal').modal("show");
+        break;
+      case TaskType.VOTE:
+        $('#view-vote-modal').modal("show");
+        break;
     }
     return false;
   }
@@ -286,5 +315,55 @@ export class HomeComponent implements OnInit {
     $("#create-todo-modal").modal("hide");
   }
 
+  searchGlobaly(searchTerm:string){
+    if(this.searchService.isSearchTermJoinCode(searchTerm) != null){
+      this.loadGroupWithJoinCode(searchTerm);
+    }else{
+      console.log("Searching globally ..................");
+      this.router.navigate(["/search",searchTerm]);
+    }
+  }
 
+  loadGroupWithJoinCode(joinCode:string){
+    this.searchService.findGroupWithJoinCode(this.searchService.isSearchTermJoinCode(joinCode)).subscribe(resp =>{
+        console.log("Group found............",resp);
+        if(resp === null){
+          this.proposedSearchTerm = joinCode;
+          $("#join-code-not-found-modal").modal("show");
+        } else {
+          this.joinCandidateGroup = resp;
+          this.memberPartOfGroup(this.joinCandidateGroup.groupUid,this.userService.getLoggedInUser().userUid);
+          $("#join-group-modal").modal("show");
+        }
+      },error => {
+        console.log("Error trying to find group...........",error);
+      });
+  }
+
+  joinGroup(groupUid:string, joinCode:string){
+     this.searchService.joinWithCode(groupUid,joinCode).subscribe(resp => {
+       console.log("Response from server..............",resp);
+       $("#join-group-modal").modal("hide");
+       this.router.navigate(["/group",groupUid]);//Viewing group joined.
+     },error => {
+       console.log("Error joining group.........................",error);
+     });
+  }
+
+  memberPartOfGroup(groupUid:string,memberUid:string){
+    this.groupService.loadGroupDetailsFromServer(groupUid).subscribe(group =>{
+      this.groupMembersRef = new GroupMembersRef(group.groupUid,group.name,group.memberCount,group.members);
+      if(this.groupMembersRef.hasMember(memberUid)){
+        this.isMemberPartOfGroup = true;
+      }
+    },error =>{
+      console.log("Error loading group..........",error);
+    });
+  }
+
+  viewGroup(groupUid:string){
+    $("#join-group-modal").modal("hide");
+    this.router.navigate(["/group",groupUid]);
+    return false;
+  }
 }

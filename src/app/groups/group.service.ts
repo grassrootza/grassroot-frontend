@@ -24,6 +24,8 @@ import {GroupMemberActivity} from './model/group-member-activity';
 import {MembersFilter} from "./member-filter/filter.model";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {FileImportResult} from "./group-details/group-members/group-members-import/file-import/file-import-result";
+import {GroupLog, GroupLogPage} from "./model/group-log.model";
+import {Moment} from "moment";
 
 
 @Injectable()
@@ -33,6 +35,7 @@ export class GroupService {
   groupDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details";
   taskTeamDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details/taskteam";
   groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
+  groupMemberExportUrl = environment.backendAppUrl + "/api/group/fetch/export";
   newMembersLIstUrl = environment.backendAppUrl + "/api/group/fetch/members/new";
   groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
@@ -55,6 +58,8 @@ export class GroupService {
   groupMemberChangeRoleUrl = environment.backendAppUrl + '/api/group/modify/members/modify/role';
   groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
   groupMemberChangeAssignmentsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/assignments';
+  groupFetchInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
+  groupDownloadInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
 
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
@@ -72,8 +77,11 @@ export class GroupService {
   statsOrganisationsUrl = environment.backendAppUrl + "/api/group/stats/organisations";
   statsMemberDetailsUrl = environment.backendAppUrl + "/api/group/stats/member-details";
   statsTopicInterestsUrl = environment.backendAppUrl + "/api/group/stats/topic-interests";
+  rawStatsTopicInterestsUrl = environment.backendAppUrl + "/api/group/stats/raw-topic-interests";
 
   groupSearchUserByTermUrl = environment.backendAppUrl + "/api/user/related/user/names";
+  groupSetTopicsUrl = environment.backendAppUrl + "/api/group/modify/topics/set";
+  groupSetJoinTopicsUrl = environment.backendAppUrl + "/api/group/modify/topics/join";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -170,8 +178,12 @@ export class GroupService {
     return this.httpClient.get<Group>(fullUrl, {params: params}).map(getGroupEntity);
   }
 
-  createGroup(name: string, description: string, permissionTemplate: string, reminderMinutes: number, discoverable: string,
-              pinGroup: boolean = true): Observable<GroupRef> {
+  createGroup(name: string,
+              description: string = "",
+              permissionTemplate: string = "CLOSED_GROUP",
+              reminderMinutes: number = 1440,
+              discoverable: string = "false",
+              pinGroup: boolean = false): Observable<GroupRef> {
 
     const fullUrl = this.groupCreateUrl;
 
@@ -213,6 +225,11 @@ export class GroupService {
           )
         }
       );
+  }
+
+  downloadGroupMembers(groupUid: string) {
+    const fullUrl = this.groupMemberExportUrl + "/" + groupUid;
+    return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
 
   fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number) {
@@ -424,6 +441,14 @@ export class GroupService {
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
 
+  fetchRawTopicInterestsStats(groupUid: string): Observable<any> {
+
+    const fullUrl = this.rawStatsTopicInterestsUrl;
+    let params = new HttpParams()
+      .set("groupUid", groupUid);
+    return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+
   updateGroupSettings(groupUid: string, name: string, description: string, isPublic: boolean, reminderInMinutes: number): Observable<boolean> {
     const fullUrl = this.groupUpdateSettingsUrl + '/' + groupUid;
 
@@ -592,6 +617,10 @@ export class GroupService {
       params = params.set("namePhoneOrEmail", filter.namePhoneOrEmail);
     }
 
+    if (filter.language != null) {
+      params = params.set("languages", filter.language.join(","));
+    }
+
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
       .map(resp => resp.map(m => Membership.createInstance(m)))
   }
@@ -607,6 +636,23 @@ export class GroupService {
       .map(resp => {
         return resp;
       })
+  }
+
+  setGroupTopics(groupUid: string, topics: string[]): Observable<any> {
+    const fullUrl = this.groupSetTopicsUrl + "/" + groupUid;
+
+    let params = new HttpParams()
+      .set("topics", topics.join(","));
+
+    return this.httpClient.post<any>(fullUrl, null, {params: params}).map(resp => {
+      return resp;
+    })
+  }
+
+  setJoinTopics(groupUid: string, joinTopics: string[]): Observable<any> {
+    const fullUrl = this.groupSetJoinTopicsUrl + "/" + groupUid;
+    let params = new HttpParams().set("joinTopics", joinTopics.join(","));
+    return this.httpClient.post<any>(fullUrl, null, {params: params});
   }
 
   removeTaskTeam(parentUid: string, taskTeamUid: string): Observable<Group> {
@@ -627,6 +673,64 @@ export class GroupService {
 
   shouldReloadPaginationPagesNumbers(reload: boolean){
     this.shouldReloadPaginationNumbers_.next(reload);
+  }
+
+  fetchInboundMessagesForGroup(groupUid: string, pageNo: number, from: Moment, to: Moment, keyword: string, sort: string[]): Observable<GroupLogPage> {
+    const fullUrl = this.groupFetchInboundMessagesUrl + '/' + groupUid;
+    let params = new HttpParams()
+      .set('page', pageNo.toString())
+      .set('size', "10");
+
+    if(from != null) {
+      params = params.set('from', from.valueOf().toString());
+    }
+
+    if(to != null) {
+      params = params.set('to', to.valueOf().toString());
+    }
+
+    if(keyword != null) {
+      params = params.set('keyword', keyword);
+    }
+
+    if(sort[1] != ""){
+      params = params.set('sort', sort.join(','));
+    }
+
+    return this.httpClient.get<GroupLogPage>(fullUrl, {params: params}).map(
+      result => {
+        console.log(result);
+        let transformedContent = result.content.map(gl => GroupLog.createInstance(gl));
+        return new GroupLogPage(
+          result.number,
+          result.totalPages,
+          result.totalElements,
+          result.size,
+          result.first,
+          result.last,
+          transformedContent
+        );
+      }
+    );
+  }
+
+  exportInboundMessages(groupUid: string, from: Moment, to: Moment, keyword: string) {
+    const fullUrl = this.groupDownloadInboundMessagesUrl + '/' + groupUid + '/download';
+    let params = new HttpParams();
+
+    if(from != null) {
+      params = params.set('from', from.valueOf().toString());
+    }
+
+    if(to != null) {
+      params = params.set('to', to.valueOf().toString());
+    }
+
+    if(keyword != null) {
+      params = params.set('keyword', keyword);
+    }
+
+    return this.httpClient.get(fullUrl, { params: params, responseType: 'blob' });
   }
 }
 

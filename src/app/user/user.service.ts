@@ -31,11 +31,19 @@ export class UserService {
     if (isValidNumber(phone, "ZA")) {
       phone = PhoneNumberUtils.convertToSystem(phone);
     }
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set("name", name)
-      .set("phone", phone)
-      .set("email", email)
       .set("password", password);
+
+    // this can happen (java - javascript JSON conversion loveliness)
+    if (phone && phone != "null") {
+      params = params.set("phone", phone);
+    }
+
+    if (email && email != "null") {
+      params = params.set("email", email);
+    }
+
     return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params})
       .map(authResponse => {
         if (authResponse.errorCode == null) {

@@ -7,6 +7,11 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from '../../model/permission.model';
 import {AlertService} from "../../../utils/alert.service";
 import {GroupRole} from "../../model/group-role";
+import {Observable} from "rxjs/Observable";
+import 'rxjs/add/observable/forkJoin';
+
+
+declare var $:any;
 
 @Component({
   selector: 'app-group-settings',
@@ -22,6 +27,9 @@ export class GroupSettingsComponent implements OnInit {
   public committeeMemberPermissions: Permission[] = [];
   public groupOrganizerPermissions: Permission[] = [];
   public permissionsToDisplay: string[] = [];
+  public topicInterestsStats: any;
+  public topicInterestInFirstColumn: number;
+  public newTopicName: string = "";
 
   public roles: string[] = [GroupRole.ROLE_GROUP_ORGANIZER, GroupRole.ROLE_COMMITTEE_MEMBER, GroupRole.ROLE_ORDINARY_MEMBER];
 
@@ -46,22 +54,22 @@ export class GroupSettingsComponent implements OnInit {
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
       let groupUid = params['id'];
-      this.groupService.loadGroupDetailsCached(groupUid, false)
-        .subscribe(
-          groupDetails => {
-            this.group = groupDetails;
 
-            this.getPermissionsForRole(this.group.groupUid);
-            this.populateFormData(this.group, [], [], []);
-          },
-          error => {
-            console.log("Error loading groups", error.status)
-          }
-        );
-    });
+      Observable.forkJoin(
+        this.groupService.loadGroupDetailsCached(groupUid, false),
+        this.groupService.fetchRawTopicInterestsStats(groupUid),
+        this.groupService.fetchGroupPermissionsToDisplay()
+      ).subscribe(data => {
+        this.group = data[0];
+        this.topicInterestInFirstColumn = Math.ceil(data[0].topics.length / 2);
 
-    this.groupService.fetchGroupPermissionsToDisplay().subscribe(resp => {
-      this.permissionsToDisplay = resp;
+        this.topicInterestsStats = data[1];
+
+        this.permissionsToDisplay = data[2];
+
+        this.getPermissionsForRole(this.group.groupUid);
+        this.populateFormData(this.group);
+      });
     });
   }
 
@@ -98,14 +106,16 @@ export class GroupSettingsComponent implements OnInit {
 
   }
 
-  populateFormData(group: Group, ordinaryMemberPermissions: Permission[], committeeMemberPermissions: Permission[], groupOrganizerPermissions: Permission[]){
+  populateFormData(group: Group){
     if(group != null){
       this.groupForm.controls['name'].setValue(group.name);
       this.groupForm.controls['description'].setValue(group.description);
       this.groupForm.controls['privacy'].setValue(group.discoverable ? "PUBLIC" : "PRIVATE");
       this.groupForm.controls['reminderInMinutes'].setValue(group.reminderMinutes);
     }
+  }
 
+  populatePermissionsTableFormData(ordinaryMemberPermissions: Permission[], committeeMemberPermissions: Permission[], groupOrganizerPermissions: Permission[]) {
     for(let i = 0 ; i < this.permissionsToDisplay.length ; i++){
       if(ordinaryMemberPermissions.length > 0){
         this.groupForm.get("ordinaryMemberPermissions").get(this.permissionsToDisplay[i]).setValue(this.ordinaryMemberPermissions[i].permissionEnabled);
@@ -131,7 +141,7 @@ export class GroupSettingsComponent implements OnInit {
         else if (role == GroupRole.ROLE_GROUP_ORGANIZER)
           this.groupOrganizerPermissions = perms.getParameters(role);
       }
-      this.populateFormData(null, this.ordinaryMemberPermissions, this.committeeMemberPermissions, this.groupOrganizerPermissions);
+      this.populatePermissionsTableFormData(this.ordinaryMemberPermissions, this.committeeMemberPermissions, this.groupOrganizerPermissions);
 
     });
   }
@@ -187,7 +197,11 @@ export class GroupSettingsComponent implements OnInit {
         let isPublic = this.groupForm.controls['privacy'].value == "PUBLIC";
         let reminderInMinutes = this.groupForm.controls['reminderInMinutes'].value;
         this.groupService.updateGroupSettings(this.group.groupUid, name, description, isPublic, reminderInMinutes).subscribe(resp => {
-          this.updatePermissions();
+          if (this.permissionsChanged) {
+            this.updatePermissions();
+          } else {
+            this.alertService.alert("group.settings.updateDone");
+          }
           this.settingsChanged = false;
         });
       }
@@ -260,6 +274,40 @@ export class GroupSettingsComponent implements OnInit {
     let size = Math.round(fileSizeinMB * 100) / 100; // convert upto 2 decimal place
     if (size > this.MAX_IMAGE_SIZE)
       this.imageErrors.push("Error (file size): " + image.name + ": exceed file size limit of " + this.MAX_IMAGE_SIZE + "MB ( " + size + "MB )");
+  }
+
+  public getNumberOfMembersWithTopic(topic) {
+    if(this.topicInterestsStats) {
+      let count = this.topicInterestsStats[topic];
+      return count !== undefined ? count : 0;
+    }
+
+  }
+
+  public deleteTopic(topic: string) {
+    let topics:string[] = this.group.topics;
+    let indexOfTopicToRemove: number = topics.indexOf(topic);
+    if(indexOfTopicToRemove != -1) {
+      topics.splice(indexOfTopicToRemove, 1);
+    }
+    this.groupService.setGroupTopics(this.group.groupUid, topics).subscribe(resp => {
+      this.topicInterestInFirstColumn = Math.ceil(topics.length / 2)
+    });
+  }
+
+  newTopicNameChanged(event) {
+    this.newTopicName = event.target.value;
+  }
+
+  addNewTopic() {
+    let topics = this.group.topics;
+    topics.push(this.newTopicName);
+    this.groupService.setGroupTopics(this.group.groupUid, topics).subscribe(resp => {
+      this.topicInterestInFirstColumn = Math.ceil(topics.length / 2)
+      this.newTopicName = "";
+      $("#newTopicNameInput").val("");
+
+    });
   }
 
 }

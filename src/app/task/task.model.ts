@@ -16,7 +16,8 @@ export class Task {
               public todoType: TodoType,
               public hasResponded: boolean,
               public wholeGroupAssigned: boolean,
-              public thisUserAssigned: boolean) {
+              public thisUserAssigned: boolean,
+              public createdByUserName:string) {
   }
 
   public getEventIconName(): string {
@@ -45,12 +46,8 @@ export class Task {
       taskData.todoType != null ? TodoType[<string>taskData.todoType] : null,
       taskData.hasResponded,
       taskData.wholeGroupAssigned,
-      taskData.thisUserAssigned
+      taskData.thisUserAssigned,
+      taskData.createdByUserName
     )
   }
-
-
-
-
-
 }

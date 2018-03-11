@@ -64,17 +64,28 @@
           </div>
         </div>
         <div class="row" *ngIf="types.email">
-          <div class="col-md-5 col-sm-12">
-            <button (click)="chooseLink('email')" class="email-link"><i class="fas fa-link"></i>
+          <div class="col-md-3 col-sm-6">
+            <button  type="button" (click)="chooseLink('email')" class="email-link"><i class="fas fa-link"></i>
               {{ 'broadcasts.create.content.link.join' | translate }}</button>
-            <button *ngIf="!!lastLinkInserted" class="insertion-link" (click)="addLinkToEmail(lastLinkInserted, lastLinkCaption)">
+            <button  type="button" *ngIf="!!lastLinkInserted" class="insertion-link" (click)="addLinkToEmail(lastLinkInserted, lastLinkCaption)">
               <i class="fas fa-link"></i> reuse last inserted link
             </button>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <button  type="button" (click)="emailFile.click()" class="insertion-link">
+              <i class="fas fa-images"></i> {{ 'broadcasts.create.content.link.file' | translate }}</button>
+            <span *ngIf="emailAttachmentKeys?.length > 0">({{ emailAttachmentKeys.length }} attached)</span>
+            <!-- note: backend can handle multiple, but imposing a little friction/discipline here -->
+            <input type="file" #emailFile
+                   [multiple]="false"
+                   accept="*"
+                   (change) = "uploadEmailAttachments($event)"
+                   style="display:none" />
           </div>
           <div class="col-md-3 col-sm-3">
             <span class="text-right">{{ 'broadcasts.create.content.merge.label' | translate }}</span>
           </div>
-          <div class="col-md-4 col-sm-9">
+          <div class="col-md-3 col-sm-9">
             <select class="form-control form-control-sm" (change)="insertMergeFieldEmail($event)" [formControlName]="'emailMergeField'">
               <option value="">{{ 'broadcasts.create.content.merge.select' | translate }}</option>
               <option *ngFor="let field of params?.mergeFields" [value]="field"
@@ -100,20 +111,20 @@
             <img *ngIf="!!fbImageUrl" src="{{ fbImageUrl }}" class="img-thumbnail" />
           </div>
           <div class="col-md-4">
-            <button (click)="chooseLink('facebook')" data-toggle="modal" class="insertion-link">
+            <button type="button" (click)="chooseLink('facebook')" data-toggle="modal" class="insertion-link">
               <i class="fas fa-link"></i> {{ 'broadcasts.create.content.link' + (!!fbLink ? '.change' : '.join') | translate }}
             </button>
-            <button *ngIf="!!fbLink" class="insertion-link" (click)="addFbLink(null, null)">
+            <button type="button" *ngIf="!!fbLink" class="insertion-link" (click)="addFbLink(null, null)">
               <i class="fas fa-unlink"></i> {{ 'broadcasts.create.content.link.remove' | translate }}
             </button>
-            <button *ngIf="!!twitterLink" class="insertion-link" (click)="addFbLink(twitterLink, twitterLinkCaption)">
+            <button type="button" *ngIf="!!twitterLink" class="insertion-link" (click)="addFbLink(twitterLink, twitterLinkCaption)">
               <i class="fas fa-unlink"></i> {{ 'broadcasts.create.content.link.copyTwitter' | translate }}
             </button>
-            <button *ngIf="!!lastLinkInserted && !fbLink" class="insertion-link" (click)="addFbLink(lastLinkInserted, lastLinkCaption)">
+            <button  type="button" *ngIf="!!lastLinkInserted && !fbLink" class="insertion-link" (click)="addFbLink(lastLinkInserted, lastLinkCaption)">
               <i class="fas fa-link"></i> reuse last inserted link
             </button>
-            <button (click)="fbFile.click()" class="insertion-link">
-              <i class="fas fa-images"></i>{{ 'broadcasts.create.content.link.file' | translate }}</button>
+            <button  type="button" (click)="fbFile.click()" class="insertion-link">
+              <i class="fas fa-images"></i>{{ 'broadcasts.create.content.link.image' | translate }}</button>
             <input type="file" #fbFile
                    [multiple]="false"
                    accept="image/*"
@@ -141,11 +152,11 @@
             {{ twCharsLeft }} characters left
           </div>
           <div class="col-md-4">
-            <button (click)="chooseLink('twitter')" class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.join' | translate }}</button>
-            <button *ngIf="!!fbLink" class="insertion-link" (click)="addTwitterLink(fbLink, fbLinkCaption)">
+            <button  type="button" (click)="chooseLink('twitter')" class="insertion-link"><i class="fas fa-link"></i> {{ 'broadcasts.create.content.link.join' | translate }}</button>
+            <button type="button" *ngIf="!!fbLink" class="insertion-link" (click)="addTwitterLink(fbLink, fbLinkCaption)">
               <i class="fas fa-unlink"></i> {{ 'broadcasts.create.content.link.copyFacebook' | translate }}
             </button>
-            <button (click)="twitterFile.click()" class="insertion-link"><i class="fas fa-images"></i> {{ 'broadcasts.create.content.link.file' | translate }}</button>
+            <button type="button" (click)="twitterFile.click()" class="insertion-link"><i class="fas fa-images"></i> {{ 'broadcasts.create.content.link.image' | translate }}</button>
             <button *ngIf="!!lastLinkInserted && !twitterLink" class="insertion-link" (click)="addTwitterLink(lastLinkInserted, lastLinkCaption)">
               <i class="fas fa-link"></i> reuse last inserted link
             </button>

@@ -46,7 +46,9 @@
               <label class="form-check-label grassroot-label-em">
                 <input class="form-check-input" type="radio" value="CUSTOM_SELECTION" formControlName="selectionType" />
                 {{ 'broadcasts.create.members.customSelection' | translate }}
+                <span *ngIf="memberForm.controls['selectionType']?.value == 'CUSTOM_SELECTION'">({{ countParams?.totalNumber }})</span>
               </label>
+              <p *ngIf="filteredMemberNames">{{ filteredMemberNames.join(", ") }}</p>
             </div>
           </div>
         </div>
@@ -55,7 +57,7 @@
                            [taskTeams]="group.subGroups"
                            [topics]="group.topics"
                            [affiliations]="group.affiliations"
-                           [includeNameFilter]="false"
+                           [includeNameFilter]="true"
                            (filterChanged)="membersFilterChanged($event)">
         </app-member-filter>
 

@@ -1,0 +1,75 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="view-meeting-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">MEETING</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6 col-sm-12">
+            <p class="title-para">
+              <img [src]="'assets/' + taskToView?.getEventIconName() "/>
+              <span class="task-field-name">Meeting: </span> {{taskToView?.title}}
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">When: </span>
+              {{taskToView?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">Where: </span>
+              {{taskToView?.location}}
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">Reminder: </span>
+            </p>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <!-- insert image -->
+          </div>
+        </div>
+        <div class="row">
+          {{taskToView?.description}}
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <app-meeting-responses [responses]="responses"></app-meeting-responses>
+          </div>
+        </div>
+
+        <div class="row mt-3" *ngIf="sendingBroadcast">
+          <div class="col-12">
+            <label class="form-label form-label-em" for="broadcast-message">This allows you to send a broadcast
+              to everyone invited to the meeting (or just those attending): </label>
+            <textarea id="broadcast-message" maxlength="160" class="form-control" [(ngModel)]="broadcastMessage"></textarea>
+          </div>
+        </div>
+        <div class="row mt-2" *ngIf="sendingBroadcast">
+          <div class="col-md-6 col-sm-12">
+            <div class="form-check form-check-inline">
+              <!-- CSS ultra weirdness is positioning checkbox wrong without the adjustment below -->
+              <input id="only-rsvp-yes" type="checkbox" class="form-check-input"
+                     style="margin-left: 5px" [(ngModel)]="sendToOnlyYes">
+              <label class="form-check-label"> Only send to people who responded 'yes'</label>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <button type="button" class="btn btn-primary float-right save-button" (click)="sendBroadcastMessage()">
+              {{ 'action.send' | translate }}
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary hover-primary footer-button" (click)="sendingBroadcast = !sendingBroadcast">Send a broadcast</button>
+        <button type="button" class="btn btn-secondary hover-primary footer-button float-left" (click)="viewAllAttendees()">View all attendees</button>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

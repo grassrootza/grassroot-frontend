@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {Language} from "../../../../utils/language";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import "rxjs/add/operator/debounceTime"
+import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -16,6 +17,8 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
   @Input() titleKey: string;
   @Input() blockIndex: number;
   @Input() placeHolderKey: string;
+  @Input() explanationKey: string;
+
   @Input() responseOptions: string[];
 
   @Input() languages: Language[];
@@ -27,6 +30,8 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
   formGroup: FormGroup;
   formGroupSetup: boolean = false;
   public charsLeft: number[] = [];
+
+  public currentTabId = "";
 
   constructor(private fb: FormBuilder) { }
 
@@ -41,6 +46,8 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
         this.formGroupSetup = true;
       }
     );
+
+    this.currentTabId = "tab-" + this.blockIndex + "-" + this.languages[0].threeDigitCode;
 
     this.formGroup.valueChanges.debounceTime(300)
       .subscribe(term => {
@@ -65,6 +72,11 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
     if (changes['priorMessages'] && !changes['priorMessages'].firstChange && this.formGroupSetup) {
       this.setMessages(this.priorMessages);
     }
+  }
+
+  tabChange($event: NgbTabChangeEvent) {
+    console.log("changing tab to: ", $event.nextId);
+    this.currentTabId = $event.nextId;
   }
 
   private setMessages(messages: Map<string, string>) {

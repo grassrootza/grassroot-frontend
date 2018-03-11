@@ -2,13 +2,20 @@ import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../campaign.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DateTimeUtils, epochMillisFromDate} from "../../utils/DateTimeUtils";
-import {optionalUrlValidator, urlValidator} from "../../utils/CustomValidators";
+import {optionalUrlValidator} from "../../utils/CustomValidators";
 import {CampaignRequest} from "./campaign-request";
 import {GroupService} from "../../groups/group.service";
 import {GroupInfo} from "../../groups/model/group-info.model";
 import {AlertService} from "../../utils/alert.service";
 import {Router} from "@angular/router";
-import {isNumeric} from "rxjs/util/isNumeric";
+import {
+  checkCodeIsNumber,
+  hasChosenGroupIfNeeded,
+  hasGroupNameIfNeeded,
+  hasValidLandingUrlIfNeeded, smsLimitAboveZero, ValidateCodeNotTaken
+} from "../utils/campaign-validators";
+
+declare var $: any;
 
 @Component({
   selector: 'app-campaign-create',
@@ -22,6 +29,8 @@ export class CampaignCreateComponent implements OnInit {
 
   public takenCodes: string[] = [];
   public availableGroups: GroupInfo[] = [];
+  public possibleTopics: string[] = [];
+  private selectedTopics: string[] = []; // select 2 and form control don't seem to play nice together, hence
 
   constructor(private campaignService: CampaignService,
               private groupService: GroupService,
@@ -33,7 +42,7 @@ export class CampaignCreateComponent implements OnInit {
       'name': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': ['', Validators.compose([Validators.required, Validators.minLength(10)])],
       'code': ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(3),
-        checkCodeIsNumber, this.checkCodeAvailability.bind(this)])],
+        checkCodeIsNumber]), ValidateCodeNotTaken.createValidator(this.campaignService)],
       'startDate': [DateTimeUtils.nowAsDateStruct(), Validators.required],
       'endDate': [DateTimeUtils.futureDateStruct(3, 0), Validators.required],
       'type': ['', Validators.required],
@@ -42,7 +51,7 @@ export class CampaignCreateComponent implements OnInit {
       'groupName': ['', hasGroupNameIfNeeded],
       'amandlaUrl': ['', optionalUrlValidator],
       'smsShare': ['false'],
-      'smsLimit': [0],
+      'smsLimit': [0, smsLimitAboveZero],
       'landingPage': ['GRASSROOT'],
       'landingUrl': ['', hasValidLandingUrlIfNeeded]
     }, { validate: 'onBlur' });
@@ -55,10 +64,21 @@ export class CampaignCreateComponent implements OnInit {
       console.log("error fetching codes: ", error);
     });
     this.groupService.groupInfoList.subscribe(result => this.loadGroupSelector(result));
+    this.alertService.hideLoadingDelayed();
+    this.setUpTopicSelector();
   }
 
   loadGroupSelector(groups: GroupInfo[]) {
     this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_UPDATE_GROUP_DETAILS"));
+    this.createCampaignForm.controls['groupUid'].valueChanges.subscribe(value => {
+      console.log("selected this group: ", value);
+      let selectedGroupTopics = this.availableGroups.find(grp => grp.groupUid === value).topics;
+      if (selectedGroupTopics) {
+        this.possibleTopics = selectedGroupTopics;
+        console.log("possible topics now  = ", this.possibleTopics);
+        // this.setUpTopicSelector();
+      }
+    });
   }
 
   checkCodeAvailability(control: FormControl) {
@@ -67,6 +87,21 @@ export class CampaignCreateComponent implements OnInit {
       return { codeTaken: true }
     }
     return null;
+  }
+
+  setUpTopicSelector() {
+    let component = $("#join-topic-select");
+    component.select2({
+      placeholder: "Topics user will be asked to select after signing, joining or engaging",
+      tags: true,
+      allowClear: true,
+    });
+
+    component.on('change.select2', function () {
+      const data = component.select2('data');
+      this.selectedTopics = data.length > 0 ? data.map(tt => tt.id) : [];
+    }.bind(this));
+
   }
 
   createCampaign() {
@@ -80,6 +115,7 @@ export class CampaignCreateComponent implements OnInit {
       return false;
     }
 
+    console.log("constructed form: ", this.getRequestFromForm());
     this.alertService.showLoading();
     this.campaignService.createCampaign(this.getRequestFromForm()).subscribe(result => {
       this.alertService.alert("campaign.create.complete.success");
@@ -122,7 +158,7 @@ export class CampaignCreateComponent implements OnInit {
       request.groupName = this.createCampaignForm.controls.groupName.value;
     }
 
-    console.log("and, here is our campaign request: ", request);
+    request.joinTopics = this.selectedTopics;
 
     return request;
   }
@@ -132,47 +168,3 @@ export class CampaignCreateComponent implements OnInit {
   }
 
 }
-
-export const hasGroupNameIfNeeded = (input: FormControl) => {
-  if (!input.root) {
-    return null;
-  }
-
-  if (input.root.get('groupType') && input.root.get('groupType').value == 'NEW') {
-    return Validators.required(input);
-  }
-
-  return null;
-};
-
-export const hasChosenGroupIfNeeded = (input: FormControl) => {
-  if (!input.root) {
-    return null;
-  }
-
-  if (input.root.get('groupType') && input.root.get('groupType').value == 'EXISTING') {
-    return Validators.required(input);
-  }
-
-  return null;
-};
-
-export const hasValidLandingUrlIfNeeded = (input: FormControl) => {
-  if (!input.root || !(input.root.get('landingPage'))) {
-    return null;
-  }
-
-  if (input.root.get('landingPage') && input.root.get('landingPage').value == 'OTHER') {
-    return urlValidator(input);
-  }
-
-  return null;
-};
-
-export const checkCodeIsNumber = (control: FormControl) => {
-  let code = control.value;
-  if ((code) && !isNumeric(code)) {
-    return { codeNumber: true }
-  }
-  return null;
-};

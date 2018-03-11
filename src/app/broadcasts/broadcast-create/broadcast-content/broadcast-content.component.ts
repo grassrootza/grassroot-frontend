@@ -8,6 +8,9 @@ import {optionalUrlValidator} from "../../../utils/CustomValidators";
 import {environment} from "../../../../environments/environment";
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {AlertService} from "../../../utils/alert.service";
+import {limitImageSizesInRichText} from "../../../utils/media-utils";
+import {MediaService} from "../../../media/media.service";
+import {MediaFunction} from "../../../media/media-function.enum";
 
 declare var $: any;
 
@@ -28,9 +31,12 @@ export class BroadcastContentComponent implements OnInit {
   MAX_SMS_LENGTH: number = 160;
   public smsCharsLeft: number = this.MAX_SMS_LENGTH;
 
-  MAX_SOCIAL_LENGTH: number=  240; // using Twitter, but enforcing good posting practice on FB
-  public fbCharsLeft: number = this.MAX_SOCIAL_LENGTH;
-  public twCharsLeft: number = this.MAX_SOCIAL_LENGTH;
+  MAX_FB_LENGTH: number = 600;
+  MAX_TWITTER_LENGTH: number=  240; // using Twitter, but enforcing good posting practice on FB
+  public fbCharsLeft: number = this.MAX_FB_LENGTH;
+  public twCharsLeft: number = this.MAX_TWITTER_LENGTH;
+
+  private emailAttachmentKeys: string[] = [];
 
   private fbImageKey: string = "";
   public fbImageUrl: string = "";
@@ -48,11 +54,14 @@ export class BroadcastContentComponent implements OnInit {
   linkForm: FormGroup;
   insertingLinkType: string;
 
+  emailHtml: string = "";
+
   IMG_MAX = {'facebook': 476, 'twitter': 506};
 
   constructor(private router: Router,
               private formBuilder: FormBuilder,
               private broadcastService: BroadcastService,
+              private mediaService: MediaService,
               private ng2ImgMax: Ng2ImgMaxService,
               private alertService: AlertService) {
     this.contentForm = formBuilder.group(new BroadcastContent());
@@ -77,11 +86,11 @@ export class BroadcastContentComponent implements OnInit {
   }
 
   fbKeyUp(event: any) {
-    this.fbCharsLeft = this.MAX_SOCIAL_LENGTH - event.target.value.length;
+    this.fbCharsLeft = this.MAX_FB_LENGTH - event.target.value.length;
   }
 
   twKeyUp(event: any) {
-    this.twCharsLeft = this.MAX_SOCIAL_LENGTH - event.target.value.length;
+    this.twCharsLeft = this.MAX_TWITTER_LENGTH - event.target.value.length;
   }
 
   setUpValidation() {
@@ -116,6 +125,10 @@ export class BroadcastContentComponent implements OnInit {
 
   saveContent() {
     this.content = this.contentForm.value;
+    if (this.types.email) {
+      this.content.emailContent = limitImageSizesInRichText(this.content.emailContent);
+      this.content.emailAttachmentKeys = this.emailAttachmentKeys;
+    }
 
     this.content.facebookImageKey = this.fbImageKey;
     this.content.facebookLink = this.fbLink;
@@ -191,6 +204,22 @@ export class BroadcastContentComponent implements OnInit {
     this.twitterLinkCaption = twLinkCaption;
   }
 
+  uploadEmailAttachments(event) {
+    let images = event.target.files;
+    if (images.length > 0) {
+      let image = images[0];
+      console.log("file name ? : ", image.name);
+      this.alertService.showLoading();
+      this.mediaService.uploadMedia(image, MediaFunction.BROADCAST_IMAGE, image.type).subscribe(response => {
+        this.alertService.hideLoadingDelayed(); // so img can pop upt
+        this.emailAttachmentKeys.push(response);
+      }, error => {
+        this.alertService.hideLoading();
+        console.log("error uploading image, error: ", error);
+      });
+    }
+  }
+
   uploadImage(event, providerId) {
     let images = event.target.files;
 
@@ -198,10 +227,9 @@ export class BroadcastContentComponent implements OnInit {
       let image = images[0];
       this.alertService.showLoading();
       this.ng2ImgMax.resizeImage(image, this.IMG_MAX[providerId], this.IMG_MAX['providerId'], true).subscribe(result => {
-        let formData: FormData = new FormData();
         let resizedImage = new File([result], result.name);
-        formData.append("image", resizedImage, image.name);
-        this.broadcastService.uploadImage(formData).subscribe(response => {
+        // need to pass type in here as resize image passes it back with octet-stream
+        this.mediaService.uploadMedia(resizedImage, MediaFunction.BROADCAST_IMAGE, image.type).subscribe(response => {
           this.alertService.hideLoadingDelayed(); // so img can pop upt
           console.log(`for provider id : ${providerId}, response: ${response}`);
           if (providerId == 'facebook') {
@@ -214,7 +242,7 @@ export class BroadcastContentComponent implements OnInit {
         }, error => {
           this.alertService.hideLoading();
           console.log("error uploading image, error: ", error);
-        })
+        });
 
       });
     }

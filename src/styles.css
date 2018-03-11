@@ -16,8 +16,6 @@ body {
   margin: 0 0 15rem;
 }
 
-
-
 h1 {
   color: #4A4A4A;
   font-size: 30px;
@@ -197,6 +195,14 @@ h6 {
   background: white;
 }
 
+.calendar-disabled {
+  background: #ECEEF1;
+  font-weight: 600;
+  border: 1px solid #929BAF;
+  border-radius: 5px;
+  color: #4A4A4A;
+}
+
 .dropdown-toggle {
   cursor: pointer;
 }
@@ -219,4 +225,44 @@ h6 {
   color: #2CBC4C;
   cursor: pointer;
   text-decoration: underline;
+}
+
+.hover-primary:hover {
+  cursor: pointer;
+  background: #26A041;
+  color: white;
+}
+
+.hover-danger:hover {
+  cursor: pointer;
+  background: #ff0000;
+  border-color: #ff0000;
+  color: white;
+}
+
+.search-bar {
+  border: 1px solid #EBEDF0;
+  font-size: 1.2em;
+}
+
+.search-addon {
+  background-color: white;
+  color: #2CBC4C;
+  border: 1px solid #EBEDF0;
+  border-left: none;
+}
+
+.search-addon:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: #26A041;
+}
+
+.task-field-para {
+  margin-top: 1rem;
+}
+
+.task-field-name {
+  color: #4A4A4A;
+  font-weight: 600;
 }

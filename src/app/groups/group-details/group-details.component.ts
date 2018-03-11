@@ -11,6 +11,8 @@ import {JoinCodeInfo} from "../model/join-code-info";
 import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
 import {AlertService} from "../../utils/alert.service";
 
+import {saveAs} from 'file-saver/FileSaver';
+
 declare var $: any;
 
 @Component({
@@ -26,12 +28,16 @@ export class GroupDetailsComponent implements OnInit {
   public baseUrl: string = environment.backendAppUrl;
   public flyerUrlJpg: string = "";
   public flyerUrlPDF: string = "";
+  public xlsDownloadUrl: string = "";
 
   public joinMethodParams: any;
   public addJoinWordForm: FormGroup;
 
   public activeJoinWords: string[] = [];
   public joinWordCbString: string = "";
+
+  public joinTopics: string[] = [];
+  public joinTopicsChanged: boolean = false;
 
   public justCopied: boolean = false;
 
@@ -82,6 +88,16 @@ export class GroupDetailsComponent implements OnInit {
     });
   }
 
+  exportGroupMembers() {
+    this.groupService.downloadGroupMembers(this.group.groupUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/xls' });
+      saveAs(blob, this.group.name + ".xlsx");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
+    return false;
+  }
+
   setupJoinParams() {
     this.joinMethodParams = {
       completeJoinCode: environment.ussdPrefix + this.group.joinCode + '#',
@@ -89,7 +105,21 @@ export class GroupDetailsComponent implements OnInit {
       joinWordsLeft: this.group.joinWordsLeft,
       shortCode: environment.groupShortCode
     };
+    this.setupJoinTopicSelector();
+  }
 
+  setupJoinTopicSelector() {
+    let selectComponent = $("#join-topic-select");
+    selectComponent.select2({
+      tags: true
+    });
+
+    selectComponent.on('change.select2', function() {
+      const data = selectComponent.select2('data');
+      this.joinTopics = data.length > 0 ? data.map(tt => tt.id) : [];
+      this.joinTopicsChanged = this.joinTopics != this.group.joinTopics;
+      console.log("working? :", this.joinTopicsChanged);
+    }.bind(this));
   }
 
   joinMethodsModal() {
@@ -156,6 +186,17 @@ export class GroupDetailsComponent implements OnInit {
       setTimeout(() => joinWord.copied = false, 2000);
     });
     return false;
+  }
+
+  setJoinTopics() {
+    this.groupService.setJoinTopics(this.group.groupUid, this.joinTopics).subscribe(result => {
+      console.log("okay that worked");
+      this.alertService.alert("group.joinMethods.joinTopicsUpdated");
+      $('#group-join-methods').modal('hide');
+      this.groupService.loadGroupDetailsFromServer(this.group.groupUid).subscribe(group => this.group = group);
+    }, error => {
+      console.log("nope, that didn't work: ", error);
+    })
   }
 
 }
