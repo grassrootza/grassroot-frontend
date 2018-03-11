@@ -24,6 +24,8 @@ import {GroupMemberActivity} from './model/group-member-activity';
 import {MembersFilter} from "./member-filter/filter.model";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {FileImportResult} from "./group-details/group-members/group-members-import/file-import/file-import-result";
+import {GroupLog, GroupLogPage} from "./model/group-log.model";
+import {Moment} from "moment";
 
 
 @Injectable()
@@ -56,6 +58,8 @@ export class GroupService {
   groupMemberChangeRoleUrl = environment.backendAppUrl + '/api/group/modify/members/modify/role';
   groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
   groupMemberChangeAssignmentsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/assignments';
+  groupFetchInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
+  groupDownloadInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
 
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
@@ -669,6 +673,64 @@ export class GroupService {
 
   shouldReloadPaginationPagesNumbers(reload: boolean){
     this.shouldReloadPaginationNumbers_.next(reload);
+  }
+
+  fetchInboundMessagesForGroup(groupUid: string, pageNo: number, from: Moment, to: Moment, keyword: string, sort: string[]): Observable<GroupLogPage> {
+    const fullUrl = this.groupFetchInboundMessagesUrl + '/' + groupUid;
+    let params = new HttpParams()
+      .set('page', pageNo.toString())
+      .set('size', "10");
+
+    if(from != null) {
+      params = params.set('from', from.valueOf().toString());
+    }
+
+    if(to != null) {
+      params = params.set('to', to.valueOf().toString());
+    }
+
+    if(keyword != null) {
+      params = params.set('keyword', keyword);
+    }
+
+    if(sort[1] != ""){
+      params = params.set('sort', sort.join(','));
+    }
+
+    return this.httpClient.get<GroupLogPage>(fullUrl, {params: params}).map(
+      result => {
+        console.log(result);
+        let transformedContent = result.content.map(gl => GroupLog.createInstance(gl));
+        return new GroupLogPage(
+          result.number,
+          result.totalPages,
+          result.totalElements,
+          result.size,
+          result.first,
+          result.last,
+          transformedContent
+        );
+      }
+    );
+  }
+
+  exportInboundMessages(groupUid: string, from: Moment, to: Moment, keyword: string) {
+    const fullUrl = this.groupDownloadInboundMessagesUrl + '/' + groupUid + '/download';
+    let params = new HttpParams();
+
+    if(from != null) {
+      params = params.set('from', from.valueOf().toString());
+    }
+
+    if(to != null) {
+      params = params.set('to', to.valueOf().toString());
+    }
+
+    if(keyword != null) {
+      params = params.set('keyword', keyword);
+    }
+
+    return this.httpClient.get(fullUrl, { params: params, responseType: 'blob' });
   }
 }
 

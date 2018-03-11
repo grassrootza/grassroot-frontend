@@ -10,6 +10,7 @@ import {GroupMembersProfileComponent} from "./group-details/group-members/group-
 import {GroupTaskTeamsComponent} from "./group-details/group-members/group-task-teams/group-task-teams.component";
 import {GroupDetailsComponent} from "./group-details/group-details.component";
 import {GroupBroadcastComponent} from "./group-details/group-broadcast/group-broadcast.component";
+import {GroupInboundMessagesComponent} from "./group-details/group-inbound-messages/group-inbound-messages.component";
 
 export const GROUP_DETAILS_ROUTES: Routes = [
   {path: '', component: GroupDetailsComponent, canActivate: [LoggedInGuard], children: [
@@ -17,6 +18,7 @@ export const GROUP_DETAILS_ROUTES: Routes = [
     {path: 'dashboard', component: GroupDashboardComponent, canActivate: [LoggedInGuard]},
     {path: 'activity', component: GroupActivityComponent, canActivate: [LoggedInGuard]},
     {path: 'broadcast', component: GroupBroadcastComponent, canActivate: [LoggedInGuard]},
+    {path: 'inbound-messages', component: GroupInboundMessagesComponent, canActivate: [LoggedInGuard]},
     {
       path: 'members',
       component: GroupMembersComponent,

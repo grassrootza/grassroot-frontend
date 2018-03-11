@@ -1,0 +1,130 @@
+<div *ngIf="group">
+  <div class="card">
+    <div class="card-body events-box">
+      <div class="row">
+        <div class="col-12">
+          <h2>
+            {{'group.inboundMessages.title' | translate}}
+          </h2>
+        </div>
+      </div>
+
+      <form [formGroup]="filterInboundMessagesForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <div class="col-md-6 mb-3">
+            <label for="inputReceived">{{'group.inboundMessages.filter.received' | translate}}</label>
+            <select id="inputReceived" class="form-control"
+              (change)="dateConditionTypeChanged($event.target.value)">
+              <option value="anyTime" [translate]="'group.inboundMessages.filter.anyTime'"> This week</option>
+              <option value="thisWeek" [translate]="'group.inboundMessages.filter.thisWeek'"> This week</option>
+              <option value="lastWeek" [translate]="'group.inboundMessages.filter.lastWeek'"> Last week </option>
+              <option value="thisMonth" [translate]="'group.inboundMessages.filter.thisMonth'"> This month</option>
+              <option value="lastMonth" [translate]="'group.inboundMessages.filter.lastMonth'"> Last month</option>
+              <option value="custom" [translate]="'group.inboundMessages.filter.custom'">Custom</option>
+            </select>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="inputKeyword">{{'group.inboundMessages.filter.keyword' | translate}}</label>
+            <input type="text" class="form-control" id="inputKeyword" [formControl]="filterInboundMessagesForm.get('keyword')"
+                   placeholder="{{'group.inboundMessages.filter.keywordPlaceholder' | translate}}">
+          </div>
+        </div>
+
+        <div class="form-row" *ngIf="showDatePicker">
+          <div class="col-md-6 mb-3" >
+            <label for="inputDateFrom">{{'group.inboundMessages.filter.dateFrom' | translate}}</label>
+            <div class="input-group" id="inputDateFrom">
+              <input class="form-control" placeholder="yyyy-mm-dd" [formControl]="filterInboundMessagesForm.get('dateFrom')"
+                     ngbDatepicker #dFrom="ngbDatepicker" style="width: auto !important;">
+
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="dFrom.toggle()" type="button">
+                  <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="inputDateTo">{{'group.inboundMessages.filter.dateTo' | translate}}</label>
+            <div class="input-group" id="inputDateTo">
+              <input class="form-control" placeholder="yyyy-mm-dd" [formControl]="filterInboundMessagesForm.get('dateTo')"
+                     ngbDatepicker #dTo="ngbDatepicker" style="width: auto !important;">
+
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" (click)="dTo.toggle()" type="button">
+                  <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-3">
+            <button type="button" class="btn btn-success" (click)="onSubmit()">{{'group.inboundMessages.filter.filter' | translate}}</button>
+            <button type="button" class="btn btn-secondary" (click)="clearFilter()">{{'group.inboundMessages.filter.clear' | translate}}</button>
+          </div>
+          <div class="col-md-2 offset-md-7">
+            <button class="btn btn-secondary rectangle hover-primary" (click)="exportMessages()">
+              <i class="fas fa-download"></i>
+              {{'group.inboundMessages.filter.exportMessages' | translate}}
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <div class="container group-info-header d-none d-md-block">
+        <div class="row">
+          <div class="col-9" (click)="orderData('targetUser')"> {{'group.inboundMessages.from' | translate}}
+            <span *ngIf="showFromFilter == 0">
+              <i class="fas fa-sort"></i>
+            </span>
+            <span *ngIf="showFromFilter == 1">
+              <i class="fas fa-sort-down"></i>
+            </span>
+            <span *ngIf="showFromFilter == 2">
+              <i class="fas fa-sort-up"></i>
+            </span>
+          </div>
+          <div class="col-3" (click)="orderData('createdDateTime')">{{'group.inboundMessages.dateReceived' | translate}}
+            <span *ngIf="showDateReceivedFilter == 0">
+              <i class="fas fa-sort"></i>
+            </span>
+            <span *ngIf="showDateReceivedFilter == 1">
+              <i class="fas fa-sort-down"></i>
+            </span>
+            <span *ngIf="showDateReceivedFilter == 2">
+                <i class="fas fa-sort-up"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div *ngFor="let inboundMessage of currentPage.content">
+        <div class="container group-info-row">
+          <div class="row flex flex-wrap">
+            <div class="col-md-9">
+              <h4>
+                <i class="fas fa-mobile-alt"></i> {{inboundMessage.targetUser.displayName}} ({{inboundMessage.targetUser.phoneNumber}})
+              </h4>
+            </div>
+
+            <div class="col-md-3">
+              {{inboundMessage.getFormattedEventTime()}}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-9">
+              {{inboundMessage.description}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <app-pagination [totalPages]="currentPage.totalPages" (onPageSelected)="goToPage($event)"></app-pagination>
+
+
+
+    </div>
+
+  </div>
+</div>
