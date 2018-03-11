@@ -27,6 +27,8 @@ export class GroupDashboardComponent implements OnInit {
   public votes: Task[] = [];
   public todos: Task[] = [];
 
+  public meetingToView: Task;
+
   public memberGrowthPeriods = ["THIS_MONTH", "LAST_MONTH", "THIS_YEAR", "ALL_TIME"];
   public currentMemberGrowthPeriod = "THIS_MONTH";
 
@@ -114,6 +116,11 @@ export class GroupDashboardComponent implements OnInit {
   todoSaved(saveResponse) {
     console.log(saveResponse);
     $("#create-todo-modal").modal("hide");
+  }
+
+  showViewMeeting(meeting: Task) {
+    this.meetingToView = meeting;
+    $("#view-meeting-modal").modal("show");
   }
 
   public memberGrowthPeriodChanged(newPeriod: string) {

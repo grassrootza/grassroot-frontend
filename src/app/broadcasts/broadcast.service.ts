@@ -324,9 +324,9 @@ export class BroadcastService {
       )
   }
 
-  sendMeetingBroadcast(meetingUid: string, message: string) {
+  sendMeetingBroadcast(meetingUid: string, message: string, sendToOnlyYes: boolean) {
     const fullUrl = this.createUrlBase + "task/MEETING/" + meetingUid;
-    let params = new HttpParams().set("message", message);
+    let params = new HttpParams().set("message", message).set("sendToAll", "" + !sendToOnlyYes);
     return this.httpClient.post(fullUrl, null, {params: params});
   }
 

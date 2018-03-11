@@ -1,0 +1,24 @@
+.modal-header {
+  background-color: #929BAF;
+  color: white;
+}
+
+.modal-title {
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.modal-close {
+  color: white;
+}
+
+.title-para {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
+.footer-button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

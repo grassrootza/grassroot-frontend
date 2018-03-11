@@ -44,15 +44,14 @@
                 <div class="col-sm-8 day-label">
                   {{formatTaskDate(dayTasks.date)}}
                 </div>
-                <div *ngFor="let task of dayTasks.tasks" class="day-task">
+                <div *ngFor="let task of dayTasks.tasks" class="day-task" (click)="handleTaskClick(task)">
                   <div>
-                    <a class="task-name" (click)="handleTaskClick(task)">
-                      <img src="assets/{{task.getEventIconName()}}"/>
-                      {{task.title}}
-                    </a>
+                    <img src="assets/{{task.getEventIconName()}}"/>
+                    <span class="agenda-task-type">{{ task.type | titlecase }}</span>
                   </div>
-                  <div>
-                    <span [translate]="'home.my-agenda.group-label'"> Group </span>: <b>{{task.ancestorGroupName}}</b>
+                  <div class="mt-1">
+                    <span class="agenda-task-name">{{task.title}}</span>
+                    <span class="agenda-field-label" [translate]="'home.my-agenda.group-label'">Group </span>: <b>{{task.ancestorGroupName}}</b>
                   </div>
                 </div>
               </div>
@@ -80,7 +79,7 @@
         <div class="card-body new-members">
 
           <div class="float-right">
-            <h3 class="float-right new-members-count-label">This week</h3>
+            <h4 class="float-right new-members-count-label">This week</h4>
             <span class="new-members-count badge badge-secondary d-inline-block">{{newMembersPage != null ? newMembersPage.totalElements : 0}}</span>
           </div>
 

@@ -23,6 +23,8 @@ export class GroupActivityComponent implements OnInit {
 
   public createTaskGroupUid: string = null;
 
+  public taskToView: Task;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private userService: UserService,
@@ -68,6 +70,13 @@ export class GroupActivityComponent implements OnInit {
           console.log(error.getmessage);
       }
       );
+  }
+
+  handleTaskClicked(task: Task) {
+    this.taskToView = task;
+    if (task.type == 'MEETING') {
+      $('#view-meeting-modal').modal('show');
+    }
   }
 
   showCreateMeetingModal(){

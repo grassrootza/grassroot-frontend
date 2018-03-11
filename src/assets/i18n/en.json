@@ -54,6 +54,12 @@
       "PETITION": "Petition",
       "ACQUISITION": "Acquisition",
       "INFORMATION": "Information"
+    },
+    "MeetingResponse": {
+      "YES": "Yes",
+      "NO": "No",
+      "MAYBE": "Maybe",
+      "NO_RESPONSE": "No Response"
     }
   },
   "menu": {

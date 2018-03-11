@@ -50,9 +50,4 @@ export class Task {
       taskData.createdByUserName
     )
   }
-
-
-
-
-
 }

@@ -14,6 +14,7 @@ export class TaskService {
 
   private upcomingGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/upcoming/group";
   private upcomingUserTasksUrl = environment.backendAppUrl + "/api/task/fetch/upcoming/user";
+  private specificTasksUrl = environment.backendAppUrl + "/api/task/fetch";
 
   private groupCreateMeetingUrl = environment.backendAppUrl + '/api/task/create/meeting';
   private groupCreateVoteUrl = environment.backendAppUrl + '/api/task/create/vote';
@@ -28,15 +29,15 @@ export class TaskService {
 
   private castVoteUrl = environment.backendAppUrl + "/api/vote/do";
   private viewVoteUrl = environment.backendAppUrl + "/api/vote/view";
-  private viewMeetingUrl = environment.backendAppUrl + "/api/meeting/view";
-  private meetingRsvpsUrl = environment.backendAppUrl + "/api/meeting/rsvps";
+
+  private meetingResponsesUrl = environment.backendAppUrl + "/api/task/fetch/meeting/rsvps";
 
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
   private upcomingTasksErrorSubject: BehaviorSubject<any> = new BehaviorSubject(null);
   public upcomingTaskError: Observable<any> = this.upcomingTasksErrorSubject.asObservable();
-  private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
+  private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
   constructor(private httpClient: HttpClient) {
 
@@ -57,8 +58,6 @@ export class TaskService {
       .map(data => data.map(task => Task.createInstanceFromData(task)));
   }
 
-
-
   public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
     let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
     return this.httpClient.get(url).map(
@@ -66,13 +65,10 @@ export class TaskService {
           console.log("results: ", res);
         let tasks = res["addedAndUpdated"]  as Task[];
         return tasks.map(t => Task.createInstanceFromData(t))
-      }
-      );
-   }
-
+      });
+  }
 
   public loadUpcomingUserTasks(userId: string) {
-
     let fullUrl = this.upcomingUserTasksUrl + "/" + userId;
     this.httpClient.get<Task[]>(fullUrl)
       .map(data => data.map(task => Task.createInstanceFromData(task)))
@@ -88,6 +84,10 @@ export class TaskService {
       );
   }
 
+  public loadTask(taskUid: string, taskType: string): Observable<Task> {
+    const fullUrl = this.specificTasksUrl + "/" + taskType + "/" + taskUid;
+    return this.httpClient.get<Task>(fullUrl);
+  }
 
   createMeeting(parentType: string, parentUid: string, subject: string, location: string, dateTimeEpochMillis: number, publicMeeting: boolean, assignedMemberUids: string[]):Observable<Task> {
     const fullUrl = this.groupCreateMeetingUrl + '/' + parentType + '/' + parentUid;
@@ -208,7 +208,7 @@ export class TaskService {
         .set("taskUid",taskUid)
         .set("contactNumber",contactPersonNumber)
         .set("contactName",contactPersonName)
-        .set("mediaFileKeys",mediaKeys + "");;
+        .set("mediaFileKeys",mediaKeys + "");
       }
 
 
@@ -232,14 +232,9 @@ export class TaskService {
     return this.httpClient.get(fullUrl);
   }
 
-  viewMeeting(id:string,phoneNumber:string):Observable<any>{
-    let fullUrl = this.viewMeetingUrl + "/" + id + "/" + phoneNumber + "/+27";
-    return this.httpClient.get(fullUrl);
-  }
-
-  meetingRsvps(phoneNumber:string,id:string):Observable<any>{
-    let fullUrl = this.meetingRsvpsUrl + "/" + phoneNumber + "/+27/" + id;
-    return this.httpClient.get(fullUrl);
+  fetchMeetingResponses(taskUid: string): Observable<Map<string, string>> {
+    const fullUrl = this.meetingResponsesUrl + "/" + taskUid;
+    return this.httpClient.get<Map<string, string>>(fullUrl);
   }
 
 

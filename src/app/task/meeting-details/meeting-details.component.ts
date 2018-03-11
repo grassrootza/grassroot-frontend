@@ -1,9 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
-
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
 import {TaskService} from "../task.service";
-import {UserService} from "../../user/user.service";
 import {Task} from "../task.model";
+import {convertResponseMap, TaskResponse} from "../task-response";
+
+const RESP_ORDER = {
+  'YES': 4, 'NO': 3, 'MAYBE': 2, 'NO_RESPONSE': 1
+};
 
 @Component({
   selector: 'app-meeting-details',
@@ -12,78 +15,47 @@ import {Task} from "../task.model";
 })
 export class MeetingDetailsComponent implements OnInit {
 
-  public meetingUid:string = "";
-  public meeting:Task;
+  public meetingUid: string = "";
+  public meeting: Task;
   public assignedMembers:number;
-  public responseYes:number;
-  public responsesNo:number;
-  public responseMaybe:number;
-  public noResponse:number;
 
-  public totalYes:number;
-  public totalNo:number;
-  public totalMaybe:number;
-  public totalNoResponse:number;
-
-  public rsvps:any[];
-  public values:string[] = [];
+  public responses: Map<String, String>;
+  public responseArray: TaskResponse[];
 
   constructor(private route:ActivatedRoute,
-              private taskService:TaskService,
-              private userService:UserService) {
-    console.log("constructing meeting details component");
+              private taskService:TaskService) {
   }
 
   ngOnInit() {
-    console.log("initing meeting details component");
     this.route.params.subscribe((params:Params)=>{
       this.meetingUid = params['id'];
-      this.viewMeeting(this.meetingUid);
-      this.meetingRsvps(this.meetingUid);
+      this.viewMeeting();
+      this.fetchResponses();
     },error=>{
       console.log("Error getting params....",error);
     });
   }
 
-  viewMeeting(id:string){
-    this.taskService.viewMeeting(id,this.userService.getLoggedInUser().msisdn).subscribe(meeting=>{
+  viewMeeting(){
+    this.taskService.loadTask(this.meetingUid, "MEETING").subscribe(meeting => {
       console.log("Viewing meeting.....",meeting);
-      this.meeting = Task.createInstanceFromData(meeting.data);
-      this.assignedMembers = meeting.data.assignedMemberCount;
-      this.responseYes = (meeting.data.totals.yes / this.assignedMembers) * 100;
-      this.responsesNo = (meeting.data.totals.no / this.assignedMembers) * 100;
-      this.responseMaybe = (meeting.data.totals.maybe / this.assignedMembers) * 100;
-      this.noResponse = (meeting.data.totals.invalid / this.assignedMembers) * 100;
-
-      this.totalYes = meeting.data.totals.yes;
-      this.totalNo = meeting.data.totals.no;
-      this.totalMaybe = meeting.data.totals.maybe;
-      this.totalNoResponse = meeting.data.totals.invalid;
-
-      console.log(this.assignedMembers);
-      console.log("Task..........",this.meeting);
-      console.log("Yes............",this.responseYes);
+      this.meeting = Task.createInstanceFromData(meeting);
     },error=>{
       console.log("Error loading meeting......",error);
     })
   }
 
-  meetingRsvps(id:string){
-    this.taskService.meetingRsvps(this.userService.getLoggedInUser().msisdn,id).subscribe(rsvps=>{
-      console.log("RSVPS...",rsvps);
-
-      /*if(rsvps.numberInvited < 100){
-        this.rsvps = Object.keys(rsvps.rsvpResponses);
-        this.rsvps.forEach(r => this.values.push(rsvps.rsvpResponses[r]));
-      }*/
-
-      this.rsvps = Object.keys(rsvps.rsvpResponses);
-      this.rsvps.forEach(r => this.values.push(rsvps.rsvpResponses[r]));
-      console.log("Keys............",this.rsvps);
-      console.log("Values..........",this.values);
-    },error=>{
-      console.log("Error....",error);
-    });
+  fetchResponses() {
+    this.taskService.fetchMeetingResponses(this.meetingUid).subscribe(responses => {
+      this.responses = responses;
+      this.responseArray = convertResponseMap(responses);
+      this.responseArray.sort((task1, task2) => {
+        if (task1.response == task2.response)
+          return task1.memberName > task2.memberName ? 1 : task2.memberName > task1.memberName ? -1 : 0;
+        else
+          return RESP_ORDER[task1.response] > RESP_ORDER[task2.response] ? -1 : 1;
+      })
+    })
   }
 
 }

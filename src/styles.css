@@ -257,3 +257,12 @@ h6 {
   text-decoration: none;
   color: #26A041;
 }
+
+.task-field-para {
+  margin-top: 1rem;
+}
+
+.task-field-name {
+  color: #4A4A4A;
+  font-weight: 600;
+}

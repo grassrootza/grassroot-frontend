@@ -102,3 +102,6 @@ h5 img {
   font-size: 14px;
 }
 
+.meeting-event {
+  cursor: pointer;
+}

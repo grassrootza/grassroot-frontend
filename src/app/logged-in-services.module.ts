@@ -17,6 +17,7 @@ import {CreateLivewireComponent} from "./groups/group-details/group-activity/cre
 import {ViewMeetingComponent} from "./view-task/view-meeting/view-meeting.component";
 import {ViewVoteComponent} from "./view-task/view-vote/view-vote.component";
 import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row/campaign-info.component";
+import {MeetingResponsesComponent} from "./task/meeting-details/meeting-responses.component";
 
 @NgModule({
   imports: [
@@ -38,6 +39,7 @@ import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row
     CreateLivewireComponent,
     ToDoRespondComponent,
     ViewMeetingComponent,
+    MeetingResponsesComponent,
     ViewVoteComponent,
     PaginationComponent,
     MemberFilterComponent
@@ -52,12 +54,13 @@ import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row
     CreateLivewireComponent,
     ToDoRespondComponent,
     ViewMeetingComponent,
+    MeetingResponsesComponent,
     ViewVoteComponent
   ],
   exports: [
     GroupInfoComponent, CampaignInfoComponent,
     CreateGroupComponent, CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, CreateLivewireComponent,
-    ToDoRespondComponent, ViewMeetingComponent, ViewVoteComponent, PaginationComponent, MemberFilterComponent
+    ToDoRespondComponent, ViewMeetingComponent, MeetingResponsesComponent, ViewVoteComponent, PaginationComponent, MemberFilterComponent
   ]
 })
 export class LoggedInServicesModule { }

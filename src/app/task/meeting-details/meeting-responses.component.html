@@ -1,0 +1,31 @@
+<div class="card" *ngIf="responses">
+  <div class="card-header responses-header">
+    <div class="row">
+      <div class="col-sm-3">
+        <span class="responses-title">Responses</span>
+      </div>
+      <div class="col-sm-7"></div>
+      <div class="col-sm-2 text-right">
+        <i class="fas fa-users"></i> {{ totalMembers }}</div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row" *ngFor="let option of responseOptions">
+      <div class="col-sm-3">
+        {{ 'enum.MeetingResponse.' + responseCounts[option]?.name | translate }}
+      </div>
+      <div class="col-sm-7">
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+               [style.width]="responseCounts[option]?.percent + '%'"
+               [attr.aria-valuenow]="responseCounts[option]?.percent" aria-valuemin="0" aria-valuemax="100">
+            {{ responseCounts[option]?.percent}}%
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-2 text-right">
+        {{ responseCounts[option]?.rawCount }}
+      </div>
+    </div>
+  </div>
+</div>
