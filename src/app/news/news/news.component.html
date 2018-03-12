@@ -1,5 +1,5 @@
 <div *ngIf="showLatest">
-	<div *ngFor="let alert of latestPosts" class="card">
+	<div *ngFor="let alert of latestPosts | slice:0:10;" class="card">
 		<div class="card-body">
 			<div class="row alert-header">
 				<div class="col-md-10 alert-headline">
@@ -18,7 +18,7 @@
 			</div>
 			<div *ngIf="alert.imageKeys.length > 0" class="row alert-image">
 				<div class="col-md-6">
-					<img class="alert-image" alt="" src="{{loadImageUrl(alert)}}">
+					<img (click)="openImage(alert)" class="alert-image" alt="" src="{{loadImageUrl(alert)}}">
 				</div>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 </div>
 
 <div *ngIf="showOlder">
-	<div *ngFor="let alert of oldPosts" class="card">
+	<div *ngFor="let alert of oldPosts | slice:0:10;" class="card">
 		<div class="card-body">
 			<div class="row alert-header">
 				<div class="col-md-10 alert-headline">
@@ -45,12 +45,26 @@
 			</div>
 			<div *ngIf="alert.imageKeys.length > 0" class="row alert-image">
 				<div class="col-md-6">
-					<img class="alert-image" alt="" src="{{loadImageUrl(alert)}}">
+					<img (click)="openImage(alert)" class="alert-image" alt="" src="{{loadImageUrl(alert)}}">
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="open-image-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    <span class="alert-modal-image-close">&times;</span>
+      <div class="modal-body">
+        <img class="alert-modal-image" alt="" src="{{imageUrl}}">
+      </div>
+      
+    </div>
+  </div>
+</div>
+
 <nav aria-label="Group list navigation">
   <ul class="pagination justify-content-end">
   	<a class="page-indicator" style="font-weight: bold;" (click)="showOlderPosts()"><i class="fa fa-chevron-left"></i>Older Posts</a>

@@ -6,6 +6,8 @@ import { NewsServiceService } from "../news-service.service";
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 
+declare var $: any;
+
 @Component({
   selector: 'app-news',
   templateUrl: './news.component.html',
@@ -19,6 +21,8 @@ export class NewsComponent implements OnInit {
   
   public showOlder:boolean = false;
   public showLatest:boolean = true;
+  
+  public imageUrl:string;
   
   constructor(private newsService:NewsServiceService,
               private mediaService:MediaService) { }
@@ -62,5 +66,14 @@ export class NewsComponent implements OnInit {
     this.showLatest = true;
     this.showOlder = false;
   }
-
+  
+  openImage(alert:PublicLivewire){
+    let imageKey:string;
+    for(let key of alert.imageKeys){
+      imageKey = key;
+    }
+    this.imageUrl = this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
+    $('#open-image-modal').modal("show");
+    console.log("Open my image....",imageKey);
+  }
 }

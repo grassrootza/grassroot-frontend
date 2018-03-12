@@ -4,6 +4,8 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 
+declare var $: any;
+
 @Injectable()
 export class NewsServiceService {
   
