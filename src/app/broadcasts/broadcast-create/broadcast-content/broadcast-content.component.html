@@ -35,13 +35,17 @@
           </div>
         </div>
         <div class="row" *ngIf="types.shortMessage">
-          <div class="col-md-5 col-sm-12">
-            {{ smsCharsLeft }} characters remaining
+          <div class="col-md-3 col-sm-6">
+            {{ smsCharsLeft }} chars left
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <button  type="button" (click)="chooseLink('shortMessage')" class="email-link"><i class="fas fa-link"></i>
+              {{ 'broadcasts.create.content.link.join' | translate }}</button>
           </div>
           <div class="col-md-3 col-sm-3">
             <span class="text-right">{{ 'broadcasts.create.content.merge.label' | translate }}</span>
           </div>
-          <div class="col-md-4 col-sm-9">
+          <div class="col-md-3 col-sm-9">
             <select class="form-control form-control-sm" (change)="insertMergeFieldSms($event.target.value)" [formControlName]="'smsMergeField'">
               <option value="">{{ 'broadcasts.create.content.merge.select' | translate }}</option>
               <option *ngFor="let field of params?.mergeFields" [value]="field"
@@ -64,17 +68,21 @@
           </div>
         </div>
         <div class="row" *ngIf="types.email">
-          <div class="col-md-3 col-sm-6">
-            <button  type="button" (click)="chooseLink('email')" class="email-link"><i class="fas fa-link"></i>
+          <div class="col-md-3 col-sm-6 text-left">
+            <button  type="button" (click)="chooseLink('email')" class="btn btn-link email-link"><i class="fas fa-link"></i>
               {{ 'broadcasts.create.content.link.join' | translate }}</button>
-            <button  type="button" *ngIf="!!lastLinkInserted" class="insertion-link" (click)="addLinkToEmail(lastLinkInserted, lastLinkCaption)">
+            <button  type="button" *ngIf="!!lastLinkInserted" class="btn btn-link email-link" (click)="addLinkToEmail(lastLinkInserted, lastLinkCaption)">
               <i class="fas fa-link"></i> reuse last inserted link
             </button>
           </div>
           <div class="col-md-3 col-sm-6">
-            <button  type="button" (click)="emailFile.click()" class="insertion-link">
+            <button  type="button" (click)="emailFile.click()" class="email-link">
               <i class="fas fa-images"></i> {{ 'broadcasts.create.content.link.file' | translate }}</button>
             <span *ngIf="emailAttachmentKeys?.length > 0">({{ emailAttachmentKeys.length }} attached)</span>
+            <button type="button" class="btn btn-link email-link" *ngIf="emailAttachmentKeys?.length > 0"
+              (click)="removeLastEmailAttachment()">remove last</button>
+            <button type="button" class="btn btn-link email-link" *ngIf="emailAttachmentKeys?.length > 1"
+              (click)="removeAllEmailAttachments()">remove all</button>
             <!-- note: backend can handle multiple, but imposing a little friction/discipline here -->
             <input type="file" #emailFile
                    [multiple]="false"
@@ -248,7 +256,7 @@
                 placeholder="{{ 'broadcasts.create.content.modal.urlPlace' | translate }}"/>
             </div>
           </div>
-          <div class="form-row">
+          <div class="form-row" *ngIf="insertingLinkType != 'shortMessage'">
             <div class="form-group col-md-12 col-sm-12">
               <label class="grassroot-label-em">{{ 'broadcasts.create.content.modal.captionLabel' | translate }}</label>
               <input class="form-control form-control-em" type="text" [formControl]="linkForm.controls['caption']"
@@ -259,7 +267,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button (click)="insertLink()" [disabled]="!linkForm.valid" type="button" class="btn btn-primary save-button">{{ 'action.insert' | translate }}</button>
+        <button (click)="insertLink()" [disabled]="insertingLinkType != 'shortMessage' && !linkForm.valid" type="button" class="btn btn-primary save-button">{{ 'action.insert' | translate }}</button>
         <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
       </div>
     </div>
