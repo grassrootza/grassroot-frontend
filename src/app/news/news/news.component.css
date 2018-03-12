@@ -1,0 +1,25 @@
+.card {
+	margin-top: 2%;
+	margin-bottom: 2%;
+}
+
+.alert-header{
+	background-color: #e6eaef;
+}
+
+.alert-headline{
+	font-weight: bold;
+}
+
+.alert-description{
+	margin-top: 3%;
+}
+
+.alert-image{
+	width: 300px;
+	height: 280px;
+}
+
+.page-indicator{
+	cursor: pointer;
+}

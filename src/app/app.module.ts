@@ -37,6 +37,8 @@ import {SearchService} from "./search/search.service";
 import {MeetingDetailsComponent} from "./task/meeting-details/meeting-details.component";
 import {LoggedInServicesModule} from "./logged-in-services.module";
 import {MediaService} from "./media/media.service";
+import { NewsServiceService } from "./news/news-service.service";
+import { NewsComponent } from './news/news/news.component';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -86,7 +88,8 @@ const routes: Routes = [
   },
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
-  {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]}
+  {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]},
+  {path: 'news',component:NewsComponent}
 ];
 
 @NgModule({
@@ -102,7 +105,8 @@ const routes: Routes = [
     PwdResetValidateComponent,
     PwdResetNewComponent,
     PasswordResetComponent,
-    MeetingDetailsComponent
+    MeetingDetailsComponent,
+    NewsComponent
   ],
   imports: [
     BrowserModule,
@@ -147,7 +151,8 @@ const routes: Routes = [
     PasswordResetService,
     AccountService,
     SearchService,
-    MediaService
+    MediaService,
+    NewsServiceService
   ],
   bootstrap: [AppComponent]
 })
