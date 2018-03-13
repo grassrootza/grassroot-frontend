@@ -1,5 +1,6 @@
 import { environment } from "../../environments/environment";
 import { PublicLivewire, PublicLivewirePage } from "../livewire/public-livewire.model";
+import { HttpParams } from "@angular/common/http";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
@@ -13,9 +14,13 @@ export class NewsServiceService {
 
   constructor(private httpClient:HttpClient) { }
 
-  loadNews():Observable<PublicLivewirePage>{
-    return this.httpClient.get<PublicLivewirePage>(this.publicNewsUrl)
-      .map(resp => {let plw = resp.content.map(livewire => PublicLivewire.createInstance(livewire));
+  loadNews(pageNumber:number):Observable<PublicLivewirePage>{
+    let params = new HttpParams()
+      .set('size',10 +"")
+      .set('sort', 'creationTime,desc')
+      .set('page',pageNumber +"")
+    return this.httpClient.get<PublicLivewirePage>(this.publicNewsUrl,{params:params})
+      .map(resp => {let formatedPublicLiveWire = resp.content.map(livewire => PublicLivewire.createInstance(livewire));
         return new PublicLivewirePage(
             resp.number,
             resp.totalPages,
@@ -23,7 +28,7 @@ export class NewsServiceService {
             resp.size,
             resp.first,
             resp.last,
-            plw
+            formatedPublicLiveWire
           )
       }
       )

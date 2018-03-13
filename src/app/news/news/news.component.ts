@@ -22,56 +22,53 @@ export class NewsComponent implements OnInit {
   public showOlder:boolean = false;
   public showLatest:boolean = true;
   
+  public pageNumber:number = 0;
+  public totalPages:number;
+  
   public imageUrl:string;
   
   constructor(private newsService:NewsServiceService,
               private mediaService:MediaService) { }
 
   ngOnInit() {
-    this.loadNews();
+    this.loadNews(this.pageNumber);
   }
   
-  loadNews(){
-    this.newsService.loadNews().subscribe(news =>{
+  loadNews(pageNumber:number){
+    this.newsService.loadNews(pageNumber).subscribe(news =>{
         console.log("Server response...",news);
         this.news = news.content;
-      
-        this.oldPosts = news.content.filter(post => moment(post.creationTimeMillis).isBefore(moment().startOf('day')));
-        
-        this.latestPosts = news.content.filter(post => moment(post.creationTimeMillis).isSameOrAfter(moment().startOf('day')));
-      
-        console.log("Old....",this.oldPosts);
-      
-        console.log("Latest....",this.latestPosts);
-        console.log("News loaded.....................................",this.news); 
+        this.totalPages = news.totalPages;
     },error =>{
       console.log("Error loading news.....",error);
     });
   }
   
-  loadImageUrl(alert:PublicLivewire):string{
-    let imageKey:string;
-    for(let key of alert.imageKeys){
-      imageKey = key;
-    }
+  loadImageUrl(imageKey:string):string{
     return this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
   }
   
   showOlderPosts(){
-    this.showOlder = true;
-    this.showLatest = false;
+    this.pageNumber += 1;
+    if(this.pageNumber < this.totalPages -1){
+      this.loadNews(this.pageNumber);
+    }else{
+      this.pageNumber = this.totalPages -1;
+      this.loadNews(this.pageNumber);
+    }
   }
   
   showLatestPosts(){
-    this.showLatest = true;
-    this.showOlder = false;
+    this.pageNumber -= 1;
+    if(this.pageNumber > 0){
+       this.loadNews(this.pageNumber);
+    }else{
+      this.pageNumber = 0;
+      this.loadNews(this.pageNumber);
+    }
   }
   
-  openImage(alert:PublicLivewire){
-    let imageKey:string;
-    for(let key of alert.imageKeys){
-      imageKey = key;
-    }
+  openImage(imageKey:string){
     this.imageUrl = this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
     $('#open-image-modal').modal("show");
     console.log("Open my image....",imageKey);

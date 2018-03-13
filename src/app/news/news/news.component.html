@@ -1,5 +1,5 @@
 <div *ngIf="showLatest">
-	<div *ngFor="let alert of latestPosts | slice:0:10;" class="card">
+	<div *ngFor="let alert of news" class="card">
 		<div class="card-body">
 			<div class="row alert-header">
 				<div class="col-md-10 alert-headline">
@@ -16,42 +16,14 @@
 					<span>{{alert.description}}</span>
 				</div>
 			</div>
-			<div *ngIf="alert.imageKeys.length > 0" class="row alert-image">
-				<div class="col-md-6">
-					<img (click)="openImage(alert)" class="alert-image" alt="" src="{{loadImageUrl(alert)}}">
+			<div *ngIf="alert.imageKeys.length > 0" class="row">
+				<div *ngFor="let imageKey of alert.imageKeys; let i = index" class="col-md-3 col-sm-6 col">
+					<img (click)="openImage(imageKey)" class="alert-image" alt="" src="{{loadImageUrl(alert.imageKeys[i])}}">
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-
-<div *ngIf="showOlder">
-	<div *ngFor="let alert of oldPosts | slice:0:10;" class="card">
-		<div class="card-body">
-			<div class="row alert-header">
-				<div class="col-md-10 alert-headline">
-					<span>
-						#LiveWire {{alert.headline}}
-					</span>
-				</div>
-				<div class="col-md-2">
-					{{alert.creationTimeMillis | date: 'dd MMM yyyy'}}
-				</div>
-			</div>
-			<div class="row alert-description">
-				<div class="col-md-12">
-					<span>{{alert.description}}</span>
-				</div>
-			</div>
-			<div *ngIf="alert.imageKeys.length > 0" class="row alert-image">
-				<div class="col-md-6">
-					<img (click)="openImage(alert)" class="alert-image" alt="" src="{{loadImageUrl(alert)}}">
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
 
 <div class="modal fade" tabindex="-1" role="dialog" id="open-image-modal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -65,10 +37,10 @@
   </div>
 </div>
 
-<nav aria-label="Group list navigation">
+<nav *ngIf="news.length > 0" aria-label="Group list navigation">
   <ul class="pagination justify-content-end">
-  	<a class="page-indicator" style="font-weight: bold;" (click)="showOlderPosts()"><i class="fa fa-chevron-left"></i>Older Posts</a>
+  	<a class="page-indicator" style="font-weight: bold;" (click)="showLatestPosts()"><i class="fa fa-chevron-left"></i> Latest Posts</a>
    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<a class="page-indicator " style="font-weight: bold;" (click)="showLatestPosts()">Latest Posts<i class="fa fa-chevron-right"></i></a>
+	<a class="page-indicator " style="font-weight: bold;" (click)="showOlderPosts()">Older Posts <i class="fa fa-chevron-right"></i></a>
   </ul>
 </nav>

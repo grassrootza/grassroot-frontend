@@ -30,6 +30,7 @@ export class CreateLivewireComponent implements OnInit {
   public liveWireAlertType:LiveWireAlertType;
   public destinationType:LiveWireAlertDestType;
   public imageKey:string = "";
+  public imageKeys:string[] = [];
   @Output() alertSaved: EventEmitter<boolean>;
 
 
@@ -90,24 +91,32 @@ export class CreateLivewireComponent implements OnInit {
     this.destination = destination;
   }
 
-  uploadImage(event){
-     this.saveImage(event.target.files);
+  uploadImage(event,input:any){
+     let images = [].slice.call(event.target.files);
+     console.log("Images m trying to upload....",images);
+     this.saveImage(images);
   }
 
   saveImage(images){
      if(images.length > 0){
-        let image = images[0];
+        console.log("Images uploaded..",images.length);
+        
         let formData: FormData = new FormData();
-        formData.append("file", image, image.name);
+        
+        for(let image of images){
+          formData.append("file", image, image.name);
+          this.taskService.uploadAlertImage(formData).subscribe(resp =>{
+            console.log("Resp",resp);
+            this.imageKeys.push(resp.data);
+            //this.imageKey = resp.data;
+            //console.log("Image Key...........",this.imageKey);
+            formData = new FormData();
+          },error =>{
+            console.log("Error loading image");
+          })
+        }
+        console.log("Image keys.....",this.imageKeys);
         console.log("formdata: ", formData);
-
-        this.taskService.uploadAlertImage(formData).subscribe(resp =>{
-          console.log("Resp",resp);
-          this.imageKey = resp.data;
-          console.log("Image Key...........",this.imageKey);
-        },error =>{
-          console.log("Error loading image");
-        })
      }
   }
 
@@ -120,11 +129,11 @@ export class CreateLivewireComponent implements OnInit {
     let type = this.createLivewireForm.get("alertType").value;
     let contactName = this.createLivewireForm.get("contactPersonName").value;
     let contactNumber = this.createLivewireForm.get("contactPersonNumber").value;
-    let mediaKeys:string[] = [];
-
-    if(this.imageKey != null){
-      mediaKeys.push(this.imageKey);
-    }
+//    let mediaKeys:string[] = [];
+//
+//    if(this.imageKey != null){
+//      mediaKeys.push(this.imageKey);
+//    }
 
     if(this.meetings.length > 0){
       this.liveWireAlertType = type === "general"? LiveWireAlertType.INSTANT:LiveWireAlertType.MEETING;
@@ -138,7 +147,7 @@ export class CreateLivewireComponent implements OnInit {
     console.log("Task ID******",this.taskUid);
 
     this.taskService.createLiveWireAlert(this.userUid,headline,this.liveWireAlertType,
-      this.groupUid,this.taskUid,this.destinationType,description,this.addLocation,contactPerson,contactName,contactNumber,mediaKeys).subscribe(alert =>{
+      this.groupUid,this.taskUid,this.destinationType,description,this.addLocation,contactPerson,contactName,contactNumber,this.imageKeys).subscribe(alert =>{
         this.createForm();
         this.alertSaved.emit(true);
         console.log("Succesfully created livewirealert*****************");
