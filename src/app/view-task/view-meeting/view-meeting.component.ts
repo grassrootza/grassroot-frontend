@@ -5,7 +5,6 @@ import {AlertService} from "../../utils/alert.service";
 import {MembershipInfo} from "../../groups/model/membership.model";
 import {Router} from "@angular/router";
 import {TaskService} from "../../task/task.service";
-import {ItemPercentage} from "../../groups/group-details/group-dashboard/member-detail-percent.model";
 
 declare var $: any;
 
@@ -25,6 +24,9 @@ export class ViewMeetingComponent implements OnInit, OnChanges {
   public members: MembershipInfo[] = [];
   public responses: Map<string, string>;
 
+  public response: string = "";
+  public responseOptions: string[] = ['YES', 'NO', 'MAYBE'];
+
   constructor(private broadcastService: BroadcastService,
               private taskService: TaskService,
               private alertService: AlertService,
@@ -34,11 +36,21 @@ export class ViewMeetingComponent implements OnInit, OnChanges {
   ngOnInit() { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['taskToView'] && !changes['taskToView'].firstChange) {
-      this.taskService.fetchMeetingResponses(this.taskToView.taskUid).subscribe(responses => {
-        this.responses = responses;
-      });
+    if (changes['taskToView'] && !changes['taskToView'].firstChange && this.taskToView && this.taskToView.type == 'MEETING') {
+      this.updateResponses();
     }
+  }
+
+  updateResponses() {
+    this.taskService.fetchMeetingResponses(this.taskToView.taskUid).subscribe(responses => {
+      this.responses = responses;
+    });
+  }
+
+  respondToMeeting() {
+    this.taskService.respondToMeeting(this.taskToView.taskUid, this.response).subscribe(updatedResponses => {
+      this.responses = updatedResponses;
+    })
   }
 
   sendBroadcastMessage() {
@@ -52,12 +64,14 @@ export class ViewMeetingComponent implements OnInit, OnChanges {
   }
 
   viewAllAttendees(){
-    console.log("Task to view....",this.taskToView.taskUid);
-
     $("#view-meeting-modal").modal("hide");
-
     this.router.navigate(['/meeting', this.taskToView.taskUid]);
     return false;
+  }
+
+  clearData() {
+    this.response = "";
+    this.sendingBroadcast = false;
   }
 
 }

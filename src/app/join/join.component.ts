@@ -30,7 +30,7 @@ export class JoinComponent implements OnInit {
 
   languages = MSG_LANGUAGES;
 
-  isUserLoggedIn: boolean = false;
+  userLoggedIn: boolean = false;
   joinedUser: User;
   validationCode: string;
 
@@ -63,9 +63,12 @@ export class JoinComponent implements OnInit {
     }, { validator: emailOrPhoneEntered("email", "phone") });
   }
 
-  // todo: if user is logged in already, don't show / require name, email, etc. And if email or phone exists, ask to login
   ngOnInit() {
-    this.isUserLoggedIn = this.userService.isLoggedIn();
+    this.userLoggedIn = this.userService.isLoggedIn();
+    if (this.userLoggedIn) {
+      this.currentStep = steps[1]; // skip user info if have a session
+    }
+
     this.route.params.subscribe((params: Params) => {
       this.groupUid = params['groupId'];
       this.route.queryParams.subscribe((qParams: Params) => {
@@ -73,7 +76,6 @@ export class JoinComponent implements OnInit {
         this.broadcastId = qParams['broadcastId'];
         this.joinService.initiateJoinSequence(this.groupUid, this.code, this.broadcastId).subscribe((result: JoinInfo) => {
           this.joinInfo = result;
-          console.log("join info: ", this.joinInfo);
           this.descriptionText = this.joinInfo.groupDescription.replace(/\n/g, "</p><p>");
           console.log("description text: ", this.descriptionText);
           this.setUpJoinTopics(this.joinInfo.groupJoinTopics);
@@ -109,17 +111,29 @@ export class JoinComponent implements OnInit {
 
   submitTopics() {
     let topics = this.joinInfo.groupJoinTopics.filter(topic => this.joinTopicsForm.controls[topic].value);
-    console.log("retrieved topics: ", topics);
+
     this.alertService.showLoading();
-    this.joinService.setTopics(this.groupUid, this.joinedUser.uid, this.validationCode, topics).subscribe(result => {
-      console.log("topics set, proceeding to finish");
-      this.alertService.hideLoading();
-      this.currentStep = steps[2];
-    }, error => {
-      console.log("topics not set, something wrong, continuing to completion");
-      this.alertService.hideLoading();
-      this.currentStep = steps[2];
-    });
+    if (this.userLoggedIn) {
+      this.joinService.completeJoinForLoggedIn(this.groupUid, this.code, this.broadcastId, topics).subscribe(result => {
+        this.proceedToStep(2);
+      }, error => {
+        console.log("error joining: ", error);
+        this.proceedToStep(2);
+      })
+    } else {
+      this.joinService.setTopics(this.groupUid, this.joinedUser.uid, this.validationCode, topics).subscribe(result => {
+        console.log("topics set, proceeding to finish");
+        this.proceedToStep(2);
+      }, error => {
+        console.log("topics not set, something wrong, continuing to completion");
+        this.proceedToStep(2);
+      });
+    }
+  }
+
+  private proceedToStep(step: number) {
+    this.alertService.hideLoading();
+    this.currentStep = steps[step];
   }
 
   signUpUser(password: string) {

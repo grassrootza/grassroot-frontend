@@ -76,6 +76,8 @@ export class GroupActivityComponent implements OnInit {
     this.taskToView = task;
     if (task.type == 'MEETING') {
       $('#view-meeting-modal').modal('show');
+    } else if (task.type == 'VOTE') {
+      $('#view-vote-modal').modal('show');
     }
   }
 

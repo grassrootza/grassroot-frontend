@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserService} from "../../../user/user.service";
 import {ActivatedRoute, Params} from "@angular/router";
 import {Task} from '../../../task/task.model'
 import {SearchService} from "../../search.service";
 import {TaskService} from "../../../task/task.service";
-import {TaskType} from "../../../task/task-type";
+
 declare var $: any;
 
 @Component({
@@ -58,19 +58,6 @@ export class MyActivitiesComponent implements OnInit {
 
   triggerViewTask(task:Task){
     this.taskToView = task;
-    console.log("Task Var...",this.taskToView);
-    console.log("Task...",task);
-    console.log("Task to view........",task.taskUid);
-
-    if(task.type == TaskType.VOTE){
-      this.taskService.viewVote(this.taskToView.taskUid,this.userService.getLoggedInUser().msisdn).subscribe(resp =>{
-        console.log("View vote response.....",resp.data.reply);
-        this.voteResponse = resp.data.reply;
-      },error =>{
-        console.log("Error viewing vote ......",error);
-      });
-    }
-
     switch (task.type){
       case "MEETING":
         $("#view-meeting-modal").modal("show");

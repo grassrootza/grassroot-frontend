@@ -8,82 +8,88 @@
         </button>
       </div>
       <div class="modal-body">
-
-        <form [formGroup]="castVoteForm"
-              (ngSubmut)="castVote()">
-
-        <div id="vote" class="ax_default label">
-          <div id="vote_div" class=""></div>
-          <div id="vote_text" class="text ">
-            <p style="font-size:14px;">
-              <span class="font-weight-bold">
-                <img [src]="'assets/' + taskToView?.getEventIconName() "/>&nbsp;&nbsp;
-              </span>
-              <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">{{taskToView?.createdByUserName + " called a vote: "}}</span>
-              <span style="font-family:'OpenSans', 'Open Sans';font-weight:400;color:#000000;">{{taskToView?.title}}</span></p>
-          </div>
-        </div>
-
-        <div id="group-name" class="ax_default label">
-          <div id="group-name-div" class=""></div>
-          <div id="group-name-text" class="text ">
-            <p><span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">Group: </span><span style="font-family:'OpenSans', 'Open Sans';font-weight:400;">{{taskToView?.parentName}}</span></p>
-          </div>
-        </div>
-
-        <div id="vote-date" class="ax_default label">
-          <div id="vote-date-div" class=""></div>
-          <div id="vote-date-text" class="text ">
-            <p><span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">Due: </span><span style="font-family:'OpenSans', 'Open Sans';font-weight:400;">{{taskToView?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}</span></p>
-          </div>
-        </div>
-
-        <div id="description" class="ax_default paragraph">
-          <div id="description-div" class=""></div>
-          <div id="description-text" class="text ">
-            <p>
-              <span>
-                {{taskToView?.description}}
-              </span>
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <p class="title-para">
+              <img [src]="'assets/' + voteToView?.getEventIconName() "/>&nbsp;&nbsp;
+              <span class="task-field-name">Vote: </span> {{voteToView?.title}}
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">Group: </span> {{voteToView?.parentName}}
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">Closes: </span> {{voteToView?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+            </p>
+            <p class="task-field-para" *ngIf="voteToView?.description">
+              <span class="task-field-name">Description: </span> {{voteToView?.description}}
+            </p>
+            <p class="task-field-para" *ngIf="voteToView?.hasResponded">
+              <span class="task-field-name">You voted: </span> {{ voteToView?.userResponse | titlecase }}
             </p>
           </div>
         </div>
 
-        <div *ngIf="!taskToView?.hasResponded" id="cast" class="ax_default label">
-          <div id="cast-div" class=""></div>
-          <div id="cast-text" class="text ">
-            <p>
-              <span>Cast your vote:</span>
-              <select name="response" id="response"
-                      [formControl]="castVoteForm.controls['response']"
-                      (change)="selectResponse($event.target.value)">
-                <option value="YES">Yes</option>
-                <option value="NO">No</option>
-                <option value="ABSTAIN">Abstain</option>
-              </select>
-            </p>
+        <div class="row" *ngIf="!voteToView?.hasResponded && voteToView?.isActive() && options" >
+          <div class="col-md-3 col-sm-6">
+            <label class="task-field-name">Cast your vote: </label>
           </div>
-        </div>
-
-          <div *ngIf="taskToView?.hasResponded" id="responded" class="ax_default label">
-            <div id="responded-div" class=""></div>
-            <div id="responded-text" class="text ">
-              <p>
-                <span>You voted: {{voteResponse?.toString()}}</span>
-
-              </p>
+          <div class="col-md-3 col-sm-6">
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                {{ !!response ? (response | titlecase) : '(Select)' }}</button>
+              <div class="dropdown-menu">
+                  <a class="dropdown-item" *ngFor="let option of options" (click)="response = option">
+                    {{ option | titlecase }}
+                  </a>
+              </div>
             </div>
           </div>
-
-
-
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">Cancel</button>
-        <div *ngIf="!taskToView?.hasResponded">
-          <button  type="button" class="btn btn-primary save-button" (click)="castVote()">Cast vote</button>
+          <div class="col-md-6 col-sm-12">
+            <div *ngIf="!voteToView?.hasResponded && !!response">
+              <button  type="button" class="btn btn-primary save-button" (click)="castVote()">Cast vote</button>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="row" *ngIf="voteToView?.voteResults">
+        <div class="col-sm-12">
+          <div class="card-header responses-header">
+            <div class="row">
+              <div class="col-sm-3">
+                <span class="responses-title">Vote results</span>
+              </div>
+              <div class="col-sm-7"></div>
+              <div class="col-sm-2 text-right">
+                <i class="fas fa-users"></i> {{ totalMembers }}</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="row" *ngFor="let option of results">
+              <div class="col-sm-3">
+                {{ option.name | titlecase }}
+              </div>
+              <div class="col-sm-7">
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                       [style.width]="option.percent + '%'"
+                       [attr.aria-valuenow]="option.percent" aria-valuemin="0" aria-valuemax="100">
+                    {{ option.percent}}%
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2 text-right">
+                {{ option.rawCount }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
       </div>
     </div>
   </div>

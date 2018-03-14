@@ -39,7 +39,7 @@ export class MeetingDetailsComponent implements OnInit {
   viewMeeting(){
     this.taskService.loadTask(this.meetingUid, "MEETING").subscribe(meeting => {
       console.log("Viewing meeting.....",meeting);
-      this.meeting = Task.createInstanceFromData(meeting);
+      this.meeting = meeting;
     },error=>{
       console.log("Error loading meeting......",error);
     })

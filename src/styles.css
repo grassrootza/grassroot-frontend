@@ -258,6 +258,11 @@ h6 {
   color: #26A041;
 }
 
+.task-title-para {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
 .task-field-para {
   margin-top: 1rem;
 }

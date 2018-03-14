@@ -27,10 +27,10 @@ export class TaskService {
   private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
   private uploadImageUrl = environment.backendAppUrl + "/api/media/storeImage";
 
-  private castVoteUrl = environment.backendAppUrl + "/api/vote/do";
-  private viewVoteUrl = environment.backendAppUrl + "/api/vote/view";
+  private castVoteUrl = environment.backendAppUrl + "/api/task/respond/vote";
 
   private meetingResponsesUrl = environment.backendAppUrl + "/api/task/fetch/meeting/rsvps";
+  private meetingRsvpUrl = environment.backendAppUrl + "/api/task/respond/meeting";
 
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
@@ -86,7 +86,7 @@ export class TaskService {
 
   public loadTask(taskUid: string, taskType: string): Observable<Task> {
     const fullUrl = this.specificTasksUrl + "/" + taskType + "/" + taskUid;
-    return this.httpClient.get<Task>(fullUrl);
+    return this.httpClient.get<Task>(fullUrl).map(Task.createInstanceFromData);
   }
 
   createMeeting(parentType: string, parentUid: string, subject: string, location: string, dateTimeEpochMillis: number, publicMeeting: boolean, assignedMemberUids: string[]):Observable<Task> {
@@ -111,7 +111,6 @@ export class TaskService {
       .set('description', description)
       .set('time', time.toString())
       .set('assignedMemberUids', assignedMemberUids.join(','));
-
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
@@ -220,21 +219,21 @@ export class TaskService {
     return this.httpClient.post(fullUrl,null,{params:params});
   }
 
-  castVote(id:string,phoneNumber:string,response:string):Observable<any>{
-    let fullUrl = this.castVoteUrl + "/" + id + "/" + phoneNumber + "/+27";
-    let params = new HttpParams().set("response",response);
-
-    return this.httpClient.get(fullUrl,{params:params});
-  }
-
-  viewVote(id:string,phoneNumber:string):Observable<any>{
-    let fullUrl = this.viewVoteUrl + "/" + id + "/" + phoneNumber + "/+27";
-    return this.httpClient.get(fullUrl);
+  castVote(taskUid:string, response:string):Observable<Task>{
+    let fullUrl = this.castVoteUrl + "/" + taskUid;
+    let params = new HttpParams().set("vote", response);
+    return this.httpClient.post<Task>(fullUrl, null, {params:params}).map(Task.createInstanceFromData);
   }
 
   fetchMeetingResponses(taskUid: string): Observable<Map<string, string>> {
     const fullUrl = this.meetingResponsesUrl + "/" + taskUid;
     return this.httpClient.get<Map<string, string>>(fullUrl);
+  }
+
+  respondToMeeting(taskUid: string, response: string): Observable<Map<string, string>> {
+    const fullUrl = this.meetingRsvpUrl + "/" + taskUid;
+    let params = new HttpParams().set("response", response.toUpperCase());
+    return this.httpClient.post<Map<string, string>>(fullUrl, null, {params: params});
   }
 
 

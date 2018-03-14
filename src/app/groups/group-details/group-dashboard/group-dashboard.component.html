@@ -42,7 +42,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let vote of votes" class="votes-event">
+          <div *ngFor="let vote of votes" class="votes-event" (click)="showViewVote(vote)">
             <div class="float-left event-date">
               <span class="day">{{vote.deadlineDate | date:'dd'}}</span>
               <span class="month">{{vote.deadlineDate | date:'MMM'}}</span>
@@ -258,3 +258,4 @@
 
 <app-view-meeting [taskToView]="meetingToView"></app-view-meeting>
 
+<app-view-vote [voteToView]="taskToView"></app-view-vote>

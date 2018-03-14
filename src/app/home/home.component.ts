@@ -257,14 +257,6 @@ export class HomeComponent implements OnInit {
       $('#respond-todo-modal').modal("show");
     }
 
-    if(task.type == TaskType.VOTE){
-      console.log("Is a vote.................");
-      this.taskService.viewVote(this.taskToView.taskUid,this.userService.getLoggedInUser().msisdn).subscribe(resp=>{
-        this.voteResponse = resp.data.reply;
-        console.log("Vote response...........",this.voteResponse);
-      })
-    }
-
     switch (task.type){
       case TaskType.MEETING:
         $('#view-meeting-modal').modal("show");

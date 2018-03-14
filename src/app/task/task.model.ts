@@ -1,5 +1,6 @@
 import {TaskType} from "./task-type";
 import {TodoType} from "./todo-type";
+import moment = require("moment");
 
 export class Task {
 
@@ -15,9 +16,11 @@ export class Task {
               public ancestorGroupName: string,
               public todoType: TodoType,
               public hasResponded: boolean,
+              public userResponse: string,
               public wholeGroupAssigned: boolean,
               public thisUserAssigned: boolean,
-              public createdByUserName:string) {
+              public createdByUserName:string,
+              public voteResults: Map<string, string>) {
   }
 
   public getEventIconName(): string {
@@ -29,6 +32,10 @@ export class Task {
       return "icon_todo.png";
     else
       return "";
+  }
+
+  public isActive(): boolean {
+    return this.deadlineMillis > moment().valueOf();
   }
 
   public static createInstanceFromData(taskData: Task) {
@@ -45,9 +52,11 @@ export class Task {
       taskData.ancestorGroupName,
       taskData.todoType != null ? TodoType[<string>taskData.todoType] : null,
       taskData.hasResponded,
+      taskData.userResponse,
       taskData.wholeGroupAssigned,
       taskData.thisUserAssigned,
-      taskData.createdByUserName
+      taskData.createdByUserName,
+      taskData.voteResults
     )
   }
 }

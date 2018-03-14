@@ -57,6 +57,8 @@ export class CreateVoteComponent implements OnInit {
       option: ['', Validators.required]
     });
   }
+
+  // todo : focus on new input (but non-trivial - https://github.com/angular/angular/issues/13158)
   addOption() {
     const control = < FormArray > this.createVoteForm.controls['voteOptions'];
     control.push(this.initVoteOptions());

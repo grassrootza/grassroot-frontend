@@ -213,7 +213,6 @@
   </div>
 </div>
 
-
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
 
@@ -230,5 +229,4 @@
 
 <app-view-meeting [taskToView]="taskToView"></app-view-meeting>
 
-<app-view-vote [taskToView]="taskToView"
-                [voteResponse]="voteResponse"></app-view-vote>
+<app-view-vote [voteToView]="taskToView"></app-view-vote>
