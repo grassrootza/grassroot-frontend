@@ -31,6 +31,7 @@ import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NotificationService} from "./user/notification.service";
 import {CampaignService} from "./campaigns/campaign.service";
 import {BroadcastService} from "./broadcasts/broadcast.service";
+import { LiveWireAlertService } from "./livewire/live-wire-alert.service";
 import {ANIMATION_TYPES, LoadingModule} from "ngx-loading";
 import {AccountService} from "./user/account.service";
 import {SearchService} from "./search/search.service";
@@ -147,7 +148,8 @@ const routes: Routes = [
     PasswordResetService,
     AccountService,
     SearchService,
-    MediaService
+    MediaService,
+    LiveWireAlertService
   ],
   bootstrap: [AppComponent]
 })

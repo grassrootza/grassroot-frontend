@@ -17,6 +17,7 @@ import {TaskType} from "../task/task-type";
 import {TodoType} from "../task/todo-type";
 import {AlertService} from "../utils/alert.service";
 import {CampaignService} from "../campaigns/campaign.service";
+import { LiveWireAlertService } from "../livewire/live-wire-alert.service";
 import {SearchService} from "../search/search.service";
 
 declare var $: any;
@@ -60,7 +61,8 @@ export class HomeComponent implements OnInit {
               private campaignService: CampaignService,
               private router: Router,
               private alertService: AlertService,
-              private searchService:SearchService) {
+              private searchService:SearchService,
+              private livewirealertService:LiveWireAlertService) {
     this.agendaBaseDate = moment().startOf('day');
   }
 
@@ -141,6 +143,12 @@ export class HomeComponent implements OnInit {
 
     this.campaignService.campaignInfoList.subscribe(campaignList => {
       this.activeCampaigns = campaignList.filter(cp => cp.isActive());
+    });
+    
+    this.livewirealertService.loadLivewireAlerts().subscribe(resp => {
+      console.log("Resp from server......",resp);
+    },error =>{
+      console.log("Error loading alerts....",error);
     });
 
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
