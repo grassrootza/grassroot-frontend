@@ -61,8 +61,7 @@ export class HomeComponent implements OnInit {
               private campaignService: CampaignService,
               private router: Router,
               private alertService: AlertService,
-              private searchService:SearchService,
-              private livewirealertService:LiveWireAlertService) {
+              private searchService:SearchService) {
     this.agendaBaseDate = moment().startOf('day');
   }
 
@@ -143,12 +142,6 @@ export class HomeComponent implements OnInit {
 
     this.campaignService.campaignInfoList.subscribe(campaignList => {
       this.activeCampaigns = campaignList.filter(cp => cp.isActive());
-    });
-    
-    this.livewirealertService.loadLivewireAlerts().subscribe(resp => {
-      console.log("Resp from server......",resp);
-    },error =>{
-      console.log("Error loading alerts....",error);
     });
 
     this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);

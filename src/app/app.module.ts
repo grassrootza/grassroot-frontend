@@ -38,6 +38,8 @@ import {SearchService} from "./search/search.service";
 import {MeetingDetailsComponent} from "./task/meeting-details/meeting-details.component";
 import {LoggedInServicesModule} from "./logged-in-services.module";
 import {MediaService} from "./media/media.service";
+import { LiveWireListComponent } from './livewire/live-wire-list/live-wire-list.component';
+import { ViewAlertComponent } from './livewire/view-alert/view-alert.component';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -87,7 +89,9 @@ const routes: Routes = [
   },
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
-  {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]}
+  {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]},
+  {path: 'livewire',component:LiveWireListComponent,canActivate:[LoggedInGuard]},
+  {path: 'view-alert/:id',component:ViewAlertComponent,canActivate:[LoggedInGuard]}
 ];
 
 @NgModule({
@@ -103,7 +107,9 @@ const routes: Routes = [
     PwdResetValidateComponent,
     PwdResetNewComponent,
     PasswordResetComponent,
-    MeetingDetailsComponent
+    MeetingDetailsComponent,
+    LiveWireListComponent,
+    ViewAlertComponent
   ],
   imports: [
     BrowserModule,

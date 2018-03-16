@@ -1,0 +1,58 @@
+import { LiveWireAlert } from "../live-wire-alert.model";
+import { LiveWireAlertService } from "../live-wire-alert.service";
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-live-wire-list',
+  templateUrl: './live-wire-list.component.html',
+  styleUrls: ['./live-wire-list.component.css']
+})
+export class LiveWireListComponent implements OnInit {
+  
+  public alertList:LiveWireAlert[]=[];
+  public pageNumber:number = 0;
+  public totalPages:number;
+  public sort:string = "desc";
+
+  constructor(private liveWireAlertService:LiveWireAlertService) { }
+
+  ngOnInit() {
+    this.loadAlerts(this.pageNumber,this.sort);
+  }
+
+  loadAlerts(pageNumber:number,sort:string){
+    this.liveWireAlertService.loadLivewireAlerts(pageNumber,sort).subscribe(resp => {
+      console.log("Loaded alerts......",resp);
+      this.alertList = resp.content;
+      this.totalPages = resp.totalPages;
+      console.log("Alerts from server.....",this.alertList);
+    },error =>{
+      console.log("Erro loading alerts.......",error);
+    });
+  }
+  
+  nextPage(){
+    this.pageNumber += 1;
+    if(this.pageNumber < this.totalPages -1){
+      this.loadAlerts(this.pageNumber,this.sort);
+    }else{
+      this.pageNumber = this.totalPages -1;
+      this.loadAlerts(this.pageNumber,this.sort);
+    }
+  }
+  
+  previousPage(){
+    this.pageNumber -= 1;
+    if(this.pageNumber > 0){
+      this.loadAlerts(this.pageNumber,this.sort);
+    }else{
+      this.pageNumber = 0;
+      this.loadAlerts(this.pageNumber,this.sort);
+    }
+  }
+  onchangeSort(value:string){
+    this.sort = value;
+    this.loadAlerts(this.pageNumber,this.sort);
+    console.log("Tyring to sort alerts......................",value);
+  }
+}

@@ -74,6 +74,7 @@
     "password": "Change password",
     "account": "Account settings",
     "integrations": "Integration settings",
+    "livewire": "Live Wire admin",
     "logout": "Logout",
     "landing": {
       "news": "NEWS",

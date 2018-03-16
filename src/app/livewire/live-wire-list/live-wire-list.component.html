@@ -1,0 +1,33 @@
+<h1 class="main-title">Live Wire</h1>
+<div class="card">
+	<div class="card-body">
+		<div class="row header">
+			<div class="col-md-2">Alert list</div>
+			<div class="col-md-4"></div>
+			<div class="col-md-2">
+				<select (change)="onchangeSort($event.target.value)">
+					<option class="dropdown-item" value="desc">Newest first</option>
+					<option class="dropdown-item" value="asc">Unreleased first</option>
+				</select>
+			</div>
+			<div class="col-md-4">
+				  <ul class="pagination justify-content-end">
+				  	<a class="page-indicator" style="font-weight: bold;" (click)="previousPage()"><i class="fa fa-chevron-left"></i> Previous</a>
+				   	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<a class="page-indicator " style="font-weight: bold;" (click)="nextPage()">Next <i class="fa fa-chevron-right"></i></a>
+				  </ul>
+			</div>
+		</div>
+		
+		<div class="row alerts-header">
+			<div class="col-md-4">Headline</div>
+			<div class="col-md-4">Contact name</div>
+			<div class="col-md-4">Number</div>
+		</div>
+		<div *ngFor="let alert of alertList" class="row alert">
+			<div class="col-md-4"><a [routerLink]="['/view-alert',alert.serverUid]">{{alert.headline}}</a></div>
+			<div class="col-md-4">{{alert.contactUserName}}</div>
+			<div class="col-md-4">{{alert.contactUserPhone}}</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,22 @@
+#sort-dropdown {
+  padding: 10px 40px;
+  font-size: 1.1em;
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  color: #4A4A4A;
+  line-height: 19px;
+}
+
+.alert{
+	margin-top: 0.5%;
+	margin-bottom: 0.5%;
+}
+
+.alerts-header{
+	background-color: #e6eaef;
+}
+
+.header{
+	margin-bottom: 2%;
+	background-color: #e6eaef;
+}

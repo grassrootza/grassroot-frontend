@@ -1,0 +1,73 @@
+<h1 class="main-title">Live Wire Alert</h1>
+  
+<a [routerLink]="['/livewire']" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>BACK TO ALERTS</a>
+  
+<div class="card">
+	<div *ngIf="liveWireAlert" class="card-body">
+		<div class="row headline">
+			<div class="col-md-2" style="font-weight: bold;">Headline</div>
+			<div class="col-md-4">{{liveWireAlert.headline}}</div>
+			<div class="col-md-4">
+				<button class="btn btn-primary">Edit</button>
+			</div>
+		</div>
+		<div class="row status">
+			<div class="col-md-2" style="font-weight: bold;">Status</div>
+			<div class="col-md-4">{{liveWireAlert.reviewed}}</div>
+		</div>
+		<div class="row contact">
+			<div class="col-md-2" style="font-weight: bold;">Contact</div>
+			<div class="col-md-4">{{liveWireAlert.contactUserName + "," + liveWireAlert.contactUserPhone}}</div>
+		</div>
+		<div class="row created-time">
+			<div class="col-md-2" style="font-weight: bold;">Created time</div>
+			<div class="col-md-4">{{liveWireAlert.creationTimeMillis | date: 'dd MMM yyyy'}}</div>
+		</div>
+		<div class="row description">
+			<div class="col-md-2" style="font-weight: bold;">Description</div>
+			<div class="col-md-4">{{liveWireAlert.description}}</div>
+			<div class="col-md-4">
+				<button class="btn btn-primary">Edit</button>
+			</div>
+		</div>
+		<div class="row group">
+			<div class="col-md-2" style="font-weight: bold;">Related to</div>
+			<div class="col-md-4">{{"Flash news for group," + liveWireAlert.ancestorGroupName + ", of size " + liveWireAlert.groupSize}}</div>
+		</div>
+		<div class="row media">
+			<div class="col-md-2" style="font-weight: bold;">Images or videos</div>
+			<div class="col-md-10">
+				<div class="row">
+					<div *ngIf="liveWireAlert.mediaFileUids.length == 0">None</div>
+					<div *ngIf="liveWireAlert.mediaFileUids.length > 0">
+						<div *ngFor="let imageId of liveWireAlert.mediaFileUids;let i = index">
+							<button class="btn btn-link" (click)="openImage(liveWireAlert.mediaFileUids[i])">Download</button>
+						</div>
+					</div>
+				</div>
+				<div class="row" style="margin-top: 1%;">ADD IMAGE</div>
+				<div class="row">
+					<input type="file">
+				</div>
+			</div>
+		</div>
+		<div class="row tags">
+			<div class="col-md-2" style="font-weight: bold;">Tags</div>
+			<div class="col-md-8"></div>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="open-image-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+    <span class="alert-modal-image-close">&times;</span>
+      <div class="modal-body">
+        <img class="alert-modal-image" alt="" src="{{imageUrl}}">
+      </div>
+      
+    </div>
+  </div>
+</div>
