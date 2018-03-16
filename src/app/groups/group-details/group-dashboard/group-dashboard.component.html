@@ -12,7 +12,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let meeting of meetings" class="meeting-event" (click)="showViewMeeting(meeting)">
+          <div *ngFor="let meeting of meetings" class="meeting-event event-row" (click)="showViewMeeting(meeting)">
             <div class="float-left event-date">
               <span class="day">{{meeting.deadlineDate | date:'dd'}}</span>
               <span class="month">{{meeting.deadlineDate | date:'MMM'}}</span>
@@ -42,7 +42,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let vote of votes" class="votes-event" (click)="showViewVote(vote)">
+          <div *ngFor="let vote of votes" class="votes-event event-row" (click)="showViewVote(vote)">
             <div class="float-left event-date">
               <span class="day">{{vote.deadlineDate | date:'dd'}}</span>
               <span class="month">{{vote.deadlineDate | date:'MMM'}}</span>
@@ -72,7 +72,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let todo of todos" class="action-items-event">
+          <div *ngFor="let todo of todos" class="action-items-event event-row" (click)="showViewTodo(todo)">
             <div class="float-left event-date">
               <span class="day">{{todo.deadlineDate | date:'dd'}}</span>
               <span class="month">{{todo.deadlineDate | date:'MMM'}}</span>
@@ -258,4 +258,6 @@
 
 <app-view-meeting [taskToView]="meetingToView"></app-view-meeting>
 
-<app-view-vote [voteToView]="todoToView"></app-view-vote>
+<app-view-vote [voteToView]="voteToView"></app-view-vote>
+
+<app-view-todo [todoTask]="todoToView"></app-view-todo>

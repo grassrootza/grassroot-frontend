@@ -1,0 +1,59 @@
+<div *ngIf="todo" class="col-md-8 offset-md-2 col-sm-12">
+  <div class="card">
+    <div class="card-body">
+      <div class="row pl-3">
+        <div class="col-12">
+          <h3>
+            <img src="assets/icon_meeting.png"/>&nbsp;
+            <span class="task-field-name">Action Item: </span>{{todo.title}}
+          </h3>
+        </div>
+      </div>
+      <div class="row pl-3 pr-3">
+        <div class="col-md-6 col-sm-12">
+          <p class="task-field-para">
+            <span class="task-field-name">Type: </span>
+            {{ 'enum.TodoType.' + todo.todoType | translate }}
+          </p>
+          <p class="task-field-para">
+            <span class="task-field-name">Due by: </span>
+            {{todo.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+          </p>
+          <p class="task-field-para">
+            <span class="task-field-name">Group: </span>
+            {{todo.ancestorGroupName}}
+          </p>
+        </div>
+        <div class="col-md-6 col-sm-12">
+          <!-- insert image -->
+        </div>
+      </div>
+      <div class="row" *ngIf="todo.description">
+        <div class="col-12">
+        {{ todo.description }}
+        </div>
+      </div>
+      <div class="row mt-4 responses">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Responses</span>
+              <button (click)="downloadResponses()" class="btn btn-secondary float-md-right"><i class="fas fa-download"></i> Download</button>
+            </div>
+            <div class="card-body">
+              <div *ngFor="let response of todoResponses" class="row info-row">
+                <div class="col-4">{{ response.memberName }}</div>
+                <div class="col-8">
+                  <i *ngIf="response.response && (todo.todoType == typeVolunteer || todo.todoType == typeValidation)"
+                     [ngClass]="[responseClasses[response.response?.toLowerCase()], 'row-icon']"></i>
+                  <span *ngIf="response.response">{{ response.response | titlecase }}</span>
+                  <span *ngIf="!response.response">{{ 'task.todo.no_response' | translate }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

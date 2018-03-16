@@ -11,12 +11,16 @@
         <div *ngIf="todoTask" class="row">
           <div class="col-md-6 col-sm-12">
             <p class="task-title-para">
-              <img [src]="'assets/' + taskToView?.getEventIconName() "/> <span class="task-field-name">Action Item:</span> {{todoTask.title}}</p>
+              <img [src]="'assets/' + todoTask?.getEventIconName() "/> <span class="task-field-name">Action Item:</span> {{todoTask.title}}</p>
             <p class="task-field-para">
-              <span class="task-field-name">Group: {{todoTask.ancestorGroupName}}</span>
+              <span class="task-field-name">Type: </span>
+              {{ 'enum.TodoType.' + todoTask.todoType | translate }}
             </p>
             <p class="task-field-para">
-              <span class="task-field-name">Due by: </span>
+              <span class="task-field-name">Group:</span> {{todoTask.ancestorGroupName}}
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">Due by:</span>
               {{todoTask?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
             </p>
           </div>
@@ -25,7 +29,7 @@
           </div>
         </div>
 
-        <div *ngIf="todoTask?.todoType == todoTypeInfoRequired" class="row">
+        <div *ngIf="todoTask && todoTask.todoType == todoTypeInfoRequired && !todoTask.hasResponded" class="row">
           <div class="col-12">
             <form [formGroup]="completeActionForm" (ngSubmit)="completeAction()">
               <div class="form-row">
@@ -41,29 +45,38 @@
               </div>
             </form>
           </div>
+        </div>
 
-          <div *ngIf="todoTask" class="rpw">
-            <div class="col-12">
-              <div class="response-input text-center"
-                   *ngIf="todoTask.todoType == todoTypeValidationRequired || todoTask.todoType == todoTypeVolunteersNedded ">
-                <span *ngIf="todoTask.todoType == todoTypeValidationRequired" class="task-field-name"
-                      [translate]="'task.todo.respondModal.validate-action-label'"> Is action complete ??</span>
+        <div *ngIf="todoTask && !todoTask.hasResponded && !todoTask.createdByThisUser" class="row">
+          <div class="col-12">
+            <div class="response-input text-center"
+                 *ngIf="todoTask.todoType == todoTypeValidationRequired || todoTask.todoType == todoTypeVolunteersNedded ">
+              <span *ngIf="todoTask.todoType == todoTypeValidationRequired" class="task-field-name"
+                    [translate]="'task.todo.respondModal.validate-action-label'"> Is action complete ??</span>
 
-                <span *ngIf="todoTask.todoType == todoTypeVolunteersNedded" class="task-field-name"
-                      [translate]="'task.todo.respondModal.volunteers-needed-label'"> Do you volunter ?</span>
-                <button class="btn btn-secondary hover-primary resp-yes-no" (click)="respondYes()" [translate]="'action.yes'">
-                  Yes
-                </button>
-                <button class="btn btn-secondary hover-danger resp-yes-no" (click)="respondNo()" [translate]="'action.no'">No</button>
-              </div>
+              <span *ngIf="todoTask.todoType == todoTypeVolunteersNedded" class="task-field-name"
+                    [translate]="'task.todo.respondModal.volunteers-needed-label'"> Do you volunter?</span>
+              <button class="btn btn-secondary hover-primary resp-yes-no" (click)="respondYes()" [translate]="'action.yes'">
+                Yes
+              </button>
+              <button class="btn btn-secondary hover-danger resp-yes-no" (click)="respondNo()" [translate]="'action.no'">No</button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="todoTask && todoTask.hasResponded" class="row">
+          <div class="col-12">
+            <div class="response-input text-center">
+              You responded <span class="task-field-name">{{ todoTask.userResponse | lowercase }}</span>
             </div>
           </div>
         </div>
 
       </div>
       <div class="modal-footer">
-        <!--<button type="button" class="btn btn-secondary hover-primary footer-button float-left" (click)="viewAllAttendees()">View all attendees</button>-->
-        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
+        <button *ngIf="todoTask?.canEdit" type="button" class="btn btn-secondary hover-primary footer-button float-left"
+                (click)="viewAllResponses()">View all responses</button>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" (click)="clearData()">
           {{ 'action.close' | translate }}
         </button>
       </div>

@@ -39,8 +39,8 @@ import {ViewTodoComponent} from "./task/view-todo/view-todo.component";
     CreateLivewireComponent,
     ViewTodoComponent,
     ViewMeetingComponent,
-    MeetingResponsesComponent,
     ViewVoteComponent,
+    MeetingResponsesComponent,
     PaginationComponent,
     MemberFilterComponent
   ],
@@ -54,13 +54,13 @@ import {ViewTodoComponent} from "./task/view-todo/view-todo.component";
     CreateLivewireComponent,
     ViewTodoComponent,
     ViewMeetingComponent,
-    MeetingResponsesComponent,
-    ViewVoteComponent
+    ViewVoteComponent,
+    MeetingResponsesComponent
   ],
   exports: [
     GroupInfoComponent, CampaignInfoComponent,
     CreateGroupComponent, CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, CreateLivewireComponent,
-    ViewTodoComponent, ViewMeetingComponent, MeetingResponsesComponent, ViewVoteComponent, PaginationComponent, MemberFilterComponent
+    ViewTodoComponent, ViewMeetingComponent, ViewVoteComponent, MeetingResponsesComponent, PaginationComponent, MemberFilterComponent
   ]
 })
 export class LoggedInServicesModule { }

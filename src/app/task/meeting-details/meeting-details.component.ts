@@ -3,6 +3,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {TaskService} from "../task.service";
 import {Task} from "../task.model";
 import {convertResponseMap, TaskResponse} from "../task-response";
+import {AlertService} from "../../utils/alert.service";
 
 const RESP_ORDER = {
   'YES': 4, 'NO': 3, 'MAYBE': 2, 'NO_RESPONSE': 1
@@ -23,10 +24,12 @@ export class MeetingDetailsComponent implements OnInit {
   public responseArray: TaskResponse[];
 
   constructor(private route:ActivatedRoute,
+              private alertService: AlertService,
               private taskService:TaskService) {
   }
 
   ngOnInit() {
+    this.alertService.hideLoadingDelayed();
     this.route.params.subscribe((params:Params)=>{
       this.meetingUid = params['id'];
       this.viewMeeting();
@@ -38,7 +41,6 @@ export class MeetingDetailsComponent implements OnInit {
 
   viewMeeting(){
     this.taskService.loadTask(this.meetingUid, "MEETING").subscribe(meeting => {
-      console.log("Viewing meeting.....",meeting);
       this.meeting = meeting;
     },error=>{
       console.log("Error loading meeting......",error);

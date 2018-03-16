@@ -32,7 +32,6 @@ export class GroupActivityComponent implements OnInit {
               private taskService: TaskService) {
   }
 
-
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
       this.groupUid = params['id'];
@@ -64,10 +63,10 @@ export class GroupActivityComponent implements OnInit {
           console.log("Old Tasks @@@@", this.pastTasks.length);
         }, error =>{
 
-          if(error.status == 401){
-            console.log("Error @@@@@@@", error.status);
-          }
-          console.log(error.getmessage);
+        if(error.status == 401){
+          console.log("Error @@@@@@@", error.status);
+        }
+        console.log(error.getmessage);
       }
       );
   }
@@ -78,6 +77,8 @@ export class GroupActivityComponent implements OnInit {
       $('#view-meeting-modal').modal('show');
     } else if (task.type == 'VOTE') {
       $('#view-vote-modal').modal('show');
+    } else if (task.type == 'TODO') {
+      $('#view-todo-modal').modal('show');
     }
   }
 

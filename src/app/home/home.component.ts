@@ -14,7 +14,6 @@ import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
-import {TodoType} from "../task/todo-type";
 import {AlertService} from "../utils/alert.service";
 import {CampaignService} from "../campaigns/campaign.service";
 import {SearchService} from "../search/search.service";
@@ -101,9 +100,6 @@ export class HomeComponent implements OnInit {
           this.hideSpinnerIfAllLoaded();
         }
       });
-
-    // this.newMembersPage = this.groupService.newMembersInMyGroups.map(membersPage => membersPage.content);
-
 
     this.groupService.newMembersInMyGroupsError
       .subscribe(
@@ -246,23 +242,15 @@ export class HomeComponent implements OnInit {
 
   handleTaskClick(task: Task): boolean {
     this.taskToView = task;
-    if (
-      task.type == TaskType.TODO
-      && task.todoType != TodoType.ACTION_REQUIRED
-      && (task.thisUserAssigned || task.wholeGroupAssigned)
-      && !task.hasResponded
-    ) {
-
-      this.toDoToRespond = task;
-      $('#view-todo-modal').modal("show");
-    }
-
     switch (task.type){
       case TaskType.MEETING:
         $('#view-meeting-modal').modal("show");
         break;
       case TaskType.VOTE:
         $('#view-vote-modal').modal("show");
+        break;
+      case TaskType.TODO:
+        $('#view-todo-modal').modal("show");
         break;
     }
     return false;

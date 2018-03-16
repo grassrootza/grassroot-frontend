@@ -1207,12 +1207,13 @@
   "task": {
     "todo": {
       "respondModal": {
-        "title": "Complete action",
+        "title": "Action item",
         "information-label": "Your response",
         "validate-action-label": "Is the action complete?",
         "volunteers-needed-label": "Do you volunteer?",
         "responded": "Done, your response has been sent to the organizer"
-      }
+      },
+      "no_response": "No response yet"
     },
     "meeting": {
       "broadcast": {

@@ -32,6 +32,9 @@ export class TaskService {
   private meetingResponsesUrl = environment.backendAppUrl + "/api/task/fetch/meeting/rsvps";
   private meetingRsvpUrl = environment.backendAppUrl + "/api/task/respond/meeting";
 
+  private todoResponsesUrl = environment.backendAppUrl + "/api/task/fetch/todo/responses";
+  private todoResponsesDownload = environment.backendAppUrl + "/api/task/fetch/todo/download";
+
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
   private upcomingTasksErrorSubject: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -234,6 +237,16 @@ export class TaskService {
     const fullUrl = this.meetingRsvpUrl + "/" + taskUid;
     let params = new HttpParams().set("response", response.toUpperCase());
     return this.httpClient.post<Map<string, string>>(fullUrl, null, {params: params});
+  }
+
+  fetchTodoResponses(taskUid: string): Observable<Map<string, string>> {
+    const fullUrl = this.todoResponsesUrl + "/" + taskUid;
+    return this.httpClient.get<Map<string, string>>(fullUrl);
+  }
+
+  downloadTodoResponses(taskUid: string): Observable<any> {
+    const fullUrl = this.todoResponsesDownload + "/" + taskUid;
+    return this.httpClient.get(fullUrl, { responseType: 'blob'});
   }
 
 

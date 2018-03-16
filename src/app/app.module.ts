@@ -34,7 +34,6 @@ import {BroadcastService} from "./broadcasts/broadcast.service";
 import {ANIMATION_TYPES, LoadingModule} from "ngx-loading";
 import {AccountService} from "./user/account.service";
 import {SearchService} from "./search/search.service";
-import {MeetingDetailsComponent} from "./task/meeting-details/meeting-details.component";
 import {LoggedInServicesModule} from "./logged-in-services.module";
 import {MediaService} from "./media/media.service";
 
@@ -86,7 +85,7 @@ const routes: Routes = [
   },
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
-  {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]}
+  {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]}
 ];
 
 @NgModule({
@@ -101,8 +100,7 @@ const routes: Routes = [
     PwdResetInitiateComponent,
     PwdResetValidateComponent,
     PwdResetNewComponent,
-    PasswordResetComponent,
-    MeetingDetailsComponent
+    PasswordResetComponent
   ],
   imports: [
     BrowserModule,
@@ -152,6 +150,4 @@ const routes: Routes = [
   bootstrap: [AppComponent]
 })
 
-
 export class AppModule {}
-

@@ -20,6 +20,8 @@ export class Task {
               public wholeGroupAssigned: boolean,
               public thisUserAssigned: boolean,
               public createdByUserName:string,
+              public createdByThisUser: boolean,
+              public canEdit: boolean,
               public voteResults: Map<string, string>) {
   }
 
@@ -56,6 +58,8 @@ export class Task {
       taskData.wholeGroupAssigned,
       taskData.thisUserAssigned,
       taskData.createdByUserName,
+      taskData.createdByThisUser,
+      taskData.canEdit,
       taskData.voteResults
     )
   }

@@ -65,7 +65,7 @@ export class ViewMeetingComponent implements OnInit, OnChanges {
 
   viewAllAttendees(){
     $("#view-meeting-modal").modal("hide");
-    this.router.navigate(['/meeting', this.taskToView.taskUid]);
+    this.router.navigate(['/task/meeting', this.taskToView.taskUid]);
     return false;
   }
 

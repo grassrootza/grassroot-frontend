@@ -50,7 +50,8 @@
                     <span class="agenda-task-type">{{ task.type | titlecase }}</span>
                   </div>
                   <div class="mt-1">
-                    <span class="agenda-task-name">{{task.title}}</span>
+                    <span class="agenda-task-name"><span *ngIf="task.type == 'TODO'" class="agenda-field-label">{{'enum.TodoType.' + task.todoType | translate }}: </span>
+                    {{task.title}}</span>
                     <span class="agenda-field-label" [translate]="'home.my-agenda.group-label'">Group </span>: <b>{{task.ancestorGroupName}}</b>
                   </div>
                 </div>
@@ -230,4 +231,4 @@
 
 <app-view-vote [voteToView]="taskToView"></app-view-vote>
 
-<app-view-todo [todoTask]="toDoToRespond"></app-view-todo>
+<app-view-todo [todoTask]="taskToView"></app-view-todo>
