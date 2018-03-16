@@ -254,7 +254,7 @@ export class HomeComponent implements OnInit {
     ) {
 
       this.toDoToRespond = task;
-      $('#respond-todo-modal').modal("show");
+      $('#view-todo-modal').modal("show");
     }
 
     switch (task.type){

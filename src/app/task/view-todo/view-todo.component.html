@@ -1,0 +1,72 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="view-todo-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" [translate]="'task.todo.respondModal.title'">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="todoTask" class="row">
+          <div class="col-md-6 col-sm-12">
+            <p class="task-title-para">
+              <img [src]="'assets/' + taskToView?.getEventIconName() "/> <span class="task-field-name">Action Item:</span> {{todoTask.title}}</p>
+            <p class="task-field-para">
+              <span class="task-field-name">Group: {{todoTask.ancestorGroupName}}</span>
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">Due by: </span>
+              {{todoTask?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+            </p>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <!-- insert image when done -->
+          </div>
+        </div>
+
+        <div *ngIf="todoTask?.todoType == todoTypeInfoRequired" class="row">
+          <div class="col-12">
+            <form [formGroup]="completeActionForm" (ngSubmit)="completeAction()">
+              <div class="form-row">
+                <div class="form-group col-md-9 col-sm-12">
+                  <input type="text" class="form-control form-control-em" placeholder="{{ 'task.todo.respondModal.information-label' | translate }}"
+                         name="name" [formControl]="completeActionForm.controls['information']" (keyup.enter)="completeAction()">
+                </div>
+                <div class="form-group col-md-3 col-sm-12 btn-group-right-align">
+                  <!--<span class="input-group-btn">-->
+                    <button class="btn btn-primary save-button">{{ 'action.save' | translate }}</button>
+                  <!--</span>-->
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div *ngIf="todoTask" class="rpw">
+            <div class="col-12">
+              <div class="response-input text-center"
+                   *ngIf="todoTask.todoType == todoTypeValidationRequired || todoTask.todoType == todoTypeVolunteersNedded ">
+                <span *ngIf="todoTask.todoType == todoTypeValidationRequired" class="task-field-name"
+                      [translate]="'task.todo.respondModal.validate-action-label'"> Is action complete ??</span>
+
+                <span *ngIf="todoTask.todoType == todoTypeVolunteersNedded" class="task-field-name"
+                      [translate]="'task.todo.respondModal.volunteers-needed-label'"> Do you volunter ?</span>
+                <button class="btn btn-secondary hover-primary resp-yes-no" (click)="respondYes()" [translate]="'action.yes'">
+                  Yes
+                </button>
+                <button class="btn btn-secondary hover-danger resp-yes-no" (click)="respondNo()" [translate]="'action.no'">No</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <!--<button type="button" class="btn btn-secondary hover-primary footer-button float-left" (click)="viewAllAttendees()">View all attendees</button>-->
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

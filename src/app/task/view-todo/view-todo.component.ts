@@ -3,16 +3,16 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TaskService} from "../task.service";
 import {TodoType} from "../todo-type";
 import {Task} from "../task.model";
-import {UserService} from "../../user/user.service";
+import {AlertService} from "../../utils/alert.service";
 
 declare var $: any;
 
 @Component({
-  selector: 'app-todo-respond',
-  templateUrl: './todo-respond.component.html',
-  styleUrls: ['./todo-respond.component.css']
+  selector: 'app-view-todo',
+  templateUrl: './view-todo.component.html',
+  styleUrls: ['./view-todo.component.css']
 })
-export class ToDoRespondComponent implements OnInit, OnChanges {
+export class ViewTodoComponent implements OnInit, OnChanges {
 
   public completeActionForm: FormGroup;
 
@@ -27,7 +27,7 @@ export class ToDoRespondComponent implements OnInit, OnChanges {
   private RESPONSE_NO = "No";
 
   constructor(private taskService: TaskService,
-              private userService: UserService,
+              private alertService: AlertService,
               formBuilder: FormBuilder) {
 
     this.completeActionForm = formBuilder.group({
@@ -48,28 +48,32 @@ export class ToDoRespondComponent implements OnInit, OnChanges {
       $('#respond-todo-modal').modal("hide");
 
       let response = this.completeActionForm.get("information").value;
-      this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, response)
+      this.taskService.respondToDo(this.todoTask.taskUid, response)
         .subscribe(
-          resp => console.log("Complete action success, response: ", resp),
+          resp => {
+            console.log("Complete action success, response: ", resp);
+            this.alertService.alert("task.todo.respondModal");
+          },
           error => console.log("Complete action failed: ", error)
         );
     }
   }
 
   respondYes() {
-    console.log("Completing action Yes");
     $('#respond-todo-modal').modal("hide");
-    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, this.RESPONSE_YES)
+    this.taskService.respondToDo(this.todoTask.taskUid, this.RESPONSE_YES)
       .subscribe(
-        resp => console.log("Complete action success, response: ", resp),
+        resp => {
+          console.log("Complete action success, response: ", resp);
+          this.alertService.alert("task.todo.respondModal");
+        },
         error => console.log("Complete action failed: ", error)
       );
   }
 
   respondNo() {
-    console.log("Completing action No");
     $('#respond-todo-modal').modal("hide");
-    this.taskService.respondToDo(this.todoTask.taskUid, this.userService.getLoggedInUser().userUid, this.RESPONSE_NO)
+    this.taskService.respondToDo(this.todoTask.taskUid, this.RESPONSE_NO)
       .subscribe(
         resp => console.log("Complete action success, response: ", resp),
         error => console.log("Complete action failed: ", error)

@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Task} from "../../task/task.model";
+import {Task} from "../task.model";
 import {UserService} from "../../user/user.service";
-import {TaskService} from "../../task/task.service";
+import {TaskService} from "../task.service";
 import {ItemPercentage} from "../../groups/group-details/group-dashboard/member-detail-percent.model";
 import {AlertService} from "../../utils/alert.service";
 

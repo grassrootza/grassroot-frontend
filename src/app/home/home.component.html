@@ -216,7 +216,6 @@
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
 
-<app-todo-respond [todoTask]="toDoToRespond"></app-todo-respond>
 
 <app-create-meeting [groupUid]="createTaskGroupUid"
                     (meetingSaved)="meetingSaved($event)"></app-create-meeting>
@@ -230,3 +229,5 @@
 <app-view-meeting [taskToView]="taskToView"></app-view-meeting>
 
 <app-view-vote [voteToView]="taskToView"></app-view-vote>
+
+<app-view-todo [todoTask]="toDoToRespond"></app-view-todo>

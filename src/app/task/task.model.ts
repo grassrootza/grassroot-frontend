@@ -1,6 +1,6 @@
 import {TaskType} from "./task-type";
 import {TodoType} from "./todo-type";
-import moment = require("moment");
+import * as moment from "moment";
 
 export class Task {
 

@@ -66,7 +66,7 @@
     "home": "HOME",
     "groups": "GROUPS",
     "campaigns": "CAMPAIGNS",
-    "networks": "NETWORKS",
+    "movements": "MOVEMENTS",
     "noNotifications": "No notifications",
     "showHelp": "Show help",
     "help": "Help",
@@ -152,7 +152,7 @@
     "createNewModal": {
       "title": "Create new group",
       "groupName": "Group Name",
-      "network": "Network",
+      "movement": "Movement",
       "description": "Description (optional)",
       "groupPrivacy": {
         "title": "Group privacy",
@@ -639,8 +639,8 @@
     "settings": {
       "title": "Group settings",
       "groupName": "Group name",
-      "network": "Network",
-      "networkSelect": "(feature under construction)",
+      "Movement": "Movement",
+      "movementSelect": "(feature under construction)",
       "groupDescription": "Group description (shown to people when they join)",
       "groupPrivacy": "Group privacy",
       "groupPublic": "Public",
@@ -1210,7 +1210,8 @@
         "title": "Complete action",
         "information-label": "Your response",
         "validate-action-label": "Is the action complete?",
-        "volunteers-needed-label": "Do you volunteer?"
+        "volunteers-needed-label": "Do you volunteer?",
+        "responded": "Done, your response has been sent to the organizer"
       }
     },
     "meeting": {

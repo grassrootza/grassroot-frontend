@@ -1,10 +1,10 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Task} from "../../task/task.model";
+import {Task} from "../task.model";
 import {BroadcastService} from "../../broadcasts/broadcast.service";
 import {AlertService} from "../../utils/alert.service";
 import {MembershipInfo} from "../../groups/model/membership.model";
 import {Router} from "@angular/router";
-import {TaskService} from "../../task/task.service";
+import {TaskService} from "../task.service";
 
 declare var $: any;
 

@@ -164,8 +164,8 @@ export class TaskService {
   }
 
 
-  respondToDo(todoUid: string, userUid: string, response: string): Observable<string> {
-    let url = this.groupRespondeTodoUrl + "/" + todoUid + "/" + userUid;
+  respondToDo(todoUid: string, response: string): Observable<string> {
+    let url = this.groupRespondeTodoUrl + "/" + todoUid;
     let params = new HttpParams()
       .set("response", response);
 
