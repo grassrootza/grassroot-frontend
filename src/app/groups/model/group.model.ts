@@ -31,7 +31,8 @@ export class Group {
               public joinWordsLeft: number,
               public joinTopics: string[],
               public reminderMinutes: number,
-              public profileImageUrl: string) {
+              public profileImageUrl: string,
+              public hasInboundMessages: boolean) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 
@@ -80,6 +81,7 @@ export const getGroupEntity = (gr: Group): Group => {
     gr.joinWordsLeft,
     gr.joinTopics,
     gr.reminderMinutes,
-    gr.profileImageUrl
+    gr.profileImageUrl,
+    gr.hasInboundMessages
   );
 };

@@ -21,9 +21,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.alertService.hideLoadingDelayed();

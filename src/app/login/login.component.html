@@ -52,7 +52,7 @@
             </div>
 
             <div class="alert alert-danger"
-                 *ngIf="loginForm.controls['username'].hasError('email') && (loginForm.controls['username'].touched || loginForm.controls['username'].dirty)">
+                 *ngIf="loginForm.controls['username'].hasError('email') && (loginForm.controls['username'].touched)">
               Sorry, that email appears invalid
             </div>
 

@@ -16,11 +16,11 @@ export class GroupInfo {
               public nextEventTime: Date,
               public nextEventType: TaskType,
               public pinned: boolean,
+              public profileImageUrl: string,
               public comingUpEvents: TaskInfo[],
               public subGroups: GroupRef[],
               public topics: string[]) {
   }
-
 
   public hasPermission(permission: string) {
     return this.userPermissions.indexOf(permission) >= 0;
@@ -56,6 +56,7 @@ export class GroupInfo {
       DateTimeUtils.parseDate(groupInfoData.nextEventTime),
       groupInfoData.nextEventType != null ? TaskType[<string>groupInfoData.nextEventType] : null,
       groupInfoData.pinned,
+      groupInfoData.profileImageUrl,
       groupInfoData.comingUpEvents.map(e => TaskInfo.createInstance(e)),
       groupInfoData.subGroups,
       groupInfoData.topics

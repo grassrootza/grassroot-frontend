@@ -12,7 +12,6 @@ import {AlertService} from "../../../utils/alert.service";
 })
 export class GroupMembersComponent implements OnInit {
 
-
   public currentTab: string = "all";
   public group: Group = null;
   public groupUid: string = ""; // as need for input (and group is null on init)

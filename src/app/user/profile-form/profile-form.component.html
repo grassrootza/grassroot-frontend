@@ -6,65 +6,69 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 justify-content-center">
+  <div class="row mt-3">
+    <div class="col-md-10 offset-md-1 col-sm-12 justify-content-center">
       <form [formGroup]="profileForm" (ngSubmit)="saveChanges()">
         <div class="form-row">
-          <div class="form-group col-sm-12">
+          <div class="form-group col-md-7 col-sm-12">
             <label class="form-label" for="name">{{ 'user.profile.name' | translate }}</label>
             <input id="name" formControlName="name" type="text" class="form-control"/>
+            <div class="alert alert-danger" *ngIf="profileForm.controls['name'].hasError('required')">
+              This field is required</div>
+
+            <label class="form-label mt-3" for="phone">{{ 'user.profile.phone' | translate }}</label>
+            <input id="phone" formControlName="phone" type="text" class="form-control"/>
+            <div *ngIf="(profileForm.controls['phone'].touched)">
+              <div class="alert alert-danger" *ngIf="profileForm.hasError('emailAndPhoneBlank')">
+                  At least one of email or phone is required</div>
+              <div class="alert alert-danger" *ngIf="profileForm.controls['phone'].hasError('validZaPhone')">
+                  Invalid phone number</div>
+            </div>
           </div>
 
-          <div class="alert alert-danger"
-               *ngIf="profileForm.controls['name'].hasError('required')">
-            This field is required</div>
-
-        </div>
-        <div class="form-row">
-          <div class="form-group col-sm-12">
-            <label class="form-label" for="phone">{{ 'user.profile.phone' | translate }}</label>
-            <input id="phone" formControlName="phone" type="text" class="form-control"/>
-
-            <div class="alert alert-danger"
-              *ngIf="profileForm.controls['phone'].hasError('required')">
-                This field is required</div>
-
-            <div class="alert alert-danger"
-                 *ngIf="profileForm.controls['phone'].hasError('invalidNumber')">
-                Invalid phone number</div>
-
-            <div class="alert alert-danger"
-                 *ngIf="profileForm.controls['phone'].hasError('numbersOnly')">
-              Only numbers required!</div>
+          <div class="form-group col-md-5 col-sm-12 text-center">
+            <div draggable="true" [ngClass]="dragAreaClass">
+              <div class="col-12 text-center" *ngIf="currentImageUrl" >
+                <img [src]="currentImageUrl" class="img-thumbnail" />
+                <button type="button" class="btn btn-link grassroot-link" (click)="file.click()"
+                        [translate]="'user.profile.image-change'"></button>
+              </div>
+              <div class="col-md-12 text-center" *ngIf="!currentImageUrl">
+                <a href="javascript:void(0)" class="grassroot-link" (click)="file.click()" >
+                  {{ ('user.profile.image-none') | translate}}</a>
+              </div>
+              <input type="file" #file
+                     [multiple]="false"
+                     accept="image/*"
+                     (change)="onImageSelected($event.target.files[0])"
+                     style="display:none" />
+            </div>
+            <div class="alert alert-danger" *ngIf="imageErrors?.size > 0">
+              {{ imageErrors?.join(', ')}} </div>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-sm-12">
             <label class="form-label" for="email">{{ 'user.profile.email' | translate }}</label>
             <input id="email" type="text" class="form-control" formControlName="email"/>
+            <div *ngIf="(profileForm.controls['email']?.touched)">
+              <div *ngIf="profileForm.hasError('emailAndPhoneBlank')" class="alert alert-danger">
+                At least one of email or phone is required</div>
 
-            <div *ngIf="profileForm.controls['email'].hasError('required')" class="alert alert-danger">
-                  This field is required</div>
-
-            <div *ngIf="profileForm.controls['email'].hasError('pattern')" class="alert alert-danger">
-                  Email must contain @ character</div>
-
-            <div *ngIf="profileForm.controls['email'].hasError('email')" class="alert alert-danger">
-                  Valid email Required</div>
-
+              <div *ngIf="profileForm.controls['email'].hasError('email')" class="alert alert-danger">
+                    Email must be valid</div>
+            </div>
           </div>
           </div>
 
         <div class="form-row">
-          <div class="form-group col-sm-12">
+          <div class="form-group col-md-6 col-sm-12">
             <label class="form-label" for="province">{{ 'user.profile.province' | translate }}</label>
             <select id="province" formControlName="province" class="form-control">
-              <option *ngFor="let p of provinceKeys" [value]="p">{{ provinces[p] }}</option>
+              <option *ngFor="let p of provinceKeys" [value]="p">{{ 'enum.UserProvince.' + provinces[p] | translate }}</option>
             </select>
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-sm-12">
+          <div class="form-group col-md-6 col-sm-12">
             <label class="form-label" for="language">{{ 'user.profile.language' | translate }}</label>
             <select id="language" formControlName="language" class="form-control">
               <option value="en">English</option>
@@ -78,8 +82,6 @@
             </p>
           </div>
         </div>
-        {{profileForm.valid}}
-        {{profileForm.invalid}}
         <div class="form-row">
           <div class="form-group col-sm-12"> <!-- [disabled]="!contentForm.valid"  -->
             <button type="submit" class="btn btn-success float-right" [disabled]="profileForm.invalid">{{ 'action.save' | translate }}

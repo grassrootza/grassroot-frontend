@@ -11,8 +11,7 @@
       </div>
       <div class="modal-body">
 
-        <form [formGroup]="createMeetingForm"
-              (ngSubmit)="createMeeting()">
+        <form [formGroup]="createMeetingForm" (ngSubmit)="createMeeting()" *ngIf="!confirmingSend">
 
           <div class="form-group row">
             <div class="col-sm-4 col-form-label text-right">
@@ -85,15 +84,26 @@
             </div>
           </div>
 
-
         </form>
+
+        <div class="row" *ngIf="confirmingSend">
+          <div class="col-12">
+            <h4 [translate]="'group.activity.meetingModal.confirmTitle'">Confirm assigned members</h4>
+            <p [translate]="'group.activity.meetingModal.confirmPara'" [translateParams]="confirmParams">
+              You are about to call a meeting about (subject) on (day). The following will be invited: (people)
+            </p>
+          </div>
+        </div>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary save-button" (click)="createMeeting()" [disabled]="!createMeetingForm.valid">{{
+        <button type="button" *ngIf="confirmingSend" (click)="confirmingSend = false" class="btn btn-secondary back-button">
+          {{ 'action.back' | translate }}
+        </button>
+        <button type="button" class="btn btn-primary save-button" (click)="next()" [disabled]="!createMeetingForm.valid">{{
           'action.send' | translate }}
         </button>
-        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" (click)="cancel()">{{ 'action.cancel' | translate }}</button>
       </div>
 
     </div>

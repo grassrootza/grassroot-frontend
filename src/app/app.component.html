@@ -76,16 +76,12 @@
                 </div>
               </li>
 
-              <li class="nav-item">
-                <!-- todo: restore fetching image, if it exists, and allow its upload in profile -->
-                <!--<img height="50" class="image rounded-circle profile-image"-->
-                       <!--src="{{loggedInUserImageUrl}}/{{loggedInUser.uid}}"/>-->
-              </li>
-
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false"><i class="far fa-user"></i>
-                  {{loggedInUser.displayName}}</a>
+                   aria-haspopup="true" aria-expanded="false">
+                  <img height="50" class="image rounded-circle profile-image" *ngIf="userImageUrl" [src]="userImageUrl"
+                    #profileImage />
+                  <span *ngIf="userHasNoImage"><i class="far fa-user"></i> </span>{{loggedInUser.displayName}}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                   <a class="dropdown-item" [routerLink]="['/user']">{{ 'menu.profile' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/password']">{{ 'menu.password' | translate }}</a>
@@ -193,8 +189,8 @@
               <div class="social-icons">
                 <a href="https://twitter.com/grassrootza" target="_blank"><img src="assets/icon-twitter.png"/></a>
                 <a href="https://facebook.com/grassrootnation" target="_blank"><img src="assets/icon-facebook.png"/></a>
-                <!-- todo : get insta icon, and add a WhatsApp icon -->
-                <a href="https://instagram.com/grassrootza"><i class="fab fa-instagram"></i></a>
+                <!-- todo : fix color, finalize size -->
+                <a href="https://instagram.com/grassrootza" target="_blank"><img src="assets/icon-instagram.png"/></a>
               </div>
             </div>
           </div>

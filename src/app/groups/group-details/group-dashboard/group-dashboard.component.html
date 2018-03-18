@@ -132,8 +132,8 @@
                        (click)="showCreateTodoModal()">
                       {{ 'groups.row.action.create' | translate }}
                     </a>
-                    <!-- todo : implement some form of permission control here -->
-                    <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{
+                    <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]"
+                      *ngIf="group.hasPermission('GROUP_PERMISSION_SEND_BROADCAST')">{{
                       'groups.row.action.broadcast' | translate }}</a>
                   </div>
                 </div>

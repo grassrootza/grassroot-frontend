@@ -34,7 +34,7 @@
             <div [ngClass]="(group.hasProfileImage()) ? 'col-md-9 col-sm-6' : 'col-12'">
               <div draggable="true" ngClass="{{imgDragAreaClass}}">
                 <div class="col-md-12 text-center" >
-                  <a href="javascript:void(0)" (click)="file.click()" >
+                  <a href="javascript:void(0)" class="grassroot-link" (click)="file.click()" >
                     {{ (group.hasProfileImage() ? 'group.settings.image.change' : 'group.settings.image.click') | translate}}</a>
                   {{ 'group.settings.image.drag'  | translate}}
                   <input type="file" #file
@@ -44,6 +44,8 @@
                          style="display:none" />
                 </div>
               </div>
+              <div class="alert alert-danger" *ngIf="imageErrors?.size > 0">
+                {{ imageErrors?.join(', ')}} </div>
             </div>
           </div>
 
@@ -93,7 +95,7 @@
               <div class="card">
                 <div class="card-header" role="tab" id="topics-accordion-header">
                   <h5 class="mb-0">
-                    <a data-toggle="collapse" href="#topics-accordion-body" role="button" aria-expanded="true" aria-controls="topics-accordion-body">
+                    <a data-toggle="collapse" class="grassroot-link" href="#topics-accordion-body" role="button" aria-expanded="true" aria-controls="topics-accordion-body">
                       {{'group.settings.topics' | translate}}
                     </a>
                   </h5>
@@ -155,12 +157,11 @@
               </div>
             </div>
 
-
           <div id="accordion" role="tablist" *ngIf="shouldDisplayPermissionsTable()">
             <div class="card">
               <div class="card-header" role="tab" id="permissions-table-heading">
                 <h5 class="mb-0">
-                  <a data-toggle="collapse" href="#permissions-table" role="button" aria-expanded="true" aria-controls="permissions-table">
+                  <a class="grassroot-link" data-toggle="collapse" href="#permissions-table" role="button" aria-expanded="true" aria-controls="permissions-table">
                     {{'group.settings.advancedPermissions' | translate}}
                   </a>
                 </h5>
@@ -180,7 +181,7 @@
                     <div class="container group-info-row" *ngFor="let permission of permissionsToDisplay; let i = index">
                       <div class="row">
                         <div class="col-5">
-                          {{getFormattedUserPermissions(permission)}}
+                          {{ 'permission.' + permission | translate }}
                         </div>
 
                         <div class="col-2">

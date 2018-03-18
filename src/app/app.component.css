@@ -109,6 +109,7 @@ footer .row {
   object-fit: cover;
   width: 40px;
   height: 40px;
+  margin-right: 5px;
 }
 
 .dropdown.help {
