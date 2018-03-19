@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {Task} from "./task.model";
+import {TaskType} from "./task-type";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {LiveWireAlertType} from "../livewire/live-wire-alert-type.enum";
@@ -35,10 +36,13 @@ export class TaskService {
   private todoResponsesUrl = environment.backendAppUrl + "/api/task/fetch/todo/responses";
   private todoResponsesDownload = environment.backendAppUrl + "/api/task/fetch/todo/download";
 
+  private fetchImageKeyUrl = environment.backendAppUrl + "/api/task/fetch/image";
+
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
   private upcomingTasksErrorSubject: BehaviorSubject<any> = new BehaviorSubject(null);
   public upcomingTaskError: Observable<any> = this.upcomingTasksErrorSubject.asObservable();
+
 
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
@@ -92,7 +96,9 @@ export class TaskService {
     return this.httpClient.get<Task>(fullUrl).map(Task.createInstanceFromData);
   }
 
-  createMeeting(parentType: string, parentUid: string, subject: string, location: string, dateTimeEpochMillis: number, publicMeeting: boolean, assignedMemberUids: string[]):Observable<Task> {
+  createMeeting(parentType: string, parentUid: string, subject: string, location: string,
+                dateTimeEpochMillis: number, publicMeeting: boolean, imageKey: string,
+                assignedMemberUids: string[]):Observable<Task> {
     const fullUrl = this.groupCreateMeetingUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -102,10 +108,13 @@ export class TaskService {
       .set('publicMeeting', publicMeeting.toString())
       .set('assignedMemberUids', assignedMemberUids.join(','));
 
+    if (imageKey)
+      params = params.set("mediaFileUid", imageKey);
+
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
-  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, assignedMemberUids: string[]):Observable<Task>{
+  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, imageKey: string, assignedMemberUids: string[]):Observable<Task>{
     const fullUrl = this.groupCreateVoteUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -115,11 +124,15 @@ export class TaskService {
       .set('time', time.toString())
       .set('assignedMemberUids', assignedMemberUids.join(','));
 
+    if (imageKey) {
+      params = params.set("mediaFileUid", imageKey);
+    }
+
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
   createTodo(todoType: string, parentType: string, parentUid: string, subject: string, dueDateTime: number, responseTag: string,
-             requireImages: boolean, recurring:boolean, recurringPeriodMillis: number, assignedMemberUids: string[], confirmingMemberUids: string[]):Observable<Task> {
+             requireImages: boolean, recurring:boolean, recurringPeriodMillis: number, imageKey: string, assignedMemberUids: string[], confirmingMemberUids: string[]):Observable<Task> {
     let fullUrl = this.groupCreateTodoUrl;
     let params;
 
@@ -162,7 +175,11 @@ export class TaskService {
         .set("assignedMemberUids", assignedMemberUids.join(","));
     }
 
+    if (imageKey) {
+      params = params.set("mediaFileUids", imageKey);
+    }
 
+    console.log("creating todo with params: ", params);
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
@@ -173,7 +190,6 @@ export class TaskService {
       .set("response", response);
 
     return this.httpClient.get<string>(url, {params: params})
-
   }
 
   uploadAlertImage(image):Observable<any>{
@@ -247,6 +263,11 @@ export class TaskService {
   downloadTodoResponses(taskUid: string): Observable<any> {
     const fullUrl = this.todoResponsesDownload + "/" + taskUid;
     return this.httpClient.get(fullUrl, { responseType: 'blob'});
+  }
+
+  fetchImageKey(taskUid: string, taskType: TaskType): Observable<string> {
+    const fullUrl = this.fetchImageKeyUrl + "/" + taskType + "/" + taskUid;
+    return this.httpClient.get(fullUrl, { responseType: 'text' });
   }
 
 

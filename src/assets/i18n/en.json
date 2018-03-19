@@ -516,27 +516,35 @@
         "location": "Meeting location",
         "dateAndTime": "Meeting date and time",
         "public": "Public meeting",
+        "public-explain": "This will allow people to see the meeting if they search for it",
+        "image": "Image",
+        "image-note": "Note: Image will not be included directly in SMS or email notification, but a short link will be attached that references it",
         "assignedMembers": "Assigned members (optional)",
-        "confirmTitle": "Confirm assigned members",
+        "confirmTitle": "Confirm meeting",
         "confirmPara": "You are about to call a meeting about {{ subject }} at {{ location }}, on {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}"
       },
       "voteModal":{
         "title": "Create new vote",
         "subject": "Subject for the vote?",
         "dateAndTime": "Vote closing date and time",
-        "description": "Longer description of vote (optional)",
+        "description-label": "Longer description (optional)",
+        "description-place": "Longer description of vote (optional, will not be included in SMS, will be visible to web and Android users)",
         "typeOfVote": "Type of vote?",
         "yesNo": "Yes, no or abstain",
         "multiOption": "Set my own list of options",
         "enterVoteOption": "Enter the vote option",
         "addVoteOption": "Add vote option",
-        "assignedMembers": "Assigned members (optional)"
+        "assignedMembers": "Assigned members (optional)",
+        "confirmTitle": "Confirm vote",
+        "confirmPara": "You are about to call a vote on {{ subject }}, closing at {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}"
       },
       "todoModal":{
         "title": "Create new action",
         "subject": "Subject for the action",
         "todoType": "What must members do?",
         "dueDateTime": "Deadline",
+        "confirmTitle": "Confirm action item",
+        "confirmPara": "You are about to create an action item, with the title {{ subject }}, due by {{ time }}. The action item is assigned to the following {{ assignedNumber }} members: {{ memberNames }}",
         "information": {
           "label": "Label for response information:",
           "placeholder": "How will you label the response e.g. ID"
@@ -547,7 +555,6 @@
           "recurringInterval": "Recurring interval (in minutes)",
           "assignedMembers": "Assign members",
           "confirmingMembers": "Confirming members"
-
         }
       },
       "livewireModal":{
@@ -1200,8 +1207,10 @@
     "insert": "Insert",
     "view": "View",
     "download": "Download",
+    "upload": "Upload",
     "closeAccount": "Close account",
     "change": "Change",
+    "remove": "Remove",
     "add": "Add",
     "join": "Join",
     "search": "Search",

@@ -26,8 +26,8 @@
               <span class="task-field-name">Reminder: </span>
             </p>
           </div>
-          <div class="col-md-6 col-sm-12">
-            <!-- insert image -->
+          <div [ngClass]="{'col-md-6 col-sm-12': 'true', 'img-loading': imageLoading}" *ngIf="imageUrl">
+            <img class="img-thumbnail" (load)="imageLoading = false" [src]="imageUrl" />
           </div>
         </div>
         <div class="row">

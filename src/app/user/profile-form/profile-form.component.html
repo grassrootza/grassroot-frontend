@@ -43,7 +43,7 @@
                      (change)="onImageSelected($event.target.files[0])"
                      style="display:none" />
             </div>
-            <div class="alert alert-danger" *ngIf="imageErrors?.size > 0">
+            <div class="alert alert-danger" *ngIf="imageErrors?.length > 0">
               {{ imageErrors?.join(', ')}} </div>
           </div>
         </div>

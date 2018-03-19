@@ -5,6 +5,9 @@ import {AlertService} from "../../utils/alert.service";
 import {MembershipInfo} from "../../groups/model/membership.model";
 import {Router} from "@angular/router";
 import {TaskService} from "../task.service";
+import {TaskType} from "../task-type";
+import {MediaService} from "../../media/media.service";
+import {MediaFunction} from "../../media/media-function.enum";
 
 declare var $: any;
 
@@ -27,9 +30,13 @@ export class ViewMeetingComponent implements OnInit, OnChanges {
   public response: string = "";
   public responseOptions: string[] = ['YES', 'NO', 'MAYBE'];
 
+  public imageUrl;
+  public imageLoading = false;
+
   constructor(private broadcastService: BroadcastService,
               private taskService: TaskService,
               private alertService: AlertService,
+              private mediaService: MediaService,
               private router: Router) {
   }
 
@@ -38,12 +45,26 @@ export class ViewMeetingComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['taskToView'] && !changes['taskToView'].firstChange && this.taskToView && this.taskToView.type == 'MEETING') {
       this.updateResponses();
+      this.fetchImage();
     }
   }
 
   updateResponses() {
     this.taskService.fetchMeetingResponses(this.taskToView.taskUid).subscribe(responses => {
       this.responses = responses;
+    });
+  }
+
+  fetchImage() {
+    this.taskService.fetchImageKey(this.taskToView.taskUid, TaskType.MEETING).subscribe(response => {
+      console.log("image key response: ", response);
+      if (response) {
+        this.imageLoading = true;
+        this.imageUrl = this.mediaService.getImageUrl(MediaFunction.TASK_IMAGE, response);
+        console.log("and here is the image URL: ", this.imageUrl);
+      } else {
+        this.imageUrl = '';
+      }
     });
   }
 

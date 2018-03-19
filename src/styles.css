@@ -301,3 +301,9 @@ h6 {
   background-color: #eff;
   color: #aaa;
 }
+
+.img-loading {
+  background: #ECEEF1;
+  border: dotted 1px;
+  margin: 20px 0;
+}

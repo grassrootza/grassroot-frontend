@@ -4,6 +4,9 @@ import {UserService} from "../../user/user.service";
 import {TaskService} from "../task.service";
 import {ItemPercentage} from "../../groups/group-details/group-dashboard/member-detail-percent.model";
 import {AlertService} from "../../utils/alert.service";
+import {MediaFunction} from "../../media/media-function.enum";
+import {TaskType} from "../task-type";
+import {MediaService} from "../../media/media.service";
 
 declare var $: any;
 
@@ -23,9 +26,13 @@ export class ViewVoteComponent implements OnInit, OnChanges {
   public options: string[];
   public results: ItemPercentage[] = [];
 
+  public imageUrl;
+  public imageLoading = false;
+
   constructor(private userService:UserService,
               private alertService:AlertService,
-              private taskService:TaskService) { }
+              private taskService:TaskService,
+              private mediaService: MediaService) { }
 
   ngOnInit() { }
 
@@ -35,6 +42,7 @@ export class ViewVoteComponent implements OnInit, OnChanges {
         console.log("returned task: ", result);
         this.voteToView = result;
         this.setupResults();
+        this.checkForImage();
       }, error => {
         console.log("error fetching task: ", error);
       });
@@ -50,6 +58,19 @@ export class ViewVoteComponent implements OnInit, OnChanges {
     this.results = this.options.map(option => new ItemPercentage(option,
       totalVotes > 0 ? Math.round((this.voteToView.voteResults[option] / totalVotes) * 100) : 0,
       this.voteToView.voteResults[option]));
+  }
+
+  checkForImage() {
+    this.taskService.fetchImageKey(this.voteToView.taskUid, TaskType.VOTE).subscribe(response => {
+      console.log("image key response: ", response);
+      if (response) {
+        this.imageLoading = true;
+        this.imageUrl = this.mediaService.getImageUrl(MediaFunction.TASK_IMAGE, response);
+        // console.log("and here is the image URL: ", this.imageUrl);
+      } else {
+        this.imageUrl = '';
+      }
+    });
   }
 
   castVote() {

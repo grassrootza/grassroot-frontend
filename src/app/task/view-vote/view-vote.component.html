@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <div class="col-md-12 col-sm-12">
+          <div class="col-md-6 col-sm-12">
             <p class="title-para">
               <img [src]="'assets/' + voteToView?.getEventIconName() "/>&nbsp;&nbsp;
               <span class="task-field-name">Vote: </span> {{voteToView?.title}}
@@ -20,6 +20,14 @@
             <p class="task-field-para">
               <span class="task-field-name">Closes: </span> {{voteToView?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
             </p>
+          </div>
+          <div [ngClass]="{'col-md-6 col-sm-12': 'true', 'img-loading': imageLoading}" *ngIf="imageUrl">
+            <img class="img-thumbnail" (load)="imageLoading = false" [src]="imageUrl" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
             <p class="task-field-para" *ngIf="voteToView?.description">
               <span class="task-field-name">Description: </span> {{voteToView?.description}}
             </p>
@@ -67,7 +75,7 @@
           <div class="card-body">
             <div class="row" *ngFor="let option of results">
               <div class="col-sm-3">
-                {{ option.name | titlecase }}
+                {{ option.name }}
               </div>
               <div class="col-sm-7">
                 <div class="progress">
