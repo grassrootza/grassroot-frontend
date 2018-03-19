@@ -1230,5 +1230,22 @@
       "meetings": "Public Meetings",
       "public-groups": "Public Groups"
     }
+  },
+  "livewire":{
+  	"list":{
+  		"title":"Live Wire",
+  		"header":"Alert list"
+  	},
+  	"view-alert":{
+  		"title":"Live Wire Alert"
+  	},
+  	"headline-modal":{
+  		"title":"Change headline",
+  		"label":"EDIT THE HEADLINE BELOW"
+  	},
+  	"desc-modal":{
+  		"title":"Change description",
+  		"label":"EDIT THE DESCRIPTION BELOW"
+  	}
   }
 }

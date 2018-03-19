@@ -1,11 +1,11 @@
-<h1 class="main-title">Live Wire</h1>
+<h1 class="main-title">{{'livewire.list.title' | translate}}</h1>
 <div class="card">
 	<div class="card-body">
 		<div class="row header">
-			<div class="col-md-2">Alert list</div>
+			<div class="col-md-2">{{'livewire.list.header' | translate}}</div>
 			<div class="col-md-4"></div>
 			<div class="col-md-2">
-				<select (change)="onchangeSort($event.target.value)">
+				<select class="form-control" (change)="onchangeSort($event.target.value)">
 					<option class="dropdown-item" value="desc">Newest first</option>
 					<option class="dropdown-item" value="asc">Unreleased first</option>
 				</select>

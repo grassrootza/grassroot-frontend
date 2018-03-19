@@ -25,7 +25,7 @@ export class TaskService {
   private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
 
   private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
-  private uploadImageUrl = environment.backendAppUrl + "/api/media/storeImage";
+  private uploadImageUrl = environment.backendAppUrl + "/api/media/store/body";
 
   private castVoteUrl = environment.backendAppUrl + "/api/vote/do";
   private viewVoteUrl = environment.backendAppUrl + "/api/vote/view";
