@@ -90,7 +90,7 @@ const routes: Routes = [
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
   {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]},
-  {path: 'livewire',component:LiveWireListComponent,canActivate:[LoggedInGuard]},
+  {path: 'livewire-admin',component:LiveWireListComponent,canActivate:[LoggedInGuard]},
   {path: 'view-alert/:id',component:ViewAlertComponent,canActivate:[LoggedInGuard]}
 ];
 

@@ -24,10 +24,13 @@
 			<div class="col-md-4">Contact name</div>
 			<div class="col-md-4">Number</div>
 		</div>
-		<div *ngFor="let alert of alertList" class="row alert">
-			<div class="col-md-4"><a [routerLink]="['/view-alert',alert.serverUid]">{{alert.headline}}</a></div>
-			<div class="col-md-4">{{alert.contactUserName}}</div>
-			<div class="col-md-4">{{alert.contactUserPhone}}</div>
+		<div *ngFor="let alert of alertList" class="alert-list">
+			<div class="row">
+				<div class="col-md-4 secondary-entity-link"><a [routerLink]="['/view-alert',alert.serverUid]">{{alert.headline}}</a></div>
+				<div class="col-md-4">{{alert.contactUserName}}</div>
+				<div class="col-md-4">{{alert.contactUserPhone}}</div>
+			</div>
+			<hr />
 		</div>
 	</div>
 </div>

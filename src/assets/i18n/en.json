@@ -1246,6 +1246,15 @@
   	"desc-modal":{
   		"title":"Change description",
   		"label":"EDIT THE DESCRIPTION BELOW"
+  	},
+  	"tags-modal":{
+  		"title":"Tag alert",
+  		"label":"PLEASE ADD TAGS BELOW (SEPARATED BY COMMAS)"
+  	},
+  	"release-modal":{
+  		"title":"Release alert",
+  		"label":"RELEASE THIS ALERT TO THE MEDIA?",
+  		"list-title":"Release to lists:"
   	}
   }
 }

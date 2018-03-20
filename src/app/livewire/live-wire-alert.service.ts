@@ -1,5 +1,6 @@
 import { environment } from "../../environments/environment";
 import { MediaFunction } from "../media/media-function.enum";
+import { DataSubscriber } from "./datasubscriber/data-subscriber.model";
 import { LiveWireAlertPage, LiveWireAlert } from "./live-wire-alert.model";
 import { HttpParams } from "@angular/common/http";
 import { HttpClient } from "@angular/common/http";
@@ -9,13 +10,16 @@ import { Observable } from "rxjs";
 @Injectable()
 export class LiveWireAlertService {
 
-  private livewireAlertListUrl = environment.backendAppUrl + "/api/livewire/list";
-  private loadAlertUrl = environment.backendAppUrl + "/api/livewire/view";
-  private updateDescriptionUrl = environment.backendAppUrl + "/api/livewire/modify/description";
-  private updateHeadlineUrl = environment.backendAppUrl + "/api/livewire/modify/headline";
-  private deleteImageUrl = environment.backendAppUrl + "/api/livewire/modify/images/delete"
+  private livewireAlertListUrl = environment.backendAppUrl + "/api/livewire/admin/list";
+  private loadAlertUrl = environment.backendAppUrl + "/api/livewire/admin/view";
+  private updateDescriptionUrl = environment.backendAppUrl + "/api/livewire/admin/modify/description";
+  private updateHeadlineUrl = environment.backendAppUrl + "/api/livewire/admin/modify/headline";
+  private deleteImageUrl = environment.backendAppUrl + "/api/livewire/admin/modify/images/delete";
   private uploadImageUrl = environment.backendAppUrl + "/api/media/store/body";
-  private updateAlergImagesUrl = environment.backendAppUrl + "/api/livewire/modify/images/add"
+  private updateAlertImagesUrl = environment.backendAppUrl + "/api/livewire/admin/modify/images/add";
+  private tagLivewireAlertUrl = environment.backendAppUrl + "/api/livewire/admin/tag";
+  private blockLivewireAlertUrl = environment.backendAppUrl + "/api/livewire/admin/block";
+  private subscriberListUrl = environment.backendAppUrl + "/api/livewire/admin/subscribers";
   
   constructor(private httpClient:HttpClient) { }
   
@@ -54,5 +58,36 @@ export class LiveWireAlertService {
       .set('alertUid',alertUid)
       .set('imageUid',imageUid);
     return this.httpClient.post<LiveWireAlert>(this.deleteImageUrl,null,{params:params});
+  }
+  
+  uploadAlertImage(image):Observable<any>{
+    let uploadFullUrl = this.uploadImageUrl + "/" + MediaFunction.LIVEWIRE_MEDIA;
+    return this.httpClient.post(uploadFullUrl, image,{ responseType: 'json' });
+  }
+  
+  updateAlertImages(alertUid:string,mediaFileKeys:string[]):Observable<LiveWireAlert>{
+    console.log("Media file keys to upload......",mediaFileKeys);
+    let params = new HttpParams()
+      .set('alertUid',alertUid)
+      .set('mediaFileKeys',mediaFileKeys.join(","));
+    return this.httpClient.post<LiveWireAlert>(this.updateAlertImagesUrl,null,{params:params});
+  }
+  
+  tagAlert(alertUid:string,tags:string):Observable<LiveWireAlert>{
+    let params = new HttpParams()
+      .set('alertUid',alertUid)
+      .set('tags',tags);
+    return this.httpClient.post<LiveWireAlert>(this.tagLivewireAlertUrl,null,{params:params});
+  }
+  
+  blockAlert(alertUid:string):Observable<LiveWireAlert>{
+    let params = new HttpParams()
+      .set('alertUid',alertUid);
+    return this.httpClient.post<LiveWireAlert>(this.blockLivewireAlertUrl,null,{params:params});
+  }
+  
+  getSubscribers():Observable<DataSubscriber[]>{
+    return this.httpClient.get<DataSubscriber[]>(this.subscriberListUrl)
+      .map(resp => resp.map(data => DataSubscriber.createInstance(data)));
   }
 }
