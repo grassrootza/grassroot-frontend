@@ -1217,9 +1217,16 @@
     "register": "Register"
   },
   "general": {
-    "charsRemaining": "Characters remaining"
+    "charsRemaining": "Characters remaining",
+    "breadcrumb": {
+      "home": "Back to home",
+      "group": "Back to group"
+    }
   },
   "task": {
+    "when": "When",
+    "where": "Where",
+    "reminder": "Reminder",
     "todo": {
       "respondModal": {
         "title": "Action item",
@@ -1228,11 +1235,29 @@
         "volunteers-needed-label": "Do you volunteer?",
         "responded": "Done, your response has been sent to the organizer"
       },
-      "no_response": "No response yet"
+      "no_response": "No response yet",
+      "details": {
+        "cancel-button": "Cancel action"
+      },
+      "cancel": {
+        "title": "Confirm cancellation",
+        "body": "Are you sure? The action item will disappear from your and others' lists. You can choose whether to notify members",
+        "done": "Done. The action item has been cancelled and members notified"
+      }
     },
     "meeting": {
       "broadcast": {
         "done": "Done! Message sent to all members who responded"
+      },
+      "details": {
+        "title-field": "Meeting",
+        "cancel-button": "Cancel meeting",
+        "attendance": "Attendance"
+      },
+      "cancel": {
+        "title": "Confirm cancellation",
+        "body": "Are you sure? This will generate a notification to all members that the meeting is cancelled",
+        "done": "Done. The meeting has been cancelled and members notified"
       }
     }
   },

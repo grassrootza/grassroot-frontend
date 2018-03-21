@@ -156,12 +156,20 @@ footer .row {
 }
 
 .notification-item-title {
-  font-size: 0.8rem;
+  /*font-size: 0.8rem;*/
+  margin-right: 8px;
 }
 
 .notification-item-time {
-  font-size: 0.8rem;
   color: #7a7a7a;
+  font-size: 0.8rem;
+  margin-right: 8px;
+  margin-top: 4px;
+}
+
+.notification-read-badge {
+  background-color: #2CBC4C;
+  padding: 8px;
 }
 
 .scrollable-menu {
@@ -170,15 +178,12 @@ footer .row {
   overflow-x: hidden;
 }
 
-.ntf-popup {
-  width: 80%;
-  position: absolute;
-  z-index: 1000;
-  top: 100px;
-}
-
-@media (min-width: 992px) {
-  .ntf-popup {
-    width: 30rem;
-  }
+.popup-holder {
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 7px 0 rgba(0,0,0,0.1);
+  border-left: #1ABC9C 5px solid;
+  padding: 10px 20px;
+  color: #4A4A4A;
+  font-size: 16px;
+  margin-bottom: 24px;
 }

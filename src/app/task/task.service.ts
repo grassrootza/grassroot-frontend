@@ -43,6 +43,7 @@ export class TaskService {
   private upcomingTasksErrorSubject: BehaviorSubject<any> = new BehaviorSubject(null);
   public upcomingTaskError: Observable<any> = this.upcomingTasksErrorSubject.asObservable();
 
+  private cancelTaskUrl = environment.backendAppUrl + "/api/task/modify/cancel";
 
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
@@ -75,9 +76,8 @@ export class TaskService {
       });
   }
 
-  public loadUpcomingUserTasks(userId: string) {
-    let fullUrl = this.upcomingUserTasksUrl + "/" + userId;
-    this.httpClient.get<Task[]>(fullUrl)
+  public loadUpcomingUserTasks() {
+    this.httpClient.get<Task[]>(this.upcomingUserTasksUrl)
       .map(data => data.map(task => Task.createInstanceFromData(task)))
       .subscribe(
         tasks => {
@@ -229,8 +229,6 @@ export class TaskService {
         .set("mediaFileKeys",mediaKeys + "");
       }
 
-
-
    if(alertType === "MEETING"){
       console.log("Is a meeting man...........................");
     }
@@ -268,6 +266,17 @@ export class TaskService {
   fetchImageKey(taskUid: string, taskType: TaskType): Observable<string> {
     const fullUrl = this.fetchImageKeyUrl + "/" + taskType + "/" + taskUid;
     return this.httpClient.get(fullUrl, { responseType: 'text' });
+  }
+
+  cancelTask(taskUid: string, taskType: TaskType, notifyMembers: boolean = true, reloadAgenda: boolean = true) {
+    const fullUrl = this.cancelTaskUrl + "/" + taskType + "/" + taskUid;
+    console.log("send notification param: ", notifyMembers.toString());
+    let params = new HttpParams().set("sendNotifications", notifyMembers.toString());
+    return this.httpClient.post(fullUrl, null, {params: params}).map(response => {
+      if (reloadAgenda) {
+        this.loadUpcomingUserTasks();
+      }
+    });
   }
 
 

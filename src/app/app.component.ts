@@ -208,6 +208,14 @@ export class AppComponent implements OnInit {
     return false;
   }
 
+  markAllNotificationsRead(): boolean {
+    this.notificationService.markAllNotificationsAsRead().subscribe(response => {
+      console.log("all notifications marked read", response);
+      this.notifications = [];
+    }, error => console.log("Mark all read failed", error));
+    return false;
+  }
+
 
 }
 

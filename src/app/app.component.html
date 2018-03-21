@@ -53,6 +53,9 @@
                   <img src="assets/icon-bell.png"/>
                 </a>
                 <div class="dropdown-menu scrollable-menu notifications" aria-labelledby="dropdown01">
+                  <a *ngIf="notifications.length > 2" class="dropdown-item" href="#" (click)="markAllNotificationsRead()">
+                    Mark all read
+                  </a>
                   <a *ngFor="let ntf of notifications" class="dropdown-item" href="#"
                      (click)="handleNotificationClick($event)">
                     <div class="notification-item">
@@ -152,18 +155,21 @@
 
   <div class="container main-content">
 
-    <div *ngIf="popupNotification" class="ntf-popup alert alert-warning" (mouseenter)="popupNotificationMouseEnter()"
-         (mouseleave)="popupNotificationMouseExit()">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="ntf-popup-body">
-        <span class="notification-item-title">{{popupNotification.message}}</span><br/>
-        <span class="notification-item-time">{{popupNotification.createdDatetime.fromNow()}}</span>
-        <a href="#" (click)="markNotificationRead(popupNotification.uid)" class="badge badge-info">Mark read</a>
+    <div class="container ntf-popup" *ngIf="popupNotification"
+         (mouseenter)="popupNotificationMouseEnter()" (mouseleave)="popupNotificationMouseExit()">
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <div class="popup-holder">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <div class="ntf-popup-body">
+                <span class="notification-item-title">{{popupNotification.message}}</span>
+                <a href="#" (click)="markNotificationRead(popupNotification.uid)" class="badge badge-info notification-read-badge">Mark read</a>
+                <span class="notification-item-time float-right">{{popupNotification.createdDatetime.fromNow()}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
 
     <router-outlet></router-outlet>
   </div>

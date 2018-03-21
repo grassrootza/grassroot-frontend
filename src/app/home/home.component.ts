@@ -139,7 +139,7 @@ export class HomeComponent implements OnInit {
       this.activeCampaigns = campaignList.filter(cp => cp.isActive());
     });
 
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.taskService.loadUpcomingUserTasks();
     this.groupService.fetchNewMembers(7, 0, 500);
     this.groupService.loadGroups();
 
@@ -269,7 +269,7 @@ export class HomeComponent implements OnInit {
 
   meetingSaved(saveResponse) {
     console.log(saveResponse);
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.taskService.loadUpcomingUserTasks();
     $("#create-meeting-modal").modal("hide");
   }
 
@@ -280,7 +280,7 @@ export class HomeComponent implements OnInit {
 
   voteSaved(saveResponse) {
     console.log(saveResponse);
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.taskService.loadUpcomingUserTasks();
     $("#create-vote-modal").modal("hide");
   }
 
@@ -291,7 +291,7 @@ export class HomeComponent implements OnInit {
 
   todoSaved(saveResponse) {
     console.log(saveResponse);
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.taskService.loadUpcomingUserTasks();
     $("#create-todo-modal").modal("hide");
   }
 

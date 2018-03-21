@@ -1,11 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TaskService} from "../task.service";
 import {Task} from "../task.model";
 import {convertResponseMap, TaskResponse} from "../task-response";
 import {AlertService} from "../../utils/alert.service";
 import {TodoType} from "../todo-type";
 import {saveAs} from 'file-saver/FileSaver';
+import {TaskType} from "../task-type";
+
+declare var $: any;
 
 const RESP_ORDER = {
   'YES': 2, 'NO': 1, '': 1
@@ -26,6 +29,9 @@ export class TodoDetailsComponent implements OnInit {
   public typeVolunteer = TodoType.VOLUNTEERS_NEEDED;
   public typeValidation = TodoType.VALIDATION_REQUIRED;
 
+  public returnToGroup: boolean;
+  public notifyCancellation = 'false';
+
   public responseClasses = {
     yes: 'fas fa-check',
     no: 'fas fa-times'
@@ -33,7 +39,8 @@ export class TodoDetailsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private alertService: AlertService,
-              private taskService: TaskService) {}
+              private taskService: TaskService,
+              private router: Router) {}
 
   ngOnInit() {
     this.alertService.hideLoadingDelayed();
@@ -44,6 +51,12 @@ export class TodoDetailsComponent implements OnInit {
     }, error => {
       console.log("Error retrieving paramaters");
     });
+
+    this.route.queryParams.subscribe((queryParams: Params) => {
+      let groupFlag = queryParams['returnToGroup'];
+      if (groupFlag)
+        this.returnToGroup = true;
+    })
   }
 
   loadTodo() {
@@ -72,6 +85,28 @@ export class TodoDetailsComponent implements OnInit {
     }, error => {
       console.log("error downloading todo responses: ", error);
     })
+  }
+
+  confirmCancel() {
+    $("#confirm-cancel-modal").modal('show');
+  }
+
+  cancelTodo() {
+    console.log("notify cancellation: ", (this.notifyCancellation == 'true'));
+    this.taskService.cancelTask(this.todoUid, TaskType.TODO, (this.notifyCancellation == 'true'), !this.returnToGroup).subscribe(response => {
+      console.log("done! todo cancelled, response: ", response);
+      $("#confirm-cancel-modal").modal('hide');
+      this.alertService.alert('task.todo.cancel.done', true);
+      this.routeToParent();
+    })
+  }
+
+  routeToParent() {
+    if (this.returnToGroup)
+      this.router.navigate(['/group', this.todo.parentUid]);
+    else
+      this.router.navigate(['/home']);
+    return false;
   }
 
 }
