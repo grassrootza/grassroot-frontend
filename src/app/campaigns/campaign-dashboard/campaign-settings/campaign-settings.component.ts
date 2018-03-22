@@ -110,7 +110,7 @@ export class CampaignSettingsComponent implements OnInit {
 
     this.campaignSettingsForm.controls['smsLimit'].valueChanges.subscribe(value => this.calculateSmsBudget(value));
     this.groupService.groupInfoList.subscribe(groups => {
-      this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_UPDATE_GROUP_DETAILS"));
+      this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_CREATE_CAMPAIGN"));
     });
   }
 

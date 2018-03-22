@@ -24,6 +24,7 @@ export class BroadcastService {
   fetchUrlBase = environment.backendAppUrl + "/api/broadcast/fetch/";
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
   costThisMonthUrl = environment.backendAppUrl + "/api/broadcast/cost-this-month";
+  shortenLinkUrl = environment.backendAppUrl + "/api/broadcast/shorten/link";
 
   public createRequest: BroadcastRequest = new BroadcastRequest();
   private createCounts: BroadcastCost = new BroadcastCost();
@@ -335,6 +336,11 @@ export class BroadcastService {
       .map(resp => {
         return resp;
       })
+  }
+
+  shortenLink(link: string): Observable<string> {
+    let params = new HttpParams().set("link", link);
+    return this.httpClient.get(this.shortenLinkUrl, {params: params, responseType: 'text'});
   }
 
 }

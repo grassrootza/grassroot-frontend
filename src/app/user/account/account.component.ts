@@ -8,7 +8,7 @@ import {AccountType} from "../model/account-type.enum";
 import {Account} from "../model/account.model";
 import {AccountBillingCycle} from "../model/account-billing-cycle.enum";
 import {AccountBillingRecords} from "../model/account-billing-records.model";
-import { saveAs } from 'file-saver/FileSaver';
+import { saveAs } from 'file-saver';
 
 declare var $: any;
 

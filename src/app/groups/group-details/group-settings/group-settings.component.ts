@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, OnInit, Output} from '@angular/core';
 import {UserService} from '../../../user/user.service';
 import {ActivatedRoute, Params} from '@angular/router';
 import {GroupService} from '../../group.service';
@@ -9,6 +9,7 @@ import {AlertService} from "../../../utils/alert.service";
 import {GroupRole} from "../../model/group-role";
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/forkJoin';
+import {MediaService} from "../../../media/media.service";
 
 
 declare var $:any;
@@ -38,8 +39,6 @@ export class GroupSettingsComponent implements OnInit {
 
   imageErrors: String[] = [];
   imgDragAreaClass: string = 'dragarea';
-  MAX_IMAGE_SIZE = 2; // in mb (allow for photos)
-  IMAGE_EXTENSIONS = "png, jpg, jpeg, gif";
 
   @Output() uploadStatus = new EventEmitter();
 
@@ -47,7 +46,8 @@ export class GroupSettingsComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private formBuilder: FormBuilder,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private mediaService: MediaService) {
     this.initGroupForm();
   }
 
@@ -170,13 +170,6 @@ export class GroupSettingsComponent implements OnInit {
     return permissions;
   }
 
-  public getFormattedUserPermissions(permission: string): string{
-    let perm = permission.slice(17).toLowerCase();
-    perm = perm.charAt(0).toUpperCase() + perm.slice(1);
-    return perm.split("_").join(" ");
-  }
-
-
   shouldDisplayPermissionsTable(): boolean {
     return this.permissionsToDisplay.length > 0 && this.committeeMemberPermissions.length > 0 && this.groupOrganizerPermissions.length > 0 && this.ordinaryMemberPermissions.length > 0;
   }
@@ -227,6 +220,34 @@ export class GroupSettingsComponent implements OnInit {
     });
   }
 
+  @HostListener('dragover', ['$event']) onDragOver(event) {
+    this.imgDragAreaClass = "droparea";
+    event.preventDefault();
+  }
+
+  @HostListener('dragenter', ['$event']) onDragEnter(event) {
+    this.imgDragAreaClass = "droparea";
+    event.preventDefault();
+  }
+
+  @HostListener('dragend', ['$event']) onDragEnd(event) {
+    this.imgDragAreaClass = "dragarea";
+    event.preventDefault();
+  }
+
+  @HostListener('dragleave', ['$event']) onDragLeave(event) {
+    this.imgDragAreaClass = "dragarea";
+    event.preventDefault();
+  }
+
+  @HostListener('drop', ['$event']) onDrop(event) {
+    this.imgDragAreaClass = "dragarea";
+    event.preventDefault();
+    event.stopPropagation();
+    let files = event.dataTransfer.files;
+    this.saveImage(files);
+  }
+
   onImageSelected(event) {
     this.saveImage(event.target.files);
   }
@@ -247,6 +268,7 @@ export class GroupSettingsComponent implements OnInit {
       this.groupService.uploadGroupImage(this.group.groupUid, formData).
         subscribe(response => {
           console.log("response: ", response);
+          this.group.profileImageUrl = response;
         },
         error => {
           console.log("error uploading image, error: ", error);
@@ -255,25 +277,8 @@ export class GroupSettingsComponent implements OnInit {
   }
 
   private isValidImage(image) {
-    this.isValidFileType(image);
-    this.isValidFileSize(image);
+    this.imageErrors = this.mediaService.isValidImage(image, true);
     return this.imageErrors.length === 0;
-  }
-
-  private isValidFileType(image) {
-    let extensions = (this.IMAGE_EXTENSIONS.split(',')).map(x => x.toLocaleUpperCase().trim());
-    let ext = image.name.toUpperCase().split('.').pop() || image.name;
-    let exists = extensions.includes(ext);
-    if (!exists) {
-      this.imageErrors.push("Error (image file type): " + image.name);
-    }
-  }
-
-  private isValidFileSize(image) {
-    let fileSizeinMB = image.size / (1024 * 1000);
-    let size = Math.round(fileSizeinMB * 100) / 100; // convert upto 2 decimal place
-    if (size > this.MAX_IMAGE_SIZE)
-      this.imageErrors.push("Error (file size): " + image.name + ": exceed file size limit of " + this.MAX_IMAGE_SIZE + "MB ( " + size + "MB )");
   }
 
   public getNumberOfMembersWithTopic(topic) {

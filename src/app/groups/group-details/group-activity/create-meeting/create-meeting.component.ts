@@ -4,7 +4,10 @@ import {TaskService} from '../../../../task/task.service';
 import {GroupService} from '../../../group.service';
 import {Membership} from '../../../model/membership.model';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
-import {DateTimeUtils} from "../../../../utils/DateTimeUtils";
+import {DateTimeUtils, isDateTimeFuture} from "../../../../utils/DateTimeUtils";
+import {MediaService} from "../../../../media/media.service";
+import {MediaFunction} from "../../../../media/media-function.enum";
+import {AlertService} from "../../../../utils/alert.service";
 
 declare var $: any;
 
@@ -20,9 +23,17 @@ export class CreateMeetingComponent implements OnInit {
   @Output() meetingSaved: EventEmitter<boolean>;
   public membersList: Membership[] = [];
 
+  public confirmingSend: boolean = false;
+  public confirmParams;
+
+  public imageName;
+  public imageKey;
+
   constructor( private taskService: TaskService,
                private formBuilder: FormBuilder,
-               private groupService: GroupService) {
+               private groupService: GroupService,
+               private mediaService: MediaService,
+               private alertService: AlertService) {
     this.initCreateMeetingForm();
     this.meetingSaved = new EventEmitter<boolean>();
   }
@@ -36,7 +47,7 @@ export class CreateMeetingComponent implements OnInit {
       'parentType': 'GROUP',
       'publicMeeting': false,
       'assignedMemberUids': []
-    });
+    }, { validator: isDateTimeFuture("date", "time") });
   }
 
   ngOnInit() {
@@ -51,44 +62,102 @@ export class CreateMeetingComponent implements OnInit {
     }.bind(this))
   }
 
-  createMeeting(){
+  next() {
     if (this.createMeetingForm.valid) {
-      let parentType: string = this.createMeetingForm.get("parentType").value;
-      let meetingSubject: string = this.createMeetingForm.get("subject").value;
-      let meetingLocation: string = this.createMeetingForm.get("location").value;
-
-      let voteDate: NgbDateStruct = this.createMeetingForm.get('date').value;
-      let voteTime: NgbTimeStruct = this.createMeetingForm.get('time').value;
-      let dateTimeEpochMillis: number = new Date(voteDate.year,
-        voteDate.month-1,
-        voteDate.day,
-        voteTime.hour,
-        voteTime.minute,
-        voteTime.second).getTime();
-
-      let publicMeeting: boolean = this.createMeetingForm.get("publicMeeting").value;
-
-      let assignedMemberUids: string[] = [];
-      if( this.createMeetingForm.get("assignedMemberUids").value != null){
-        for(let i=0; i < this.createMeetingForm.get("assignedMemberUids").value.length; i++ ){
-          assignedMemberUids.push(this.createMeetingForm.get("assignedMemberUids").value[i]);
-        }
+      if (this.confirmingSend) {
+        this.createMeeting();
+      } else {
+        this.confirmMeeting();
       }
+    }
+  }
 
-      this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis, publicMeeting, assignedMemberUids)
-        .subscribe(task => {
-            console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
-            this.initCreateMeetingForm();
-            this.meetingSaved.emit(true)
-          },
-          error => {
-            console.log("Error creating task: ", error);
-            this.meetingSaved.emit(false);
-          });
+  confirmMeeting() {
+    let membersAssigned = this.createMeetingForm.get("assignedMemberUids").value && this.createMeetingForm.get("assignedMemberUids").value.length > 0;
+    let assignedMemberUids = membersAssigned ? this.createMeetingForm.get("assignedMemberUids").value : [];
+    let assignedMemberNames = membersAssigned ? this.membersList.filter(member => assignedMemberUids.indexOf(member.user.uid) != -1)
+      .map(member => member.user.displayName) : this.membersList.map(member => member.user.displayName);
+
+    let nameText = assignedMemberNames.length > 10 ?
+      assignedMemberNames.slice(0, 10).join(", ") + " and " + (assignedMemberNames.length - 10) + " others" : assignedMemberNames.join(", ");
+
+    let time = DateTimeUtils.momentFromNgbStruct(this.createMeetingForm.get('date').value,
+      this.createMeetingForm.get('time').value).format('dddd, MMMM Do YYYY, h:mm a');
+
+    this.confirmParams = {
+      subject: this.createMeetingForm.get("subject").value,
+      location: this.createMeetingForm.get("location").value,
+      time: time,
+      assignedNumber: membersAssigned ? assignedMemberUids.length : this.membersList.length,
+      memberNames: nameText
+    };
+
+    this.confirmingSend = true;
+  }
+
+  cancel() {
+    // else creates a weird jitter effect as modal isn't closed yet
+    setTimeout(() => this.confirmingSend = false, 500);
+  }
+
+  createMeeting(){
+
+    let parentType: string = this.createMeetingForm.get("parentType").value;
+    let meetingSubject: string = this.createMeetingForm.get("subject").value;
+    let meetingLocation: string = this.createMeetingForm.get("location").value;
+
+    let voteDate: NgbDateStruct = this.createMeetingForm.get('date').value;
+    let voteTime: NgbTimeStruct = this.createMeetingForm.get('time').value;
+    let dateTimeEpochMillis: number = new Date(voteDate.year,
+      voteDate.month-1,
+      voteDate.day,
+      voteTime.hour,
+      voteTime.minute,
+      voteTime.second).getTime();
+
+    let publicMeeting: boolean = this.createMeetingForm.get("publicMeeting").value;
+
+    let assignedMemberUids: string[] = [];
+    if( this.createMeetingForm.get("assignedMemberUids").value != null){
+      for(let i=0; i < this.createMeetingForm.get("assignedMemberUids").value.length; i++ ){
+        assignedMemberUids.push(this.createMeetingForm.get("assignedMemberUids").value[i]);
+      }
     }
-    else {
-      console.log("Create meeting form invalid!");
+
+    this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis,
+      publicMeeting, this.imageKey, assignedMemberUids).subscribe(task => {
+          console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
+          this.initCreateMeetingForm();
+          this.confirmingSend = false;
+          this.meetingSaved.emit(true)
+        }, error => {
+          console.log("Error creating task: ", error);
+          this.confirmingSend = false;
+          this.meetingSaved.emit(false);
+      });
+  }
+
+  addMeetingImage(event){
+    let images = event.target.files;
+    if(images.length > 0){
+      let image = images[0];
+      this.alertService.showLoading();
+      this.mediaService.uploadMedia(image, MediaFunction.TASK_IMAGE).subscribe(resp =>{
+        this.imageKey = resp;
+        this.imageName = image.name;
+        this.alertService.hideLoading();
+        console.log("Image Key...........",this.imageKey);
+      },error =>{
+        this.alertService.hideLoading();
+        console.log("Error loading image");
+      })
     }
+  }
+
+  clearImage() {
+    this.imageKey = undefined;
+    this.imageName = undefined;
+    return false;
   }
 
 }

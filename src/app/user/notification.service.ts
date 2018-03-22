@@ -25,4 +25,9 @@ export class NotificationService {
     return this.httpClient.get<any>(fullUrl, {params: params})
   }
 
+  markAllNotificationsAsRead(): Observable<any> {
+    const fullUrl = this.unreadNotificationsUrl + "/mark-read/all";
+    return this.httpClient.get<any>(fullUrl);
+  }
+
 }

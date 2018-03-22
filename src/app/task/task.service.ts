@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {Task} from "./task.model";
+import {TaskType} from "./task-type";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {LiveWireAlertType} from "../livewire/live-wire-alert-type.enum";
@@ -27,15 +28,22 @@ export class TaskService {
   private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
   private uploadImageUrl = environment.backendAppUrl + "/api/media/storeImage";
 
-  private castVoteUrl = environment.backendAppUrl + "/api/vote/do";
-  private viewVoteUrl = environment.backendAppUrl + "/api/vote/view";
+  private castVoteUrl = environment.backendAppUrl + "/api/task/respond/vote";
 
   private meetingResponsesUrl = environment.backendAppUrl + "/api/task/fetch/meeting/rsvps";
+  private meetingRsvpUrl = environment.backendAppUrl + "/api/task/respond/meeting";
+
+  private todoResponsesUrl = environment.backendAppUrl + "/api/task/fetch/todo/responses";
+  private todoResponsesDownload = environment.backendAppUrl + "/api/task/fetch/todo/download";
+
+  private fetchImageKeyUrl = environment.backendAppUrl + "/api/task/fetch/image";
 
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
   private upcomingTasksErrorSubject: BehaviorSubject<any> = new BehaviorSubject(null);
   public upcomingTaskError: Observable<any> = this.upcomingTasksErrorSubject.asObservable();
+
+  private cancelTaskUrl = environment.backendAppUrl + "/api/task/modify/cancel";
 
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
@@ -68,9 +76,8 @@ export class TaskService {
       });
   }
 
-  public loadUpcomingUserTasks(userId: string) {
-    let fullUrl = this.upcomingUserTasksUrl + "/" + userId;
-    this.httpClient.get<Task[]>(fullUrl)
+  public loadUpcomingUserTasks() {
+    this.httpClient.get<Task[]>(this.upcomingUserTasksUrl)
       .map(data => data.map(task => Task.createInstanceFromData(task)))
       .subscribe(
         tasks => {
@@ -86,10 +93,12 @@ export class TaskService {
 
   public loadTask(taskUid: string, taskType: string): Observable<Task> {
     const fullUrl = this.specificTasksUrl + "/" + taskType + "/" + taskUid;
-    return this.httpClient.get<Task>(fullUrl);
+    return this.httpClient.get<Task>(fullUrl).map(Task.createInstanceFromData);
   }
 
-  createMeeting(parentType: string, parentUid: string, subject: string, location: string, dateTimeEpochMillis: number, publicMeeting: boolean, assignedMemberUids: string[]):Observable<Task> {
+  createMeeting(parentType: string, parentUid: string, subject: string, location: string,
+                dateTimeEpochMillis: number, publicMeeting: boolean, imageKey: string,
+                assignedMemberUids: string[]):Observable<Task> {
     const fullUrl = this.groupCreateMeetingUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -99,10 +108,13 @@ export class TaskService {
       .set('publicMeeting', publicMeeting.toString())
       .set('assignedMemberUids', assignedMemberUids.join(','));
 
+    if (imageKey)
+      params = params.set("mediaFileUid", imageKey);
+
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
-  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, assignedMemberUids: string[]):Observable<Task>{
+  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, imageKey: string, assignedMemberUids: string[]):Observable<Task>{
     const fullUrl = this.groupCreateVoteUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -112,12 +124,15 @@ export class TaskService {
       .set('time', time.toString())
       .set('assignedMemberUids', assignedMemberUids.join(','));
 
+    if (imageKey) {
+      params = params.set("mediaFileUid", imageKey);
+    }
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
   createTodo(todoType: string, parentType: string, parentUid: string, subject: string, dueDateTime: number, responseTag: string,
-             requireImages: boolean, recurring:boolean, recurringPeriodMillis: number, assignedMemberUids: string[], confirmingMemberUids: string[]):Observable<Task> {
+             requireImages: boolean, recurring:boolean, recurringPeriodMillis: number, imageKey: string, assignedMemberUids: string[], confirmingMemberUids: string[]):Observable<Task> {
     let fullUrl = this.groupCreateTodoUrl;
     let params;
 
@@ -160,18 +175,21 @@ export class TaskService {
         .set("assignedMemberUids", assignedMemberUids.join(","));
     }
 
+    if (imageKey) {
+      params = params.set("mediaFileUids", imageKey);
+    }
 
+    console.log("creating todo with params: ", params);
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
 
-  respondToDo(todoUid: string, userUid: string, response: string): Observable<string> {
-    let url = this.groupRespondeTodoUrl + "/" + todoUid + "/" + userUid;
+  respondToDo(todoUid: string, response: string): Observable<string> {
+    let url = this.groupRespondeTodoUrl + "/" + todoUid;
     let params = new HttpParams()
       .set("response", response);
 
     return this.httpClient.get<string>(url, {params: params})
-
   }
 
   uploadAlertImage(image):Observable<any>{
@@ -211,8 +229,6 @@ export class TaskService {
         .set("mediaFileKeys",mediaKeys + "");
       }
 
-
-
    if(alertType === "MEETING"){
       console.log("Is a meeting man...........................");
     }
@@ -220,21 +236,47 @@ export class TaskService {
     return this.httpClient.post(fullUrl,null,{params:params});
   }
 
-  castVote(id:string,phoneNumber:string,response:string):Observable<any>{
-    let fullUrl = this.castVoteUrl + "/" + id + "/" + phoneNumber + "/+27";
-    let params = new HttpParams().set("response",response);
-
-    return this.httpClient.get(fullUrl,{params:params});
-  }
-
-  viewVote(id:string,phoneNumber:string):Observable<any>{
-    let fullUrl = this.viewVoteUrl + "/" + id + "/" + phoneNumber + "/+27";
-    return this.httpClient.get(fullUrl);
+  castVote(taskUid:string, response:string):Observable<Task>{
+    let fullUrl = this.castVoteUrl + "/" + taskUid;
+    let params = new HttpParams().set("vote", response);
+    return this.httpClient.post<Task>(fullUrl, null, {params:params}).map(Task.createInstanceFromData);
   }
 
   fetchMeetingResponses(taskUid: string): Observable<Map<string, string>> {
     const fullUrl = this.meetingResponsesUrl + "/" + taskUid;
     return this.httpClient.get<Map<string, string>>(fullUrl);
+  }
+
+  respondToMeeting(taskUid: string, response: string): Observable<Map<string, string>> {
+    const fullUrl = this.meetingRsvpUrl + "/" + taskUid;
+    let params = new HttpParams().set("response", response.toUpperCase());
+    return this.httpClient.post<Map<string, string>>(fullUrl, null, {params: params});
+  }
+
+  fetchTodoResponses(taskUid: string): Observable<Map<string, string>> {
+    const fullUrl = this.todoResponsesUrl + "/" + taskUid;
+    return this.httpClient.get<Map<string, string>>(fullUrl);
+  }
+
+  downloadTodoResponses(taskUid: string): Observable<any> {
+    const fullUrl = this.todoResponsesDownload + "/" + taskUid;
+    return this.httpClient.get(fullUrl, { responseType: 'blob'});
+  }
+
+  fetchImageKey(taskUid: string, taskType: TaskType): Observable<string> {
+    const fullUrl = this.fetchImageKeyUrl + "/" + taskType + "/" + taskUid;
+    return this.httpClient.get(fullUrl, { responseType: 'text' });
+  }
+
+  cancelTask(taskUid: string, taskType: TaskType, notifyMembers: boolean = true, reloadAgenda: boolean = true) {
+    const fullUrl = this.cancelTaskUrl + "/" + taskType + "/" + taskUid;
+    console.log("send notification param: ", notifyMembers.toString());
+    let params = new HttpParams().set("sendNotifications", notifyMembers.toString());
+    return this.httpClient.post(fullUrl, null, {params: params}).map(response => {
+      if (reloadAgenda) {
+        this.loadUpcomingUserTasks();
+      }
+    });
   }
 
 

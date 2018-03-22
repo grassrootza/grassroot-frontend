@@ -1,6 +1,8 @@
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import * as moment from "moment";
 import {Moment} from "moment";
+import {AbstractControl, FormGroup} from "@angular/forms";
+import {urlPattern} from "./CustomValidators";
 
 export class DateTimeUtils {
 
@@ -50,6 +52,12 @@ export class DateTimeUtils {
     return { year: date.year(), month: date.month() + 1, day: date.date() };
   }
 
+  public static futureTimeStruct(minutesToAdd: number = 0, hoursToaAdd: number = 0) {
+    let date = moment().add(minutesToAdd, 'minutes').add(hoursToaAdd, 'hours');
+    console.log("altered date: ", date);
+    return { hour: date.hour(), minute: date.minutes() }
+  }
+
   public static momentFromNgbStruct(date: NgbDateStruct, time?: NgbTimeStruct): Moment {
     return moment(
       [
@@ -71,4 +79,18 @@ export const epochMillisFromDate = (ngbDate: NgbDateStruct) => {
 
 export const ngbDateFromMoment = (date: Moment): NgbDateStruct => {
   return { year: date.year(), month: date.month() + 1, day: date.date() }
+};
+
+export const isDateTimeFuture = (dateFieldName: string = "date", timeFieldName: string = "time") => {
+  return (form: FormGroup) => {
+    let date = form.get(dateFieldName);
+    let time = form.get(timeFieldName);
+
+    if (date && time) {
+      let derivedMoment = DateTimeUtils.momentFromNgbStruct(date.value, time.value);
+      return derivedMoment.isAfter(moment()) ? null : { dateTimePast: true };
+    }
+
+    return null;
+  }
 };

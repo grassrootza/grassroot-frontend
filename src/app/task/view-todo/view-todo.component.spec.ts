@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {ToDoRespondComponent} from './todo-respond.component';
+import {ViewTodoComponent} from './todo-respond.component';
 
-describe('ToDoRespondComponent', () => {
-  let component: ToDoRespondComponent;
-  let fixture: ComponentFixture<ToDoRespondComponent>;
+describe('ViewTodoComponent', () => {
+  let component: ViewTodoComponent;
+  let fixture: ComponentFixture<ViewTodoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ToDoRespondComponent]
+      declarations: [ViewTodoComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ToDoRespondComponent);
+    fixture = TestBed.createComponent(ViewTodoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

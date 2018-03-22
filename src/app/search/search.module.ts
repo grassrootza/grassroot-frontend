@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
 import {LoggedInServicesModule} from "../logged-in-services.module";
 import {GlobalSearchResultsComponent} from "./global-search-results/global-search-results.component";
@@ -10,7 +10,6 @@ import {MyActivitiesComponent} from "./global-search-results/my-activities/my-ac
 import {MyCampaignsComponent} from "./global-search-results/my-campaigns/my-campaigns.component";
 import {PublicMeetingsComponent} from "./global-search-results/public-meetings/public-meetings.component";
 import {PublicGroupsComponent} from "./global-search-results/public-groups/public-groups.component";
-import {ViewTodoComponent} from "../view-task/view-todo/view-todo.component";
 import {SharedModule} from "../shared.module";
 
 
@@ -39,8 +38,7 @@ export const SEARCH_ROUTE: Routes = [
     MyGroupsComponent,
     MyCampaignsComponent,
     PublicGroupsComponent,
-    PublicMeetingsComponent,
-    ViewTodoComponent
+    PublicMeetingsComponent
   ]
 })
 export class SearchModule { }

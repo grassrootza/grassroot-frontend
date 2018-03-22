@@ -12,7 +12,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let meeting of meetings" class="meeting-event" (click)="showViewMeeting(meeting)">
+          <div *ngFor="let meeting of meetings" class="meeting-event event-row" (click)="showViewMeeting(meeting)">
             <div class="float-left event-date">
               <span class="day">{{meeting.deadlineDate | date:'dd'}}</span>
               <span class="month">{{meeting.deadlineDate | date:'MMM'}}</span>
@@ -42,7 +42,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let vote of votes" class="votes-event">
+          <div *ngFor="let vote of votes" class="votes-event event-row" (click)="showViewVote(vote)">
             <div class="float-left event-date">
               <span class="day">{{vote.deadlineDate | date:'dd'}}</span>
               <span class="month">{{vote.deadlineDate | date:'MMM'}}</span>
@@ -72,7 +72,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let todo of todos" class="action-items-event">
+          <div *ngFor="let todo of todos" class="action-items-event event-row" (click)="showViewTodo(todo)">
             <div class="float-left event-date">
               <span class="day">{{todo.deadlineDate | date:'dd'}}</span>
               <span class="month">{{todo.deadlineDate | date:'MMM'}}</span>
@@ -132,8 +132,8 @@
                        (click)="showCreateTodoModal()">
                       {{ 'groups.row.action.create' | translate }}
                     </a>
-                    <!-- todo : implement some form of permission control here -->
-                    <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{
+                    <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]"
+                      *ngIf="group.hasPermission('GROUP_PERMISSION_SEND_BROADCAST')">{{
                       'groups.row.action.broadcast' | translate }}</a>
                   </div>
                 </div>
@@ -258,3 +258,6 @@
 
 <app-view-meeting [taskToView]="meetingToView"></app-view-meeting>
 
+<app-view-vote [voteToView]="voteToView"></app-view-vote>
+
+<app-view-todo [todoTask]="todoToView"></app-view-todo>

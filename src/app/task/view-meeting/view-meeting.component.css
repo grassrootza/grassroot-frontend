@@ -13,12 +13,15 @@
   color: white;
 }
 
-.title-para {
-  margin-top: 1rem;
-  font-size: 1.1rem;
-}
-
 .footer-button {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.btn.dropdown-toggle {
+  padding: 0.5rem;
+  width: 100%;
+  background-color: white;
+  border: solid 1px #cccccc;
+  text-align: left;
 }

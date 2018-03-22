@@ -89,7 +89,7 @@ export class MemberListComponent implements OnInit {
   }
 
   selectMember(member: Membership) {
-    member.selected = true;
+    member.selected = !member.selected;
   }
 
   public selectAllOnPage(event): void {

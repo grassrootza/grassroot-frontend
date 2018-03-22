@@ -14,7 +14,6 @@ import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
-import {TodoType} from "../task/todo-type";
 import {AlertService} from "../utils/alert.service";
 import {CampaignService} from "../campaigns/campaign.service";
 import {SearchService} from "../search/search.service";
@@ -102,9 +101,6 @@ export class HomeComponent implements OnInit {
         }
       });
 
-    // this.newMembersPage = this.groupService.newMembersInMyGroups.map(membersPage => membersPage.content);
-
-
     this.groupService.newMembersInMyGroupsError
       .subscribe(
         error => {
@@ -143,7 +139,7 @@ export class HomeComponent implements OnInit {
       this.activeCampaigns = campaignList.filter(cp => cp.isActive());
     });
 
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.taskService.loadUpcomingUserTasks();
     this.groupService.fetchNewMembers(7, 0, 500);
     this.groupService.loadGroups();
 
@@ -246,31 +242,15 @@ export class HomeComponent implements OnInit {
 
   handleTaskClick(task: Task): boolean {
     this.taskToView = task;
-    if (
-      task.type == TaskType.TODO
-      && task.todoType != TodoType.ACTION_REQUIRED
-      && (task.thisUserAssigned || task.wholeGroupAssigned)
-      && !task.hasResponded
-    ) {
-
-      this.toDoToRespond = task;
-      $('#respond-todo-modal').modal("show");
-    }
-
-    if(task.type == TaskType.VOTE){
-      console.log("Is a vote.................");
-      this.taskService.viewVote(this.taskToView.taskUid,this.userService.getLoggedInUser().msisdn).subscribe(resp=>{
-        this.voteResponse = resp.data.reply;
-        console.log("Vote response...........",this.voteResponse);
-      })
-    }
-
     switch (task.type){
       case TaskType.MEETING:
         $('#view-meeting-modal').modal("show");
         break;
       case TaskType.VOTE:
         $('#view-vote-modal').modal("show");
+        break;
+      case TaskType.TODO:
+        $('#view-todo-modal').modal("show");
         break;
     }
     return false;
@@ -289,7 +269,7 @@ export class HomeComponent implements OnInit {
 
   meetingSaved(saveResponse) {
     console.log(saveResponse);
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.taskService.loadUpcomingUserTasks();
     $("#create-meeting-modal").modal("hide");
   }
 
@@ -300,7 +280,7 @@ export class HomeComponent implements OnInit {
 
   voteSaved(saveResponse) {
     console.log(saveResponse);
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.taskService.loadUpcomingUserTasks();
     $("#create-vote-modal").modal("hide");
   }
 
@@ -311,7 +291,7 @@ export class HomeComponent implements OnInit {
 
   todoSaved(saveResponse) {
     console.log(saveResponse);
-    this.taskService.loadUpcomingUserTasks(this.userService.getLoggedInUser().userUid);
+    this.taskService.loadUpcomingUserTasks();
     $("#create-todo-modal").modal("hide");
   }
 
