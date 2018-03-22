@@ -231,16 +231,8 @@ export class TaskService {
         .set("taskUid",taskUid)
         .set("contactNumber",contactPersonNumber)
         .set("contactName",contactPersonName)
-        .set("mediaFileKeys",mediaKeys + "");
+        .set("mediaFileKeys",mediaKeys.join(","));
       }
-
-<<<<<<< HEAD
-   if(alertType === "MEETING"){
-      console.log("Is a meeting man...........................");
-    }
-
-=======
->>>>>>> 144060f4b3019216ee73157d9cc781612fa1fefa
     return this.httpClient.post(fullUrl,null,{params:params});
   }
 

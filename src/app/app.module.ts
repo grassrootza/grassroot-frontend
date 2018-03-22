@@ -92,7 +92,6 @@ const routes: Routes = [
   },
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
-  {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]},
   {path: 'livewire-admin',component:LiveWireListComponent,canActivate:[LoggedInGuard]},
   {path: 'view-alert/:id',component:ViewAlertComponent,canActivate:[LoggedInGuard]},
   {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]},
@@ -112,7 +111,6 @@ const routes: Routes = [
     PwdResetValidateComponent,
     PwdResetNewComponent,
     PasswordResetComponent,
-    MeetingDetailsComponent,
     LiveWireListComponent,
     ViewAlertComponent,
     NewsComponent
