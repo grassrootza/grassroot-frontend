@@ -20,6 +20,7 @@ export class LiveWireAlertService {
   private tagLivewireAlertUrl = environment.backendAppUrl + "/api/livewire/admin/tag";
   private blockLivewireAlertUrl = environment.backendAppUrl + "/api/livewire/admin/block";
   private subscriberListUrl = environment.backendAppUrl + "/api/livewire/admin/subscribers";
+  private releaseAlertUrl = environment.backendAppUrl + "/api/livewire/admin/release";
   
   constructor(private httpClient:HttpClient) { }
   
@@ -89,5 +90,14 @@ export class LiveWireAlertService {
   getSubscribers():Observable<DataSubscriber[]>{
     return this.httpClient.get<DataSubscriber[]>(this.subscriberListUrl)
       .map(resp => resp.map(data => DataSubscriber.createInstance(data)));
+  }
+  
+  releaseAlert(alertUid:string,dataSubscriberUids:string[]):Observable<LiveWireAlert>{
+    console.log("Recieved subscriber uids......",dataSubscriberUids);
+    let params = new HttpParams()
+      .set('alertUid',alertUid)
+      .set('publicLists',dataSubscriberUids.join(","))
+    
+    return this.httpClient.post<LiveWireAlert>(this.releaseAlertUrl,null,{params:params});
   }
 }

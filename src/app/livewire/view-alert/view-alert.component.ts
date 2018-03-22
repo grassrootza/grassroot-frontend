@@ -21,6 +21,7 @@ export class ViewAlertComponent implements OnInit {
   public headline:string = "";
   public desc:string = "";
   public imageKeys:string[] = [];
+  public subscriberUids:string[] = [];
   public subscribers:DataSubscriber[] = [];
   
   constructor(private route:ActivatedRoute,
@@ -74,8 +75,7 @@ export class ViewAlertComponent implements OnInit {
     this.liveWireAlertService.updateAlertHeadline(this.alertUid,headline).subscribe(resp => {
       console.log("Resp updated...",resp);
       $('#change-headline-modal').modal("hide");
-      this.router.navigated = false;
-      this.router.navigate([this.router.url]);
+      this.refreshComponent();
     },error => {
       console.log("Error updating headline...",error);
     });
@@ -86,8 +86,7 @@ export class ViewAlertComponent implements OnInit {
     this.liveWireAlertService.updateAlertDescription(this.alertUid,description).subscribe(resp => {
       console.log("Update response......",resp);
       $('#change-description-modal').modal("hide");
-      this.router.navigated = false;
-      this.router.navigate([this.router.url]);
+      this.refreshComponent();
     },error=> {
       console.log("Error updating alert description...",error);
     });
@@ -97,8 +96,7 @@ export class ViewAlertComponent implements OnInit {
   deleteImage(imageUid:string){
     this.liveWireAlertService.deleteAlertImage(imageUid,this.alertUid).subscribe(resp => {
       console.log("Deleted image...",resp);
-      this.router.navigated = false;
-      this.router.navigate([this.router.url]);
+      this.refreshComponent();
     }, error =>{
       console.log("Error deleting image...",error);
     });
@@ -137,8 +135,7 @@ export class ViewAlertComponent implements OnInit {
   updateAlert(imageKeys:string[]){
     this.liveWireAlertService.updateAlertImages(this.alertUid,this.imageKeys).subscribe(resp => {
       console.log("Data from server........",resp);
-      this.router.navigated = false;
-      this.router.navigate([this.router.url]);
+      this.refreshComponent();
     },error =>{
       console.log("Error adding images to alert.....",error);
     });
@@ -153,8 +150,7 @@ export class ViewAlertComponent implements OnInit {
     this.liveWireAlertService.tagAlert(this.alertUid,tags).subscribe(resp => {
       console.log("Tagged alert...",resp);
       $('#tags-modal').modal("hide");
-      this.router.navigated = false;
-      this.router.navigate([this.router.url]);
+      this.refreshComponent();
     },error => {
       console.log("Error tagging alert....",error);
     });
@@ -163,8 +159,7 @@ export class ViewAlertComponent implements OnInit {
   blockAlert(serverUid:string){
     this.liveWireAlertService.blockAlert(this.alertUid).subscribe(resp =>{
       console.log("Blocked alert...",resp);
-      this.router.navigated = false;
-      this.router.navigate([this.router.url]);
+      this.refreshComponent();
     },error =>{
       console.log("Error blocking alert.....",error);
     });
@@ -182,7 +177,35 @@ export class ViewAlertComponent implements OnInit {
   }
   
   selectedSubscribers(event:any,uid:string){
+    event == true ? this.addSubscriberUid(uid) : this.removeSubscriberUid(uid);
     console.log("Check event.............",event);
     console.log("Subscriber id.............",uid);
+    console.log("Subscriber uids...........",this.subscriberUids);
+  }
+  
+  addSubscriberUid(uid:string){
+    this.subscriberUids.push(uid);
+  }
+  
+  removeSubscriberUid(uid:string){
+    if(this.subscriberUids.indexOf(uid) !== -1){
+      this.subscriberUids.splice(this.subscriberUids.indexOf(uid),1);
+    }
+  }
+  
+  releaseAlert(){
+    console.log("Data subscriber list in release method.....",this.subscriberUids);
+    this.liveWireAlertService.releaseAlert(this.alertUid,this.subscriberUids).subscribe(resp => {
+      console.log("Alert released....",resp);
+      $('#release-modal').modal("hide");
+      this.refreshComponent();
+    },error => {
+      console.log("Error releasing alert.....",error);
+    });
+  }
+  
+  refreshComponent(){
+      this.router.navigated = false;
+      this.router.navigate([this.router.url]);
   }
 }
