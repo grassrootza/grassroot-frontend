@@ -1,0 +1,17 @@
+<div class="carousel-wrapper" [ngStyle]="carouselWrapperStyle">
+  <ul class="carousel-inner" #carousel>
+    <li *ngFor="let item of items;" class="carousel-item active">
+      <div class="row" [ngStyle]="carouselItemStyle">
+        <div class="col-sm-9 text-left carousel-text">
+          {{item.headline}}
+        </div>
+        <div class="col-sm-2 carousel-date-placeholder">
+          <span class="carousel-date">{{item.creationTimeMillis | date}}</span>
+        </div>
+        <div class="col-sm-1 carousel-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>

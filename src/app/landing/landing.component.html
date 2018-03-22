@@ -11,45 +11,21 @@
 
 <!-- Latest News -->
 
-<!--<div class="section-latest-news">-->
-  <!--<div class="container">-->
-    <!--<div class="latest-news">-->
-      <!--<h2>Latest News</h2>-->
-      <!--<div class="news-headings row">-->
-        <!--<div id="owl-demo" class="owl-carousel owl-theme">-->
-          <!--<div class="item">-->
-            <!--<div class="col-md-4 order-md-2 col-sm-12 order-sm-2">-->
-              <!--<div class="posted-on"> <span class="date">December 4, 2017</span></div>-->
-            <!--</div>-->
-            <!--<div class="col-md-8 order-md-1 col-sm-12 order-sm-1">-->
-              <!--<h3><a href="#">Ambassador feedback implemented on to the platform</a></h3>-->
-            <!--</div>-->
-          <!--</div>&lt;!&ndash; /.item &ndash;&gt;-->
-          <!--<div class="item">-->
-            <!--<div class="col-md-4 order-md-2">-->
-              <!--<div class="posted-on"> <span class="date">December 4, 2017</span> </div>-->
-            <!--</div>-->
-            <!--<div class="col-md-8 order-md-1">-->
-              <!--<h3><a href="#">Ambassador feedback implemented on to the platform</a></h3>-->
-            <!--</div>-->
-          <!--</div>&lt;!&ndash; /.item &ndash;&gt;-->
-          <!--<div class="item">-->
-            <!--<div class="col-md-4 order-md-2">-->
-              <!--<div class="posted-on"> <span class="date">December 4, 2017</span> </div>-->
-            <!--</div>-->
-            <!--<div class="col-md-8 order-md-1">-->
-              <!--<h3><a href="#">Ambassador feedback implemented on to the platform</a></h3>-->
-            <!--</div>-->
-          <!--</div>&lt;!&ndash; /.item &ndash;&gt;-->
-        <!--</div>&lt;!&ndash; /.owl-carousel &ndash;&gt;-->
+<div class="section-latest-news">
+  <div class="row">
+    <div class="col-sm-2 text-center">
+      <span class="latest-news-placeholder">Latest News</span>
+      <span class="latest-news-separator"></span>
+
+    </div>
+    <div class="col-sm-10" #tasknote>
+      <carousel [items]="newsList" [carouselContainerWidth]="carouselContainerWidth" [durationBetweenScrolls]="2000"></carousel>
+    </div>
 
 
-      <!--</div>&lt;!&ndash; /.row &ndash;&gt;-->
-    <!--</div>&lt;!&ndash; /.latest-news &ndash;&gt;-->
-  <!--</div>&lt;!&ndash; /.container &ndash;&gt;-->
-<!--</div>&lt;!&ndash; /.section-latest-news &ndash;&gt;-->
 
-
+  </div>
+</div><!-- /.section-latest-news -->
 
 <!-- Section Grey -->
 <div class="section-grey bg-grey">
@@ -67,44 +43,12 @@
       <div class="col-lg-6">
         <div class="box-happening-now">
           <h3>Happening Now....</h3>
-          <div class="row">
+          <div class="row" *ngFor="let activity of activitiesList">
             <div class="col-sm-8">
-              <i class="far fa-file-alt"></i> Anita I. signed a petition
+              <i [class]="getIconForPublicActivityType(activity.type)"></i> {{activity.actorName}} - {{getTypeNameFormatted(activity.type)}}
             </div>
             <div class="col-sm-4 time col-12">
-              2 seconds ago
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-8">
-              <i class="fas fa-users"></i> Lisa joined a group
-            </div>
-            <div class="col-sm-4 time col-12">
-              2 seconds ago
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-8">
-              <i class="far fa-file-alt"></i> Jackson signed a petition
-            </div>
-            <div class="col-sm-4 time col-12">
-              3 seconds ago
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-8">
-              <i class="fas fa-users"></i> Sibu joined a group
-            </div>
-            <div class="col-sm-4 time col-12">
-              5 seconds ago
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-8">
-              <i class="fas fa-users"></i> Tanya M. joined a group
-            </div>
-            <div class="col-sm-4 time col-12">
-              6 seconds ago
+              {{activity.actionTimeMillis | date}}
             </div>
           </div>
         </div><!-- /.box-happening-now -->

@@ -1,0 +1,47 @@
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.carousel-wrapper {
+  overflow: hidden;
+}
+
+.carousel-inner {
+  display: flex;
+  overflow: visible;
+}
+
+.row{
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.carousel-text {
+  height: 28px;
+  width: 438px;
+  color: #7A7D8C;
+  font-family: Nunito;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.carousel-date-placeholder {
+  height: 30px;
+  width: 167px;
+  border-radius: 2px;
+  background-color: #F5F6FA;
+}
+
+.carousel-date {
+  width: 134px;
+  color: #7A7D8C;
+  font-family: Nunito;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.carousel-arrow{
+  color: #2CBC4C;
+}
