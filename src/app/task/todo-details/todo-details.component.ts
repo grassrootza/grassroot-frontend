@@ -5,7 +5,7 @@ import {Task} from "../task.model";
 import {convertResponseMap, TaskResponse} from "../task-response";
 import {AlertService} from "../../utils/alert.service";
 import {TodoType} from "../todo-type";
-import {saveAs} from 'file-saver/FileSaver';
+import { saveAs } from 'file-saver';
 import {TaskType} from "../task-type";
 
 declare var $: any;

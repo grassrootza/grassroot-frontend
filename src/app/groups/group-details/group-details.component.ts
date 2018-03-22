@@ -10,8 +10,7 @@ import {JoinCodeInfo} from "../model/join-code-info";
 
 import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
 import {AlertService} from "../../utils/alert.service";
-
-import {saveAs} from 'file-saver/FileSaver';
+import { saveAs } from 'file-saver';
 
 declare var $: any;
 
