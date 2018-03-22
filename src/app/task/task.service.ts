@@ -25,7 +25,6 @@ export class TaskService {
 
   private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
 
-  private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
   private uploadImageUrl = environment.backendAppUrl + "/api/media/store/body";
 
   private castVoteUrl = environment.backendAppUrl + "/api/task/respond/vote";
@@ -195,45 +194,6 @@ export class TaskService {
   uploadAlertImage(image):Observable<any>{
     let uploadFullUrl = this.uploadImageUrl + "/" + MediaFunction.LIVEWIRE_MEDIA;
     return this.httpClient.post(uploadFullUrl, image,{ responseType: 'json' });
-  }
-
-  createLiveWireAlert(userUid:string,headline:string,alertType:LiveWireAlertType,groupUid:string,taskUid:string,
-                      destination:LiveWireAlertDestType,description:string,addLocation:boolean,contactPerson:string,
-                      contactPersonName:string,contactPersonNumber:string,mediaKeys:string[]):Observable<any>{
-
-    let fullUrl = this.createLiveWireAlertUrl + "/" + userUid;
-    let params;
-    
-    console.log("Media file keys..................................",mediaKeys);
-    
-    let mediaKeyArray: string[] = [];
-    
-
-    params = new HttpParams()
-      .set("headline",headline)
-      .set("description",description)
-      .set("type",alertType)
-      .set("groupUid",groupUid)
-      .set("addLocation",addLocation + "")
-      .set("destType",destination)
-      .set("taskUid",taskUid)
-      .set("mediaFileKeys",mediaKeys.join(","));
-
-
-      if(contactPerson === "someone"){
-      params = new HttpParams()
-        .set("headline",headline)
-        .set("description",description)
-        .set("type",alertType)
-        .set("groupUid",groupUid)
-        .set("addLocation",addLocation + "")
-        .set("destType",destination)
-        .set("taskUid",taskUid)
-        .set("contactNumber",contactPersonNumber)
-        .set("contactName",contactPersonName)
-        .set("mediaFileKeys",mediaKeys.join(","));
-      }
-    return this.httpClient.post(fullUrl,null,{params:params});
   }
 
   castVote(taskUid:string, response:string):Observable<Task>{

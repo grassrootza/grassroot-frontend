@@ -8,6 +8,7 @@ import {TaskType} from '../../../../task/task-type';
 import {UserService} from "../../../../user/user.service";
 import {LiveWireAlertType} from "../../../../livewire/live-wire-alert-type.enum";
 import {LiveWireAlertDestType} from "../../../../livewire/live-wire-alert-dest-type.enum";
+import { LiveWireAlertService } from "../../../../livewire/live-wire-alert.service";
 
 declare var $: any;
 
@@ -40,7 +41,8 @@ export class CreateLivewireComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private groupService: GroupService,
               private taskService: TaskService,
-              private userService:UserService) {
+              private userService:UserService,
+              private liveWireAlertService:LiveWireAlertService) {
       this.alertSaved = new EventEmitter<boolean>();
    }
 
@@ -105,7 +107,7 @@ export class CreateLivewireComponent implements OnInit {
         
         for(let image of images){
           formData.append("file", image, image.name);
-          this.taskService.uploadAlertImage(formData).subscribe(resp =>{
+          this.liveWireAlertService.uploadAlertImage(formData).subscribe(resp =>{
             console.log("Resp",resp);
             this.imageKeys.push(resp.data);
             //this.imageKey = resp.data;
@@ -146,7 +148,7 @@ export class CreateLivewireComponent implements OnInit {
 
     console.log("Task ID******",this.taskUid);
 
-    this.taskService.createLiveWireAlert(this.userUid,headline,this.liveWireAlertType,
+    this.liveWireAlertService.createLiveWireAlert(this.userUid,headline,this.liveWireAlertType,
       this.groupUid,this.taskUid,this.destinationType,description,this.addLocation,contactPerson,contactName,contactNumber,this.imageKeys).subscribe(alert =>{
         this.createForm();
         this.alertSaved.emit(true);
