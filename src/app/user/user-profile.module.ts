@@ -9,12 +9,14 @@ import {USER_PROFILE_ROUTES} from "./user-profile-routes";
 import {RouterModule} from "@angular/router";
 import {LoggedInServicesModule} from "../logged-in-services.module";
 import {SharedModule} from "../shared.module";
+import {Ng2ImgMaxModule} from "ng2-img-max";
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     LoggedInServicesModule,
+    Ng2ImgMaxModule,
     RouterModule.forChild(USER_PROFILE_ROUTES)
   ],
   declarations: [

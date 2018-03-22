@@ -35,11 +35,11 @@ import { LiveWireAlertService } from "./livewire/live-wire-alert.service";
 import {ANIMATION_TYPES, LoadingModule} from "ngx-loading";
 import {AccountService} from "./user/account.service";
 import {SearchService} from "./search/search.service";
-import {MeetingDetailsComponent} from "./task/meeting-details/meeting-details.component";
 import {LoggedInServicesModule} from "./logged-in-services.module";
 import {MediaService} from "./media/media.service";
 import { LiveWireListComponent } from './livewire/live-wire-list/live-wire-list.component';
 import { ViewAlertComponent } from './livewire/view-alert/view-alert.component';
+import { MeetingDetailsComponent } from "./task/meeting-details/meeting-details.component";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -91,7 +91,9 @@ const routes: Routes = [
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
   {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]},
   {path: 'livewire-admin',component:LiveWireListComponent,canActivate:[LoggedInGuard]},
-  {path: 'view-alert/:id',component:ViewAlertComponent,canActivate:[LoggedInGuard]}
+  {path: 'view-alert/:id',component:ViewAlertComponent,canActivate:[LoggedInGuard]},
+  {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]}
+
 ];
 
 @NgModule({
@@ -110,6 +112,7 @@ const routes: Routes = [
     MeetingDetailsComponent,
     LiveWireListComponent,
     ViewAlertComponent
+
   ],
   imports: [
     BrowserModule,
@@ -160,6 +163,4 @@ const routes: Routes = [
   bootstrap: [AppComponent]
 })
 
-
 export class AppModule {}
-

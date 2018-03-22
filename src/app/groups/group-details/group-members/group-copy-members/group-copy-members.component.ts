@@ -60,6 +60,7 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
 
   saveCopyMemberToGroup(groupUid: string = null){
     let groupAddMemberInfo: GroupAddMemberInfo[] = [];
+    console.log("copying members into group, currently: ", this.members);
     this.members.forEach(member => {
       const memberInfo = new GroupAddMemberInfo(
         member.user.phoneNumber,
@@ -75,6 +76,7 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
       );
       groupAddMemberInfo.push(memberInfo);
     });
+    console.log("after transformation, members to copy in: ", groupAddMemberInfo);
     this.groupService.confirmAddMembersToGroup(groupUid ? groupUid : this.selectedGroup.groupUid, groupAddMemberInfo, "COPIED_INTO_GROUP").subscribe(resp => {
       console.log(resp);
       this.alertAndCleanUp("group.allMembers.copyMembers.addedDone");

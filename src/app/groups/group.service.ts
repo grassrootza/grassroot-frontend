@@ -125,11 +125,7 @@ export class GroupService {
 
   loadGroups() {
     const fullUrl = this.groupListUrl;
-    return this.httpClient.get<GroupInfo[]>(fullUrl)
-      .map(
-        data => data.map(gr => GroupInfo.createInstance(gr))
-      )
-      .subscribe(
+    return this.httpClient.get<GroupInfo[]>(fullUrl).map(data => data.map(GroupInfo.createInstance)).subscribe(
         groups => {
           this.groupInfoList_.next(groups);
           localStorage.setItem(this.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
@@ -472,7 +468,6 @@ export class GroupService {
   }
 
   fetchGroupPermissionsToDisplay(): Observable<string[]> {
-
     return this.httpClient.get<string[]>(this.groupFetchPermissionsDisplayedUrl).map(resp => {
       return resp;
     })

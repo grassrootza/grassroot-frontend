@@ -66,7 +66,7 @@
     "home": "HOME",
     "groups": "GROUPS",
     "campaigns": "CAMPAIGNS",
-    "networks": "NETWORKS",
+    "movements": "MOVEMENTS",
     "noNotifications": "No notifications",
     "showHelp": "Show help",
     "help": "Help",
@@ -153,7 +153,7 @@
     "createNewModal": {
       "title": "Create new group",
       "groupName": "Group Name",
-      "network": "Network",
+      "movement": "Movement",
       "description": "Description (optional)",
       "groupPrivacy": {
         "title": "Group privacy",
@@ -210,6 +210,7 @@
     "joinWords": "SMS to join",
     "joinWordsSuffix": " to {{ shortCode }}",
     "noJoinWordsCanSet": " None. Click to add",
+    "noJoinWordsCantSet": " None.",
     "flyer": "Download flyer",
     "nav": {
       "dashboard": "Group Dashboard",
@@ -412,7 +413,7 @@
           "phone": "Phone",
           "email": "Email"
         },
-        "assignTopicLabel": "Assign topic:",
+        "assignTopicLabel": "Assign topic to {{count}} members:",
         "pickTopic": "Pick topic to assign to member",
         "assigned": "Done, topics assigned to member"
       },
@@ -495,7 +496,8 @@
           "confirmHeading": "Preview entries for importing ({{ value }})",
           "confirmMax": "only first {{ value }} shown as sample",
           "saveAsTaskTeam": "Save selection as task team",
-          "topics": "Assign topic(s) to these members:"
+          "topics": "Assign topic(s) to these members:",
+          "error": "Sorry, there was an error processing the file"
         },
         "importComplete": {
           "title": "Success!",
@@ -515,25 +517,35 @@
         "location": "Meeting location",
         "dateAndTime": "Meeting date and time",
         "public": "Public meeting",
-        "assignedMembers": "Assigned members (optional)"
+        "public-explain": "This will allow people to see the meeting if they search for it",
+        "image": "Image",
+        "image-note": "Note: Image will not be included directly in SMS or email notification, but a short link will be attached that references it",
+        "assignedMembers": "Assigned members (optional)",
+        "confirmTitle": "Confirm meeting",
+        "confirmPara": "You are about to call a meeting about {{ subject }} at {{ location }}, on {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}"
       },
       "voteModal":{
         "title": "Create new vote",
         "subject": "Subject for the vote?",
         "dateAndTime": "Vote closing date and time",
-        "description": "Longer description of vote (optional)",
+        "description-label": "Longer description (optional)",
+        "description-place": "Longer description of vote (optional, will not be included in SMS, will be visible to web and Android users)",
         "typeOfVote": "Type of vote?",
         "yesNo": "Yes, no or abstain",
         "multiOption": "Set my own list of options",
         "enterVoteOption": "Enter the vote option",
         "addVoteOption": "Add vote option",
-        "assignedMembers": "Assigned members (optional)"
+        "assignedMembers": "Assigned members (optional)",
+        "confirmTitle": "Confirm vote",
+        "confirmPara": "You are about to call a vote on {{ subject }}, closing at {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}"
       },
       "todoModal":{
         "title": "Create new action",
         "subject": "Subject for the action",
         "todoType": "What must members do?",
         "dueDateTime": "Deadline",
+        "confirmTitle": "Confirm action item",
+        "confirmPara": "You are about to create an action item, with the title {{ subject }}, due by {{ time }}. The action item is assigned to the following {{ assignedNumber }} members: {{ memberNames }}",
         "information": {
           "label": "Label for response information:",
           "placeholder": "How will you label the response e.g. ID"
@@ -544,7 +556,6 @@
           "recurringInterval": "Recurring interval (in minutes)",
           "assignedMembers": "Assign members",
           "confirmingMembers": "Confirming members"
-
         }
       },
       "livewireModal":{
@@ -640,8 +651,8 @@
     "settings": {
       "title": "Group settings",
       "groupName": "Group name",
-      "network": "Network",
-      "networkSelect": "(feature under construction)",
+      "Movement": "Movement",
+      "movementSelect": "(feature under construction)",
       "groupDescription": "Group description (shown to people when they join)",
       "groupPrivacy": "Group privacy",
       "groupPublic": "Public",
@@ -1077,6 +1088,8 @@
       "name": "Your name",
       "phone": "* Mobile number",
       "email": "* Email address",
+      "image-none": "Add a profile image (click or drag and drop)",
+      "image-change": "Change image",
       "province": "Your province",
       "language": "Your SMS and USSD language",
       "otp-note": "* We will send you an OTP to confirm your changes",
@@ -1195,28 +1208,57 @@
     "insert": "Insert",
     "view": "View",
     "download": "Download",
+    "upload": "Upload",
     "closeAccount": "Close account",
     "change": "Change",
+    "remove": "Remove",
     "add": "Add",
     "join": "Join",
     "search": "Search",
     "register": "Register"
   },
   "general": {
-    "charsRemaining": "Characters remaining"
+    "charsRemaining": "Characters remaining",
+    "breadcrumb": {
+      "home": "Back to home",
+      "group": "Back to group"
+    }
   },
   "task": {
+    "when": "When",
+    "where": "Where",
+    "reminder": "Reminder",
     "todo": {
       "respondModal": {
-        "title": "Complete action",
+        "title": "Action item",
         "information-label": "Your response",
         "validate-action-label": "Is the action complete?",
-        "volunteers-needed-label": "Do you volunteer?"
+        "volunteers-needed-label": "Do you volunteer?",
+        "responded": "Done, your response has been sent to the organizer"
+      },
+      "no_response": "No response yet",
+      "details": {
+        "cancel-button": "Cancel action"
+      },
+      "cancel": {
+        "title": "Confirm cancellation",
+        "body": "Are you sure? The action item will disappear from your and others' lists. You can choose whether to notify members",
+        "done": "Done. The action item has been cancelled and members notified"
       }
     },
     "meeting": {
       "broadcast": {
         "done": "Done! Message sent to all members who responded"
+      },
+      "details": {
+        "title-field": "Meeting",
+        "cancel-button": "Cancel meeting",
+        "attendance": "Attendance"
+      },
+      "cancel": {
+        "title": "Confirm cancellation",
+        "body": "Are you sure? This will generate a notification to all members that the meeting is cancelled",
+        "done": "Done. The meeting has been cancelled and members notified"
       }
     }
   },
@@ -1235,26 +1277,48 @@
   	"list":{
   		"title":"Live Wire",
   		"header":"Alert list"
-  	},
+  		},
   	"view-alert":{
   		"title":"Live Wire Alert"
-  	},
+  		},
   	"headline-modal":{
   		"title":"Change headline",
   		"label":"EDIT THE HEADLINE BELOW"
-  	},
+  		},
   	"desc-modal":{
   		"title":"Change description",
   		"label":"EDIT THE DESCRIPTION BELOW"
-  	},
+  		},
   	"tags-modal":{
   		"title":"Tag alert",
   		"label":"PLEASE ADD TAGS BELOW (SEPARATED BY COMMAS)"
-  	},
+  		},
   	"release-modal":{
   		"title":"Release alert",
   		"label":"RELEASE THIS ALERT TO THE MEDIA?",
   		"list-title":"Release to lists:"
-  	}
+  		}
+  	},
+  	"permission": {
+    "GROUP_PERMISSION_UPDATE_GROUP_DETAILS": "Change overall group settings",
+    "GROUP_PERMISSION_CHANGE_PERMISSION_TEMPLATE": "Change permissions",
+    "GROUP_PERMISSION_FORCE_PERMISSION_CHANGE": "Change permissions",
+    "GROUP_PERMISSION_CREATE_SUBGROUP": "Create a task team",
+    "GROUP_PERMISSION_AUTHORIZE_SUBGROUP": "Create a task team",
+    "GROUP_PERMISSION_DELEGATE_SUBGROUP_CREATION": "Create a task team",
+    "GROUP_PERMISSION_DELINK_SUBGROUP": "Remove a task team",
+    "GROUP_PERMISSION_ADD_GROUP_MEMBER": "Add a member",
+    "GROUP_PERMISSION_FORCE_ADD_MEMBER": "Add a member",
+    "GROUP_PERMISSION_DELETE_GROUP_MEMBER": "Remove a member",
+    "GROUP_PERMISSION_SEE_MEMBER_DETAILS": "See members' details",
+    "GROUP_PERMISSION_CREATE_GROUP_MEETING": "Call a meeting",
+    "GROUP_PERMISSION_VIEW_MEETING_RSVPS": "See meeting RSVPs",
+    "GROUP_PERMISSION_CREATE_GROUP_VOTE": "Call a vote",
+    "GROUP_PERMISSION_READ_UPCOMING_EVENTS": "See upcoming events",
+    "GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY": "Create an action item",
+    "GROUP_PERMISSION_CLOSE_OPEN_LOGBOOK": "Close an action item",
+    "GROUP_PERMISSION_ALTER_TODO": "Edit an action item",
+    "GROUP_PERMISSION_SEND_BROADCAST": "Send broadcasts",
+    "GROUP_PERMISSION_CREATE_CAMPAIGN": "Create campaign"
   }
 }

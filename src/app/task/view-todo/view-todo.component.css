@@ -1,0 +1,46 @@
+.response-input {
+  padding: 0.5rem;
+  border: solid 0.05rem #cccccc;
+  border-radius: 100px;
+}
+
+.resp-yes-no {
+  padding: 10px 50px;
+  margin-left: 1rem;
+}
+
+.modal-header {
+  background-color: #929BAF;
+  color: white;
+}
+
+.modal-title {
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.modal-close {
+  color: white;
+}
+
+.footer-button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.btn.dropdown-toggle {
+  padding: 0.5rem;
+  width: 100%;
+  background-color: white;
+  border: solid 1px #cccccc;
+  text-align: left;
+}
+
+.save-inline-button {
+  font-size: 1.1em;
+}
+
+.btn-group-right-align {
+  text-align: right;
+}

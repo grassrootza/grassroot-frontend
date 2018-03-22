@@ -176,6 +176,10 @@ h6 {
   padding: 10px 50px;
 }
 
+.back-button {
+  padding: 10px 50px;
+}
+
 .cancel-button {
   padding: 10px 20px;
 }
@@ -258,6 +262,11 @@ h6 {
   color: #26A041;
 }
 
+.task-title-para {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+}
+
 .task-field-para {
   margin-top: 1rem;
 }
@@ -265,4 +274,36 @@ h6 {
 .task-field-name {
   color: #4A4A4A;
   font-weight: 600;
+}
+
+.dragarea {
+  font-size: 1.2em;
+  border: 2px dashed #bbb;
+  padding: 10px ;
+  background-color: #fff;
+  color: #bbb;
+  height: 100%;
+  align-items: center;
+}
+
+.dragarea-with-image {
+  border: 2px dashed #bbb;
+  background-color: #fff;
+  padding: 0;
+  height: 100%;
+  align-items: center;
+}
+
+.droparea {
+  font-size: 1.2em;
+  border: 2px dashed #bbb;
+  padding: 10px ;
+  background-color: #eff;
+  color: #aaa;
+}
+
+.img-loading {
+  background: #ECEEF1;
+  border: dotted 1px;
+  margin: 20px 0;
 }

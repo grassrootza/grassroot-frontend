@@ -124,10 +124,12 @@ export class GroupDetailsComponent implements OnInit {
 
   joinMethodsModal() {
     console.log("join method params = ", this.joinMethodParams);
-    $('#group-join-methods').modal('show');
-    this.groupService.fetchActiveJoinWords().subscribe(result => {
-      this.activeJoinWords = result;
-    })
+    if (this.group.hasPermission('GROUP_PERMISSION_SEND_BROADCAST') || this.group.joinWords) {
+      $('#group-join-methods').modal('show');
+      this.groupService.fetchActiveJoinWords().subscribe(result => {
+        this.activeJoinWords = result;
+      })
+    }
   }
 
   checkJoinWordAvailability(control: FormControl) {

@@ -14,7 +14,7 @@ var ViewVoteComponent = /** @class */ (function () {
     };
     __decorate([
         core_1.Input()
-    ], ViewVoteComponent.prototype, "taskToView", void 0);
+    ], ViewVoteComponent.prototype, "todoToView", void 0);
     ViewVoteComponent = __decorate([
         core_1.Component({
             selector: 'app-view-vote',

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {UserService} from "./user/user.service";
 import {NavigationEnd, RouteConfigLoadStart, Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
-import {environment} from "../environments/environment";
 import {TranslateService} from '@ngx-translate/core';
 import {AlertService} from "./utils/alert.service";
 import {NotificationService} from "./user/notification.service";
@@ -37,7 +36,8 @@ export class AppComponent implements OnInit {
   private maxNumberOfPopupNotificationInSequence = 3;
   private DISPLAYED_NOTIFICATIONS_STORAGE_KEY: string = "displayedNotifications";
 
-  public loggedInUserImageUrl = environment.backendAppUrl + "/api/user/profile/image/view";
+  public userImageUrl;
+  public userHasNoImage: boolean; // seems redundant but Angular being insanely obtuse on chnages
 
   constructor(private router: Router,
               private userService: UserService,
@@ -46,6 +46,12 @@ export class AppComponent implements OnInit {
               private notificationService: NotificationService) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
+    if (this.loggedInUser && this.loggedInUser.hasImage) {
+      this.userImageUrl = this.userService.getProfileImageUrl(false);
+    } else {
+      this.userImageUrl = '';
+      this.userHasNoImage = true;
+    }
 
     this.router.events.subscribe(ev => {
       if (ev instanceof RouteConfigLoadStart) {
@@ -61,7 +67,12 @@ export class AppComponent implements OnInit {
 
     this.userService.loggedInUser.subscribe(user => {
       console.log("user emitted!");
-      this.loggedInUser = user
+      this.loggedInUser = user;
+      this.userHasNoImage = !this.loggedInUser || !this.loggedInUser.hasImage;
+      console.log("user has no image? : ", this.userHasNoImage);
+      if (this.loggedInUser && this.loggedInUser.hasImage) {
+        this.userImageUrl = this.userService.getProfileImageUrl(true);
+      }
     });
 
     this.alertService.getAlert().subscribe(message=> {
@@ -194,6 +205,14 @@ export class AppComponent implements OnInit {
         error => console.log("Mark notification failed!", error)
       );
 
+    return false;
+  }
+
+  markAllNotificationsRead(): boolean {
+    this.notificationService.markAllNotificationsAsRead().subscribe(response => {
+      console.log("all notifications marked read", response);
+      this.notifications = [];
+    }, error => console.log("Mark all read failed", error));
     return false;
   }
 

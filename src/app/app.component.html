@@ -35,8 +35,8 @@
               </a>
             </li>
 
-            <li class="nav-item" [ngClass]="{active: currentUrl == '/networks'}">
-              <a class="nav-link disabled" [routerLink]="['/networks']"> {{ 'menu.networks' | translate }} <span class="sr-only">(current)</span></a>
+            <li class="nav-item" [ngClass]="{active: currentUrl == '/movements'}">
+              <a class="nav-link disabled" [routerLink]="['/movements']"> {{ 'menu.movements' | translate }} <span class="sr-only">(current)</span></a>
             </li>
 
           </ul>
@@ -53,6 +53,9 @@
                   <img src="assets/icon-bell.png"/>
                 </a>
                 <div class="dropdown-menu scrollable-menu notifications" aria-labelledby="dropdown01">
+                  <a *ngIf="notifications.length > 2" class="dropdown-item" href="#" (click)="markAllNotificationsRead()">
+                    Mark all read
+                  </a>
                   <a *ngFor="let ntf of notifications" class="dropdown-item" href="#"
                      (click)="handleNotificationClick($event)">
                     <div class="notification-item">
@@ -76,16 +79,12 @@
                 </div>
               </li>
 
-              <li class="nav-item">
-                <!-- todo: restore fetching image, if it exists, and allow its upload in profile -->
-                <!--<img height="50" class="image rounded-circle profile-image"-->
-                       <!--src="{{loggedInUserImageUrl}}/{{loggedInUser.uid}}"/>-->
-              </li>
-
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false"><i class="far fa-user"></i>
-                  {{loggedInUser.displayName}}</a>
+                   aria-haspopup="true" aria-expanded="false">
+                  <img height="50" class="image rounded-circle profile-image" *ngIf="userImageUrl" [src]="userImageUrl"
+                    #profileImage />
+                  <span *ngIf="userHasNoImage"><i class="far fa-user"></i> </span>{{loggedInUser.displayName}}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                   <a class="dropdown-item" [routerLink]="['/user']">{{ 'menu.profile' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/password']">{{ 'menu.password' | translate }}</a>
@@ -157,18 +156,21 @@
 
   <div class="container main-content">
 
-    <div *ngIf="popupNotification" class="ntf-popup alert alert-warning" (mouseenter)="popupNotificationMouseEnter()"
-         (mouseleave)="popupNotificationMouseExit()">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="ntf-popup-body">
-        <span class="notification-item-title">{{popupNotification.message}}</span><br/>
-        <span class="notification-item-time">{{popupNotification.createdDatetime.fromNow()}}</span>
-        <a href="#" (click)="markNotificationRead(popupNotification.uid)" class="badge badge-info">Mark read</a>
+    <div class="container ntf-popup" *ngIf="popupNotification"
+         (mouseenter)="popupNotificationMouseEnter()" (mouseleave)="popupNotificationMouseExit()">
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <div class="popup-holder">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <div class="ntf-popup-body">
+                <span class="notification-item-title">{{popupNotification.message}}</span>
+                <a href="#" (click)="markNotificationRead(popupNotification.uid)" class="badge badge-info notification-read-badge">Mark read</a>
+                <span class="notification-item-time float-right">{{popupNotification.createdDatetime.fromNow()}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-
 
     <router-outlet></router-outlet>
   </div>
@@ -194,8 +196,8 @@
               <div class="social-icons">
                 <a href="https://twitter.com/grassrootza" target="_blank"><img src="assets/icon-twitter.png"/></a>
                 <a href="https://facebook.com/grassrootnation" target="_blank"><img src="assets/icon-facebook.png"/></a>
-                <!-- todo : get insta icon, and add a WhatsApp icon -->
-                <a href="https://instagram.com/grassrootza"><i class="fab fa-instagram"></i></a>
+                <!-- todo : fix color, finalize size -->
+                <a href="https://instagram.com/grassrootza" target="_blank"><img src="assets/icon-instagram.png"/></a>
               </div>
             </div>
           </div>

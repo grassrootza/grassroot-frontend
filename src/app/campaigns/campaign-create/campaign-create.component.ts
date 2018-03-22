@@ -69,7 +69,7 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   loadGroupSelector(groups: GroupInfo[]) {
-    this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_UPDATE_GROUP_DETAILS"));
+    this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_CREATE_CAMPAIGN"));
     this.createCampaignForm.controls['groupUid'].valueChanges.subscribe(value => {
       console.log("selected this group: ", value);
       let selectedGroupTopics = this.availableGroups.find(grp => grp.groupUid === value).topics;

@@ -76,6 +76,29 @@ export class BroadcastContentComponent implements OnInit {
     this.content = this.broadcastService.getContent();
     this.contentForm.setValue(this.content);
     this.setUpValidation();
+    this.restorePriorAttachments();
+  }
+
+  restorePriorAttachments() {
+    if (this.content.emailAttachmentKeys) {
+      this.emailAttachmentKeys = this.content.emailAttachmentKeys;
+    }
+    if (this.content.facebookImageKey) {
+      this.fbImageKey = this.content.facebookImageKey;
+      this.fbImageUrl = environment.backendAppUrl + "/image/broadcast/" + this.fbImageKey;
+    }
+    if (this.content.facebookLink) {
+      this.fbLink = this.content.facebookLink;
+      this.fbLinkCaption = this.content.facebookLinkCaption;
+    }
+    if (this.content.twitterImageKey) {
+      this.twitterImageKey = this.content.twitterImageKey;
+      this.twitterImageUrl = environment.backendAppUrl + "/image/broadcast" + this.twitterImageKey;
+    }
+    if (this.content.twitterLink) {
+      this.twitterLink = this.content.twitterLink;
+      this.twitterLinkCaption = this.content.twitterLinkCaption;
+    }
   }
 
   // todo : save things every few words

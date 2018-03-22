@@ -10,7 +10,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-md-6 col-sm-12">
-            <p class="title-para">
+            <p class="task-title-para">
               <img [src]="'assets/' + taskToView?.getEventIconName() "/>
               <span class="task-field-name">Meeting: </span> {{taskToView?.title}}
             </p>
@@ -26,12 +26,34 @@
               <span class="task-field-name">Reminder: </span>
             </p>
           </div>
-          <div class="col-md-6 col-sm-12">
-            <!-- insert image -->
+          <div [ngClass]="{'col-md-6 col-sm-12': 'true', 'img-loading': imageLoading}" *ngIf="imageUrl">
+            <img class="img-thumbnail" (load)="imageLoading = false" [src]="imageUrl" />
           </div>
         </div>
         <div class="row">
           {{taskToView?.description}}
+        </div>
+
+        <div class="row mb-3" *ngIf="!taskToView?.hasResponded" >
+          <div class="col-md-3 col-sm-6">
+            <label class="task-field-name">Will you attend? </label>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <div class="dropdown">
+              <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                {{ !!response ? (response | titlecase) : '(Select)' }}</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" *ngFor="let option of responseOptions" (click)="response = option">
+                  {{ option | titlecase }}
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <div *ngIf="!taskToView?.hasResponded && !!response">
+              <button  type="button" class="btn btn-primary save-button" (click)="respondToMeeting()">RSVP</button>
+            </div>
+          </div>
         </div>
 
         <div class="row">
@@ -66,7 +88,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary hover-primary footer-button" (click)="sendingBroadcast = !sendingBroadcast">Send a broadcast</button>
         <button type="button" class="btn btn-secondary hover-primary footer-button float-left" (click)="viewAllAttendees()">View all attendees</button>
-        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal" (click)="clearData()">
           {{ 'action.close' | translate }}
         </button>
       </div>
