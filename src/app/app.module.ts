@@ -40,6 +40,9 @@ import {MediaService} from "./media/media.service";
 import { LiveWireListComponent } from './livewire/live-wire-list/live-wire-list.component';
 import { ViewAlertComponent } from './livewire/view-alert/view-alert.component';
 import { MeetingDetailsComponent } from "./task/meeting-details/meeting-details.component";
+import { NewsServiceService } from "./news/news-service.service";
+import { NewsComponent } from './news/news/news.component';
+
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -92,8 +95,8 @@ const routes: Routes = [
   {path: 'meeting/:id', component:MeetingDetailsComponent, canActivate:[LoggedInGuard]},
   {path: 'livewire-admin',component:LiveWireListComponent,canActivate:[LoggedInGuard]},
   {path: 'view-alert/:id',component:ViewAlertComponent,canActivate:[LoggedInGuard]},
-  {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]}
-
+  {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]},
+  {path: 'news',component:NewsComponent}
 ];
 
 @NgModule({
@@ -111,8 +114,8 @@ const routes: Routes = [
     PasswordResetComponent,
     MeetingDetailsComponent,
     LiveWireListComponent,
-    ViewAlertComponent
-
+    ViewAlertComponent,
+    NewsComponent
   ],
   imports: [
     BrowserModule,
@@ -158,7 +161,8 @@ const routes: Routes = [
     AccountService,
     SearchService,
     MediaService,
-    LiveWireAlertService
+    LiveWireAlertService,
+    NewsServiceService
   ],
   bootstrap: [AppComponent]
 })
