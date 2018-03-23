@@ -6,7 +6,7 @@ import {GroupService} from "../../group.service";
 import {GroupLogPage} from "../../model/group-log.model";
 import * as moment from 'moment';
 import {DateTimeUtils} from "../../../utils/DateTimeUtils";
-import {saveAs} from 'file-saver/FileSaver';
+import { saveAs } from 'file-saver';
 
 
 @Component({
