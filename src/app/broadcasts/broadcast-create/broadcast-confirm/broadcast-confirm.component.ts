@@ -4,6 +4,7 @@ import {BroadcastService} from "../../broadcast.service";
 import {Router} from "@angular/router";
 import {BroadcastConfirmation, BroadcastContent} from "../../model/broadcast-request";
 import {AlertService} from "../../../utils/alert.service";
+import {emailStyleHeader} from "../../../utils/media-utils";
 
 @Component({
   selector: 'app-broadcast-confirm',
@@ -14,6 +15,7 @@ export class BroadcastConfirmComponent implements OnInit {
 
   public confirmFields: BroadcastConfirmation;
   public contentFields: BroadcastContent;
+  public strippedEmailContent: string;
 
   constructor(public activeModal: NgbActiveModal,
               private router: Router,
@@ -24,6 +26,9 @@ export class BroadcastConfirmComponent implements OnInit {
     this.confirmFields = this.broadcastService.getConfirmationFields();
     console.log("confirmation fields: ", this.confirmFields);
     this.contentFields = this.broadcastService.getContent();
+    if (this.contentFields.emailContent) {
+      this.strippedEmailContent = this.contentFields.emailContent.replace(emailStyleHeader, '');
+    }
   }
 
   edit() {

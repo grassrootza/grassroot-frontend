@@ -37,6 +37,7 @@ import {AccountService} from "./user/account.service";
 import {SearchService} from "./search/search.service";
 import {LoggedInServicesModule} from "./logged-in-services.module";
 import {MediaService} from "./media/media.service";
+import {RecaptchaDirective} from "./utils/recaptcha.directive";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -102,7 +103,8 @@ const routes: Routes = [
     PwdResetInitiateComponent,
     PwdResetValidateComponent,
     PwdResetNewComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    RecaptchaDirective
   ],
   imports: [
     BrowserModule,
