@@ -41,16 +41,19 @@
         </p>
       </div><!-- /.col-lg-6 -->
       <div class="col-lg-6">
-        <div class="box-happening-now">
+        <div class="box-happening-now" >
           <h3>Happening Now....</h3>
-          <div class="row" *ngFor="let activity of activitiesList">
-            <div class="col-sm-8">
-              <i [class]="getIconForPublicActivityType(activity.type)"></i> {{activity.actorName}} - {{getTypeNameFormatted(activity.type)}}
-            </div>
-            <div class="col-sm-4 time col-12">
-              {{activity.actionTimeMillis | date}}
+          <div style="overflow: hidden" #activitiesPlaceHolder>
+            <div class="row" *ngFor="let activity of activitiesList" #activitiesRow>
+              <div class="col-sm-8">
+                <i [class]="getIconForPublicActivityType(activity.type)"></i> {{activity.actorName}} - {{getTypeNameFormatted(activity.type)}}
+              </div>
+              <div class="col-sm-4 time col-12">
+                {{activity.actionTimeMillis | date}}
+              </div>
             </div>
           </div>
+
         </div><!-- /.box-happening-now -->
       </div><!-- /.col-lg-6 -->
     </div><!-- /.row -->
