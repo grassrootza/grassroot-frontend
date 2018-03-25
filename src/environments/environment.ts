@@ -9,6 +9,10 @@ export const environment = {
   frontendAppUrl: "http://alpha.grassroot.cloud", // leave as this for testing (bitly doesn't like localhost)
   ussdPrefix: `*134*1994*`,
   groupShortCode: '31660',
+
   recaptchaPublicKey: '6LegYE0UAAAAAFrs_Mf8-_1YD6pLC-wps4W__96p',
-  recaptchaVerifyUrl: 'https://p21elfj42g.execute-api.eu-west-1.amazonaws.com/latest/validate_captcha'
+
+  // some lambda endpoints
+  recaptchaVerifyUrl: 'https://p21elfj42g.execute-api.eu-west-1.amazonaws.com/latest/validate_captcha',
+  mediaFetchUrl: 'https://6waduader0.execute-api.eu-west-1.amazonaws.com/latest'
 };

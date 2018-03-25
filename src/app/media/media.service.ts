@@ -9,7 +9,7 @@ import 'rxjs/add/operator/map';
 export class MediaService {
 
   private uploadMediaUrl = environment.backendAppUrl + "/api/media/store/body";
-  private fetchImageUrl = environment.backendAppUrl + "/image";
+  private fetchImageUrl = environment.mediaFetchUrl;
 
   public IMAGE_EXTENSIONS = "png, jpg, jpeg, gif";
   public DEFAULT_MAX_SIZE = 2; // in mb

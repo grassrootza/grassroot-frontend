@@ -46,6 +46,7 @@ export class CreateMeetingComponent implements OnInit {
       'time': [DateTimeUtils.timeFromDate(new Date()), Validators.required],
       'parentType': 'GROUP',
       'publicMeeting': false,
+      'description': [''],
       'assignedMemberUids': []
     }, { validator: isDateTimeFuture("date", "time") });
   }
@@ -105,6 +106,7 @@ export class CreateMeetingComponent implements OnInit {
     let parentType: string = this.createMeetingForm.get("parentType").value;
     let meetingSubject: string = this.createMeetingForm.get("subject").value;
     let meetingLocation: string = this.createMeetingForm.get("location").value;
+    let meetingDesc: string = this.createMeetingForm.get("description").value;
 
     let voteDate: NgbDateStruct = this.createMeetingForm.get('date').value;
     let voteTime: NgbTimeStruct = this.createMeetingForm.get('time').value;
@@ -125,7 +127,7 @@ export class CreateMeetingComponent implements OnInit {
     }
 
     this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis,
-      publicMeeting, this.imageKey, assignedMemberUids).subscribe(task => {
+      publicMeeting, meetingDesc, this.imageKey, assignedMemberUids).subscribe(task => {
           console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
           this.initCreateMeetingForm();
           this.confirmingSend = false;

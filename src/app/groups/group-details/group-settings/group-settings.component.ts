@@ -28,6 +28,8 @@ export class GroupSettingsComponent implements OnInit {
   public committeeMemberPermissions: Permission[] = [];
   public groupOrganizerPermissions: Permission[] = [];
   public permissionsToDisplay: string[] = [];
+  public permissionsFetched: boolean = false;
+
   public topicInterestsStats: any;
   public topicInterestInFirstColumn: number;
   public newTopicName: string = "";
@@ -101,6 +103,8 @@ export class GroupSettingsComponent implements OnInit {
         "GROUP_PERMISSION_CLOSE_OPEN_LOGBOOK": false,
         "GROUP_PERMISSION_VIEW_MEETING_RSVPS": false,
         "GROUP_PERMISSION_READ_UPCOMING_EVENTS": false,
+        "GROUP_PERMISSION_SEND_BROADCAST": false,
+        "GROUP_PERMISSION_CREATE_CAMPAIGN": false
       }
     );
 
@@ -117,17 +121,21 @@ export class GroupSettingsComponent implements OnInit {
 
   populatePermissionsTableFormData(ordinaryMemberPermissions: Permission[], committeeMemberPermissions: Permission[], groupOrganizerPermissions: Permission[]) {
     for(let i = 0 ; i < this.permissionsToDisplay.length ; i++){
-      if(ordinaryMemberPermissions.length > 0){
+      if(ordinaryMemberPermissions.length > 0  && this.nsPermCheck("ordinaryMemberPermission", this.permissionsToDisplay[i])){
         this.groupForm.get("ordinaryMemberPermissions").get(this.permissionsToDisplay[i]).setValue(this.ordinaryMemberPermissions[i].permissionEnabled);
       }
-      if(committeeMemberPermissions. length > 0){
+      if(committeeMemberPermissions. length > 0 && this.nsPermCheck("committeeMemberPermissions", this.permissionsToDisplay[i])){
         this.groupForm.get("committeeMemberPermissions").get(this.permissionsToDisplay[i]).setValue(this.committeeMemberPermissions[i].permissionEnabled);
       }
-      if(groupOrganizerPermissions. length > 0){
+      if(groupOrganizerPermissions. length > 0 && this.nsPermCheck("groupOrganizerPermissions", this.permissionsToDisplay[i])){
         this.groupForm.get("groupOrganizerPermissions").get(this.permissionsToDisplay[i]).setValue(this.groupOrganizerPermissions[i].permissionEnabled);
       }
     }
 
+  }
+
+  nsPermCheck(role: string, permission: string): boolean {
+    return !!this.groupForm.get(role) && !!this.groupForm.get(role).get(permission);
   }
 
   getPermissionsForRole(groupUid: string){
@@ -142,7 +150,7 @@ export class GroupSettingsComponent implements OnInit {
           this.groupOrganizerPermissions = perms.getParameters(role);
       }
       this.populatePermissionsTableFormData(this.ordinaryMemberPermissions, this.committeeMemberPermissions, this.groupOrganizerPermissions);
-
+      this.permissionsFetched = true;
     });
   }
 
@@ -168,10 +176,6 @@ export class GroupSettingsComponent implements OnInit {
       });
     }
     return permissions;
-  }
-
-  shouldDisplayPermissionsTable(): boolean {
-    return this.permissionsToDisplay.length > 0 && this.committeeMemberPermissions.length > 0 && this.groupOrganizerPermissions.length > 0 && this.ordinaryMemberPermissions.length > 0;
   }
 
   settingsChangedTrigger(){

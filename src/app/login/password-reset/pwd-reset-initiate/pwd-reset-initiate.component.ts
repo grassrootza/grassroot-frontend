@@ -19,7 +19,7 @@ export class PwdResetInitiateComponent implements OnInit {
 
   formInitiate: FormGroup;
   username = new FormControl();
-  captcha = new FormControl();
+  captcha = new FormControl(); // used inside form, so retain
 
   constructor(private passwordService: PasswordResetService, private router: Router,
               private fb: FormBuilder) {
