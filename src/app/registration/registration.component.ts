@@ -1,13 +1,19 @@
 import {Component} from '@angular/core';
 import {UserService} from "../user/user.service";
 import {Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../utils/CustomValidators";
+import {RECAPTCHA_URL} from "../utils/recaptcha.directive";
+import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css']
+  styleUrls: ['./registration.component.css'],
+  providers: [{
+    provide: RECAPTCHA_URL,
+    useValue: environment.recaptchaVerifyUrl
+  }]
 })
 export class RegistrationComponent {
 
@@ -19,7 +25,8 @@ export class RegistrationComponent {
       name: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       phone: ['', optionalPhoneValidator],
       email: ['', optionalEmailValidator],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(5)])]
+      password: ['', Validators.compose([Validators.required, Validators.minLength(5)])],
+      captcha: new FormControl()
     }, { validator: emailOrPhoneEntered("email", "phone") })
   }
 

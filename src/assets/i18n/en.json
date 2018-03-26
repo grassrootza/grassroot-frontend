@@ -520,6 +520,8 @@
         "public-explain": "This will allow people to see the meeting if they search for it",
         "image": "Image",
         "image-note": "Note: Image will not be included directly in SMS or email notification, but a short link will be attached that references it",
+        "description-label": "Longer description (optional)",
+        "description-place": "Longer description of meeting (optional, will not be included in SMS, will be visible to web, email and Android users)",
         "assignedMembers": "Assigned members (optional)",
         "confirmTitle": "Confirm meeting",
         "confirmPara": "You are about to call a meeting about {{ subject }} at {{ location }}, on {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}"
@@ -651,7 +653,7 @@
     "settings": {
       "title": "Group settings",
       "groupName": "Group name",
-      "Movement": "Movement",
+      "movement": "Movement",
       "movementSelect": "(feature under construction)",
       "groupDescription": "Group description (shown to people when they join)",
       "groupPrivacy": "Group privacy",

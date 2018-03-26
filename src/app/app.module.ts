@@ -42,7 +42,7 @@ import { ViewAlertComponent } from './livewire/view-alert/view-alert.component';
 import { MeetingDetailsComponent } from "./task/meeting-details/meeting-details.component";
 import { NewsServiceService } from "./news/news-service.service";
 import { NewsComponent } from './news/news/news.component';
-
+import {RecaptchaDirective} from "./utils/recaptcha.directive";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -113,7 +113,8 @@ const routes: Routes = [
     PasswordResetComponent,
     LiveWireListComponent,
     ViewAlertComponent,
-    NewsComponent
+    NewsComponent,
+    RecaptchaDirective
   ],
   imports: [
     BrowserModule,

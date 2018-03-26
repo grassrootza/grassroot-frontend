@@ -50,8 +50,6 @@ export class GroupAddMemberComponent implements OnInit {
     this.roleKeys = Object.keys(GroupRole);
     this.addMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("memberEmail", "phoneNumber")});
     this.setupValidation();
-    console.log("alright, ready to work");
-
   }
 
   private setupValidation() {

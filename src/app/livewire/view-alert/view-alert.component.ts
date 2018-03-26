@@ -1,5 +1,6 @@
 import { MediaFunction } from "../../media/media-function.enum";
 import { MediaService } from "../../media/media.service";
+import { IntegrationsService } from "../../user/integrations/integrations.service";
 import { DataSubscriber } from "../datasubscriber/data-subscriber.model";
 import { LiveWireAlert } from "../live-wire-alert.model";
 import { LiveWireAlertService } from "../live-wire-alert.service";

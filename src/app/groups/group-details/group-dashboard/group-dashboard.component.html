@@ -25,7 +25,7 @@
             {{ 'group.dashboard.no-meetings' | translate }}
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')">
           <img src="assets/icon-plus.png" class="float-right event-new" (click)="showCreateMeetingModal()"/>
           <span [translate]="'group.dashboard.add-meeting'">Schedule a new meeting</span>
         </div>
@@ -55,7 +55,7 @@
             {{ 'group.dashboard.no-votes' | translate }}
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')">
           <img src="assets/icon-plus.png" class="float-right event-new" (click)="showCreateVoteModal()"/>
           <span [translate]="'group.dashboard.add-vote'">Create a new vote</span>
         </div>
@@ -85,7 +85,7 @@
             {{ 'group.dashboard.no-todos' | translate }}
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')">
           <img src="assets/icon-plus.png" class="float-right event-new" (click)="showCreateTodoModal()"/>
           <span [translate]="'group.dashboard.add-todo'">Add an action item</span>
         </div>
