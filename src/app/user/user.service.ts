@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {isValidNumber} from "libphonenumber-js";
+import {LocalStorageService} from "../utils/local-storage.service";
 
 @Injectable()
 export class UserService {
@@ -22,10 +23,10 @@ export class UserService {
 
   public showForceLogoutReason = false;
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(private httpClient: HttpClient, private router: Router, private localStorageService: LocalStorageService) {
     console.log("Initializing user service");
-    if (localStorage.getItem("loggedInUser") != null) {
-      this._loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"))
+    if (this.localStorageService.getItem("loggedInUser")) {
+      this._loggedInUser = JSON.parse(this.localStorageService.getItem("loggedInUser"))
     }
   }
 
@@ -81,11 +82,11 @@ export class UserService {
 
   storeAuthUser(user: AuthenticatedUser, token?: string) {
     if (token) {
-      localStorage.setItem("token", token);
+      this.localStorageService.setItem("token", token);
     }
     this._loggedInUser = user;
     this.loggedInUser.emit(this._loggedInUser);
-    localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
+    this.localStorageService.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
   }
 
   logout(showForceLogoutReason: boolean): any {
@@ -94,13 +95,13 @@ export class UserService {
 
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
-    localStorage.removeItem('token');
-    localStorage.removeItem('loggedInUser');
-    localStorage.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login
+    this.localStorageService.removeItem('token');
+    this.localStorageService.removeItem('loggedInUser');
+    this.localStorageService.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login
 
     // clear up broadcast items, just in case user had some lying around
-    localStorage.removeItem('broadcastCreateRequest');
-    localStorage.removeItem('broadcastCreateStep');
+    this.localStorageService.removeItem('broadcastCreateRequest');
+    this.localStorageService.removeItem('broadcastCreateStep');
 
     console.log("routing to login");
     console.log("going back to login");

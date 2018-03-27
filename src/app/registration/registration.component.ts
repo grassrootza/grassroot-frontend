@@ -3,17 +3,11 @@ import {UserService} from "../user/user.service";
 import {Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../utils/CustomValidators";
-import {RECAPTCHA_URL} from "../utils/recaptcha.directive";
-import {environment} from "../../environments/environment";
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css'],
-  providers: [{
-    provide: RECAPTCHA_URL,
-    useValue: environment.recaptchaVerifyUrl
-  }]
+  styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent {
 

@@ -17,6 +17,7 @@ import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage} from './model/broadcast';
 import * as moment from 'moment';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {LocalStorageService} from "../utils/local-storage.service";
 
 @Injectable()
 export class BroadcastService {
@@ -38,7 +39,7 @@ export class BroadcastService {
 
   public loadedFromCache: boolean = false;
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(private httpClient: HttpClient, private router: Router, private localStorageService: LocalStorageService) {
     // look for anything cached in here (constructor, not initCreate) so it's available to the route
     this.loadBroadcast();
   }
@@ -239,12 +240,12 @@ export class BroadcastService {
   Below helps persist and retrieve in-progress broadcast
    */
   saveBroadcast() {
-    localStorage.setItem('broadcastCreateRequest', JSON.stringify(this.createRequest));
+    this.localStorageService.setItem('broadcastCreateRequest', JSON.stringify(this.createRequest));
   }
 
   loadBroadcast() {
     this.createRequest = new BroadcastRequest();
-    let storedString = localStorage.getItem('broadcastCreateRequest');
+    let storedString = this.localStorageService.getItem('broadcastCreateRequest');
     console.log("stored string: ", storedString);
     if (storedString) {
       let cachedRequest = JSON.parse(storedString);
@@ -253,7 +254,7 @@ export class BroadcastService {
       console.log("nothing in cache, just return new empty");
       this.createRequest = new BroadcastRequest();
     }
-    let storedStep = localStorage.getItem('broadcastCreateStep');
+    let storedStep = this.localStorageService.getItem('broadcastCreateStep');
     this.latestStep = Number(storedStep) || 1;
     this.currentStep = this.latestStep;
   }
@@ -263,8 +264,8 @@ export class BroadcastService {
     this.createRequest.clear();
     this.currentStep = 1;
     this.latestStep = 1;
-    localStorage.removeItem('broadcastCreateRequest');
-    localStorage.removeItem('broadcastCreateStep');
+    this.localStorageService.removeItem('broadcastCreateRequest');
+    this.localStorageService.removeItem('broadcastCreateStep');
   }
 
   setPageCompleted(page: string) {
@@ -272,7 +273,7 @@ export class BroadcastService {
     // 1 for zero base, 1 to go to next
     if (this.latestStep < nextPage) {
       this.latestStep = nextPage;
-      localStorage.setItem('broadcastCreateStep', this.latestStep.toString());
+      this.localStorageService.setItem('broadcastCreateStep', this.latestStep.toString());
     }
   }
 

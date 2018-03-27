@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {UserService} from "./user/user.service";
 import {NavigationEnd, RouteConfigLoadStart, Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
@@ -6,6 +6,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {AlertService} from "./utils/alert.service";
 import {NotificationService} from "./user/notification.service";
 import {Notification} from "./user/model/notification.model";
+import {LocalStorageService} from "./utils/local-storage.service";
+import {isPlatformBrowser} from "@angular/common";
 
 declare var $: any;
 
@@ -43,7 +45,9 @@ export class AppComponent implements OnInit {
               private userService: UserService,
               private translateService: TranslateService,
               private alertService: AlertService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private localStorageService: LocalStorageService,
+              @Inject(PLATFORM_ID) protected platformId: Object) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
     if (this.loggedInUser && this.loggedInUser.hasImage) {
@@ -83,18 +87,22 @@ export class AppComponent implements OnInit {
       this.loadingModule = loading;
     });
 
-    translateService.addLangs(['en']);
-    translateService.setDefaultLang('en');
-    const browserLang = translateService.getBrowserLang();
-    translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+    if (isPlatformBrowser(this.platformId)) {
+      translateService.addLangs(['en']);
+      translateService.setDefaultLang('en');
+      const browserLang = translateService.getBrowserLang();
+      translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+    }
   }
 
   ngOnInit(): void {
-    $(".ntf-popup").hide();
-    this.pullNotifications();
-    setInterval(() => {
-      this.pullNotifications()
-    }, 10000);
+    if (isPlatformBrowser(this.platformId)) {
+      $(".ntf-popup").hide();
+      this.pullNotifications();
+      setInterval(() => {
+        this.pullNotifications()
+      }, 10000);
+    }
   }
 
   private pullNotifications() {
@@ -112,7 +120,7 @@ export class AppComponent implements OnInit {
         notifications => {
           // console.log("Notifications: ", notifications);
 
-          let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+          let displayedNotifications: string = this.localStorageService.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
           if (!displayedNotifications)
             displayedNotifications = "";
 
@@ -145,10 +153,10 @@ export class AppComponent implements OnInit {
       }, 4000);
 
 
-      let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+      let displayedNotifications: string = this.localStorageService.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
       displayedNotifications = displayedNotifications ? displayedNotifications : "";
       displayedNotifications = displayedNotifications + ";" + this.popupNotification.uid;
-      localStorage.setItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
+      this.localStorageService.setItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
 
       this.currentPopupNotificationIndex++;
     }

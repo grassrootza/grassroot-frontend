@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "./",
+    "module": "es2015",
+    "types": []
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts",
+    "app/login/password-reset//.",
+    "app/user/integrations//.",
+    "app/utils/recaptcha.directive.ts"
+  ],
+  "angularCompilerOptions": {
+    "entryModule": "./app/app.browser.module#AppBrowserModule"
+  }
+}

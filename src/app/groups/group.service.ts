@@ -26,6 +26,7 @@ import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {FileImportResult} from "./group-details/group-members/group-members-import/file-import/file-import-result";
 import {GroupLog, GroupLogPage} from "./model/group-log.model";
 import {Moment} from "moment";
+import {LocalStorageService} from "../utils/local-storage.service";
 
 
 @Injectable()
@@ -104,20 +105,20 @@ export class GroupService {
   private NEW_MEMBERS_DATA_CACHE = "NEW_MEMBERS_DATA_CACHE";
   private MY_GROUPS_DATA_CACHE = "MY_GROUPS_DATA_CACHE";
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
 
-    let cachedMyGroups = localStorage.getItem(this.MY_GROUPS_DATA_CACHE);
+    let cachedMyGroups = this.localStorageService.getItem(this.MY_GROUPS_DATA_CACHE);
     if (cachedMyGroups) {
-      let cachedMyGroupsData = JSON.parse(localStorage.getItem(this.MY_GROUPS_DATA_CACHE));
+      let cachedMyGroupsData = JSON.parse(this.localStorageService.getItem(this.MY_GROUPS_DATA_CACHE));
       console.log("cachedMyGroupsData before", cachedMyGroupsData);
       cachedMyGroupsData = cachedMyGroupsData.map(gr => GroupInfo.createInstance(gr));
       console.log("cachedMyGroupsData after", cachedMyGroupsData);
       this.groupInfoList_.next(cachedMyGroupsData);
     }
 
-    let cachedNewMembers = localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE);
+    let cachedNewMembers = this.localStorageService.getItem(this.NEW_MEMBERS_DATA_CACHE);
     if (cachedNewMembers) {
-      let cachedNewMembersData = JSON.parse(localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE));
+      let cachedNewMembersData = JSON.parse(this.localStorageService.getItem(this.NEW_MEMBERS_DATA_CACHE));
       cachedNewMembersData.content = cachedNewMembersData.content.map(membership => Membership.createInstance(membership));
       this.newMembersInMyGroups_.next(cachedNewMembersData);
     }
@@ -128,7 +129,7 @@ export class GroupService {
     return this.httpClient.get<GroupInfo[]>(fullUrl).map(data => data.map(GroupInfo.createInstance)).subscribe(
         groups => {
           this.groupInfoList_.next(groups);
-          localStorage.setItem(this.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
+          this.localStorageService.setItem(this.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
         },
         error => {
           this.groupInfoListError_.next(error);
@@ -255,7 +256,7 @@ export class GroupService {
       .subscribe(
         newMembersPage => {
           this.newMembersInMyGroups_.next(newMembersPage);
-          localStorage.setItem(this.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
+          this.localStorageService.setItem(this.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
         },
         error => {
           console.log("Failed to fetch new members", error);

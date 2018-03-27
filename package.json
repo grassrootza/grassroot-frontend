@@ -8,7 +8,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "build:uni": "ng build --prod --output-hashing=none && ng build --prod --app 1 --output-hashing=false",
+    "build:serv": "ng build --prod --app 1 --output-hashing=false"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +27,8 @@
     "@angular/router": "^5.2.0",
     "@auth0/angular-jwt": "^1.0.0-beta.9",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.9",
+    "@nguniversal/express-engine": "^5.0.0-beta.8",
+    "@nguniversal/module-map-ngfactory-loader": "^5.0.0-beta.8",
     "@ngx-translate/core": "^9.0.2",
     "@ngx-translate/http-loader": "^2.0.1",
     "blueimp-canvas-to-blob": "^3.14.0",
