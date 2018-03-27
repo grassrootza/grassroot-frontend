@@ -2,13 +2,15 @@ import { DateTimeUtils } from "../utils/DateTimeUtils";
 import * as moment from 'moment';
 export class PublicLivewire {
   
-  constructor(public headline:string,
+  constructor(public serverUid:string,
+              public headline:string,
               public creationTimeMillis:any,
               public description:string,
               public imageKeys:string[]){}
   
   public static createInstance(publicLivewire:PublicLivewire):PublicLivewire{
-    return new PublicLivewire(publicLivewire.headline,
+    return new PublicLivewire(publicLivewire.serverUid,
+                              publicLivewire.headline,
                               moment(publicLivewire.creationTimeMillis),
                               publicLivewire.description,
                               publicLivewire.imageKeys);

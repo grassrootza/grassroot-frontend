@@ -11,6 +11,7 @@ declare var $: any;
 export class NewsServiceService {
   
   private publicNewsUrl = environment.backendAppUrl + "/api/news/list"
+  private loadAlertUrl = environment.backendAppUrl + "/api/news/load/alert";
 
   constructor(private httpClient:HttpClient) { }
 
@@ -32,5 +33,9 @@ export class NewsServiceService {
           )
       }
       )
+  }
+  loadAlert(alertUid:string):Observable<PublicLivewire>{
+    let params = new HttpParams().set('alertUid',alertUid);
+    return this.httpClient.get<PublicLivewire>(this.loadAlertUrl,{params:params});
   }
 }

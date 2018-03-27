@@ -95,7 +95,7 @@ const routes: Routes = [
   {path: 'livewire-admin',component:LiveWireListComponent,canActivate:[LoggedInGuard]},
   {path: 'view-alert/:id',component:ViewAlertComponent,canActivate:[LoggedInGuard]},
   {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]},
-  {path: 'news',component:NewsComponent}
+  {path: 'news/:id',component:NewsComponent}
 ];
 
 @NgModule({

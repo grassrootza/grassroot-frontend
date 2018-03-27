@@ -49,4 +49,11 @@
 	margin-top: 2%;
 }
 
+.first{
+	background-color: lime;
+}
+
+.loaded-outside{
+	border:1px solid lime;
+}
 

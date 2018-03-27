@@ -215,6 +215,10 @@ export class AppComponent implements OnInit {
     }, error => console.log("Mark all read failed", error));
     return false;
   }
+  
+  goToNews(){
+    this.router.navigate(['/news',0])
+  }
 
 
 }

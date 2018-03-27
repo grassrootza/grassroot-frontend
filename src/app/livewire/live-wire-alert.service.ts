@@ -4,6 +4,8 @@ import { DataSubscriber } from "./datasubscriber/data-subscriber.model";
 import { LiveWireAlertDestType } from "./live-wire-alert-dest-type.enum";
 import { LiveWireAlertType } from "./live-wire-alert-type.enum";
 import { LiveWireAlertPage, LiveWireAlert } from "./live-wire-alert.model";
+import { FacebookPost } from "./post/facebook-post.model";
+import { TwitterPost } from "./post/twitter-post.model";
 import { HttpParams } from "@angular/common/http";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
@@ -24,6 +26,8 @@ export class LiveWireAlertService {
   private blockLivewireAlertUrl = environment.backendAppUrl + "/api/livewire/admin/block";
   private subscriberListUrl = environment.backendAppUrl + "/api/livewire/admin/subscribers";
   private releaseAlertUrl = environment.backendAppUrl + "/api/livewire/admin/release";
+  private postFBUrl = environment.backendAppUrl + "/api/livewire/admin/post/facebook";
+  private postTwitterUrl = environment.backendAppUrl + "/api/livewire/admin/post/twitter";
   
   constructor(private httpClient:HttpClient) { }
   
@@ -141,5 +145,26 @@ export class LiveWireAlertService {
       .set('publicLists',dataSubscriberUids.join(","))
     
     return this.httpClient.post<LiveWireAlert>(this.releaseAlertUrl,null,{params:params});
+  }
+  
+  postOnFB(post:FacebookPost):Observable<any>{
+    let params = new HttpParams()
+      .set('facebookPageId',"")
+      .set('message',post.message)
+      .set('linkUrl',post.linkUrl)
+      .set('linkName',post.linkName)
+      .set('imageKey',post.imageKey)
+      .set('imageMediaType',post.imageMediaType)
+      .set('imageCaption',post.imageCaption);
+    
+    return this.httpClient.post(this.postFBUrl,null,{params:params});
+  }
+  
+  postOnTwitter(tweet:TwitterPost):Observable<any>{
+    let params = new HttpParams()
+      .set('message',tweet.message)
+      .set('imageMediaFunction',tweet.imageMediaFunction)
+      .set('imageKey',tweet.imageKey);
+    return this.httpClient.post(this.postTwitterUrl,null,{params:params});
   }
 }

@@ -1,9 +1,12 @@
 import { MediaFunction } from "../../media/media-function.enum";
 import { MediaService } from "../../media/media.service";
 import { IntegrationsService } from "../../user/integrations/integrations.service";
+import { UserService } from "../../user/user.service";
 import { DataSubscriber } from "../datasubscriber/data-subscriber.model";
 import { LiveWireAlert } from "../live-wire-alert.model";
 import { LiveWireAlertService } from "../live-wire-alert.service";
+import { FacebookPost } from "../post/facebook-post.model";
+import { TwitterPost } from "../post/twitter-post.model";
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from "@angular/router";
 
@@ -24,11 +27,18 @@ export class ViewAlertComponent implements OnInit {
   public imageKeys:string[] = [];
   public subscriberUids:string[] = [];
   public subscribers:DataSubscriber[] = [];
+  public shareOnFB:boolean = false;
+  public shareOnTwitter:boolean = false;
+  
+  private linkUrl:string = "";
+  private linkName:string = "grassroor news";
   
   constructor(private route:ActivatedRoute,
               private liveWireAlertService:LiveWireAlertService,
               private mediaService:MediaService,
-              private router:Router) { 
+              private router:Router,
+              private integrationService:IntegrationsService,
+              private userService:UserService) { 
     this.router.routeReuseStrategy.shouldReuseRoute = function(){
       return false;
     }
@@ -37,6 +47,7 @@ export class ViewAlertComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params:Params)=>{
       this.alertUid = params['id'];
+      this.linkUrl = "www.grassroot.org/za/news/" + this.alertUid;
       this.loadAlert(this.alertUid);
     },error=>{
       console.log("Error getting params....",error);
@@ -198,6 +209,14 @@ export class ViewAlertComponent implements OnInit {
     console.log("Data subscriber list in release method.....",this.subscriberUids);
     this.liveWireAlertService.releaseAlert(this.alertUid,this.subscriberUids).subscribe(resp => {
       console.log("Alert released....",resp);
+      if(this.shareOnFB){
+        this.shareAlertOnFacebook(this.liveWireAlert);
+      }
+      
+      if(this.shareOnTwitter){
+        this.shareAlertOnTwitter(this.liveWireAlert);
+      }
+      
       $('#release-modal').modal("hide");
       this.refreshComponent();
     },error => {
@@ -208,5 +227,38 @@ export class ViewAlertComponent implements OnInit {
   refreshComponent(){
       this.router.navigated = false;
       this.router.navigate([this.router.url]);
+  }
+  
+  facebookEvent(event,media){
+    console.log("Media....",event + " " + media);
+    this.shareOnFB = event;
+    //this.shareFB(this.liveWireAlert);
+  }
+  
+  tweetEvent(event,twitter){
+    console.log("Media....",event + " " + twitter);
+    this.shareOnTwitter = event;
+    //this.shareAlertOnTwitter(this.liveWireAlert);
+  }
+  
+  shareAlertOnFacebook(alert:LiveWireAlert){
+    let post = new FacebookPost(this.userService.getLoggedInUser().userUid,
+                                "",alert.description,this.linkUrl,this.linkName,alert.mediaFileUids[0],MediaFunction.LIVEWIRE_MEDIA,alert.mediaFileUids[0]);
+    let posts:FacebookPost[] = [];
+    posts.push(post);
+    this.liveWireAlertService.postOnFB(post).subscribe(resp => {
+      console.log("Posted on FB",resp);
+    },error => {
+      console.log("Error sharing on FB",error);
+    });
+  }
+  
+  shareAlertOnTwitter(alert:LiveWireAlert){
+    let tweet = new TwitterPost(this.userService.getLoggedInUser().userUid,alert.description,MediaFunction.LIVEWIRE_MEDIA,alert.mediaFileUids[0]);
+    this.liveWireAlertService.postOnTwitter(tweet).subscribe(resp => {
+      console.log("Posted on twitter......",resp);
+    },error => {
+      console.log("Error twitting......",error);
+    });
   }
 }

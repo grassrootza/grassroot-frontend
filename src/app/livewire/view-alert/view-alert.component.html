@@ -213,9 +213,13 @@
         			<h5>Share to social:</h5>
         		</div>
         		<ul>
-        			<li><input type="checkbox"><i class="fab fa-facebook-square"></i></li>
-        			<li><input type="checkbox"><i class="fab fa-twitter-square"></i></li>
-        			<li><input type="checkbox"><i class="fab fa-linkedin-in"></i></li>
+        			<li>
+        				<input type="checkbox" value="facebook" #facebook (change)="facebookEvent($event.target.checked,facebook.value)">
+        				<i class="fab fa-facebook-square"></i>
+        				<!-- <input type="text">-->
+        			</li>
+        			<li><input type="checkbox" value="twitter" #twitter (change)="tweetEvent($event.target.checked,twitter.value)"><i class="fab fa-twitter-square"></i></li>
+        			<!--<li><input type="checkbox"><i class="fab fa-linkedin-in"></i></li>-->
         		</ul>
         	</div>
         </div>
