@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {UserService} from "./user/user.service";
-import {NavigationEnd, RouteConfigLoadStart, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
 import {TranslateService} from '@ngx-translate/core';
 import {AlertService} from "./utils/alert.service";
@@ -57,17 +57,17 @@ export class AppComponent implements OnInit {
       this.userHasNoImage = true;
     }
 
-    this.router.events.subscribe(ev => {
-      if (ev instanceof RouteConfigLoadStart) {
-        console.log("start routing to lazy module, navigating");
-        this.loadingModule = true;
-      }
-
-      if (ev instanceof NavigationEnd) {
-        console.log("navigation has ended");
-        this.currentUrl = ev.url;
-      }
-    });
+    // this.router.events.subscribe(ev => {
+    //   if (ev instanceof RouteConfigLoadStart) {
+    //     console.log("start routing to lazy module, navigating");
+    //     this.loadingModule = true;
+    //   }
+    //
+    //   if (ev instanceof NavigationEnd) {
+    //     console.log("navigation has ended");
+    //     this.currentUrl = ev.url;
+    //   }
+    // });
 
     this.userService.loggedInUser.subscribe(user => {
       console.log("user emitted!");
@@ -87,11 +87,14 @@ export class AppComponent implements OnInit {
       this.loadingModule = loading;
     });
 
+    translateService.addLangs(['en']);
+    translateService.setDefaultLang('en');
+
     if (isPlatformBrowser(this.platformId)) {
-      translateService.addLangs(['en']);
-      translateService.setDefaultLang('en');
       const browserLang = translateService.getBrowserLang();
       translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+    } else {
+      translateService.use('en');
     }
   }
 

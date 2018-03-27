@@ -13,10 +13,7 @@
     "main.browser.ts",
     "app/app.browser.module.ts",
     "app/app.browser.routing.module.ts",
-    "app/groups//.",
-    "app/login/password-reset//.",
-    "app/user/integrations//.",
-    "app/utils/recaptcha.directive.ts"
+    "app/groups//."
   ],
   "angularCompilerOptions": {
     "entryModule": "./app/app.server.module#AppServerModule"

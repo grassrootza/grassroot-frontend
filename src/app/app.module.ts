@@ -17,6 +17,12 @@ import {LocalStorageService} from "./utils/local-storage.service";
 import {IntegrationsService} from "./user/integrations/integrations.service";
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
 import {NotificationService} from "./user/notification.service";
+import {PwdResetNewComponent} from "./login/password-reset/pwd-reset-new/pwd-reset-new.component";
+import {PwdResetValidateComponent} from "./login/password-reset/pwd-reset-validate/pwd-reset-validate.component";
+import {PasswordResetComponent} from "./login/password-reset/password-reset.component";
+import {PwdResetInitiateComponent} from "./login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component";
+import {IntegrationConnectComponent} from "./user/integrations/integration-connect/integration-connect.component";
+import {RecaptchaDirective} from "./utils/recaptcha.directive";
 
 @NgModule({
   declarations: [
@@ -24,12 +30,12 @@ import {NotificationService} from "./user/notification.service";
     LoginComponent,
     RegistrationComponent,
     JoinComponent,
-    // RecaptchaDirective,
-    // IntegrationConnectComponent,
-    // PwdResetInitiateComponent,
-    // PwdResetValidateComponent,
-    // PwdResetNewComponent,
-    // PasswordResetComponent
+    RecaptchaDirective,
+    IntegrationConnectComponent,
+    PwdResetInitiateComponent,
+    PwdResetValidateComponent,
+    PwdResetNewComponent,
+    PasswordResetComponent
   ],
   imports: [
     BrowserModule,

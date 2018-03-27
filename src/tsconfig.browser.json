@@ -9,9 +9,7 @@
   "exclude": [
     "test.ts",
     "**/*.spec.ts",
-    "app/login/password-reset//.",
-    "app/user/integrations//.",
-    "app/utils/recaptcha.directive.ts"
+    "**/translate-server-loader.service.ts"
   ],
   "angularCompilerOptions": {
     "entryModule": "./app/app.browser.module#AppBrowserModule"

@@ -11,6 +11,7 @@ const {
 } = require(`./dist-server/main.bundle`);
 
 const app = express();
+// app.compress();
 
 const { provideModuleMap } = require('@nguniversal/module-map-ngfactory-loader');
 const provider = provideModuleMap(LAZY_MODULE_MAP);

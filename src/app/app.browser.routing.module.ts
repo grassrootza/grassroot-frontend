@@ -14,7 +14,7 @@ import {IntegrationConnectComponent} from "./user/integrations/integration-conne
 
 const routes: Routes = [
 
-  {path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [LoggedInGuard]},
+  // {path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [LoggedInGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},

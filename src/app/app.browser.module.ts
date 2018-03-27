@@ -1,4 +1,4 @@
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, BrowserTransferStateModule, TransferState} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -18,7 +18,6 @@ import {PasswordResetService} from "./login/password-reset/password-reset.servic
 import {SharedModule} from "./shared.module";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {NotificationService} from "./user/notification.service";
 import {CampaignService} from "./campaigns/campaign.service";
 import {BroadcastService} from "./broadcasts/broadcast.service";
@@ -27,42 +26,36 @@ import {SearchService} from "./search/search.service";
 import {LoggedInServicesModule} from "./logged-in-services.module";
 import {MediaService} from "./media/media.service";
 import {AppBrowserRoutingModule} from "./app.browser.routing.module";
-import {PwdResetNewComponent} from "./login/password-reset/pwd-reset-new/pwd-reset-new.component";
-import {PwdResetValidateComponent} from "./login/password-reset/pwd-reset-validate/pwd-reset-validate.component";
-import {PasswordResetComponent} from "./login/password-reset/password-reset.component";
-import {PwdResetInitiateComponent} from "./login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component";
-import {IntegrationConnectComponent} from "./user/integrations/integration-connect/integration-connect.component";
-import {RecaptchaDirective} from "./utils/recaptcha.directive";
+import {AppModule} from "./app.module";
+import {TransferHttpCacheModule} from "@nguniversal/common";
+import {TranslateBrowserLoader} from "./translate/translate-browser-loader.service";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
 }
 
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, '/assets/i18n/', '.json');
+export function exportTranslateStaticLoader(http: HttpClient, transferState: TransferState) {
+  return new TranslateBrowserLoader('/assets/i18n/', '.json', transferState, http);
 }
 
 @NgModule({
   declarations: [
     GroupMembersImportComponent,
-    FileImportComponent,
-    RecaptchaDirective,
-    IntegrationConnectComponent,
-    PwdResetInitiateComponent,
-    PwdResetValidateComponent,
-    PwdResetNewComponent,
-    PasswordResetComponent
+    FileImportComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'grassroot-frontend'}),
+    BrowserTransferStateModule,
+    TransferHttpCacheModule,
+    AppModule,
     HttpClientModule,
     LoggedInServicesModule,
     AppBrowserRoutingModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
+        useFactory: exportTranslateStaticLoader,
+        deps: [HttpClient, TransferState]
       }
     }),
     JwtModule.forRoot({
