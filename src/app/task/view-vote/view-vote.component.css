@@ -1,0 +1,27 @@
+.modal-header {
+  background-color: #929BAF;
+  color: white;
+}
+
+.modal-title {
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.modal-close {
+  color: white;
+}
+
+.footer-button {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.btn.dropdown-toggle {
+  padding: 0.5rem;
+  width: 100%;
+  background-color: white;
+  border: solid 1px #cccccc;
+  text-align: left;
+}

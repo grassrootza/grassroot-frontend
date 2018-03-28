@@ -24,8 +24,8 @@
           <h1 [translate]="'group.activity.upcoming'"> Upcoming</h1>
         </div>
       </div>
-      <div class="card" *ngFor="let task of upcomingTasks" style="margin-bottom: 1rem !important;">
-        <div class="card-body events-box" >
+      <div class="card" *ngFor="let task of upcomingTasks" style="margin-bottom: 1rem !important; cursor: pointer" (click)="handleTaskClicked(task)">
+        <div class="card-body events-box">
           <div class="row">
             <div class="col-1">
               <div class="date-box rounded text-center">
@@ -64,7 +64,7 @@
           <h1> Past Activity</h1>
         </div>
       </div>
-      <div class="card" *ngFor="let task of pastTasks" style="margin-bottom: 1rem !important;">
+      <div class="card" *ngFor="let task of pastTasks" style="margin-bottom: 1rem !important; cursor: pointer" (click)="handleTaskClicked(task)">
         <div class="card-body events-box" >
           <div class="row">
             <div class="col-1">
@@ -108,4 +108,8 @@
 <app-create-todo [groupUid]="createTaskGroupUid"
                  (todoSaved)="todoSaved($event)"></app-create-todo>
 
+<app-view-meeting [taskToView]="taskToView"></app-view-meeting>
 
+<app-view-vote [voteToView]="taskToView"></app-view-vote>
+
+<app-view-todo [todoTask]="taskToView"></app-view-todo>

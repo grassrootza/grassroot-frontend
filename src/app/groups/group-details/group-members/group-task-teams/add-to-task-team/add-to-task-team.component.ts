@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {GroupRef} from "../../../../model/group-ref.model";
 import {GroupService} from "../../../../group.service";
-import {AlertService} from "../../../../../utils/alert.service";
+import {AlertService} from "../../../../../utils/alert-service/alert.service";
 import {Group} from "../../../../model/group.model";
 import {Membership} from "../../../../model/membership.model";
 

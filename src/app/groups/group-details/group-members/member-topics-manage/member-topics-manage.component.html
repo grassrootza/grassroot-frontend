@@ -8,33 +8,36 @@
         </button>
       </div>
       <div class="modal-body" *ngIf="members">
-        <div class="container group-info-header d-none d-md-block">
-          <div class="row">
-            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.name'">Name</div>
-            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.role'">Role</div>
-            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.phone'">Phone</div>
-            <div class="col-3" [translate]="'group.allMembers.assignTopic.table.email'">email</div>
+        <div *ngIf="members.length < 10">
+          <div class="container group-info-header d-none d-md-block" >
+            <div class="row">
+              <div class="col-3" [translate]="'group.allMembers.assignTopic.table.name'">Name</div>
+              <div class="col-3" [translate]="'group.allMembers.assignTopic.table.role'">Role</div>
+              <div class="col-3" [translate]="'group.allMembers.assignTopic.table.phone'">Phone</div>
+              <div class="col-3" [translate]="'group.allMembers.assignTopic.table.email'">email</div>
+            </div>
           </div>
-        </div>
-        <div class="container group-info-row" *ngFor="let member of members">
-          <div class="row flex flex-wrap">
-            <div class="col-3">
-              {{member.user.displayName}}
-            </div>
-            <div class="col-3">
-              {{ ('enum.GroupRole.' + member.roleName) | translate }}
-            </div>
-            <div class="col-3">
-              {{member.nationalNumber()}}
-            </div>
-            <div class="col-3">
-              {{member.user.email}}
+          <div class="container group-info-row" *ngFor="let member of members">
+            <div class="row flex flex-wrap">
+              <div class="col-3">
+                {{member.user.displayName}}
+              </div>
+              <div class="col-3">
+                {{ ('enum.GroupRole.' + member.roleName) | translate }}
+              </div>
+              <div class="col-3">
+                {{member.nationalNumber()}}
+              </div>
+              <div class="col-3">
+                {{member.user.email}}
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="container">
-          <span [translate]="'group.allMembers.assignTopic.assignTopicLabel'">Assign topics:</span>
+        <div class="container group-info-row mt-3">
+          <span [translate]="'group.allMembers.assignTopic.assignTopicLabel'"
+            [translateParams]="{count: members.length}">Assign topics to X members:</span>
           <select class="form-control form-control-em" id="{{ selectId }}" multiple="multiple" style="width: 100%">
             <option *ngFor="let topic of group.topics" [value]="topic">
               {{topic}}
@@ -42,6 +45,7 @@
           </select>
         </div>
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="saveAssignTopicToMember()" [disabled]="modalSelectedTopics.length == 0">
           {{ 'action.save' | translate }}

@@ -1,0 +1,29 @@
+
+.group-info-header {
+  border-top: none;
+  border-bottom: none;
+  background-color: #F5F6FA;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 12px;
+  line-height: 16px;
+  cursor: pointer;
+}
+
+.group-info-row {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  vertical-align: middle;
+  border-top: solid #ECEEF1 1px;
+  cursor: pointer;
+}
+
+.group-info-row {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.group-info-row img {
+  margin-right: 0.5rem;
+  margin-bottom: 0.2rem;
+}

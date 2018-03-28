@@ -22,11 +22,6 @@
           <p [innerHtml]="group.description"></p>
           <div class="row">
             <div class="col-md-7">
-              <!-- maybe do a modal to select options in future -->
-              <div class="group-info" *ngIf="group.hasProfileImage()">
-                <a class="grassroot-link flyer-link" target="_blank" href="{{ flyerUrlPDF }}">{{ 'group.flyer' | translate }}</a>
-              </div>
-
               <div class="group-info creation-info">
                 <span class="grassroot-link">//</span> <strong>{{'group.creationLabel' | translate}}</strong>
                 <span>{{'group.creationInfo' | translate:group}}</span>
@@ -48,9 +43,14 @@
                 <a class="grassroot-link flyer-link" href="#" (click)="exportGroupMembers()">Export group to Excel</a>
               </div>
 
+              <!-- maybe do a modal to select options in future -->
+              <div class="group-info">
+                <a class="grassroot-link flyer-link" target="_blank" href="{{ flyerUrlPDF }}">{{ 'group.flyer' | translate }}</a>
+              </div>
+
             </div>
             <div class="col-md-5 text-right">
-              <div class="group-info">
+              <div class="group-info" *ngIf="group?.hasPermission('GROUP_PERMISSION_SEND_BROADCAST')">
                 <a [routerLink]="['/broadcast/create/group', group.groupUid]" class="btn btn-success broadcast-btn">
                   <img src="assets/icon_megaphone.png"/>
                   {{'group.sendBroadcast' | translate}}
@@ -69,10 +69,10 @@
                       {{ joinMethodParams.joinWords | uppercase }}
                       {{ 'group.joinWordsSuffix' | translate:joinMethodParams | uppercase }}
                     </div>
-                    <!-- todo : permission checks -->
                     <ng-template #nowords>
                       <div class="join-word">
-                        {{ 'group.noJoinWordsCanSet' | translate | uppercase }}
+                        {{ (group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS') ?
+                          'group.noJoinWordsCanSet' : 'group.noJoinWordsCantSet') | translate | uppercase }}
                       </div>
                     </ng-template>
                   </div>
@@ -110,11 +110,15 @@
           <a class="nav-link" href="#" [routerLink]="['broadcast']" [translate]="'group.nav.broadcast'"> Broadcast </a>
         </li>
 
+        <li class="nav-item" [ngClass]="{active: currentTab === 'inbound-messages'}" *ngIf="group?.hasInboundMessages">
+          <a class="nav-link" href="#" [routerLink]="['inbound-messages']" [translate]="'group.nav.inboundMessages'">Inbound messages</a>
+        </li>
+
         <li class="nav-item" [ngClass]="{active: currentTab === 'members'}" *ngIf="group?.hasPermission('GROUP_PERMISSION_SEE_MEMBER_DETAILS')">
           <a class="nav-link" href="#" [routerLink]="['members']" [translate]="'group.nav.members'"> Members </a>
         </li>
 
-        <li class="nav-item" [ngClass]="{active: currentTab === 'settings'}">
+        <li class="nav-item" [ngClass]="{active: currentTab === 'settings'}" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
           <a class="nav-link" href="#" [routerLink]="['settings']" [translate]="'group.nav.settings'"> Settings </a>
         </li>
 
@@ -141,7 +145,6 @@
       </div>
       <div class="modal-body">
         <div class="row">
-          <!-- todo : circled number as in wireframe -->
           <div class="col-md-4 col-sm-12">
             <h5 [innerHtml]="'group.joinMethods.ussdCode' | translate:joinMethodParams"></h5>
           </div>
@@ -184,33 +187,35 @@
           </div>
         </div>
 
-        <div class="row join-words-add-container" *ngIf="joinMethodParams?.joinWordsLeft > 0; else noWordsLeft">
-          <div class="col-md-7 col-sm-12">
-            <h4>
-              {{ 'group.joinMethods.addJoinWord.' + ((joinMethodParams.joinWords) ? 'some' : 'none') | translate:joinMethodParams }}
-            </h4>
+        <div *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
+          <div class="row join-words-add-container" *ngIf="joinMethodParams?.joinWordsLeft > 0; else noWordsLeft">
+            <div class="col-md-7 col-sm-12">
+              <h4>
+                {{ 'group.joinMethods.addJoinWord.' + ((joinMethodParams.joinWords) ? 'some' : 'none') | translate:joinMethodParams }}
+              </h4>
+            </div>
+            <div class="col-md-5 col-sm-12">
+              <form [formGroup]="addJoinWordForm" (ngSubmit)="addJoinWord()">
+                  <div class="input-group">
+                    <input type="text" class="form-control" formControlName="joinWord" name="joinWord" id="joinWord"/>
+                    <span class="input-group-btn">
+                      <button [disabled]="!addJoinWordForm.valid" class="btn btn-primary" type="submit">Add</button>
+                    </span>
+                  </div>
+                  <div class="alert alert-danger" role="alert"
+                       *ngIf="addJoinWordForm.controls.joinWord?.errors?.wordTaken">
+                    {{ 'group.joinMethods.joinWordTaken' | translate }}
+                  </div>
+              </form>
+            </div>
           </div>
-          <div class="col-md-5 col-sm-12">
-            <form [formGroup]="addJoinWordForm" (ngSubmit)="addJoinWord()">
-                <div class="input-group">
-                  <input type="text" class="form-control" formControlName="joinWord" name="joinWord" id="joinWord"/>
-                  <span class="input-group-btn">
-                    <button [disabled]="!addJoinWordForm.valid" class="btn btn-primary" type="submit">Add</button>
-                  </span>
-                </div>
-                <div class="alert alert-danger" role="alert"
-                     *ngIf="addJoinWordForm.controls.joinWord?.errors?.wordTaken">
-                  {{ 'group.joinMethods.joinWordTaken' | translate }}
-                </div>
-            </form>
-          </div>
-        </div>
 
-        <ng-template #noWordsLeft>
-          <div class="row" class="join-words-add-container">
-            <h4>{{ 'group.joinMethods.noWordsLeft' | translate }}</h4>
-          </div>
-        </ng-template>
+          <ng-template #noWordsLeft>
+            <div class="row" class="join-words-add-container">
+              <h4>{{ 'group.joinMethods.noWordsLeft' | translate }}</h4>
+            </div>
+          </ng-template>
+        </div>
 
         <div class="row mt-3">
           <div class="col-12">

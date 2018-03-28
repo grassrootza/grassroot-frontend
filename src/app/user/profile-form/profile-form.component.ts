@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {UserProvince} from "../model/user-province.enum";
 import {UserService} from "../user.service";
 import {UserProfile} from "../user.model";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../utils/alert.service";
-import {NumberValidator} from "../../validators/NumberValidator";
+import {AlertService} from "../../utils/alert-service/alert.service";
+import {Ng2ImgMaxService} from "ng2-img-max";
+import {MediaService} from "../../media/media.service";
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../../validators/CustomValidators";
 
 declare var $: any;
 
@@ -22,8 +24,15 @@ export class ProfileFormComponent implements OnInit {
   profileForm: FormGroup;
   otpForm: FormGroup;
 
-  constructor(private userService: UserService, private formBuilder: FormBuilder,
-              private alertService: AlertService) {
+  public dragAreaClass: string = "dragarea";
+  public imageErrors: string[] = [];
+  public currentImageUrl: string;
+
+  constructor(private userService: UserService,
+              private formBuilder: FormBuilder,
+              private alertService: AlertService,
+              private mediaService: MediaService,
+              private ng2ImgMax: Ng2ImgMaxService) {
     this.provinceKeys = Object.keys(this.provinces);
 
     console.log("empty profile looks like: ", new UserProfile());
@@ -33,17 +42,20 @@ export class ProfileFormComponent implements OnInit {
     });
 
     this.profileForm = new FormGroup({
-        email:new FormControl('',[Validators.required,Validators.pattern("[^ @]*@[^ @]*"),Validators.email]),
+        email:new FormControl('',[optionalEmailValidator]),
         name:new FormControl('',Validators.required),
-        phone:new FormControl('',[Validators.required,NumberValidator.numberValidator]),
+        phone:new FormControl('',[optionalPhoneValidator]),
         province:new FormControl('',Validators.required),
         language:new FormControl('',Validators.required)
-    });
+    }, emailOrPhoneEntered("email", "phone"));
+
   }
 
   ngOnInit() {
     this.userProfile = new UserProfile(this.userService.getLoggedInUser());
     this.profileForm.setValue(this.userProfile);
+    this.currentImageUrl = this.userService.getProfileImageUrl(false);
+    this.dragAreaClass = this.dragClass();
   }
 
   saveChanges() {
@@ -74,4 +86,60 @@ export class ProfileFormComponent implements OnInit {
         console.log("ah, an error: ", error);
       });
   }
+
+  onImageSelected(image) {
+    // let image = event.target.files[0];
+    console.log("image valid? : ", image);
+    this.imageErrors = this.mediaService.isValidImage(image, true);
+    if (this.imageErrors && this.imageErrors.length > 0) {
+      console.log("image errors: ", this.imageErrors);
+      return;
+    }
+
+    this.alertService.showLoading();
+    this.ng2ImgMax.resizeImage(image, 200, 200, true).subscribe(result => {
+      let resizedImage = new File([result], image.name);
+      this.userService.updateImage(resizedImage).subscribe(result => {
+        console.log("done! result: ", result);
+        this.alertService.hideLoading();
+        this.currentImageUrl = this.userService.getProfileImageUrl(true);
+      }, error => {
+        console.log("Error! Could not change user image", error);
+        this.alertService.hideLoading();
+      })
+    });
+  }
+
+  dragClass(): string {
+    return this.currentImageUrl ? 'dragarea-with-image' : 'dragarea';
+  }
+
+  @HostListener('dragover', ['$event']) onDragOver(event) {
+    this.dragAreaClass = "droparea";
+    event.preventDefault();
+  }
+
+  @HostListener('dragenter', ['$event']) onDragEnter(event) {
+    this.dragAreaClass = "droparea";
+    event.preventDefault();
+  }
+
+  @HostListener('dragend', ['$event']) onDragEnd(event) {
+    this.dragAreaClass = this.dragClass();
+    event.preventDefault();
+  }
+
+  @HostListener('dragleave', ['$event']) onDragLeave(event) {
+    this.dragAreaClass = this.dragClass();
+    event.preventDefault();
+  }
+
+  @HostListener('drop', ['$event']) onDrop(event) {
+    this.dragAreaClass = this.dragClass();
+    event.preventDefault();
+    event.stopPropagation();
+    let files = event.dataTransfer.files;
+    this.onImageSelected(files[0]);
+  }
+
 }

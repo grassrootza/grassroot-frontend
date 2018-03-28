@@ -3,7 +3,7 @@ import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {GroupService} from "../../group.service";
 import {UserService} from "../../../user/user.service";
 import {Group} from "../../model/group.model";
-import {AlertService} from "../../../utils/alert.service";
+import {AlertService} from "../../../utils/alert-service/alert.service";
 
 @Component({
   selector: 'app-group-members',
@@ -11,7 +11,6 @@ import {AlertService} from "../../../utils/alert.service";
   styleUrls: ['./group-members.component.css']
 })
 export class GroupMembersComponent implements OnInit {
-
 
   public currentTab: string = "all";
   public group: Group = null;

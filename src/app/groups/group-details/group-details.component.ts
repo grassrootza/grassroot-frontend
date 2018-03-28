@@ -9,9 +9,8 @@ import {TranslateService} from "@ngx-translate/core";
 import {JoinCodeInfo} from "../model/join-code-info";
 
 import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
-import {AlertService} from "../../utils/alert.service";
-
-import {saveAs} from 'file-saver/FileSaver';
+import {AlertService} from "../../utils/alert-service/alert.service";
+import { saveAs } from 'file-saver';
 
 declare var $: any;
 
@@ -124,10 +123,12 @@ export class GroupDetailsComponent implements OnInit {
 
   joinMethodsModal() {
     console.log("join method params = ", this.joinMethodParams);
-    $('#group-join-methods').modal('show');
-    this.groupService.fetchActiveJoinWords().subscribe(result => {
-      this.activeJoinWords = result;
-    })
+    if (this.group.hasPermission('GROUP_PERMISSION_SEND_BROADCAST') || this.group.joinWords) {
+      $('#group-join-methods').modal('show');
+      this.groupService.fetchActiveJoinWords().subscribe(result => {
+        this.activeJoinWords = result;
+      })
+    }
   }
 
   checkJoinWordAvailability(control: FormControl) {

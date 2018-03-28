@@ -23,13 +23,14 @@ export class GroupActivityComponent implements OnInit {
 
   public createTaskGroupUid: string = null;
 
+  public taskToView: Task;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private userService: UserService,
               private groupService: GroupService,
               private taskService: TaskService) {
   }
-
 
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
@@ -62,12 +63,23 @@ export class GroupActivityComponent implements OnInit {
           console.log("Old Tasks @@@@", this.pastTasks.length);
         }, error =>{
 
-          if(error.status == 401){
-            console.log("Error @@@@@@@", error.status);
-          }
-          console.log(error.getmessage);
+        if(error.status == 401){
+          console.log("Error @@@@@@@", error.status);
+        }
+        console.log(error.getmessage);
       }
       );
+  }
+
+  handleTaskClicked(task: Task) {
+    this.taskToView = task;
+    if (task.type == 'MEETING') {
+      $('#view-meeting-modal').modal('show');
+    } else if (task.type == 'VOTE') {
+      $('#view-vote-modal').modal('show');
+    } else if (task.type == 'TODO') {
+      $('#view-todo-modal').modal('show');
+    }
   }
 
   showCreateMeetingModal(){

@@ -4,7 +4,7 @@ import {UserService} from '../../../../user/user.service';
 import {GroupService} from '../../../group.service';
 import {Membership, MembersPage} from '../../../model/membership.model';
 import {Group} from '../../../model/group.model';
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 import {GroupInfo} from "../../../model/group-info.model";
 

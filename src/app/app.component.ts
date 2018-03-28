@@ -1,12 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {UserService} from "./user/user.service";
-import {NavigationEnd, RouteConfigLoadStart, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
-import {environment} from "../environments/environment";
 import {TranslateService} from '@ngx-translate/core';
-import {AlertService} from "./utils/alert.service";
+import {AlertService} from "./utils/alert-service/alert.service";
 import {NotificationService} from "./user/notification.service";
 import {Notification} from "./user/model/notification.model";
+import {LocalStorageService} from "./utils/local-storage.service";
+import {isPlatformBrowser} from "@angular/common";
+import {CookiesService} from "./utils/cookie-service/cookies.service";
 
 declare var $: any;
 
@@ -37,31 +39,46 @@ export class AppComponent implements OnInit {
   private maxNumberOfPopupNotificationInSequence = 3;
   private DISPLAYED_NOTIFICATIONS_STORAGE_KEY: string = "displayedNotifications";
 
-  public loggedInUserImageUrl = environment.backendAppUrl + "/api/user/profile/image/view";
+  public userImageUrl;
+  public userHasNoImage: boolean; // seems redundant but Angular being insanely obtuse on chnages
 
   constructor(private router: Router,
               private userService: UserService,
               private translateService: TranslateService,
               private alertService: AlertService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private localStorageService: LocalStorageService,
+              private cookieService: CookiesService,
+              @Inject(PLATFORM_ID) protected platformId: Object) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
+    if (this.loggedInUser && this.loggedInUser.hasImage) {
+      this.userImageUrl = this.userService.getProfileImageUrl(false);
+    } else {
+      this.userImageUrl = '';
+      this.userHasNoImage = true;
+    }
 
-    this.router.events.subscribe(ev => {
-      if (ev instanceof RouteConfigLoadStart) {
-        console.log("start routing to lazy module, navigating");
-        this.loadingModule = true;
-      }
-
-      if (ev instanceof NavigationEnd) {
-        console.log("navigation has ended");
-        this.currentUrl = ev.url;
-      }
-    });
+    // this.router.events.subscribe(ev => {
+    //   if (ev instanceof RouteConfigLoadStart) {
+    //     console.log("start routing to lazy module, navigating");
+    //     this.loadingModule = true;
+    //   }
+    //
+    //   if (ev instanceof NavigationEnd) {
+    //     console.log("navigation has ended");
+    //     this.currentUrl = ev.url;
+    //   }
+    // });
 
     this.userService.loggedInUser.subscribe(user => {
       console.log("user emitted!");
-      this.loggedInUser = user
+      this.loggedInUser = user;
+      this.userHasNoImage = !this.loggedInUser || !this.loggedInUser.hasImage;
+      console.log("user has no image? : ", this.userHasNoImage);
+      if (this.loggedInUser && this.loggedInUser.hasImage) {
+        this.userImageUrl = this.userService.getProfileImageUrl(true);
+      }
     });
 
     this.alertService.getAlert().subscribe(message=> {
@@ -74,16 +91,26 @@ export class AppComponent implements OnInit {
 
     translateService.addLangs(['en']);
     translateService.setDefaultLang('en');
-    const browserLang = translateService.getBrowserLang();
-    translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+
+    if (isPlatformBrowser(this.platformId)) {
+      const browserLang = translateService.getBrowserLang();
+      translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+      this.cookieService.put("grassroot-logged-in", "" + false);
+      console.log("put cookie: ", this.cookieService.get("grassroot-logged-in"));
+    } else {
+      translateService.use('en');
+    }
   }
 
   ngOnInit(): void {
-    $(".ntf-popup").hide();
-    this.pullNotifications();
-    setInterval(() => {
-      this.pullNotifications()
-    }, 10000);
+    console.log("is the user logged in? ", this.userService.isLoggedIn());
+    if (isPlatformBrowser(this.platformId) && this.userService.isLoggedIn()) {
+      $(".ntf-popup").hide();
+      this.pullNotifications();
+      setInterval(() => {
+        this.pullNotifications()
+      }, 10000);
+    }
   }
 
   private pullNotifications() {
@@ -101,7 +128,7 @@ export class AppComponent implements OnInit {
         notifications => {
           // console.log("Notifications: ", notifications);
 
-          let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+          let displayedNotifications: string = this.localStorageService.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
           if (!displayedNotifications)
             displayedNotifications = "";
 
@@ -134,10 +161,10 @@ export class AppComponent implements OnInit {
       }, 4000);
 
 
-      let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+      let displayedNotifications: string = this.localStorageService.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
       displayedNotifications = displayedNotifications ? displayedNotifications : "";
       displayedNotifications = displayedNotifications + ";" + this.popupNotification.uid;
-      localStorage.setItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
+      this.localStorageService.setItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
 
       this.currentPopupNotificationIndex++;
     }
@@ -194,6 +221,14 @@ export class AppComponent implements OnInit {
         error => console.log("Mark notification failed!", error)
       );
 
+    return false;
+  }
+
+  markAllNotificationsRead(): boolean {
+    this.notificationService.markAllNotificationsAsRead().subscribe(response => {
+      console.log("all notifications marked read", response);
+      this.notifications = [];
+    }, error => console.log("Mark all read failed", error));
     return false;
   }
 

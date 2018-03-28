@@ -3,11 +3,11 @@ import {Membership, MembersPage} from '../../../model/membership.model';
 import {GroupService} from '../../../group.service';
 import {Group} from '../../../model/group.model';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../validators/CustomValidators';
 import {GroupAddMemberInfo} from '../../../model/group-add-member-info.model';
 import {GroupRole} from '../../../model/group-role';
 import {UserProvince} from '../../../../user/model/user-province.enum';
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 
 declare var $: any;
@@ -89,7 +89,7 @@ export class MemberListComponent implements OnInit {
   }
 
   selectMember(member: Membership) {
-    member.selected = true;
+    member.selected = !member.selected;
   }
 
   public selectAllOnPage(event): void {

@@ -6,6 +6,7 @@ import {Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {isValidNumber} from "libphonenumber-js";
+import {LocalStorageService} from "../utils/local-storage.service";
 
 @Injectable()
 export class UserService {
@@ -14,16 +15,18 @@ export class UserService {
   private loginUrl: string = environment.backendAppUrl + "/api/auth/login-password";
   private updateProfileUrl: string = environment.backendAppUrl + "/api/user/profile/data/update";
   private updatePasswordUrl: string = environment.backendAppUrl + "/api/user/profile/password/update";
+  private updateImageUrl: string = environment.backendAppUrl + "/api/user/profile/image/change";
+  private loggedInUserImageUrlBase = environment.backendAppUrl + "/api/user/profile/image/view";
 
   private _loggedInUser: AuthenticatedUser = null;
   public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
 
   public showForceLogoutReason = false;
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(private httpClient: HttpClient, private router: Router, private localStorageService: LocalStorageService) {
     console.log("Initializing user service");
-    if (localStorage.getItem("loggedInUser") != null) {
-      this._loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"))
+    if (this.localStorageService.getItem("loggedInUser")) {
+      this._loggedInUser = JSON.parse(this.localStorageService.getItem("loggedInUser"))
     }
   }
 
@@ -31,15 +34,23 @@ export class UserService {
     if (isValidNumber(phone, "ZA")) {
       phone = PhoneNumberUtils.convertToSystem(phone);
     }
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set("name", name)
-      .set("phone", phone)
-      .set("email", email)
       .set("password", password);
+
+    // this can happen (java - javascript JSON conversion loveliness)
+    if (phone && phone != "null") {
+      params = params.set("phone", phone);
+    }
+
+    if (email && email != "null") {
+      params = params.set("email", email);
+    }
+
     return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params})
       .map(authResponse => {
         if (authResponse.errorCode == null) {
-          this.storeAuthUser(authResponse.user.token, authResponse.user);
+          this.storeAuthUser(authResponse.user, authResponse.user.token);
         }
         return authResponse;
       });
@@ -62,18 +73,22 @@ export class UserService {
         authResponse => {
           console.log("AuthResponse: ", authResponse);
           if (authResponse.errorCode == null) {
-            this.storeAuthUser(authResponse.user.token, authResponse.user);
+            this.storeAuthUser(authResponse.user, authResponse.user.token);
           }
           return authResponse;
         }
       );
   }
 
-  storeAuthUser(token: string, user: AuthenticatedUser) {
-    localStorage.setItem("token", token);
+  storeAuthUser(user: AuthenticatedUser, token?: string) {
+    if (token) {
+      console.log("setting token: ", token);
+      this.localStorageService.setItem('token', token);
+      console.log("stored token: ", this.localStorageService.getItem('token'));
+    }
     this._loggedInUser = user;
     this.loggedInUser.emit(this._loggedInUser);
-    localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
+    this.localStorageService.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
   }
 
   logout(showForceLogoutReason: boolean): any {
@@ -82,15 +97,16 @@ export class UserService {
 
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
-    localStorage.removeItem('token');
-    localStorage.removeItem('loggedInUser');
-    localStorage.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login
+    this.localStorageService.removeItem('token');
+    this.localStorageService.removeItem('loggedInUser');
+    this.localStorageService.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login
 
     // clear up broadcast items, just in case user had some lying around
-    localStorage.removeItem('broadcastCreateRequest');
-    localStorage.removeItem('broadcastCreateStep');
+    this.localStorageService.removeItem('broadcastCreateRequest');
+    this.localStorageService.removeItem('broadcastCreateStep');
 
     console.log("routing to login");
+    console.log("going back to login");
     this.router.navigate(['/login']);
   }
 
@@ -116,8 +132,7 @@ export class UserService {
         console.log("here is the result: ", message);
         if (message == "UPDATED") {
           let updatedUser: AuthenticatedUser = result['data'];
-          // console.log("updating the user, which is: ", updatedUser);
-          this.storeAuthUser(updatedUser.token, updatedUser);
+          this.storeAuthUser(updatedUser, updatedUser.token);
         }
         return message;
       });
@@ -133,5 +148,28 @@ export class UserService {
       .set("callingInterface", "WEB_2");
 
     return this.httpClient.post(this.updatePasswordUrl, null, {params: params});
+  }
+
+  // use this instead of media service because server method uses user's UID to stash
+  // note: keeping image max library out of this service (as this service is needed pre-login)
+  // so call image resize in component, not here
+  updateImage(image: any): Observable<string> {
+    const formData: FormData = new FormData();
+    formData.append("photo", image, image.name);
+    return this.httpClient.post(this.updateImageUrl, formData, { responseType: 'text'}).map(response => {
+      console.log("image response from server: ", response);
+      let updatedUser = this._loggedInUser;
+      updatedUser.hasImage = true;
+      this.storeAuthUser(updatedUser);
+      return response;
+    });
+  }
+
+  getProfileImageUrl(cacheBust: boolean = false) {
+    if (!this._loggedInUser || !this._loggedInUser.hasImage) {
+      return null;
+    }
+    // query param is to force reload
+    return this.loggedInUserImageUrlBase + "/" + this._loggedInUser.userUid + (cacheBust ? "?cb=" + Date.now() : "");
   }
 }

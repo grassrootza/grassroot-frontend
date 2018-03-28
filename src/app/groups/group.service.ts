@@ -24,6 +24,9 @@ import {GroupMemberActivity} from './model/group-member-activity';
 import {MembersFilter} from "./member-filter/filter.model";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {FileImportResult} from "./group-details/group-members/group-members-import/file-import/file-import-result";
+import {GroupLog, GroupLogPage} from "./model/group-log.model";
+import {Moment} from "moment";
+import {LocalStorageService} from "../utils/local-storage.service";
 
 
 @Injectable()
@@ -56,6 +59,8 @@ export class GroupService {
   groupMemberChangeRoleUrl = environment.backendAppUrl + '/api/group/modify/members/modify/role';
   groupMemberChangeDetailsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/details';
   groupMemberChangeAssignmentsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/assignments';
+  groupFetchInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
+  groupDownloadInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
 
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
@@ -100,20 +105,20 @@ export class GroupService {
   private NEW_MEMBERS_DATA_CACHE = "NEW_MEMBERS_DATA_CACHE";
   private MY_GROUPS_DATA_CACHE = "MY_GROUPS_DATA_CACHE";
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
 
-    let cachedMyGroups = localStorage.getItem(this.MY_GROUPS_DATA_CACHE);
+    let cachedMyGroups = this.localStorageService.getItem(this.MY_GROUPS_DATA_CACHE);
     if (cachedMyGroups) {
-      let cachedMyGroupsData = JSON.parse(localStorage.getItem(this.MY_GROUPS_DATA_CACHE));
+      let cachedMyGroupsData = JSON.parse(this.localStorageService.getItem(this.MY_GROUPS_DATA_CACHE));
       console.log("cachedMyGroupsData before", cachedMyGroupsData);
       cachedMyGroupsData = cachedMyGroupsData.map(gr => GroupInfo.createInstance(gr));
       console.log("cachedMyGroupsData after", cachedMyGroupsData);
       this.groupInfoList_.next(cachedMyGroupsData);
     }
 
-    let cachedNewMembers = localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE);
+    let cachedNewMembers = this.localStorageService.getItem(this.NEW_MEMBERS_DATA_CACHE);
     if (cachedNewMembers) {
-      let cachedNewMembersData = JSON.parse(localStorage.getItem(this.NEW_MEMBERS_DATA_CACHE));
+      let cachedNewMembersData = JSON.parse(this.localStorageService.getItem(this.NEW_MEMBERS_DATA_CACHE));
       cachedNewMembersData.content = cachedNewMembersData.content.map(membership => Membership.createInstance(membership));
       this.newMembersInMyGroups_.next(cachedNewMembersData);
     }
@@ -121,14 +126,10 @@ export class GroupService {
 
   loadGroups() {
     const fullUrl = this.groupListUrl;
-    return this.httpClient.get<GroupInfo[]>(fullUrl)
-      .map(
-        data => data.map(gr => GroupInfo.createInstance(gr))
-      )
-      .subscribe(
+    return this.httpClient.get<GroupInfo[]>(fullUrl).map(data => data.map(GroupInfo.createInstance)).subscribe(
         groups => {
           this.groupInfoList_.next(groups);
-          localStorage.setItem(this.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
+          this.localStorageService.setItem(this.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
         },
         error => {
           this.groupInfoListError_.next(error);
@@ -255,7 +256,7 @@ export class GroupService {
       .subscribe(
         newMembersPage => {
           this.newMembersInMyGroups_.next(newMembersPage);
-          localStorage.setItem(this.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
+          this.localStorageService.setItem(this.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
         },
         error => {
           console.log("Failed to fetch new members", error);
@@ -468,7 +469,6 @@ export class GroupService {
   }
 
   fetchGroupPermissionsToDisplay(): Observable<string[]> {
-
     return this.httpClient.get<string[]>(this.groupFetchPermissionsDisplayedUrl).map(resp => {
       return resp;
     })
@@ -669,6 +669,64 @@ export class GroupService {
 
   shouldReloadPaginationPagesNumbers(reload: boolean){
     this.shouldReloadPaginationNumbers_.next(reload);
+  }
+
+  fetchInboundMessagesForGroup(groupUid: string, pageNo: number, from: Moment, to: Moment, keyword: string, sort: string[]): Observable<GroupLogPage> {
+    const fullUrl = this.groupFetchInboundMessagesUrl + '/' + groupUid;
+    let params = new HttpParams()
+      .set('page', pageNo.toString())
+      .set('size', "10");
+
+    if(from != null) {
+      params = params.set('from', from.valueOf().toString());
+    }
+
+    if(to != null) {
+      params = params.set('to', to.valueOf().toString());
+    }
+
+    if(keyword != null) {
+      params = params.set('keyword', keyword);
+    }
+
+    if(sort[1] != ""){
+      params = params.set('sort', sort.join(','));
+    }
+
+    return this.httpClient.get<GroupLogPage>(fullUrl, {params: params}).map(
+      result => {
+        console.log(result);
+        let transformedContent = result.content.map(gl => GroupLog.createInstance(gl));
+        return new GroupLogPage(
+          result.number,
+          result.totalPages,
+          result.totalElements,
+          result.size,
+          result.first,
+          result.last,
+          transformedContent
+        );
+      }
+    );
+  }
+
+  exportInboundMessages(groupUid: string, from: Moment, to: Moment, keyword: string) {
+    const fullUrl = this.groupDownloadInboundMessagesUrl + '/' + groupUid + '/download';
+    let params = new HttpParams();
+
+    if(from != null) {
+      params = params.set('from', from.valueOf().toString());
+    }
+
+    if(to != null) {
+      params = params.set('to', to.valueOf().toString());
+    }
+
+    if(keyword != null) {
+      params = params.set('keyword', keyword);
+    }
+
+    return this.httpClient.get(fullUrl, { params: params, responseType: 'blob' });
   }
 }
 

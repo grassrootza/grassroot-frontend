@@ -9,10 +9,15 @@
       <p class="pwd-info">{{ 'reset.initiate.info' | translate }}</p>
     </div>
   </div>
-  <form (submit)="submitUsername()">
+  <form [formGroup]="formInitiate" (submit)="submitUsername()">
     <div class="form-row">
       <div class="form-group col-md-10 offset-md-1 col-12 text-center">
-        <input type="text" class="form-control pwd-input" [formControl]="username" />
+        <input type="text" class="form-control pwd-input" formControlName="username" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-10 offset-md-1 col-12 text-center">
+        <div align="center" appRecaptcha formControlName="captcha"></div>
       </div>
     </div>
     <div class="col-md-10 offset-md-1 col-12 alert alert-danger" role="alert"
@@ -21,7 +26,7 @@
     </div>
     <div class="form-row">
       <div class="form-group col-12 text-center">
-        <button [disabled]="!username.valid" type="submit" class="btn btn-primary pwd-next">{{ 'reset.initiate.next' | translate }}</button>
+        <button [disabled]="!formInitiate.valid" type="submit" class="btn btn-primary pwd-next">{{ 'reset.initiate.next' | translate }}</button>
       </div>
     </div>
   </form>

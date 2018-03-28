@@ -12,11 +12,12 @@ import {MemberFilterComponent} from "./groups/member-filter/member-filter.compon
 import {CreateTodoComponent} from "./groups/group-details/group-activity/create-todo/create-todo.component";
 import {GroupInfoComponent} from "./groups/group-list-row/group-info.component";
 import {CreateGroupComponent} from "./groups/create-group/create-group.component";
-import {ToDoRespondComponent} from "./task/todo-respond/todo-respond.component";
 import {CreateLivewireComponent} from "./groups/group-details/group-activity/create-livewire/create-livewire.component";
-import {ViewMeetingComponent} from "./view-task/view-meeting/view-meeting.component";
-import {ViewVoteComponent} from "./view-task/view-vote/view-vote.component";
+import {ViewMeetingComponent} from "./task/view-meeting/view-meeting.component";
+import {ViewVoteComponent} from "./task/view-vote/view-vote.component";
 import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row/campaign-info.component";
+import {MeetingResponsesComponent} from "./task/meeting-details/meeting-responses.component";
+import {ViewTodoComponent} from "./task/view-todo/view-todo.component";
 
 @NgModule({
   imports: [
@@ -36,9 +37,10 @@ import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row
     CreateVoteComponent,
     CreateTodoComponent,
     CreateLivewireComponent,
-    ToDoRespondComponent,
+    ViewTodoComponent,
     ViewMeetingComponent,
     ViewVoteComponent,
+    MeetingResponsesComponent,
     PaginationComponent,
     MemberFilterComponent
   ],
@@ -50,14 +52,15 @@ import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row
     CreateVoteComponent,
     CreateTodoComponent,
     CreateLivewireComponent,
-    ToDoRespondComponent,
+    ViewTodoComponent,
     ViewMeetingComponent,
-    ViewVoteComponent
+    ViewVoteComponent,
+    MeetingResponsesComponent
   ],
   exports: [
     GroupInfoComponent, CampaignInfoComponent,
     CreateGroupComponent, CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, CreateLivewireComponent,
-    ToDoRespondComponent, ViewMeetingComponent, ViewVoteComponent, PaginationComponent, MemberFilterComponent
+    ViewTodoComponent, ViewMeetingComponent, ViewVoteComponent, MeetingResponsesComponent, PaginationComponent, MemberFilterComponent
   ]
 })
 export class LoggedInServicesModule { }

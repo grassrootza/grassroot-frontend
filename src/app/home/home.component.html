@@ -44,15 +44,15 @@
                 <div class="col-sm-8 day-label">
                   {{formatTaskDate(dayTasks.date)}}
                 </div>
-                <div *ngFor="let task of dayTasks.tasks" class="day-task">
+                <div *ngFor="let task of dayTasks.tasks" class="day-task" (click)="handleTaskClick(task)">
                   <div>
-                    <a class="task-name" (click)="handleTaskClick(task)">
-                      <img src="assets/{{task.getEventIconName()}}"/>
-                      {{task.title}}
-                    </a>
+                    <img src="assets/{{task.getEventIconName()}}"/>
+                    <span class="agenda-task-type">{{ task.type | titlecase }}</span>
                   </div>
-                  <div>
-                    <span [translate]="'home.my-agenda.group-label'"> Group </span>: <b>{{task.ancestorGroupName}}</b>
+                  <div class="mt-1">
+                    <span class="agenda-task-name"><span *ngIf="task.type == 'TODO'" class="agenda-field-label">{{'enum.TodoType.' + task.todoType | translate }}: </span>
+                    {{task.title}}</span>
+                    <span class="agenda-field-label" [translate]="'home.my-agenda.group-label'">Group </span>: <b>{{task.ancestorGroupName}}</b>
                   </div>
                 </div>
               </div>
@@ -80,7 +80,7 @@
         <div class="card-body new-members">
 
           <div class="float-right">
-            <h3 class="float-right new-members-count-label">This week</h3>
+            <h4 class="float-right new-members-count-label">This week</h4>
             <span class="new-members-count badge badge-secondary d-inline-block">{{newMembersPage != null ? newMembersPage.totalElements : 0}}</span>
           </div>
 
@@ -214,11 +214,9 @@
   </div>
 </div>
 
-
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
 
-<app-todo-respond [todoTask]="toDoToRespond"></app-todo-respond>
 
 <app-create-meeting [groupUid]="createTaskGroupUid"
                     (meetingSaved)="meetingSaved($event)"></app-create-meeting>
@@ -231,5 +229,6 @@
 
 <app-view-meeting [taskToView]="taskToView"></app-view-meeting>
 
-<app-view-vote [taskToView]="taskToView"
-                [voteResponse]="voteResponse"></app-view-vote>
+<app-view-vote [voteToView]="taskToView"></app-view-vote>
+
+<app-view-todo [todoTask]="taskToView"></app-view-todo>

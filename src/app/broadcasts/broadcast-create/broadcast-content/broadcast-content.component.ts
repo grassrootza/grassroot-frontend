@@ -4,11 +4,11 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 import {BroadcastParams} from "../../model/broadcast-params";
-import {optionalUrlValidator} from "../../../utils/CustomValidators";
+import {optionalUrlValidator} from "../../../validators/CustomValidators";
 import {environment} from "../../../../environments/environment";
 import {Ng2ImgMaxService} from "ng2-img-max";
-import {AlertService} from "../../../utils/alert.service";
-import {limitImageSizesInRichText} from "../../../utils/media-utils";
+import {AlertService} from "../../../utils/alert-service/alert.service";
+import {limitImageSizesInRichText} from "../../../media/media-utils";
 import {MediaService} from "../../../media/media.service";
 import {MediaFunction} from "../../../media/media-function.enum";
 
@@ -54,8 +54,6 @@ export class BroadcastContentComponent implements OnInit {
   linkForm: FormGroup;
   insertingLinkType: string;
 
-  emailHtml: string = "";
-
   IMG_MAX = {'facebook': 476, 'twitter': 506};
 
   constructor(private router: Router,
@@ -78,6 +76,29 @@ export class BroadcastContentComponent implements OnInit {
     this.content = this.broadcastService.getContent();
     this.contentForm.setValue(this.content);
     this.setUpValidation();
+    this.restorePriorAttachments();
+  }
+
+  restorePriorAttachments() {
+    if (this.content.emailAttachmentKeys) {
+      this.emailAttachmentKeys = this.content.emailAttachmentKeys;
+    }
+    if (this.content.facebookImageKey) {
+      this.fbImageKey = this.content.facebookImageKey;
+      this.fbImageUrl = environment.backendAppUrl + "/image/broadcast/" + this.fbImageKey;
+    }
+    if (this.content.facebookLink) {
+      this.fbLink = this.content.facebookLink;
+      this.fbLinkCaption = this.content.facebookLinkCaption;
+    }
+    if (this.content.twitterImageKey) {
+      this.twitterImageKey = this.content.twitterImageKey;
+      this.twitterImageUrl = environment.backendAppUrl + "/image/broadcast" + this.twitterImageKey;
+    }
+    if (this.content.twitterLink) {
+      this.twitterLink = this.content.twitterLink;
+      this.twitterLinkCaption = this.content.twitterLinkCaption;
+    }
   }
 
   // todo : save things every few words
@@ -166,7 +187,7 @@ export class BroadcastContentComponent implements OnInit {
 
     let linkType = this.linkForm.controls['linkType'].value;
     console.log("link type: ", linkType);
-    if (linkType === "URL") {
+    if (linkType === "OWN") {
       this.lastLinkInserted = this.linkForm.controls['url'].value;
     } else if (linkType === "GROUP") {
       this.lastLinkInserted = this.broadcastService.inboundGroupUrl(this.broadcastService.parentId());
@@ -183,6 +204,10 @@ export class BroadcastContentComponent implements OnInit {
         break;
       case 'twitter':
         this.addTwitterLink(this.lastLinkInserted, this.lastLinkCaption);
+        break;
+      case 'shortMessage':
+        this.addShortMsgLink(this.lastLinkInserted);
+        break;
     }
 
     $("#insert-link-modal").modal("hide");
@@ -204,6 +229,18 @@ export class BroadcastContentComponent implements OnInit {
     this.twitterLinkCaption = twLinkCaption;
   }
 
+  addShortMsgLink(link: string) {
+    this.alertService.showLoading();
+    this.broadcastService.shortenLink(link).subscribe(shortLink => {
+      this.alertService.hideLoading();
+      this.contentForm.controls['shortMessage'].patchValue(`${this.contentForm.controls['shortMessage'].value} ${shortLink}`);
+      this.lastLinkInserted = ""; // since without caption can't insert in other types
+    }, error => {
+      console.log("error! : ", error);
+      this.alertService.hideLoading();
+    });
+  }
+
   uploadEmailAttachments(event) {
     let images = event.target.files;
     if (images.length > 0) {
@@ -218,6 +255,16 @@ export class BroadcastContentComponent implements OnInit {
         console.log("error uploading image, error: ", error);
       });
     }
+  }
+
+  removeLastEmailAttachment() {
+    console.log("current keys: ", this.emailAttachmentKeys);
+    this.emailAttachmentKeys.pop();
+    console.log("after removal: ", this.emailAttachmentKeys);
+  }
+
+  removeAllEmailAttachments() {
+    this.emailAttachmentKeys = [];
   }
 
   uploadImage(event, providerId) {

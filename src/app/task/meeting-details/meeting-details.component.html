@@ -1,115 +1,94 @@
-<div >
+<div>
+  <div class="row mb-3">
+    <div class="col-12">
+      <a (click)="routeToParent()" href="#" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>
+        {{ (returnToGroup ? 'general.breadcrumb.group' : 'general.breadcrumb.home') | translate }}</a>
+    </div>
+  </div>
   <div class="card">
     <div class="card-body">
-
-      <div id="title" class="meeting-title">
-        <h3>
-        <span>
-          <img [src]="'assets/' + meeting?.getEventIconName() "/>&nbsp;
-        </span>
-          <span>
-          Meeting:
-        </span>
-          <span>
-          {{meeting?.title}}
-        </span>
-        </h3>
+      <div class="row">
+        <div class="col-md-8 col-sm-12">
+          <h3>
+            <img src="assets/icon_meeting.png"/>&nbsp;
+            {{ 'task.meeting.details.title-field' | translate }}: {{meeting?.title}}
+          </h3>
+        </div>
+        <div class="col-md-4 col-sm-12 text-md-right text-sm-left">
+          <button type="button" (click)="confirmCancel()" class="btn btn-secondary hover-danger cancel-button">
+            {{ 'task.meeting.details.cancel-button' | translate }}</button>
+        </div>
       </div>
-
-      <div id="date">
-        <p>
-          <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">
-            When:
-          </span>
-          <span>
+      <div class="row pl-3 pr-3">
+        <div class="col-md-6 col-sm-12">
+          <p class="task-field-para">
+            <span class="task-field-name">{{ 'task.when' | translate }}: </span>
             {{meeting?.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
-          </span>
-        </p>
-      </div>
-
-      <div id="location">
-        <p>
-          <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">
-            Where:
-          </span>
-          <span>
+          </p>
+          <p class="task-field-para">
+            <span class="task-field-name">{{ 'task.where' | translate }}: </span>
             {{meeting?.location}}
-          </span>
-        </p>
+          </p>
+          <p class="task-field-para">
+            <span class="task-field-name">{{ 'task.reminder' | translate }}: </span>
+          </p>
+        </div>
+        <div class="col-md-6 col-sm-12" *ngIf="imageUrl">
+          <img class="img-thumbnail" [src]="imageUrl" />
+        </div>
       </div>
 
-      <div id="reminder">
-        <p>
-          <span style="font-family:'OpenSans-Bold', 'Open Sans Bold', 'Open Sans';font-weight:700;">
-            Reminder:
-          </span>
-          <span>
-
-          </span>
-        </p>
-      </div>
-
-      <div id="description">
+      <div class="row">
         {{meeting?.description}}
       </div>
 
-      <div class="row assigned-members">
-        <div class="col-md-6">Sent to({{assignedMembers}} Members)</div>
-      </div>
-
-      <div class="row responses">
-        <div class="col-md-3 header">Responses</div>
-        <div class="col-md-3"></div>
-        <div class="col-md-3"></div>
-        <div class="col-md-2"><img src="assets/members.png"/>{{assignedMembers}}</div>
-      </div>
-
-      <div class="container row">
-        <div class="col-3">
-          <div>Yes</div>
-          <div>No</div>
-          <div>Maybe</div>
-          <div>No Response</div>
-        </div>
-        <div class="col-3">
-
-        </div>
-        <div class="col-3">
-          <div>{{responseYes | number:'1.1-1'}}%</div>
-          <div>{{responsesNo | number:'1.1-1'}}%</div>
-          <div>{{responseMaybe | number:'1.1-1'}}%</div>
-          <div>{{noResponse | number:'1.1-1'}}%</div>
-        </div>
-        <div class="col-3">
-          <div class="col-md">{{totalYes}}</div>
-          <div class="col-md">{{totalNo}}</div>
-          <div class="col-md">{{totalMaybe}}</div>
-          <div class="col-md">{{totalNoResponse}}</div>
+      <div class="row">
+        <div class="col-sm-12">
+          <app-meeting-responses [responses]="responses"></app-meeting-responses>
         </div>
       </div>
 
-      <div class="container attendence-header">
-        <h3>Attendence</h3>
-        <div class="container attendence-info-header">
-          <div class="row">
-            <div class="col-md-4 col-lg-4 d-block">Members</div>
-            <div class="col-md-2 col-lg-2 d-none d-md-block"></div>
-            <div class="col-md-2 col-lg-2 d-none d-md-block"></div>
-            <div class="col-md-4 col-lg-4 d-none d-md-block">Response</div>
+      <div class="row mt-4 attendance">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title"> {{ 'task.meeting.details.attendance' | translate }}</span>
+            </div>
+            <div class="card-body">
+              <div *ngFor="let response of responseArray" class="row info-row">
+                <div class="col-md-8 col-sm-6 attendee-name">{{response.memberName}}</div>
+                <div class="col-md-4 col-sm-6">{{ 'enum.MeetingResponse.' + response.response | translate }}</div>
+              </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirm-cancel-modal" tabindex="-1" role="dialog"
+     aria-labelledby="confirm-cancel-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'task.meeting.cancel.title' | translate }}</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            {{ 'task.meeting.cancel.body' | translate }}
           </div>
         </div>
-
-        <div class="container">
-          <div *ngFor="let rsvp of rsvps; let i = index" class="row attendence-info-row">
-            <div class="col-4 attendee-name">{{rsvp}}</div>
-            <div class="col-2"></div>
-            <div class="col-2"></div>
-            <div class="col-4">{{values[i]}}</div>
-          </div>
-        </div>
-
       </div>
-
+      <div class="modal-footer">
+        <button data-dismiss="modal" type="button" class="btn btn-secondary">{{ 'action.close' | translate }}</button>
+        <button (click)="cancelMeeting()" type="button" class="btn btn-secondary hover-danger">{{ 'action.confirm' | translate }}</button>
+      </div>
     </div>
   </div>
 </div>

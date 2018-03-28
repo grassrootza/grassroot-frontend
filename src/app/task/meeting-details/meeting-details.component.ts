@@ -1,9 +1,18 @@
-import {Component, Input, OnInit} from '@angular/core';
-
-import {ActivatedRoute, Params} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TaskService} from "../task.service";
-import {UserService} from "../../user/user.service";
 import {Task} from "../task.model";
+import {convertResponseMap, TaskResponse} from "../task-response";
+import {AlertService} from "../../utils/alert-service/alert.service";
+import {TaskType} from "../task-type";
+import {MediaFunction} from "../../media/media-function.enum";
+import {MediaService} from "../../media/media.service";
+
+const RESP_ORDER = {
+  'YES': 4, 'NO': 3, 'MAYBE': 2, 'NO_RESPONSE': 1
+};
+
+declare var $: any;
 
 @Component({
   selector: 'app-meeting-details',
@@ -12,78 +21,92 @@ import {Task} from "../task.model";
 })
 export class MeetingDetailsComponent implements OnInit {
 
-  public meetingUid:string = "";
-  public meeting:Task;
+  public meetingUid: string = "";
+  public meeting: Task;
   public assignedMembers:number;
-  public responseYes:number;
-  public responsesNo:number;
-  public responseMaybe:number;
-  public noResponse:number;
 
-  public totalYes:number;
-  public totalNo:number;
-  public totalMaybe:number;
-  public totalNoResponse:number;
+  public responses: Map<String, String>;
+  public responseArray: TaskResponse[];
 
-  public rsvps:any[];
-  public values:string[] = [];
+  public returnToGroup: boolean = false;
 
-  constructor(private route:ActivatedRoute,
+  public imageUrl;
+
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private alertService: AlertService,
               private taskService:TaskService,
-              private userService:UserService) {
-    console.log("constructing meeting details component");
+              private mediaService: MediaService) {
   }
 
   ngOnInit() {
-    console.log("initing meeting details component");
+    this.alertService.hideLoadingDelayed();
     this.route.params.subscribe((params:Params)=>{
       this.meetingUid = params['id'];
-      this.viewMeeting(this.meetingUid);
-      this.meetingRsvps(this.meetingUid);
+      this.viewMeeting();
+      this.fetchResponses();
+      this.fetchImage();
     },error=>{
       console.log("Error getting params....",error);
     });
+
+    this.route.queryParams.subscribe((queryParams: Params) => {
+      let groupFlag = queryParams['returnToGroup'];
+      if (groupFlag)
+        this.returnToGroup = true;
+    })
   }
 
-  viewMeeting(id:string){
-    this.taskService.viewMeeting(id,this.userService.getLoggedInUser().msisdn).subscribe(meeting=>{
-      console.log("Viewing meeting.....",meeting);
-      this.meeting = Task.createInstanceFromData(meeting.data);
-      this.assignedMembers = meeting.data.assignedMemberCount;
-      this.responseYes = (meeting.data.totals.yes / this.assignedMembers) * 100;
-      this.responsesNo = (meeting.data.totals.no / this.assignedMembers) * 100;
-      this.responseMaybe = (meeting.data.totals.maybe / this.assignedMembers) * 100;
-      this.noResponse = (meeting.data.totals.invalid / this.assignedMembers) * 100;
-
-      this.totalYes = meeting.data.totals.yes;
-      this.totalNo = meeting.data.totals.no;
-      this.totalMaybe = meeting.data.totals.maybe;
-      this.totalNoResponse = meeting.data.totals.invalid;
-
-      console.log(this.assignedMembers);
-      console.log("Task..........",this.meeting);
-      console.log("Yes............",this.responseYes);
+  viewMeeting(){
+    this.taskService.loadTask(this.meetingUid, "MEETING").subscribe(meeting => {
+      this.meeting = meeting;
     },error=>{
       console.log("Error loading meeting......",error);
     })
   }
 
-  meetingRsvps(id:string){
-    this.taskService.meetingRsvps(this.userService.getLoggedInUser().msisdn,id).subscribe(rsvps=>{
-      console.log("RSVPS...",rsvps);
+  fetchResponses() {
+    this.taskService.fetchMeetingResponses(this.meetingUid).subscribe(responses => {
+      this.responses = responses;
+      this.responseArray = convertResponseMap(responses);
+      this.responseArray.sort((task1, task2) => {
+        if (task1.response == task2.response)
+          return task1.memberName > task2.memberName ? 1 : task2.memberName > task1.memberName ? -1 : 0;
+        else
+          return RESP_ORDER[task1.response] > RESP_ORDER[task2.response] ? -1 : 1;
+      })
+    })
+  }
 
-      /*if(rsvps.numberInvited < 100){
-        this.rsvps = Object.keys(rsvps.rsvpResponses);
-        this.rsvps.forEach(r => this.values.push(rsvps.rsvpResponses[r]));
-      }*/
-
-      this.rsvps = Object.keys(rsvps.rsvpResponses);
-      this.rsvps.forEach(r => this.values.push(rsvps.rsvpResponses[r]));
-      console.log("Keys............",this.rsvps);
-      console.log("Values..........",this.values);
-    },error=>{
-      console.log("Error....",error);
+  fetchImage() {
+    this.taskService.fetchImageKey(this.meetingUid, TaskType.MEETING).subscribe(response => {
+      if (response) {
+        this.imageUrl = this.mediaService.getImageUrl(MediaFunction.TASK_IMAGE, response);
+      } else {
+        this.imageUrl = '';
+      }
     });
+  }
+
+  confirmCancel() {
+    $("#confirm-cancel-modal").modal('show');
+  }
+
+  cancelMeeting() {
+    this.taskService.cancelTask(this.meetingUid, TaskType.MEETING, true, !this.returnToGroup).subscribe(response => {
+      console.log("done! meeting cancelled, response: ", response);
+      $("#confirm-cancel-modal").modal('hide');
+      this.alertService.alert('task.meeting.cancel.done', true);
+      this.routeToParent();
+    })
+  }
+
+  routeToParent() {
+    if (this.returnToGroup)
+      this.router.navigate(['/group', this.meeting.parentUid]);
+    else
+      this.router.navigate(['/home']);
+    return false;
   }
 
 }

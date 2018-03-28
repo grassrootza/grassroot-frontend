@@ -27,6 +27,10 @@ export class GroupDashboardComponent implements OnInit {
   public votes: Task[] = [];
   public todos: Task[] = [];
 
+  public meetingToView: Task;
+  public voteToView: Task;
+  public todoToView: Task;
+
   public memberGrowthPeriods = ["THIS_MONTH", "LAST_MONTH", "THIS_YEAR", "ALL_TIME"];
   public currentMemberGrowthPeriod = "THIS_MONTH";
 
@@ -94,6 +98,7 @@ export class GroupDashboardComponent implements OnInit {
   meetingSaved(saveResponse) {
     console.log(saveResponse);
     $("#create-meeting-modal").modal("hide");
+    this.loadTasks();
   }
 
   showCreateVoteModal() {
@@ -104,6 +109,7 @@ export class GroupDashboardComponent implements OnInit {
   voteSaved(saveResponse) {
     console.log(saveResponse);
     $("#create-vote-modal").modal("hide");
+    this.loadTasks();
   }
 
   showCreateTodoModal() {
@@ -114,6 +120,22 @@ export class GroupDashboardComponent implements OnInit {
   todoSaved(saveResponse) {
     console.log(saveResponse);
     $("#create-todo-modal").modal("hide");
+    this.loadTasks();
+  }
+
+  showViewMeeting(meeting: Task) {
+    this.meetingToView = meeting;
+    $("#view-meeting-modal").modal("show");
+  }
+
+  showViewVote(vote: Task) {
+    this.voteToView = vote;
+    $("#view-vote-modal").modal("show");
+  }
+
+  showViewTodo(todo: Task) {
+    this.todoToView = todo;
+    $("#view-todo-modal").modal("show");
   }
 
   public memberGrowthPeriodChanged(newPeriod: string) {

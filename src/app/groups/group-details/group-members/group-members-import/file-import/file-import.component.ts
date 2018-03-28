@@ -5,8 +5,8 @@ import {GroupMembersImportExcelSheetAnalysis} from '../../../../model/group-memb
 import {GroupAddMemberInfo} from '../../../../model/group-add-member-info.model';
 import {GroupModifiedResponse} from '../../../../model/group-modified-response.model';
 import {FileImportResult} from "./file-import-result";
-import {AlertService} from "../../../../../utils/alert.service";
-import { saveAs } from 'file-saver/FileSaver';
+import {AlertService} from "../../../../../utils/alert-service/alert.service";
+import { saveAs } from 'file-saver';
 
 declare var $: any;
 
@@ -20,6 +20,8 @@ export class FileImportComponent implements OnInit {
   public MAX_NON_ERROR_DISPLAY = 100;
 
   private groupUid: string = "";
+  public groupTopics: string[] = [];
+  public assignedTopics: string[] = [];
 
   errors: Array<string> =[];
   dragAreaClass: string = 'dragarea';
@@ -57,6 +59,10 @@ export class FileImportComponent implements OnInit {
   ngOnInit(): void {
     this.route.parent.params.subscribe(params => {
       this.groupUid = params['id'];
+      this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(group => {
+        this.groupTopics = group.topics;
+        this.setUpTopicSelect();
+      });
     });
   }
 
@@ -64,6 +70,13 @@ export class FileImportComponent implements OnInit {
     this.sheetAnalysis = null;
     this.groupAddMembersInfo = [];
     this.uploadComplete = false;
+  }
+
+  setUpTopicSelect() {
+    $(".topics-multi-select").on('change.select2', function () {
+      const data = $('.topics-multi-select').select2('data');
+      this.assignedTopics = data.length > 0 ? data.map(tt => tt.id) : null;
+    }.bind(this));
   }
 
   analyzeHeaders(formData: FormData, params: any) {
@@ -135,9 +148,20 @@ export class FileImportComponent implements OnInit {
   }
 
   confirmImport() {
+    this.alertService.showLoading();
+
+    if (this.assignedTopics && this.assignedTopics.length > 0) {
+      this.groupAddMembersInfo.forEach(member => member.topics = this.assignedTopics);
+    }
+
     this.groupService.confirmAddMembersToGroup(this.groupUid, this.groupAddMembersInfo, "FILE_IMPORT").subscribe(resp => {
       this.groupModifiedResponse = resp;
       this.uploadComplete = true;
+      this.alertService.hideLoading();
+    }, error => {
+      console.log("error uploading!", error);
+      this.alertService.hideLoading();
+      this.alertService.alert('group.import.file.confirm.error');
     })
   }
 

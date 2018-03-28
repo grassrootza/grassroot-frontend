@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CampaignInfo} from "../../model/campaign-info";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DateTimeUtils, ngbDateFromMoment} from "../../../utils/DateTimeUtils";
-import {optionalUrlValidator} from "../../../utils/CustomValidators";
+import {optionalUrlValidator} from "../../../validators/CustomValidators";
 import {CampaignService} from "../../campaign.service";
 import {ActivatedRoute} from "@angular/router";
 import {MediaFunction} from "../../../media/media-function.enum";
@@ -14,7 +14,7 @@ import {
   ValidateCodeNotTaken
 } from "../../utils/campaign-validators";
 import {CampaignMsgRequest, CampaignUpdateParams} from "../../campaign-create/campaign-request";
-import {AlertService} from "../../../utils/alert.service";
+import {AlertService} from "../../../utils/alert-service/alert.service";
 import {CurrencyPipe} from "@angular/common";
 import {ENGLISH, Language} from "../../../utils/language";
 import * as moment from "moment";
@@ -110,7 +110,7 @@ export class CampaignSettingsComponent implements OnInit {
 
     this.campaignSettingsForm.controls['smsLimit'].valueChanges.subscribe(value => this.calculateSmsBudget(value));
     this.groupService.groupInfoList.subscribe(groups => {
-      this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_UPDATE_GROUP_DETAILS"));
+      this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_CREATE_CAMPAIGN"));
     });
   }
 

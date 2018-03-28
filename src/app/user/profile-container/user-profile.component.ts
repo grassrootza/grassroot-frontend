@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {UserService} from "../user.service";
 import {NavigationEnd, Router} from "@angular/router";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 
 @Component({
   selector: 'app-user-profile',
@@ -21,9 +21,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.alertService.hideLoadingDelayed();

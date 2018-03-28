@@ -247,12 +247,14 @@
 
   <div class="row mt-3">
     <div class="col-6">
-      <label for="task-team" class="grassroot-label-em">Save selection as new task team:</label>
+      <label for="task-team" class="grassroot-label-em" [translate]="'group.import.file.confirm.saveAsTaskTeam'">Save selection as new task team:</label>
       <input id="task-team" type="text" class="form-control" />
     </div>
     <div class="col-6">
-      <label for="topics" class="grassroot-label-em">Assign topic(s) to these members:</label>
-      <input id="topics" type="text" class="form-control" />
+      <label for="topics-multi-select" class="grassroot-label-em" [translate]="'group.import.file.confirm.topics'">Assign topic(s) to these members:</label>
+      <select id="topics-multi-select" multiple="multiple" class="form-control">
+        <option *ngFor="let topic of groupTopics" [value]="topic">{{ topic }}</option>
+      </select>
     </div>
   </div>
 

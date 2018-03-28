@@ -12,7 +12,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let meeting of meetings" class="meeting-event">
+          <div *ngFor="let meeting of meetings" class="meeting-event event-row" (click)="showViewMeeting(meeting)">
             <div class="float-left event-date">
               <span class="day">{{meeting.deadlineDate | date:'dd'}}</span>
               <span class="month">{{meeting.deadlineDate | date:'MMM'}}</span>
@@ -25,7 +25,7 @@
             {{ 'group.dashboard.no-meetings' | translate }}
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_MEETING')">
           <img src="assets/icon-plus.png" class="float-right event-new" (click)="showCreateMeetingModal()"/>
           <span [translate]="'group.dashboard.add-meeting'">Schedule a new meeting</span>
         </div>
@@ -42,7 +42,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let vote of votes" class="votes-event">
+          <div *ngFor="let vote of votes" class="votes-event event-row" (click)="showViewVote(vote)">
             <div class="float-left event-date">
               <span class="day">{{vote.deadlineDate | date:'dd'}}</span>
               <span class="month">{{vote.deadlineDate | date:'MMM'}}</span>
@@ -55,7 +55,7 @@
             {{ 'group.dashboard.no-votes' | translate }}
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_GROUP_VOTE')">
           <img src="assets/icon-plus.png" class="float-right event-new" (click)="showCreateVoteModal()"/>
           <span [translate]="'group.dashboard.add-vote'">Create a new vote</span>
         </div>
@@ -72,7 +72,7 @@
               {{ 'group.dashboard.view-all' | translate }} <i class="fas fa-arrow-right"></i>
             </a>
           </h5>
-          <div *ngFor="let todo of todos" class="action-items-event">
+          <div *ngFor="let todo of todos" class="action-items-event event-row" (click)="showViewTodo(todo)">
             <div class="float-left event-date">
               <span class="day">{{todo.deadlineDate | date:'dd'}}</span>
               <span class="month">{{todo.deadlineDate | date:'MMM'}}</span>
@@ -85,7 +85,7 @@
             {{ 'group.dashboard.no-todos' | translate }}
           </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer" *ngIf="group.hasPermission('GROUP_PERMISSION_CREATE_LOGBOOK_ENTRY')">
           <img src="assets/icon-plus.png" class="float-right event-new" (click)="showCreateTodoModal()"/>
           <span [translate]="'group.dashboard.add-todo'">Add an action item</span>
         </div>
@@ -132,8 +132,8 @@
                        (click)="showCreateTodoModal()">
                       {{ 'groups.row.action.create' | translate }}
                     </a>
-                    <!-- todo : implement some form of permission control here -->
-                    <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]">{{
+                    <a class="dropdown-item" [routerLink]="['/broadcast/create/group', group.groupUid]"
+                      *ngIf="group.hasPermission('GROUP_PERMISSION_SEND_BROADCAST')">{{
                       'groups.row.action.broadcast' | translate }}</a>
                   </div>
                 </div>
@@ -255,3 +255,9 @@
 
 <app-create-todo [groupUid]="createTaskGroupUid"
                  (todoSaved)="todoSaved($event)"></app-create-todo>
+
+<app-view-meeting [taskToView]="meetingToView"></app-view-meeting>
+
+<app-view-vote [voteToView]="voteToView"></app-view-vote>
+
+<app-view-todo [todoTask]="todoToView"></app-view-todo>

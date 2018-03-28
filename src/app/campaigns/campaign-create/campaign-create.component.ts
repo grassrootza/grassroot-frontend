@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../campaign.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DateTimeUtils, epochMillisFromDate} from "../../utils/DateTimeUtils";
-import {optionalUrlValidator} from "../../utils/CustomValidators";
+import {optionalUrlValidator} from "../../validators/CustomValidators";
 import {CampaignRequest} from "./campaign-request";
 import {GroupService} from "../../groups/group.service";
 import {GroupInfo} from "../../groups/model/group-info.model";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {Router} from "@angular/router";
 import {
   checkCodeIsNumber,
@@ -69,7 +69,7 @@ export class CampaignCreateComponent implements OnInit {
   }
 
   loadGroupSelector(groups: GroupInfo[]) {
-    this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_UPDATE_GROUP_DETAILS"));
+    this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_CREATE_CAMPAIGN"));
     this.createCampaignForm.controls['groupUid'].valueChanges.subscribe(value => {
       console.log("selected this group: ", value);
       let selectedGroupTopics = this.availableGroups.find(grp => grp.groupUid === value).topics;

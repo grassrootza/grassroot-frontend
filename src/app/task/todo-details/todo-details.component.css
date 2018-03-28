@@ -1,0 +1,69 @@
+.attendence-info-header {
+  background: #929292;
+  font-style: inherit;
+  color: #ffffff;
+  margin-top: 5%;
+}
+
+.meeting-title{
+  margin-bottom: 5%;
+}
+
+.assigned-members{
+  margin-top: 5%;
+  font-weight: bold;
+}
+
+.attendence-header{
+  margin-top: 5%;
+}
+
+.download-link {
+  margin-left: 10px;
+}
+
+.responses .card {
+  border-radius: 2px;
+  border: 1px solid #E5E9F2;
+  /*box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);*/
+}
+
+.responses .card-header {
+  background-color: #929BAF;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.responses .card-title {
+  font-size: 16px;
+  color: #FFFFFF;
+  font-family: Nunito;
+  font-weight: 600;
+  line-height: 16px;
+  vertical-align: center;
+}
+
+.responses .card-body {
+  padding-top: 0.5rem;
+}
+
+.responses .info-row {
+  border-top: none;
+  border-bottom: none;
+  padding-top: 0.5rem;
+  padding-bottom: 1.5rem;
+  font-size: 15px;
+  line-height: 16px;
+}
+
+.responses .row-icon {
+  color: #2CBC4C;
+  font-size: 1.4rem;
+}
+
+.responses .btn-secondary {
+  font-size: 1rem;
+}

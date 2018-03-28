@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserProvince} from '../../../../user/model/user-province.enum';
 import {GroupRole} from '../../../model/group-role';
 import {GroupModifiedResponse} from '../../../model/group-modified-response.model';
-import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../validators/CustomValidators';
 import {Observable} from 'rxjs/Observable';
 import {Group} from '../../../model/group.model';
 import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';
@@ -50,8 +50,6 @@ export class GroupAddMemberComponent implements OnInit {
     this.roleKeys = Object.keys(GroupRole);
     this.addMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("memberEmail", "phoneNumber")});
     this.setupValidation();
-    console.log("alright, ready to work");
-
   }
 
   private setupValidation() {

@@ -9,7 +9,8 @@ export class User {
               public firstName: string,
               public enabled: string,
               public languageCode: string,
-              public province: string) {
+              public province: string,
+              public hasPassword: boolean) {
   }
 }
 
@@ -25,6 +26,7 @@ export class AuthenticatedUser {
               public email: string,
               public languageCode: string,
               public province: string,
+              public hasImage: boolean,
               public token: string) {
   }
 
@@ -38,6 +40,7 @@ export class UserProfile {
   // province: UserProvince = UserProvince.ZA_GP;
   province: string = 'ZA_GP';
   language: string = "en";
+
 
   constructor(user?: AuthenticatedUser) {
     if (user) {

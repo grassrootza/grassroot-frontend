@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {UserService} from "../user/user.service";
 import {Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../utils/CustomValidators";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../validators/CustomValidators";
 
 @Component({
   selector: 'app-registration',
@@ -19,7 +19,8 @@ export class RegistrationComponent {
       name: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
       phone: ['', optionalPhoneValidator],
       email: ['', optionalEmailValidator],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(5)])]
+      password: ['', Validators.compose([Validators.required, Validators.minLength(5)])],
+      captcha: new FormControl()
     }, { validator: emailOrPhoneEntered("email", "phone") })
   }
 

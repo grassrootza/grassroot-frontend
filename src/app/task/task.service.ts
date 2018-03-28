@@ -3,17 +3,20 @@ import {environment} from "../../environments/environment";
 import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {Task} from "./task.model";
+import {TaskType} from "./task-type";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {LiveWireAlertType} from "../livewire/live-wire-alert-type.enum";
 import {LiveWireAlertDestType} from "../livewire/live-wire-alert-dest-type.enum";
 import {MediaFunction} from "../media/media-function.enum";
+import {LocalStorageService} from "../utils/local-storage.service";
 
 @Injectable()
 export class TaskService {
 
   private upcomingGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/upcoming/group";
   private upcomingUserTasksUrl = environment.backendAppUrl + "/api/task/fetch/upcoming/user";
+  private specificTasksUrl = environment.backendAppUrl + "/api/task/fetch";
 
   private groupCreateMeetingUrl = environment.backendAppUrl + '/api/task/create/meeting';
   private groupCreateVoteUrl = environment.backendAppUrl + '/api/task/create/vote';
@@ -26,23 +29,30 @@ export class TaskService {
   private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
   private uploadImageUrl = environment.backendAppUrl + "/api/media/store/body";
 
-  private castVoteUrl = environment.backendAppUrl + "/api/vote/do";
-  private viewVoteUrl = environment.backendAppUrl + "/api/vote/view";
-  private viewMeetingUrl = environment.backendAppUrl + "/api/meeting/view";
-  private meetingRsvpsUrl = environment.backendAppUrl + "/api/meeting/rsvps";
+  private castVoteUrl = environment.backendAppUrl + "/api/task/respond/vote";
+
+  private meetingResponsesUrl = environment.backendAppUrl + "/api/task/fetch/meeting/rsvps";
+  private meetingRsvpUrl = environment.backendAppUrl + "/api/task/respond/meeting";
+
+  private todoResponsesUrl = environment.backendAppUrl + "/api/task/fetch/todo/responses";
+  private todoResponsesDownload = environment.backendAppUrl + "/api/task/fetch/todo/download";
+
+  private fetchImageKeyUrl = environment.backendAppUrl + "/api/task/fetch/image";
 
   private upcomingTasksSubject: BehaviorSubject<Task[]> = new BehaviorSubject(null);
   public upcomingTasks: Observable<Task[]> = this.upcomingTasksSubject.asObservable();
   private upcomingTasksErrorSubject: BehaviorSubject<any> = new BehaviorSubject(null);
   public upcomingTaskError: Observable<any> = this.upcomingTasksErrorSubject.asObservable();
+
+  private cancelTaskUrl = environment.backendAppUrl + "/api/task/modify/cancel";
+
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
+  constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
 
-  constructor(private httpClient: HttpClient) {
-
-    let cachedTasks = localStorage.getItem(this.MY_AGENDA_DATA_CACHE);
+    let cachedTasks = this.localStorageService.getItem(this.MY_AGENDA_DATA_CACHE);
     if (cachedTasks) {
-      let cachedTasksData = JSON.parse(localStorage.getItem(this.MY_AGENDA_DATA_CACHE));
+      let cachedTasksData = JSON.parse(this.localStorageService.getItem(this.MY_AGENDA_DATA_CACHE));
       console.log("Cached tasks before", cachedTasksData);
       cachedTasksData = cachedTasksData.map(task => Task.createInstanceFromData(task));
       console.log("Cached tasks before", cachedTasksData);
@@ -57,8 +67,6 @@ export class TaskService {
       .map(data => data.map(task => Task.createInstanceFromData(task)));
   }
 
-
-
   public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
     let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
     return this.httpClient.get(url).map(
@@ -66,20 +74,16 @@ export class TaskService {
           console.log("results: ", res);
         let tasks = res["addedAndUpdated"]  as Task[];
         return tasks.map(t => Task.createInstanceFromData(t))
-      }
-      );
-   }
+      });
+  }
 
-
-  public loadUpcomingUserTasks(userId: string) {
-
-    let fullUrl = this.upcomingUserTasksUrl + "/" + userId;
-    this.httpClient.get<Task[]>(fullUrl)
+  public loadUpcomingUserTasks() {
+    this.httpClient.get<Task[]>(this.upcomingUserTasksUrl)
       .map(data => data.map(task => Task.createInstanceFromData(task)))
       .subscribe(
         tasks => {
           this.upcomingTasksSubject.next(tasks);
-          localStorage.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
+          this.localStorageService.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
         },
         error => {
           this.upcomingTasksErrorSubject.next(error);
@@ -88,8 +92,14 @@ export class TaskService {
       );
   }
 
+  public loadTask(taskUid: string, taskType: string): Observable<Task> {
+    const fullUrl = this.specificTasksUrl + "/" + taskType + "/" + taskUid;
+    return this.httpClient.get<Task>(fullUrl).map(Task.createInstanceFromData);
+  }
 
-  createMeeting(parentType: string, parentUid: string, subject: string, location: string, dateTimeEpochMillis: number, publicMeeting: boolean, assignedMemberUids: string[]):Observable<Task> {
+  createMeeting(parentType: string, parentUid: string, subject: string, location: string,
+                dateTimeEpochMillis: number, publicMeeting: boolean, description: string,
+                imageKey: string, assignedMemberUids: string[]):Observable<Task> {
     const fullUrl = this.groupCreateMeetingUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -99,10 +109,16 @@ export class TaskService {
       .set('publicMeeting', publicMeeting.toString())
       .set('assignedMemberUids', assignedMemberUids.join(','));
 
+    if (description)
+      params = params.set("description", description);
+
+    if (imageKey)
+      params = params.set("mediaFileUid", imageKey);
+
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
-  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, assignedMemberUids: string[]):Observable<Task>{
+  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, imageKey: string, assignedMemberUids: string[]):Observable<Task>{
     const fullUrl = this.groupCreateVoteUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -112,12 +128,15 @@ export class TaskService {
       .set('time', time.toString())
       .set('assignedMemberUids', assignedMemberUids.join(','));
 
+    if (imageKey) {
+      params = params.set("mediaFileUid", imageKey);
+    }
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
   createTodo(todoType: string, parentType: string, parentUid: string, subject: string, dueDateTime: number, responseTag: string,
-             requireImages: boolean, recurring:boolean, recurringPeriodMillis: number, assignedMemberUids: string[], confirmingMemberUids: string[]):Observable<Task> {
+             requireImages: boolean, recurring:boolean, recurringPeriodMillis: number, imageKey: string, assignedMemberUids: string[], confirmingMemberUids: string[]):Observable<Task> {
     let fullUrl = this.groupCreateTodoUrl;
     let params;
 
@@ -160,18 +179,21 @@ export class TaskService {
         .set("assignedMemberUids", assignedMemberUids.join(","));
     }
 
+    if (imageKey) {
+      params = params.set("mediaFileUids", imageKey);
+    }
 
+    console.log("creating todo with params: ", params);
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
 
-  respondToDo(todoUid: string, userUid: string, response: string): Observable<string> {
-    let url = this.groupRespondeTodoUrl + "/" + todoUid + "/" + userUid;
+  respondToDo(todoUid: string, response: string): Observable<string> {
+    let url = this.groupRespondeTodoUrl + "/" + todoUid;
     let params = new HttpParams()
       .set("response", response);
 
     return this.httpClient.get<string>(url, {params: params})
-
   }
 
   uploadAlertImage(image):Observable<any>{
@@ -185,11 +207,11 @@ export class TaskService {
 
     let fullUrl = this.createLiveWireAlertUrl + "/" + userUid;
     let params;
-    
+
     console.log("Media file keys..................................",mediaKeys);
-    
+
     let mediaKeyArray: string[] = [];
-    
+
 
     params = new HttpParams()
       .set("headline",headline)
@@ -213,32 +235,53 @@ export class TaskService {
         .set("taskUid",taskUid)
         .set("contactNumber",contactPersonNumber)
         .set("contactName",contactPersonName)
-        .set("mediaFileKeys",mediaKeys + "");;
+        .set("mediaFileKeys",mediaKeys + "");
       }
 
     return this.httpClient.post(fullUrl,null,{params:params});
   }
 
-  castVote(id:string,phoneNumber:string,response:string):Observable<any>{
-    let fullUrl = this.castVoteUrl + "/" + id + "/" + phoneNumber + "/+27";
-    let params = new HttpParams().set("response",response);
-
-    return this.httpClient.get(fullUrl,{params:params});
+  castVote(taskUid:string, response:string):Observable<Task>{
+    let fullUrl = this.castVoteUrl + "/" + taskUid;
+    let params = new HttpParams().set("vote", response);
+    return this.httpClient.post<Task>(fullUrl, null, {params:params}).map(Task.createInstanceFromData);
   }
 
-  viewVote(id:string,phoneNumber:string):Observable<any>{
-    let fullUrl = this.viewVoteUrl + "/" + id + "/" + phoneNumber + "/+27";
-    return this.httpClient.get(fullUrl);
+  fetchMeetingResponses(taskUid: string): Observable<Map<string, string>> {
+    const fullUrl = this.meetingResponsesUrl + "/" + taskUid;
+    return this.httpClient.get<Map<string, string>>(fullUrl);
   }
 
-  viewMeeting(id:string,phoneNumber:string):Observable<any>{
-    let fullUrl = this.viewMeetingUrl + "/" + id + "/" + phoneNumber + "/+27";
-    return this.httpClient.get(fullUrl);
+  respondToMeeting(taskUid: string, response: string): Observable<Map<string, string>> {
+    const fullUrl = this.meetingRsvpUrl + "/" + taskUid;
+    let params = new HttpParams().set("response", response.toUpperCase());
+    return this.httpClient.post<Map<string, string>>(fullUrl, null, {params: params});
   }
 
-  meetingRsvps(phoneNumber:string,id:string):Observable<any>{
-    let fullUrl = this.meetingRsvpsUrl + "/" + phoneNumber + "/+27/" + id;
-    return this.httpClient.get(fullUrl);
+  fetchTodoResponses(taskUid: string): Observable<Map<string, string>> {
+    const fullUrl = this.todoResponsesUrl + "/" + taskUid;
+    return this.httpClient.get<Map<string, string>>(fullUrl);
+  }
+
+  downloadTodoResponses(taskUid: string): Observable<any> {
+    const fullUrl = this.todoResponsesDownload + "/" + taskUid;
+    return this.httpClient.get(fullUrl, { responseType: 'blob'});
+  }
+
+  fetchImageKey(taskUid: string, taskType: TaskType): Observable<string> {
+    const fullUrl = this.fetchImageKeyUrl + "/" + taskType + "/" + taskUid;
+    return this.httpClient.get(fullUrl, { responseType: 'text' });
+  }
+
+  cancelTask(taskUid: string, taskType: TaskType, notifyMembers: boolean = true, reloadAgenda: boolean = true) {
+    const fullUrl = this.cancelTaskUrl + "/" + taskType + "/" + taskUid;
+    console.log("send notification param: ", notifyMembers.toString());
+    let params = new HttpParams().set("sendNotifications", notifyMembers.toString());
+    return this.httpClient.post(fullUrl, null, {params: params}).map(response => {
+      if (reloadAgenda) {
+        this.loadUpcomingUserTasks();
+      }
+    });
   }
 
 

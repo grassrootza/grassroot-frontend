@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {UserService} from "../user.service";
 import {AuthenticatedUser, UserProfile} from "../user.model";
 import {AccountService} from "../account.service";
@@ -8,7 +8,7 @@ import {AccountType} from "../model/account-type.enum";
 import {Account} from "../model/account.model";
 import {AccountBillingCycle} from "../model/account-billing-cycle.enum";
 import {AccountBillingRecords} from "../model/account-billing-records.model";
-import { saveAs } from 'file-saver/FileSaver';
+import { saveAs } from 'file-saver';
 
 declare var $: any;
 
