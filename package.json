@@ -40,6 +40,7 @@
     "helmet": "^3.12.0",
     "jquery": "^3.0.0",
     "libphonenumber-js": "^0.4.49",
+    "lodash": "^4.17.5",
     "moment": "^2.20.1",
     "ng2-clipboard": "^1.0.35",
     "ng2-img-max": "^2.1.15",

@@ -1,5 +1,5 @@
 .main-content {
-  padding-top: 90px;
+  padding-top: 66px;
 }
 
 .navbar {
@@ -25,7 +25,6 @@
 }
 
 .navbar-light .navbar-nav .active > .nav-link {
-
   color: #2CBC4C !important;
   border-bottom: solid #2CBC4C 2px !important;
 }
