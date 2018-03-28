@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
-import { CarouselComponent } from './carousel/carousel.component';
+import {CommonModule} from '@angular/common';
 import {LandingComponent} from './landing.component';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../shared.module";
@@ -17,8 +16,7 @@ export const LANDING_ROUTE: Routes = [
     SharedModule,
     RouterModule.forChild(LANDING_ROUTE),
   ],
-  declarations: [LandingComponent,
-    CarouselComponent],
+  declarations: [],
   providers: [
     PublicActivityService,
     PublicNewsService

@@ -7,7 +7,6 @@ import {ANIMATION_TYPES, LoadingModule} from 'ngx-loading';
 import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {UserService} from './user/user.service';
 import {AlertService} from './utils/alert-service/alert.service';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppComponent} from './app.component';
 import {BrowserModule} from '@angular/platform-browser';
@@ -25,6 +24,10 @@ import {PasswordResetComponent} from "./login/password-reset/password-reset.comp
 import {PwdResetInitiateComponent} from "./login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component";
 import {IntegrationConnectComponent} from "./user/integrations/integration-connect/integration-connect.component";
 import {RecaptchaDirective} from "./utils/recaptcha.directive";
+import {LandingComponent} from "./landing/landing.component";
+import {PublicActivityService} from "./landing/public-activity.service";
+import {PublicNewsService} from "./landing/public-news.service";
+import {CarouselComponent} from "./landing/carousel/carousel.component";
 
 @NgModule({
   declarations: [
@@ -37,11 +40,12 @@ import {RecaptchaDirective} from "./utils/recaptcha.directive";
     PwdResetInitiateComponent,
     PwdResetValidateComponent,
     PwdResetNewComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    LandingComponent,
+    CarouselComponent
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
     HttpClientModule,
     LoadingModule.forRoot({
       animationType: ANIMATION_TYPES.circleSwish, backdropBackgroundColour: 'rgba(0,0,0,0.2)',
@@ -61,7 +65,9 @@ import {RecaptchaDirective} from "./utils/recaptcha.directive";
     IntegrationsService,
     PasswordResetService,
     LocalStorageService,
-    NotificationService
+    NotificationService,
+    PublicActivityService,
+    PublicNewsService
   ]
 })
 export class AppModule { }

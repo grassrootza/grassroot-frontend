@@ -14,6 +14,7 @@ import {AppServerRoutingModule} from "./app.server.routing.module";
 import {TranslateServerLoader} from "./translate/translate-server-loader.service";
 import {CookiesService} from "./utils/cookie-service/cookies.service";
 import {ServerCookieService} from "./utils/cookie-service/server-cookie.service";
+import {NoopAnimationsModule} from "@angular/platform-browser/animations";
 
 export function translateFactory(transferState: TransferState) {
   return new TranslateServerLoader('/assets/i18n', '.json', transferState);
@@ -33,6 +34,7 @@ export function translateFactory(transferState: TransferState) {
     TranslateModule,
     ReactiveFormsModule,
     FormsModule,
+    NoopAnimationsModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,

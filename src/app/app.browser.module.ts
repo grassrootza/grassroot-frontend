@@ -32,6 +32,7 @@ import {TranslateBrowserLoader} from "./translate/translate-browser-loader.servi
 import {CookiesService} from "./utils/cookie-service/cookies.service";
 import {BrowserCookiesService} from "./utils/cookie-service/browser-cookies.service";
 import {CookieModule} from "ngx-cookie";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -52,6 +53,7 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
     TransferHttpCacheModule,
     AppModule,
     HttpClientModule,
+    BrowserAnimationsModule,
     LoggedInServicesModule,
     AppBrowserRoutingModule,
     TranslateModule.forRoot({

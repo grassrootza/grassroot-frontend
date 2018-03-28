@@ -1,8 +1,9 @@
-import { AfterViewInit, Component, ContentChildren, Directive, ElementRef, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Inject, Input, PLATFORM_ID, ViewChild} from '@angular/core';
 // import { CarouselItemDirective } from './carousel-item.directive';
-import { animate, AnimationBuilder, AnimationFactory, AnimationPlayer, style } from '@angular/animations';
+import {animate, AnimationBuilder, AnimationFactory, AnimationPlayer, style} from '@angular/animations';
 import {Observable} from 'rxjs/Rx';
-import { PublicLivewire } from '../model/public-livewire.model';
+import {PublicLivewire} from '../model/public-livewire.model';
+import {isPlatformBrowser} from "@angular/common";
 
 @Component({
   selector: 'carousel',
@@ -23,7 +24,7 @@ export class CarouselComponent<T> implements AfterViewInit {
   carouselWrapperStyle = {};
   carouselItemStyle = {};
 
-  constructor( private builder : AnimationBuilder ) {
+  constructor(private builder : AnimationBuilder, @Inject(PLATFORM_ID) protected platformId: Object) {
   }
 
   ngAfterViewInit() {
@@ -40,7 +41,9 @@ export class CarouselComponent<T> implements AfterViewInit {
       };
     });
 
-    this.startAutoScroll();
+    if (isPlatformBrowser(this.platformId) && this.items && this.items.length > 1) {
+      this.startAutoScroll();
+    }
 
   }
 

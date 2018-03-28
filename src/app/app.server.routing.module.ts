@@ -4,6 +4,7 @@ import {LoadingScreenComponent} from './utils/loading-screen/loading-screen.comp
 import {NgModule} from '@angular/core';
 import {JoinComponent} from './join/join.component';
 import {RegistrationComponent} from './registration/registration.component';
+import {LandingComponent} from "./landing/landing.component";
 
 // a bit of redundancy here, but small price to pay to avoid routing weirdness if use joint routes
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
+  {path: 'landing', component: LandingComponent},
   // directs all other routes to the main page
   {path: '**', component: LoadingScreenComponent}
 ];
