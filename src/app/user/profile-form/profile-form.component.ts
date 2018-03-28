@@ -3,10 +3,10 @@ import {UserProvince} from "../model/user-province.enum";
 import {UserService} from "../user.service";
 import {UserProfile} from "../user.model";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {MediaService} from "../../media/media.service";
-import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../../utils/CustomValidators";
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../../validators/CustomValidators";
 
 declare var $: any;
 

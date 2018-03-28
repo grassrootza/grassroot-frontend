@@ -82,7 +82,9 @@ export class UserService {
 
   storeAuthUser(user: AuthenticatedUser, token?: string) {
     if (token) {
-      this.localStorageService.setItem("token", token);
+      console.log("setting token: ", token);
+      this.localStorageService.setItem('token', token);
+      console.log("stored token: ", this.localStorageService.getItem('token'));
     }
     this._loggedInUser = user;
     this.loggedInUser.emit(this._loggedInUser);

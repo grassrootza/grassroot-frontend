@@ -4,7 +4,7 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/observable/timer";
 import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/map";
-import {urlValidator} from "../../utils/CustomValidators";
+import {urlValidator} from "../../validators/CustomValidators";
 import {isNumeric} from "rxjs/util/isNumeric";
 
 export class ValidateCodeNotTaken {

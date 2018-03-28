@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../campaign.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DateTimeUtils, epochMillisFromDate} from "../../utils/DateTimeUtils";
-import {optionalUrlValidator} from "../../utils/CustomValidators";
+import {optionalUrlValidator} from "../../validators/CustomValidators";
 import {CampaignRequest} from "./campaign-request";
 import {GroupService} from "../../groups/group.service";
 import {GroupInfo} from "../../groups/model/group-info.model";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {Router} from "@angular/router";
 import {
   checkCodeIsNumber,

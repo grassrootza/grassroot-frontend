@@ -3,7 +3,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TaskService} from "../task.service";
 import {Task} from "../task.model";
 import {convertResponseMap, TaskResponse} from "../task-response";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {TaskType} from "../task-type";
 import {MediaFunction} from "../../media/media-function.enum";
 import {MediaService} from "../../media/media.service";

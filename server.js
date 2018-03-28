@@ -1,6 +1,7 @@
 require('zone.js/dist/zone-node');
 
 const express = require('express');
+const helmet = require('helmet');
 const ngExpressEngine = require('@nguniversal/express-engine').ngExpressEngine;
 
 require('@angular/core').enableProdMode();
@@ -11,7 +12,7 @@ const {
 } = require(`./dist-server/main.bundle`);
 
 const app = express();
-// app.compress();
+app.use(helmet());
 
 const { provideModuleMap } = require('@nguniversal/module-map-ngfactory-loader');
 const provider = provideModuleMap(LAZY_MODULE_MAP);

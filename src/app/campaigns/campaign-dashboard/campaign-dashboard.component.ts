@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CampaignInfo} from "../model/campaign-info";
 import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {CampaignService} from "../campaign.service";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {MediaService} from "../../media/media.service";
 import {MediaFunction} from "../../media/media-function.enum";
 

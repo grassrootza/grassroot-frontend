@@ -3,7 +3,7 @@ import {Task} from "../task.model";
 import {UserService} from "../../user/user.service";
 import {TaskService} from "../task.service";
 import {ItemPercentage} from "../../groups/group-details/group-dashboard/member-detail-percent.model";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {MediaFunction} from "../../media/media-function.enum";
 import {TaskType} from "../task-type";
 import {MediaService} from "../../media/media.service";

@@ -13,7 +13,7 @@ import {GroupMembersImportComponent} from './groups/group-details/group-members/
 import {FileImportComponent} from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
 import {IntegrationsService} from "./user/integrations/integrations.service";
 import {JoinService} from "./join/join.service";
-import {AlertService} from "./utils/alert.service";
+import {AlertService} from "./utils/alert-service/alert.service";
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
 import {SharedModule} from "./shared.module";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
@@ -29,6 +29,9 @@ import {AppBrowserRoutingModule} from "./app.browser.routing.module";
 import {AppModule} from "./app.module";
 import {TransferHttpCacheModule} from "@nguniversal/common";
 import {TranslateBrowserLoader} from "./translate/translate-browser-loader.service";
+import {CookiesService} from "./utils/cookie-service/cookies.service";
+import {BrowserCookiesService} from "./utils/cookie-service/browser-cookies.service";
+import {CookieModule} from "ngx-cookie";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -67,7 +70,8 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
       }
     }),
     NgbModule.forRoot(),
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
+    CookieModule.forRoot()
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},
@@ -85,7 +89,8 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
     PasswordResetService,
     AccountService,
     SearchService,
-    MediaService
+    MediaService,
+    {provide: CookiesService, useClass: BrowserCookiesService}
   ],
   bootstrap: [AppComponent]
 })

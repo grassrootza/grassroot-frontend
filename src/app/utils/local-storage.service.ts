@@ -6,9 +6,9 @@ export class LocalStorageService {
 
   constructor(@Inject(PLATFORM_ID) protected platformId: Object) { }
 
-  setItem(key: string, value: any) {
+  setItem(key: string, value: string) {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(key, value);
     }
   }
 

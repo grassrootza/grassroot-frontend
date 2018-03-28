@@ -7,7 +7,7 @@ import {BroadcastParams} from "../../model/broadcast-params";
 import {GroupService} from "../../../groups/group.service";
 import {Group} from "../../../groups/model/group.model";
 import {MembersFilter} from "../../../groups/member-filter/filter.model";
-import {AlertService} from "../../../utils/alert.service";
+import {AlertService} from "../../../utils/alert-service/alert.service";
 import {User} from "../../../user/user.model";
 import {getUserFromMembershipInfo} from "../../../groups/model/membership.model";
 

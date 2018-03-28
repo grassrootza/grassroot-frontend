@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {PasswordResetService} from "../password-reset.service";
-import {AlertService} from "../../../utils/alert.service";
+import {AlertService} from "../../../utils/alert-service/alert.service";
 import {Router} from "@angular/router";
 
 @Component({

@@ -7,7 +7,7 @@ import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {DateTimeUtils, isDateTimeFuture} from "../../../../utils/DateTimeUtils";
 import {MediaService} from "../../../../media/media.service";
 import {MediaFunction} from "../../../../media/media-function.enum";
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 
 declare var $: any;
 

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../campaign.service";
 import {CampaignInfo} from "../model/campaign-info";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 
 @Component({
   selector: 'app-campaigns',

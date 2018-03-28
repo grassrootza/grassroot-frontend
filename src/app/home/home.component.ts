@@ -14,7 +14,7 @@ import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
-import {AlertService} from "../utils/alert.service";
+import {AlertService} from "../utils/alert-service/alert.service";
 import {CampaignService} from "../campaigns/campaign.service";
 import {SearchService} from "../search/search.service";
 
@@ -61,6 +61,7 @@ export class HomeComponent implements OnInit {
               private alertService: AlertService,
               private searchService:SearchService) {
     this.agendaBaseDate = moment().startOf('day');
+    // console.log("found the cookie? ", this.cookieService.get("testing"));
   }
 
   ngOnInit() {

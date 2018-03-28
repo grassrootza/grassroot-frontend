@@ -12,6 +12,8 @@ import {DatePipe} from '@angular/common';
 import {LoadingScreenComponent} from "./utils/loading-screen/loading-screen.component";
 import {AppServerRoutingModule} from "./app.server.routing.module";
 import {TranslateServerLoader} from "./translate/translate-server-loader.service";
+import {CookiesService} from "./utils/cookie-service/cookies.service";
+import {ServerCookieService} from "./utils/cookie-service/server-cookie.service";
 
 export function translateFactory(transferState: TransferState) {
   return new TranslateServerLoader('/assets/i18n', '.json', transferState);
@@ -42,7 +44,8 @@ export function translateFactory(transferState: TransferState) {
   exports: [
     RouterModule, FormsModule, ReactiveFormsModule, TranslateModule
   ],
-  providers: [DatePipe, TranslatePipe],
+  providers: [DatePipe, TranslatePipe,
+    {provide: CookiesService, useClass: ServerCookieService}],
   bootstrap: [AppComponent]
 })
 export class AppServerModule {}

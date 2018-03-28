@@ -5,7 +5,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {Membership} from '../../../model/membership.model';
 import {MediaFunction} from "../../../../media/media-function.enum";
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 import {MediaService} from "../../../../media/media.service";
 import {DateTimeUtils, isDateTimeFuture} from "../../../../utils/DateTimeUtils";
 

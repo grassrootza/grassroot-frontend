@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angula
 import {Group} from "../../../model/group.model";
 import {Membership} from "../../../model/membership.model";
 import {GroupService} from "../../../group.service";
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 import {GroupInfo} from "../../../model/group-info.model";
 import {GroupAddMemberInfo} from "../../../model/group-add-member-info.model";
 import {GroupRole} from "../../../model/group-role";

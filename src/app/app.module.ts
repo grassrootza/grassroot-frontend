@@ -6,7 +6,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {ANIMATION_TYPES, LoadingModule} from 'ngx-loading';
 import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {UserService} from './user/user.service';
-import {AlertService} from './utils/alert.service';
+import {AlertService} from './utils/alert-service/alert.service';
 import {AppComponent} from './app.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {LoginComponent} from './login/login.component';

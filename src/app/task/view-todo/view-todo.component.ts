@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TaskService} from "../task.service";
 import {TodoType} from "../todo-type";
 import {Task} from "../task.model";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {Router} from "@angular/router";
 
 declare var $: any;

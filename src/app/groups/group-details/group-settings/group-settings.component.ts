@@ -5,7 +5,7 @@ import {GroupService} from '../../group.service';
 import {Group} from '../../model/group.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from '../../model/permission.model';
-import {AlertService} from "../../../utils/alert.service";
+import {AlertService} from "../../../utils/alert-service/alert.service";
 import {GroupRole} from "../../model/group-role";
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/forkJoin';

@@ -3,11 +3,12 @@ import {UserService} from "./user/user.service";
 import {Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
 import {TranslateService} from '@ngx-translate/core';
-import {AlertService} from "./utils/alert.service";
+import {AlertService} from "./utils/alert-service/alert.service";
 import {NotificationService} from "./user/notification.service";
 import {Notification} from "./user/model/notification.model";
 import {LocalStorageService} from "./utils/local-storage.service";
 import {isPlatformBrowser} from "@angular/common";
+import {CookiesService} from "./utils/cookie-service/cookies.service";
 
 declare var $: any;
 
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit {
               private alertService: AlertService,
               private notificationService: NotificationService,
               private localStorageService: LocalStorageService,
+              private cookieService: CookiesService,
               @Inject(PLATFORM_ID) protected platformId: Object) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
@@ -93,13 +95,16 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const browserLang = translateService.getBrowserLang();
       translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+      this.cookieService.put("grassroot-logged-in", "" + false);
+      console.log("put cookie: ", this.cookieService.get("grassroot-logged-in"));
     } else {
       translateService.use('en');
     }
   }
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
+    console.log("is the user logged in? ", this.userService.isLoggedIn());
+    if (isPlatformBrowser(this.platformId) && this.userService.isLoggedIn()) {
       $(".ntf-popup").hide();
       this.pullNotifications();
       setInterval(() => {

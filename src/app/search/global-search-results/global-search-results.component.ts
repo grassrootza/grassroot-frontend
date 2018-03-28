@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {NavigationEnd, Router} from "@angular/router";
 
 @Component({

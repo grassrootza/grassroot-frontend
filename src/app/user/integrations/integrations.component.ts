@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {IntegrationsService} from "./integrations.service";
 import {IntegrationSettingsList, ManagedPage} from "../model/integration-settings";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 
 @Component({
   selector: 'app-integrations',

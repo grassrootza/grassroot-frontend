@@ -3,8 +3,8 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {BroadcastService} from "../../broadcast.service";
 import {Router} from "@angular/router";
 import {BroadcastConfirmation, BroadcastContent} from "../../model/broadcast-request";
-import {AlertService} from "../../../utils/alert.service";
-import {emailStyleHeader} from "../../../utils/media-utils";
+import {AlertService} from "../../../utils/alert-service/alert.service";
+import {emailStyleHeader} from "../../../media/media-utils";
 
 @Component({
   selector: 'app-broadcast-confirm',
