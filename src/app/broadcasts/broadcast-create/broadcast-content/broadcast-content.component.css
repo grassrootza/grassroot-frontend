@@ -1,3 +1,5 @@
+@import "https://cdn.quilljs.com/1.2.2/quill.snow.css";
+
 .error {
   color: #ff0000;
 }

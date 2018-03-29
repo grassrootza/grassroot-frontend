@@ -13,11 +13,12 @@ import {FileImportComponent} from "./groups/group-details/group-members/group-me
 import {IntegrationConnectComponent} from "./user/integrations/integration-connect/integration-connect.component";
 import {LandingComponent} from "./landing/landing.component";
 import {NewsComponent} from "./news/news.component";
+import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 
 const routes: Routes = [
 
-  // {path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [LoggedInGuard]},
-  {path: 'landing', component: LandingComponent},
+  {path: '', component: HomeScreenRoutingComponent},
+  {path: 'about', component: LandingComponent},
   {path: 'news', component: NewsComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},

@@ -30,6 +30,7 @@ import {CarouselComponent} from "./landing/carousel/carousel.component";
 import {NewsComponent} from "./news/news.component";
 import {PublicNewsService} from "./landing/public-news.service";
 import {MediaService} from "./media/media.service";
+import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import {MediaService} from "./media/media.service";
     PwdResetValidateComponent,
     PwdResetNewComponent,
     PasswordResetComponent,
+    HomeScreenRoutingComponent,
     LandingComponent,
     CarouselComponent,
     NewsComponent

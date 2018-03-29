@@ -18,6 +18,7 @@ import {PublicActivityService} from './public-activity.service';
 import {PublicNewsService} from './public-news.service';
 import {AlertService} from "../utils/alert-service/alert.service";
 import {isPlatformBrowser} from "@angular/common";
+import {ActivatedRoute} from "@angular/router";
 
 
 declare var $: any;
@@ -38,6 +39,9 @@ export class LandingComponent implements OnInit, AfterViewInit {
   public carouselContainerWidth: number = 0;
   public activitiesHeight: number = 0;
 
+  public anchorPoint: string;
+  public viewInited: boolean = false;
+
   private player: AnimationPlayer;
 
   constructor(private alertService: AlertService,
@@ -45,10 +49,14 @@ export class LandingComponent implements OnInit, AfterViewInit {
               private publicNewsService: PublicNewsService,
               private cdr: ChangeDetectorRef,
               private builder: AnimationBuilder,
+              private route: ActivatedRoute,
               @Inject(PLATFORM_ID) protected platformId: Object) {
+    console.log("constructing landing component");
   }
 
   ngOnInit() {
+    console.log("init on landing component");
+
     this.alertService.hideLoadingDelayed();
 
     //load public activity first time component is initialized
@@ -60,7 +68,6 @@ export class LandingComponent implements OnInit, AfterViewInit {
           setTimeout(() => {
             this.activitiesHeight = this.activitiesRow.nativeElement.offsetHeight;
           });
-
         });
 
       //load new public activity every minute after that (60000 ms = 1min), remove this if we dont need to update news when user is on page.
@@ -78,6 +85,25 @@ export class LandingComponent implements OnInit, AfterViewInit {
             this.loadNews();
           }
         );
+    }
+
+    this.route.fragment.subscribe(fragment => {
+      console.log("got a new fragment: ", fragment);
+      this.anchorPoint = fragment;
+      this.scrollToAnchor(fragment);
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
+    this.cdr.detectChanges();
+  }
+
+  scrollToAnchor(anchor: string) {
+    if (this.anchorPoint && isPlatformBrowser(this.platformId)) {
+      document.querySelector('#' + this.anchorPoint).scrollIntoView({behavior: 'smooth'});
+    } else if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo(0, 0);
     }
   }
 
@@ -165,11 +191,6 @@ export class LandingComponent implements OnInit, AfterViewInit {
       });
   }
 
-
-  ngAfterViewInit(): void {
-    this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
-    this.cdr.detectChanges();
-  }
 
   public getTypeNameFormatted(type: PublicActivityType): string {
     return type.toString()

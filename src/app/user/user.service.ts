@@ -7,6 +7,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {isValidNumber} from "libphonenumber-js";
 import {LocalStorageService} from "../utils/local-storage.service";
+import {CookiesService} from "../utils/cookie-service/cookies.service";
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,8 @@ export class UserService {
 
   public showForceLogoutReason = false;
 
-  constructor(private httpClient: HttpClient, private router: Router, private localStorageService: LocalStorageService) {
+  constructor(private httpClient: HttpClient, private router: Router, private localStorageService: LocalStorageService,
+              private cookieService: CookiesService) {
     console.log("Initializing user service");
     if (this.localStorageService.getItem("loggedInUser")) {
       this._loggedInUser = JSON.parse(this.localStorageService.getItem("loggedInUser"))
@@ -82,17 +84,15 @@ export class UserService {
 
   storeAuthUser(user: AuthenticatedUser, token?: string) {
     if (token) {
-      console.log("setting token: ", token);
       this.localStorageService.setItem('token', token);
-      console.log("stored token: ", this.localStorageService.getItem('token'));
     }
     this._loggedInUser = user;
     this.loggedInUser.emit(this._loggedInUser);
     this.localStorageService.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
+    this.cookieService.storeUserLoggedIn();
   }
 
-  logout(showForceLogoutReason: boolean): any {
-
+  logout(showForceLogoutReason: boolean, afterLogoutRoute: string = ''): any {
     this.showForceLogoutReason = showForceLogoutReason;
 
     this._loggedInUser = null;
@@ -105,9 +105,9 @@ export class UserService {
     this.localStorageService.removeItem('broadcastCreateRequest');
     this.localStorageService.removeItem('broadcastCreateStep');
 
-    console.log("routing to login");
-    console.log("going back to login");
-    this.router.navigate(['/login']);
+    this.cookieService.clearUserLoggedIn();
+
+    this.router.navigate([afterLogoutRoute]);
   }
 
   isLoggedIn(): boolean {

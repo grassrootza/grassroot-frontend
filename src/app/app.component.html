@@ -118,11 +118,11 @@
             </li>
 
             <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/about')}">
-              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.about' | translate }} <span class="sr-only">(current)</span> </a>
+              <a class="nav-link" [routerLink]="['/about']" fragment="vision"> {{ 'menu.landing.about' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
 
             <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/contribute')}">
-              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.contribute' | translate }} <span class="sr-only">(current)</span> </a>
+              <a class="nav-link" [routerLink]="['/about']" fragment="contribute"> {{ 'menu.landing.contribute' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
           </ul>
 
@@ -153,7 +153,7 @@
 
   </div>
 
-  <div class="container main-content">
+  <div class="container-fluid main-content">
 
     <div class="container ntf-popup" *ngIf="popupNotification"
          (mouseenter)="popupNotificationMouseEnter()" (mouseleave)="popupNotificationMouseExit()">

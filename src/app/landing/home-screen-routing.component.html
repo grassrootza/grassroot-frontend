@@ -1,0 +1,8 @@
+<div class="container-fluid" *ngIf="isLoggedIn">
+  Logged in!
+</div>
+
+<div class="container-fluid" *ngIf="!isLoggedIn">
+  <!--Not logged in!-->
+  <app-landing></app-landing>
+</div>

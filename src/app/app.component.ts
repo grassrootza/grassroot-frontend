@@ -20,6 +20,7 @@ declare var $: any;
 
 export class AppComponent implements OnInit {
 
+  isUserLoggedIn: boolean = false;
   loggedInUser: AuthenticatedUser = null;
   alertMessage: string = "";
   currentUrl = "";
@@ -143,7 +144,7 @@ export class AppComponent implements OnInit {
         },
         error => {
           if (error.status == 401)
-            this.userService.logout(true);
+            this.userService.logout(true, '/login');
           else console.log("Notifications error: ", error);
         }
 

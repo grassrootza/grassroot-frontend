@@ -6,7 +6,6 @@ import {eitherEmailOrPhoneValid} from "../validators/CustomValidators";
 import {TranslateService} from "@ngx-translate/core";
 import {AlertService} from "../utils/alert-service/alert.service";
 import {LocalStorageService} from "../utils/local-storage.service";
-import {CookiesService} from "../utils/cookie-service/cookies.service";
 
 @Component({
   selector: 'app-login',
@@ -22,13 +21,12 @@ export class LoginComponent implements AfterViewInit {
   showForceLogoutReason = false;
 
   constructor(public userService: UserService, private router: Router, private translate: TranslateService,
-              private alertService: AlertService, private localStorageService: LocalStorageService, private cookieService: CookiesService) {
+              private alertService: AlertService, private localStorageService: LocalStorageService) {
     this.message = '';
     this.loginForm = new FormGroup({
         username: new FormControl('',[Validators.required, Validators.minLength(3), eitherEmailOrPhoneValid]),
         password:new FormControl('',Validators.required)});
     this.showForceLogoutReason = this.userService.showForceLogoutReason;
-    console.log("getting : ", this.cookieService.get("grassroot-logged-in"));
   }
 
   ngAfterViewInit() {
