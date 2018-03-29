@@ -1,0 +1,52 @@
+.card {
+	margin-top: 2%;
+	margin-bottom: 2%;
+}
+
+.alert-header{
+	background-color: #e6eaef;
+}
+
+.alert-headline{
+	font-weight: bold;
+}
+
+.alert-description{
+	margin-top: 3%;
+}
+
+.alert-image{
+	width: 200px;
+	height: 150px;
+}
+
+.alert-image:hover{
+	opacity: 2;
+	cursor: pointer;
+}
+
+.page-indicator{
+	cursor: pointer;
+}
+
+.alert-modal-image{
+	width: 100%;
+	height: 100%;
+}
+
+.alert-modal-image-close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.col{
+	margin-bottom: 2%;
+	margin-top: 2%;
+}
+
+

@@ -71,9 +71,7 @@ export class HomeComponent implements OnInit {
       this.alertService.showLoading();
     }
 
-    this.taskService.upcomingTasks
-      .subscribe(
-        tasks => {
+    this.taskService.upcomingTasks.subscribe(tasks => {
         if (tasks) {
           this.myTasks = this.groupTasksByDay(tasks);
           this.filterMyAgendaTasksRegardingBaseDate();
@@ -82,8 +80,7 @@ export class HomeComponent implements OnInit {
         }
         });
 
-    this.taskService.upcomingTaskError.subscribe(
-      error => {
+    this.taskService.upcomingTaskError.subscribe(error => {
         if (error) {
           console.log("Tasks load failed:", error);
           this.tasksLoadFinished = true;

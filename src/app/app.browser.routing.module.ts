@@ -12,11 +12,13 @@ import {PwdResetNewComponent} from "./login/password-reset/pwd-reset-new/pwd-res
 import {FileImportComponent} from "./groups/group-details/group-members/group-members-import/file-import/file-import.component";
 import {IntegrationConnectComponent} from "./user/integrations/integration-connect/integration-connect.component";
 import {LandingComponent} from "./landing/landing.component";
+import {NewsComponent} from "./news/news.component";
 
 const routes: Routes = [
 
   // {path: '', redirectTo: 'home', pathMatch: 'full', canActivate: [LoggedInGuard]},
   {path: 'landing', component: LandingComponent},
+  {path: 'news', component: NewsComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
@@ -54,7 +56,7 @@ const routes: Routes = [
   },
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
-  {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]}
+  {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]},
 ];
 
 @NgModule({
