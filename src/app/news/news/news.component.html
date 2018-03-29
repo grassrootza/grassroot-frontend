@@ -1,6 +1,7 @@
 <div>
 	<div *ngFor="let alert of news; let i = index" class="card">
-		<div [ngClass]="(alert.serverUid == alertUid)?'loaded-outside':'card-body'">
+		<div [ngClass]="(alert.serverUid == alertUid)?'loaded-outside':'card-body'" 
+							[id]="(alert.serverUid == alertUid)?'target':'news-item'">
 			<div class="row alert-header">
 				<div class="col-md-10 alert-headline">
 					<span>

@@ -3,9 +3,10 @@ import { MediaFunction } from "../../media/media-function.enum";
 import { MediaService } from "../../media/media.service";
 import { DateTimeUtils } from "../../utils/DateTimeUtils";
 import { NewsServiceService } from "../news-service.service";
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { ActivatedRoute, Params } from "@angular/router";
 import * as moment from 'moment';
+import { ScrollToService } from 'ng2-scroll-to-el';
 
 declare var $: any;
 
@@ -26,47 +27,49 @@ export class NewsComponent implements OnInit {
   public alertUid:string = "";
   public firstAlert:PublicLivewire;
   public alertIndex:number;
+
+  public loadFromOutside:boolean = false;
   
   constructor(private newsService:NewsServiceService,
               private mediaService:MediaService,
-              private route:ActivatedRoute) { }
+              private route:ActivatedRoute,
+              private scrollService: ScrollToService) { }
 
   ngOnInit() {
-    this.loadNews(this.pageNumber);
     this.route.params.subscribe((params:Params) => {
+      this.loadNews(this.pageNumber);
       this.alertUid = params['id'];
+      if(this.alertUid !== '0'){
+        console.log("Alert uid .... Out load",this.alertUid);
+        this.loadFromOutside = true;
+      }else{
+        console.log("Load news inside") 
+      }
     });
-    
-    
-    if(this.alertUid !== '0'){
-      console.log("Alert uid .... Out load",this.alertUid);
-      this.loadAlert(this.alertUid);
-    }else{
-      console.log("Load news inside") 
-    }
   }
   
-  loadNews(pageNumber:number){
+  loadNews(pageNumber:number) {
     this.newsService.loadNews(pageNumber).subscribe(news =>{
         console.log("Server response...",news);
         this.news = news.content;
-        this.firstAlert = news.content.find(alert => alert.serverUid == this.alertUid);
-        this.alertIndex = this.news.indexOf(this.firstAlert);
-        console.log("Alert index@@@@@@@@@@@@@@",this.alertIndex);
         this.totalPages = news.totalPages;
+        if (this.loadFromOutside) {
+          console.log("scrolling ...");
+          setTimeout(() => {
+            this.scrollService.scrollTo('#target',1,1).subscribe(data => {
+              console.log("scrolled")
+            },error => {
+              console.log("Error scrolling..",error);
+            },() => {
+              console.log("done..")
+            });
+          },500);
+        }
     },error =>{
       console.log("Error loading news.....",error);
     });
   }
   
-  loadAlert(alertUid:string){
-    this.newsService.loadAlert(alertUid).subscribe(resp => {
-      this.firstAlert = resp;
-      console.log("Alert loaded.....",this.firstAlert);
-    },error => {
-      console.log("Error loading alert.....",error);
-    });
-  }
   
   loadImageUrl(imageKey:string):string{
     return this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
