@@ -3,13 +3,12 @@ import {Observable} from "rxjs/Observable";
 import "rxjs/add/operator/map";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from "../../environments/environment";
-import {PublicActivity} from "./model/public-activity.model";
 import {PublicLivewire, PublicLivewirePage} from "./model/public-livewire.model";
 
 @Injectable()
 export class PublicNewsService {
 
-  private activityUrl = environment.backendAppUrl + '/api/news/list';
+  private publicNewsUrl = environment.backendAppUrl + "/api/news/list";
 
   constructor(private httpClient: HttpClient) {
   }
@@ -21,10 +20,10 @@ export class PublicNewsService {
       .set('size', "5")
       .set("numberToFetch", "5");
 
-    return this.httpClient.get<PublicLivewirePage>(this.activityUrl, {params: params})
+    return this.httpClient.get<PublicLivewirePage>(this.publicNewsUrl, {params: params})
       .map(
         result => {
-          let transformedContent = result.content.map(plw => PublicLivewire.createInstanceFromData(plw));
+          let transformedContent = result.content.map(PublicLivewire.createInstanceFromData);
           return new PublicLivewirePage(
             result.number,
             result.totalPages,
@@ -35,5 +34,25 @@ export class PublicNewsService {
             transformedContent);
         }
       );
+  }
+
+  loadNews(pageNumber:number):Observable<PublicLivewirePage>{
+    let params = new HttpParams()
+      .set('size',10 +"")
+      .set('sort', 'creationTime,desc')
+      .set('page',pageNumber +"");
+    return this.httpClient.get<PublicLivewirePage>(this.publicNewsUrl,{params:params})
+      .map(resp => {let formatedPublicLiveWire = resp.content.map(PublicLivewire.createInstanceFromData);
+          return new PublicLivewirePage(
+            resp.number,
+            resp.totalPages,
+            resp.totalElements,
+            resp.size,
+            resp.first,
+            resp.last,
+            formatedPublicLiveWire
+          )
+        }
+      )
   }
 }

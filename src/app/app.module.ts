@@ -27,8 +27,9 @@ import {RecaptchaDirective} from "./utils/recaptcha.directive";
 import {LandingComponent} from "./landing/landing.component";
 import {PublicActivityService} from "./landing/public-activity.service";
 import {CarouselComponent} from "./landing/carousel/carousel.component";
-import {NewsComponent} from "./news/news/news.component";
+import {NewsComponent} from "./news/news.component";
 import {PublicNewsService} from "./landing/public-news.service";
+import {MediaService} from "./media/media.service";
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {PublicNewsService} from "./landing/public-news.service";
     LocalStorageService,
     NotificationService,
     PublicActivityService,
-    PublicNewsService
+    PublicNewsService,
+    MediaService
   ]
 })
 export class AppModule { }

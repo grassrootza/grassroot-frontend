@@ -1,10 +1,8 @@
-import { PublicLivewire } from "../../livewire/public-livewire.model";
-import { MediaFunction } from "../../media/media-function.enum";
-import { MediaService } from "../../media/media.service";
-import { DateTimeUtils } from "../../utils/DateTimeUtils";
-import { NewsServiceService } from "../news-service.service";
-import { Component, OnInit } from '@angular/core';
-import * as moment from 'moment';
+import {PublicLivewire} from "../livewire/public-livewire.model";
+import {MediaFunction} from "../media/media-function.enum";
+import {MediaService} from "../media/media.service";
+import {Component, OnInit} from '@angular/core';
+import {PublicNewsService} from "../landing/public-news.service";
 
 declare var $: any;
 
@@ -16,24 +14,21 @@ declare var $: any;
 export class NewsComponent implements OnInit {
 
   public news:PublicLivewire[]=[];
-  public oldPosts:PublicLivewire[] = [];
-  public latestPosts:PublicLivewire[] = [];
-  
-  public showOlder:boolean = false;
+
   public showLatest:boolean = true;
-  
+
   public pageNumber:number = 0;
   public totalPages:number;
-  
+
   public imageUrl:string;
-  
-  constructor(private newsService:NewsServiceService,
+
+  constructor(private newsService:PublicNewsService,
               private mediaService:MediaService) { }
 
   ngOnInit() {
     this.loadNews(this.pageNumber);
   }
-  
+
   loadNews(pageNumber:number){
     this.newsService.loadNews(pageNumber).subscribe(news =>{
         console.log("Server response...",news);
@@ -43,11 +38,11 @@ export class NewsComponent implements OnInit {
       console.log("Error loading news.....",error);
     });
   }
-  
+
   loadImageUrl(imageKey:string):string{
     return this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
   }
-  
+
   showOlderPosts(){
     this.pageNumber += 1;
     if(this.pageNumber < this.totalPages -1){
@@ -57,7 +52,7 @@ export class NewsComponent implements OnInit {
       this.loadNews(this.pageNumber);
     }
   }
-  
+
   showLatestPosts(){
     this.pageNumber -= 1;
     if(this.pageNumber > 0){
@@ -67,7 +62,7 @@ export class NewsComponent implements OnInit {
       this.loadNews(this.pageNumber);
     }
   }
-  
+
   openImage(imageKey:string){
     this.imageUrl = this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
     $('#open-image-modal').modal("show");
