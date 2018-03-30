@@ -57,7 +57,7 @@
                     Mark all read
                   </a>
                   <a *ngFor="let ntf of notifications" class="dropdown-item" href="#"
-                     (click)="handleNotificationClick($event)">
+                     (click)="handleNotificationClick($event, ntf.uid)">
                     <div class="notification-item">
                       <span class="notification-item-title">{{ntf.message}}</span><br/>
                       <span class="notification-item-time">{{ntf.createdDatetime.fromNow()}}</span>
@@ -90,6 +90,7 @@
                   <a class="dropdown-item" [routerLink]="['/user/password']">{{ 'menu.password' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/account']">{{ 'menu.account' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/integrations']">{{ 'menu.integrations' | translate }}</a>
+                  <a class="dropdown-item" *ngIf="loggedInUser.hasSystemAdmin()">Admin panel</a>
                   <a class="dropdown-item" href="/" (click)="logout();">{{ 'menu.logout' | translate }}</a>
                 </div>
               </li>

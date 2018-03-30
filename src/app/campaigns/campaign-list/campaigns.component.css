@@ -2,6 +2,11 @@
   padding: 0.3rem;
 }
 
+.no-campaign {
+  padding: 30px 10px;
+  font-size: 1.2rem;
+}
+
 .campaign-info-header {
   border-top: none;
   border-bottom: none;

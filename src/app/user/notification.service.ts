@@ -3,13 +3,16 @@ import {environment} from "../../environments/environment";
 import {Observable} from "rxjs/Observable";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Notification} from "./model/notification.model";
+import {LocalStorageService} from "../utils/local-storage.service";
+
+export const DISPLAYED_NOTIFICATIONS_STORAGE_KEY: string = "displayedNotifications";
 
 @Injectable()
 export class NotificationService {
 
   private unreadNotificationsUrl = environment.backendAppUrl + "/api/user/notifications";
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
   }
 
   fetchUnreadNotifications(): Observable<Notification[]> {
@@ -20,14 +23,27 @@ export class NotificationService {
 
   markNotificationRead(notificationUid: string): Observable<any> {
     const fullUrl = this.unreadNotificationsUrl + "/mark-read";
-    const params = new HttpParams()
-      .set("notificationUid", notificationUid);
-    return this.httpClient.get<any>(fullUrl, {params: params})
+    const params = new HttpParams().set("notificationUid", notificationUid);
+    const currentCache = this.localStorageService.getItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+    return this.httpClient.get<any>(fullUrl, {params: params}).map(response => {
+      if (currentCache) {
+        const remKeys = currentCache.split(';');
+        const index = remKeys.indexOf(notificationUid, 0);
+        if (index > -1) {
+          remKeys.splice(index, 1);
+          this.localStorageService.setItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY, remKeys.join(";"));
+        }
+      }
+      return response;
+    });
   }
 
   markAllNotificationsAsRead(): Observable<any> {
     const fullUrl = this.unreadNotificationsUrl + "/mark-read/all";
-    return this.httpClient.get<any>(fullUrl);
+    return this.httpClient.get<any>(fullUrl).map(response => {
+      this.localStorageService.removeItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+      return response;
+    });
   }
 
 }

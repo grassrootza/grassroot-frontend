@@ -248,7 +248,8 @@ h6 {
 
 .search-bar {
   border: 1px solid #EBEDF0;
-  font-size: 1.2em;
+  font-size: 1.1em;
+  padding: 10px 10px;
 }
 
 .search-addon {

@@ -167,6 +167,11 @@
   /*margin-top: 1rem;*/
 }
 
+.new-members-none {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
 @media (min-width: 992px) {
 
   .new-members-body {

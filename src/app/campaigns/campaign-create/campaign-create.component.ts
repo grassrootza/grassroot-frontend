@@ -14,6 +14,7 @@ import {
   hasGroupNameIfNeeded,
   hasValidLandingUrlIfNeeded, smsLimitAboveZero, ValidateCodeNotTaken
 } from "../utils/campaign-validators";
+import {UserService} from "../../user/user.service";
 
 declare var $: any;
 
@@ -24,16 +25,20 @@ declare var $: any;
 })
 export class CampaignCreateComponent implements OnInit {
 
+  public canCreateCampaign: boolean = false;
+
   public createCampaignForm: FormGroup;
   public dragAreaClass: string = "dragarea";
 
   public takenCodes: string[] = [];
   public availableGroups: GroupInfo[] = [];
   public possibleTopics: string[] = [];
+
   private selectedTopics: string[] = []; // select 2 and form control don't seem to play nice together, hence
 
   constructor(private campaignService: CampaignService,
               private groupService: GroupService,
+              private userService: UserService,
               private formBuilder: FormBuilder,
               private router: Router,
               private alertService: AlertService) {

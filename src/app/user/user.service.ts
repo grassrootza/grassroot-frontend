@@ -1,7 +1,7 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {environment} from "../../environments/environment";
-import {AuthenticatedUser, AuthorizationResponse, UserProfile} from "./user.model";
+import {AuthenticatedUser, AuthorizationResponse, getAuthUser, UserProfile} from "./user.model";
 import {Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
@@ -28,7 +28,7 @@ export class UserService {
               private cookieService: CookiesService) {
     console.log("Initializing user service");
     if (this.localStorageService.getItem("loggedInUser")) {
-      this._loggedInUser = JSON.parse(this.localStorageService.getItem("loggedInUser"))
+      this._loggedInUser = getAuthUser(JSON.parse(this.localStorageService.getItem("loggedInUser")))
     }
   }
 
@@ -52,7 +52,7 @@ export class UserService {
     return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params})
       .map(authResponse => {
         if (authResponse.errorCode == null) {
-          this.storeAuthUser(authResponse.user, authResponse.user.token);
+          this.storeAuthUser(getAuthUser(authResponse.user), authResponse.user.token);
         }
         return authResponse;
       });
@@ -71,11 +71,10 @@ export class UserService {
       .set("interfaceType", "WEB_2");
 
     return this.httpClient.get<AuthorizationResponse>(this.loginUrl, {params: params})
-      .map(
-        authResponse => {
+      .map(authResponse => {
           console.log("AuthResponse: ", authResponse);
           if (authResponse.errorCode == null) {
-            this.storeAuthUser(authResponse.user, authResponse.user.token);
+            this.storeAuthUser(getAuthUser(authResponse.user), authResponse.user.token);
           }
           return authResponse;
         }
@@ -172,4 +171,9 @@ export class UserService {
     // query param is to force reload
     return this.loggedInUserImageUrlBase + "/" + this._loggedInUser.userUid + (cacheBust ? "?cb=" + Date.now() : "");
   }
+
+  hasActivePaidAccount() {
+    return this._loggedInUser && this._loggedInUser.hasAccountAdmin();
+  }
+
 }

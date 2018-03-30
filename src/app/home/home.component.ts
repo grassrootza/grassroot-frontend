@@ -36,8 +36,6 @@ export class HomeComponent implements OnInit {
 
   public agendaBaseDate: Moment;
 
-  public toDoToRespond: Task = null;
-
   public createTaskGroupUid: string = null;
 
   private tasksLoadFinished = false;
@@ -46,12 +44,12 @@ export class HomeComponent implements OnInit {
 
   public taskToView:Task;
 
-  public voteResponse:string;
-
   public joinCandidateGroup:GroupRef;
   public isMemberPartOfGroup:boolean = false;
   public groupMembersRef:GroupMembersRef;
   public proposedSearchTerm: string = "";
+
+  public canManageCampaigns: boolean;
 
   constructor(private taskService: TaskService,
               private userService: UserService,
@@ -65,6 +63,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.canManageCampaigns = this.userService.hasActivePaidAccount();
 
     if (!this.tasksLoadFinished || !this.newMembersLoadFinished || !this.newMembersLoadFinished) {
       console.log("Showing spinner");
@@ -133,9 +133,11 @@ export class HomeComponent implements OnInit {
         }
       );
 
-    this.campaignService.campaignInfoList.subscribe(campaignList => {
-      this.activeCampaigns = campaignList.filter(cp => cp.isActive());
-    });
+    if (this.canManageCampaigns) {
+      this.campaignService.campaignInfoList.subscribe(campaignList => {
+        this.activeCampaigns = campaignList.filter(cp => cp.isActive());
+      });
+    }
 
     this.taskService.loadUpcomingUserTasks();
     this.groupService.fetchNewMembers(7, 0, 500);
@@ -147,7 +149,9 @@ export class HomeComponent implements OnInit {
   private hideSpinnerIfAllLoaded() {
     if (this.tasksLoadFinished && this.newMembersLoadFinished && this.groupsLoadFinished) {
       this.alertService.hideLoadingDelayed();
-      this.campaignService.loadCampaigns();
+      if (this.canManageCampaigns) {
+        this.campaignService.loadCampaigns();
+      }
     }
   }
 

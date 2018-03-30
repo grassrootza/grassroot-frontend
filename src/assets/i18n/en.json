@@ -99,16 +99,21 @@
     "termsOfUse": "TERMS OF USE"
   },
   "home": {
+    "search": "Search your activity, public activity, or enter a join code",
     "my-agenda": {
       "title": "My agenda",
-      "group-label": "Group"
+      "group-label": "Group",
+      "no-tasks": "You have no upcoming tasks. To create a task, just use one of the options in the 'create action' dropdown on one of your groups"
     },
     "new-members": {
-      "title": "New members"
+      "title": "New members",
+      "no-members": "No members have joined any of your groups this week. To recruit members, use the join code, join words, or import features on any of your groups"
     },
     "starred-groups": {
       "title": "Starred groups",
-      "empty": "You have no pinned groups currently."
+      "empty": "You currently have no starred (favourite) groups. You can pin groups by clicking on the star next to them in your group list, or creating a new one",
+      "group-list": "View all my groups",
+      "create-group": "create a group"
     },
     "active-campaigns": {
       "title": "Active campaigns",
@@ -736,6 +741,7 @@
     }
   },
   "campaign": {
+    "no-account": "Sorry, to create or manage campaigns you need a Grassroot Extra account. To create one, please send an email to <a href=\"mailto:accounts@grassroot.org.za?subject=Grassroot%20Extra%20Account\" class=\"grassroot-link\">accounts@grassroot.org.za</a>.",
     "types": {
       "PETITION": "Petitition",
       "ACQUISITION": "Acquisition",

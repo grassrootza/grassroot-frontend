@@ -6,6 +6,11 @@
       </div>
     </div>
   </div>
+  <div class="row" *ngIf="!account">
+    You do not have a Grassroot Extra account. To get started setting one up, please send an email to
+    <a href="mailto:accounts@grassroot.org.za?subject=Grassroot%20Extra%20Account" class="grassroot-link">accounts@grassroot.org.za</a>.
+    Soon, the sign-up process will be automated with a simple form.
+  </div>
   <div class="row" *ngIf="account">
     <div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 justify-content-center">
       <form [formGroup]="accountForm" (ngSubmit)="saveChanges()">

@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
 import {TranslateService} from '@ngx-translate/core';
 import {AlertService} from "./utils/alert-service/alert.service";
-import {NotificationService} from "./user/notification.service";
+import {DISPLAYED_NOTIFICATIONS_STORAGE_KEY, NotificationService} from "./user/notification.service";
 import {Notification} from "./user/model/notification.model";
 import {LocalStorageService} from "./utils/local-storage.service";
 import {isPlatformBrowser} from "@angular/common";
@@ -38,7 +38,6 @@ export class AppComponent implements OnInit {
   private popupNotificationDisplayInProgress = false;
 
   private maxNumberOfPopupNotificationInSequence = 3;
-  private DISPLAYED_NOTIFICATIONS_STORAGE_KEY: string = "displayedNotifications";
 
   public userImageUrl;
   public userHasNoImage: boolean; // seems redundant but Angular being insanely obtuse on chnages
@@ -124,12 +123,8 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    this.notificationService.fetchUnreadNotifications()
-      .subscribe(
-        notifications => {
-          // console.log("Notifications: ", notifications);
-
-          let displayedNotifications: string = this.localStorageService.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+    this.notificationService.fetchUnreadNotifications().subscribe(notifications => {
+          let displayedNotifications: string = this.localStorageService.getItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
           if (!displayedNotifications)
             displayedNotifications = "";
 
@@ -154,18 +149,18 @@ export class AppComponent implements OnInit {
   showNextNewNotification() {
     if (this.newNotifications.length > this.currentPopupNotificationIndex && this.currentPopupNotificationIndex < this.maxNumberOfPopupNotificationInSequence) {
       this.popupNotificationDisplayInProgress = true;
-      console.log("Showing popup ntf " + this.currentPopupNotificationIndex);
       this.popupNotification = this.newNotifications[this.currentPopupNotificationIndex];
+
       $(".ntf-popup").fadeIn(500);
       this.popopNotificationTimeoutId = setTimeout(() => {
         this.hidePopupNotification()
       }, 4000);
 
 
-      let displayedNotifications: string = this.localStorageService.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+      let displayedNotifications: string = this.localStorageService.getItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
       displayedNotifications = displayedNotifications ? displayedNotifications : "";
       displayedNotifications = displayedNotifications + ";" + this.popupNotification.uid;
-      this.localStorageService.setItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
+      this.localStorageService.setItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
 
       this.currentPopupNotificationIndex++;
     }
@@ -176,13 +171,11 @@ export class AppComponent implements OnInit {
   }
 
   popupNotificationMouseEnter() {
-    console.log("Mouse enter popup notification");
     this.popupNotificationEngaged = true;
     clearTimeout(this.popopNotificationTimeoutId)
   }
 
   popupNotificationMouseExit() {
-    console.log("Mouse exit popup notification");
     this.popupNotificationEngaged = false;
     this.hidePopupNotification()
   }
@@ -204,15 +197,14 @@ export class AppComponent implements OnInit {
   }
 
 
-  handleNotificationClick(event: any) {
+  handleNotificationClick(event: any, notificationUid: string) {
     event.stopPropagation();
+    this.markNotificationRead(notificationUid);
     return false;
   }
 
   markNotificationRead(notificationUid: string): boolean {
-    this.notificationService.markNotificationRead(notificationUid)
-      .subscribe(
-        successResponse => {
+    this.notificationService.markNotificationRead(notificationUid).subscribe(successResponse => {
           console.log("Mark notification result: ", successResponse);
           //remove notification with this uid, since it's no longed unread
           this.notifications = this.notifications.filter(ntf => ntf.uid != notificationUid);
