@@ -12,7 +12,7 @@ import {PwdResetNewComponent} from "./login/password-reset/pwd-reset-new/pwd-res
 import {FileImportComponent} from "./groups/group-details/group-members/group-members-import/file-import/file-import.component";
 import {IntegrationConnectComponent} from "./user/integrations/integration-connect/integration-connect.component";
 import {LandingComponent} from "./landing/landing.component";
-import {NewsComponent} from "./news/news.component";
+import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 
 const routes: Routes = [

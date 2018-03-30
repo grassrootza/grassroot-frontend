@@ -13,12 +13,12 @@ import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
 import {PublicActivityType} from './model/public-activity-type.enum';
 import {PublicActivity} from './model/public-activity.model';
-import {PublicLivewire} from './model/public-livewire.model';
 import {PublicActivityService} from './public-activity.service';
 import {PublicNewsService} from './public-news.service';
 import {AlertService} from "../utils/alert-service/alert.service";
 import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
+import {PublicLivewire} from "../livewire/public-livewire.model";
 
 
 declare var $: any;

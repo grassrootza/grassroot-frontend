@@ -1,5 +1,5 @@
-<div class="container">
-<div class="row">
+<div class="container primary-container">
+  <div class="row">
     <div class="col-md-6 d-none d-md-block login-graphic">
       <div class="col-md-10 offset-md-1">
         <div class="media mt-5 pt-3">
@@ -82,6 +82,13 @@
           <div class="col-12 text-center">
             {{ 'login.newUser-prefix' | translate }}
             <a class="grassroot-link register-user" [routerLink]="['/register']">{{ 'login.newUser-suffix' | translate }}</a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-left legacy-link">
+            <b>Note:</b> This is the new Grassroot web interface. If you would like to use the old platform,
+            <a href="https://app.grassroot.org.za" class="grassroot-link">click here.</a> The old interface
+            will be discontinued at the end of April, 2018.
           </div>
         </div>
       </div>

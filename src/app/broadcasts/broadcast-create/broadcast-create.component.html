@@ -1,85 +1,80 @@
-<div class="card">
-  <div class="card-body">
-
-    <div class="row">
-      <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1">
-        <div class="d-flex justify-content-center">
-          <h1>{{ 'broadcasts.create.title' | translate }}</h1>
+<div class="container primary-container">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1">
+          <div class="d-flex justify-content-center">
+            <h1>{{ 'broadcasts.create.title' | translate }}</h1>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="container">
-      <nav class="navbar navbar-expand navbar-light ">
+      <div class="container">
+        <nav class="navbar navbar-expand navbar-light ">
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sendBroadcastNavbar"
-                aria-controls="sendBroadcastNavbar" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sendBroadcastNavbar"
+                  aria-controls="sendBroadcastNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-        <div class="collapse navbar-collapse justify-content-center d-flex" id="sendBroadcastNavbar">
+          <div class="collapse navbar-collapse justify-content-center d-flex" id="sendBroadcastNavbar">
 
-          <ul class="navbar-nav ">
+            <ul class="navbar-nav ">
 
-            <li class="nav-item " [ngClass]="{active: getCurrentStep() == 1, enabled: getCurrentStep() > 0}">
-              <div class="text-center">
-                <button class="btn"
-                        [ngClass]="{'btn-success': getCurrentStep() > 0, 'btn-outline-secondary disabled': getCurrentStep() <= 0}">
-                  1
-                </button>
-              </div>
-              <a class="nav-link" href="#" [routerLink]="['types']" [translate]="'broadcasts.create.nav.types'">
-                Message types</a>
-            </li>
+              <li class="nav-item " [ngClass]="{active: getCurrentStep() == 1, enabled: getCurrentStep() > 0}">
+                <div class="text-center">
+                  <button class="btn"
+                          [ngClass]="{'btn-success': getCurrentStep() > 0, 'btn-outline-secondary disabled': getCurrentStep() <= 0}">
+                    1
+                  </button>
+                </div>
+                <a class="nav-link" href="#" [routerLink]="['types']" [translate]="'broadcasts.create.nav.types'">
+                  Message types</a>
+              </li>
 
-            <li class="nav-item" [ngClass]="{active: getCurrentStep() == 2,  enabled: getCurrentStep() > 1}">
-              <div class="text-center">
-                <button class="btn"
-                        [ngClass]="{'btn-success': getCurrentStep() > 1, 'btn-outline-secondary disabled': getCurrentStep() <= 1}">
-                  2
-                </button>
-              </div>
-              <a class="nav-link" href="#" [routerLink]="['content']" [translate]="'broadcasts.create.nav.content'">
-                Message content </a>
-            </li>
+              <li class="nav-item" [ngClass]="{active: getCurrentStep() == 2,  enabled: getCurrentStep() > 1}">
+                <div class="text-center">
+                  <button class="btn"
+                          [ngClass]="{'btn-success': getCurrentStep() > 1, 'btn-outline-secondary disabled': getCurrentStep() <= 1}">
+                    2
+                  </button>
+                </div>
+                <a class="nav-link" href="#" [routerLink]="['content']" [translate]="'broadcasts.create.nav.content'">
+                  Message content </a>
+              </li>
 
-            <li class="nav-item" [ngClass]="{active: getCurrentStep() == 3,  enabled: getCurrentStep() > 2}">
-              <div class="text-center">
-                <button class="btn"
-                        [ngClass]="{'btn-success': getCurrentStep() > 2, 'btn-outline-secondary disabled': getCurrentStep() <= 2}">
-                  3
-                </button>
-              </div>
-              <a class="nav-link" href="#" [routerLink]="['members']" [translate]="'broadcasts.create.nav.members'">
-                Select members </a>
-            </li>
+              <li class="nav-item" [ngClass]="{active: getCurrentStep() == 3,  enabled: getCurrentStep() > 2}">
+                <div class="text-center">
+                  <button class="btn"
+                          [ngClass]="{'btn-success': getCurrentStep() > 2, 'btn-outline-secondary disabled': getCurrentStep() <= 2}">
+                    3
+                  </button>
+                </div>
+                <a class="nav-link" href="#" [routerLink]="['members']" [translate]="'broadcasts.create.nav.members'">
+                  Select members </a>
+              </li>
 
-            <li class="nav-item" [ngClass]="{active: getCurrentStep() == 4,  enabled: getCurrentStep() > 3}">
-              <div class="text-center">
-                <button class="btn"
-                        [ngClass]="{'btn-success': getCurrentStep() > 3, 'btn-outline-secondary disabled': getCurrentStep() <= 3}">
-                  4
-                </button>
-              </div>
-              <a class="nav-link" href="#" [routerLink]="['schedule']" [translate]="'broadcasts.create.nav.schedule'">
-                When to Send </a>
-            </li>
-
-          </ul>
-
-        </div>
-      </nav>
-    </div>
-
-
-    <div class="card col-md-10 offset-md-1 mt-md-5">
-      <div class="card-body">
-        <router-outlet></router-outlet>
+              <li class="nav-item" [ngClass]="{active: getCurrentStep() == 4,  enabled: getCurrentStep() > 3}">
+                <div class="text-center">
+                  <button class="btn"
+                          [ngClass]="{'btn-success': getCurrentStep() > 3, 'btn-outline-secondary disabled': getCurrentStep() <= 3}">
+                    4
+                  </button>
+                </div>
+                <a class="nav-link" href="#" [routerLink]="['schedule']" [translate]="'broadcasts.create.nav.schedule'">
+                  When to Send </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
       </div>
+
+      <div class="card col-md-10 offset-md-1 mt-md-5">
+        <div class="card-body">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+
     </div>
-
-
   </div>
-
-
 </div>

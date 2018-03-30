@@ -2,8 +2,8 @@ import {AfterViewInit, Component, ElementRef, Inject, Input, PLATFORM_ID, ViewCh
 // import { CarouselItemDirective } from './carousel-item.directive';
 import {animate, AnimationBuilder, AnimationFactory, AnimationPlayer, style} from '@angular/animations';
 import {Observable} from 'rxjs/Rx';
-import {PublicLivewire} from '../model/public-livewire.model';
 import {isPlatformBrowser} from "@angular/common";
+import {PublicLivewire} from "../../livewire/public-livewire.model";
 
 @Component({
   selector: 'carousel',

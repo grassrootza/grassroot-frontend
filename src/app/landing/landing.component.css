@@ -331,6 +331,7 @@ p {
 
 .latest-news-separator {
   box-sizing: border-box;
+  margin-left: 10px;
   height: 20px;
   width: 2px;
   border: 1px solid #4A4A4A;

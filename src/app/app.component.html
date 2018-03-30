@@ -182,9 +182,9 @@
         <div class="row">
           <div class="col-6">
             <img class="footer-logo" src="assets/grassroot-02.png"/> <br/>
-            <a href="#">{{ 'footer.aboutUs' | translate }}</a>
-            <a href="#">{{ 'footer.news' | translate }}</a>
-            <a href="#">{{ 'footer.contribute' | translate }}</a>
+            <a href="#" [routerLink]="['/about']" fragment="vision">{{ 'footer.aboutUs' | translate }}</a>
+            <a href="#" [routerLink]="['/news']">{{ 'footer.news' | translate }}</a>
+            <a href="#" [routerLink]="['/about']" fragment="contribute">{{ 'footer.contribute' | translate }}</a>
             <a href="#">{{ 'footer.contactUs' | translate }}</a>
           </div>
 

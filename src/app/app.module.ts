@@ -27,7 +27,7 @@ import {RecaptchaDirective} from "./utils/recaptcha.directive";
 import {LandingComponent} from "./landing/landing.component";
 import {PublicActivityService} from "./landing/public-activity.service";
 import {CarouselComponent} from "./landing/carousel/carousel.component";
-import {NewsComponent} from "./news/news.component";
+import {NewsComponent} from "./livewire/news.component";
 import {PublicNewsService} from "./landing/public-news.service";
 import {MediaService} from "./media/media.service";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";

@@ -5,7 +5,7 @@ import {NgModule} from '@angular/core';
 import {JoinComponent} from './join/join.component';
 import {RegistrationComponent} from './registration/registration.component';
 import {LandingComponent} from "./landing/landing.component";
-import {NewsComponent} from "./news/news.component";
+import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 
 // a bit of redundancy here, but small price to pay to avoid routing weirdness if use joint routes

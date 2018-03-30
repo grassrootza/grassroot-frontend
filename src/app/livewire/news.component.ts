@@ -1,4 +1,4 @@
-import {PublicLivewire} from "../livewire/public-livewire.model";
+import {PublicLivewire} from "./public-livewire.model";
 import {MediaFunction} from "../media/media-function.enum";
 import {MediaService} from "../media/media.service";
 import {Component, OnInit} from '@angular/core';

@@ -5,7 +5,6 @@ html {
   min-height: 100%;
 }
 
-
 body {
   padding: 0;
   background-color: #F5F6FA;
@@ -61,11 +60,14 @@ h6 {
   padding-left: 0 !important;
 }
 
+.primary-container {
+  padding-top: 10px;
+}
+
 .no-padding-horizontal {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-
 
 .padding-vertical {
   padding-top: 2rem;
