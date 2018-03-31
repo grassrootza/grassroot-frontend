@@ -42,6 +42,8 @@ export class AppComponent implements OnInit {
   public userImageUrl;
   public userHasNoImage: boolean; // seems redundant but Angular being insanely obtuse on chnages
 
+  public showMenu: boolean = false;
+
   constructor(private router: Router,
               private userService: UserService,
               private translateService: TranslateService,
@@ -111,6 +113,19 @@ export class AppComponent implements OnInit {
         this.pullNotifications()
       }, 10000);
     }
+  }
+
+  public navigateToMainLink(route: string, fragment?: string) {
+    if (fragment) {
+      this.router.navigate([route], { fragment: fragment });
+    } else {
+      this.router.navigate([route]);
+    }
+    this.showMenu = false;
+  }
+
+  public toggleMenuCollapse() {
+    this.showMenu = !this.showMenu;
   }
 
   private pullNotifications() {

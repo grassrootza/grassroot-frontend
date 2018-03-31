@@ -28,3 +28,9 @@
   padding: 10px 50px;
   font-size: 1.1em;
 }
+
+@media(max-width: 768) {
+  .stage-buttons {
+    display: none !important;
+  }
+}

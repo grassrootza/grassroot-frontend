@@ -5,12 +5,12 @@
       <div class="input-group">
         <input #searchTerm type="text" [placeholder]="'home.search' | translate" class="form-control search-bar" (keyup.enter)="searchGlobaly(searchTerm.value)"/>
         <span class="input-group-btn">
-          <button class="btn btn-link search-addon" (click)="searchGlobaly(searchTerm.value)"><i class="fa fa-search"></i> {{ 'action.search' | translate }}</button>
+          <button class="btn btn-link search-addon" (click)="searchGlobaly(searchTerm.value)"><i class="fa fa-search"></i><span class="search-text"> {{ 'action.search' | translate }}</span></button>
         </span>
       </div>
     </div>
     <div class="col-md-5 col-sm-12">
-      <div class="dropdown float-right">
+      <div class="dropdown float-md-right">
         <button id="create-dropdown" class="btn btn-primary dropdown-toggle create-button" type="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
           {{ 'home.create.title' | translate }}
@@ -76,7 +76,7 @@
     </div>
 
     <div class="col-lg-8">
-      <div class="card">
+      <div class="card new-members-card">
         <div class="card-body new-members">
 
           <div class="float-right">

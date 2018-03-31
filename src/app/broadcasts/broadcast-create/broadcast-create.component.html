@@ -1,7 +1,7 @@
 <div class="container primary-container">
   <div class="card">
     <div class="card-body">
-      <div class="row">
+      <div class="row d-none d-md-block">
         <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1">
           <div class="d-flex justify-content-center">
             <h1>{{ 'broadcasts.create.title' | translate }}</h1>
@@ -9,8 +9,8 @@
         </div>
       </div>
 
-      <div class="container">
-        <nav class="navbar navbar-expand navbar-light ">
+      <div class="container d-none d-lg-block">
+        <nav class="navbar navbar-expand navbar-light">
 
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#sendBroadcastNavbar"
                   aria-controls="sendBroadcastNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@
       </div>
 
       <div class="card col-md-10 offset-md-1 mt-md-5">
-        <div class="card-body">
+        <div class="card-body broadcast-main">
           <router-outlet></router-outlet>
         </div>
       </div>
