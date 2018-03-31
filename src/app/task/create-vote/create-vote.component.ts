@@ -1,13 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TaskService} from '../../../../task/task.service';
-import {GroupService} from '../../../group.service';
+import {TaskService} from '../task.service';
+import {GroupService} from '../../groups/group.service';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
-import {Membership} from '../../../model/membership.model';
-import {MediaFunction} from "../../../../media/media-function.enum";
-import {AlertService} from "../../../../utils/alert-service/alert.service";
-import {MediaService} from "../../../../media/media.service";
-import {DateTimeUtils, isDateTimeFuture} from "../../../../utils/DateTimeUtils";
+import {Membership} from '../../groups/model/membership.model';
+import {MediaFunction} from "../../media/media-function.enum";
+import {AlertService} from "../../utils/alert-service/alert.service";
+import {MediaService} from "../../media/media.service";
+import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
 
 declare var $: any;
 

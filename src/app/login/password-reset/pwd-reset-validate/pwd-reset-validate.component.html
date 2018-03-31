@@ -9,19 +9,19 @@
       <p class="pwd-info">{{ 'reset.validate.info' | translate }}</p>
     </div>
   </div>
-  <!--<form (submit)="submitOtp()">-->
-    <!--<div class="form-row">-->
-      <!--<div class="form-group col-md-10 offset-md-1 col-12 text-center">-->
-        <!--<input type="text" class="form-control pwd-input" [formControl]="otp" />-->
-      <!--</div>-->
-    <!--</div>-->
-    <!--<div class="col-md-10 offset-md-1 col-12 alert alert-danger" role="alert" *ngIf="invalidOtp">-->
-      <!--{{ 'reset.validate.error' | translate }}-->
-    <!--</div>-->
-    <!--<div class="form-row">-->
-      <!--<div class="form-group col-12 text-center">-->
-        <!--<button [disabled]="!otp.valid" type="submit" class="btn btn-primary pwd-next">{{ 'reset.validate.next' | translate }}</button>-->
-      <!--</div>-->
-    <!--</div>-->
-  <!--</form>-->
+  <form (submit)="submitOtp()">
+    <div class="form-row">
+      <div class="form-group col-md-10 offset-md-1 col-12 text-center">
+        <input type="text" class="form-control pwd-input" [formControl]="otp" />
+      </div>
+    </div>
+    <div class="col-md-10 offset-md-1 col-12 alert alert-danger" role="alert" *ngIf="invalidOtp">
+      {{ 'reset.validate.error' | translate }}
+    </div>
+    <div class="form-row">
+      <div class="form-group col-12 text-center">
+        <button [disabled]="!otp.valid" type="submit" class="btn btn-primary pwd-next">{{ 'reset.validate.next' | translate }}</button>
+      </div>
+    </div>
+  </form>
 </div>

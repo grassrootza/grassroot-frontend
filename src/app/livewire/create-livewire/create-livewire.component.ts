@@ -1,13 +1,13 @@
 import {Component, Input, OnInit,Output,EventEmitter} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {GroupService} from "../../../group.service";
-import {GroupInfo} from "../../../model/group-info.model";
-import {Task} from "../../../../task/task.model";
-import {TaskService} from "../../../../task/task.service";
-import {TaskType} from '../../../../task/task-type';
-import {UserService} from "../../../../user/user.service";
-import {LiveWireAlertType} from "../../../../livewire/live-wire-alert-type.enum";
-import {LiveWireAlertDestType} from "../../../../livewire/live-wire-alert-dest-type.enum";
+import {GroupService} from "../../groups/group.service";
+import {GroupInfo} from "../../groups/model/group-info.model";
+import {Task} from "../../task/task.model";
+import {TaskService} from "../../task/task.service";
+import {TaskType} from '../../task/task-type';
+import {UserService} from "../../user/user.service";
+import {LiveWireAlertType} from "../live-wire-alert-type.enum";
+import {LiveWireAlertDestType} from "../live-wire-alert-dest-type.enum";
 
 declare var $: any;
 
