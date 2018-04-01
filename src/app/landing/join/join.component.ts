@@ -3,12 +3,12 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {JoinService} from "./join.service";
 import {JoinInfo} from "./join-info";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AlertService} from "../utils/alert-service/alert.service";
-import {UserService} from "../user/user.service";
-import {UserProvince} from "../user/model/user-province.enum";
-import {MSG_LANGUAGES} from "../utils/language";
-import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../validators/CustomValidators";
-import {User} from "../user/user.model";
+import {AlertService} from "../../utils/alert-service/alert.service";
+import {UserService} from "../../user/user.service";
+import {UserProvince} from "../../user/model/user-province.enum";
+import {MSG_LANGUAGES} from "../../utils/language";
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../../validators/CustomValidators";
+import {User} from "../../user/user.model";
 
 declare var $: any;
 const steps: string[] = ["START", "TOPICS", "DONE"];

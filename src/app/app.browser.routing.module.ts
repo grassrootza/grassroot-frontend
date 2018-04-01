@@ -2,7 +2,7 @@ import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {RegistrationComponent} from './registration/registration.component';
 import {NgModule} from '@angular/core';
-import {JoinComponent} from './join/join.component';
+import {JoinComponent} from './landing/join/join.component';
 import {PwdResetInitiateComponent} from "./login/password-reset/pwd-reset-initiate/pwd-reset-initiate.component";
 import {PasswordResetComponent} from "./login/password-reset/password-reset.component";
 import {GroupMembersImportComponent} from "./groups/group-details/group-members/group-members-import/group-members-import.component";

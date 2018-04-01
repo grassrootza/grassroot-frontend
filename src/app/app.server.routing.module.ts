@@ -2,7 +2,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './login/login.component';
 import {LoadingScreenComponent} from './utils/loading-screen/loading-screen.component';
 import {NgModule} from '@angular/core';
-import {JoinComponent} from './join/join.component';
+import {JoinComponent} from './landing/join/join.component';
 import {RegistrationComponent} from './registration/registration.component';
 import {LandingComponent} from "./landing/landing.component";
 import {NewsComponent} from "./livewire/news.component";

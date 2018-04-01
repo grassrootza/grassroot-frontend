@@ -1,5 +1,5 @@
-import {Language} from "../utils/language";
-import {User} from "../user/user.model";
+import {Language} from "../../utils/language";
+import {User} from "../../user/user.model";
 
 export class JoinInfo {
 

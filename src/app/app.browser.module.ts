@@ -12,7 +12,7 @@ import {JwtModule} from "@auth0/angular-jwt";
 import {GroupMembersImportComponent} from './groups/group-details/group-members/group-members-import/group-members-import.component';
 import {FileImportComponent} from './groups/group-details/group-members/group-members-import/file-import/file-import.component';
 import {IntegrationsService} from "./user/integrations/integrations.service";
-import {JoinService} from "./join/join.service";
+import {JoinService} from "./landing/join/join.service";
 import {AlertService} from "./utils/alert-service/alert.service";
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
 import {SharedModule} from "./shared.module";

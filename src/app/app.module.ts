@@ -11,9 +11,9 @@ import {AlertService} from './utils/alert-service/alert.service';
 import {AppComponent} from './app.component';
 import {BrowserModule} from '@angular/platform-browser';
 import {LoginComponent} from './login/login.component';
-import {JoinComponent} from './join/join.component';
+import {JoinComponent} from './landing/join/join.component';
 import {RegistrationComponent} from './registration/registration.component';
-import {JoinService} from './join/join.service';
+import {JoinService} from './landing/join/join.service';
 import {LocalStorageService} from "./utils/local-storage.service";
 import {IntegrationsService} from "./user/integrations/integrations.service";
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
@@ -31,6 +31,9 @@ import {NewsComponent} from "./livewire/news.component";
 import {PublicNewsService} from "./landing/public-news.service";
 import {MediaService} from "./media/media.service";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
+import {IncomingResponseService} from "./landing/incoming-response.service";
+import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
+import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.component";
 
 @NgModule({
   declarations: [
@@ -47,7 +50,9 @@ import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.componen
     HomeScreenRoutingComponent,
     LandingComponent,
     CarouselComponent,
-    NewsComponent
+    NewsComponent,
+    UnsubscribeComponent,
+    FrontPageRespondComponent
   ],
   imports: [
     BrowserModule,
@@ -73,7 +78,8 @@ import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.componen
     NotificationService,
     PublicActivityService,
     PublicNewsService,
-    MediaService
+    MediaService,
+    IncomingResponseService
   ]
 })
 export class AppModule { }
