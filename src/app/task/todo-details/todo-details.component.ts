@@ -109,4 +109,13 @@ export class TodoDetailsComponent implements OnInit {
     return false;
   }
 
+  downloadEventErrorReport() {
+    this.taskService.downloadBroadcastErrorReport(this.todoUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "task-error-report.xls");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
+  }
+
 }

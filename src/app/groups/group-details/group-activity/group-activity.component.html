@@ -24,22 +24,25 @@
           <h1 [translate]="'group.activity.upcoming'"> Upcoming</h1>
         </div>
       </div>
-      <div class="card" *ngFor="let task of upcomingTasks" style="margin-bottom: 1rem !important; cursor: pointer" (click)="handleTaskClicked(task)">
+      <div class="card" *ngFor="let task of upcomingTasks" style="margin-bottom: 1rem !important; cursor: pointer">
         <div class="card-body events-box">
           <div class="row">
-            <div class="col-1">
+            <div class="col-1" (click)="handleTaskClicked(task)">
               <div class="date-box rounded text-center">
                 <h3>{{task.deadlineDate | date: 'dd'}}</h3>
                 {{task.deadlineDate | date: 'MMM'}}
               </div>
             </div>
             <div class="col-11">
-              <div class="row">
+              <div class="row" (click)="handleTaskClicked(task)">
                 <span class="font-weight-bold">
                   <img [src]="'assets/' + task.getEventIconName() "/>
                   {{task.type}}:&nbsp;
                 </span>
                   {{task.title}}
+              </div>
+              <div class="row">
+                <a (click)="downloadEventErrorReport(task)" class="download-error-report">Download error report</a>
               </div>
               <div class="row" *ngIf="task.type == taskTypes.VOTE">
                 <span class="font-weight-bold" [translate]="'group.activity.voteCloses'"> Closes:</span>&nbsp;
@@ -67,19 +70,22 @@
       <div class="card" *ngFor="let task of pastTasks" style="margin-bottom: 1rem !important; cursor: pointer" (click)="handleTaskClicked(task)">
         <div class="card-body events-box" >
           <div class="row">
-            <div class="col-1">
+            <div class="col-1" (click)="handleTaskClicked(task)">
               <div class="date-box rounded text-center">
                 <h3>{{task.deadlineDate | date: 'dd'}}</h3>
                 {{task.deadlineDate | date: 'MMM'}}
               </div>
             </div>
             <div class="col-11">
-              <div class="row">
+              <div class="row" (click)="handleTaskClicked(task)">
                 <span class="font-weight-bold">
                   <img [src]="'assets/' + task.getEventIconName() "/>
                   {{task.type}}:&nbsp;
                 </span>
                   {{task.title}}
+              </div>
+              <div class="row">
+                <a (click)="downloadEventErrorReport(task)" class="download-error-report">Download error report</a>
               </div>
               <div class="row" *ngIf="task.type == taskTypes.VOTE">
                 <span class="font-weight-bold" [translate]="'group.activity.voteCloses'"> Closes:</span>&nbsp;

@@ -45,6 +45,8 @@ export class TaskService {
 
   private cancelTaskUrl = environment.backendAppUrl + "/api/task/modify/cancel";
 
+  private downloadErrorReportUrl = environment.backendAppUrl + "/api/task/fetch/error-report/";
+
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
   constructor(private httpClient: HttpClient) {
@@ -280,6 +282,12 @@ export class TaskService {
         this.loadUpcomingUserTasks();
       }
     });
+  }
+
+  downloadBroadcastErrorReport(taskUid: string) {
+    const fullUrl = this.downloadErrorReportUrl  + taskUid + '/download';
+
+    return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
 
 

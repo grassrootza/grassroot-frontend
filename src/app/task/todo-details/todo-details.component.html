@@ -19,6 +19,11 @@
             {{ 'task.todo.details.cancel-button' | translate }}</button>
         </div>
       </div>
+      <div class="row">
+        <div class="offset-1 col-sm-11">
+          <a (click)="downloadEventErrorReport()" class="download-error-report">{{ 'task.todo.details.download-error-button' | translate }}</a>
+        </div>
+      </div>
       <div class="row pl-3 pr-3">
         <div class="col-md-6 col-sm-12">
           <p class="task-field-para">
