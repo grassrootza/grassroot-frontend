@@ -1,0 +1,20 @@
+FROM keymetrics/pm2:latest-alpine
+
+WORKDIR /app
+
+COPY package.json /app/
+
+COPY ./ /app/
+
+ENV NPM_CONFIG_LOGLEVEL warn
+
+ARG env=prod
+ARG NODE_ENV=production
+
+RUN npm install --production
+
+RUN ls -al -R
+
+EXPOSE 4000
+
+CMD [ "pm2-runtime", "start", "pm2.json" ]
