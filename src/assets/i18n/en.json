@@ -297,6 +297,7 @@
         "phone": "Phone",
         "email": "Email"
       },
+      "errorReport": "Error report",
       "bulkManage":{
         "bulkManage": "Bulk manage",
         "meeting": "Call a meeting",
@@ -616,7 +617,7 @@
         "sentActions": {
           "view": "View",
           "resend": "Resend",
-          "sentReport": "Sent report"
+          "downloadReport": "Download report"
         }
       },
       "viewModal": {
