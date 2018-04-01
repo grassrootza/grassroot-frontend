@@ -71,8 +71,6 @@ export class GroupAllMembersComponent implements OnInit {
     this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort)
       .subscribe(
         membersPage => {
-          console.log('MEMBERS PAGE');
-          console.log(membersPage);
           this.currentPage = membersPage;
           this.alertService.hideLoading();
         },
