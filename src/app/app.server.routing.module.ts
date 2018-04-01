@@ -7,6 +7,8 @@ import {RegistrationComponent} from './registration/registration.component';
 import {LandingComponent} from "./landing/landing.component";
 import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
+import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
+import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.component";
 
 // a bit of redundancy here, but small price to pay to avoid routing weirdness if use joint routes
 const routes: Routes = [
@@ -16,6 +18,8 @@ const routes: Routes = [
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
   {path: 'news', component: NewsComponent},
+  {path: 'unsubscribe/:groupId/:userId/:token', component: UnsubscribeComponent},
+  {path: 'respond/:taskType/:taskId/:userId/:token', component: FrontPageRespondComponent},
   // directs all other routes to the main page
   {path: '**', component: LoadingScreenComponent}
 ];

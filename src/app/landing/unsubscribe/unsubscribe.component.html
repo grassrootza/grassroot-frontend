@@ -1,10 +1,64 @@
 <div class="container primary-container">
-  <div class="card-body">
+  <div class="card">
     <div class="row">
-      <div class="col-12">
-        <div class="form-group">
-          <div align="center" appRecaptcha formControlName="captcha"></div>
+      <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12 text-center">
+        <div class="card-body" *ngIf="!succeeded && !failed">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'unsubscribe.initiate.title'">Unsubscribe</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p *ngIf="!groupName" [translate]="'unsubscribe.initiate.body'">
+                You are about to unsubscribe from the group, and will no longer receive notifications or emails from it. Are you sure?
+              </p>
+              <p *ngIf="groupName" [translate]="'unsubscribe.initiate.body-group'"
+                [translateParams]="{name: groupName}">
+              </p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group" *ngIf="!loggedInUser">
+                <div align="center" appRecaptcha [formControl]="recaptcha"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button type="button" class="btn btn-primary" [disabled]="!(loggedInUser || recaptcha.valid)"
+                (click)="submitUnsubscribe()" [translate]="'unsubscribe.initiate.button'">Unsubscribe</button>
+            </div>
+          </div>
         </div>
+
+        <div class="card-body" *ngIf="succeeded">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'unsubscribe.succeeded.title'">Done!</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p [innerHtml]="'unsubscribe.succeeded.body' | translate">You have unsubscribed from the group. If you feel it has been abusive, you can also send us a report at <a href="mailto:contact@grassroot.org.za">contact@grassroot.org.za</a></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body" *ngIf="failed">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'unsubscribe.failed.title'">Done!</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p [innerHtml]="'unsubscribe.failed.body' | translate">Sorry, something went wrong unsubscribing you from the group. If you are already a Grassroot user, try logging out and then clicking on the link again. Otherwise you can email us at <a href="mailto:contact@grassroot.org.za">contact@grassroot.org.za</a></p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

@@ -14,6 +14,8 @@ import {IntegrationConnectComponent} from "./user/integrations/integration-conne
 import {LandingComponent} from "./landing/landing.component";
 import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
+import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
+import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.component";
 
 const routes: Routes = [
 
@@ -23,6 +25,8 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
+  {path: 'unsubscribe/:groupId/:userId/:token', component: UnsubscribeComponent},
+  {path: 'respond/:taskType/:taskId/:userId/:token', component: FrontPageRespondComponent},
   {path: 'forgot', component: PasswordResetComponent,
     children: [
       {path: '', redirectTo: 'initiate', pathMatch: 'full'},

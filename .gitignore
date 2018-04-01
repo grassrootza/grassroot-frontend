@@ -52,3 +52,9 @@ package-lock.json
 Dockerrun.aws.json
 *.zip
 /Dockerrun.aws.json
+.elasticbeanstalk/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

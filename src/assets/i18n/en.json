@@ -1293,6 +1293,22 @@
       "public-groups": "Public Groups"
     }
   },
+  "unsubscribe": {
+    "initiate": {
+      "title": "Unsubscribe",
+      "body": "You are about to unsubscribe from the group, and will no longer receive notifications or emails from it. Are you sure?",
+      "body-group": "You are about to unsubscribe from {{ name }}, and will no longer receive notifications or emails from it. Are you sure?",
+      "button": "Unsubscribe"
+    },
+    "succeeded": {
+      "title": "Done",
+      "body": "You have unsubscribed from the group. If you feel the group has been abusive, you can also send us a report at <a href=\"mailto:contact@grassroot.org.za\">contact@grassroot.org.za</a>"
+    },
+    "failed": {
+      "title": "Error",
+      "body": "Sorry, something went wrong unsubscribing you from the group. If you are already a Grassroot user, try logging out and then clicking on the link again. Otherwise you can email us at <a href=\"mailto:contact@grassroot.org.za\">contact@grassroot.org.za</a>"
+    }
+  },
   "permission": {
     "GROUP_PERMISSION_UPDATE_GROUP_DETAILS": "Change overall group settings",
     "GROUP_PERMISSION_CHANGE_PERMISSION_TEMPLATE": "Change permissions",
