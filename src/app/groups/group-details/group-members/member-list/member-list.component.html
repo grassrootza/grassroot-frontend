@@ -70,32 +70,32 @@
       </div>
 
       <div class="col-md-2">
-        <p class="member-name">{{member.user.displayName}}</p>
-        <p class="affiliation-subtitle text-nowrap">
+        <p class="member-name" [ngClass]="{'user-has-errors': member.user.contactError}">{{member.user.displayName}}</p>
+        <p class="affiliation-subtitle text-nowrap" [ngClass]="{'user-has-errors': member.user.contactError}">
           <span *ngIf="hasAffiliations(member)">{{ 'group.allMembers.table.affiliation' | translate }}{{ member.affiliations.join(', ')}}</span>
           <span *ngIf="hasAffiliations(member) && member?.topics?.length > 0">; </span>
           <span *ngIf="member?.topics?.length > 0">Topics: {{member.topics.join(', ')}}</span>
         </p>
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-2" >
           <span class="badge badge-success" [translate]="'enum.GroupRole.' + member.roleName">
             Group role
           </span>
       </div>
 
       <div class="col-md-2">
-        <span *ngIf="member.user.province" [translate]="'enum.UserProvince.' + member.user.province">
+        <span *ngIf="member.user.province" [translate]="'enum.UserProvince.' + member.user.province" [ngClass]="{'user-has-errors': member.user.contactError}">
           User province
         </span>
-        <span *ngIf="!member.user.province" [translate]="'enum.UserProvince.UNKNOWN'">Unknown</span>
+        <span *ngIf="!member.user.province" [translate]="'enum.UserProvince.UNKNOWN'" [ngClass]="{'user-has-errors': member.user.contactError}">Unknown</span>
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-2" [ngClass]="{'user-has-errors': member.user.contactError}">
         {{member.nationalNumber()}}
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-2" [ngClass]="{'user-has-errors': member.user.contactError}">
         {{member.user.email}}
       </div>
 
