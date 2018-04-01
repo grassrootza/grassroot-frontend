@@ -42,3 +42,17 @@
 .dropdown-item {
   cursor: pointer;
 }
+
+.btn-outline-primary {
+  color: #2CBC4C;
+  background-color: transparent;
+  background-image: none;
+  border-color: #2CBC4C;
+}
+
+.btn-outline-primary:hover{
+  color: #fff;
+  background-color: #2CBC4C;
+  border-color: #2CBC4C;
+  box-shadow: 0 0 0 0.2rem rgba(44, 188, 76,.5);
+}

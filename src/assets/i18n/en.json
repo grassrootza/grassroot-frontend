@@ -307,6 +307,7 @@
         "phone": "Phone",
         "email": "Email"
       },
+      "errorReport": "Error report",
       "bulkManage":{
         "bulkManage": "Bulk manage",
         "meeting": "Call a meeting",
@@ -626,7 +627,7 @@
         "sentActions": {
           "view": "View",
           "resend": "Resend",
-          "sentReport": "Sent report"
+          "downloadReport": "Download report"
         }
       },
       "viewModal": {
@@ -1255,7 +1256,8 @@
       },
       "no_response": "No response yet",
       "details": {
-        "cancel-button": "Cancel action"
+        "cancel-button": "Cancel action",
+        "download-error-button": "Download error report"
       },
       "cancel": {
         "title": "Confirm cancellation",
@@ -1270,7 +1272,8 @@
       "details": {
         "title-field": "Meeting",
         "cancel-button": "Cancel meeting",
-        "attendance": "Attendance"
+        "attendance": "Attendance",
+        "download-error-button": "Download error report"
       },
       "cancel": {
         "title": "Confirm cancellation",

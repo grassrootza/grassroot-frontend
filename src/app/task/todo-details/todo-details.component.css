@@ -67,3 +67,14 @@
 .responses .btn-secondary {
   font-size: 1rem;
 }
+
+.download-error-report {
+  text-decoration: underline !important;
+  color: blue !important;
+}
+
+.download-error-report:hover{
+  cursor: pointer;
+}
+
+

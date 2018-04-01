@@ -26,6 +26,7 @@ export class BroadcastService {
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
   costThisMonthUrl = environment.backendAppUrl + "/api/broadcast/cost-this-month";
   shortenLinkUrl = environment.backendAppUrl + "/api/broadcast/shorten/link";
+  downloadErrorReportUrl = environment.backendAppUrl + "/api/broadcast/error-report/";
 
   public createRequest: BroadcastRequest = new BroadcastRequest();
   private createCounts: BroadcastCost = new BroadcastCost();
@@ -293,6 +294,7 @@ export class BroadcastService {
           let transformetContent = result.content.map(
 
             bc => new Broadcast(
+              bc.broadcastUid,
               bc.title,
               bc.shortMessageSent,
               bc.emailSent,
@@ -342,6 +344,12 @@ export class BroadcastService {
   shortenLink(link: string): Observable<string> {
     let params = new HttpParams().set("link", link);
     return this.httpClient.get(this.shortenLinkUrl, {params: params, responseType: 'text'});
+  }
+
+  downloadBroadcastErrorReport(broadcastUid: string) {
+    const fullUrl = this.downloadErrorReportUrl  + broadcastUid + '/download';
+
+    return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
 
 }
