@@ -22,6 +22,7 @@ export class Task {
               public createdByUserName:string,
               public createdByThisUser: boolean,
               public canEdit: boolean,
+              public voteOptions: string[],
               public voteResults: Map<string, string>) {
   }
 
@@ -60,6 +61,7 @@ export class Task {
       taskData.createdByUserName,
       taskData.createdByThisUser,
       taskData.canEdit,
+      taskData.voteOptions,
       taskData.voteResults
     )
   }

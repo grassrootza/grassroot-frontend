@@ -1232,7 +1232,8 @@
     "add": "Add",
     "join": "Join",
     "search": "Search",
-    "register": "Register"
+    "register": "Register",
+    "error": "Error"
   },
   "general": {
     "charsRemaining": "Characters remaining",
@@ -1263,6 +1264,43 @@
         "title": "Confirm cancellation",
         "body": "Are you sure? The action item will disappear from your and others' lists. You can choose whether to notify members",
         "done": "Done. The action item has been cancelled and members notified"
+      },
+      "respond": {
+        "title": "Respond to action item",
+        "body": {
+          "information": "{{ caller }} has requested information about {{ title }}. If you want to respond, just type your response below and click 'submit'.",
+          "volunteer": "{{ caller }} has requested volunteers for {{ title }}. If you want to volunteer, just click below, and they'll be sent a message",
+          "validate": "{{ caller }} called for action about {{ title }}. Is the action done yet?"
+        },
+        "submit": {
+          "information": "Submit",
+          "volunteer": "Volunteer",
+          "validate": "Yes, it's done"
+        },
+        "negative": {
+          "information": "Cancel",
+          "volunteer": "No, I can't",
+          "validate": "Not yet"
+        },
+        "done-positive": {
+          "information": "Done. We've sent your response to the organizer. What next?",
+          "volunteer": "Done, we've notified the organizer that you'll volunteer. What next?",
+          "validate": "We've recorded the action item as done. What next?"
+        },
+        "done-negative": {
+          "information": "Okay, we've skipped sending anything to the organizer. What next?",
+          "volunteer": "Alright, we haven't recorded you as a volunteer. What next?",
+          "validate": "Okay, the action item hasn't been recorded as done. What next?"
+        },
+        "failed": "Sorry, something went wrong recording your response. Please try again later or just dial *134*1994#",
+        "already": {
+          "title": "Already responded",
+          "body": "You have already responded to this action item. Each member cannot respond more than once. If you would like to change your response, please contact the organizer, {{ caller }}. Thanks for participating!"
+        },
+        "closed": {
+          "title": "Already past",
+          "body": "Responses for this action item were already due and the deadline has past"
+        }
       }
     },
     "meeting": {
@@ -1279,7 +1317,47 @@
         "title": "Confirm cancellation",
         "body": "Are you sure? This will generate a notification to all members that the meeting is cancelled",
         "done": "Done. The meeting has been cancelled and members notified"
+      },
+      "respond": {
+        "title": "Are you attending?",
+        "body": "{{ caller }} has called a meeting about {{ title }}, at {{ location }}, on {{ date }}. Will you attend?",
+        "yes": "Yes, I'll attend",
+        "no": "No, I can't attend",
+        "done-yes": "Done. Your attendance has been recorded and, if the meeting organizer has set one, you will be reminded before time",
+        "done-no": "Okay, we've noted that you won't be attending. What next?",
+        "failed": "Sorry, something went wrong recording your attendance. Please try again later or just dial *134*1994#",
+        "already": {
+          "title": "Already responded",
+          "body-yes": "You have already responded to this meeting invite, and indicated you will attend. If you want to alter your response, you can do so by clicking below",
+          "body-no": "You have already responded to this meeting invite, and indicated you won't attend. If you want to alter your response, you can do so by clicking below"
+        },
+        "closed": {
+          "title": "Meeting already past",
+          "body": "The date and time of this meeting have already past. If you want more details, please contact the meeting organizer, {{ caller }}."
+        }
       }
+    },
+    "vote": {
+      "respond": {
+        "title": "What is your vote?",
+        "body": "{{ caller }} has called a vote on {{ title }}, by {{ date }}. What do you respond?",
+        "info": "Note: Votes via Grassroot are at present exclusively for informal polling within groups. Your individual vote is secret and results will be distributed to all group members after the vote closes.",
+        "submit": "Cast vote",
+        "done-yes": "Done. Your vote has been recorded. You will receive the results when the vote closes. What next?",
+        "failed": "Sorry, something went wrong recording your vote. Please try again later or just dial *134*1994#",
+        "already": {
+          "title": "Already voted",
+          "body": "You have already cast your vote (your vote is confidential, and so is not disclosed here, or anywhere). Vote results will be distributed to all memebrs after the vote closes."
+        },
+        "closed": {
+          "title": "Vote closed",
+          "body": "This vote has already closed. Responses were distributed to members via notifications. For more details, contact the vote caller, {{ caller }}."
+        }
+      }
+    },
+    "authfailed": {
+      "title": "Access denied",
+      "body": "Sorry, but your link has failed security checks. Please check it and try again, or contact your Grassroot group organizer."
     }
   },
   "search": {

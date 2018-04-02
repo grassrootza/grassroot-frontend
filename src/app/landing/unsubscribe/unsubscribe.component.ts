@@ -4,7 +4,7 @@ import {IncomingResponseService} from "../incoming-response.service";
 import {environment} from "../../../environments/environment";
 import {RECAPTCHA_URL} from "../../utils/recaptcha.directive";
 import {ActivatedRoute, Params} from "@angular/router";
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormControl} from "@angular/forms";
 
 @Component({
   selector: 'app-group-unsubscribe',
