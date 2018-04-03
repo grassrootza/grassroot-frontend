@@ -5,6 +5,8 @@ import {UserService} from '../../../user/user.service';
 import {GroupService} from '../../group.service';
 import {Group} from '../../model/group.model';
 import {Broadcast, BroadcastPage} from '../../../broadcasts/model/broadcast';
+import { saveAs } from 'file-saver';
+
 
 declare var $: any;
 
@@ -75,6 +77,15 @@ export class GroupBroadcastComponent implements OnInit {
     this.modalBroadcast = broadcast;
     console.log(broadcast);
     $('#broadcast-view-modal').modal('show');
+  }
+
+  donwloadBroadcastErrorReport(broadcast: Broadcast) {
+    this.broadcastService.downloadBroadcastErrorReport(broadcast.broadcastUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "broadcast-error-report.xls");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
   }
 
 }

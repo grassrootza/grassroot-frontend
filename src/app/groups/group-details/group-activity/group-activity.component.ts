@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import { saveAs } from 'file-saver';
 import {UserService} from '../../../user/user.service';
 import {GroupService} from '../../group.service';
 import {ActivatedRoute, Params, Router} from '@angular/router';
@@ -116,5 +117,14 @@ export class GroupActivityComponent implements OnInit {
     $("#create-todo-modal").modal("hide");
     if(saveResponse)
       this.loadTasks();
+  }
+
+  downloadEventErrorReport(task: Task) {
+    this.taskService.downloadBroadcastErrorReport(task.taskUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "task-error-report.xls");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
   }
 }

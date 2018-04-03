@@ -60,6 +60,7 @@ export class GroupService {
   groupMemberChangeAssignmentsUrl = environment.backendAppUrl + '/api/group/modify/members/modify/assignments';
   groupFetchInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
   groupDownloadInboundMessagesUrl = environment.backendAppUrl + "/api/group/fetch/inbound-messages";
+  groupDownloadMembersErrorReportUrl = environment.backendAppUrl + "/api/group/fetch/members/error-report";
 
   groupFilterMembersUrl = environment.backendAppUrl + '/api/group/fetch/members/filter';
   groupCreateTaskTeamUrl = environment.backendAppUrl + '/api/group/modify/create/taskteam';
@@ -726,6 +727,12 @@ export class GroupService {
     }
 
     return this.httpClient.get(fullUrl, { params: params, responseType: 'blob' });
+  }
+
+  downloadErrorReport(groupUid: string) {
+    const fullUrl = this.groupDownloadMembersErrorReportUrl + '/' + groupUid + '/download';
+
+    return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
 }
 

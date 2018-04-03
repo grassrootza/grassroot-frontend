@@ -10,7 +10,8 @@ export class User {
               public enabled: string,
               public languageCode: string,
               public province: string,
-              public hasPassword: boolean) {
+              public hasPassword: boolean,
+              public contactError: boolean) {
   }
 }
 

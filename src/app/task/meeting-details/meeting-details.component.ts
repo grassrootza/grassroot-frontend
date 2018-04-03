@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
+import { saveAs } from 'file-saver';
 import {TaskService} from "../task.service";
 import {Task} from "../task.model";
 import {convertResponseMap, TaskResponse} from "../task-response";
@@ -107,6 +108,16 @@ export class MeetingDetailsComponent implements OnInit {
     else
       this.router.navigate(['/home']);
     return false;
+  }
+
+
+  downloadEventErrorReport() {
+    this.taskService.downloadBroadcastErrorReport(this.meetingUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "task-error-report.xls");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
   }
 
 }

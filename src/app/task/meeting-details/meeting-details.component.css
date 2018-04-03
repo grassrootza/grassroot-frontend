@@ -66,3 +66,12 @@
   font-size: 15px;
   line-height: 16px;
 }
+
+.download-error-report {
+  text-decoration: underline !important;
+  color: blue !important;
+}
+
+.download-error-report:hover{
+  cursor: pointer;
+}

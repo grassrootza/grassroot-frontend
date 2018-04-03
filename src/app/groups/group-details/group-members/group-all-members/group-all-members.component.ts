@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
+import { saveAs } from 'file-saver';
 import {UserService} from '../../../../user/user.service';
 import {GroupService} from '../../../group.service';
 import {Membership, MembersPage} from '../../../model/membership.model';
@@ -70,7 +71,6 @@ export class GroupAllMembersComponent implements OnInit {
     this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort)
       .subscribe(
         membersPage => {
-          console.log(membersPage);
           this.currentPage = membersPage;
           this.alertService.hideLoading();
         },
@@ -148,6 +148,15 @@ export class GroupAllMembersComponent implements OnInit {
   bulkManageCheckNumberOfSelectedMembers(): number{
     this.bulkManageMembers = this.currentPage.getSelectedMembers();
     return this.bulkManageMembers.length;
+  }
+
+  downloadErrorReport() {
+    this.groupService.downloadErrorReport(this.groupUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "error-report.xls");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
   }
 
 }
