@@ -40,7 +40,22 @@ export class Broadcast {
         return new DatePipe("en").transform(this.dateTimeSent, "d MMM y");
       }
     }
+  }
 
+  getFormattedScheduleDateTimeSend():string{
+    if(this.scheduledSendTime == null){
+      return "";
+    }
+    else{
+      let currentDate = new Date();
+      let twoDatesSame = this.areTwoDatesSame(currentDate, this.scheduledSendTime);
+
+      if(twoDatesSame){
+        return new DatePipe("en").transform(this.scheduledSendTime, "hh:MM a");
+      }else{
+        return new DatePipe("en").transform(this.scheduledSendTime, "d MMM y");
+      }
+    }
   }
 
 
