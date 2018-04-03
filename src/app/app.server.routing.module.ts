@@ -9,6 +9,9 @@ import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
 import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.component";
+import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component";
+import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
+import {AboutUsComponent} from "./landing/static/about-us.component";
 
 // a bit of redundancy here, but small price to pay to avoid routing weirdness if use joint routes
 const routes: Routes = [
@@ -20,6 +23,12 @@ const routes: Routes = [
   {path: 'news', component: NewsComponent},
   {path: 'unsubscribe/:groupId/:userId/:token', component: UnsubscribeComponent},
   {path: 'respond/:taskType/:taskId/:userId/:token', component: FrontPageRespondComponent},
+
+  // bunch of routes for front matter
+  // {path: 'about', component: AboutUsComponent},
+  {path: 'privacy', component: PrivacyPolicyComponent},
+  {path: 'terms', component: TermsOfUseComponent},
+
   // directs all other routes to the main page
   {path: '**', component: LoadingScreenComponent}
 ];

@@ -289,7 +289,7 @@ p {
 #intro {
   border-radius: 0px;
   margin-bottom: 0px;
-  background: url(/assets/landing/banner_bg.jpg) no-repeat;
+  background: url(/assets/landing/banner_bg_prog.jpg) no-repeat;
   background-size: cover;
   position: relative; }
 #intro .intro-content {
@@ -473,6 +473,7 @@ p {
   font-weight: 100;
   line-height: 26px; }
 .campaigns h3 {
+  color: #FFFFFF;
   font-weight: 600; }
 .campaigns .img-right img {
   box-shadow: 0px 0px 20px #7a7d8c; }

@@ -10,7 +10,4 @@ export class CookiesService {
   clearUserLoggedIn() { }
   isUserLoggedIn(): boolean { return false; }
 
-  get(key: string) { }
-  put(key: string, value: string) { }
-
 }

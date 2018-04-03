@@ -26,7 +26,7 @@ export class HomeScreenRoutingComponent implements OnInit {
     if (this.isLoggedIn) {
       this.alertService.showLoading();
       if (isPlatformBrowser(this.platformId)) {
-        this.router.navigate(['home']);
+        this.router.navigate(['/home']);
       }
     }
   }

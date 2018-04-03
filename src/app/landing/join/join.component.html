@@ -7,7 +7,7 @@
             <h2 class="text-center group-name-title">{{ joinInfo?.groupName }}</h2>
             <p class="privacy-statement">
               {{ 'join.intro' | translate:joinInfo }}
-              (<a href="https://www.grassroot.org.za/privacy" target="_blank">{{ 'join.privacy' | translate }}</a>).
+              (<a [routerLink]="['/privacy']">{{ 'join.privacy' | translate }}</a>).
             </p>
           </div>
         </div>

@@ -118,12 +118,13 @@
             </li>
 
             <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/about')}">
-              <a class="nav-link" (click)="navigateToMainLink('/about', 'vision')"> {{ 'menu.landing.about' | translate }} <span class="sr-only">(current)</span> </a>
+              <a class="nav-link" (click)="navigateToMainLink('/about')"> {{ 'menu.landing.about' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
 
             <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/contribute')}">
               <a class="nav-link" (click)="navigateToMainLink('/about', 'contribute')"> {{ 'menu.landing.contribute' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
+
           </ul>
 
           <div class="my-2 my-lg-0">
@@ -215,8 +216,8 @@
 
           <div class="col-md-6 col-sm-12">
             <div class="float-md-right">
-              <a href="https://www.grassroot.org.za/privacy">{{ 'footer.privacyPolicy' | translate }}</a> | &nbsp;
-              <a href="#">{{ 'footer.termsOfUse' | translate }}</a>
+              <a href="#" [routerLink]="['/privacy']">{{ 'footer.privacyPolicy' | translate }}</a> | &nbsp;
+              <a href="#" [routerLink]="['/terms']">{{ 'footer.termsOfUse' | translate }}</a>
             </div>
           </div>
         </div>

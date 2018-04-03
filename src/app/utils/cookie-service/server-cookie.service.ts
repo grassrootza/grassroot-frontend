@@ -25,10 +25,10 @@ export class ServerCookieService extends CookiesService {
   constructor(@Inject(PLATFORM_ID) protected platformId: Object, @Inject(REQUEST) @Optional() private request: Request) {
     super();
     if (isPlatformServer(platformId) && this.request != null) {
-      console.log("request not null, looks like on server!, request: ", request.headers.cookie);
+      // console.log("request not null, looks like on server!, request: ", request.headers.cookie);
       this.parseCookies(this.request.headers.cookie);
     }
-    console.log("should be done getting cookies, here is store: ", this.cookieStore);
+    // console.log("should be done getting cookies, here is store: ", this.cookieStore);
   }
 
   public parseCookies(cookies) {
@@ -42,9 +42,6 @@ export class ServerCookieService extends CookiesService {
   }
 
   public get(key: string) {
-    console.log("cookie store: ", this.cookieStore);
-    console.log("key: ", key);
-    console.log("store with key: ", this.cookieStore[key]);
     return !!this.cookieStore[key] ? this.cookieStore[key] : null;
   }
 

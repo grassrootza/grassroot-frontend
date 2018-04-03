@@ -19,11 +19,6 @@ export class PublicActivityService {
       .set("numberToFetch", "5");
 
     return this.httpClient.get<PublicActivity[]>(this.activityUrl, {params: params})
-      .map(
-        result => {
-          let transformedContent = result.map(n => PublicActivity.createInstanceFromData(n));
-          return transformedContent;
-        }
-      );
+      .map(result => result.map(PublicActivity.createInstanceFromData));
   }
 }

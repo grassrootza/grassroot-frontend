@@ -16,11 +16,14 @@ import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
 import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.component";
+import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component";
+import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
+import {AboutUsComponent} from "./landing/static/about-us.component";
 
 const routes: Routes = [
 
   {path: '', component: HomeScreenRoutingComponent},
-  {path: 'about', component: LandingComponent},
+  // {path: 'about', component: LandingComponent},
   {path: 'news', component: NewsComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
@@ -62,6 +65,11 @@ const routes: Routes = [
   {path: 'social/connect/:providerId', component: IntegrationConnectComponent, canActivate: [LoggedInGuard]},
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
   {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]},
+
+  // some front matter (basically static)
+  {path: 'about', component: AboutUsComponent},
+  {path: 'privacy', component: PrivacyPolicyComponent},
+  {path: 'terms', component: TermsOfUseComponent}
 ];
 
 @NgModule({

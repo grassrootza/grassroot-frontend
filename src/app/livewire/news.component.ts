@@ -31,7 +31,6 @@ export class NewsComponent implements OnInit {
 
   loadNews(pageNumber:number){
     this.newsService.loadNews(pageNumber).subscribe(news =>{
-        console.log("Server response...",news);
         this.news = news.content;
         this.totalPages = news.totalPages;
     },error =>{
@@ -66,6 +65,5 @@ export class NewsComponent implements OnInit {
   openImage(imageKey:string){
     this.imageUrl = this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
     $('#open-image-modal').modal("show");
-    console.log("Open my image....",imageKey);
   }
 }

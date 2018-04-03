@@ -1,0 +1,99 @@
+.list-group-item {
+  padding-left: 0;
+}
+
+.padded-card {
+  padding: 2rem;
+}
+
+.section-header-narrow {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.mission-para {
+  font-size: 18px;
+  color: #4A4A4A;
+  font-weight: bolder;
+}
+
+.team-list .list-group-item {
+  font-size: 18px;
+  padding-left: 10px;
+  background: #FFFFFF;
+}
+
+.team-list .list-group-item:hover {
+  background: #ebf8ee;
+}
+
+.team-list .active {
+  background: #ebf8ee;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  color: #4A4A4A;
+}
+
+.team-bio-para {
+  font-size: 18px;
+  color: #4f4f4f;
+  font-weight: bolder;
+}
+
+.team-name-container {
+  padding: 5px;
+}
+
+.team-name-list {
+  background-color: rgba(245,246,250,0.7);
+  border: 1px solid #EBEDF0;
+  padding: 10px 20px;
+  text-align: center;
+  display: block;
+}
+
+@media (max-width: 720px) {
+  .padded-card {
+    padding: 1rem;
+  }
+
+  .team-bio-para {
+    padding-top: 10px;
+  }
+}
+
+.partner-list {
+  list-style-type: none;
+}
+
+.partner-list li {
+  margin-left: 0;
+  padding-left: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: #2cbc4c;
+}
+
+.partner-list p {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.partner-list li a {
+  color: #1c7430 !important;
+}
+
+.box a {
+  color: #1c7430 !important;
+}
+
+.logo-para {
+  margin-top: 10px;
+}
+
+.max-height-logo {
+  max-height: 48px;
+}
+
+.max-width-logo {
+  max-width: 144px;
+}

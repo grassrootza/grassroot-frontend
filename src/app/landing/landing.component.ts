@@ -51,12 +51,9 @@ export class LandingComponent implements OnInit, AfterViewInit {
               private builder: AnimationBuilder,
               private route: ActivatedRoute,
               @Inject(PLATFORM_ID) protected platformId: Object) {
-    console.log("constructing landing component");
   }
 
   ngOnInit() {
-    console.log("init on landing component");
-
     this.alertService.hideLoadingDelayed();
 
     //load public activity first time component is initialized
@@ -88,7 +85,6 @@ export class LandingComponent implements OnInit, AfterViewInit {
     }
 
     this.route.fragment.subscribe(fragment => {
-      console.log("got a new fragment: ", fragment);
       this.anchorPoint = fragment;
       this.scrollToAnchor(fragment);
     });
@@ -112,14 +108,12 @@ export class LandingComponent implements OnInit, AfterViewInit {
         console.log(activities);
         const numberOfNewActivities = this.getNumberOfNewActivities(activities);
         if (numberOfNewActivities > 0) {
-          console.log('starting animation');
           this.playActivitiesAnimation(numberOfNewActivities, activities);
         }
       });
   }
 
   getNumberOfNewActivities(newActivities: PublicActivity[]): number {
-    console.log('calling check new activities');
     const arrayAreEqual = _(this.activitiesList)
       .differenceWith(newActivities, _.isEqual)
       .isEmpty();

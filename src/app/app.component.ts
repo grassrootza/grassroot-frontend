@@ -8,7 +8,6 @@ import {DISPLAYED_NOTIFICATIONS_STORAGE_KEY, NotificationService} from "./user/n
 import {Notification} from "./user/model/notification.model";
 import {LocalStorageService} from "./utils/local-storage.service";
 import {isPlatformBrowser} from "@angular/common";
-import {CookiesService} from "./utils/cookie-service/cookies.service";
 
 declare var $: any;
 
@@ -50,7 +49,6 @@ export class AppComponent implements OnInit {
               private alertService: AlertService,
               private notificationService: NotificationService,
               private localStorageService: LocalStorageService,
-              private cookieService: CookiesService,
               @Inject(PLATFORM_ID) protected platformId: Object) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
@@ -74,10 +72,10 @@ export class AppComponent implements OnInit {
     // });
 
     this.userService.loggedInUser.subscribe(user => {
-      console.log("user emitted!");
+      // console.log("user emitted!");
       this.loggedInUser = user;
       this.userHasNoImage = !this.loggedInUser || !this.loggedInUser.hasImage;
-      console.log("user has no image? : ", this.userHasNoImage);
+      // console.log("user has no image? : ", this.userHasNoImage);
       if (this.loggedInUser && this.loggedInUser.hasImage) {
         this.userImageUrl = this.userService.getProfileImageUrl(true);
       }
@@ -97,15 +95,13 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const browserLang = translateService.getBrowserLang();
       translateService.use(browserLang.match(/en/) ? browserLang : 'en');
-      this.cookieService.put("grassroot-logged-in", "" + false);
-      console.log("put cookie: ", this.cookieService.get("grassroot-logged-in"));
     } else {
       translateService.use('en');
     }
   }
 
   ngOnInit(): void {
-    console.log("is the user logged in? ", this.userService.isLoggedIn());
+    // console.log("is the user logged in? ", this.userService.isLoggedIn());
     if (isPlatformBrowser(this.platformId) && this.userService.isLoggedIn()) {
       $(".ntf-popup").hide();
       this.pullNotifications();

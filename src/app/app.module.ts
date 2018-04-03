@@ -34,6 +34,9 @@ import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.componen
 import {IncomingResponseService} from "./landing/incoming-response.service";
 import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
 import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.component";
+import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component";
+import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
+import {AboutUsComponent} from "./landing/static/about-us.component";
 
 @NgModule({
   declarations: [
@@ -52,7 +55,10 @@ import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.co
     CarouselComponent,
     NewsComponent,
     UnsubscribeComponent,
-    FrontPageRespondComponent
+    FrontPageRespondComponent,
+    PrivacyPolicyComponent,
+    TermsOfUseComponent,
+    AboutUsComponent
   ],
   imports: [
     BrowserModule,
