@@ -20,7 +20,6 @@ import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PublicLivewire} from "../livewire/public-livewire.model";
 
-
 declare var $: any;
 
 @Component({

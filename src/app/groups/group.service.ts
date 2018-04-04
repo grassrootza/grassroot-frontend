@@ -573,6 +573,7 @@ export class GroupService {
 
   filterGroupMembers(groupUid: string,
                      filter: MembersFilter): Observable<Membership[]> {
+    console.log("filtering group members ...");
 
     let params = new HttpParams()
       .set("groupUid", groupUid);
@@ -618,8 +619,18 @@ export class GroupService {
       params = params.set("languages", filter.language.join(","));
     }
 
+    let cbParams = params.set("cb", "" + (new Date()));
+
+    console.log("fetching filtered members, params = ", params);
+    this.httpClient.get(this.groupFilterMembersUrl, {params: cbParams}).subscribe(result => console.log("result: ", result));
+
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
-      .map(resp => resp.map(m => Membership.createInstance(m)))
+      .map(resp => {
+        console.log("response from client: ", resp);
+        return resp.map(m => Membership.createInstance(m))
+      }, error => {
+        console.log("error: ", error);
+      })
   }
 
   createTaskTeam(parentUid: string, taskTeamName: string, memberUids: string[]):Observable<any>{
