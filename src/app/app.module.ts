@@ -43,7 +43,6 @@ import { MeetingDetailsComponent } from "./task/meeting-details/meeting-details.
 import { NewsServiceService } from "./news/news-service.service";
 import { NewsComponent } from './news/news/news.component';
 import {RecaptchaDirective} from "./utils/recaptcha.directive";
-import { ScrollToModule } from 'ng2-scroll-to-el';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -142,8 +141,7 @@ const routes: Routes = [
       }
     }),
     NgbModule.forRoot(),
-    SharedModule.forRoot(),
-    ScrollToModule.forRoot()
+    SharedModule.forRoot()
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},

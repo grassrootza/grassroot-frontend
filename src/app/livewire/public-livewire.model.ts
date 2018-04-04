@@ -1,19 +1,29 @@
-import { DateTimeUtils } from "../utils/DateTimeUtils";
 import * as moment from 'moment';
+
 export class PublicLivewire {
-  
+
   constructor(public serverUid:string,
-              public headline:string,
-              public creationTimeMillis:any,
-              public description:string,
-              public imageKeys:string[]){}
-  
-  public static createInstance(publicLivewire:PublicLivewire):PublicLivewire{
-    return new PublicLivewire(publicLivewire.serverUid,
-                              publicLivewire.headline,
-                              moment(publicLivewire.creationTimeMillis),
-                              publicLivewire.description,
-                              publicLivewire.imageKeys);
+              public headline: string,
+              public creationTimeMillis: any,
+              public description: string,
+              public imageKeys: string[],
+              public contactName?: string,
+              public alertType?: string,
+              public entityName?: string,
+              public entitySize?: number,
+              public activityCount?: number) {}
+
+  public static createInstance(alert:PublicLivewire): PublicLivewire {
+    return new PublicLivewire(alert.serverUid,
+      alert.headline,
+      moment(alert.creationTimeMillis),
+      alert.description,
+      alert.imageKeys,
+      alert.contactName,
+      alert.alertType,
+      alert.entityName,
+      alert.entitySize,
+      alert.activityCount);
   }
 }
 

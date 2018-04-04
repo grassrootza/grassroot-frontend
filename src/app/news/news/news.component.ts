@@ -3,10 +3,10 @@ import { MediaFunction } from "../../media/media-function.enum";
 import { MediaService } from "../../media/media.service";
 import { DateTimeUtils } from "../../utils/DateTimeUtils";
 import { NewsServiceService } from "../news-service.service";
-import { Component, OnInit} from '@angular/core';
+import { isPlatformBrowser } from "@angular/common";
+import { Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
 import { ActivatedRoute, Params } from "@angular/router";
 import * as moment from 'moment';
-import { ScrollToService } from 'ng2-scroll-to-el';
 
 declare var $: any;
 
@@ -29,18 +29,21 @@ export class NewsComponent implements OnInit {
   public alertIndex:number;
 
   public loadFromOutside:boolean = false;
+
   
   constructor(private newsService:NewsServiceService,
               private mediaService:MediaService,
               private route:ActivatedRoute,
-              private scrollService: ScrollToService) { }
+              @Inject(PLATFORM_ID) protected platformId: Object) { }
 
   ngOnInit() {
+    
     this.route.params.subscribe((params:Params) => {
       this.loadNews(this.pageNumber);
       this.alertUid = params['id'];
       if(this.alertUid !== '0'){
         console.log("Alert uid .... Out load",this.alertUid);
+        console.log("Alert uid",this.alertUid);
         this.loadFromOutside = true;
       }else{
         console.log("Load news inside") 
@@ -53,18 +56,19 @@ export class NewsComponent implements OnInit {
         console.log("Server response...",news);
         this.news = news.content;
         this.totalPages = news.totalPages;
-        if (this.loadFromOutside) {
-          console.log("scrolling ...");
-          setTimeout(() => {
-            this.scrollService.scrollTo('#target',1,1).subscribe(data => {
-              console.log("scrolled")
-            },error => {
-              console.log("Error scrolling..",error);
-            },() => {
-              console.log("done..")
-            });
-          },500);
+        
+        if(this.loadFromOutside){
+          console.log("Loading from outside.....");
+          if (isPlatformBrowser(this.platformId)){
+            setTimeout(() => {
+              console.log("-------------->");
+              var el = document.getElementById('target');
+              document.querySelector('#target').scrollIntoView({behavior: 'smooth'});
+            }, 2000)
+            //document.querySelector('#\\4').scrollIntoView({behavior: 'smooth'});
+          }
         }
+        
     },error =>{
       console.log("Error loading news.....",error);
     });

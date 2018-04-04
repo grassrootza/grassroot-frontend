@@ -10,7 +10,7 @@ declare var $: any;
 @Injectable()
 export class NewsServiceService {
   
-  private publicNewsUrl = environment.backendAppUrl + "/api/news/list"
+  private publicNewsUrl = environment.backendAppUrl + "/api/news/list/full";
   private loadAlertUrl = environment.backendAppUrl + "/api/news/load/alert";
 
   constructor(private httpClient:HttpClient) { }

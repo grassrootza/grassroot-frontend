@@ -1,30 +1,44 @@
-<div>
-	<div *ngFor="let alert of news; let i = index" class="card">
-		<div [ngClass]="(alert.serverUid == alertUid)?'loaded-outside':'card-body'" 
-							[id]="(alert.serverUid == alertUid)?'target':'news-item'">
-			<div class="row alert-header">
-				<div class="col-md-10 alert-headline">
-					<span>
-						#LiveWire {{alert.headline}}
-					</span>
-				</div>
-				<div class="col-md-2">
-					{{alert.creationTimeMillis | date: 'dd MMM yyyy'}}
-				</div>
-			</div>
-			<div class="row alert-description">
-				<div class="col-md-12">
-					<span>{{alert.description}}</span>
-				</div>
-			</div>
-			<div *ngIf="alert.imageKeys.length > 0" class="row">
-				<div *ngFor="let imageKey of alert.imageKeys; let i = index" class="col-md-3 col-sm-6 col">
-					<img (click)="openImage(imageKey)" class="alert-image" alt="" src="{{loadImageUrl(alert.imageKeys[i])}}">
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+  
+    <div *ngFor="let alert of news; let i = index" class="card" [id]="(alert.serverUid == alertUid)?'target':'news-item'">
+      <div class="card-header alert-header">
+        <div class="row">
+          <div class="col-md-10 alert-headline">
+            <span>
+              #LiveWire {{ 'enum.LiveWireAlertType.' + alert.alertType | translate }}: {{alert.headline}}
+            </span>
+          </div>
+          <div class="col-md-2">
+            {{alert.creationTimeMillis | date: 'dd MMM yyyy'}}
+          </div>
+        </div>
+      </div>
+      <div [ngClass]="(alert.serverUid == alertUid)?'loaded-outside':'card-body'"
+      		>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="description-header">Alert description:</p>
+            <p>{{alert.description}}</p>
+            <p>
+              Alert created by {{alert.contactName}}, who is a member of a group that has taken action
+              {{ alert.activityCount }} times.
+            </p>
+          </div>
+        </div>
+        <div *ngIf="alert.imageKeys.length > 0">
+          <div class="row">
+            <div class="col-12">
+              <p class="description-header">Images:</p>
+            </div>
+          </div>
+          <div class="row">
+            <div *ngFor="let imageKey of alert.imageKeys; let i = index" class="col-md-3 col-sm-6 col">
+              <img (click)="openImage(imageKey)" class="alert-image img-thumbnail" alt="" src="{{loadImageUrl(alert.imageKeys[i])}}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
 
 <div class="modal fade" tabindex="-1" role="dialog" id="open-image-modal" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
