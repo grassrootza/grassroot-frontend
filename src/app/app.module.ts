@@ -37,6 +37,7 @@ import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.co
 import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component";
 import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
+import {ContributeComponent} from "./landing/static/contribute.component";
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import {AboutUsComponent} from "./landing/static/about-us.component";
     FrontPageRespondComponent,
     PrivacyPolicyComponent,
     TermsOfUseComponent,
-    AboutUsComponent
+    AboutUsComponent,
+    ContributeComponent
   ],
   imports: [
     BrowserModule,

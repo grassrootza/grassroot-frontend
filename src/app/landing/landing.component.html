@@ -257,9 +257,9 @@
         <div class="col-md-6">
           <p class="about-our-org">Find out about our organization, mission, project, team and partners.</p>
           <ul>
-            <li><a href=""><span class="imgwrap"><img src="assets/landing/icon_vision.jpg" alt=""></span> Our Vision and Mission <i class="fas fa-arrow-right"></i></a> </li>
-            <li><a href=""><span class="imgwrap"><img src="assets/landing/icon_team.jpg" alt=""></span> Meet our team <i class="fas fa-arrow-right"></i></a></li>
-            <li><a href=""><span class="imgwrap"><img src="assets/landing/icon_partners.jpg" alt=""></span> Our partners <i class="fas fa-arrow-right"></i></a></li>
+            <li><a href="" (click)="navigateTo('about')"><span class="imgwrap"><img src="assets/landing/icon_vision.jpg" alt=""></span> Our Vision and Mission <i class="fas fa-arrow-right"></i></a> </li>
+            <li><a href="" (click)="navigateTo('about', 'team')"><span class="imgwrap"><img src="assets/landing/icon_team.jpg" alt=""></span> Meet our team <i class="fas fa-arrow-right"></i></a></li>
+            <li><a href="" (click)="navigateTo('about', 'partners')"><span class="imgwrap"><img src="assets/landing/icon_partners.jpg" alt=""></span> Our partners <i class="fas fa-arrow-right"></i></a></li>
           </ul>
         </div><!-- /.col-md-6 -->
       </div><!-- /.row -->
@@ -312,7 +312,7 @@
               </div>
             </div>
             <br>
-            <p class="make-a-pledge">Not ready to donate? <a href="#">Make a pledge</a> to contribute in the future.</p>
+            <!--<p class="make-a-pledge">Not ready to donate? <a href="#">Make a pledge</a> to contribute in the future.</p>-->
           </div><!-- /.col-md-6 -->
         </div><!-- /.row -->
       </div><!-- /.contribute -->

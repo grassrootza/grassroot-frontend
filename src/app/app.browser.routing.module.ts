@@ -19,6 +19,7 @@ import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.co
 import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component";
 import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
+import {ContributeComponent} from "./landing/static/contribute.component";
 
 const routes: Routes = [
 
@@ -68,6 +69,10 @@ const routes: Routes = [
 
   // some front matter (basically static)
   {path: 'about', component: AboutUsComponent},
+
+  {path: 'contribute', component: ContributeComponent},
+  {path: 'contribute/success', component: ContributeComponent},
+
   {path: 'privacy', component: PrivacyPolicyComponent},
   {path: 'terms', component: TermsOfUseComponent}
 ];

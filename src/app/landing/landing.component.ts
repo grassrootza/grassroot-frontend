@@ -17,7 +17,7 @@ import {PublicActivityService} from './public-activity.service';
 import {PublicNewsService} from './public-news.service';
 import {AlertService} from "../utils/alert-service/alert.service";
 import {isPlatformBrowser} from "@angular/common";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {PublicLivewire} from "../livewire/public-livewire.model";
 
 
@@ -50,6 +50,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
               private cdr: ChangeDetectorRef,
               private builder: AnimationBuilder,
               private route: ActivatedRoute,
+              private router: Router,
               @Inject(PLATFORM_ID) protected platformId: Object) {
   }
 
@@ -101,6 +102,15 @@ export class LandingComponent implements OnInit, AfterViewInit {
     } else if (isPlatformBrowser(this.platformId)) {
       window.scrollTo(0, 0);
     }
+  }
+
+  navigateTo(route: string, fragment?: string) {
+    if (fragment) {
+      this.router.navigate([route], { fragment: fragment });
+    } else {
+      this.router.navigate([route]);
+    }
+    return false;
   }
 
   loadPublicActivity() {

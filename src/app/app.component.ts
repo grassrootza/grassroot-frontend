@@ -111,12 +111,8 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public navigateToMainLink(route: string, fragment?: string) {
-    if (fragment) {
-      this.router.navigate([route], { fragment: fragment });
-    } else {
-      this.router.navigate([route]);
-    }
+  public navigateToMainLink(route: string) {
+    this.router.navigate([route]);
     this.showMenu = false;
   }
 

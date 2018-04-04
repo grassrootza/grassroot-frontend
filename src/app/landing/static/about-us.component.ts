@@ -1,5 +1,6 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from "@angular/core";
 import {isPlatformBrowser} from "@angular/common";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-about-us',
@@ -28,14 +29,35 @@ export class AboutUsComponent implements OnInit {
     "Sanele Mkhasibe"
   ];
 
-  constructor(@Inject(PLATFORM_ID) protected platformId: Object) {
+  constructor(private route: ActivatedRoute, @Inject(PLATFORM_ID) protected platformId: Object) {
   }
 
   ngOnInit() {
-    // probably going to remove this since we'll consolidate sections
+    this.route.fragment.subscribe(fragment => {
+      if (fragment) {
+        this.scrollToElement(fragment);
+      } else {
+        console.log("no fragment");
+        this.scrollToTop();
+      }
+    });
+
+  }
+
+  scrollToElement(section: string) {
     if (isPlatformBrowser(this.platformId)) {
-      window.scrollTo(0, 0);
+      const timeOut = section === 'team' ? 0 : 300;
+      const adjust = section === 'team' ? -75 : 0;
+      setTimeout(() => {
+        document.querySelector('#' + section).scrollIntoView(true);
+        window.scrollBy(0, adjust);
+      }, timeOut);
     }
+  }
+
+  scrollToTop() {
+    if (isPlatformBrowser(this.platformId))
+      window.scrollTo(0, 0);
   }
 
 }
