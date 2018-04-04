@@ -17,7 +17,7 @@ import {AlertService} from "./utils/alert-service/alert.service";
 import {PasswordResetService} from "./login/password-reset/password-reset.service";
 import {SharedModule} from "./shared.module";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {NotificationService} from "./user/notification.service";
 import {CampaignService} from "./campaigns/campaign.service";
 import {BroadcastService} from "./broadcasts/broadcast.service";
@@ -27,7 +27,6 @@ import {LoggedInServicesModule} from "./logged-in-services.module";
 import {MediaService} from "./media/media.service";
 import {AppBrowserRoutingModule} from "./app.browser.routing.module";
 import {AppModule} from "./app.module";
-import {TransferHttpCacheModule} from "@nguniversal/common";
 import {TranslateBrowserLoader} from "./translate/translate-browser-loader.service";
 import {CookiesService} from "./utils/cookie-service/cookies.service";
 import {BrowserCookiesService} from "./utils/cookie-service/browser-cookies.service";
@@ -50,9 +49,8 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
   imports: [
     BrowserModule.withServerTransition({appId: 'grassroot-frontend'}),
     BrowserTransferStateModule,
-    TransferHttpCacheModule,
+    // TransferHttpCacheModule,
     AppModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     LoggedInServicesModule,
     AppBrowserRoutingModule,

@@ -82,7 +82,6 @@ export class HomeComponent implements OnInit {
 
     this.taskService.upcomingTaskError.subscribe(error => {
         if (error) {
-          console.log("Tasks load failed:", error);
           this.tasksLoadFinished = true;
           this.hideSpinnerIfAllLoaded();
         }
@@ -110,28 +109,17 @@ export class HomeComponent implements OnInit {
         }
       );
 
-
-    this.groupService.groupInfoList
-      .subscribe(
-        groups => {
-          if (groups) {
-            this.pinnedGroups = groups.filter(gr => gr.pinned);
-            this.groupsLoadFinished = true;
-            this.hideSpinnerIfAllLoaded();
-          }
-        }
-      );
-
-    this.groupService.groupInfoList
-      .subscribe(
-        error => {
-          if (error) {
-            console.log("Pinned groups load failed!", error);
-            this.groupsLoadFinished = true;
-            this.hideSpinnerIfAllLoaded();
-          }
-        }
-      );
+    this.groupService.groupInfoList.subscribe(groups => {
+      if (groups) {
+        this.pinnedGroups = groups.filter(gr => gr.pinned);
+        this.groupsLoadFinished = true;
+        this.hideSpinnerIfAllLoaded();
+      }
+    }, error => {
+      console.log("Pinned groups load failed!", error);
+      this.groupsLoadFinished = true;
+      this.hideSpinnerIfAllLoaded();
+    });
 
     if (this.canManageCampaigns) {
       this.campaignService.campaignInfoList.subscribe(campaignList => {

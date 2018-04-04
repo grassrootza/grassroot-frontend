@@ -13,18 +13,18 @@ import {AlertService} from "../../utils/alert-service/alert.service";
 })
 export class ContributeComponent implements OnInit {
 
-  private donateError: boolean;
+  public donateError: boolean;
 
   private donationInitUrl = environment.backendAppUrl + "/api/donate/initiate";
   private donationResultUrl = environment.backendAppUrl + "/api/donate/result";
   private shareDonateEmailUrl = environment.backendAppUrl + "/api/donate/share";
 
-  private displayDonateInput: boolean = true;
-  private displayDonateForm: boolean = false;
-  private displayShareForm: boolean = false;
+  public displayDonateInput: boolean = true;
+  public displayDonateForm: boolean = false;
+  public displayShareForm: boolean = false;
 
-  // public paymentResultUrl: string = environment.frontendAppUrl + "/contribute/success";
-  public paymentResultUrl: string = "http://localhost:4200/contribute/success";
+  public paymentResultUrl: string = environment.frontendAppUrl + "/contribute/success";
+  // public paymentResultUrl: string = "http://localhost:4200/contribute/success";
 
   public showShareCompleted: boolean = false;
 

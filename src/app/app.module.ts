@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {ANIMATION_TYPES, LoadingModule} from 'ngx-loading';
@@ -38,6 +38,7 @@ import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component"
 import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
+import {LoggingInterceptor} from "./utils/logging-interceptor.class";
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import {ContributeComponent} from "./landing/static/contribute.component";
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},
     {provide: APP_BASE_HREF, useValue: '/'},
+    // {provide: HTTP_INTERCEPTORS, useClass: LoggingInterceptor, multi: true},
     AlertService,
     UserService,
     JoinService,

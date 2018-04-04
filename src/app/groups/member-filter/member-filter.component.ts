@@ -25,6 +25,8 @@ export class MemberFilterComponent implements OnInit {
   joinMethods: string[];
   userLanguages: Language[];
 
+  private nameInputSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+
   @Input()
   taskTeams: GroupRef[] = [];
 
@@ -55,7 +57,7 @@ export class MemberFilterComponent implements OnInit {
     this.provinceKeys = Object.keys(UserProvince);
     this.joinMethods = Object.keys(GroupJoinMethod);
     this.userLanguages = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
-    console.log(this.userLanguages);
+    // console.log(this.userLanguages);
   }
 
   ngOnInit() {
@@ -68,7 +70,7 @@ export class MemberFilterComponent implements OnInit {
     });
 
     if (this.includeNameFilter) {
-      this.nameInputSubject.asObservable().debounceTime(300)
+      this.nameInputSubject.asObservable().debounceTime(500)
         .subscribe(
           value => {
             this.filter.namePhoneOrEmail = value;
@@ -80,7 +82,7 @@ export class MemberFilterComponent implements OnInit {
   }
 
   setupSelect2() {
-    console.log("in member filter, topics: ", this.topics);
+    // console.log("in member filter, topics: ", this.topics);
 
     $(".provinces-multi-select").select2({placeholder: "Select a province"});
     $(".task-teams-multi-select").select2({placeholder: "Select task teams"});
@@ -135,7 +137,7 @@ export class MemberFilterComponent implements OnInit {
   }
 
   dateConditionTypeChanged(value) {
-    console.log("Join data select data: ", value);
+    // console.log("Join data select data: ", value);
 
     if (value == "ANY") {
       this.joinDateConditionType = null;
@@ -159,25 +161,23 @@ export class MemberFilterComponent implements OnInit {
   }
 
   dateChanged(date) {
-    console.log("Date changed: ", date);
+    // console.log("Date changed: ", date);
     this.filter.joinDate = moment([date.year, date.month - 1, date.day, 0, 0, 0, 0]);
     this.fireFilterChange();
   }
 
-
-  private nameInputSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   nameOrPhoneChanged(value) {
     this.nameInputSubject.next(value);
   }
 
   daysAgoChanged(value) {
-    console.log("Days ago changed: ", value);
+    // console.log("Days ago changed: ", value);
     this.filter.joinDaysAgo = value;
     this.fireFilterChange();
   }
 
   private fireFilterChange() {
-    console.log("Filter changed: ", this.filter);
+    // console.log("Filter changed: ", this.filter);
     this.filterChanged.emit(this.filter);
   }
 }

@@ -111,9 +111,9 @@ export class GroupService {
     let cachedMyGroups = this.localStorageService.getItem(this.MY_GROUPS_DATA_CACHE);
     if (cachedMyGroups) {
       let cachedMyGroupsData = JSON.parse(this.localStorageService.getItem(this.MY_GROUPS_DATA_CACHE));
-      console.log("cachedMyGroupsData before", cachedMyGroupsData);
+      // console.log("cachedMyGroupsData before", cachedMyGroupsData);
       cachedMyGroupsData = cachedMyGroupsData.map(gr => GroupInfo.createInstance(gr));
-      console.log("cachedMyGroupsData after", cachedMyGroupsData);
+      // console.log("cachedMyGroupsData after", cachedMyGroupsData);
       this.groupInfoList_.next(cachedMyGroupsData);
     }
 
@@ -625,12 +625,7 @@ export class GroupService {
     this.httpClient.get(this.groupFilterMembersUrl, {params: cbParams}).subscribe(result => console.log("result: ", result));
 
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
-      .map(resp => {
-        console.log("response from client: ", resp);
-        return resp.map(m => Membership.createInstance(m))
-      }, error => {
-        console.log("error: ", error);
-      })
+      .map(resp => resp.map(m => Membership.createInstance(m)));
   }
 
   createTaskTeam(parentUid: string, taskTeamName: string, memberUids: string[]):Observable<any>{
