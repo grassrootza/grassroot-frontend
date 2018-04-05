@@ -1,3 +1,86 @@
+@media (min-width: 300px) {
+  #banner {
+    min-height: 240px; }
+  #banner h1 {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 28px;
+    margin-bottom: 30px;
+    margin-top: 15px; }
+  #banner .intro-content {
+    max-width: 65%; }
+
+}
+
+@media (min-width: 576px) {
+  #banner h1 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  #banner .intro-content {
+    max-width: 55%;
+  }
+}
+
+@media (min-width: 768px) {
+  #banner {
+    min-height: 320px; }
+  #banner h1 {
+    font-size: 55px;
+    line-height: 65px; }
+  #banner .intro-content {
+    max-width: 90%; }
+}
+
+@media (min-width: 992px) {
+  #banner .intro-content {
+    max-width: 75%; }
+}
+
+@media (min-width: 1200px) {
+  #banner .intro-content {
+    max-width: 55%; }
+}
+
+#banner {
+  border-radius: 0px;
+  margin-bottom: 0px;
+  background-size: cover;
+  position: relative;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("/assets/contribute_banner.jpg")
+}
+
+#banner .intro-content {
+  /*max-width: 770px;*/
+  width: 100%;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+}
+
+#banner .meet-vote-act {
+  font-size: 25px;
+  line-height: 36px;
+  color: #ffffff; }
+
+#banner h1 {
+  color: #ffffff;
+  font-weight: 100; }
+
+img.display-photo {
+  max-height: 320px;
+}
+
+.mission-statement .mission-para {
+  color: #1F1F1F;
+}
+
 .donation-form {
   /*position: relative;*/
   padding: 25px 15px;

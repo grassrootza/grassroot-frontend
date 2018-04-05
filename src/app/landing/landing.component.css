@@ -289,34 +289,6 @@ p {
   color: #ffffff;
   font-weight: 100; }
 
-/*.section-latest-news {*/
-  /*height: 75px;*/
-  /*background-color: #FFFFFF;*/
-  /*position: relative;*/
-  /*z-index: 2;*/
-  /*padding-top: 25px;*/
-  /*padding-bottom: 17px;*/
-  /*box-shadow: 0 2px 7px 0 rgba(0,0,0,0.15);*/
-/*}*/
-
-.latest-news-placeholder {
-  height: 28px;
-  width: 102px;
-  color: #4A4A4A;
-  font-family: Nunito;
-  font-size: 18px;
-  font-weight: 600;
-  line-height: 28px;
-}
-
-.latest-news-separator {
-  box-sizing: border-box;
-  margin-left: 10px;
-  height: 20px;
-  width: 2px;
-  border: 1px solid #4A4A4A;
-}
-
 .section-grey h2 {
   margin-bottom: 20px; }
 .section-grey p {

@@ -9,10 +9,6 @@
   padding-bottom: 10px;
 }
 
-.btn-secondary {
-  color: #7A7D8C;
-}
-
 .rectangle {
   height: 50px;
   border: 1px solid #929BAF;
@@ -23,7 +19,6 @@
   height: 0.79%;
   width: 3.43%;
   color: #4A4A4A;
-  font-family: Nunito;
   font-size: 14px;
   font-weight: 600;
   line-height: 16px;

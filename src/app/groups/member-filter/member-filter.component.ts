@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {UserProvince} from '../../user/model/user-province.enum';
 
 import {MembersFilter} from "./filter.model";
@@ -19,7 +19,7 @@ declare var $: any;
   templateUrl: './member-filter.component.html',
   styleUrls: ['./member-filter.component.css']
 })
-export class MemberFilterComponent implements OnInit {
+export class MemberFilterComponent implements OnInit, OnChanges {
 
   provinceKeys: string[];
   joinMethods: string[];
@@ -47,6 +47,7 @@ export class MemberFilterComponent implements OnInit {
   joinDateConditionType = null;
 
   public filterForm: FormGroup;
+  public hasCampaigns: boolean = false;
 
   private filter: MembersFilter = new MembersFilter();
 
@@ -58,6 +59,15 @@ export class MemberFilterComponent implements OnInit {
     this.joinMethods = Object.keys(GroupJoinMethod);
     this.userLanguages = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
     // console.log(this.userLanguages);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes && changes['campaigns'] && !changes['campaigns'].firstChange) {
+      this.hasCampaigns = this.campaigns && this.campaigns.length > 0;
+      console.log("campaigns changed, setting up? : ", this.hasCampaigns);
+      if (this.hasCampaigns)
+        setTimeout(() => this.setUpCampaignsSelect(), 100);
+    }
   }
 
   ngOnInit() {
@@ -89,7 +99,7 @@ export class MemberFilterComponent implements OnInit {
     $(".topics-multi-select-filter").select2({placeholder: "Select topics"});
     $(".affiliations-multi-select").select2({placeholder: "Select affiliations (organizations)"});
     $(".join-methods-multi-select").select2({placeholder: "Select sources"});
-    $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
+
     $(".language-multi-select").select2({placeholder: "Select languages"});
 
 
@@ -123,15 +133,23 @@ export class MemberFilterComponent implements OnInit {
       this.fireFilterChange();
     }.bind(this));
 
-    $(".campaigns-multi-select").on('change.select2', function () {
-      const data = $('.campaigns-multi-select').select2('data');
-      this.filter.campaigns = data.length > 0 ? data.map(tt => tt.id) : null;
-      this.fireFilterChange();
-    }.bind(this));
-
     $(".language-multi-select").on('change.select2', function () {
       const data = $('.language-multi-select').select2('data');
       this.filter.language = data.length > 0 ? data.map(tt => tt.id) : null;
+      this.fireFilterChange();
+    }.bind(this));
+
+    if (this.hasCampaigns) {
+      this.setUpCampaignsSelect();
+    }
+  }
+
+  setUpCampaignsSelect() {
+    console.log("setting up campaign select ...");
+    $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
+    $(".campaigns-multi-select").on('change.select2', function () {
+      const data = $('.campaigns-multi-select').select2('data');
+      this.filter.campaigns = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
   }

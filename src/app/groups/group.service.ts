@@ -16,7 +16,7 @@ import {Membership, MembersPage} from './model/membership.model';
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {getAddMemberInfo, GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
-import {getGroupMembersList, GroupRef} from './model/group-ref.model';
+import {GroupRef} from './model/group-ref.model';
 import {JoinCodeInfo} from './model/join-code-info';
 import {GroupPermissionsByRole} from './model/permission.model';
 import {GroupRelatedUserResponse} from './model/group-related-user.model';
@@ -573,7 +573,7 @@ export class GroupService {
 
   filterGroupMembers(groupUid: string,
                      filter: MembersFilter): Observable<Membership[]> {
-    console.log("filtering group members ...");
+    // console.log("filtering group members ...");
 
     let params = new HttpParams()
       .set("groupUid", groupUid);
@@ -620,9 +620,6 @@ export class GroupService {
     }
 
     let cbParams = params.set("cb", "" + (new Date()));
-
-    console.log("fetching filtered members, params = ", params);
-    this.httpClient.get(this.groupFilterMembersUrl, {params: cbParams}).subscribe(result => console.log("result: ", result));
 
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
       .map(resp => resp.map(m => Membership.createInstance(m)));

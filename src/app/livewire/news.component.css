@@ -19,6 +19,18 @@ h2 {
   line-height: 36px;
 }
 
+h3 {
+  font-weight: 100;
+  font-size: 22px;
+  line-height: 32px;
+}
+
+h4 {
+  font-weight: 100;
+  font-size: 20px;
+  line-height: 28px;
+}
+
 #banner h1 {
   color: #FFFFFF;
   font-weight: 100;
@@ -90,12 +102,10 @@ h2 {
 
 @media (min-width: 320px) {
   #banner {
-    min-height: 340px;
+    height: 200px;
   }
 
   #banner h1 {
-    font-size: 20px;
-    line-height: 28px;
     margin-bottom: 30px;
     margin-top: 15px;
   }
@@ -103,10 +113,6 @@ h2 {
 }
 
 @media (min-width: 576px) {
-  #banner h1 {
-    font-size: 20px;
-    line-height: 28px;
-  }
 
   #banner .intro-content {
     max-width: 55%;
@@ -115,8 +121,20 @@ h2 {
 
 @media (min-width: 768px) {
   #banner {
-    min-height: 530px; }
+    height: 280px;
+  }
   #banner h1 {
     font-size: 55px;
-    line-height: 65px; }
+    line-height: 65px;
+  }
+}
+
+@media (max-width: 768px) {
+  h4 {
+    font-size: 16px;
+    line-height: 24px;
+    text-align: justify;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
 }
