@@ -11,8 +11,8 @@ declare var $: any;
 export class NewsServiceService {
   
   private publicNewsUrl = environment.backendAppUrl + "/api/news/list/full";
-  private loadAlertUrl = environment.backendAppUrl + "/api/news/load/alert";
-
+  private alertPageNumberUrl = environment.backendAppUrl + "/api/news/page/number";
+  
   constructor(private httpClient:HttpClient) { }
 
   loadNews(pageNumber:number):Observable<PublicLivewirePage>{
@@ -34,8 +34,9 @@ export class NewsServiceService {
       }
       )
   }
-  loadAlert(alertUid:string):Observable<PublicLivewire>{
+  
+  findAlertPageNumber(alertUid:string):Observable<any>{
     let params = new HttpParams().set('alertUid',alertUid);
-    return this.httpClient.get<PublicLivewire>(this.loadAlertUrl,{params:params});
+    return this.httpClient.get(this.alertPageNumberUrl,{params:params});
   }
 }

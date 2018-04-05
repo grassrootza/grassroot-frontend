@@ -27,6 +27,7 @@ export class NewsComponent implements OnInit {
   public alertUid:string = "";
   public firstAlert:PublicLivewire;
   public alertIndex:number;
+  public outPageNumber:number;
 
   public loadFromOutside:boolean = false;
 
@@ -37,17 +38,27 @@ export class NewsComponent implements OnInit {
               @Inject(PLATFORM_ID) protected platformId: Object) { }
 
   ngOnInit() {
-    
     this.route.params.subscribe((params:Params) => {
-      this.loadNews(this.pageNumber);
       this.alertUid = params['id'];
       if(this.alertUid !== '0'){
         console.log("Alert uid .... Out load",this.alertUid);
         console.log("Alert uid",this.alertUid);
         this.loadFromOutside = true;
+        this.loadAndScrollToAlert(this.alertUid);
       }else{
-        console.log("Load news inside") 
+        console.log("Load news inside");
+        this.loadNews(this.pageNumber);
       }
+    });
+  }
+  
+  loadAndScrollToAlert(alertuid:string){
+    this.newsService.findAlertPageNumber(alertuid).subscribe(resp => {
+      console.log("Page number....",resp);
+      this.outPageNumber = resp;
+      this.loadNews(this.outPageNumber);
+    },error => {
+      console.log("Error finding alert page number",error);
     });
   }
   
@@ -61,11 +72,9 @@ export class NewsComponent implements OnInit {
           console.log("Loading from outside.....");
           if (isPlatformBrowser(this.platformId)){
             setTimeout(() => {
-              console.log("-------------->");
               var el = document.getElementById('target');
               document.querySelector('#target').scrollIntoView({behavior: 'smooth'});
             }, 2000)
-            //document.querySelector('#\\4').scrollIntoView({behavior: 'smooth'});
           }
         }
         
