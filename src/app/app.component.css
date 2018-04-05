@@ -90,6 +90,13 @@ footer .row {
   margin-bottom: 1rem;
 }
 
+.footer-subtitle {
+  color: #FFFFFF;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 22px;
+}
+
 .footer-wrapper-2 {
   background-color: #292929;
 }

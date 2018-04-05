@@ -4,7 +4,7 @@
     <div class="intro-content">
       <div class="meet-vote-act">MEET, VOTE, ACT </div>
       <h1>Mobilizing your community has never been this easy</h1>
-      <p><a class="call-to-action btn btn-success btn-lg" href="#" role="button">Get Started</a></p>
+      <p><a class="call-to-action btn btn-success btn-lg" href="#start" role="button">Get Started</a></p>
     </div><!-- /.intro-content -->
   </div>
 </div><!-- /.jumbotron -->
@@ -12,19 +12,12 @@
 <!-- Latest News -->
 
 <div class="section-latest-news">
-  <div class="row">
-    <div class="col-md-8 offset-md-2">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-2 col-sm-12 text-left">
-            <span class="latest-news-placeholder">Latest News</span>
-            <span class="latest-news-separator"></span>
-          </div>
-          <div class="col-md-10 col-sm-12" #tasknote>
-            <carousel [items]="newsList" [carouselContainerWidth]="carouselContainerWidth" [durationBetweenScrolls]="3000"></carousel>
-          </div>
-        </div>
-    </div>
+  <div class="container">
+    <div class="latest-news">
+      <h2>Latest News</h2>
+      <div class="news-headings row" #tasknote>
+        <carousel [items]="newsList" [carouselContainerWidth]="carouselContainerWidth" [durationBetweenScrolls]="3500"></carousel>
+      </div>
     </div>
   </div>
 </div><!-- /.section-latest-news -->
@@ -49,11 +42,12 @@
             <h3>Happening Now....</h3>
             <div style="overflow: hidden" #activitiesPlaceHolder>
               <div class="row" *ngFor="let activity of activitiesList" #activitiesRow>
-                <div class="col-sm-8">
-                  <i [class]="getIconForPublicActivityType(activity.type)"></i> {{activity.actorName}} - {{getTypeNameFormatted(activity.type)}}
+                <div class="col-lg-7 col-md-12">
+                  <img [src]="getImgSourceForPublicActivityType(activity.type)" class="icon-holder"/>
+                  {{activity.actorName}} {{ ('enum.PublicActivityType.' +  activity.type) | translate }}
                 </div>
-                <div class="col-sm-4 time col-12">
-                  {{activity.actionTimeMillis | date}}
+                <div class="col-lg-5 time col-md-12">
+                  {{activity.actionTimeMillis | timeAgo }}
                 </div>
               </div>
             </div>
@@ -140,6 +134,7 @@
         </div><!-- /.col-lg-6 -->
       </div><!-- /.row -->
       <div class="text-center"><a href="#" [routerLink]="['/register']" class="call-to-action btn btn-success">Register to start using our tools</a></div>
+      <div id="start"></div> <!-- reference for links -->
     </div><!-- /.container -->
   </div><!-- /.tools -->
 
@@ -290,7 +285,7 @@
         <div class="col-sm-3 col-6"><img src="assets/landing/donor10.jpg" alt="" class="img-fluid"></div>
         <div class="col-sm-3 col-6"><img src="assets/landing/donor11.jpg" alt="" class="img-fluid"></div>
       </div><!-- /.row -->
-      <p class="text-center"><a href="#" class="call-to-action btn btn-success">Learn more about our funding</a></p>
+      <!--<p class="text-center"><a href="#" class="call-to-action btn btn-success">Learn more about our funding</a></p>-->
 
 
       <!-- Contribute -->

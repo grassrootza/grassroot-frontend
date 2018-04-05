@@ -39,6 +39,7 @@ import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
 import {LoggingInterceptor} from "./utils/logging-interceptor.class";
+import {TimeAgoPipe} from "time-ago-pipe";
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import {LoggingInterceptor} from "./utils/logging-interceptor.class";
     PrivacyPolicyComponent,
     TermsOfUseComponent,
     AboutUsComponent,
-    ContributeComponent
+    ContributeComponent,
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,

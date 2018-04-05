@@ -60,7 +60,6 @@ export class CreateTodoComponent implements OnInit {
   }
 
   fetchGroupMembers(){
-    console.log("fetching group members");
     if(this.groupUid != "" && this.groupUid != undefined) {
       this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members =>{
         this.groupMembers = members.content;
@@ -86,11 +85,11 @@ export class CreateTodoComponent implements OnInit {
   initInformationRequiredTodo(){
     this.createTodoForm.addControl('responseTag', new FormControl('', Validators.required));
     this.createTodoForm.addControl('assignedMemberUids', new FormControl([]));
-    console.log("initInformationRequiredTodo");
+    // console.log("initInformationRequiredTodo");
   }
 
   initValidationRequiredTodo() {
-    console.log("initValidationRequiredTodo");
+    // console.log("initValidationRequiredTodo");
     this.createTodoForm.addControl("requireImages",new FormControl(false));
     this.createTodoForm.addControl("assignedMemberUids", new FormControl([], Validators.required));
     this.createTodoForm.addControl("confirmingMemberUids", new FormControl([], Validators.required));
@@ -101,11 +100,11 @@ export class CreateTodoComponent implements OnInit {
     this.createTodoForm.addControl("recurringPeriodMillis", new FormControl(0));
     this.createTodoForm.addControl("assignedMemberUids", new FormControl([]));
 
-    console.log("initActionRequiredTodo");
+    // console.log("initActionRequiredTodo");
   }
 
   initVolunteersNeededTodo(){
-    console.log("initVolunteersNeededTodo");
+    // console.log("initVolunteersNeededTodo");
     this.createTodoForm.addControl("assignedMemberUids", new FormControl([]));
 
   }
@@ -241,7 +240,6 @@ export class CreateTodoComponent implements OnInit {
         this.imageKey = resp;
         this.imageName = image.name;
         this.alertService.hideLoading();
-        console.log("Image Key...........",this.imageKey);
       },error =>{
         this.alertService.hideLoading();
         console.log("Error loading image");

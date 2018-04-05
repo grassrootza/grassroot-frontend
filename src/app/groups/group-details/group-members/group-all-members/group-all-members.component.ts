@@ -67,9 +67,9 @@ export class GroupAllMembersComponent implements OnInit {
     if (!this.currentPage) {
       this.alertService.showLoading();
     }
+    console.log("sorting users, retrieved sort: ", sort);
     this.filterMembersPage = sort;
-    this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort)
-      .subscribe(
+    this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort).subscribe(
         membersPage => {
           this.currentPage = membersPage;
           this.alertService.hideLoading();

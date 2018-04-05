@@ -64,6 +64,17 @@
     "LiveWireAlertType": {
       "INSTANT": "Flash Alert",
       "MEETING": "Public Gathering"
+    },
+    "PublicActivityType": {
+      "SIGNED_PETITION": "signed a petition",
+      "JOINED_GROUP": "joined a new group",
+      "CALLED_MEETING": "called a gathering",
+      "CALLED_VOTE": "issued a vote",
+      "CREATED_TODO": "set an action item",
+      "CREATED_GROUP": "created a new group",
+      "CREATED_ALERT": "issued a news alert",
+      "SENT_BROADCAST": "sent a broadcast",
+      "CREATED_CAMPAIGN": "created a campaign"
     }
   },
   "menu": {

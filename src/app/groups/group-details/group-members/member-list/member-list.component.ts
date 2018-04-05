@@ -164,19 +164,19 @@ export class MemberListComponent implements OnInit {
       !member.affiliations.every(s => !s);
   }
 
-  filterData(fieldToFilter: string){
+  sortData(fieldToSort: string){
     let direction = "";
-    if(fieldToFilter === "user.displayName"){
+    if(fieldToSort === "user.displayName"){
       this.showRoleFilter = 0;
       this.showProvinceFilter = 0;
       this.showPhoneFilter = 0;
       this.showEmailFilter = 0;
       switch (this.showNameFilter){
-        case 0: this.showNameFilter = 1; direction = "desc"; break;
-        case 1: this.showNameFilter = 2; direction = "asc"; break;
+        case 0: this.showNameFilter = 1; direction = "asc"; break;
+        case 1: this.showNameFilter = 2; direction = "desc"; break;
         case 2: this.showNameFilter = 0; direction = ""; break;
       }
-    }else if(fieldToFilter === "roleName"){
+    }else if(fieldToSort === "roleName"){
       this.showNameFilter = 0;
       this.showProvinceFilter = 0;
       this.showPhoneFilter = 0;
@@ -186,7 +186,7 @@ export class MemberListComponent implements OnInit {
         case 1: this.showRoleFilter = 2; direction = "asc"; break;
         case 2: this.showRoleFilter = 0; direction = ""; break;
       }
-    }else if(fieldToFilter === "user.province"){
+    }else if(fieldToSort === "user.province"){
       this.showNameFilter = 0;
       this.showRoleFilter = 0;
       this.showPhoneFilter = 0;
@@ -196,7 +196,7 @@ export class MemberListComponent implements OnInit {
         case 1: this.showProvinceFilter = 2; direction = "asc"; break;
         case 2: this.showProvinceFilter = 0; direction = ""; break;
       }
-    }else if(fieldToFilter === "user.phoneNumber"){
+    }else if(fieldToSort === "user.phoneNumber"){
       this.showNameFilter = 0;
       this.showRoleFilter = 0;
       this.showProvinceFilter = 0;
@@ -206,7 +206,7 @@ export class MemberListComponent implements OnInit {
         case 1: this.showPhoneFilter = 2; direction = "asc"; break;
         case 2: this.showPhoneFilter = 0; direction = ""; break;
       }
-    }else if(fieldToFilter === "user.emailAddress"){
+    }else if(fieldToSort === "user.emailAddress"){
       this.showNameFilter = 0;
       this.showRoleFilter = 0;
       this.showProvinceFilter = 0;
@@ -217,7 +217,7 @@ export class MemberListComponent implements OnInit {
         case 2: this.showEmailFilter = 0; direction = ""; break;
       }
     }
-    this.sortUserList.emit([fieldToFilter, direction]);
+    this.sortUserList.emit([fieldToSort, direction]);
     this.groupService.shouldReloadPaginationPagesNumbers(true);
   }
 

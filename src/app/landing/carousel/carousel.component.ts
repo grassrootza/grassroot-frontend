@@ -1,4 +1,14 @@
-import {AfterViewInit, Component, ElementRef, Inject, Input, PLATFORM_ID, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnChanges,
+  PLATFORM_ID,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 // import { CarouselItemDirective } from './carousel-item.directive';
 import {animate, AnimationBuilder, AnimationFactory, AnimationPlayer, style} from '@angular/animations';
 import {Observable} from 'rxjs/Rx';
@@ -11,9 +21,9 @@ import {PublicLivewire} from "../../livewire/public-livewire.model";
   templateUrl: './carousel.component.html',
   styleUrls: ['./carousel.component.css'],
 })
-export class CarouselComponent<T> implements AfterViewInit {
+export class CarouselComponent<T> implements AfterViewInit, OnChanges {
   @ViewChild('carousel') private carousel : ElementRef;
-  @Input() timing = '500ms ease-in';
+  @Input() timing = '800ms ease-in';
   @Input() durationBetweenScrolls: number = 2000;
   @Input() items: any[] = [];
   @Input() propertiesToDisplay: string[] = [];
@@ -29,22 +39,32 @@ export class CarouselComponent<T> implements AfterViewInit {
 
   ngAfterViewInit() {
     // For some reason only here I need to add setTimeout, in my local env it's working without this.
-    setTimeout(() => {
-      this.itemWidth = this.carouselContainerWidth;
-      this.carouselWrapperStyle = {
-        width: `${this.itemWidth}px`
-      };
 
-      const width = this.carouselContainerWidth;
-      this.carouselItemStyle = {
-        width: `${width}px`
-      };
-    });
+  }
 
-    if (isPlatformBrowser(this.platformId) && this.items && this.items.length > 1) {
-      this.startAutoScroll();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['items'] && !changes['items'].firstChange) {
+      if (isPlatformBrowser(this.platformId) && this.items && this.items.length > 1) {
+        this.startAutoScroll();
+      }
     }
 
+    if (changes['carouselContainerWidth']) {
+      this.setWidths();
+    }
+  }
+
+  setWidths() {
+    console.log("setting container width to: ", this.carouselContainerWidth);
+    this.itemWidth = this.carouselContainerWidth;
+    this.carouselWrapperStyle = {
+      width: `${this.itemWidth}px`
+    };
+
+    const width = this.carouselContainerWidth;
+    this.carouselItemStyle = {
+      width: `${width}px`
+    };
   }
 
 
@@ -96,6 +116,7 @@ export class CarouselComponent<T> implements AfterViewInit {
 
 
   private startAutoScroll() {
+    console.log("starting auto scroll with interval: ", this.durationBetweenScrolls);
     Observable.interval(this.durationBetweenScrolls).subscribe(() => {
       if(this.scrollDirection === 'left')
         this.left();

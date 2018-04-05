@@ -28,6 +28,7 @@ export class BroadcastConfirmComponent implements OnInit {
     this.contentFields = this.broadcastService.getContent();
     if (this.contentFields.emailContent) {
       this.strippedEmailContent = this.contentFields.emailContent.replace(emailStyleHeader, '');
+      console.log("stripped email content, now = ", this.strippedEmailContent);
     }
   }
 

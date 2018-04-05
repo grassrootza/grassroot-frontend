@@ -25,7 +25,7 @@ declare var $: any;
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.component.html',
-  styleUrls: [ './landing.component.css' ]
+  styleUrls: [ './landing.component.css', './news-style.css' ]
 })
 export class LandingComponent implements OnInit, AfterViewInit {
 
@@ -42,6 +42,10 @@ export class LandingComponent implements OnInit, AfterViewInit {
   public viewInited: boolean = false;
 
   private player: AnimationPlayer;
+
+  public pseudonyms: string[] = [
+
+  ];
 
   constructor(private alertService: AlertService,
               private publicActivityService: PublicActivityService,
@@ -67,8 +71,8 @@ export class LandingComponent implements OnInit, AfterViewInit {
           });
         });
 
-      //load new public activity every minute after that (60000 ms = 1min), remove this if we dont need to update news when user is on page.
-      Observable.interval(60000)
+      //load new public activity every half minute after that (30000 ms = 1min), remove this if we dont need to update news when user is on page.
+      Observable.interval(30000)
         .subscribe(() => {
           this.loadPublicActivity();
         });
@@ -83,23 +87,19 @@ export class LandingComponent implements OnInit, AfterViewInit {
           }
         );
     }
-
-    this.route.fragment.subscribe(fragment => {
-      this.anchorPoint = fragment;
-      this.scrollToAnchor(fragment);
-    });
   }
 
   ngAfterViewInit(): void {
     this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
+    console.log("carousel width: ", this.carouselContainerWidth);
     this.cdr.detectChanges();
-  }
 
-  scrollToAnchor(anchor: string) {
-    if (this.anchorPoint && isPlatformBrowser(this.platformId)) {
-      document.querySelector('#' + this.anchorPoint).scrollIntoView({behavior: 'smooth'});
-    } else if (isPlatformBrowser(this.platformId)) {
-      window.scrollTo(0, 0);
+    if (isPlatformBrowser(this.platformId)) {
+      Observable.fromEvent(window, 'resize')
+        .debounceTime(200)
+        .subscribe(() => {
+          this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
+        })
     }
   }
 
@@ -167,6 +167,28 @@ export class LandingComponent implements OnInit, AfterViewInit {
   }
 
 
+  getImgSourceForPublicActivityType(type: PublicActivityType): string {
+    if (type === PublicActivityType.SIGNED_PETITION) {
+      return 'assets/landing/icon_partners.jpg';
+    } else if (type === PublicActivityType.SENT_BROADCAST) {
+      return 'assets/landing/icon_call_broadcast.png';
+    } else if (type === PublicActivityType.CREATED_GROUP) {
+      return 'assets/landing/icon_create_group.jpg';
+    } else if (type === PublicActivityType.CALLED_MEETING) {
+      return 'assets/landing/icon_call_meeting.jpg';
+    } else if (type === PublicActivityType.CREATED_ALERT) {
+      return 'assets/icon_megaphone.png';
+    } else if (type === PublicActivityType.CREATED_CAMPAIGN) {
+      return 'assets/icon_megaphone.png';
+    } else if (type === PublicActivityType.JOINED_GROUP) {
+      return 'assets/landing/icon_connect.jpg';
+    } else if (type === PublicActivityType.CALLED_VOTE) {
+      return 'assets/landing/icon_vote.jpg';
+    } else if (type === PublicActivityType.CREATED_TODO) {
+      return 'assets/landing/icon_create_action.jpg';
+    }
+  }
+
   getIconForPublicActivityType(type: PublicActivityType): string {
     if (type === PublicActivityType.SIGNED_PETITION) {
       return 'far fa-file-alt';
@@ -184,6 +206,8 @@ export class LandingComponent implements OnInit, AfterViewInit {
       return 'fa-user-plus';
     } else if (type === PublicActivityType.CALLED_VOTE) {
       return 'far fa-check-square';
+    } else if (type === PublicActivityType.CREATED_TODO) {
+      return 'far fa-check-square';
     }
   }
 
@@ -192,14 +216,6 @@ export class LandingComponent implements OnInit, AfterViewInit {
       .subscribe(news => {
         this.newsList = news.content;
       });
-  }
-
-
-  public getTypeNameFormatted(type: PublicActivityType): string {
-    return type.toString()
-      .toLowerCase()
-      .split('_')
-      .join(' ');
   }
 
 }
