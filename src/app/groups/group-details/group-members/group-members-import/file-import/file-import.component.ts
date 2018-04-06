@@ -5,7 +5,7 @@ import {GroupMembersImportExcelSheetAnalysis} from '../../../../model/group-memb
 import {GroupAddMemberInfo} from '../../../../model/group-add-member-info.model';
 import {GroupModifiedResponse} from '../../../../model/group-modified-response.model';
 import {FileImportResult} from "./file-import-result";
-import {AlertService} from "../../../../../utils/alert.service";
+import {AlertService} from "../../../../../utils/alert-service/alert.service";
 import { saveAs } from 'file-saver';
 
 declare var $: any;

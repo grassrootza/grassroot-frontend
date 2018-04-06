@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {GroupRef} from "../../../../model/group-ref.model";
 import {GroupService} from "../../../../group.service";
-import {AlertService} from "../../../../../utils/alert.service";
+import {AlertService} from "../../../../../utils/alert-service/alert.service";
 import {Group} from "../../../../model/group.model";
 import {Membership} from "../../../../model/membership.model";
 
@@ -28,7 +28,7 @@ export class AddToTaskTeamComponent implements OnInit, OnChanges {
               private alertService: AlertService) { }
 
   ngOnInit() {
-    console.log("fired up task team modal");
+    // console.log("fired up task team modal");
   }
 
   ngOnChanges() {
@@ -36,7 +36,7 @@ export class AddToTaskTeamComponent implements OnInit, OnChanges {
   }
 
   toggleNewTeamNameEntry() {
-    console.log("group entity: ", this.group);
+    // console.log("group entity: ", this.group);
     this.creatingTaskTeam = !this.creatingTaskTeam;
     if (!this.creatingTaskTeam) {
       this.newTaskTeamName = null;
@@ -51,7 +51,7 @@ export class AddToTaskTeamComponent implements OnInit, OnChanges {
 
   saveAddMemberToTaskTeam(){
     let memberUids: string[] = this.members.map(member => member.user.uid);
-    console.log(`creating team: ${this.creatingTaskTeam}, and selected team: ${this.selectedTaskTeam}`);
+    // console.log(`creating team: ${this.creatingTaskTeam}, and selected team: ${this.selectedTaskTeam}`);
     if (this.creatingTaskTeam) {
       this.groupService.createTaskTeam(this.group.groupUid, this.newTaskTeamName, memberUids).subscribe(response => {
         this.alertAndCleanUp("group.allMembers.addToTaskTeam.createdDone");
@@ -73,7 +73,7 @@ export class AddToTaskTeamComponent implements OnInit, OnChanges {
   }
 
   cancelOrClose() {
-    console.log("exiting, reseting");
+    // console.log("exiting, reseting");
     this.resetValues();
     $('#' + this.modalId).modal('hide');
   }

@@ -14,7 +14,7 @@ import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";
 import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
-import {AlertService} from "../utils/alert.service";
+import {AlertService} from "../utils/alert-service/alert.service";
 import {CampaignService} from "../campaigns/campaign.service";
 import {SearchService} from "../search/search.service";
 
@@ -36,8 +36,6 @@ export class HomeComponent implements OnInit {
 
   public agendaBaseDate: Moment;
 
-  public toDoToRespond: Task = null;
-
   public createTaskGroupUid: string = null;
 
   private tasksLoadFinished = false;
@@ -46,12 +44,12 @@ export class HomeComponent implements OnInit {
 
   public taskToView:Task;
 
-  public voteResponse:string;
-
   public joinCandidateGroup:GroupRef;
   public isMemberPartOfGroup:boolean = false;
   public groupMembersRef:GroupMembersRef;
   public proposedSearchTerm: string = "";
+
+  public canManageCampaigns: boolean;
 
   constructor(private taskService: TaskService,
               private userService: UserService,
@@ -61,18 +59,19 @@ export class HomeComponent implements OnInit {
               private alertService: AlertService,
               private searchService:SearchService) {
     this.agendaBaseDate = moment().startOf('day');
+    // console.log("found the cookie? ", this.cookieService.get("testing"));
   }
 
   ngOnInit() {
+
+    this.canManageCampaigns = this.userService.hasActivePaidAccount();
 
     if (!this.tasksLoadFinished || !this.newMembersLoadFinished || !this.newMembersLoadFinished) {
       console.log("Showing spinner");
       this.alertService.showLoading();
     }
 
-    this.taskService.upcomingTasks
-      .subscribe(
-        tasks => {
+    this.taskService.upcomingTasks.subscribe(tasks => {
         if (tasks) {
           this.myTasks = this.groupTasksByDay(tasks);
           this.filterMyAgendaTasksRegardingBaseDate();
@@ -81,10 +80,8 @@ export class HomeComponent implements OnInit {
         }
         });
 
-    this.taskService.upcomingTaskError.subscribe(
-      error => {
+    this.taskService.upcomingTaskError.subscribe(error => {
         if (error) {
-          console.log("Tasks load failed:", error);
           this.tasksLoadFinished = true;
           this.hideSpinnerIfAllLoaded();
         }
@@ -112,32 +109,23 @@ export class HomeComponent implements OnInit {
         }
       );
 
-
-    this.groupService.groupInfoList
-      .subscribe(
-        groups => {
-          if (groups) {
-            this.pinnedGroups = groups.filter(gr => gr.pinned);
-            this.groupsLoadFinished = true;
-            this.hideSpinnerIfAllLoaded();
-          }
-        }
-      );
-
-    this.groupService.groupInfoList
-      .subscribe(
-        error => {
-          if (error) {
-            console.log("Pinned groups load failed!", error);
-            this.groupsLoadFinished = true;
-            this.hideSpinnerIfAllLoaded();
-          }
-        }
-      );
-
-    this.campaignService.campaignInfoList.subscribe(campaignList => {
-      this.activeCampaigns = campaignList.filter(cp => cp.isActive());
+    this.groupService.groupInfoList.subscribe(groups => {
+      if (groups) {
+        this.pinnedGroups = groups.filter(gr => gr.pinned);
+        this.groupsLoadFinished = true;
+        this.hideSpinnerIfAllLoaded();
+      }
+    }, error => {
+      console.log("Pinned groups load failed!", error);
+      this.groupsLoadFinished = true;
+      this.hideSpinnerIfAllLoaded();
     });
+
+    if (this.canManageCampaigns) {
+      this.campaignService.campaignInfoList.subscribe(campaignList => {
+        this.activeCampaigns = campaignList.filter(cp => cp.isActive());
+      });
+    }
 
     this.taskService.loadUpcomingUserTasks();
     this.groupService.fetchNewMembers(7, 0, 500);
@@ -149,7 +137,9 @@ export class HomeComponent implements OnInit {
   private hideSpinnerIfAllLoaded() {
     if (this.tasksLoadFinished && this.newMembersLoadFinished && this.groupsLoadFinished) {
       this.alertService.hideLoadingDelayed();
-      this.campaignService.loadCampaigns();
+      if (this.canManageCampaigns) {
+        this.campaignService.loadCampaigns();
+      }
     }
   }
 

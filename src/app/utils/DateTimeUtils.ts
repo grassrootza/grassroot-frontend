@@ -2,7 +2,7 @@ import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import * as moment from "moment";
 import {Moment} from "moment";
 import {AbstractControl, FormGroup} from "@angular/forms";
-import {urlPattern} from "./CustomValidators";
+import {urlPattern} from "../validators/CustomValidators";
 
 export class DateTimeUtils {
 

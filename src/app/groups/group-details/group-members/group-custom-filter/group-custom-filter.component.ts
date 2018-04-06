@@ -71,9 +71,10 @@ export class GroupCustomFilterComponent implements OnInit {
 
   membersFilterChanged(filter: MembersFilter) {
     this.loading = true;
-    this.groupService.filterGroupMembers(this.group.groupUid, filter)
-      .subscribe(
+    // console.log("loading filtered members, filter = ", filter);
+    this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(
         members => {
+          // console.log("got members back, refreshing ... members = ", members);
           this.loading = false;
           this.filteredMembers = members;
           this.currentFilter = filter;

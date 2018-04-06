@@ -4,7 +4,7 @@ import {BroadcastService} from "../../broadcast.service";
 import {BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BroadcastParams} from "../../model/broadcast-params";
-import {AlertService} from "../../../utils/alert.service";
+import {AlertService} from "../../../utils/alert-service/alert.service";
 
 @Component({
   selector: 'app-broadcast-type',

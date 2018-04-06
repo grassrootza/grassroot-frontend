@@ -1,0 +1,141 @@
+<div class="modal fade" id="create-livewire-alert-modal" tabindex="-1" role="dialog" aria-labelledby="create-livewire-alert-modal"
+     aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.activity.livewireModal.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="createLivewireForm"
+              (ngSubmit)="createLivewire()" enctype="multipart/form-data">
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="livewire-subject">{{ 'group.activity.livewireModal.subject.label' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="livewire-subject"
+                     placeholder="{{ 'group.activity.livewireModal.subject.placeholder' | translate }}"
+                     name="headline" [formControl]="createLivewireForm.controls['headline']">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="contact-person">{{ 'group.activity.livewireModal.contactPerson' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <div id="contact-person">
+                <input type="radio" name="contact" value="me" [formControl]="createLivewireForm.controls['contact']">Me
+                <input type="radio" name="contact" value="someone" [formControl]="createLivewireForm.controls['contact']">Someone else
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="createLivewireForm.controls['contact']?.value === 'someone'">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="contact-person-name">{{ 'group.activity.livewireModal.contactSomeone.label' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="contact-person-name"
+                     placeholder="{{ 'group.activity.livewireModal.contactSomeone.placeholder' | translate }}"
+                     name="contactPersonName" [formControl]="createLivewireForm.controls['contactPersonName']">
+            </div>
+
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="contact-person-number">{{ 'group.activity.livewireModal.contactSomeoneNumber.label' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="contact-person-number"
+                     placeholder="{{ 'group.activity.livewireModal.contactSomeoneNumber.placeholder' | translate }}"
+                     name="contactPersonNumber" [formControl]="createLivewireForm.controls['contactPersonNumber']">
+            </div>
+          </div>
+
+          <div *ngIf="meetings.length > 0" class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="alert-type">{{ 'group.activity.livewireModal.alertType' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <div id="alert-type">
+                <input type="radio" name="alertType" value="general" [formControl]="createLivewireForm.controls['alertType']">General news
+                <input type="radio" name="alertType" value="public" [formControl]="createLivewireForm.controls['alertType']">Public gathering
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group row" *ngIf="createLivewireForm.controls['alertType']?.value === 'public'">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="meetings">{{ 'group.activity.livewireModal.publicGathering.label' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="meetings" name="selectMeeting"
+                      [formControl]="createLivewireForm.controls['selectMeeting']"
+                      (change)="onChangeSelectMeeting($event.target.value)">
+                <option *ngFor="let meeting of meetings" [ngValue]="meeting.taskUid">{{meeting.title}}</option>
+              </select>
+            </div>
+          </div>
+
+
+          <!--Image upload-->
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="alertImage">{{ 'group.activity.livewireModal.image.label' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <input class="form-control" type="file" id="alertImage"
+              name="file" #file [formControl]="createLivewireForm.controls['file']"
+              (change)="uploadImage($event,showFileNames)" multiple="multiple">
+              <input #showFileNames type="hidden">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="destination">{{ 'group.activity.livewireModal.destination.label' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="destination" name="destination"
+                      [formControl]="createLivewireForm.controls['destination']"
+                      (change)="selectDest($event.target.value)">
+                <option value="SINGLE_AND_PUBLIC">{{'group.activity.livewireModal.destination.both' | translate}}</option>
+                <option value="PUBLIC_LIST">{{'group.activity.livewireModal.destination.public' | translate}}</option>
+                <option value="SINGLE_LIST">{{'group.activity.livewireModal.destination.myMediaList' | translate}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-right">
+              <label for="articleText">{{ 'group.activity.livewireModal.articleText.label' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <textarea type="text" maxlength="150" class="form-control" id="articleText"
+                placeholder="{{'group.activity.livewireModal.articleText.placeholder' | translate}}"
+                       name="articleText" [formControl]="createLivewireForm.controls['articleText']">
+              </textarea>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary save-button" (click)="createLivewire()" [disabled]="!createLivewireForm.valid">{{
+          'action.send' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+

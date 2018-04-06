@@ -1,23 +1,30 @@
-<div class="card group-summary" *ngIf="group">
+<div class="container primary-container">
+  <div class="row mt-1 mb-3" *ngIf="group">
+    <div class="col-12">
+      <a [routerLink]="['/group', group.groupUid]" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i> {{ 'general.breadcrumb.group' | translate }}</a>
+    </div>
+  </div>
 
-  <div class="card-body">
-    <div class="row">
-      <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1">
-        <div class="d-flex justify-content-center">
-          <h1>Import lists into master group</h1>
+  <div class="card group-summary" *ngIf="group">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-lg-6 col-md-8 col-sm-10 offset-lg-3 offset-md-2 offset-sm-1">
+          <div class="d-flex justify-content-center">
+            <h1>Import lists into master group</h1>
+          </div>
+          <div class="d-flex justify-content-center">
+            <h3>{{group.name}}</h3>
+          </div>
         </div>
-        <div class="d-flex justify-content-center">
-          <h3>{{group.name}}</h3>
-        </div>
-      </div>
 
-      <div class="col-12 d-flex justify-content-center mt-3">
-        <div class="tab-area col-12">
-          <router-outlet></router-outlet>
+        <div class="col-12 d-flex justify-content-center mt-3">
+          <div class="tab-area col-12">
+            <router-outlet></router-outlet>
+          </div>
         </div>
+
       </div>
 
     </div>
-
   </div>
 </div>

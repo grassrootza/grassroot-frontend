@@ -1,0 +1,195 @@
+<div class="container primary-container">
+  <!-- CASE 1 : token validation failed -->
+  <div class="card" *ngIf="securityFailed">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12 text-center">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'task.authfailed.title'">Security check failed</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p [translate]="'task.authfailed.body'">Looks like you're trying something</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 2: token validation is fine, but task is already in the past -->
+  <div class="card" *ngIf="task && !task.isActive()">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12 text-center">
+        <div class="card-body" *ngIf="!succeeded && !failed">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'task.' + taskKey + '.respond.closed.title'">Already past</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p [translate]="'task.' + taskKey + '.respond.closed.body'"
+                 [translateParams]="{caller: task.createdByUserName}">This stuff already happened</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 3: slightly more complex, task is active, but already responded -- if it's a meeting, can change -->
+  <div class="card" *ngIf="task && task.isActive() && task.hasResponded">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12 text-center">
+        <div class="card-body" *ngIf="!succeeded && !failed">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'task.' + taskKey + '.respond.already.title'">Are you attending?</h3>
+            </div>
+          </div>
+          <div class="row" *ngIf="taskType !== 'MEETING'">
+            <div class="col-12">
+              <p [translate]="'task.' + taskKey + '.respond.already.body'"
+                 [translateParams]="{caller: task.createdByUserName}">You've already done it</p>
+            </div>
+          </div>
+          <div class="row" *ngIf="taskType == 'MEETING'">
+            <div class="col-12"><p [translate]="meetingRespondedParaKey">You said you're going</p></div>
+          </div>
+          <div class="row" *ngIf="taskType == 'MEETING'">
+            <div class="col-12">
+              <button type="button" class="btn btn-secondary save-button hover-primary" (click)="respondToTask('yes')"
+                      [translate]="yesButtonKey">Yes</button>
+              <button type="button" class="btn btn-secondary save-button hover-danger" (click)="respondToTask('no')"
+                      [translate]="noButtonKey">No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. MAIN EVENT - most likely scenario -->
+  <div class="card" *ngIf="task && task.isActive()">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12 text-center">
+        <div class="card-body" *ngIf="!task.hasResponded && !succeeded && !failed">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'task.' + taskKey + '.respond.title'">Are you attending?</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p *ngIf="taskType !== 'TODO'" [translate]="'task.' + taskKey + '.respond.body'"
+                [translateParams]="{caller: task.createdByUserName, location: task.location, title: task.title, date: dateString}">
+                Someone has called a meeting about something, at a place, on a time. Will you attend?
+              </p>
+              <p *ngIf="taskType == 'TODO'" [translate]="'task.todo.respond.body.' + todoKey"
+                 [translateParams]="{caller: task.createdByUserName, title: task.title, date: dateString}">
+                Someone has requested information about something. If you want to respond, just type your response below and click 'submit'.
+              </p>
+            </div>
+          </div>
+
+          <!-- action item responding, if it's an information one -->
+          <div class="row" *ngIf="taskType == 'TODO' && task.todoType == 'INFORMATION_REQUIRED'">
+            <div class="col-12">
+              <div class="form-group">
+                <input type="text" class="form-control form-control-em" [(ngModel)]="response" />
+              </div>
+            </div>
+          </div>
+
+          <!-- vote responding: options & a captcha -->
+          <div class="row mb-3" *ngIf="taskType == 'VOTE'">
+            <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-12">
+              <div class="dropdown">
+                <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                  {{ !!response ? (response) : '(Select)' }}</button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" *ngFor="let option of task.voteOptions" (click)="response = option">
+                    {{ option }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row" *ngIf="taskType == 'VOTE' && !loggedInUser">
+            <div class="col-12">
+              <div class="form-group"> <!-- for others, token should be sufficient -->
+                <div align="center" appRecaptcha [formControl]="recaptcha"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- votes and information todos only have a 'submit button' -->
+          <div class="row" *ngIf="singleButton">
+            <div class="col-12">
+              <button type="button" class="btn btn-primary save-button"
+                      [disabled]="(recaptcha && !recaptcha.valid) || !response"
+                      (click)="respondToTask()" [translate]="yesButtonKey">Submit</button>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="!singleButton">
+            <div class="col-12">
+              <button type="button" class="btn btn-secondary save-button hover-primary" (click)="respondToTask('yes')"
+                      [translate]="yesButtonKey">Yes</button>
+              <button type="button" class="btn btn-secondary save-button hover-danger" (click)="respondToTask('no')"
+                      [translate]="noButtonKey">No</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="card-body" *ngIf="succeeded">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'action.done'">Done</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p [translate]="successParaKey">
+                Done. Your attendance has been recorded and, if the meeting organizer has set one, you will be reminded before time. What next?
+            </div>
+          </div>
+          <div class="row" *ngIf="!loggedInUser">
+            <div class="col-12">
+              <button type="button" class="btn btn-primary save-button" [routerLink]="['/login']"
+                      [translate]="'menu.landing.login'">Login</button>
+              <button type="button" class="btn btn-primary save-button" [routerLink]="['/register']"
+                      [translate]="'menu.landing.register'">Register</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="loggedInUser">
+            <div class="col-12">
+              <button type="button" class="btn btn-primary save-button" [routerLink]="['/home']"
+                      [translate]="'menu.home'">Home</button>
+              <button type="button" class="btn btn-primary save-button" [routerLink]="['/register']"
+                      [translate]="'menu.group'">View group</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body" *ngIf="failed">
+          <div class="row">
+            <div class="col-12">
+              <h3 [translate]="'action.error'">Error</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <p [translate]="'task.respond.' + taskKey + '.failed'">Sorry, something went wrong recording your vote. Please try again later or just dial *134*1994#</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

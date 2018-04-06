@@ -9,7 +9,7 @@ import {TranslateService} from "@ngx-translate/core";
 import {JoinCodeInfo} from "../model/join-code-info";
 
 import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import { saveAs } from 'file-saver';
 
 declare var $: any;

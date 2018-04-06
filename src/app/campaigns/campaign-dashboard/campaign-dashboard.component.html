@@ -1,9 +1,13 @@
-<div *ngIf="campaign != null">
+<div class="container primary-container" *ngIf="campaign != null">
+  <div class="row mb-3">
+    <div class="col-12">
+      <a [routerLink]="['/campaigns']" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i> {{ 'general.breadcrumb.campaigns' | translate }}</a>
+    </div>
+  </div>
 
-  <div class="card campaign-summary">
+  <div class="card">
     <div class="card-body">
       <h2 class="campaign-title">{{ campaign.name }}</h2>
-
       <div class="row">
         <div class="col-md-4">
           <img *ngIf="campaignImageUrl" class="img-fluid" [src]="campaignImageUrl" />

@@ -1,24 +1,26 @@
-<div class="card">
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-3">
-        <nav class="navbar navbar-expand-lg navbar-light">
-          <div class="collapse navbar-collapse" id="userProfileNavbar">
-            <ul class="main-nav navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" [ngClass]="{active: currentTab === 'profile'}" [routerLink]="['profile']" [translate]="'menu.profile'">My profile</a>
-                <a class="nav-link" [ngClass]="{active: currentTab === 'password'}" [routerLink]="['password']" [translate]="'menu.password'"></a>
-                <a class="nav-link" [ngClass]="{active: currentTab === 'account'}" [routerLink]="['account']" [translate]="'menu.account'"></a>
-                <a class="nav-link" [ngClass]="{active: currentTab === 'integrations'}" [routerLink]="['integrations']" [translate]="'menu.integrations'"></a>
-                <a class="nav-link" href="" (click)="logout()" [translate]="'menu.logout'"></a>
-              </li>
-            </ul>
+<div class="container primary-container">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-3">
+          <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="userProfileNavbar">
+              <ul class="main-nav navbar-nav mr-auto">
+                <li class="nav-item">
+                  <a class="nav-link" [ngClass]="{active: currentTab === 'profile'}" [routerLink]="['profile']" [translate]="'menu.profile'">My profile</a>
+                  <a class="nav-link" [ngClass]="{active: currentTab === 'password'}" [routerLink]="['password']" [translate]="'menu.password'"></a>
+                  <a class="nav-link" [ngClass]="{active: currentTab === 'account'}" [routerLink]="['account']" [translate]="'menu.account'"></a>
+                  <a class="nav-link" [ngClass]="{active: currentTab === 'integrations'}" [routerLink]="['integrations']" [translate]="'menu.integrations'"></a>
+                  <a class="nav-link" href="" (click)="logout()" [translate]="'menu.logout'"></a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        </div>
+        <div class="col-md-9">
+          <div class="tab-area" >
+            <router-outlet></router-outlet>
           </div>
-        </nav>
-      </div>
-      <div class="col-md-9">
-        <div class="tab-area" >
-          <router-outlet></router-outlet>
         </div>
       </div>
     </div>

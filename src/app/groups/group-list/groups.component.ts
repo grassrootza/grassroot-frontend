@@ -3,7 +3,7 @@ import {GroupService} from "../group.service";
 import {GroupInfo} from "../model/group-info.model";
 import {GroupRef} from "../model/group-ref.model";
 import {Router} from "@angular/router";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {TranslateService} from "@ngx-translate/core";
 
 declare var $: any;

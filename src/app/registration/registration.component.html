@@ -1,89 +1,96 @@
-<div id="banner-image"></div>
-<div class="row">
-  <div class="container col-md-8 offset-md-4">
-    <h1 class="display-1 register-banner">{{ 'registration.banner' | translate }}</h1>
-    <h2 class="display-2 register-sub-banner">{{ 'registration.sub-banner' | translate | uppercase }}</h2>
+<div class="jumbotron" id="banner">
+  <div class="container text-center">
+    <div class="intro-content">
+      <h1 [translate]="'registration.banner'">Welcome to Grassroot</h1>
+      <h2 class="display-2 register-sub-banner">{{ 'registration.sub-banner' | translate | uppercase }}</h2>-->
+    </div><!-- /.intro-content -->
   </div>
-</div>
+</div><!-- /.jumbotron -->
 
-<div class="row mt-md-3 pt-5">
-  <div class="col-12 text-center">
-    <h2>{{ 'registration.title' | translate }}</h2>
+<div class="container">
+  <div class="row mt-3">
+    <div class="col-12 text-center">
+      <h2>{{ 'registration.title' | translate }}</h2>
+    </div>
   </div>
-</div>
-<div class="row mt-md-3">
-  <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
-    <div class="card">
-      <div class="card-body">
-        <form [formGroup]="regForm" (submit)="register()">
-          <div class="form-group">
-            <label for="name" class="grassroot-label-em">{{ 'registration.displayname' | translate }}</label>
-            <input formControlName="name" type="text" class="form-control form-control-em" name="name" id="name">
-            <div class="alert alert-danger" role="alert"
-                 *ngIf="regForm.get('name').invalid && (regForm.get('name').touched || regForm.get('name').dirty)">
-              <div *ngIf="regForm.get('name').errors.required">Name is required</div>
-              <div *ngIf="regForm.get('name').errors.minlength">Name must be at least two characters</div>
+  <div class="row mt-md-3">
+    <div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-12">
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="regForm" (submit)="register()">
+            <div class="form-group">
+              <label for="name" class="grassroot-label-em">{{ 'registration.displayname' | translate }}</label>
+              <input formControlName="name" type="text" class="form-control form-control-em" name="name" id="name">
+              <div class="alert alert-danger" role="alert"
+                   *ngIf="regForm.get('name').invalid && (regForm.get('name').touched || regForm.get('name').dirty)">
+                <div *ngIf="regForm.get('name').errors.required">Name is required</div>
+                <div *ngIf="regForm.get('name').errors.minlength">Name must be at least two characters</div>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label for="phone" class="grassroot-label-em">{{ 'registration.phoneNumber' | translate }}</label>
-            <input formControlName="phone" type="text" class="form-control form-control-em" name="phone" id="phone">
-            <div class="alert alert-danger" role="alert"
-                 *ngIf="regForm.get('phone').invalid && (regForm.get('phone').touched)">
-              <div *ngIf="regForm.get('phone').errors.validZaPhone">Please enter a valid South African number</div>
+            <div class="form-group">
+              <label for="phone" class="grassroot-label-em">{{ 'registration.phoneNumber' | translate }}</label>
+              <input formControlName="phone" type="text" class="form-control form-control-em" name="phone" id="phone">
+              <div class="alert alert-danger" role="alert"
+                   *ngIf="regForm.get('phone').invalid && (regForm.get('phone').touched)">
+                <div *ngIf="regForm.get('phone').errors.validZaPhone">Please enter a valid South African number</div>
+              </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label for="email" class="grassroot-label-em">{{ 'registration.emailAddress' | translate }}</label>
-            <input formControlName="email" type="text" class="form-control form-control-em" name="email" id="email">
-            <div class="alert alert-danger" role="alert"
-                 *ngIf="regForm.get('email').invalid && (regForm.get('email').touched)">
-              <div *ngIf="regForm.get('email').errors.email">Please enter a valid email address</div>
+            <div class="form-group">
+              <label for="email" class="grassroot-label-em">{{ 'registration.emailAddress' | translate }}</label>
+              <input formControlName="email" type="text" class="form-control form-control-em" name="email" id="email">
+              <div class="alert alert-danger" role="alert"
+                   *ngIf="regForm.get('email').invalid && (regForm.get('email').touched)">
+                <div *ngIf="regForm.get('email').errors.email">Please enter a valid email address</div>
+              </div>
             </div>
-          </div>
 
-          <div class="form-row">
-            <div class="form-group col-sm-12">
-              <p class="footnote">
-                {{ 'registration.footnote' | translate }}
-              </p>
+            <div class="form-row">
+              <div class="form-group col-sm-12">
+                <p class="footnote">
+                  {{ 'registration.footnote' | translate }}
+                </p>
+              </div>
             </div>
+
+            <div class="form-group">
+              <label for="password" class="grassroot-label-em">{{ 'registration.password' | translate }}</label>
+              <input formControlName="password" type="password" class="form-control form-control-em" name="password" id="password">
+            </div>
+
+            <div class="form-group">
+              <div align="center" class="recaptcha-holder" appRecaptcha formControlName="captcha"></div>
+            </div>
+
+            <div class="form-group text-center mt-md-3">
+              <button [disabled]="!regForm.valid" type="submit" class="btn btn-primary register-button">
+                {{ 'action.signUp' | translate }}
+              </button>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-sm-12">
+                <p class="footnote">Note: Grassroot is currently deployed for South African mobile phone numbers. Foreign numbers,
+                  or email only registrations, will work, but some functionality may be restricted.</p>
+              </div>
+            </div>
+
+          </form>
+
+          <div class="alert alert-danger my-lg-3" role="alert" *ngIf="message">
+            {{ message }}
           </div>
 
-          <div class="form-group">
-            <label for="password" class="grassroot-label-em">{{ 'registration.password' | translate }}</label>
-            <input formControlName="password" type="password" class="form-control form-control-em" name="password" id="password">
+          <div class="form-group text-center grassroot-label-em">
+            {{ 'registration.haveAccountQ' | translate }}<br>
+            <a class="grassroot-link" [routerLink]="['/login']">{{ 'registration.haveAccountLink' | translate }}</a>
           </div>
 
-          <div class="form-group">
-            <div align="center" appRecaptcha formControlName="captcha"></div>
-          </div>
 
-          <div class="form-group text-center mt-md-3">
-            <button [disabled]="!regForm.valid" type="submit" class="btn btn-primary register-button">
-              {{ 'action.signUp' | translate }}
-            </button>
-          </div>
-
-        </form>
-
-        <div class="alert alert-danger my-lg-3" role="alert" *ngIf="message">
-          {{ message }}
         </div>
-
-        <div class="form-group text-center grassroot-label-em">
-          {{ 'registration.haveAccountQ' | translate }}<br>
-          <a class="grassroot-link" [routerLink]="['/login']">{{ 'registration.haveAccountLink' | translate }}</a>
-        </div>
-
 
       </div>
-
     </div>
   </div>
 </div>
-
-
-

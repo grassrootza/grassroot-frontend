@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {BroadcastService} from "../broadcast.service";
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 
 @Component({
   selector: 'app-broadcast-create',

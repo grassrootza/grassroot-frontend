@@ -1,0 +1,15 @@
+.btn.dropdown-toggle {
+  padding: 0.5rem;
+  width: 100%;
+  background-color: white;
+  border: solid 1px #cccccc;
+  text-align: left;
+}
+
+.dropdown-menu {
+  width: 100%;
+}
+
+.dropdown-item {
+  width: 100%;
+}

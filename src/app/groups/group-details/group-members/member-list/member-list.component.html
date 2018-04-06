@@ -4,7 +4,7 @@
       <input type="checkbox" class="checkbox-shape" (click)="selectAllOnPage($event)"/>
     </div>
 
-    <div class="col-2" (click)="filterData('user.displayName')"> {{'group.allMembers.table.name' | translate}}
+    <div class="col-2" (click)="sortData('user.displayName')"> {{'group.allMembers.table.name' | translate}}
         <span *ngIf="showNameFilter == 0">
           <i class="fas fa-sort"></i>
         </span>
@@ -15,7 +15,7 @@
           <i class="fas fa-sort-up"></i>
         </span>
     </div>
-    <div class="col-2" (click)="filterData('roleName')">{{'group.allMembers.table.role' | translate}}
+    <div class="col-2" (click)="sortData('roleName')">{{'group.allMembers.table.role' | translate}}
       <span *ngIf="showRoleFilter == 0">
           <i class="fas fa-sort"></i>
         </span>
@@ -26,7 +26,7 @@
           <i class="fas fa-sort-up"></i>
       </span>
     </div>
-    <div class="col-2" (click)="filterData('user.province')">{{'group.allMembers.table.province' | translate}}
+    <div class="col-2" (click)="sortData('user.province')">{{'group.allMembers.table.province' | translate}}
       <span *ngIf="showProvinceFilter == 0">
           <i class="fas fa-sort"></i>
       </span>
@@ -37,7 +37,7 @@
           <i class="fas fa-sort-up"></i>
       </span>
     </div>
-    <div class="col-2" (click)="filterData('user.phoneNumber')">{{'group.allMembers.table.phone' | translate}}
+    <div class="col-2" (click)="sortData('user.phoneNumber')">{{'group.allMembers.table.phone' | translate}}
       <span *ngIf="showPhoneFilter == 0">
           <i class="fas fa-sort"></i>
       </span>
@@ -48,7 +48,7 @@
           <i class="fas fa-sort-up"></i>
       </span>
     </div>
-    <div class="col-2" (click)="filterData('user.emailAddress')">{{'group.allMembers.table.email' | translate}}
+    <div class="col-2" (click)="sortData('user.emailAddress')">{{'group.allMembers.table.email' | translate}}
       <span *ngIf="showEmailFilter == 0">
           <i class="fas fa-sort"></i>
       </span>

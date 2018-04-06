@@ -3,7 +3,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TaskService} from "../task.service";
 import {Task} from "../task.model";
 import {convertResponseMap, TaskResponse} from "../task-response";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {TodoType} from "../todo-type";
 import { saveAs } from 'file-saver';
 import {TaskType} from "../task-type";

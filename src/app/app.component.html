@@ -12,25 +12,24 @@
           <img src="assets/grassroot-01.png"/>
         </a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" (click)="toggleMenuCollapse()" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault" [class.show]="showMenu">
           <ul class="main-nav navbar-nav mr-auto">
 
             <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/home')}">
-              <a class="nav-link" [routerLink]="['/home']"> {{ 'menu.home' | translate }} <span class="sr-only">(current)</span> </a>
+              <a class="nav-link" (click)="navigateToMainLink('/home')"> {{ 'menu.home' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
 
             <li class="nav-item"
                 [ngClass]="{active: currentUrl === '/groups' || currentUrl.startsWith('/group/') || currentUrl.startsWith('/broadcast/create/')}">
-              <a class="nav-link" [routerLink]="['/groups']"> {{ 'menu.groups' | translate }} <span class="sr-only">(current)</span> </a>
+              <a class="nav-link" (click)="navigateToMainLink('/groups')"> {{ 'menu.groups' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
 
             <li class="nav-item" [ngClass]="{active: currentUrl === '/campaigns' || currentUrl.startsWith('/campaigns/')}">
-              <a class="nav-link" [routerLink]="['/campaigns']"> {{ 'menu.campaigns' | translate }} <span
+              <a class="nav-link" (click)="navigateToMainLink('/campaigns')"> {{ 'menu.campaigns' | translate }} <span
                 class="sr-only">(current)</span>
               </a>
             </li>
@@ -45,7 +44,7 @@
 
             <ul class="nav-item" class="navbar-nav mr-auto">
 
-              <li class="nav-item dropdown notifications">
+              <li class="nav-item dropdown notifications d-none d-lg-block">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                   <span *ngIf="notifications.length > 0"
@@ -57,7 +56,7 @@
                     Mark all read
                   </a>
                   <a *ngFor="let ntf of notifications" class="dropdown-item" href="#"
-                     (click)="handleNotificationClick($event)">
+                     (click)="handleNotificationClick($event, ntf.uid)">
                     <div class="notification-item">
                       <span class="notification-item-title">{{ntf.message}}</span><br/>
                       <span class="notification-item-time">{{ntf.createdDatetime.fromNow()}}</span>
@@ -69,7 +68,7 @@
                 </div>
               </li>
 
-              <li class="nav-item dropdown help">
+              <li class="nav-item dropdown help d-none d-xl-block">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                   <img src="assets/icon-help.png"/> {{ 'menu.help' | translate }}
@@ -90,6 +89,8 @@
                   <a class="dropdown-item" [routerLink]="['/user/password']">{{ 'menu.password' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/account']">{{ 'menu.account' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/integrations']">{{ 'menu.integrations' | translate }}</a>
+                  <a class="dropdown-item" *ngIf="loggedInUser.hasSystemAdmin()">Admin panel</a>
+                  <a class="dropdown-item" href="/">Delete my profile</a>
                   <a class="dropdown-item" href="/" (click)="logout();">{{ 'menu.logout' | translate }}</a>
                 </div>
               </li>
@@ -105,37 +106,37 @@
           <img src="assets/grassroot-01.png"/>
         </a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-                aria-controls="navbarsLoggedOut" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" (click)="toggleMenuCollapse()" aria-controls="navbarsLoggedOut" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarsLoggedOut">
+        <div class="collapse navbar-collapse" id="navbarsLoggedOut" [class.show]="showMenu">
           <ul class="main-nav navbar-nav mr-auto">
 
             <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/news')}">
-              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.news' | translate }} <span class="sr-only">(current)</span> </a>
+              <a class="nav-link" (click)="navigateToMainLink('/news')"> {{ 'menu.landing.news' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
 
             <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/about')}">
-              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.about' | translate }} <span class="sr-only">(current)</span> </a>
+              <a class="nav-link" (click)="navigateToMainLink('/about')"> {{ 'menu.landing.about' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
 
             <li class="nav-item" [ngClass]="{active: currentUrl.startsWith('/contribute')}">
-              <a class="nav-link" [routerLink]="['/news']"> {{ 'menu.landing.contribute' | translate }} <span class="sr-only">(current)</span> </a>
+              <a class="nav-link" (click)="navigateToMainLink('/contribute')"> {{ 'menu.landing.contribute' | translate }} <span class="sr-only">(current)</span> </a>
             </li>
+
           </ul>
 
-          <div class=" my-2 my-lg-0">
+          <div class="my-2 my-lg-0">
 
             <ul class="nav-item" class="navbar-nav mr-auto">
 
               <li class="nav-item">
-                <a class="btn btn-secondary nav-login" [routerLink]="['/login']"> {{ 'menu.landing.login' | translate }} </a>
+                <a class="btn btn-secondary nav-login" (click)="navigateToMainLink('/login')"> {{ 'menu.landing.login' | translate }} </a>
               </li>
 
               <li class="nav-item">
-                <a class="btn btn-primary btn-nav" [routerLink]="['/register']"> {{ 'menu.landing.register' | translate }} </a>
+                <a class="btn btn-primary nav-register" style="color: white" (click)="navigateToMainLink('/register')"> {{ 'menu.landing.register' | translate }} </a>
               </li>
 
             </ul>
@@ -153,9 +154,9 @@
 
   </div>
 
-  <div class="container main-content">
+  <div class="container-fluid main-content">
 
-    <div class="container ntf-popup" *ngIf="popupNotification"
+    <div class="container ntf-popup mt-3" *ngIf="popupNotification"
          (mouseenter)="popupNotificationMouseEnter()" (mouseleave)="popupNotificationMouseExit()">
         <div class="row">
           <div class="col-md-12 col-sm-12">
@@ -180,16 +181,17 @@
     <div class="footer-wrapper container-fluid ">
       <div class="container footer-content">
         <div class="row">
-          <div class="col-6">
+          <div class="col-md-6 col-sm-12">
             <img class="footer-logo" src="assets/grassroot-02.png"/> <br/>
-            <a href="#">{{ 'footer.aboutUs' | translate }}</a>
-            <a href="#">{{ 'footer.news' | translate }}</a>
-            <a href="#">{{ 'footer.contribute' | translate }}</a>
-            <a href="#">{{ 'footer.contactUs' | translate }}</a>
+            <!--<span class="footer-subtitle">Tools for a people's democracy</span>-->
+            <a href="#" [routerLink]="['/about']">{{ 'footer.aboutUs' | translate }}</a>
+            <a href="#" [routerLink]="['/news']">{{ 'footer.news' | translate }}</a>
+            <a href="#" [routerLink]="['/contribute']">{{ 'footer.contribute' | translate }}</a>
           </div>
 
-          <div class="col-6">
-            <div class="float-right text-right">
+          <div class="col-md-6 col-sm-12">
+            <!-- <div class="float-md-right text-right text-md-right text-sm-left"> -->
+            <div class="info-holder float-md-right">
             <span class="info" [innerHTML]="'footer.info' | translate ">
             </span>
               <div class="social-icons">
@@ -209,14 +211,14 @@
       <div class="container footer-content-2">
         <div class="row">
 
-          <div class="col-6 copyright">
+          <div class="col-md-6 col-sm-12 copyright">
             {{ 'footer.copyright' | translate }}
           </div>
 
-          <div class="col-6">
-            <div class="float-right text-right">
-              <a href="https://www.grassroot.org.za/privacy">{{ 'footer.privacyPolicy' | translate }}</a> | &nbsp;
-              <a href="#">{{ 'footer.termsOfUse' | translate }}</a>
+          <div class="col-md-6 col-sm-12">
+            <div class="float-md-right">
+              <a href="#" [routerLink]="['/privacy']">{{ 'footer.privacyPolicy' | translate }}</a> | &nbsp;
+              <a href="#" [routerLink]="['/terms']">{{ 'footer.termsOfUse' | translate }}</a>
             </div>
           </div>
         </div>

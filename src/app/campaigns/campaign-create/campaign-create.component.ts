@@ -2,11 +2,11 @@ import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../campaign.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {DateTimeUtils, epochMillisFromDate} from "../../utils/DateTimeUtils";
-import {optionalUrlValidator} from "../../utils/CustomValidators";
+import {optionalUrlValidator} from "../../validators/CustomValidators";
 import {CampaignRequest} from "./campaign-request";
 import {GroupService} from "../../groups/group.service";
 import {GroupInfo} from "../../groups/model/group-info.model";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {Router} from "@angular/router";
 import {
   checkCodeIsNumber,
@@ -14,6 +14,7 @@ import {
   hasGroupNameIfNeeded,
   hasValidLandingUrlIfNeeded, smsLimitAboveZero, ValidateCodeNotTaken
 } from "../utils/campaign-validators";
+import {UserService} from "../../user/user.service";
 
 declare var $: any;
 
@@ -24,16 +25,20 @@ declare var $: any;
 })
 export class CampaignCreateComponent implements OnInit {
 
+  public canCreateCampaign: boolean = false;
+
   public createCampaignForm: FormGroup;
   public dragAreaClass: string = "dragarea";
 
   public takenCodes: string[] = [];
   public availableGroups: GroupInfo[] = [];
   public possibleTopics: string[] = [];
+
   private selectedTopics: string[] = []; // select 2 and form control don't seem to play nice together, hence
 
   constructor(private campaignService: CampaignService,
               private groupService: GroupService,
+              private userService: UserService,
               private formBuilder: FormBuilder,
               private router: Router,
               private alertService: AlertService) {

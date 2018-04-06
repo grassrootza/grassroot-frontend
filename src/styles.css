@@ -5,7 +5,6 @@ html {
   min-height: 100%;
 }
 
-
 body {
   padding: 0;
   background-color: #F5F6FA;
@@ -61,11 +60,14 @@ h6 {
   padding-left: 0 !important;
 }
 
+.primary-container {
+  padding-top: 10px;
+}
+
 .no-padding-horizontal {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-
 
 .padding-vertical {
   padding-top: 2rem;
@@ -246,7 +248,8 @@ h6 {
 
 .search-bar {
   border: 1px solid #EBEDF0;
-  font-size: 1.2em;
+  font-size: 1.1em;
+  padding: 10px 10px;
 }
 
 .search-addon {
@@ -307,3 +310,5 @@ h6 {
   border: dotted 1px;
   margin: 20px 0;
 }
+
+@media screen and (max-width: 575px){ .recaptcha-holder {transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;} }

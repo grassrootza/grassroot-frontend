@@ -9,6 +9,7 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {LiveWireAlertType} from "../livewire/live-wire-alert-type.enum";
 import {LiveWireAlertDestType} from "../livewire/live-wire-alert-dest-type.enum";
 import {MediaFunction} from "../media/media-function.enum";
+import {LocalStorageService} from "../utils/local-storage.service";
 
 @Injectable()
 export class TaskService {
@@ -26,7 +27,7 @@ export class TaskService {
   private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
 
   private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
-  private uploadImageUrl = environment.backendAppUrl + "/api/media/storeImage";
+  private uploadImageUrl = environment.backendAppUrl + "/api/media/store/body";
 
   private castVoteUrl = environment.backendAppUrl + "/api/task/respond/vote";
 
@@ -49,11 +50,11 @@ export class TaskService {
 
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
 
-    let cachedTasks = localStorage.getItem(this.MY_AGENDA_DATA_CACHE);
+    let cachedTasks = this.localStorageService.getItem(this.MY_AGENDA_DATA_CACHE);
     if (cachedTasks) {
-      let cachedTasksData = JSON.parse(localStorage.getItem(this.MY_AGENDA_DATA_CACHE));
+      let cachedTasksData = JSON.parse(this.localStorageService.getItem(this.MY_AGENDA_DATA_CACHE));
       console.log("Cached tasks before", cachedTasksData);
       cachedTasksData = cachedTasksData.map(task => Task.createInstanceFromData(task));
       console.log("Cached tasks before", cachedTasksData);
@@ -84,7 +85,7 @@ export class TaskService {
       .subscribe(
         tasks => {
           this.upcomingTasksSubject.next(tasks);
-          localStorage.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
+          this.localStorageService.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
         },
         error => {
           this.upcomingTasksErrorSubject.next(error);
@@ -204,10 +205,15 @@ export class TaskService {
 
   createLiveWireAlert(userUid:string,headline:string,alertType:LiveWireAlertType,groupUid:string,taskUid:string,
                       destination:LiveWireAlertDestType,description:string,addLocation:boolean,contactPerson:string,
-                      contactPersonName:string,contactPersonNumber:string,mediaKeys:Set<string>):Observable<any>{
+                      contactPersonName:string,contactPersonNumber:string,mediaKeys:string[]):Observable<any>{
 
     let fullUrl = this.createLiveWireAlertUrl + "/" + userUid;
     let params;
+
+    console.log("Media file keys..................................",mediaKeys);
+
+    let mediaKeyArray: string[] = [];
+
 
     params = new HttpParams()
       .set("headline",headline)
@@ -217,7 +223,7 @@ export class TaskService {
       .set("addLocation",addLocation + "")
       .set("destType",destination)
       .set("taskUid",taskUid)
-      .set("mediaFileKeys",mediaKeys + "");
+      .set("mediaFileKeys",mediaKeys.join(","));
 
 
       if(contactPerson === "someone"){
@@ -233,10 +239,6 @@ export class TaskService {
         .set("contactName",contactPersonName)
         .set("mediaFileKeys",mediaKeys + "");
       }
-
-   if(alertType === "MEETING"){
-      console.log("Is a meeting man...........................");
-    }
 
     return this.httpClient.post(fullUrl,null,{params:params});
   }

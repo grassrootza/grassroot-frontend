@@ -9,6 +9,7 @@ COPY package.json /app/
 COPY ./ /app/
 
 ARG env=prod
+ARG NODE_ENV=production
 
 #RUN ng build --environment=prod --target=production --output-hashing none
 #RUN npm run build -- --aot --build-optimizer --environment=$env

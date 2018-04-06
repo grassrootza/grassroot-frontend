@@ -1,0 +1,96 @@
+<div class="jumbotron" id="banner">
+  <div class="container text-center">
+    <div class="intro-content">
+      <h1>Contribute</h1>
+    </div><!-- /.intro-content -->
+  </div>
+</div><!-- /.jumbotron -->
+
+<div class="row">
+  <div class="col-md-8 offset-md-2">
+
+    <div class="section-grey bg-grey">
+      <div class="container">
+        <div class="section-header text-center">
+          <h2>Contributions, large or small, funding or code. Ideas and feedback.
+            Examples and connections. All make a difference.</h2>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <img src="assets/landing/conversation.jpg" style="" alt="" class="conversation img-fluid">
+          </div>
+          <div class="col-lg-6">
+            <p class="mission-para">
+              Your donation will support our engagement with communities, product development, and infrastructure costs. Donations above $1,000 are acknowledged on our funders page, unless donors wishes to remain anonymous.
+            </p>
+            <p class="mission-para">
+              All of our tools are built as open source code (licensed under BSD 3.0). Development is active and we will welcome any contributions. Please feel free to raise an issue or pull request.
+            </p>
+
+            <!-- 1. initial donation form to set amount -->
+            <div class="donation-form donation-input" *ngIf="displayDonateInput">
+              <h3>Make a donation (in South African
+                <a target="_blank" href="http://www.x-rates.com/table/?from=ZAR&amount=1">Rand</a>)</h3>
+              <form action="#">
+                <div class="fields-wrap">
+                  <input type="number" value="1000" #donateAmount>
+                  <input type="button" value="Donate" (click)="initiateDonation(donateAmount.value)">
+                </div>
+              </form>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 2. Check out form placeholder -->
+        <div class="row" *ngIf="displayDonateForm">
+          <div class="col-12 text-center">
+            <form [action]="paymentResultUrl" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form>
+          </div>
+        </div>
+
+        <!-- 3. donation succeeded, share form -->
+        <div class="row" *ngIf="displayShareForm">
+          <div class="col-lg-12 padded-card">
+            <div class="share-form donation-form">
+              <h3>Thank you! Share with someone else?</h3>
+              <h4>Your support is immensely appreciated. It would help us even more if you could share our story.
+                Just enter your name and someone's email below, and we'll send them a link.</h4>
+              <form [formGroup]="shareDonationForm">
+                <input type="text" [formControl]="shareDonationForm.controls['senderName']"
+                       placeholder="Your name, so we can say who sent the link"/>
+                <div class="fields-wrap">
+                  <input type="email" [formControl]="shareDonationForm.controls['emailAddress']"
+                         placeholder="The email address of the person to send to"/>
+                  <input [disabled]="!shareDonationForm.valid" type="button" value="Share" (click)="sendShareDonationEmail()" />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Donation failed, show an error and exit -->
+        <div class="row" *ngIf="donateError">
+          <div class="col-lg-12 text-center">
+            <h4>Sorry, there was an error processing your payment. Thanks for trying to support us! If this occurs
+            again, please just email us at <a href="mailto:contact@grassroot.org.za?subject=Donating">contact@grassroot.org.za</a></h4>
+          </div>
+        </div>
+
+        <!-- 5. And the sharing email succeeded, so just show a thank you -->
+        <div class="row" *ngIf="showShareCompleted">
+          <div class="col-lg-12 padded-card">
+            <div class="share-done">
+              <h2>Thank you for your support! You're helping us build the tools of a people's democracy</h2>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
