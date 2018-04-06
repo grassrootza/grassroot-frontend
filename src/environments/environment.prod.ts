@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   backendAppUrl: "https://app.grassroot.org.za",
-  frontendAppUrl: "https://alpha.grassroot.cloud",
+  frontendAppUrl: "https://www.grassroot.org.za",
   ussdPrefix: `*134*1994*`,
   groupShortCode: '31660',
   recaptchaPublicKey: '6LegYE0UAAAAAFrs_Mf8-_1YD6pLC-wps4W__96p',

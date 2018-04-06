@@ -26,7 +26,13 @@ export class HomeScreenRoutingComponent implements OnInit {
     if (this.isLoggedIn) {
       this.alertService.showLoading();
       if (isPlatformBrowser(this.platformId)) {
-        this.router.navigate(['/home']);
+        if (this.userService.isLoggedIn()) {
+          this.router.navigate(['/home']);
+        } else {
+          // in case cookie and user service get confused
+          this.isLoggedIn = false;
+          this.cookieService.clearUserLoggedIn();
+        }
       }
     }
   }

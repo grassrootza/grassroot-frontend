@@ -4,7 +4,6 @@ import {LoadingScreenComponent} from './utils/loading-screen/loading-screen.comp
 import {NgModule} from '@angular/core';
 import {JoinComponent} from './landing/join/join.component';
 import {RegistrationComponent} from './registration/registration.component';
-import {LandingComponent} from "./landing/landing.component";
 import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
@@ -12,11 +11,11 @@ import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.co
 import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component";
 import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
+import {ContributeComponent} from "./landing/static/contribute.component";
 
 // a bit of redundancy here, but small price to pay to avoid routing weirdness if use joint routes
 const routes: Routes = [
   {path: '', component: HomeScreenRoutingComponent},
-  {path: 'about', component: LandingComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
@@ -25,7 +24,10 @@ const routes: Routes = [
   {path: 'respond/:taskType/:taskId/:userId/:token', component: FrontPageRespondComponent},
 
   // bunch of routes for front matter
-  // {path: 'about', component: AboutUsComponent},
+  {path: 'about', component: AboutUsComponent},
+  {path: 'contribute', component: ContributeComponent},
+  {path: 'contribute/success', component: ContributeComponent},
+
   {path: 'privacy', component: PrivacyPolicyComponent},
   {path: 'terms', component: TermsOfUseComponent},
 

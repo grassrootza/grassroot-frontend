@@ -11,7 +11,6 @@ import {LoggedInGuard} from "./logged-in.guard";
 import {PwdResetNewComponent} from "./login/password-reset/pwd-reset-new/pwd-reset-new.component";
 import {FileImportComponent} from "./groups/group-details/group-members/group-members-import/file-import/file-import.component";
 import {IntegrationConnectComponent} from "./user/integrations/integration-connect/integration-connect.component";
-import {LandingComponent} from "./landing/landing.component";
 import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
@@ -24,7 +23,6 @@ import {ContributeComponent} from "./landing/static/contribute.component";
 const routes: Routes = [
 
   {path: '', component: HomeScreenRoutingComponent},
-  // {path: 'about', component: LandingComponent},
   {path: 'news', component: NewsComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
