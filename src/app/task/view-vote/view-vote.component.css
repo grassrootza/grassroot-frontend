@@ -25,3 +25,12 @@
   border: solid 1px #cccccc;
   text-align: left;
 }
+
+.download-error-report {
+  text-decoration: underline !important;
+  color: blue !important;
+}
+
+.download-error-report:hover{
+  cursor: pointer;
+}

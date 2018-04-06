@@ -45,7 +45,7 @@ export class TaskService {
 
   private cancelTaskUrl = environment.backendAppUrl + "/api/task/modify/cancel";
 
-  private downloadErrorReportUrl = environment.backendAppUrl + "/api/task/fetch/error-report/";
+  private downloadErrorReportUrl = environment.backendAppUrl + "/api/task/fetch/error-report";
 
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
@@ -284,8 +284,8 @@ export class TaskService {
     });
   }
 
-  downloadBroadcastErrorReport(taskUid: string) {
-    const fullUrl = this.downloadErrorReportUrl  + taskUid + '/download';
+  downloadBroadcastErrorReport(taskType: string, taskUid: string) {
+    const fullUrl = this.downloadErrorReportUrl + '/' + taskType + '/' + taskUid + '/download';
 
     return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
