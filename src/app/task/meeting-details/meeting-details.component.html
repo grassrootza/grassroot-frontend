@@ -1,4 +1,4 @@
-<div>
+<div class="container primary-container">
   <div class="row mb-3">
     <div class="col-12">
       <a (click)="routeToParent()" href="#" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>
@@ -19,9 +19,9 @@
             {{ 'task.meeting.details.cancel-button' | translate }}</button>
         </div>
       </div>
-      <div class="row" *ngIf="meeting?.errorReport">
-        <div class="offset-1 col-sm-11">
-          <a (click)="downloadEventErrorReport()" class="download-error-report">{{ 'task.meeting.details.download-error-button' | translate }}</a>
+      <div class="row pl-3" *ngIf="meeting?.errorReport">
+        <div class="col-12">
+          <a href="#" (click)="downloadEventErrorReport()" class="grassroot-link">{{ 'task.meeting.details.download-error-button' | translate }}</a>
         </div>
       </div>
 

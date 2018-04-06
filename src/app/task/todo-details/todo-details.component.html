@@ -1,68 +1,70 @@
-<div *ngIf="todo" class="col-md-8 offset-md-2 col-sm-12">
-  <div class="row mb-3">
-    <div class="col-12">
-      <a (click)="routeToParent()" href="#" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>
-        {{ (returnToGroup ? 'general.breadcrumb.group' : 'general.breadcrumb.home') | translate }}</a>
+<div *ngIf="todo" class="container primary-container">
+  <div class="col-md-8 offset-md-2 col-sm-12">
+    <div class="row mb-3">
+      <div class="col-12">
+        <a (click)="routeToParent()" href="#" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>
+          {{ (returnToGroup ? 'general.breadcrumb.group' : 'general.breadcrumb.home') | translate }}</a>
+      </div>
     </div>
-  </div>
-  <div class="card">
-    <div class="card-body">
-      <div class="row pl-3">
-        <div class="col-md-8 col-sm-12">
-          <h3>
-            <img src="assets/icon-action-items.png"/>&nbsp;
-            <span class="task-field-name">Action Item: </span>{{todo.title}}
-          </h3>
+    <div class="card">
+      <div class="card-body">
+        <div class="row pl-3">
+          <div class="col-md-8 col-sm-12">
+            <h3>
+              <img src="assets/icon-action-items.png"/>&nbsp;
+              <span class="task-field-name">Action Item: </span>{{todo.title}}
+            </h3>
+          </div>
+          <div class="col-md-4 col-sm-12 text-md-right text-sm-left">
+            <button type="button" (click)="confirmCancel()" class="btn btn-secondary hover-danger cancel-button">
+              {{ 'task.todo.details.cancel-button' | translate }}</button>
+          </div>
         </div>
-        <div class="col-md-4 col-sm-12 text-md-right text-sm-left">
-          <button type="button" (click)="confirmCancel()" class="btn btn-secondary hover-danger cancel-button">
-            {{ 'task.todo.details.cancel-button' | translate }}</button>
+        <div class="row pl-3" *ngIf="todo.errorReport">
+          <div class="col-12">
+            <a href="#" (click)="downloadEventErrorReport()" class="grassroot-link">{{ 'task.todo.details.download-error-button' | translate }}</a>
+          </div>
         </div>
-      </div>
-      <div class="row" *ngIf="todo.errorReport">
-        <div class="offset-1 col-sm-11">
-          <a (click)="downloadEventErrorReport()" class="download-error-report">{{ 'task.todo.details.download-error-button' | translate }}</a>
+        <div class="row pl-3 pr-3">
+          <div class="col-md-6 col-sm-12">
+            <p class="task-field-para">
+              <span class="task-field-name">Type: </span>
+              {{ 'enum.TodoType.' + todo.todoType | translate }}
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">Due by: </span>
+              {{todo.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
+            </p>
+            <p class="task-field-para">
+              <span class="task-field-name">Group: </span>
+              {{todo.ancestorGroupName}}
+            </p>
+          </div>
+          <div class="col-md-6 col-sm-12">
+            <!-- insert image -->
+          </div>
         </div>
-      </div>
-      <div class="row pl-3 pr-3">
-        <div class="col-md-6 col-sm-12">
-          <p class="task-field-para">
-            <span class="task-field-name">Type: </span>
-            {{ 'enum.TodoType.' + todo.todoType | translate }}
-          </p>
-          <p class="task-field-para">
-            <span class="task-field-name">Due by: </span>
-            {{todo.deadlineDate | date: 'hh:mm a on dd MMM yy'}}
-          </p>
-          <p class="task-field-para">
-            <span class="task-field-name">Group: </span>
-            {{todo.ancestorGroupName}}
-          </p>
+        <div class="row" *ngIf="todo.description">
+          <div class="col-12">
+            {{ todo.description }}
+          </div>
         </div>
-        <div class="col-md-6 col-sm-12">
-          <!-- insert image -->
-        </div>
-      </div>
-      <div class="row" *ngIf="todo.description">
-        <div class="col-12">
-          {{ todo.description }}
-        </div>
-      </div>
-      <div class="row mt-4 responses">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-header">
-              <span class="card-title">Responses</span>
-              <button (click)="downloadResponses()" class="btn btn-secondary float-md-right"><i class="fas fa-download"></i> Download</button>
-            </div>
-            <div class="card-body">
-              <div *ngFor="let response of todoResponses" class="row info-row">
-                <div class="col-4">{{ response.memberName }}</div>
-                <div class="col-8">
-                  <i *ngIf="response.response && (todo.todoType == typeVolunteer || todo.todoType == typeValidation)"
-                    [ngClass]="[responseClasses[response.response?.toLowerCase()], 'row-icon']"></i>
-                  <span *ngIf="response.response">{{ response.response | titlecase }}</span>
-                  <span *ngIf="!response.response">{{ 'task.todo.no_response' | translate }}</span>
+        <div class="row mt-4 responses">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Responses</span>
+                <button (click)="downloadResponses()" class="btn btn-secondary float-md-right"><i class="fas fa-download"></i> Download</button>
+              </div>
+              <div class="card-body">
+                <div *ngFor="let response of todoResponses" class="row info-row">
+                  <div class="col-4">{{ response.memberName }}</div>
+                  <div class="col-8">
+                    <i *ngIf="response.response && (todo.todoType == typeVolunteer || todo.todoType == typeValidation)"
+                      [ngClass]="[responseClasses[response.response?.toLowerCase()], 'row-icon']"></i>
+                    <span *ngIf="response.response">{{ response.response | titlecase }}</span>
+                    <span *ngIf="!response.response">{{ 'task.todo.no_response' | translate }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -71,53 +73,53 @@
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="confirm-cancel-modal" tabindex="-1" role="dialog"
-  aria-labelledby="confirm-cancel-modal-label" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'task.todo.cancel.title' | translate }}</h5>
-        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-12">
-            {{ 'task.todo.cancel.body' | translate }}
-          </div>
+  <div class="modal fade" id="confirm-cancel-modal" tabindex="-1" role="dialog"
+    aria-labelledby="confirm-cancel-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">{{ 'task.todo.cancel.title' | translate }}</h5>
+          <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div class="row">
-          <div class="form-group col-sm-2">
-            <label>Notify members</label>
-          </div>
-
-          <div class="form-group col-sm-4">
-            <div class="form-check form-check-inline">
-              <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="true" name="discoverable"
-                  [(ngModel)]="notifyCancellation">
-                Notify
-              </label>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              {{ 'task.todo.cancel.body' | translate }}
             </div>
           </div>
+          <div class="row">
+            <div class="form-group col-sm-2">
+              <label>Notify members</label>
+            </div>
 
-          <div class="form-group col-sm-4">
-            <div class="form-check form-check-inline">
-              <label class="form-check-label">
-                <input class="form-check-input" type="radio" value="false" name="discoverable"
-                  checked="checked" [(ngModel)]="notifyCancellation">
-                No notices
-              </label>
+            <div class="form-group col-sm-4">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" value="true" name="discoverable"
+                    [(ngModel)]="notifyCancellation">
+                  Notify
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group col-sm-4">
+              <div class="form-check form-check-inline">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="radio" value="false" name="discoverable"
+                    checked="checked" [(ngModel)]="notifyCancellation">
+                  No notices
+                </label>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button data-dismiss="modal" type="button" class="btn btn-secondary">{{ 'action.close' | translate }}</button>
-        <button (click)="cancelTodo()" type="button" class="btn btn-secondary hover-danger">{{ 'action.confirm' | translate }}</button>
+        <div class="modal-footer">
+          <button data-dismiss="modal" type="button" class="btn btn-secondary">{{ 'action.close' | translate }}</button>
+          <button (click)="cancelTodo()" type="button" class="btn btn-secondary hover-danger">{{ 'action.confirm' | translate }}</button>
+        </div>
       </div>
     </div>
   </div>

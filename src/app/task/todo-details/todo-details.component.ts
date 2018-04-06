@@ -116,6 +116,7 @@ export class TodoDetailsComponent implements OnInit {
     }, error => {
       console.log("error getting the file: ", error);
     });
+    return false;
   }
 
 }
