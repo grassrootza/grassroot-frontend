@@ -23,7 +23,8 @@ export class Task {
               public createdByThisUser: boolean,
               public canEdit: boolean,
               public voteOptions: string[],
-              public voteResults: Map<string, string>) {
+              public voteResults: Map<string, string>,
+              public errorReport: boolean) {
   }
 
   public getEventIconName(): string {
@@ -62,7 +63,8 @@ export class Task {
       taskData.createdByThisUser,
       taskData.canEdit,
       taskData.voteOptions,
-      taskData.voteResults
+      taskData.voteResults,
+      taskData.errorReport
     )
   }
 }

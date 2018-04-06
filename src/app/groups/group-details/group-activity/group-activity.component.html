@@ -39,9 +39,9 @@
                   <img [src]="'assets/' + task.getEventIconName() "/>
                   {{task.type}}:&nbsp;
                 </span>
-                  {{task.title}}
+                {{task.title}}
               </div>
-              <div class="row">
+              <div class="row" *ngIf="task.errorReport">
                 <a (click)="downloadEventErrorReport(task)" class="download-error-report">Download error report</a>
               </div>
               <div class="row" *ngIf="task.type == taskTypes.VOTE">
@@ -82,9 +82,9 @@
                   <img [src]="'assets/' + task.getEventIconName() "/>
                   {{task.type}}:&nbsp;
                 </span>
-                  {{task.title}}
+                {{task.title}}
               </div>
-              <div class="row">
+              <div class="row" *ngIf="task.errorReport">
                 <a (click)="downloadEventErrorReport(task)" class="download-error-report">Download error report</a>
               </div>
               <div class="row" *ngIf="task.type == taskTypes.VOTE">
@@ -106,13 +106,13 @@
 <!--modals-->
 
 <app-create-meeting [groupUid]="createTaskGroupUid"
-                    (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+  (meetingSaved)="meetingSaved($event)"></app-create-meeting>
 
 <app-create-vote [groupUid]="createTaskGroupUid"
-                 (voteSaved)="voteSaved($event)"></app-create-vote>
+  (voteSaved)="voteSaved($event)"></app-create-vote>
 
 <app-create-todo [groupUid]="createTaskGroupUid"
-                 (todoSaved)="todoSaved($event)"></app-create-todo>
+  (todoSaved)="todoSaved($event)"></app-create-todo>
 
 <app-view-meeting [taskToView]="taskToView"></app-view-meeting>
 

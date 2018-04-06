@@ -2,6 +2,8 @@ require('zone.js/dist/zone-node');
 
 const express = require('express');
 const helmet = require('helmet');
+const serveStatic = require('serve-static')
+
 const ngExpressEngine = require('@nguniversal/express-engine').ngExpressEngine;
 
 require('@angular/core').enableProdMode();
@@ -28,8 +30,16 @@ app.engine(
 app.set('view engine', 'html');
 app.set('views', __dirname);
 
-app.use(express.static(__dirname + '/assets', { index: false }));
-app.use(express.static(__dirname + '/dist', { index: false }));
+app.use(express.static(__dirname + '/assets', { index: false, maxAge: '30 days' }));
+app.use(express.static(__dirname + '/dist', { index: false, maxAge: '1 day', setHeaders: setCustomCacheControl }));
+
+function setCustomCacheControl (res, path) {
+  const mimeType = serveStatic.mime.lookup(path);
+  if (mimeType === 'image/png' || mimeType === 'image/jpeg') {
+    // Custom Cache-Control for images, at one month
+    res.setHeader('Cache-Control', 'public, max-age=2592000')
+  }
+}
 
 app.get('/*', (req, res) => {
   console.time(`GET: ${req.originalUrl}`);
