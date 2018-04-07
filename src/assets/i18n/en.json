@@ -90,6 +90,7 @@
     "account": "Account settings",
     "integrations": "Integration settings",
     "logout": "Logout",
+    "delete": "Delete account",
     "landing": {
       "news": "NEWS",
       "livewire": "LIVEWIRE",
@@ -1158,6 +1159,16 @@
       "google-complete": "Done! The Google integration is complete",
       "storing": "Storing details ...",
       "remove": "unlink account"
+    },
+    "delete": {
+      "title": "Delete my account",
+      "disuasion": "Are you sure you want to delete your profile? This will remove you from all Grassroot groups, and remove any personal information we hold about you. We will not be able to undo this - if you choose to return, you will have to enter your name and details, sign up for your groups again, etc. Are you sure you want to proceed?",
+      "button": "Yes, I'm sure",
+      "error-unknown": "Sorry, something went wrong deleting your profile. Please try again later, or email <a href=\"mailto:contact@grassroot.org.za?subject=Delete%20account\">contact@grassroot.org.za</a>",
+      "otp-prompt": "Okay, we'll delete your profile. As a last step, for security reasons we have sent a code to your phone or email (whichever you usually receive notifications on). Please enter the code below and click confirm. After that your profile will be permanently deleted.",
+      "otp-confirm": "Confirmed, delete profile",
+      "otp-error": "Sorry, the code you entered is incorrect. Please try again. If you continue to encounter errors, please email <a href=\"mailto:contact@grassroot.org.za?subject=Delete%20account\">contact@grassroot.org.za</a>",
+      "done": "Done. Your profile is deleted. Goodbye."
     }
   },
   "login": {

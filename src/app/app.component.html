@@ -90,7 +90,7 @@
                   <a class="dropdown-item" [routerLink]="['/user/account']">{{ 'menu.account' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/integrations']">{{ 'menu.integrations' | translate }}</a>
                   <a class="dropdown-item" *ngIf="loggedInUser.hasSystemAdmin()">Admin panel</a>
-                  <a class="dropdown-item" href="/">Delete my profile</a>
+                  <a class="dropdown-item" [routerLink]="['/user/delete']"> {{ 'menu.delete' | translate }}</a>
                   <a class="dropdown-item" href="/" (click)="logout();">{{ 'menu.logout' | translate }}</a>
                 </div>
               </li>

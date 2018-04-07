@@ -19,6 +19,9 @@ export class UserService {
   private updateImageUrl: string = environment.backendAppUrl + "/api/user/profile/image/change";
   private loggedInUserImageUrlBase = environment.backendAppUrl + "/api/user/profile/image/view";
 
+  private deleteUserInitiate: string = environment.backendAppUrl + "/api/user/profile/delete/initiate";
+  private deleteUserConfirm: string = environment.backendAppUrl + "/api/user/profile/delete/confirm";
+
   private _loggedInUser: AuthenticatedUser = null;
   public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
 
@@ -94,6 +97,12 @@ export class UserService {
   logout(showForceLogoutReason: boolean, afterLogoutRoute: string = ''): any {
     this.showForceLogoutReason = showForceLogoutReason;
 
+    this.cleanUpUser();
+
+    this.router.navigate([afterLogoutRoute]);
+  }
+
+  cleanUpUser() {
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
     this.localStorageService.removeItem('token');
@@ -105,8 +114,6 @@ export class UserService {
     this.localStorageService.removeItem('broadcastCreateStep');
 
     this.cookieService.clearUserLoggedIn();
-
-    this.router.navigate([afterLogoutRoute]);
   }
 
   isLoggedIn(): boolean {
@@ -174,6 +181,22 @@ export class UserService {
 
   hasActivePaidAccount() {
     return this._loggedInUser && this._loggedInUser.hasAccountAdmin();
+  }
+
+  initiateUserDelete(): Observable<string> {
+    return this.httpClient.post(this.deleteUserInitiate, null, { responseType: 'text' });
+  }
+
+  completeUserDelete(otp: string): Observable<any> {
+    const params = new HttpParams().set("otp", otp);
+    return this.httpClient.post(this.deleteUserConfirm, null, { params: params, responseType: 'text' }).map(result => {
+      console.log("result from server: ", result);
+      if (result == 'USER_DELETED') {
+        console.log("okay, cleaning up user");
+        this.cleanUpUser();
+      }
+      return result;
+    });
   }
 
 }
