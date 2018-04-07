@@ -16,7 +16,6 @@ import {Task} from "../task/task.model";
 import {TaskType} from "../task/task-type";
 import {AlertService} from "../utils/alert-service/alert.service";
 import {CampaignService} from "../campaigns/campaign.service";
-import { LiveWireAlertService } from "../livewire/live-wire-alert.service";
 import {SearchService} from "../search/search.service";
 
 declare var $: any;
@@ -284,6 +283,15 @@ export class HomeComponent implements OnInit {
     console.log(saveResponse);
     this.taskService.loadUpcomingUserTasks();
     $("#create-todo-modal").modal("hide");
+  }
+
+  showCreateLivewireAlertModal(group: GroupInfo){
+    this.createTaskGroupUid = group.groupUid;
+    $("#create-livewire-alert-modal").modal("show");
+  }
+
+  alertSaved(saveResponse){
+    $("#create-livewire-alert-modal").modal("hide");
   }
 
   searchGlobaly(searchTerm:string){

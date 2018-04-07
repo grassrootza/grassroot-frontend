@@ -1,7 +1,7 @@
 <h1 class="main-title">{{'livewire.view-alert.title' | translate}}</h1>
-  
-<a [routerLink]="['/livewire-admin']" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>BACK TO ALERTS</a>
-  
+
+<a [routerLink]="['/admin/livewire/list']" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>BACK TO ALERTS</a>
+
 <div class="row">
 	<div class="col-md-1">
 		<button class="btn btn-secondary" (click)="openReleaseModal()">Release</button>
@@ -93,7 +93,7 @@
       <div class="modal-body">
         <img class="alert-modal-image" alt="" src="{{imageUrl}}">
       </div>
-      
+
     </div>
   </div>
 </div>
@@ -108,20 +108,20 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    
+
       <div class="modal-body">
         <div class="form-group">
         	<label for="headline-text" class="control-label">{{'livewire.headline-modal.label' | translate}}</label>
-        	<input class="form-control" type="text" id="headline-text" 
+        	<input class="form-control" type="text" id="headline-text"
         		name="headline-text" value="{{headline}}" [(ngModel)]="headline">
         </div>
       </div>
-      
+
       <div class="modal-footer">
       	<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       	<button class="btn btn-danger" (click)="updateHeadline(headline)">Edit</button>
       </div>
-      
+
     </div>
   </div>
 </div>
@@ -136,22 +136,22 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    
+
       <div class="modal-body">
         <div class="form-group">
         	<label for="description-text" class="control-label">{{'livewire.desc-modal.label' | translate}}</label>
-        	
+
         	<textarea class="form-control" #description rows="" cols="" id="description-text" name="description-text">
         		{{desc}}
         	</textarea>
         </div>
       </div>
-      
+
       <div class="modal-footer">
       	<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       	<button class="btn btn-danger" (click)="updateDescription(description.value)">Edit</button>
       </div>
-      
+
     </div>
   </div>
 </div>
@@ -166,20 +166,20 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    
+
       <div class="modal-body">
         <div class="form-group">
         	<label for="tags" class="control-label">{{'livewire.tags-modal.label' | translate}}</label>
-        	
+
         	<input type="text" class="form-control" id="tags" name="tags" #tags>
         </div>
       </div>
-      
+
       <div class="modal-footer">
       	<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       	<button class="btn btn-danger" (click)="addTags(tags.value)">Confirmed</button>
       </div>
-      
+
     </div>
   </div>
 </div>
@@ -194,11 +194,11 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    
+
       <div class="modal-body">
         <div class="form-group">
         	<label for="tags" class="control-label">{{'livewire.release-modal.label' | translate}}</label>
-        	
+
         	<div *ngIf="subscribers.length > 0">
         		<div class="row">
         			<h5>{{'livewire.release-modal.list-title' | translate}}</h5>
@@ -224,12 +224,12 @@
         	</div>
         </div>
       </div>
-      
+
       <div class="modal-footer">
       	<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
       	<button class="btn btn-danger" (click)="releaseAlert()">Confirmed</button>
       </div>
-      
+
     </div>
   </div>
 </div>

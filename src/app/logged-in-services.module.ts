@@ -18,6 +18,7 @@ import {ViewVoteComponent} from "./task/view-vote/view-vote.component";
 import {CampaignInfoComponent} from "./campaigns/campaign-list/campaign-list-row/campaign-info.component";
 import {MeetingResponsesComponent} from "./task/meeting-details/meeting-responses.component";
 import {ViewTodoComponent} from "./task/view-todo/view-todo.component";
+import {LivewireUserService} from "./livewire/livewire-user-service";
 
 @NgModule({
   imports: [
@@ -56,6 +57,9 @@ import {ViewTodoComponent} from "./task/view-todo/view-todo.component";
     ViewMeetingComponent,
     ViewVoteComponent,
     MeetingResponsesComponent
+  ],
+  providers: [
+    LivewireUserService
   ],
   exports: [
     GroupInfoComponent, CampaignInfoComponent,

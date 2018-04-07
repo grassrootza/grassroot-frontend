@@ -126,6 +126,7 @@
                           (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
                           (onTriggerCreateVote)="showCreateVoteModal($event)"
                           (onTriggerCreateTodo)="showCreateTodoModal($event)"
+                          (onTriggerCreateLivewireAlert)="showCreateLivewireAlertModal($event)"
                           [extendedInfoVisible]="pinnedGroups.length == 1">
           </app-group-info>
 
@@ -239,3 +240,6 @@
 <app-view-vote [voteToView]="taskToView"></app-view-vote>
 
 <app-view-todo [todoTask]="taskToView"></app-view-todo>
+
+<app-create-livewire [groupUid]="createTaskGroupUid"
+                     (alertSaved)="alertSaved($event)"></app-create-livewire>

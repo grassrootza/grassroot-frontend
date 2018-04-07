@@ -1,4 +1,4 @@
-import { MediaFunction } from "../../media/media-function.enum";
+import { MediaFunction } from "../../../media/media-function.enum";
 export class TwitterPost {
   constructor(public postingUserUid:string,
     public message:string,

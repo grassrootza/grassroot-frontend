@@ -2,11 +2,11 @@ import * as moment from 'moment';
 
 export class PublicLivewire {
 
-  constructor(public serverUid:string,
-              public headline: string,
+  constructor(public headline: string,
               public creationTimeMillis: any,
               public description: string,
               public imageKeys: string[],
+              public serverUid?:string,
               public contactName?: string,
               public alertType?: string,
               public entityName?: string,
@@ -14,11 +14,12 @@ export class PublicLivewire {
               public activityCount?: number) {}
 
   public static createInstance(alert:PublicLivewire): PublicLivewire {
-    return new PublicLivewire(alert.serverUid,
+    return new PublicLivewire(
       alert.headline,
       moment(alert.creationTimeMillis),
       alert.description,
       alert.imageKeys,
+      alert.serverUid,
       alert.contactName,
       alert.alertType,
       alert.entityName,

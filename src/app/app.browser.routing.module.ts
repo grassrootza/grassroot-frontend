@@ -65,6 +65,10 @@ const routes: Routes = [
   {path: 'search/:searchTerm',loadChildren:'./search/search.module#SearchModule',canActivate:[LoggedInGuard]},
   {path: 'task', loadChildren: './task/task-details.module#TaskDetailsModule', canActivate:[LoggedInGuard]},
 
+  {
+    path: 'admin', loadChildren: './admin/admin.module#AdminModule', canActivate: [LoggedInGuard]
+  },
+
   // some front matter (basically static)
   {path: 'about', component: AboutUsComponent},
 

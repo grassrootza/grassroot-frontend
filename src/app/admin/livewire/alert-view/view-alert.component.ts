@@ -1,14 +1,14 @@
-import { MediaFunction } from "../../media/media-function.enum";
-import { MediaService } from "../../media/media.service";
-import { IntegrationsService } from "../../user/integrations/integrations.service";
-import { UserService } from "../../user/user.service";
-import { DataSubscriber } from "../datasubscriber/data-subscriber.model";
-import { LiveWireAlert } from "../live-wire-alert.model";
-import { LiveWireAlertService } from "../live-wire-alert.service";
-import { FacebookPost } from "../post/facebook-post.model";
-import { TwitterPost } from "../post/twitter-post.model";
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from "@angular/router";
+import {MediaFunction} from "../../../media/media-function.enum";
+import {MediaService} from "../../../media/media.service";
+import {IntegrationsService} from "../../../user/integrations/integrations.service";
+import {UserService} from "../../../user/user.service";
+import {DataSubscriber} from "../model/data-subscriber.model";
+import {LiveWireAlert} from "../../../livewire/live-wire-alert.model";
+import {FacebookPost} from "../model/facebook-post.model";
+import {TwitterPost} from "../model/twitter-post.model";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Params, Router} from "@angular/router";
+import {LiveWireAdminService} from "../livewire-admin-service";
 
 declare var $: any;
 
@@ -29,16 +29,16 @@ export class ViewAlertComponent implements OnInit {
   public subscribers:DataSubscriber[] = [];
   public shareOnFB:boolean = false;
   public shareOnTwitter:boolean = false;
-  
+
   private linkUrl:string = "";
   private linkName:string = "grassroor news";
-  
+
   constructor(private route:ActivatedRoute,
-              private liveWireAlertService:LiveWireAlertService,
+              private liveWireAlertService:LiveWireAdminService,
               private mediaService:MediaService,
               private router:Router,
               private integrationService:IntegrationsService,
-              private userService:UserService) { 
+              private userService:UserService) {
     this.router.routeReuseStrategy.shouldReuseRoute = function(){
       return false;
     }
@@ -53,7 +53,7 @@ export class ViewAlertComponent implements OnInit {
       console.log("Error getting params....",error);
     });
   }
-  
+
   loadAlert(alertUid:string){
     this.liveWireAlertService.loadAlert(alertUid).subscribe(resp => {
       this.liveWireAlert = resp;
@@ -62,27 +62,27 @@ export class ViewAlertComponent implements OnInit {
       console.log("Error loading alert....................",error);
     })
   }
-  
+
   loadImageUrl(imageKey:string):string{
     return this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
   }
-  
+
   openImage(imageKey:string){
     this.imageUrl = this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
     $('#open-image-modal').modal("show");
     console.log("Open my image....",imageKey);
   }
-  
+
   openHeadlineModal(headline:string){
     this.headline = headline;
     $('#change-headline-modal').modal("show");
   }
-  
+
   openDescriptionModal(description:string){
     this.desc = description;
     $('#change-description-modal').modal("show");
   }
-  
+
   updateHeadline(headline:string){
     this.liveWireAlertService.updateAlertHeadline(this.alertUid,headline).subscribe(resp => {
       console.log("Resp updated...",resp);
@@ -93,7 +93,7 @@ export class ViewAlertComponent implements OnInit {
     });
     console.log("Headline.....",headline);
   }
-  
+
   updateDescription(description:string){
     this.liveWireAlertService.updateAlertDescription(this.alertUid,description).subscribe(resp => {
       console.log("Update response......",resp);
@@ -104,7 +104,7 @@ export class ViewAlertComponent implements OnInit {
     });
     console.log("Desc.....",description);
   }
-  
+
   deleteImage(imageUid:string){
     this.liveWireAlertService.deleteAlertImage(imageUid,this.alertUid).subscribe(resp => {
       console.log("Deleted image...",resp);
@@ -114,7 +114,7 @@ export class ViewAlertComponent implements OnInit {
     });
     console.log("Delete it..............",imageUid);
   }
-  
+
   uploadImages(event,input:any){
      let images = [].slice.call(event.target.files);
      console.log("Images....",images);
@@ -124,9 +124,9 @@ export class ViewAlertComponent implements OnInit {
   saveImage(images){
      if(images.length > 0){
         console.log("Images uploaded..",images.length);
-        
+
         let formData: FormData = new FormData();
-        
+
         for(let image of images){
           formData.append("file", image, image.name);
           this.liveWireAlertService.uploadAlertImage(formData).subscribe(resp =>{
@@ -139,11 +139,11 @@ export class ViewAlertComponent implements OnInit {
           })
         }
         console.log("Image keys.....",this.imageKeys);
-        
+
         console.log("formdata: ", formData);
      }
   }
-  
+
   updateAlert(imageKeys:string[]){
     this.liveWireAlertService.updateAlertImages(this.alertUid,this.imageKeys).subscribe(resp => {
       console.log("Data from server........",resp);
@@ -152,11 +152,11 @@ export class ViewAlertComponent implements OnInit {
       console.log("Error adding images to alert.....",error);
     });
   }
-  
+
   openTagsModal(serverUid:string){
     $('#tags-modal').modal("show");
   }
-  
+
   addTags(tags:string){
     console.log("Tags...",tags);
     this.liveWireAlertService.tagAlert(this.alertUid,tags).subscribe(resp => {
@@ -176,7 +176,7 @@ export class ViewAlertComponent implements OnInit {
       console.log("Error blocking alert.....",error);
     });
   }
-  
+
   openReleaseModal(){
     console.log("release..............................");
     this.liveWireAlertService.getSubscribers().subscribe(resp => {
@@ -187,24 +187,24 @@ export class ViewAlertComponent implements OnInit {
     });
     $('#release-modal').modal("show");
   }
-  
+
   selectedSubscribers(event:any,uid:string){
     event == true ? this.addSubscriberUid(uid) : this.removeSubscriberUid(uid);
     console.log("Check event.............",event);
     console.log("Subscriber id.............",uid);
     console.log("Subscriber uids...........",this.subscriberUids);
   }
-  
+
   addSubscriberUid(uid:string){
     this.subscriberUids.push(uid);
   }
-  
+
   removeSubscriberUid(uid:string){
     if(this.subscriberUids.indexOf(uid) !== -1){
       this.subscriberUids.splice(this.subscriberUids.indexOf(uid),1);
     }
   }
-  
+
   releaseAlert(){
     console.log("Data subscriber list in release method.....",this.subscriberUids);
     this.liveWireAlertService.releaseAlert(this.alertUid,this.subscriberUids).subscribe(resp => {
@@ -212,35 +212,35 @@ export class ViewAlertComponent implements OnInit {
       if(this.shareOnFB){
         this.shareAlertOnFacebook(this.liveWireAlert);
       }
-      
+
       if(this.shareOnTwitter){
         this.shareAlertOnTwitter(this.liveWireAlert);
       }
-      
+
       $('#release-modal').modal("hide");
       this.refreshComponent();
     },error => {
       console.log("Error releasing alert.....",error);
     });
   }
-  
+
   refreshComponent(){
       this.router.navigated = false;
       this.router.navigate([this.router.url]);
   }
-  
+
   facebookEvent(event,media){
     console.log("Media....",event + " " + media);
     this.shareOnFB = event;
     //this.shareFB(this.liveWireAlert);
   }
-  
+
   tweetEvent(event,twitter){
     console.log("Media....",event + " " + twitter);
     this.shareOnTwitter = event;
     //this.shareAlertOnTwitter(this.liveWireAlert);
   }
-  
+
   shareAlertOnFacebook(alert:LiveWireAlert){
     let post = new FacebookPost(this.userService.getLoggedInUser().userUid,
                                 "",alert.description,this.linkUrl,this.linkName,alert.mediaFileUids[0],MediaFunction.LIVEWIRE_MEDIA,alert.mediaFileUids[0]);
@@ -252,7 +252,7 @@ export class ViewAlertComponent implements OnInit {
       console.log("Error sharing on FB",error);
     });
   }
-  
+
   shareAlertOnTwitter(alert:LiveWireAlert){
     let tweet = new TwitterPost(this.userService.getLoggedInUser().userUid,alert.description,MediaFunction.LIVEWIRE_MEDIA,alert.mediaFileUids[0]);
     this.liveWireAlertService.postOnTwitter(tweet).subscribe(resp => {

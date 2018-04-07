@@ -1,6 +1,6 @@
-import { LiveWireAlert } from "../live-wire-alert.model";
-import { LiveWireAlertService } from "../live-wire-alert.service";
+import { LiveWireAlert } from "../../../livewire/live-wire-alert.model";
 import { Component, OnInit } from '@angular/core';
+import {LiveWireAdminService} from "../livewire-admin-service";
 
 @Component({
   selector: 'app-live-wire-list',
@@ -8,13 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./live-wire-list.component.css']
 })
 export class LiveWireListComponent implements OnInit {
-  
+
   public alertList:LiveWireAlert[]=[];
   public pageNumber:number = 0;
   public totalPages:number;
   public sort:string = "desc";
 
-  constructor(private liveWireAlertService:LiveWireAlertService) { }
+  constructor(private liveWireAlertService:LiveWireAdminService) { }
 
   ngOnInit() {
     this.loadAlerts(this.pageNumber,this.sort);
@@ -30,7 +30,7 @@ export class LiveWireListComponent implements OnInit {
       console.log("Erro loading alerts.......",error);
     });
   }
-  
+
   nextPage(){
     this.pageNumber += 1;
     if(this.pageNumber < this.totalPages -1){
@@ -40,7 +40,7 @@ export class LiveWireListComponent implements OnInit {
       this.loadAlerts(this.pageNumber,this.sort);
     }
   }
-  
+
   previousPage(){
     this.pageNumber -= 1;
     if(this.pageNumber > 0){
