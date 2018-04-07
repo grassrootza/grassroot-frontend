@@ -1,16 +1,16 @@
 <div class="row justify-content-center">
   <div class="col-3">
-    <button class="btn btn-block btn-outline-secondary" (click)="showCreateMeetingModal()">
+    <button class="btn btn-block btn-outline-secondary hover-primary" (click)="showCreateMeetingModal()">
       <img src="assets/icon_meeting.png"/>
       {{'group.activity.meeting' | translate}}</button>
   </div>
   <div class="col-3">
-    <button class="btn btn-block btn-outline-secondary" (click)="showCreateVoteModal()">
+    <button class="btn btn-block btn-outline-secondary hover-primary" (click)="showCreateVoteModal()">
       <img src="assets/icon-votes.png"/>
       {{'group.activity.vote' | translate}}</button>
   </div>
   <div class="col-3">
-    <button class="btn btn-block btn-outline-secondary" (click)="showCreateTodoModal()">
+    <button class="btn btn-block btn-outline-secondary hover-primary" (click)="showCreateTodoModal()">
       <img src="assets/icon_todo.png"/>
       {{'group.activity.actionItem' | translate}}</button>
   </div>
@@ -39,10 +39,10 @@
                   <img [src]="'assets/' + task.getEventIconName() "/>
                   {{task.type}}:&nbsp;
                 </span>
-                  {{task.title}}
+                {{task.title}}
               </div>
-              <div class="row">
-                <a (click)="downloadEventErrorReport(task)" class="download-error-report">Download error report</a>
+              <div class="row" *ngIf="task.errorReport">
+                <a (click)="downloadEventErrorReport(task)" class="grassroot-link download-error-report">Download error report</a>
               </div>
               <div class="row" *ngIf="task.type == taskTypes.VOTE">
                 <span class="font-weight-bold" [translate]="'group.activity.voteCloses'"> Closes:</span>&nbsp;
@@ -67,7 +67,7 @@
           <h1> Past Activity</h1>
         </div>
       </div>
-      <div class="card" *ngFor="let task of pastTasks" style="margin-bottom: 1rem !important; cursor: pointer" (click)="handleTaskClicked(task)">
+      <div class="card" *ngFor="let task of pastTasks" style="margin-bottom: 1rem !important; cursor: pointer">
         <div class="card-body events-box" >
           <div class="row">
             <div class="col-1" (click)="handleTaskClicked(task)">
@@ -82,10 +82,10 @@
                   <img [src]="'assets/' + task.getEventIconName() "/>
                   {{task.type}}:&nbsp;
                 </span>
-                  {{task.title}}
+                {{task.title}}
               </div>
-              <div class="row">
-                <a (click)="downloadEventErrorReport(task)" class="download-error-report">Download error report</a>
+              <div class="row" *ngIf="task.errorReport">
+                <a href="javascript:void(0)" (click)="downloadEventErrorReport(task)" class="grassroot-link">Download error report</a>
               </div>
               <div class="row" *ngIf="task.type == taskTypes.VOTE">
                 <span class="font-weight-bold" [translate]="'group.activity.voteCloses'"> Closes:</span>&nbsp;
@@ -106,13 +106,13 @@
 <!--modals-->
 
 <app-create-meeting [groupUid]="createTaskGroupUid"
-                    (meetingSaved)="meetingSaved($event)"></app-create-meeting>
+  (meetingSaved)="meetingSaved($event)"></app-create-meeting>
 
 <app-create-vote [groupUid]="createTaskGroupUid"
-                 (voteSaved)="voteSaved($event)"></app-create-vote>
+  (voteSaved)="voteSaved($event)"></app-create-vote>
 
 <app-create-todo [groupUid]="createTaskGroupUid"
-                 (todoSaved)="todoSaved($event)"></app-create-todo>
+  (todoSaved)="todoSaved($event)"></app-create-todo>
 
 <app-view-meeting [taskToView]="taskToView"></app-view-meeting>
 

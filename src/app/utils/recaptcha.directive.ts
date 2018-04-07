@@ -31,7 +31,7 @@ declare global {
 export const RECAPTCHA_URL = new InjectionToken('RECAPTCHA_URL');
 
 @Injectable()
-class RecaptchaAsyncValidator {
+export class RecaptchaAsyncValidator {
 
   constructor( private httpClient : HttpClient, @Inject(RECAPTCHA_URL) private url ) {
   }

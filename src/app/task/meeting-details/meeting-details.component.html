@@ -1,4 +1,4 @@
-<div>
+<div class="container primary-container">
   <div class="row mb-3">
     <div class="col-12">
       <a (click)="routeToParent()" href="#" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>
@@ -19,9 +19,9 @@
             {{ 'task.meeting.details.cancel-button' | translate }}</button>
         </div>
       </div>
-      <div class="row">
-        <div class="offset-1 col-sm-11">
-          <a (click)="downloadEventErrorReport()" class="download-error-report">{{ 'task.meeting.details.download-error-button' | translate }}</a>
+      <div class="row pl-3" *ngIf="meeting?.errorReport">
+        <div class="col-12">
+          <a href="#" (click)="downloadEventErrorReport()" class="grassroot-link">{{ 'task.meeting.details.download-error-button' | translate }}</a>
         </div>
       </div>
 
@@ -65,17 +65,17 @@
                 <div class="col-md-8 col-sm-6 attendee-name">{{response.memberName}}</div>
                 <div class="col-md-4 col-sm-6">{{ 'enum.MeetingResponse.' + response.response | translate }}</div>
               </div>
+            </div>
           </div>
-      </div>
 
-    </div>
-  </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="modal fade" id="confirm-cancel-modal" tabindex="-1" role="dialog"
-     aria-labelledby="confirm-cancel-modal-label" aria-hidden="true">
+  aria-labelledby="confirm-cancel-modal-label" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">

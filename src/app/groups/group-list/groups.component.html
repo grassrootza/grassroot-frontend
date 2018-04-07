@@ -1,156 +1,157 @@
-<button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#create-group-modal">
-  {{ 'groups.create' | translate }}
-</button>
-<h1 class="main-title">{{ 'groups.title' | translate }}</h1>
+<div class="container primary-container">
+  <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#create-group-modal">
+    {{ 'groups.create' | translate }}
+  </button>
+  <h1 class="main-title">{{ 'groups.title' | translate }}</h1>
 
-<h2 *ngIf="pinnedGroups.length > 0">
-  <img src="assets/star_black.png"/>
-  {{ 'groups.pinnedGroups.title' | translate }}
-</h2>
+  <h2 *ngIf="pinnedGroups.length > 0">
+    <img src="assets/star_black.png"/>
+    {{ 'groups.pinnedGroups.title' | translate }}
+  </h2>
 
-<div *ngIf="pinnedGroups.length > 0" class="card pinned-groups">
+  <div *ngIf="pinnedGroups.length > 0" class="card pinned-groups">
 
-  <div class="card-body">
+    <div class="card-body">
 
-    <div class="container group-info-header">
-      <div class="row">
-        <div class="col-sm-3  d-block" (click)="sortByGroupName(true)">{{ 'groups.pinnedGroups.name' | translate }}
-          <span id="pinnedSortByNamePlaceHolder">
-            <i class="fa fa-sort"></i>
-          </span></div>
-        <div class="col-sm-2 d-none d-md-block" (click)="sortByRoleName(true)">{{ 'groups.pinnedGroups.role' | translate }}
-          <span id="pinnedSortByRolePlaceHolder">
-            <i class="fa fa-sort"></i>
-          </span></div>
-        <div class="col-sm-3 d-none d-md-block" (click)="sortByUpNext(true)">{{ 'groups.pinnedGroups.upNext' | translate }}
-          <span id="pinnedSortByUpNextPlaceHolder">
-            <i class="fa fa-sort"></i>
-          </span>
+      <div class="container group-info-header">
+        <div class="row">
+          <div class="col-sm-3  d-block" (click)="sortByGroupName(true)">{{ 'groups.pinnedGroups.name' | translate }}
+            <span id="pinnedSortByNamePlaceHolder">
+              <i class="fa fa-sort"></i>
+            </span></div>
+          <div class="col-sm-2 d-none d-md-block" (click)="sortByRoleName(true)">{{ 'groups.pinnedGroups.role' | translate }}
+            <span id="pinnedSortByRolePlaceHolder">
+              <i class="fa fa-sort"></i>
+            </span></div>
+          <div class="col-sm-3 d-none d-md-block" (click)="sortByUpNext(true)">{{ 'groups.pinnedGroups.upNext' | translate }}
+            <span id="pinnedSortByUpNextPlaceHolder">
+              <i class="fa fa-sort"></i>
+            </span>
+          </div>
+          <div class="col-sm-2 d-none d-md-block" (click)="sortByMembersCount(true)">{{ 'groups.pinnedGroups.members' | translate }}
+            <span id="pinnedSortByMembersCountPlaceHolder">
+              <i class="fa fa-sort"></i>
+            </span>
+          </div>
+          <div class="col-sm-2 d-none d-md-block"></div>
         </div>
-        <div class="col-sm-2 d-none d-md-block" (click)="sortByMembersCount(true)">{{ 'groups.pinnedGroups.members' | translate }}
-          <span id="pinnedSortByMembersCountPlaceHolder">
-            <i class="fa fa-sort"></i>
-          </span>
-        </div>
-        <div class="col-sm-2 d-none d-md-block"></div>
       </div>
+
+      <app-group-info *ngFor="let gr of pinnedGroups"
+                      [group]="gr"
+                      [extendedInfoVisible]="pinnedGroups.length == 1"
+                      (onGroupClicked)="showGroup($event)"
+                      (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
+                      (onTriggerCreateVote)="showCreateVoteModal($event)"
+                      (onTriggerCreateTodo)="showCreateTodoModal($event)"
+                      (onTriggerCreateLivewireAlert)="showCreateLivewireAlertModal($event)"
+                      (pinToggled)="toggleGroupPin($event)"
+      >
+      </app-group-info>
+
     </div>
-
-    <app-group-info *ngFor="let gr of pinnedGroups"
-                    [group]="gr"
-                    [extendedInfoVisible]="pinnedGroups.length == 1"
-                    (onGroupClicked)="showGroup($event)"
-                    (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
-                    (onTriggerCreateVote)="showCreateVoteModal($event)"
-                    (onTriggerCreateTodo)="showCreateTodoModal($event)"
-                    (onTriggerCreateLivewireAlert)="showCreateLivewireAlertModal($event)"
-                    (pinToggled)="toggleGroupPin($event)"
-    >
-    </app-group-info>
-
   </div>
-</div>
 
 
-<h2>
-  <img src="assets/star_black.png"/>
-  {{ 'groups.allGroups.title' | translate }}
-</h2>
+  <h2>
+    <img src="assets/star_black.png"/>
+    {{ 'groups.allGroups.title' | translate }}
+  </h2>
 
-<div class="form-inline filter">
-  <label class="mr-md-2 " for="inlineRolePick">My role </label>
+  <div class="form-inline filter">
+    <label class="mr-md-2 " for="inlineRolePick">My role </label>
 
-  <div class="w-100 d-sm-block d-md-none"></div>
+    <div class="w-100 d-sm-block d-md-none"></div>
 
-  <div class="dropdown " id="inlineRolePick">
-      <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-        {{ 'groups.filter.selectRole' | translate }}
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_COMMITTEE_MEMBER')">{{ 'groups.filter.commitee' | translate }}</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_ORDINARY_MEMBER')">{{ 'groups.filter.member' | translate }}</a>
-        <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_GROUP_ORGANIZER')">{{ 'groups.filter.organizer' | translate }}</a>
+    <div class="dropdown " id="inlineRolePick">
+        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+          {{ 'groups.filter.selectRole' | translate }}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_COMMITTEE_MEMBER')">{{ 'groups.filter.commitee' | translate }}</a>
+          <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_ORDINARY_MEMBER')">{{ 'groups.filter.member' | translate }}</a>
+          <a class="dropdown-item" (click)="filterGroupsByRole('ROLE_GROUP_ORGANIZER')">{{ 'groups.filter.organizer' | translate }}</a>
+        </div>
       </div>
-    </div>
 
-  <div class="w-100 d-sm-block d-md-none"></div>
-
-
-  <label class="mr-md-2 " for="inlineKeywordPick">{{ 'groups.filter.keyword' | translate }} </label>
-
-  <div class="w-100 d-sm-block d-md-none"></div>
-
-  <input type="text" class="form-control " id="inlineKeywordPick" placeholder="{{ 'groups.filter.keywordPlaceholder' | translate }}"
-           name="name" (keyup)="filterByKeyword()">
-
-  <div class="w-100 d-sm-block d-md-none"></div>
-
-  <button type="button" class="btn btn-success clear-filters mt-sm-1" (click)="clearAllFilters()">{{ 'groups.filter.clear' | translate }}</button>
-</div>
+    <div class="w-100 d-sm-block d-md-none"></div>
 
 
-<div *ngIf="groups.length > 0" class="card">
-  <div class="card-body">
+    <label class="mr-md-2 " for="inlineKeywordPick">{{ 'groups.filter.keyword' | translate }} </label>
 
-    <div class="container group-info-header">
-      <div class="row">
-        <div class="col-md-2 col-lg-3 d-block" (click)="sortByGroupName(false)">{{ 'groups.allGroups.name' | translate }}
-          <span id="sortByNamePlaceHolder">
-            <i class="fa fa-sort"></i>
-          </span>
-        </div>
-        <div class="col-md-2 col-lg-2 d-none d-md-block" (click)="sortByRoleName(false)">{{ 'groups.allGroups.role' | translate }}
-          <span id="sortByRolePlaceHolder">
-            <i class="fa fa-sort"></i>
-          </span>
-        </div>
-        <div class="col-md-3 col-lg-3 d-none d-md-block" (click)="sortByUpNext(false)">{{ 'groups.allGroups.upNext' | translate }}
-          <span id="sortByUpNextPlaceHolder">
-            <i class="fa fa-sort"></i>
-          </span>
-        </div>
-        <div class="col-md-2 col-lg-2 d-none d-md-block" (click)="sortByMembersCount(false)">{{ 'groups.allGroups.members' | translate }}
-          <span id="sortByMembersCountPlaceHolder">
-            <i class="fa fa-sort"></i>
-          </span>
-        </div>
-        <div class="col-md-2 col-lg-1 d-none d-md-block"></div>
-        <div class="col-md-1 col-lg-1 d-none d-md-block"></div>
-      </div>
-    </div>
+    <div class="w-100 d-sm-block d-md-none"></div>
 
-    <app-group-info *ngFor="let gr of filteredGroupsPage"
-                    [group]="gr"
-                    (pinToggled)="toggleGroupPin($event)"
-                    (onGroupClicked)="showGroup($event)"
-                    (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
-                    (onTriggerCreateVote)="showCreateVoteModal($event)"
-                    (onTriggerCreateTodo)="showCreateTodoModal($event)"
-                    (onTriggerCreateLivewireAlert)="showCreateLivewireAlertModal($event)">
-    </app-group-info>
+    <input type="text" class="form-control " id="inlineKeywordPick" placeholder="{{ 'groups.filter.keywordPlaceholder' | translate }}"
+             name="name" (keyup)="filterByKeyword()">
 
+    <div class="w-100 d-sm-block d-md-none"></div>
+
+    <button type="button" class="btn btn-success clear-filters mt-sm-1" (click)="clearAllFilters()">{{ 'groups.filter.clear' | translate }}</button>
   </div>
+
+
+  <div *ngIf="groups.length > 0" class="card">
+    <div class="card-body">
+
+      <div class="container group-info-header">
+        <div class="row">
+          <div class="col-md-2 col-lg-3 d-block" (click)="sortByGroupName(false)">{{ 'groups.allGroups.name' | translate }}
+            <span id="sortByNamePlaceHolder">
+              <i class="fa fa-sort"></i>
+            </span>
+          </div>
+          <div class="col-md-2 col-lg-2 d-none d-md-block" (click)="sortByRoleName(false)">{{ 'groups.allGroups.role' | translate }}
+            <span id="sortByRolePlaceHolder">
+              <i class="fa fa-sort"></i>
+            </span>
+          </div>
+          <div class="col-md-3 col-lg-3 d-none d-md-block" (click)="sortByUpNext(false)">{{ 'groups.allGroups.upNext' | translate }}
+            <span id="sortByUpNextPlaceHolder">
+              <i class="fa fa-sort"></i>
+            </span>
+          </div>
+          <div class="col-md-2 col-lg-2 d-none d-md-block" (click)="sortByMembersCount(false)">{{ 'groups.allGroups.members' | translate }}
+            <span id="sortByMembersCountPlaceHolder">
+              <i class="fa fa-sort"></i>
+            </span>
+          </div>
+          <div class="col-md-2 col-lg-1 d-none d-md-block"></div>
+          <div class="col-md-1 col-lg-1 d-none d-md-block"></div>
+        </div>
+      </div>
+
+      <app-group-info *ngFor="let gr of filteredGroupsPage"
+                      [group]="gr"
+                      (pinToggled)="toggleGroupPin($event)"
+                      (onGroupClicked)="showGroup($event)"
+                      (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
+                      (onTriggerCreateVote)="showCreateVoteModal($event)"
+                      (onTriggerCreateTodo)="showCreateTodoModal($event)"
+                      (onTriggerCreateLivewireAlert)="showCreateLivewireAlertModal($event)">
+      </app-group-info>
+
+    </div>
+  </div>
+
+  <nav aria-label="Group list navigation" *ngIf="pagesList.length > 0">
+    <ul class="pagination justify-content-end">
+      <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
+        <a class="page-indicator " (click)="previousPage()">
+          <img src="../../../assets/arrow-left.png">{{ 'pagination.previous' | translate }}
+        </a>
+      </li>
+      <li class="page-item" *ngFor="let page of pagesList">
+        <a class="page-indicator " [ngClass]="(page==currentPage)?'page-selected':''" (click)="goToPage(page)">{{page}}</a>
+      </li>
+      <li class="page-item" [ngClass]="(currentPage==pagesList.length)?'disabled':''">
+        <a class="page-indicator " (click)="nextPage()">
+          {{ 'pagination.next' | translate }} <img src="../../../assets/arrow-right.png">
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div>
-
-<nav aria-label="Group list navigation" *ngIf="pagesList.length > 0">
-  <ul class="pagination justify-content-end">
-    <li class="page-item " [ngClass]="(currentPage==1)?'disabled':''">
-      <a class="page-indicator " (click)="previousPage()">
-        <img src="../../../assets/arrow-left.png">{{ 'pagination.previous' | translate }}
-      </a>
-    </li>
-    <li class="page-item" *ngFor="let page of pagesList">
-      <a class="page-indicator " [ngClass]="(page==currentPage)?'page-selected':''" (click)="goToPage(page)">{{page}}</a>
-    </li>
-    <li class="page-item" [ngClass]="(currentPage==pagesList.length)?'disabled':''">
-      <a class="page-indicator " (click)="nextPage()">
-        {{ 'pagination.next' | translate }} <img src="../../../assets/arrow-right.png">
-      </a>
-    </li>
-  </ul>
-</nav>
-
 
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>

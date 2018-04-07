@@ -4,11 +4,11 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 import {BroadcastParams} from "../../model/broadcast-params";
-import {optionalUrlValidator} from "../../../utils/CustomValidators";
+import {optionalUrlValidator} from "../../../validators/CustomValidators";
 import {environment} from "../../../../environments/environment";
 import {Ng2ImgMaxService} from "ng2-img-max";
-import {AlertService} from "../../../utils/alert.service";
-import {limitImageSizesInRichText} from "../../../utils/media-utils";
+import {AlertService} from "../../../utils/alert-service/alert.service";
+import {limitImageSizesInRichText} from "../../../media/media-utils";
 import {MediaService} from "../../../media/media.service";
 import {MediaFunction} from "../../../media/media-function.enum";
 

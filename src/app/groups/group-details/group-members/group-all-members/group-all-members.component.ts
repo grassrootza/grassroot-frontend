@@ -5,7 +5,7 @@ import {UserService} from '../../../../user/user.service';
 import {GroupService} from '../../../group.service';
 import {Membership, MembersPage} from '../../../model/membership.model';
 import {Group} from '../../../model/group.model';
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 import {GroupInfo} from "../../../model/group-info.model";
 
@@ -67,9 +67,9 @@ export class GroupAllMembersComponent implements OnInit {
     if (!this.currentPage) {
       this.alertService.showLoading();
     }
+    console.log("sorting users, retrieved sort: ", sort);
     this.filterMembersPage = sort;
-    this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort)
-      .subscribe(
+    this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort).subscribe(
         membersPage => {
           this.currentPage = membersPage;
           this.alertService.hideLoading();

@@ -120,7 +120,7 @@ export class GroupActivityComponent implements OnInit {
   }
 
   downloadEventErrorReport(task: Task) {
-    this.taskService.downloadBroadcastErrorReport(task.taskUid).subscribe(data => {
+    this.taskService.downloadBroadcastErrorReport(task.type, task.taskUid).subscribe(data => {
       let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       saveAs(blob, "task-error-report.xls");
     }, error => {

@@ -10,6 +10,7 @@ import {RouterModule} from "@angular/router";
 import {LoggedInServicesModule} from "../logged-in-services.module";
 import {SharedModule} from "../shared.module";
 import {Ng2ImgMaxModule} from "ng2-img-max";
+import {UserDeleteComponent} from "./delete/user-delete.component";
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import {Ng2ImgMaxModule} from "ng2-img-max";
     ProfileFormComponent,
     PasswordComponent,
     AccountComponent,
-    IntegrationsComponent
+    IntegrationsComponent,
+    UserDeleteComponent
   ]
 })
 export class UserProfileModule {

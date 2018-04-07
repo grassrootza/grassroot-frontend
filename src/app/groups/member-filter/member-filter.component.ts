@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {UserProvince} from '../../user/model/user-province.enum';
 
 import {MembersFilter} from "./filter.model";
@@ -19,11 +19,13 @@ declare var $: any;
   templateUrl: './member-filter.component.html',
   styleUrls: ['./member-filter.component.css']
 })
-export class MemberFilterComponent implements OnInit {
+export class MemberFilterComponent implements OnInit, OnChanges {
 
   provinceKeys: string[];
   joinMethods: string[];
   userLanguages: Language[];
+
+  private nameInputSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   @Input()
   taskTeams: GroupRef[] = [];
@@ -45,6 +47,7 @@ export class MemberFilterComponent implements OnInit {
   joinDateConditionType = null;
 
   public filterForm: FormGroup;
+  public hasCampaigns: boolean = false;
 
   private filter: MembersFilter = new MembersFilter();
 
@@ -55,7 +58,16 @@ export class MemberFilterComponent implements OnInit {
     this.provinceKeys = Object.keys(UserProvince);
     this.joinMethods = Object.keys(GroupJoinMethod);
     this.userLanguages = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
-    console.log(this.userLanguages);
+    // console.log(this.userLanguages);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes && changes['campaigns'] && !changes['campaigns'].firstChange) {
+      this.hasCampaigns = this.campaigns && this.campaigns.length > 0;
+      console.log("campaigns changed, setting up? : ", this.hasCampaigns);
+      if (this.hasCampaigns)
+        setTimeout(() => this.setUpCampaignsSelect(), 100);
+    }
   }
 
   ngOnInit() {
@@ -68,7 +80,7 @@ export class MemberFilterComponent implements OnInit {
     });
 
     if (this.includeNameFilter) {
-      this.nameInputSubject.asObservable().debounceTime(300)
+      this.nameInputSubject.asObservable().debounceTime(500)
         .subscribe(
           value => {
             this.filter.namePhoneOrEmail = value;
@@ -80,14 +92,14 @@ export class MemberFilterComponent implements OnInit {
   }
 
   setupSelect2() {
-    console.log("in member filter, topics: ", this.topics);
+    // console.log("in member filter, topics: ", this.topics);
 
     $(".provinces-multi-select").select2({placeholder: "Select a province"});
     $(".task-teams-multi-select").select2({placeholder: "Select task teams"});
     $(".topics-multi-select-filter").select2({placeholder: "Select topics"});
     $(".affiliations-multi-select").select2({placeholder: "Select affiliations (organizations)"});
     $(".join-methods-multi-select").select2({placeholder: "Select sources"});
-    $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
+
     $(".language-multi-select").select2({placeholder: "Select languages"});
 
 
@@ -121,21 +133,29 @@ export class MemberFilterComponent implements OnInit {
       this.fireFilterChange();
     }.bind(this));
 
-    $(".campaigns-multi-select").on('change.select2', function () {
-      const data = $('.campaigns-multi-select').select2('data');
-      this.filter.campaigns = data.length > 0 ? data.map(tt => tt.id) : null;
-      this.fireFilterChange();
-    }.bind(this));
-
     $(".language-multi-select").on('change.select2', function () {
       const data = $('.language-multi-select').select2('data');
       this.filter.language = data.length > 0 ? data.map(tt => tt.id) : null;
       this.fireFilterChange();
     }.bind(this));
+
+    if (this.hasCampaigns) {
+      this.setUpCampaignsSelect();
+    }
+  }
+
+  setUpCampaignsSelect() {
+    console.log("setting up campaign select ...");
+    $(".campaigns-multi-select").select2({placeholder: "Select campaigns"});
+    $(".campaigns-multi-select").on('change.select2', function () {
+      const data = $('.campaigns-multi-select').select2('data');
+      this.filter.campaigns = data.length > 0 ? data.map(tt => tt.id) : null;
+      this.fireFilterChange();
+    }.bind(this));
   }
 
   dateConditionTypeChanged(value) {
-    console.log("Join data select data: ", value);
+    // console.log("Join data select data: ", value);
 
     if (value == "ANY") {
       this.joinDateConditionType = null;
@@ -159,25 +179,23 @@ export class MemberFilterComponent implements OnInit {
   }
 
   dateChanged(date) {
-    console.log("Date changed: ", date);
+    // console.log("Date changed: ", date);
     this.filter.joinDate = moment([date.year, date.month - 1, date.day, 0, 0, 0, 0]);
     this.fireFilterChange();
   }
 
-
-  private nameInputSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   nameOrPhoneChanged(value) {
     this.nameInputSubject.next(value);
   }
 
   daysAgoChanged(value) {
-    console.log("Days ago changed: ", value);
+    // console.log("Days ago changed: ", value);
     this.filter.joinDaysAgo = value;
     this.fireFilterChange();
   }
 
   private fireFilterChange() {
-    console.log("Filter changed: ", this.filter);
+    // console.log("Filter changed: ", this.filter);
     this.filterChanged.emit(this.filter);
   }
 }

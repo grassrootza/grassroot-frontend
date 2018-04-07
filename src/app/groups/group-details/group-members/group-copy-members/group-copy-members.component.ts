@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
 import {Group} from "../../../model/group.model";
 import {Membership} from "../../../model/membership.model";
 import {GroupService} from "../../../group.service";
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 import {GroupInfo} from "../../../model/group-info.model";
 import {GroupAddMemberInfo} from "../../../model/group-add-member-info.model";
 import {GroupRole} from "../../../model/group-role";
@@ -15,7 +15,7 @@ declare var $: any;
   templateUrl: './group-copy-members.component.html',
   styleUrls: ['./group-copy-members.component.css']
 })
-export class GroupCopyMembersComponent implements OnInit, OnChanges {
+export class GroupCopyMembersComponent implements OnChanges {
 
   @Input() modalId: string = "add-member-to-task-team";
   @Input() groups: GroupInfo[] = [];
@@ -30,10 +30,6 @@ export class GroupCopyMembersComponent implements OnInit, OnChanges {
 
   constructor(private groupService: GroupService,
               private alertService: AlertService) { }
-
-  ngOnInit() {
-    console.log("fired up copy members modal");
-  }
 
   ngOnChanges() {
     // console.log("add to task team changed, members now: ", this.members);

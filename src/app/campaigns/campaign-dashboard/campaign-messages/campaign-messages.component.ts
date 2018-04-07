@@ -3,7 +3,7 @@ import {ENGLISH, Language, MSG_LANGUAGES} from "../../../utils/language";
 import {CampaignMsgRequest} from "../../campaign-create/campaign-request";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {CampaignService} from "../../campaign.service";
-import {AlertService} from "../../../utils/alert.service";
+import {AlertService} from "../../../utils/alert-service/alert.service";
 import {ActivatedRoute} from "@angular/router";
 import * as moment from "moment";
 import {CampaignInfo} from "../../model/campaign-info";

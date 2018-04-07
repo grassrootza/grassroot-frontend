@@ -4,7 +4,7 @@ import {Group} from "../../../model/group.model";
 import {UserService} from "../../../../user/user.service";
 import {GroupService} from "../../../group.service";
 import {Membership, MembersPage} from "../../../model/membership.model";
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 import {GroupInfo} from "../../../model/group-info.model";
 
 declare var $:any;

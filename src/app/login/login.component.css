@@ -36,3 +36,12 @@
 .login-banner-bold {
   font-weight: 600;
 }
+
+.legacy-link {
+  margin-top: 2rem;
+  margin-bottom: 0;
+  padding: 10px 20px;
+  border: 1px dashed #2cbc4c;
+  font-size: 1.1em;
+  color: #4A4A4A;
+}

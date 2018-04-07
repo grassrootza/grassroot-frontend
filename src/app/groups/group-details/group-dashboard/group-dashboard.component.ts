@@ -47,10 +47,10 @@ export class GroupDashboardComponent implements OnInit {
   ngOnInit() {
 
     this.route.parent.params.subscribe((params: Params) => {
-      console.log("Activated route params: ", params);
+      // console.log("Activated route params: ", params);
       this.groupUid = params['id'];
 
-      console.log("fetching group in dashboard");
+      // console.log("fetching group in dashboard");
       this.groupService.loadGroupDetailsCached(this.groupUid, true)
         .subscribe(
           groupDetails => {
@@ -77,7 +77,7 @@ export class GroupDashboardComponent implements OnInit {
       .loadUpcomingGroupTasks(this.groupUid)
       .subscribe(
         result => {
-          console.log("Tasks loaded: ", result);
+          // console.log("Tasks loaded: ", result);
           this.meetings = result.filter(task => task.type == TaskType.MEETING);
           this.votes = result.filter(task => task.type == TaskType.VOTE);
           this.todos = result.filter(task => task.type == TaskType.TODO);
@@ -90,7 +90,7 @@ export class GroupDashboardComponent implements OnInit {
 
 
   showCreateMeetingModal() {
-    console.log("Show create meeting modal for group: " + this.group.groupUid);
+    // console.log("Show create meeting modal for group: " + this.group.groupUid);
     this.createTaskGroupUid = this.group.groupUid;
     $("#create-meeting-modal").modal("show");
   }
@@ -139,7 +139,7 @@ export class GroupDashboardComponent implements OnInit {
   }
 
   public memberGrowthPeriodChanged(newPeriod: string) {
-    console.log("member growth period changed: ", newPeriod);
+    // console.log("member growth period changed: ", newPeriod);
     this.currentMemberGrowthPeriod = newPeriod;
     switch (newPeriod) {
       case 'THIS_MONTH':
@@ -167,7 +167,7 @@ export class GroupDashboardComponent implements OnInit {
     this.groupService.fetchMemberGrowthStats(this.groupUid, year, month)
       .subscribe(
         results => {
-          console.log("member growth stats for year " + year + ", month: " + month + ": ", results);
+          // console.log("member growth stats for year " + year + ", month: " + month + ": ", results);
 
           let timeUnits = Object.keys(results);
           let values: number[] = [];
@@ -217,7 +217,7 @@ export class GroupDashboardComponent implements OnInit {
       .subscribe(
         results => {
 
-          console.log("member provinces stats: ", results);
+          // console.log("member provinces stats: ", results);
 
           let provinces = Object.keys(results);
           let provinceNames = [];
@@ -268,7 +268,7 @@ export class GroupDashboardComponent implements OnInit {
       .subscribe(
         results => {
 
-          console.log("member sources stats: ", results);
+          // console.log("member sources stats: ", results);
 
           let sources = Object.keys(results);
           let sourceNames = [];
@@ -318,7 +318,7 @@ export class GroupDashboardComponent implements OnInit {
       .subscribe(
         results => {
 
-          console.log("member organisations stats: ", results);
+          // console.log("member organisations stats: ", results);
 
           let organisations = Object.keys(results);
           let counts: number[] = [];
@@ -363,7 +363,7 @@ export class GroupDashboardComponent implements OnInit {
     this.groupService.fetchMemberDetailsStats(this.groupUid)
       .subscribe(
         results => {
-          console.log("member details stats: ", results);
+          // console.log("member details stats: ", results);
           let newStats: ItemPercentage[] = [];
           let details = Object.keys(results);
           details.forEach(detail => {
@@ -384,7 +384,7 @@ export class GroupDashboardComponent implements OnInit {
     this.groupService.fetchTopicInterestsStats(this.groupUid)
       .subscribe(
         results => {
-          console.log("topic interests stats: ", results);
+          // console.log("topic interests stats: ", results);
           let newStats: ItemPercentage[] = [];
           let details = Object.keys(results);
           details.forEach(detail => {

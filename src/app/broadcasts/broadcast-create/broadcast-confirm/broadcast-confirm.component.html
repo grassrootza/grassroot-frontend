@@ -40,7 +40,7 @@
         <ngb-tab *ngIf="confirmFields.sendEmail">
           <ng-template ngbTabTitle><span class="tab-title-text">{{ 'broadcasts.create.types.emailLabel' | translate }}</span></ng-template>
           <ng-template ngbTabContent>
-            <div class="tab-content-text" [innerHtml]="contentFields.emailContent"></div>
+            <div class="tab-content-text" [innerHtml]="strippedEmailContent"></div>
           </ng-template>
         </ngb-tab>
         <ngb-tab *ngIf="confirmFields.postFacebook">

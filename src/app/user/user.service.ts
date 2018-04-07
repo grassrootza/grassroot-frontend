@@ -1,11 +1,13 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {environment} from "../../environments/environment";
-import {AuthenticatedUser, AuthorizationResponse, UserProfile} from "./user.model";
+import {AuthenticatedUser, AuthorizationResponse, getAuthUser, UserProfile} from "./user.model";
 import {Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {isValidNumber} from "libphonenumber-js";
+import {LocalStorageService} from "../utils/local-storage.service";
+import {CookiesService} from "../utils/cookie-service/cookies.service";
 
 @Injectable()
 export class UserService {
@@ -17,15 +19,19 @@ export class UserService {
   private updateImageUrl: string = environment.backendAppUrl + "/api/user/profile/image/change";
   private loggedInUserImageUrlBase = environment.backendAppUrl + "/api/user/profile/image/view";
 
+  private deleteUserInitiate: string = environment.backendAppUrl + "/api/user/profile/delete/initiate";
+  private deleteUserConfirm: string = environment.backendAppUrl + "/api/user/profile/delete/confirm";
+
   private _loggedInUser: AuthenticatedUser = null;
   public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
 
   public showForceLogoutReason = false;
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(private httpClient: HttpClient, private router: Router, private localStorageService: LocalStorageService,
+              private cookieService: CookiesService) {
     console.log("Initializing user service");
-    if (localStorage.getItem("loggedInUser") != null) {
-      this._loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"))
+    if (this.localStorageService.getItem("loggedInUser")) {
+      this._loggedInUser = getAuthUser(JSON.parse(this.localStorageService.getItem("loggedInUser")))
     }
   }
 
@@ -49,7 +55,7 @@ export class UserService {
     return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params})
       .map(authResponse => {
         if (authResponse.errorCode == null) {
-          this.storeAuthUser(authResponse.user, authResponse.user.token);
+          this.storeAuthUser(getAuthUser(authResponse.user), authResponse.user.token);
         }
         return authResponse;
       });
@@ -68,11 +74,10 @@ export class UserService {
       .set("interfaceType", "WEB_2");
 
     return this.httpClient.get<AuthorizationResponse>(this.loginUrl, {params: params})
-      .map(
-        authResponse => {
+      .map(authResponse => {
           console.log("AuthResponse: ", authResponse);
           if (authResponse.errorCode == null) {
-            this.storeAuthUser(authResponse.user, authResponse.user.token);
+            this.storeAuthUser(getAuthUser(authResponse.user), authResponse.user.token);
           }
           return authResponse;
         }
@@ -81,30 +86,34 @@ export class UserService {
 
   storeAuthUser(user: AuthenticatedUser, token?: string) {
     if (token) {
-      localStorage.setItem("token", token);
+      this.localStorageService.setItem('token', token);
     }
     this._loggedInUser = user;
     this.loggedInUser.emit(this._loggedInUser);
-    localStorage.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
+    this.localStorageService.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
+    this.cookieService.storeUserLoggedIn();
   }
 
-  logout(showForceLogoutReason: boolean): any {
-
+  logout(showForceLogoutReason: boolean, afterLogoutRoute: string = ''): any {
     this.showForceLogoutReason = showForceLogoutReason;
 
+    this.cleanUpUser();
+
+    this.router.navigate([afterLogoutRoute]);
+  }
+
+  cleanUpUser() {
     this._loggedInUser = null;
     this.loggedInUser.emit(this._loggedInUser);
-    localStorage.removeItem('token');
-    localStorage.removeItem('loggedInUser');
-    localStorage.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login
+    this.localStorageService.removeItem('token');
+    this.localStorageService.removeItem('loggedInUser');
+    this.localStorageService.removeItem('afterLoginUrl'); // to avoid coming back to same place after logout/login
 
     // clear up broadcast items, just in case user had some lying around
-    localStorage.removeItem('broadcastCreateRequest');
-    localStorage.removeItem('broadcastCreateStep');
+    this.localStorageService.removeItem('broadcastCreateRequest');
+    this.localStorageService.removeItem('broadcastCreateStep');
 
-    console.log("routing to login");
-    console.log("going back to login");
-    this.router.navigate(['/login']);
+    this.cookieService.clearUserLoggedIn();
   }
 
   isLoggedIn(): boolean {
@@ -169,4 +178,25 @@ export class UserService {
     // query param is to force reload
     return this.loggedInUserImageUrlBase + "/" + this._loggedInUser.userUid + (cacheBust ? "?cb=" + Date.now() : "");
   }
+
+  hasActivePaidAccount() {
+    return this._loggedInUser && this._loggedInUser.hasAccountAdmin();
+  }
+
+  initiateUserDelete(): Observable<string> {
+    return this.httpClient.post(this.deleteUserInitiate, null, { responseType: 'text' });
+  }
+
+  completeUserDelete(otp: string): Observable<any> {
+    const params = new HttpParams().set("otp", otp);
+    return this.httpClient.post(this.deleteUserConfirm, null, { params: params, responseType: 'text' }).map(result => {
+      console.log("result from server: ", result);
+      if (result == 'USER_DELETED') {
+        console.log("okay, cleaning up user");
+        this.cleanUpUser();
+      }
+      return result;
+    });
+  }
+
 }

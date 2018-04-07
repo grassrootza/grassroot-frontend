@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Group} from "../../../model/group.model";
 import {Membership} from "../../../model/membership.model";
 import {GroupService} from "../../../group.service";
-import {AlertService} from "../../../../utils/alert.service";
+import {AlertService} from "../../../../utils/alert-service/alert.service";
 
 declare var $: any;
 

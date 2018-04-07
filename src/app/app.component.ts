@@ -1,11 +1,13 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {UserService} from "./user/user.service";
-import {NavigationEnd, RouteConfigLoadStart, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
 import {TranslateService} from '@ngx-translate/core';
-import {AlertService} from "./utils/alert.service";
-import {NotificationService} from "./user/notification.service";
+import {AlertService} from "./utils/alert-service/alert.service";
+import {DISPLAYED_NOTIFICATIONS_STORAGE_KEY, NotificationService} from "./user/notification.service";
 import {Notification} from "./user/model/notification.model";
+import {LocalStorageService} from "./utils/local-storage.service";
+import {isPlatformBrowser} from "@angular/common";
 
 declare var $: any;
 
@@ -17,6 +19,7 @@ declare var $: any;
 
 export class AppComponent implements OnInit {
 
+  isUserLoggedIn: boolean = false;
   loggedInUser: AuthenticatedUser = null;
   alertMessage: string = "";
   currentUrl = "";
@@ -34,16 +37,19 @@ export class AppComponent implements OnInit {
   private popupNotificationDisplayInProgress = false;
 
   private maxNumberOfPopupNotificationInSequence = 3;
-  private DISPLAYED_NOTIFICATIONS_STORAGE_KEY: string = "displayedNotifications";
 
   public userImageUrl;
   public userHasNoImage: boolean; // seems redundant but Angular being insanely obtuse on chnages
+
+  public showMenu: boolean = false;
 
   constructor(private router: Router,
               private userService: UserService,
               private translateService: TranslateService,
               private alertService: AlertService,
-              private notificationService: NotificationService) {
+              private notificationService: NotificationService,
+              private localStorageService: LocalStorageService,
+              @Inject(PLATFORM_ID) protected platformId: Object) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
     if (this.loggedInUser && this.loggedInUser.hasImage) {
@@ -53,23 +59,23 @@ export class AppComponent implements OnInit {
       this.userHasNoImage = true;
     }
 
-    this.router.events.subscribe(ev => {
-      if (ev instanceof RouteConfigLoadStart) {
-        console.log("start routing to lazy module, navigating");
-        this.loadingModule = true;
-      }
-
-      if (ev instanceof NavigationEnd) {
-        console.log("navigation has ended");
-        this.currentUrl = ev.url;
-      }
-    });
+    // this.router.events.subscribe(ev => {
+    //   if (ev instanceof RouteConfigLoadStart) {
+    //     console.log("start routing to lazy module, navigating");
+    //     this.loadingModule = true;
+    //   }
+    //
+    //   if (ev instanceof NavigationEnd) {
+    //     console.log("navigation has ended");
+    //     this.currentUrl = ev.url;
+    //   }
+    // });
 
     this.userService.loggedInUser.subscribe(user => {
-      console.log("user emitted!");
+      // console.log("user emitted!");
       this.loggedInUser = user;
       this.userHasNoImage = !this.loggedInUser || !this.loggedInUser.hasImage;
-      console.log("user has no image? : ", this.userHasNoImage);
+      // console.log("user has no image? : ", this.userHasNoImage);
       if (this.loggedInUser && this.loggedInUser.hasImage) {
         this.userImageUrl = this.userService.getProfileImageUrl(true);
       }
@@ -85,16 +91,33 @@ export class AppComponent implements OnInit {
 
     translateService.addLangs(['en']);
     translateService.setDefaultLang('en');
-    const browserLang = translateService.getBrowserLang();
-    translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+
+    if (isPlatformBrowser(this.platformId)) {
+      const browserLang = translateService.getBrowserLang();
+      translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+    } else {
+      translateService.use('en');
+    }
   }
 
   ngOnInit(): void {
-    $(".ntf-popup").hide();
-    this.pullNotifications();
-    setInterval(() => {
-      this.pullNotifications()
-    }, 10000);
+    // console.log("is the user logged in? ", this.userService.isLoggedIn());
+    if (isPlatformBrowser(this.platformId) && this.userService.isLoggedIn()) {
+      $(".ntf-popup").hide();
+      this.pullNotifications();
+      setInterval(() => {
+        this.pullNotifications()
+      }, 10000);
+    }
+  }
+
+  public navigateToMainLink(route: string) {
+    this.router.navigate([route]);
+    this.showMenu = false;
+  }
+
+  public toggleMenuCollapse() {
+    this.showMenu = !this.showMenu;
   }
 
   private pullNotifications() {
@@ -107,12 +130,8 @@ export class AppComponent implements OnInit {
       return;
     }
 
-    this.notificationService.fetchUnreadNotifications()
-      .subscribe(
-        notifications => {
-          // console.log("Notifications: ", notifications);
-
-          let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+    this.notificationService.fetchUnreadNotifications().subscribe(notifications => {
+          let displayedNotifications: string = this.localStorageService.getItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
           if (!displayedNotifications)
             displayedNotifications = "";
 
@@ -127,7 +146,7 @@ export class AppComponent implements OnInit {
         },
         error => {
           if (error.status == 401)
-            this.userService.logout(true);
+            this.userService.logout(true, '/login');
           else console.log("Notifications error: ", error);
         }
 
@@ -137,18 +156,18 @@ export class AppComponent implements OnInit {
   showNextNewNotification() {
     if (this.newNotifications.length > this.currentPopupNotificationIndex && this.currentPopupNotificationIndex < this.maxNumberOfPopupNotificationInSequence) {
       this.popupNotificationDisplayInProgress = true;
-      console.log("Showing popup ntf " + this.currentPopupNotificationIndex);
       this.popupNotification = this.newNotifications[this.currentPopupNotificationIndex];
+
       $(".ntf-popup").fadeIn(500);
       this.popopNotificationTimeoutId = setTimeout(() => {
         this.hidePopupNotification()
       }, 4000);
 
 
-      let displayedNotifications: string = localStorage.getItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+      let displayedNotifications: string = this.localStorageService.getItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
       displayedNotifications = displayedNotifications ? displayedNotifications : "";
       displayedNotifications = displayedNotifications + ";" + this.popupNotification.uid;
-      localStorage.setItem(this.DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
+      this.localStorageService.setItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
 
       this.currentPopupNotificationIndex++;
     }
@@ -159,13 +178,11 @@ export class AppComponent implements OnInit {
   }
 
   popupNotificationMouseEnter() {
-    console.log("Mouse enter popup notification");
     this.popupNotificationEngaged = true;
     clearTimeout(this.popopNotificationTimeoutId)
   }
 
   popupNotificationMouseExit() {
-    console.log("Mouse exit popup notification");
     this.popupNotificationEngaged = false;
     this.hidePopupNotification()
   }
@@ -187,15 +204,14 @@ export class AppComponent implements OnInit {
   }
 
 
-  handleNotificationClick(event: any) {
+  handleNotificationClick(event: any, notificationUid: string) {
     event.stopPropagation();
+    this.markNotificationRead(notificationUid);
     return false;
   }
 
   markNotificationRead(notificationUid: string): boolean {
-    this.notificationService.markNotificationRead(notificationUid)
-      .subscribe(
-        successResponse => {
+    this.notificationService.markNotificationRead(notificationUid).subscribe(successResponse => {
           console.log("Mark notification result: ", successResponse);
           //remove notification with this uid, since it's no longed unread
           this.notifications = this.notifications.filter(ntf => ntf.uid != notificationUid);

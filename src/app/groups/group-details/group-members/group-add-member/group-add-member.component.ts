@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserProvince} from '../../../../user/model/user-province.enum';
 import {GroupRole} from '../../../model/group-role';
 import {GroupModifiedResponse} from '../../../model/group-modified-response.model';
-import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../utils/CustomValidators';
+import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../validators/CustomValidators';
 import {Observable} from 'rxjs/Observable';
 import {Group} from '../../../model/group.model';
 import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';

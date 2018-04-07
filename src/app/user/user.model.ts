@@ -28,17 +28,37 @@ export class AuthenticatedUser {
               public languageCode: string,
               public province: string,
               public hasImage: boolean,
-              public token: string) {
+              public token: string,
+              public systemRoles: string[]) {
   }
 
+  hasAccountAdmin() {
+    return this.systemRoles && this.systemRoles.indexOf('ROLE_ACCOUNT_ADMIN') != -1;
+  }
+
+  hasSystemAdmin() {
+    return this.systemRoles && this.systemRoles.indexOf('ROLE_SYSTEM_ADMIN') != -1;
+  }
 }
+
+export const getAuthUser = (au: AuthenticatedUser): AuthenticatedUser => {
+  return new AuthenticatedUser(
+    au.userUid,
+    au.displayName,
+    au.msisdn,
+    au.email,
+    au.languageCode,
+    au.province,
+    au.hasImage,
+    au.token,
+    au.systemRoles
+  );
+};
 
 export class UserProfile {
   name: string = "";
   phone: string = "";
   email: string = "";
-  // note: typescript enum handling is garbage, so this line results in the label string
-  // province: UserProvince = UserProvince.ZA_GP;
   province: string = 'ZA_GP';
   language: string = "en";
 

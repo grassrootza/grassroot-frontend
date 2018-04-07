@@ -3,7 +3,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {TaskService} from "../task.service";
 import {Task} from "../task.model";
 import {convertResponseMap, TaskResponse} from "../task-response";
-import {AlertService} from "../../utils/alert.service";
+import {AlertService} from "../../utils/alert-service/alert.service";
 import {TodoType} from "../todo-type";
 import { saveAs } from 'file-saver';
 import {TaskType} from "../task-type";
@@ -110,12 +110,13 @@ export class TodoDetailsComponent implements OnInit {
   }
 
   downloadEventErrorReport() {
-    this.taskService.downloadBroadcastErrorReport(this.todoUid).subscribe(data => {
+    this.taskService.downloadBroadcastErrorReport(this.todo.type, this.todoUid).subscribe(data => {
       let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       saveAs(blob, "task-error-report.xls");
     }, error => {
       console.log("error getting the file: ", error);
     });
+    return false;
   }
 
 }

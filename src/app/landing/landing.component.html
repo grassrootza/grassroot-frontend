@@ -1,0 +1,345 @@
+<!--<div class="container">-->
+<div class="jumbotron" id="intro">
+  <div class="container text-center">
+    <div class="intro-content">
+      <div class="meet-vote-act">MEET, VOTE, ACT </div>
+      <h1>Mobilizing your community has never been this easy</h1>
+      <p><a class="call-to-action btn btn-success btn-lg" href="#start" role="button">Get Started</a></p>
+    </div><!-- /.intro-content -->
+  </div>
+</div><!-- /.jumbotron -->
+
+<!-- Latest News -->
+
+<div class="section-latest-news">
+  <div class="container">
+    <div class="latest-news">
+      <h2>Latest News</h2>
+      <div class="news-headings row" #tasknote>
+        <carousel [items]="newsList" [carouselContainerWidth]="carouselContainerWidth" [durationBetweenScrolls]="3500"></carousel>
+      </div>
+    </div>
+  </div>
+</div><!-- /.section-latest-news -->
+
+<div class="row">
+<div class="col-md-8 offset-md-2">
+  <!-- Section Grey -->
+  <div class="section-grey bg-grey">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6">
+          <h2>In every community there are men and women who have the fire within to create change.</h2>
+          <p>
+            Mobilizing and organizing takes skill and time and money. So many who might lead do not. Those who do must spend most of their time on basic tasks rather than learning, planning and inspiring.
+          </p>
+          <p>
+            We have built a platform to change this. It consists of purpose-built tools that solve real problems for people who wish to organize their communities. It connects such leaders to each other, and allows the easy aggregation and analysis of the issues they tackle.
+          </p>
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+          <div class="box-happening-now" >
+            <h3>Happening Now....</h3>
+            <div style="overflow: hidden" #activitiesPlaceHolder>
+              <div class="row" *ngFor="let activity of activitiesList" #activitiesRow>
+                <div class="col-lg-7 col-md-12">
+                  <img [src]="getImgSourceForPublicActivityType(activity.type)" class="icon-holder"/>
+                  {{activity.actorName}} {{ ('enum.PublicActivityType.' +  activity.type) | translate }}
+                </div>
+                <div class="col-lg-5 time col-md-12">
+                  {{activity.actionTimeMillis | timeAgo }}
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.box-happening-now -->
+        </div><!-- /.col-lg-6 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+  </div><!-- /.section-grey -->
+
+  <!-- Tools -->
+  <div class="tools bg-white">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Tools for a people's democracy</h2>
+        <p>Simple ways to create and manage groups over low-end phones with little bandwidth</p>
+      </div><!-- /.section-header -->
+      <div class="tools-inner row">
+        <div class="col-lg-6">
+          <div class="tool">
+            <div class="icon-wrapper">
+              <img src="assets/landing/icon_create_group.jpg" alt="">
+            </div><!-- /.tool-wrapper -->
+            <div class="tool-info">
+              <h3>Create Groups</h3>
+              <p>Easily setup a group and use a join code to simply recruit and add people via any phone.</p>
+            </div><!-- /.tool-info -->
+          </div><!-- /.tool -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+          <div class="tool">
+            <div class="icon-wrapper">
+              <img src="assets/landing/icon_call_meeting.jpg" alt="">
+            </div><!-- /.tool-wrapper -->
+            <div class="tool-info">
+              <h3>Call Meetings</h3>
+              <p>Summon people to a meeting and let members confirm attendance. Automated reminders and acknowledgements make organising a breeze.</p>
+            </div><!-- /.tool-info -->
+          </div><!-- /.tool -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+          <div class="tool">
+            <div class="icon-wrapper">
+              <img src="assets/landing/icon_vote.jpg" alt="">
+            </div><!-- /.tool-wrapper -->
+            <div class="tool-info">
+              <h3>Vote</h3>
+              <p>Call and participate in votes to decide among priorities. It gives everyone with any phone a quick and anonymous say and sends the results back to them as soon as the poll closes</p>
+            </div><!-- /.tool-info -->
+          </div><!-- /.tool -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+          <div class="tool">
+            <div class="icon-wrapper">
+              <img src="assets/landing/icon_create_action.jpg" alt="">
+            </div><!-- /.tool-wrapper -->
+            <div class="tool-info">
+              <h3>Create Action Items</h3>
+              <p>Make things happen by assigning action items.  It gives everyone a view of group decisions, facts and times associated with them.</p>
+            </div><!-- /.tool-info -->
+          </div><!-- /.tool -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+          <div class="tool">
+            <div class="icon-wrapper">
+              <img src="assets/landing/icon_search.jpg" alt="">
+            </div><!-- /.tool-wrapper -->
+            <div class="tool-info">
+              <h3>Search and Recall</h3>
+              <p>Group organizers and members have full recall ability for their groups to see: a record of prior meetings, results of old votes, and records of which actions have been completed.</p>
+            </div><!-- /.tool-info -->
+          </div><!-- /.tool -->
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-6">
+          <div class="tool">
+            <div class="icon-wrapper">
+              <img src="assets/landing/icon_connect.jpg" alt="">
+            </div><!-- /.tool-wrapper -->
+            <div class="tool-info">
+              <h3>Connect</h3>
+              <p>Groups can be made public and can then be found by anyone who searches for them by name. A request to join is sent to the designated group organizer.</p>
+            </div><!-- /.tool-info -->
+          </div><!-- /.tool -->
+        </div><!-- /.col-lg-6 -->
+      </div><!-- /.row -->
+      <div class="text-center"><a href="#" [routerLink]="['/register']" class="call-to-action btn btn-success">Register to start using our tools</a></div>
+      <div id="start"></div> <!-- reference for links -->
+    </div><!-- /.container -->
+  </div><!-- /.tools -->
+
+
+  <!-- Choose how to use Grassroot -->
+  <div class="choose-how-to-use-grassroot bg-grey">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="text-center">Choose how you want to use Grassroot</h2>
+      </div><!-- /.section-header -->
+
+      <div class="boxes row">
+        <div class="col-md-4">
+          <div class="box box-dial">
+            <h4>Dial *134*1994#</h4>
+            <div class="img-wrap">
+              <img src="assets/landing/dial.jpg" class="img-fluid" alt="">
+            </div>
+            <p>To get started, simply dial <br> *134*1994# from any phone <br> (in South Africa).</p>
+            <!--<p><a href="#">See our quick how-to on getting started <i class="fas fa-arrow-right"></i></a></p>-->
+          </div><!-- /.box -->
+        </div>
+        <div class="col-md-4">
+          <div class="box box-download">
+            <h4>Download Grassroot for Android</h4>
+            <div class="img-wrap">
+              <img src="assets/landing/download_app.jpg" class="img-fluid" alt="">
+            </div>
+            <p>All the functionality of USSD with the added convenience of an app!</p>
+            <a href="https://play.google.com/store/apps/details?id=za.org.grassroot.android&utm_source=global_co&utm_medium=prtnr&utm_content=Mar2515&utm_campaign=PartBadge&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"><img src="assets/landing/google_play.jpg" alt=""></a>
+          </div><!-- /.box -->
+        </div>
+        <div class="col-md-4">
+          <div class="box box-visit">
+            <h4>Visit www.grassroot.org.za</h4>
+            <div class="img-wrap">
+              <img src="assets/landing/visit_app.jpg" class="img-fluid" alt="">
+            </div>
+            <p>Login or sign-up right here on our website to access all of your groups and more.</p>
+            <a href="#" [routerLink]="['/register']" class="call-to-action btn btn-success">Register</a>
+          </div>
+        </div><!-- /.box -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+  </div><!-- /.choose-how-to-use-grassroot -->
+
+
+
+  <!-- Additional Tools -->
+  <div class="additional-tools bg-white">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Power up with additional tools on the web app</h2>
+        <p>Catering for large organisations and networks of groups.</p>
+      </div>
+      <div class="section-content row">
+        <div class="col-md-6 order-md-2">
+          <h3>Groups</h3>
+          <ul>
+            <li>Manage and monitor group activity</li>
+            <li>Segment members using task groups and topic tags.</li>
+            <li>Import and export member lists</li>
+          </ul>
+          <br>
+          <h3>Networks</h3>
+          <ul>
+            <li>Aggregate views of groups connected to your network.</li>
+            <li>See where you need to allocate more resources or encourage more activity.</li>
+          </ul>
+          <br>
+        </div><!-- /.col-md-6 -->
+        <div class="col-md-6  order-md-1 left-img-area">
+          <img src="assets/landing/additional_tools.jpg" alt="" class="img-fluid">
+        </div><!-- /.col-md-6 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+  </div><!-- /.additional-tools -->
+
+
+  <!-- Campaigns -->
+  <div class="campaigns bg-blue">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Campaigns</h3>
+          <ul>
+            <li>Integrate with Amandla Awethu petitions</li>
+            <li>Setup recruiment drives to grow your group</li>
+            <li>Drive information campaigns to spread your message</li>
+            <li>Monitor performance with the campaign dashboard</li>
+          </ul>
+          <h3>Reach your members with Broadcasts</h3>
+          <ul>
+            <li>Access your members via multiple channels such as sms, email and social media.</li>
+            <li>Send messages to groups, campaigns or create custom segments of your members.</li>
+          </ul>
+        </div><!-- /.col-md-6 -->
+        <div class="col-md-6 img-right">
+          <img src="assets/landing/campaigns2.jpg" alt="" class="img-fluid">
+        </div><!-- /.col-md-6 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+  </div><!-- /.campaigns -->
+
+  <!-- Our Vision -->
+  <div class="our-vision bg-grey" id="vision">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Our vision is a nation self-organizing from the ground up.</h2>
+      </div><!-- /.section-header -->
+      <div class="section-content row">
+        <div class="col-md-6">
+          <img src="assets/landing/robots.jpg" alt="" class="img-fluid">
+        </div><!-- /.col-md-6 -->
+        <div class="col-md-6">
+          <p class="about-our-org">Find out about our organization, mission, project, team and partners.</p>
+          <ul>
+            <li><a href="" (click)="navigateTo('about')"><span class="imgwrap"><img src="assets/landing/icon_vision.jpg" alt=""></span> Our Vision and Mission <i class="fas fa-arrow-right"></i></a> </li>
+            <li><a href="" (click)="navigateTo('about', 'team')"><span class="imgwrap"><img src="assets/landing/icon_team.jpg" alt=""></span> Meet our team <i class="fas fa-arrow-right"></i></a></li>
+            <li><a href="" (click)="navigateTo('about', 'partners')"><span class="imgwrap"><img src="assets/landing/icon_partners.jpg" alt=""></span> Our partners <i class="fas fa-arrow-right"></i></a></li>
+            <li><a href="" (click)="navigateTo('about', 'impact')"><span class="imgwrap"><img src="assets/landing/icon_vision.jpg" alt=""></span> Stories of impact <i class="fas fa-arrow-right"></i></a></li>
+          </ul>
+        </div><!-- /.col-md-6 -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->
+  </div><!-- /.our-vision -->
+
+
+  <!-- Donors  -->
+  <div class="donors bg-white">
+    <div class="container">
+      <div class="section-header text-center">
+        <h2>Grassroot is made possible by the generosity of many.</h2>
+        <p>
+          We have reached this point thanks to institutional and individual donors, to whom we are immensely grateful.
+          Below we list the institutions that have supported us so far, as well as individuals who have contributed R10,000/$1,000 and above, some of whom have requested that we keep their gift anonymous.
+        </p>
+      </div><!-- /.section-header -->
+      <div class="logos row text-center" >
+        <div class="col-sm-3 "><img src="assets/landing/donor1.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 "><img src="assets/landing/donor2.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 "><img src="assets/landing/donor3.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 "><img src="assets/landing/donor4.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 col-6"><img src="assets/landing/donor5.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 col-6"><img src="assets/landing/donor6.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 col-6"><img src="assets/landing/donor7.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 col-6"><img src="assets/landing/donor8.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 col-6"><img src="assets/landing/donor9.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 col-6"><img src="assets/landing/donor10.jpg" alt="" class="img-fluid"></div>
+        <div class="col-sm-3 col-6"><img src="assets/landing/donor11.jpg" alt="" class="img-fluid"></div>
+      </div><!-- /.row -->
+      <!--<p class="text-center"><a href="#" class="call-to-action btn btn-success">Learn more about our funding</a></p>-->
+
+
+      <!-- Contribute -->
+      <div class="contribute" id="contribute">
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Contribute</h3>
+            <p>Your donation will help fund our engagement with communities, product development, and messaging and server costs.</p>
+            <p>Contributions, large or small, funding or code, ideas and feedback, examples and connections: all make a difference.</p>
+            <p class="contribute-btn"><a href="#" class="call-to-action btn btn-success">Contribute Now</a></p>
+          </div><!-- /.col-md-6 -->
+          <div class="col-md-6">
+            <div class="row">
+              <div class="col-sm-6">
+                <img src="assets/landing/thumb1.jpg" alt="" class="d-none d-sm-block img-fluid">
+              </div>
+              <div class="col-sm-6">
+                <img src="assets/landing/thumb2.jpg" alt="" class="d-none d-sm-block img-fluid">
+              </div>
+            </div>
+            <br>
+            <!--<p class="make-a-pledge">Not ready to donate? <a href="#">Make a pledge</a> to contribute in the future.</p>-->
+          </div><!-- /.col-md-6 -->
+        </div><!-- /.row -->
+      </div><!-- /.contribute -->
+    </div><!-- /.container -->
+  </div><!-- /.donors -->
+
+
+  <!-- Join the Conversation -->
+  <div class="join-the-conversation bg-grey">
+    <div class="container">
+      <div class="container-inner">
+        <div class="row">
+          <div class="col-lg-6">
+            <img src="assets/landing/conversation.jpg" style="" alt="" class="conversation img-fluid">
+          </div><!-- /.col-lg-6 -->
+          <div class="col-lg-6 subscribtion-form-area text-center">
+            <div class="content-area">
+              <h2>Join the conversation</h2>
+              <p>Updates, news and feedback - find out what others are saying, have your say,  and keep up to date with new features by joining our social community. We're always keen to connect with you on Facebook, Twitter and Linked In.</p>
+              <div class="social-icons">
+                <ul>
+                  <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                  <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                  <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                </ul>
+              </div>
+            </div><!-- /.content-area -->
+          </div><!-- /.col-lg-6 -->
+        </div><!-- /.row -->
+      </div><!-- /.container-inner -->
+    </div><!-- /.container -->
+  </div><!-- /.join-the-conversation -->
+</div>
+</div>

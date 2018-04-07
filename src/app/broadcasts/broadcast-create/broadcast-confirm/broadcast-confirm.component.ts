@@ -3,8 +3,8 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {BroadcastService} from "../../broadcast.service";
 import {Router} from "@angular/router";
 import {BroadcastConfirmation, BroadcastContent} from "../../model/broadcast-request";
-import {AlertService} from "../../../utils/alert.service";
-import {emailStyleHeader} from "../../../utils/media-utils";
+import {AlertService} from "../../../utils/alert-service/alert.service";
+import {emailStyleHeader} from "../../../media/media-utils";
 
 @Component({
   selector: 'app-broadcast-confirm',
@@ -28,6 +28,7 @@ export class BroadcastConfirmComponent implements OnInit {
     this.contentFields = this.broadcastService.getContent();
     if (this.contentFields.emailContent) {
       this.strippedEmailContent = this.contentFields.emailContent.replace(emailStyleHeader, '');
+      console.log("stripped email content, now = ", this.strippedEmailContent);
     }
   }
 

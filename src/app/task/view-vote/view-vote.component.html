@@ -14,6 +14,9 @@
               <img [src]="'assets/' + voteToView?.getEventIconName() "/>&nbsp;&nbsp;
               <span class="task-field-name">Vote: </span> {{voteToView?.title}}
             </p>
+            <p class="task-field-para" *ngIf="voteToView?.errorReport">
+              <a (click)="downloadEventErrorReport()" class="download-error-report">{{ 'task.todo.details.download-error-button' | translate }}</a>
+            </p>
             <p class="task-field-para">
               <span class="task-field-name">Group: </span> {{voteToView?.parentName}}
             </p>
@@ -44,10 +47,10 @@
           <div class="col-md-3 col-sm-6">
             <div class="dropdown">
               <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                {{ !!response ? (response | titlecase) : '(Select)' }}</button>
+                {{ !!response ? response : '(Select)' }}</button>
               <div class="dropdown-menu">
                   <a class="dropdown-item" *ngFor="let option of options" (click)="response = option">
-                    {{ option | titlecase }}
+                    {{ option }}
                   </a>
               </div>
             </div>
