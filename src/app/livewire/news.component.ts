@@ -1,7 +1,9 @@
+import {isPlatformBrowser} from "@angular/common";
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {ActivatedRoute, Params} from "@angular/router";
 import {PublicLivewire} from "./public-livewire.model";
 import {MediaFunction} from "../media/media-function.enum";
 import {MediaService} from "../media/media.service";
-import {Component, OnInit} from '@angular/core';
 import {PublicNewsService} from "../landing/public-news.service";
 
 declare var $: any;
@@ -22,17 +24,59 @@ export class NewsComponent implements OnInit {
 
   public imageUrl:string;
 
-  constructor(private newsService:PublicNewsService,
-              private mediaService:MediaService) { }
+  public alertUid:string = "";
+  public firstAlert:PublicLivewire;
+  public alertIndex:number;
+  public outPageNumber:number;
+
+  public loadFromOutside:boolean = false;
+
+
+  constructor(private newsService: PublicNewsService,
+              private mediaService:MediaService,
+              private route:ActivatedRoute,
+              @Inject(PLATFORM_ID) protected platformId: Object) { }
 
   ngOnInit() {
-    this.loadNews(this.pageNumber);
+    this.route.params.subscribe((params:Params) => {
+      this.alertUid = params['id'];
+      if(this.alertUid !== '0'){
+        console.log("Alert uid .... Out load",this.alertUid);
+        console.log("Alert uid",this.alertUid);
+        this.loadFromOutside = true;
+        this.loadAndScrollToAlert(this.alertUid);
+      }else{
+        console.log("Load news inside");
+        this.loadNews(this.pageNumber);
+      }
+    });
   }
 
-  loadNews(pageNumber:number){
+  loadAndScrollToAlert(alertuid:string){
+    this.newsService.findAlertPageNumber(alertuid).subscribe(resp => {
+      console.log("Page number....",resp);
+      this.outPageNumber = resp;
+      this.loadNews(this.outPageNumber);
+    },error => {
+      console.log("Error finding alert page number",error);
+    });
+  }
+
+  loadNews(pageNumber:number) {
     this.newsService.loadNews(pageNumber).subscribe(news =>{
         this.news = news.content;
         this.totalPages = news.totalPages;
+
+        if(this.loadFromOutside){
+          console.log("Loading from outside.....");
+          if (isPlatformBrowser(this.platformId)){
+            setTimeout(() => {
+              const el = document.getElementById('target');
+              document.querySelector('#target').scrollIntoView({behavior: 'smooth'});
+            }, 2000)
+          }
+        }
+
     },error =>{
       console.log("Error loading news.....",error);
     });

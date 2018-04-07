@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
 import {ANIMATION_TYPES, LoadingModule} from 'ngx-loading';
@@ -38,7 +38,6 @@ import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component"
 import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
-import {LoggingInterceptor} from "./utils/logging-interceptor.class";
 import {TimeAgoPipe} from "time-ago-pipe";
 
 @NgModule({

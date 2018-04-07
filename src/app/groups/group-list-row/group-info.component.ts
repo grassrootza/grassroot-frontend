@@ -68,7 +68,6 @@ export class GroupInfoComponent implements OnInit {
   }
 
   triggerCreateLivewireAlert(){
-    console.log("############",this.group.groupUid + "");
     this.onTriggerCreateLivewireAlert.emit(this.group);
   }
 
