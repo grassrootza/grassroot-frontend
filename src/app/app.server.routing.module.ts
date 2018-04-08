@@ -20,6 +20,7 @@ const routes: Routes = [
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
   {path: 'news', component: NewsComponent},
+  {path: 'news/:id', component: NewsComponent},
   {path: 'unsubscribe/:groupId/:userId/:token', component: UnsubscribeComponent},
   {path: 'respond/:taskType/:taskId/:userId/:token', component: FrontPageRespondComponent},
 
