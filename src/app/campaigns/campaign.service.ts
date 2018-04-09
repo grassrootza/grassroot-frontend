@@ -43,7 +43,7 @@ export class CampaignService {
 
     this.httpClient.get<CampaignInfo[]>(this.campaignListUrl)
       .map(data => {
-          console.log("Campaign json object from server: ", data);
+          // console.log("Campaign json object from server: ", data);
           return data.map(cp => getCampaignEntity(cp))
         })
       .subscribe(

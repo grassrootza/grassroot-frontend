@@ -1,4 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import { saveAs } from 'file-saver';
 import {Task} from "../task.model";
 import {UserService} from "../../user/user.service";
 import {TaskService} from "../task.service";
@@ -82,6 +83,15 @@ export class ViewVoteComponent implements OnInit, OnChanges {
       // $("#view-vote-modal").modal("hide");
     },error =>{
       console.log("Error casting vote.......",error);
+    });
+  }
+
+  downloadEventErrorReport() {
+    this.taskService.downloadBroadcastErrorReport(this.voteToView.type, this.voteToView.taskUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "task-error-report.xls");
+    }, error => {
+      console.log("error getting the file: ", error);
     });
   }
 }

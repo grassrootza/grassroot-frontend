@@ -494,13 +494,11 @@ export class GroupsComponent implements OnInit {
   }
 
   showCreateLivewireAlertModal(group: GroupInfo){
-      console.log("Create livewire alert**********");
       this.createTaskGroupUid = group.groupUid;
       $("#create-livewire-alert-modal").modal("show");
   }
 
   alertSaved(saveResponse){
-    console.log("Save Resp..................",saveResponse);
     $("#create-livewire-alert-modal").modal("hide");
   }
 

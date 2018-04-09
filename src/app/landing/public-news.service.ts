@@ -10,6 +10,7 @@ export class PublicNewsService {
 
   private publicNewsHeadlineUrl = environment.backendAppUrl + "/api/news/list/headlines";
   private publicNewsAlertsUrl = environment.backendAppUrl + "/api/news/list/full";
+  private alertPageNumberUrl = environment.backendAppUrl + "/api/news/page/number";
 
   constructor(private httpClient: HttpClient) {
   }
@@ -56,4 +57,10 @@ export class PublicNewsService {
         }
       )
   }
+
+  findAlertPageNumber(alertUid:string):Observable<any>{
+    let params = new HttpParams().set('alertUid',alertUid);
+    return this.httpClient.get(this.alertPageNumberUrl,{params:params});
+  }
+
 }

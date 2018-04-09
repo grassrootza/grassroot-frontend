@@ -112,12 +112,13 @@ export class MeetingDetailsComponent implements OnInit {
 
 
   downloadEventErrorReport() {
-    this.taskService.downloadBroadcastErrorReport(this.meetingUid).subscribe(data => {
+    this.taskService.downloadBroadcastErrorReport(this.meeting.type, this.meetingUid).subscribe(data => {
       let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
       saveAs(blob, "task-error-report.xls");
     }, error => {
       console.log("error getting the file: ", error);
     });
+    return false;
   }
 
 }

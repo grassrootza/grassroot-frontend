@@ -1,0 +1,41 @@
+<div class="card-body">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-center">
+        <h2 [translate]="'user.delete.title'">Delete my account</h2>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12" *ngIf="!requestOtp" [translate]="'user.delete.disuasion'">
+      Are you sure you want to do this?
+    </div>
+  </div>
+  <div class="row mt-3" *ngIf="!requestOtp">
+    <div class="col-12 text-center">
+      <button class="btn btn-secondary save-button hover-danger" (click)="initiateDelete()"
+        [translate]="'user.delete.button'">Yes, delete</button>
+    </div>
+  </div>
+  <div class="row" *ngIf="requestOtp">
+    <div class="col-12">
+      <label for="otp" [translate]="'user.delete.otp-prompt'">
+        Okay, well if you really want to. For security reasons, we have to verify it's you. Please enter the OTP we just sent
+      </label>
+    </div>
+  </div>
+  <div class="row mt-3" *ngIf="requestOtp">
+    <div class="col-12">
+      <input id="otp" type="text" class="form-control text-center" [(ngModel)]="otp" />
+    </div>
+  </div>
+  <div class="row mt-3" *ngIf="requestOtp">
+    <div class="col-12 text-center">
+      <button class="btn btn-secondary save-button hover-danger" (click)="completeDelete()"
+        [translate]="'user.delete.otp-confirm'">Yes, I really mean it</button>
+    </div>
+  </div>
+  <div class="alert alert-danger mt-5" *ngIf="displayError" [innerHtml]="errorMessageKey | translate">
+  </div>
+
+</div>

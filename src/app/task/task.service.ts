@@ -6,8 +6,6 @@ import {Task} from "./task.model";
 import {TaskType} from "./task-type";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
-import {LiveWireAlertType} from "../livewire/live-wire-alert-type.enum";
-import {LiveWireAlertDestType} from "../livewire/live-wire-alert-dest-type.enum";
 import {MediaFunction} from "../media/media-function.enum";
 import {LocalStorageService} from "../utils/local-storage.service";
 
@@ -26,7 +24,6 @@ export class TaskService {
 
   private allGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/group";
 
-  private createLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/create";
   private uploadImageUrl = environment.backendAppUrl + "/api/media/store/body";
 
   private castVoteUrl = environment.backendAppUrl + "/api/task/respond/vote";
@@ -46,7 +43,7 @@ export class TaskService {
 
   private cancelTaskUrl = environment.backendAppUrl + "/api/task/modify/cancel";
 
-  private downloadErrorReportUrl = environment.backendAppUrl + "/api/task/fetch/error-report/";
+  private downloadErrorReportUrl = environment.backendAppUrl + "/api/task/fetch/error-report";
 
   private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
 
@@ -203,46 +200,6 @@ export class TaskService {
     return this.httpClient.post(uploadFullUrl, image,{ responseType: 'json' });
   }
 
-  createLiveWireAlert(userUid:string,headline:string,alertType:LiveWireAlertType,groupUid:string,taskUid:string,
-                      destination:LiveWireAlertDestType,description:string,addLocation:boolean,contactPerson:string,
-                      contactPersonName:string,contactPersonNumber:string,mediaKeys:string[]):Observable<any>{
-
-    let fullUrl = this.createLiveWireAlertUrl + "/" + userUid;
-    let params;
-
-    console.log("Media file keys..................................",mediaKeys);
-
-    let mediaKeyArray: string[] = [];
-
-
-    params = new HttpParams()
-      .set("headline",headline)
-      .set("description",description)
-      .set("type",alertType)
-      .set("groupUid",groupUid)
-      .set("addLocation",addLocation + "")
-      .set("destType",destination)
-      .set("taskUid",taskUid)
-      .set("mediaFileKeys",mediaKeys.join(","));
-
-
-      if(contactPerson === "someone"){
-      params = new HttpParams()
-        .set("headline",headline)
-        .set("description",description)
-        .set("type",alertType)
-        .set("groupUid",groupUid)
-        .set("addLocation",addLocation + "")
-        .set("destType",destination)
-        .set("taskUid",taskUid)
-        .set("contactNumber",contactPersonNumber)
-        .set("contactName",contactPersonName)
-        .set("mediaFileKeys",mediaKeys + "");
-      }
-
-    return this.httpClient.post(fullUrl,null,{params:params});
-  }
-
   castVote(taskUid:string, response:string):Observable<Task>{
     let fullUrl = this.castVoteUrl + "/" + taskUid;
     let params = new HttpParams().set("vote", response);
@@ -286,8 +243,8 @@ export class TaskService {
     });
   }
 
-  downloadBroadcastErrorReport(taskUid: string) {
-    const fullUrl = this.downloadErrorReportUrl  + taskUid + '/download';
+  downloadBroadcastErrorReport(taskType: string, taskUid: string) {
+    const fullUrl = this.downloadErrorReportUrl + '/' + taskType + '/' + taskUid + '/download';
 
     return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }

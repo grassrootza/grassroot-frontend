@@ -285,6 +285,15 @@ export class HomeComponent implements OnInit {
     $("#create-todo-modal").modal("hide");
   }
 
+  showCreateLivewireAlertModal(group: GroupInfo){
+    this.createTaskGroupUid = group.groupUid;
+    $("#create-livewire-alert-modal").modal("show");
+  }
+
+  alertSaved(saveResponse){
+    $("#create-livewire-alert-modal").modal("hide");
+  }
+
   searchGlobaly(searchTerm:string){
     if(this.searchService.isSearchTermJoinCode(searchTerm) != null){
       this.loadGroupWithJoinCode(searchTerm);
