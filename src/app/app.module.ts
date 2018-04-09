@@ -40,6 +40,7 @@ import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
 import {LoggingInterceptor} from "./utils/logging-interceptor.class";
 import {TimeAgoPipe} from "time-ago-pipe";
+import { SystemAdminComponent } from './admin/system-admin/system-admin.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import {TimeAgoPipe} from "time-ago-pipe";
     TermsOfUseComponent,
     AboutUsComponent,
     ContributeComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    SystemAdminComponent
   ],
   imports: [
     BrowserModule,
