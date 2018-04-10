@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
+import { Router } from '@angular/router'
 
 declare var $: any;
 
@@ -10,7 +11,10 @@ declare var $: any;
 })
 export class SystemAdminComponent implements OnInit {
 
-  constructor(private adminService:AdminService) { }
+  public userToOptoutUid:string;
+  
+  constructor(private adminService:AdminService,
+              private router:Router) { }
 
   ngOnInit() {
   }
@@ -18,7 +22,7 @@ export class SystemAdminComponent implements OnInit {
   loadUsers(searchTerm:string){
     console.log("Searching....",searchTerm);
     this.adminService.loadUser(searchTerm).subscribe(resp => {
-      console.log("Loaded......",resp);
+      this.userToOptoutUid = resp.id;
       $('#user-opt-out-modal').modal("show");
     },error => {
       console.log("Error loading user..",error);
@@ -26,9 +30,9 @@ export class SystemAdminComponent implements OnInit {
   }
   
   optOutUser(otp:string){
-    console.log("Otp entered....",otp);
-    this.adminService.optOutUser(otp).subscribe(resp => {
+    this.adminService.optOutUser(otp,this.userToOptoutUid).subscribe(resp => {
       $('#user-opt-out-modal').modal("hide");
+      this.router.navigate(["/home"]);
     },error => {
       console.log("Error opting user out...",error);
     });

@@ -78,7 +78,7 @@ const routes: Routes = [
 
   {path: 'privacy', component: PrivacyPolicyComponent},
   {path: 'terms', component: TermsOfUseComponent},
-  {path: 'admin', component: SystemAdminComponent}
+  {path: 'system-admin', component: SystemAdminComponent}
 ];
 
 @NgModule({

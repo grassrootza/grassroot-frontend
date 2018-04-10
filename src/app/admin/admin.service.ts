@@ -6,7 +6,7 @@ import {Observable} from "rxjs/Observable";
 @Injectable()
 export class AdminService {
 
-  private loadUsersUrl = environment.backendAppUrl + "/api/admin/users/load";
+  private loadUsersUrl = environment.backendAppUrl + "/api/admin/user/load";
   private optOutUserUrl = environment.backendAppUrl + "/api/admin/user/optout";
   constructor(private httpClient: HttpClient) { }
 
@@ -15,8 +15,10 @@ export class AdminService {
     return this.httpClient.get(this.loadUsersUrl,{params:params});
   }
   
-  optOutUser(otp:string):Observable<any>{
-    let params = new HttpParams().set('otpEntered',otp);
+  optOutUser(otp:string,userToOptoutUid:string):Observable<any>{
+    let params = new HttpParams()
+      .set('otpEntered',otp)
+      .set('userToOptOutUid',userToOptoutUid);
     return this.httpClient.post(this.optOutUserUrl,null,{params:params});
   }
 }
