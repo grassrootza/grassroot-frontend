@@ -11,7 +11,8 @@ declare var $: any;
 })
 export class SystemAdminComponent implements OnInit {
 
-  public userToOptoutUid:string;
+  public userUid:string;
+  public userNotFoundMessage:string;
   
   constructor(private adminService:AdminService,
               private router:Router) { }
@@ -22,15 +23,25 @@ export class SystemAdminComponent implements OnInit {
   loadUsers(searchTerm:string){
     console.log("Searching....",searchTerm);
     this.adminService.loadUser(searchTerm).subscribe(resp => {
-      this.userToOptoutUid = resp.id;
-      $('#user-opt-out-modal').modal("show");
+      console.log("Response....",resp);
+      if(resp === ""){
+        this.userNotFoundMessage = "User not found,type correct number or email";
+        console.log("Message:",this.userNotFoundMessage);
+        setTimeout(() => {
+          this.userNotFoundMessage = "";
+        }, 2000)
+      }else{
+        this.userUid = resp;
+        $('#user-opt-out-modal').modal("show");
+      }
+
     },error => {
       console.log("Error loading user..",error);
     });
   }
   
   optOutUser(otp:string){
-    this.adminService.optOutUser(otp,this.userToOptoutUid).subscribe(resp => {
+    this.adminService.optOutUser(otp,this.userUid).subscribe(resp => {
       $('#user-opt-out-modal').modal("hide");
       this.router.navigate(["/home"]);
     },error => {

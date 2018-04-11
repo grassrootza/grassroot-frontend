@@ -8,17 +8,18 @@ export class AdminService {
 
   private loadUsersUrl = environment.backendAppUrl + "/api/admin/user/load";
   private optOutUserUrl = environment.backendAppUrl + "/api/admin/user/optout";
+  
   constructor(private httpClient: HttpClient) { }
 
   loadUser(searchTerm:string):Observable<any>{
     let params = new HttpParams().set('lookupTerm',searchTerm);
-    return this.httpClient.get(this.loadUsersUrl,{params:params});
+    return this.httpClient.get(this.loadUsersUrl,{responseType:'text',params:params});
   }
   
   optOutUser(otp:string,userToOptoutUid:string):Observable<any>{
     let params = new HttpParams()
       .set('otpEntered',otp)
       .set('userToOptOutUid',userToOptoutUid);
-    return this.httpClient.post(this.optOutUserUrl,null,{params:params});
+    return this.httpClient.post(this.optOutUserUrl,null,{responseType:'text',params:params);
   }
 }
