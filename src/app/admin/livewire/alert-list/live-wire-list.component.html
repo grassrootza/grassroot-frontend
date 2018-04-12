@@ -1,38 +1,40 @@
-<h1 class="main-title">{{'livewire.list.title' | translate}}</h1>
-<div class="card">
-	<div class="card-body">
-		<div class="row header">
-			<div class="col-md-2">{{'livewire.list.header' | translate}}</div>
-			<div class="col-md-4"></div>
-			<div class="col-md-2">
-				<select class="form-control" (change)="onchangeSort($event.target.value)">
-					<option class="dropdown-item" value="desc">Newest first</option>
-					<option class="dropdown-item" value="asc">Unreleased first</option>
-				</select>
-			</div>
-			<div class="col-md-4">
-				  <ul class="pagination justify-content-end">
-				  	<a class="page-indicator" style="font-weight: bold;" (click)="previousPage()"><i class="fa fa-chevron-left"></i> Previous</a>
-				   	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-					<a class="page-indicator " style="font-weight: bold;" (click)="nextPage()">Next <i class="fa fa-chevron-right"></i></a>
-				  </ul>
-			</div>
-		</div>
+<div class="container primary-container">
+  <div class="card">
+    <div class="card-body">
+      <div class="row text-center">
+        <h1 class="main-title text-center">{{'livewire.list.title' | translate}}</h1>
+      </div>
+      <div class="row header">
+        <div class="col-md-2">{{'livewire.list.header' | translate}}</div>
+        <div class="col-md-2 offset-4">
+          <select class="form-control" (change)="onchangeSort($event.target.value)">
+            <option class="dropdown-item" value="desc">Newest first</option>
+            <option class="dropdown-item" value="asc">Unreleased first</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+            <ul class="pagination justify-content-end">
+              <a class="page-indicator" style="font-weight: bold;" (click)="previousPage()"><i class="fa fa-chevron-left"></i> Previous</a>
+              <a class="page-indicator " style="font-weight: bold;" (click)="nextPage()">Next <i class="fa fa-chevron-right"></i></a>
+            </ul>
+        </div>
+      </div>
 
-		<div class="row alerts-header">
-			<div class="col-md-4">Headline</div>
-			<div class="col-md-4">Contact name</div>
-			<div class="col-md-4">Number</div>
-		</div>
-		<div *ngFor="let alert of alertList" class="alert-list">
-			<div class="row">
-				<div class="col-md-4 secondary-entity-link">
-					<a [routerLink]="['/admin/livewire',alert.serverUid]">{{alert.headline}}</a>
-				</div>
-				<div class="col-md-4">{{alert.contactUserName}}</div>
-				<div class="col-md-4">{{alert.contactUserPhone}}</div>
-			</div>
-			<hr />
-		</div>
-	</div>
+      <div class="row alerts-header">
+        <div class="col-md-4">Headline</div>
+        <div class="col-md-4">Contact name</div>
+        <div class="col-md-4">Number</div>
+      </div>
+      <div *ngFor="let alert of alertList" class="alert-list">
+        <div class="row">
+          <div class="col-md-4 secondary-entity-link">
+            <a [routerLink]="['/admin/livewire', alert.serverUid]" class="grassroot-link">{{alert.headline}}</a>
+          </div>
+          <div class="col-md-4">{{alert.contactUserName}}</div>
+          <div class="col-md-4">{{alert.contactUserPhone}}</div>
+        </div>
+        <hr />
+      </div>
+    </div>
+  </div>
 </div>
