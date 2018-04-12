@@ -27,7 +27,12 @@ export class IntegrationsService {
 
   storeProviderConnectResult(provider: string, returnedParams: any) {
     console.log("params: ", returnedParams);
-    return this.httpClient.get(this.settingsUrlBase + "/connect/" + provider + "/complete", { params: returnedParams });
+    if (provider === 'facebook') {
+        let params = new HttpParams().set("code", returnedParams.code);
+        return this.httpClient.get(this.settingsUrlBase + "/connect/facebook/complete", { params: returnedParams });
+    } else {
+        return this.httpClient.get(this.settingsUrlBase + "/connect/" + provider + "/complete", { params: returnedParams });
+    }
   }
 
   removeProviderPage(provider: string, providerUserId: string) {

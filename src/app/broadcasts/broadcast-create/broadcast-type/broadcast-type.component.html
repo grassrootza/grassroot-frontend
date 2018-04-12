@@ -59,8 +59,8 @@
                     multiple [size]="createParams?.facebookPages?.length + 1"
                     class="form-control fb-select" [formControl]="typesForm.controls['facebookPages']">
               <option selected value="" [disabled]="!!(typesForm.controls['facebookPages'])"> -- Select page(s) -- </option>
-              <option *ngFor="let page of createParams.facebookPages; let i = index" value="{{ page.providerUserId }}">
-                {{ page.displayName }}
+              <option *ngFor="let page of createParams.facebookPages; let i = index" value="{{ page.pageId}}">
+                {{ page.pageName }}
               </option>
             </select>
             <a [routerLink]="['/user/integrations']" class="grassroot-link account-link">
