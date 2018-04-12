@@ -4,7 +4,6 @@
 	<a [routerLink]="['/admin/livewire/list']" class="grassroot-breadcrumb"><i
 		class="fas fa-arrow-left"></i>BACK TO ALERTS</a>
 
-
 	<div class="row" *ngIf="!liveWireAlert.sent">
 		<div class="col-md-1">
 			<button class="btn btn-secondary" (click)="openReleaseModal()">Release</button>
@@ -34,267 +33,242 @@
 				<div class="col-md-4">{{!liveWireAlert.reviewed ? "Unreviewed"
 					: liveWireAlert.sent ? "Sent" : "Blocked"}}</div>
 			</div>
-			<div class="col-md-1">
-				<button class="btn btn-secondary"
-					(click)="blockAlert(liveWireAlert.serverUid)">Block</button>
+			<hr />
+			<div class="row contact">
+				<div class="col-md-2" style="font-weight: bold;">Contact</div>
+				<div class="col-md-4">{{liveWireAlert.contactUserName + "," +
+					liveWireAlert.contactUserPhone}}</div>
 			</div>
-			<div class="col-md-1">
-				<button class="btn btn-secondary"
-					(click)="openTagsModal(liveWireAlert.serverUid)">Tags</button>
+			<hr />
+			<div class="row created-time">
+				<div class="col-md-2" style="font-weight: bold;">Created time</div>
+				<div class="col-md-4">{{liveWireAlert.creationTimeMillis |
+					date: 'dd MMM yyyy'}}</div>
 			</div>
-		</div>
-		<div class="card">
-			<div *ngIf="liveWireAlert" class="card-body">
-				<div class="row headline">
-					<div class="col-md-2" style="font-weight: bold;">Headline</div>
-					<div class="col-md-4">{{liveWireAlert.headline}}</div>
-					<div class="col-md-4">
-						<button class="btn btn-primary"
-							(click)="openHeadlineModal(liveWireAlert.headline)">Edit</button>
+			<hr />
+			<div class="row description">
+				<div class="col-md-2" style="font-weight: bold;">Description</div>
+				<div class="col-md-4">{{liveWireAlert.description}}</div>
+				<div class="col-md-4">
+					<button class="btn btn-primary"
+						(click)="openDescriptionModal(liveWireAlert.description)">Edit</button>
+				</div>
+			</div>
+			<hr />
+			<div class="row group">
+				<div class="col-md-2" style="font-weight: bold;">Related to</div>
+				<div class="col-md-4">{{"Flash news for group," +
+					liveWireAlert.ancestorGroupName + ", of size " +
+					liveWireAlert.groupSize}}</div>
+			</div>
+			<hr />
+			<div class="row media">
+				<div class="col-md-2" style="font-weight: bold;">Images or
+					videos</div>
+				<div class="col-md-10">
+					<div *ngIf="liveWireAlert.mediaFileUids.length == 0">
+						<div class="row">None</div>
 					</div>
-				</div>
-				<hr />
-				<div class="row status">
-					<div class="col-md-2" style="font-weight: bold;">Status</div>
-					<div class="col-md-4">{{!liveWireAlert.reviewed ?
-						"Unreviewed" : liveWireAlert.sent ? "Sent" : "Blocked"}}</div>
-				</div>
-				<hr />
-				<div class="row contact">
-					<div class="col-md-2" style="font-weight: bold;">Contact</div>
-					<div class="col-md-4">{{liveWireAlert.contactUserName + "," +
-						liveWireAlert.contactUserPhone}}</div>
-				</div>
-				<hr />
-				<div class="row created-time">
-					<div class="col-md-2" style="font-weight: bold;">Created time</div>
-					<div class="col-md-4">{{liveWireAlert.creationTimeMillis |
-						date: 'dd MMM yyyy'}}</div>
-				</div>
-				<hr />
-				<div class="row description">
-					<div class="col-md-2" style="font-weight: bold;">Description</div>
-					<div class="col-md-4">{{liveWireAlert.description}}</div>
-					<div class="col-md-4">
-						<button class="btn btn-primary"
-							(click)="openDescriptionModal(liveWireAlert.description)">Edit</button>
-					</div>
-				</div>
-				<hr />
-				<div class="row group">
-					<div class="col-md-2" style="font-weight: bold;">Related to</div>
-					<div class="col-md-4">{{"Flash news for group," +
-						liveWireAlert.ancestorGroupName + ", of size " +
-						liveWireAlert.groupSize}}</div>
-				</div>
-				<hr />
-				<div class="row media">
-					<div class="col-md-2" style="font-weight: bold;">Images or
-						videos</div>
-					<div class="col-md-10">
-						<div *ngIf="liveWireAlert.mediaFileUids.length == 0">
-							<div class="row">None</div>
-						</div>
-						<div class="row">
-							<input type="file" class="form-control" multiple="multiple"
-								(change)="uploadImages($event,showFileNames)"> <input
-								#showFileNames type="hidden">
-						</div>
-					</div>
-				</div>
-				<hr />
-				<div *ngIf="liveWireAlert.mediaFileUids.length > 0" class="row">
-					<div
-						*ngFor="let imageKey of liveWireAlert.mediaFileUids; let i = index"
-						class="col-md-3 col-sm-6 col">
-						<div class="row">
-							<img (click)="openImage(imageKey)" class="alert-image" alt=""
-								src="{{loadImageUrl(liveWireAlert.mediaFileUids[i])}}" />
-						</div>
-						<div class="row" style="margin-top: 1%;">
-							<button class="btn btn-danger btn-sm"
-								(click)="deleteImage(imageKey)">
-								<i class="far fa-trash-alt"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-				<hr />
-				<div class="row tags">
-					<div class="col-md-2" style="font-weight: bold;">Tags</div>
-					<div class="col-md-8">
-						<div *ngIf="liveWireAlert.tags.length > 0">{{liveWireAlert.tags}}</div>
+					<div class="row">
+						<input type="file" class="form-control" multiple="multiple"
+							(change)="uploadImages($event,showFileNames)"> <input
+							#showFileNames type="hidden">
 					</div>
 				</div>
 			</div>
-		</div>
-
-
-
-		<div class="modal fade" tabindex="-1" role="dialog"
-			id="open-image-modal" aria-hidden="true">
-			<div class="modal-dialog modal-lg" role="document">
-				<div class="modal-content">
-					<span class="alert-modal-image-close">&times;</span>
-					<div class="modal-body">
-						<img class="alert-modal-image" alt="" src="{{imageUrl}}">
+			<hr />
+			<div *ngIf="liveWireAlert.mediaFileUids.length > 0" class="row">
+				<div
+					*ngFor="let imageKey of liveWireAlert.mediaFileUids; let i = index"
+					class="col-md-3 col-sm-6 col">
+					<div class="row">
+						<img (click)="openImage(imageKey)" class="alert-image" alt=""
+							src="{{loadImageUrl(liveWireAlert.mediaFileUids[i])}}" />
 					</div>
-
-				</div>
-			</div>
-		</div>
-
-		<div class="modal fade" tabindex="-1" role="dialog"
-			id="change-headline-modal" aria-hidden="true">
-			<div class="modal-dialog modal-md" role="document">
-				<div class="modal-content">
-					<span class="alert-modal-image-close">&times;</span>
-					<div class="modal-header">
-						<h5 class="modal-title">{{'livewire.headline-modal.title' |
-							translate}}</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
+					<div class="row" style="margin-top: 1%;">
+						<button class="btn btn-danger btn-sm"
+							(click)="deleteImage(imageKey)">
+							<i class="far fa-trash-alt"></i>
 						</button>
 					</div>
-
-					<div class="modal-body">
-						<div class="form-group">
-							<label for="headline-text" class="control-label">{{'livewire.headline-modal.label'
-								| translate}}</label> <input class="form-control" type="text"
-								id="headline-text" name="headline-text" value="{{headline}}"
-								[(ngModel)]="headline">
-						</div>
-					</div>
-
-					<div class="modal-footer">
-						<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-						<button class="btn btn-danger" (click)="updateHeadline(headline)">Edit</button>
-					</div>
-
 				</div>
 			</div>
-		</div>
-
-		<div class="modal fade" tabindex="-1" role="dialog"
-			id="change-description-modal" aria-hidden="true">
-			<div class="modal-dialog modal-md" role="document">
-				<div class="modal-content">
-					<span class="alert-modal-image-close">&times;</span>
-					<div class="modal-header">
-						<h5 class="modal-title">{{'livewire.desc-modal.title' |
-							translate}}</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-
-					<div class="modal-body">
-						<div class="form-group">
-							<label for="description-text" class="control-label">{{'livewire.desc-modal.label'
-								| translate}}</label>
-
-							<textarea class="form-control" #description rows="" cols=""
-								id="description-text" name="description-text">
-        		{{desc}}
-        	</textarea>
-						</div>
-					</div>
-
-					<div class="modal-footer">
-						<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-						<button class="btn btn-danger"
-							(click)="updateDescription(description.value)">Edit</button>
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-		<div class="modal fade" tabindex="-1" role="dialog" id="tags-modal"
-			aria-hidden="true">
-			<div class="modal-dialog modal-md" role="document">
-				<div class="modal-content">
-					<span class="alert-modal-image-close">&times;</span>
-					<div class="modal-header">
-						<h5 class="modal-title">{{'livewire.tags-modal.title' |
-							translate}}</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-
-					<div class="modal-body">
-						<div class="form-group">
-							<label for="tags" class="control-label">{{'livewire.tags-modal.label'
-								| translate}}</label> <input type="text" class="form-control" id="tags"
-								name="tags" #tags>
-						</div>
-					</div>
-
-					<div class="modal-footer">
-						<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-						<button class="btn btn-danger" (click)="addTags(tags.value)">Confirmed</button>
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-		<div class="modal fade" tabindex="-1" role="dialog" id="release-modal"
-			aria-hidden="true">
-			<div class="modal-dialog modal-md" role="document">
-				<div class="modal-content">
-					<span class="alert-modal-image-close">&times;</span>
-					<div class="modal-header">
-						<h5 class="modal-title">{{'livewire.release-modal.title' |
-							translate}}</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-
-					<div class="modal-body">
-						<div class="form-group">
-							<label for="tags" class="control-label">{{'livewire.release-modal.label'
-								| translate}}</label>
-
-							<div *ngIf="subscribers.length > 0">
-								<div class="row">
-									<h5>{{'livewire.release-modal.list-title' | translate}}</h5>
-								</div>
-								<ul>
-									<li *ngFor="let subscriber of subscribers"><input
-										type="checkbox" value="{{subscriber.uid}}"
-										(change)="selectedSubscribers($event.target.checked,subscriber.uid)">
-										<span>{{subscriber.displayName}}</span></li>
-								</ul>
-								<div class="row">
-									<h5>Share to social:</h5>
-								</div>
-								<ul>
-									<li><input type="checkbox" value="facebook" #facebook
-										(change)="facebookEvent($event.target.checked,facebook.value)">
-										<i class="fab fa-facebook-square"></i> <!-- <input type="text">-->
-									</li>
-									<li><input type="checkbox" value="twitter" #twitter
-										(change)="tweetEvent($event.target.checked,twitter.value)"><i
-										class="fab fa-twitter-square"></i></li>
-									<!--<li><input type="checkbox"><i class="fab fa-linkedin-in"></i></li>-->
-								</ul>
-							</div>
-						</div>
-					</div>
-
-					<div class="modal-footer">
-						<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-						<button class="btn btn-danger" (click)="releaseAlert()">Confirmed</button>
-					</div>
-
+			<hr />
+			<div class="row tags">
+				<div class="col-md-2" style="font-weight: bold;">Tags</div>
+				<div class="col-md-8">
+					<div *ngIf="liveWireAlert.tags.length > 0">{{liveWireAlert.tags}}</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+
+	<div class="modal fade" tabindex="-1" role="dialog"
+		id="open-image-modal" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<span class="alert-modal-image-close">&times;</span>
+				<div class="modal-body">
+					<img class="alert-modal-image" alt="" src="{{imageUrl}}">
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog"
+		id="change-headline-modal" aria-hidden="true">
+		<div class="modal-dialog modal-md" role="document">
+			<div class="modal-content">
+				<span class="alert-modal-image-close">&times;</span>
+				<div class="modal-header">
+					<h5 class="modal-title">{{'livewire.headline-modal.title' |
+						translate}}</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="headline-text" class="control-label">{{'livewire.headline-modal.label'
+							| translate}}</label> <input class="form-control" type="text"
+							id="headline-text" name="headline-text" value="{{headline}}"
+							[(ngModel)]="headline">
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-danger" (click)="updateHeadline(headline)">Edit</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog"
+		id="change-description-modal" aria-hidden="true">
+		<div class="modal-dialog modal-md" role="document">
+			<div class="modal-content">
+				<span class="alert-modal-image-close">&times;</span>
+				<div class="modal-header">
+					<h5 class="modal-title">{{'livewire.desc-modal.title' |
+						translate}}</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="description-text" class="control-label">{{'livewire.desc-modal.label'
+							| translate}}</label>
+
+						<textarea class="form-control" #description rows="" cols=""
+							id="description-text" name="description-text">
+        		{{desc}}
+        	</textarea>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-danger"
+						(click)="updateDescription(description.value)">Edit</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" id="tags-modal"
+		aria-hidden="true">
+		<div class="modal-dialog modal-md" role="document">
+			<div class="modal-content">
+				<span class="alert-modal-image-close">&times;</span>
+				<div class="modal-header">
+					<h5 class="modal-title">{{'livewire.tags-modal.title' |
+						translate}}</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="tags" class="control-label">{{'livewire.tags-modal.label'
+							| translate}}</label> <input type="text" class="form-control" id="tags"
+							name="tags" #tags>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-danger" (click)="addTags(tags.value)">Confirmed</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" tabindex="-1" role="dialog" id="release-modal"
+		aria-hidden="true">
+		<div class="modal-dialog modal-md" role="document">
+			<div class="modal-content">
+				<span class="alert-modal-image-close">&times;</span>
+				<div class="modal-header">
+					<h5 class="modal-title">{{'livewire.release-modal.title' |
+						translate}}</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body">
+					<div class="form-group">
+						<label for="tags" class="control-label">{{'livewire.release-modal.label'
+							| translate}}</label>
+
+						<div *ngIf="subscribers.length > 0">
+							<div class="row">
+								<h5>{{'livewire.release-modal.list-title' | translate}}</h5>
+							</div>
+							<ul>
+								<li *ngFor="let subscriber of subscribers"><input
+									type="checkbox" value="{{subscriber.uid}}"
+									(change)="selectedSubscribers($event.target.checked,subscriber.uid)">
+									<span>{{subscriber.displayName}}</span></li>
+							</ul>
+							<div class="row">
+								<h5>Share to social:</h5>
+							</div>
+							<ul>
+								<li><input type="checkbox" value="facebook" #facebook
+									(change)="facebookEvent($event.target.checked,facebook.value)">
+									<i class="fab fa-facebook-square"></i> <!-- <input type="text">-->
+								</li>
+								<li><input type="checkbox" value="twitter" #twitter
+									(change)="tweetEvent($event.target.checked,twitter.value)"><i
+									class="fab fa-twitter-square"></i></li>
+								<!--<li><input type="checkbox"><i class="fab fa-linkedin-in"></i></li>-->
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-danger" (click)="releaseAlert()">Confirmed</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
