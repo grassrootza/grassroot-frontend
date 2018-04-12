@@ -13,6 +13,7 @@ export class SystemAdminComponent implements OnInit {
 
   public userUid:string;
   public userNotFoundMessage:string;
+  public invalidOtpMessage:string;
   
   constructor(private adminService:AdminService,
               private router:Router) { }
@@ -46,6 +47,19 @@ export class SystemAdminComponent implements OnInit {
       this.router.navigate(["/home"]);
     },error => {
       console.log("Error opting user out...",error);
+      this.invalidOtpMessage = "Error! invalid OTP";
+      setTimeout(() => {
+        this.invalidOtpMessage = "";
+      },2000);
+    });
+  }
+  
+  resetUserPwd(otp:string){
+    this.adminService.resetUserPassword(otp,this.userUid).subscribe(resp => {
+      $('#user-opt-out-modal').modal("hide");
+      this.router.navigate(["/home"]);
+    },error => {
+      console.log("Error updating password",error);
     });
   }
 }

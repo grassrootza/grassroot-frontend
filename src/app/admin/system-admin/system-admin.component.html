@@ -4,12 +4,12 @@
 			<h1 class="main-title">Manage User</h1>
 			<div class="form-group">
 				<label for="phoneNumber" class="control-label">Enter a phone
-					number or display name:</label> <input type="text" id="phoneNumber"
+					number or email address:</label> <input type="text" id="phoneNumber"
 					class="form-control" name="phoneNumber" #phoneNumber />
 			</div>
 
-			<div class="alert alert-danger my-lg-3" role="alert" *ngIf="userNotFoundMessage">
-				{{ userNotFoundMessage }}</div>
+			<div class="alert alert-danger my-lg-3" role="alert"
+				*ngIf="userNotFoundMessage">{{ userNotFoundMessage }}</div>
 
 			<div class="form-group">
 				<button class="btn btn-primary"
@@ -17,37 +17,39 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="modal fade" tabindex="-1" role="dialog"
-	id="user-opt-out-modal" aria-hidden="true">
-	<div class="modal-dialog modal-md" role="document">
-		<div class="modal-content">
-			<span class="alert-modal-image-close">&times;</span>
-			<div class="modal-header">
-				<h5 class="modal-title">{{'user.opt-out.otp-note' | translate}}</h5>
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-
-			<div class="modal-body">
-				<div class="form-group">
-					<input class="form-control" type="text" id="headline-text"
-						name="otp" #otp>
+		id="user-opt-out-modal" aria-hidden="true">
+		<div class="modal-dialog modal-md" role="document">
+			<div class="modal-content">
+				<span class="alert-modal-image-close">&times;</span>
+				<div class="modal-header">
+					<h5 class="modal-title">{{'user.opt-out.otp-note' |
+						translate}}</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
 				</div>
-			</div>
 
-			<div class="modal-footer">
-				<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-				<button class="btn btn-danger" (click)="optOutUser(otp.value)">Opt-out</button>
-			</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<input class="form-control" type="text" id="headline-text"
+							name="otp" #otp>
+					</div>
+				</div>
 
+				<div class="alert alert-danger my-lg-3" role="alert" *ngIf="invalidOtpMessage">{{ invalidOtpMessage }}</div>
+
+				<div class="modal-footer">
+					<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-primary" (click)="resetUserPwd(otp.value)">Reset user's password</button>
+					<button class="btn btn-danger" (click)="optOutUser(otp.value)">Opt-out</button>
+				</div>
+
+			</div>
 		</div>
 	</div>
-</div>
-	
-	
 </div>
 
 

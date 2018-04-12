@@ -1172,7 +1172,7 @@
       "done": "Done. Your profile is deleted. Goodbye."
     },
     "opt-out":{
-    	"otp-note": "If your email or phone matched one we have on file, we have sent an OTP to your phone, or if you do not have a phone, to your email. Please enter it below to opt-out."
+    	"otp-note": "If your email or phone matched one we have on file, we have sent an OTP to your phone, or if you do not have a phone, to your email. Please enter it below to opt-out or change password."
   	}
   },
   "login": {
