@@ -2,7 +2,7 @@
 
 <a [routerLink]="['/admin/livewire/list']" class="grassroot-breadcrumb"><i class="fas fa-arrow-left"></i>BACK TO ALERTS</a>
 
-<div class="row">
+<div class="row" *ngIf="!liveWireAlert.sent">
 	<div class="col-md-1">
 		<button class="btn btn-secondary" (click)="openReleaseModal()">Release</button>
 	</div>
