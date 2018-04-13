@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
-import { Router } from '@angular/router'
+import { Router } from '@angular/router';
+import { GroupAdmin } from '../../groups/model/group-admin.model';
 
 declare var $: any;
 
@@ -14,9 +15,19 @@ export class SystemAdminComponent implements OnInit {
   public userUid:string;
   public userNotFoundMessage:string;
   public invalidOtpMessage:string;
+  public groupToActivateOrDeactivateUid:string;
+  public searchTerm:string;
+  public userRole:string = "ROLE_ORDINARY_MEMBER";
+  public groupUid:string;
+
+  public groups:GroupAdmin[] = [];
   
   constructor(private adminService:AdminService,
-              private router:Router) { }
+              private router:Router) { 
+    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+      return false;
+    }
+  }
 
   ngOnInit() {
   }
@@ -61,5 +72,69 @@ export class SystemAdminComponent implements OnInit {
     },error => {
       console.log("Error updating password",error);
     });
+  }
+
+  searchGroups(groupName:string){
+    console.log("Searching for group....",groupName);
+    this.searchTerm = groupName;
+    this.adminService.findGroups(groupName).subscribe(resp => {
+      console.log("Resp ....",resp)
+      this.groups = resp;
+    },error => {
+      console.log("Error loading goups",error);
+    });
+  }
+
+  triggerActivateOrDeactivateModal(active:boolean,groupUid:string){
+    console.log("Choosing modal....",active);
+    console.log("Group uid m activating or deactivating....",groupUid);
+    this.groupToActivateOrDeactivateUid = groupUid;
+    if(active){
+      $('#deactivate-group-modal').modal("show");
+    }else{
+      $('#activate-group-modal').modal("show");
+    }
+  }
+
+  confirmDeactivate(){
+    console.log("Group uid.....",this.groupToActivateOrDeactivateUid);
+    this.adminService.deactivateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
+      $('#deactivate-group-modal').modal("hide");
+      this.refreshComponent();
+    },error => {
+      console.log("Error deactivating group...",error);
+    });
+  }
+
+  confirmActivate(){
+    this.adminService.activateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
+      $('#activate-group-modal').modal("hide");
+      this.refreshComponent();
+      console.log("Was looking for groups with name ...",this.searchTerm);
+    },error => {
+      console.log("Error Activatin Group...",error);
+    });
+  }
+
+  triggerAddMemberModal(groupUid:string){
+    this.groupUid = groupUid;
+    $('#add-member-modal').modal("show");
+  }
+
+  onChangeSelectRole(role:string){
+    this.userRole = role;
+  }
+
+  addMember(displayName:string,phoneNumber:string){
+    this.adminService.addMember(phoneNumber,displayName,this.userRole,this.groupUid).subscribe(resp => {
+      $('#add-member-modal').modal("hide");
+    },error => {
+      console.log("Error adding member to group",error);
+    });
+  }
+
+  refreshComponent(){
+      this.router.navigated = false;
+      this.router.navigate([this.router.url]);
   }
 }
