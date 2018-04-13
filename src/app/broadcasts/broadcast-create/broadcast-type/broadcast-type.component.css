@@ -1,5 +1,5 @@
 .type-icon {
-  font-size: 72px;
+  font-size: 36px;
 }
 
 .gr-icon {
@@ -32,4 +32,17 @@
 
 .account-link {
   text-decoration: underline;
+}
+
+@media (max-width: 992px) {
+  .form-row {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (min-width: 992px) {
+  .type-icon {
+    font-size: 72px;
+  }
 }

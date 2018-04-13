@@ -38,8 +38,6 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   joinDateConditions: string[] = ["DAYS_AGO-EXACT", "DAYS_AGO-BEFORE", "DAYS_AGO-AFTER", "DATE-EXACT", "DATE-BEFORE", "DATE-AFTER"];
   joinDateConditionType = null;
 
-  selectedRole: string = 'ANY';
-
   public filterForm: FormGroup;
   public hasCampaigns: boolean = false;
 

@@ -46,18 +46,18 @@ export class BroadcastScheduleComponent implements OnInit {
 
   storeSchedule() {
     let entity: BroadcastSchedule = this.scheduleForm.value;
-    console.log("entity: ", entity);
+    // console.log("entity: ", entity);
     if (entity.sendType == 'FUTURE') {
       entity.sendMoment = DateTimeUtils.momentFromNgbStruct(entity.dateEpochMillis, entity.timeEpochMillis);
       entity.sendDateString = entity.sendMoment.format("h:mm a [on] dddd, MMMM Do YYYY");
       entity.sendDateTimeMillis = entity.sendMoment.valueOf();
     }
-    console.log("well, this is the entity: ", entity);
+    // console.log("well, this is the entity: ", entity);
     this.broadcastService.setSchedule(entity);
   }
 
   cancel() {
-    console.log("cancelling");
+    // console.log("cancelling");
     this.broadcastService.cancelCurrentCreate();
   }
 

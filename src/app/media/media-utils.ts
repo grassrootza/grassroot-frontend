@@ -1,10 +1,11 @@
-const quillImgSrcReg = /<img[^>]src=/;
+const quillImgSrcReg = /<img.+src=/;
+const fullImgSrcReg = /<img.+>/g;
 
-export const limitImageSizesInRichText = (emailHtml: string): string => {
+export const limitImageSizesInRichText = (emailHtml: string, maxWidth: number = 640): string => {
   let foundImg = emailHtml.search(quillImgSrcReg) != -1;
   if (foundImg) {
     emailHtml = emailStyleHeader + emailHtml;
-    emailHtml = emailHtml.replace(quillImgSrcReg, '<img style=\"max-width: 640px\" src=');
+    emailHtml = emailHtml.replace(quillImgSrcReg, '<img style=\"max-width: ' + maxWidth + 'px !important\" src=');
   }
   return emailHtml;
 };
@@ -18,3 +19,7 @@ export const emailStyleHeader = '<style>img { ' +
   '}' +
   '}' +
   '</style>';
+
+export const replaceImagesInRichText = (emailHtml: string): string => {
+  return emailHtml.replace(fullImgSrcReg, "<br><i>[inline image]</i></br>");
+};

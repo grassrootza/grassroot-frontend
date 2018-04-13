@@ -1,7 +1,7 @@
-<div class="col-md-10 offset-md-1 col-12" *ngIf="createParams">
+<div class="col-12" *ngIf="createParams">
   <div class="row">
-    <div class="col-md-12 text-center mb-md-3" >
-      <h3>{{ 'broadcasts.create.types.title' | translate }}</h3>
+    <div class="col-12 text-center mb-md-3" >
+      <h3 class="text-center">{{ 'broadcasts.create.types.title' | translate }}</h3>
     </div>
   </div>
   <div class="row">
@@ -11,7 +11,7 @@
 
         <div class="form-row">
 
-          <div class="col-md-2 col-sm-4">
+          <div class="col-md-2 col-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input type="checkbox" [disabled]="!createParams.smsAllowed" class="form-check-input" formControlName="shortMessage">
@@ -19,7 +19,7 @@
               </label>
             </div>
           </div>
-          <div class="col-md-4 col-sm-8 pr-md-5">
+          <div class="col-md-4 col-8 pr-md-5">
             <p class="type-header">
               {{ 'broadcasts.create.types.smsLabel' | translate }}
             </p>
@@ -27,7 +27,7 @@
             <!--<p *ngIf="createParams.smsAllowed">{{ 'broadcasts.create.types.smsCostsThisMonth' | translate}} {{costThisMonth | currency: 'ZAR':'symbol-narrow'}}</p>-->
           </div>
 
-          <div class="col-md-2 col-sm-4">
+          <div class="col-md-2 col-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" value="false"
@@ -36,14 +36,14 @@
               </label>
             </div>
           </div>
-          <div class="col-md-4 col-sm-8 pl-md-3">
+          <div class="col-md-4 col-8 pl-md-3">
             <p class="type-header">{{ 'broadcasts.create.types.emailLabel' | translate }}</p>
           </div>
         </div>
 
         <div class="form-row mt-md-5">
 
-          <div class="col-md-2 col-sm-4">
+          <div class="col-md-2 col-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" value="false"
@@ -52,7 +52,7 @@
               </label>
             </div>
           </div>
-          <div class="col-md-4 col-sm-8">
+          <div class="col-md-4 col-8">
             <p class="type-header">{{ 'broadcasts.create.types.fbLabel' | translate }}</p>
             <p class="type-desc" *ngIf="createParams.fbConnected && typesForm.controls['facebook']?.value != true">{{ createParams.getFbPageNames().join(", ") }}</p>
             <select *ngIf="createParams.fbConnected && typesForm.controls['facebook']?.value == true"
@@ -67,7 +67,7 @@
               {{ ('broadcasts.create.types.' + (createParams.fbConnected ? 'changeAccount' : 'linkAccount')) | translate }}</a>
           </div>
 
-          <div class="form-group col-md-2 col-sm-4">
+          <div class="form-group col-md-2 col-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" value="false"
@@ -76,7 +76,7 @@
               </label>
             </div>
           </div>
-          <div class="col-md-4 col-sm-8 pl-md-3">
+          <div class="col-md-4 col-8 pl-md-3">
             <p class="type-header">{{ 'broadcasts.create.types.twitterLabel' | translate }}</p>
             <p class="type-desc" *ngIf="createParams.twitterConnected">{{ createParams.twitterAccount.displayName }}</p>
             <a [routerLink]="['/user/integrations']" class="grassroot-link account-link">
@@ -86,13 +86,13 @@
         </div>
 
         <div class="form-row mt-md-3">
-          <div class="col-sm-4">
+          <div class="col-md-4 col-12 cancel-holder">
             <button type="button" (click)="cancel()" class="btn btn-secondary cancel-button">
                     {{ 'action.cancel' | translate }}
             </button>
           </div>
-          <div class="col-sm-8 ">
-            <button [disabled]="!typesForm.valid" type="submit" class="btn btn-primary float-right next-button"> {{ 'action.next' |
+          <div class="col-md-8 col-12 next-holder">
+            <button [disabled]="!typesForm.valid" type="submit" class="btn btn-primary float-md-right next-button"> {{ 'action.next' |
               translate }}
             </button>
           </div>

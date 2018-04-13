@@ -127,7 +127,7 @@ export class BroadcastContentComponent implements OnInit {
       return false;
     }
     this.saveContent();
-    console.log("stashed content for this broadcast, value = ", this.broadcastService.getContent());
+    // console.log("stashed content for this broadcast, value = ", this.broadcastService.getContent());
     return true;
   }
 
@@ -172,7 +172,7 @@ export class BroadcastContentComponent implements OnInit {
   }
 
   insertMergeFieldEmail(event) {
-    console.log("event: ", event);
+    // console.log("event: ", event);
     this.contentForm.controls['emailContent'].patchValue(`${this.contentForm.controls['emailContent'].value} ${event.target.value}`);
     this.contentForm.controls['emailMergeField'].reset('', {onlySelf: true});
   }
@@ -186,7 +186,7 @@ export class BroadcastContentComponent implements OnInit {
     this.lastLinkCaption = this.linkForm.controls['caption'].value;
 
     let linkType = this.linkForm.controls['linkType'].value;
-    console.log("link type: ", linkType);
+    // console.log("link type: ", linkType);
     if (linkType === "OWN") {
       this.lastLinkInserted = this.linkForm.controls['url'].value;
     } else if (linkType === "GROUP") {
