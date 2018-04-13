@@ -20,6 +20,7 @@ export class CreateMeetingComponent implements OnInit {
 
   public createMeetingForm: FormGroup;
   @Input() groupUid: string = "";
+  @Input() preAssignedMemberUids: string[] = [];
   @Output() meetingSaved: EventEmitter<boolean>;
   public membersList: Membership[] = [];
 
@@ -52,15 +53,21 @@ export class CreateMeetingComponent implements OnInit {
   }
 
   ngOnInit() {
-
     $('#create-meeting-modal').on('shown.bs.modal', function () {
       console.log("Create meeting dialog shown for group: " + this.groupUid);
       if (this.groupUid != "" && this.groupUid != undefined) {
         this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
           this.membersList = members.content;
+          this.setAssignedMembers();
         });
       }
     }.bind(this))
+  }
+
+  setAssignedMembers() {
+    if (this.preAssignedMemberUids) {
+      this.createMeetingForm.get('assignedMemberUids').setValue(this.preAssignedMemberUids, { onlySelf: true })
+    }
   }
 
   next() {

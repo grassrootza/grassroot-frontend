@@ -8,6 +8,7 @@ import {CampaignService} from "../../../../campaigns/campaign.service";
 import {CampaignInfo} from "../../../../campaigns/model/campaign-info";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 import {GroupInfo} from "../../../model/group-info.model";
+import {getCreateModalId} from "../../../../task/task-type";
 
 declare var $: any;
 
@@ -21,6 +22,8 @@ export class GroupCustomFilterComponent implements OnInit {
   currentPage: MembersPage = null;
   currentFilter: MembersFilter = new MembersFilter();
   filteredMembers: Membership[] = [];
+  filteredMemberUids: string[] = [];
+
   membersToManage: Membership[] = [];
   groupsToCopyMembersTo: GroupInfo[] = [];
 
@@ -127,7 +130,16 @@ export class GroupCustomFilterComponent implements OnInit {
         && g.groupUid !== this.group.groupUid);
       $('#bulk-copy-members-to-group').modal('show');
     });
+  }
 
+  showCreateTaskModal(taskType: string) {
+    this.filteredMemberUids = this.filteredMembers.map(member => member.user.uid);
+    $("#" + getCreateModalId(taskType)).modal('show');
+  }
+
+  taskCreated(saveResponse, type: string) {
+    console.log(saveResponse);
+    $("#" + getCreateModalId(type)).modal("hide");
   }
 
 }

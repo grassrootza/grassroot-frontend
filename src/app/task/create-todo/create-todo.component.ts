@@ -35,6 +35,7 @@ export class CreateTodoComponent implements OnInit {
   public possibleConfirmingMembers: Membership[] = [];
 
   @Input() groupUid: string;
+  @Input() preAssignedMemberUids: string[] = [];
   @Output() todoSaved: EventEmitter<boolean>;
 
   public imageName;
@@ -65,6 +66,7 @@ export class CreateTodoComponent implements OnInit {
         this.groupMembers = members.content;
         this.possibleAssignedMembers = this.groupMembers;
         this.possibleConfirmingMembers = this.groupMembers;
+        this.setAssignedMembers();
       });
     }
   }
@@ -80,6 +82,12 @@ export class CreateTodoComponent implements OnInit {
 
     let selectedTodoType = this.createTodoForm.controls['todoType'].value;
     this.setControlsOnType(selectedTodoType);
+  }
+
+  setAssignedMembers() {
+    if (this.preAssignedMemberUids) {
+      this.createTodoForm.get('assignedMemberUids').setValue(this.preAssignedMemberUids, { onlySelf: true })
+    }
   }
 
   initInformationRequiredTodo(){

@@ -67,4 +67,5 @@ export class Task {
       taskData.errorReport
     )
   }
+
 }

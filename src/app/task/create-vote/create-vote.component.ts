@@ -29,6 +29,7 @@ export class CreateVoteComponent implements OnInit {
   public confirmParams: {};
 
   @Input() groupUid: string;
+  @Input() preAssignedMemberUids: string[] = [];
   @Output() voteSaved: EventEmitter<boolean>;
 
   constructor(private taskService: TaskService,
@@ -45,6 +46,7 @@ export class CreateVoteComponent implements OnInit {
       if (this.groupUid != "" && this.groupUid != undefined) {
         this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
           this.membersList = members.content;
+          this.setAssignedMembers();
         });
       }
     }.bind(this));
@@ -68,6 +70,12 @@ export class CreateVoteComponent implements OnInit {
     return this.formBuilder.group({
       option: ['', Validators.required]
     });
+  }
+
+  setAssignedMembers() {
+    if (this.preAssignedMemberUids) {
+      this.createVoteForm.get('assignedMemberUids').setValue(this.preAssignedMemberUids, { onlySelf: true })
+    }
   }
 
   // todo : focus on new input (but non-trivial - https://github.com/angular/angular/issues/13158)

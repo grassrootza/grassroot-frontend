@@ -15,13 +15,13 @@
 
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.meeting'">Call a meeting</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.broadcast'">Send broadcast</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.topics'" (click)="showBulkAssignTopicsModal()">Assign topic</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.taskTeam'" (click)="showBulkAddToTaskTeamModal()">Add to task team</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.copyToGroup'" (click)="showBulkCopyToGroupModal()">Copy to group</a>
-              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.role'">Change role</a>
               <a class="dropdown-item disabled" [translate]="'group.allMembers.manage.remove'" (click)="showBulkRemoveModal()">Remove</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.meeting'" (click)="showCreateTaskModal('MEETING')">Call a meeting</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.vote'" (click)="showCreateTaskModal('VOTE')">Call a vote</a>
+              <a class="dropdown-item disabled" [translate]="'group.allMembers.bulkManage.todo'" (click)="showCreateTaskModal('TODO')">Create an action</a>
             </div>
         </div>
       </div>
@@ -125,24 +125,11 @@
                         [groups]="groupsToCopyMembersTo"  [members]="bulkManageMembers" [modalId]="'bulk-copy-members-to-group'"
                         (membersAdded)="goToFirstPage()"></app-group-copy-members>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="no-topics-for-group" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ 'group.allMembers.assignTopic.noTopicsForGroup.title' | translate }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <h3>{{ 'group.allMembers.assignTopic.noTopicsForGroup.body' | translate}}</h3>
+<app-create-meeting [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids"
+                    (meetingSaved)="taskCreated($event, 'MEETING')"></app-create-meeting>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">
-          {{ 'action.ok' | translate }}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+<app-create-vote [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids"
+                    (voteSaved)="taskCreated($event, 'VOTE')"></app-create-vote>
+
+<app-create-todo [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids"
+                 (todoSaved)="taskCreated($event, 'TODO')"></app-create-todo>
