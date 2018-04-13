@@ -22,6 +22,7 @@ export class MemberListComponent implements OnInit {
   @Input() public currentPage: MembersPage = null;
   @Input() public group: Group = null;
   @Input() public isTaskTeam: boolean = false;
+  @Input() public showSortToggles: boolean = true;
 
   @Output() memberRemoved: EventEmitter<any>;
   @Output() shouldReloadList: EventEmitter<boolean>;
@@ -165,6 +166,7 @@ export class MemberListComponent implements OnInit {
   }
 
   sortData(fieldToSort: string){
+    console.log(`sorting data by field: ${fieldToSort}`);
     let direction = "";
     if(fieldToSort === "user.displayName"){
       this.showRoleFilter = 0;

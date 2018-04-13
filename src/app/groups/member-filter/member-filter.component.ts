@@ -11,6 +11,7 @@ import * as moment from "moment";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import "rxjs/add/operator/debounceTime";
 import {AFRIKAANS, ENGLISH, Language, SOTHO, XHOSA, ZULU} from "../../utils/language";
+import {GroupRole} from "../model/group-role";
 
 declare var $: any;
 
@@ -24,40 +25,33 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   provinceKeys: string[];
   joinMethods: string[];
   userLanguages: Language[];
+  roleKeys: string[];
 
   private nameInputSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-  @Input()
-  taskTeams: GroupRef[] = [];
-
-  @Input()
-  campaigns: CampaignInfo[] = [];
-
-  @Input()
-  topics: string[] = [];
-
-  @Input()
-  affiliations: string[] = [];
-
-  @Input()
-  includeNameFilter: boolean = true;
+  @Input() taskTeams: GroupRef[] = [];
+  @Input() campaigns: CampaignInfo[] = [];
+  @Input() topics: string[] = [];
+  @Input() affiliations: string[] = [];
+  @Input() includeNameFilter: boolean = true;
 
   joinDateConditions: string[] = ["DAYS_AGO-EXACT", "DAYS_AGO-BEFORE", "DAYS_AGO-AFTER", "DATE-EXACT", "DATE-BEFORE", "DATE-AFTER"];
-
   joinDateConditionType = null;
+
+  selectedRole: string = 'ANY';
 
   public filterForm: FormGroup;
   public hasCampaigns: boolean = false;
 
   private filter: MembersFilter = new MembersFilter();
 
-  @Output()
-  public filterChanged: EventEmitter<MembersFilter> = new EventEmitter();
+  @Output() public filterChanged: EventEmitter<MembersFilter> = new EventEmitter();
 
   constructor(private formBuilder: FormBuilder) {
     this.provinceKeys = Object.keys(UserProvince);
     this.joinMethods = Object.keys(GroupJoinMethod);
     this.userLanguages = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
+    this.roleKeys = Object.keys(GroupRole);
     // console.log(this.userLanguages);
   }
 
@@ -75,8 +69,14 @@ export class MemberFilterComponent implements OnInit, OnChanges {
     this.setupSelect2();
 
     this.filterForm = this.formBuilder.group({
+      'role': 'ANY',
       'date': [DateTimeUtils.dateFromDate(new Date())],
       'daysAgo': 1
+    });
+
+    this.filterForm.controls['role'].valueChanges.subscribe(value => {
+      this.filter.role = value;
+      this.fireFilterChange();
     });
 
     if (this.includeNameFilter) {
@@ -196,6 +196,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
 
   private fireFilterChange() {
     // console.log("Filter changed: ", this.filter);
+    console.log(`firing observable inside inner component`);
     this.filterChanged.emit(this.filter);
   }
 }

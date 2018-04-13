@@ -370,6 +370,7 @@
       },
       "filterMembers": {
         "province": "Province",
+        "role": "Role",
         "taskTeam": "Task team",
         "topics": "Topics",
         "affiliations": "Affiliations",

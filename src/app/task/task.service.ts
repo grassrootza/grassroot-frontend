@@ -52,9 +52,9 @@ export class TaskService {
     let cachedTasks = this.localStorageService.getItem(this.MY_AGENDA_DATA_CACHE);
     if (cachedTasks) {
       let cachedTasksData = JSON.parse(this.localStorageService.getItem(this.MY_AGENDA_DATA_CACHE));
-      console.log("Cached tasks before", cachedTasksData);
+      // console.log("Cached tasks before", cachedTasksData);
       cachedTasksData = cachedTasksData.map(task => Task.createInstanceFromData(task));
-      console.log("Cached tasks before", cachedTasksData);
+      // console.log("Cached tasks before", cachedTasksData);
       this.upcomingTasksSubject.next(cachedTasksData);
     }
   }
