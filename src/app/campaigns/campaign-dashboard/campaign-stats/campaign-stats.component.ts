@@ -4,6 +4,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import * as moment from 'moment';
 import {Chart} from 'chart.js';
 import {CampaignInfo} from "../../model/campaign-info";
+import { TranslateService } from '@ngx-translate/core';
 
 const CHART_COLORS = ["#c45850", "#3e95cd", "#3cba9f", "#8e5ea2", "#e8c3b9"];
 
@@ -27,7 +28,7 @@ export class CampaignStatsComponent implements OnInit {
   activityChart: any;
 
   constructor(private campaignService: CampaignService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute, private translateService: TranslateService) { }
 
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
@@ -86,7 +87,7 @@ export class CampaignStatsComponent implements OnInit {
   public loadConversionRates() {
 
     this.campaignService.fetchConversionStats(this.campaignUid).subscribe(results => {
-      console.log("conversion rates: ", results);
+      // console.log("conversion rates: ", results);
 
       let funnelStages = Object.keys(results);
       let stageNames = [];
@@ -97,9 +98,7 @@ export class CampaignStatsComponent implements OnInit {
       funnelStages.forEach(fs => {
           counts.push(results[fs]);
           colors.push(CHART_COLORS[i % CHART_COLORS.length]);
-          // let pName = UserProvince[tu];
-          // pName = pName ? pName : "Other";
-          stageNames.push(fs);
+          this.translateService.get(`enum.CampaignLog.${fs}`).subscribe(label => stageNames.push(label));
           i++;
         }
       );
@@ -129,7 +128,7 @@ export class CampaignStatsComponent implements OnInit {
 
   public loadChannelEngagement() {
     this.campaignService.fetchChannelStats(this.campaignUid).subscribe(results => {
-      console.log("engagement channels: ", results);
+      // console.log("engagement channels: ", results);
       let channels = Object.keys(results);
       let channelNames = [];
       let counts: number[] = [];
@@ -139,9 +138,7 @@ export class CampaignStatsComponent implements OnInit {
       channels.forEach(channel => {
           counts.push(results[channel]);
           colors.push(CHART_COLORS[i % CHART_COLORS.length]);
-          // let pName = UserProvince[tu];
-          // pName = pName ? pName : "Other";
-          channelNames.push(channel);
+          this.translateService.get(`enum.UserInterface.${channel}`).subscribe(value => channelNames.push(value));;
           i++;
         }
       );
@@ -180,9 +177,7 @@ export class CampaignStatsComponent implements OnInit {
       provinces.forEach(province => {
           counts.push(results[province]);
           colors.push(CHART_COLORS[i % CHART_COLORS.length]);
-          // let pName = UserProvince[tu];
-          // pName = pName ? pName : "Other";
-          provinceNames.push(province);
+          this.translateService.get(`enum.UserProvince.${province}`).subscribe(provinceName => provinceNames.push(provinceName));
           i++;
         }
       );
@@ -211,15 +206,17 @@ export class CampaignStatsComponent implements OnInit {
 
   public loadActivityStats() {
     this.campaignService.fetchActivityStats(this.campaignUid, this.activityDataDivision, this.activityTimePeriod).subscribe(result => {
-      console.log("result: ", result);
+      // console.log("result: ", result);
 
       let timeUnits = result['TIME_UNITS'];
       let i = 0;
       let dataSets = [];
 
+      const i18KeyPrefix = 'enum.' + (this.activityDataDivision === 'by_channel' ? 'UserInterface' : 'UserProvince') + '.';
+
       Object.keys(result).filter(dataType => dataType != 'TIME_UNITS').forEach(dataType => {
         let dataset = {
-          label: dataType,
+          label: this.translateService.instant(i18KeyPrefix + dataType),
           backgroundColor: CHART_COLORS[i % CHART_COLORS.length],
           data: timeUnits.map(tu => result[dataType][tu])
         };

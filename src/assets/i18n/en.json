@@ -75,6 +75,26 @@
       "CREATED_ALERT": "issued a news alert",
       "SENT_BROADCAST": "sent a broadcast",
       "CREATED_CAMPAIGN": "created a campaign"
+    },
+    "CampaignLog": {
+      "CAMPAIGN_FOUND": "Dialed code",
+      "CAMPAIGN_EXITED_NEG": "Did not sign",
+      "CAMPAIGN_PETITION_SIGNED": "Signed petititon",
+      "CAMPAIGN_USER_ADDED_TO_MASTER_GROUP": "Joined group",
+      "CAMPAIGN_SHARED": "Shared campaign",
+      "CAMPAIGN_USER_TAGGED": "Chose topic"
+    },
+    "UserInterface": {
+      "USSD": "USSD",
+      "INCOMING_SMS": "Inbound SMS",
+      "ANDROID": "Android app",
+      "ANDROID_2": "Android app",
+      "WEB": "Website",
+      "WEB_2": "Website",
+      "FACEBOOK": "Facebook",
+      "TWITTER": "Twitter",
+      "EMAIL": "Email link",
+      "WHATSAPP": "WhatsApp"
     }
   },
   "menu": {
