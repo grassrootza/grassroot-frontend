@@ -34,6 +34,12 @@
         </div>
     </ng-container>
   </div>
+  <div class="row bottom-buffer">
+    <p>We will only ask to publish to your Facebook page. We do not read or store any data about your Facebook account, aside from what we require to
+      publish posts. Specifically, we store only your page names and their respective Facebook IDs, under the strict terms of our  
+      <a [routerLink]="['/privacy']">privacy policy</a>. 
+    </p>
+  </div>
   <div class="row top-buffer">
     <div class="col-md-6 col-sm-12 col-12">
       <h3><i class="fab fa-twitter-square tw-logo"></i>{{ 'user.integrations.twitter' | translate }}</h3>
@@ -55,15 +61,5 @@
         <p><a href="" class="remove-link" (click)="removeTwitter(page)">{{ 'user.integrations.remove' | translate }}</a>
       </div>
     </ng-container>
-  </div>
-  <div class="row top-buffer">
-    <div class="col-md-6 col-sm-12 col-12">
-      <h3><i class="fab fa-google g-logo"></i>{{ 'user.integrations.google' | translate }}</h3>
-    </div>
-    <div class="col-md-6 col-sm-12 col-12">
-      <button type="button" class="btn btn-success float-right btn-responsive" (click)="connectGoogle()">
-        <i class="fas fa-plus"></i> {{ 'user.integrations.g-link' | translate }}
-      </button>
-    </div>
   </div>
 </div>

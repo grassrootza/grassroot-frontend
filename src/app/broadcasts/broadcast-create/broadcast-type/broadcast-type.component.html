@@ -14,8 +14,8 @@
           <div class="col-md-2 col-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
-                <input type="checkbox" [disabled]="!createParams.smsAllowed" class="form-check-input" formControlName="shortMessage">
-                <i class="fas fa-mobile-alt type-icon gr-icon"></i>
+                <input type="checkbox" *ngIf="createParams?.smsAllowed" class="form-check-input" formControlName="shortMessage">
+                <i [ngClass]="{'fas fa-mobile-alt type-icon': true, 'gr-icon': createParams?.smsAllowed, 'icon-disabled': !(createParams?.smsAllowed)}"></i>
               </label>
             </div>
           </div>
@@ -30,8 +30,7 @@
           <div class="col-md-2 col-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" value="false"
-                       formControlName="email">
+                <input class="form-check-input" type="checkbox" value="false" formControlName="email">
                 <i class="fas fa-envelope type-icon gr-icon"></i>
               </label>
             </div>

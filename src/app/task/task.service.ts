@@ -7,7 +7,7 @@ import {TaskType} from "./task-type";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {MediaFunction} from "../media/media-function.enum";
-import {LocalStorageService} from "../utils/local-storage.service";
+import {LocalStorageService, STORE_KEYS} from "../utils/local-storage.service";
 
 @Injectable()
 export class TaskService {
@@ -45,13 +45,11 @@ export class TaskService {
 
   private downloadErrorReportUrl = environment.backendAppUrl + "/api/task/fetch/error-report";
 
-  private MY_AGENDA_DATA_CACHE = "MY_AGENDA_DATA_CACHE";
-
   constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
 
-    let cachedTasks = this.localStorageService.getItem(this.MY_AGENDA_DATA_CACHE);
+    let cachedTasks = this.localStorageService.getItem(STORE_KEYS.MY_AGENDA_DATA_CACHE);
     if (cachedTasks) {
-      let cachedTasksData = JSON.parse(this.localStorageService.getItem(this.MY_AGENDA_DATA_CACHE));
+      let cachedTasksData = JSON.parse(this.localStorageService.getItem(STORE_KEYS.MY_AGENDA_DATA_CACHE));
       // console.log("Cached tasks before", cachedTasksData);
       cachedTasksData = cachedTasksData.map(task => Task.createInstanceFromData(task));
       // console.log("Cached tasks before", cachedTasksData);
@@ -82,7 +80,7 @@ export class TaskService {
       .subscribe(
         tasks => {
           this.upcomingTasksSubject.next(tasks);
-          this.localStorageService.setItem(this.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
+          this.localStorageService.setItem(STORE_KEYS.MY_AGENDA_DATA_CACHE, JSON.stringify(tasks));
         },
         error => {
           this.upcomingTasksErrorSubject.next(error);

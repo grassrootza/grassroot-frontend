@@ -47,14 +47,14 @@
                 <a class="grassroot-link flyer-link" target="_blank" href="{{ flyerUrlPDF }}">{{ 'group.flyer' | translate }}</a>
               </div>
 
-              <div class="group-info" *ngIf="!group.paidFor ">
+              <!-- <div class="group-info" *ngIf="!group.paidFor ">
                 This group is not linked to a Grassroot Extra account, which is required for some functions, such as broadcasts.
                 Please email <a class="grassroot-link" href="mailto:contact@grassroot.org.za?subject=Grassroot%20Extra">contact@grassroot.org.za</a>.
-              </div>
+              </div> -->
 
             </div>
             <div class="col-md-5 text-right">
-              <div class="group-info" *ngIf="group?.paidFor && group?.hasPermission('GROUP_PERMISSION_SEND_BROADCAST')">
+              <div class="group-info" *ngIf="group?.hasPermission('GROUP_PERMISSION_SEND_BROADCAST')">
                 <a [routerLink]="['/broadcast/create/group', group.groupUid]" class="btn btn-success broadcast-btn">
                   <img src="assets/icon_megaphone.png"/>
                   {{'group.sendBroadcast' | translate}}

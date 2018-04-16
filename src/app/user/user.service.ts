@@ -96,9 +96,7 @@ export class UserService {
 
   logout(showForceLogoutReason: boolean, afterLogoutRoute: string = ''): any {
     this.showForceLogoutReason = showForceLogoutReason;
-
     this.cleanUpUser();
-
     this.router.navigate([afterLogoutRoute]);
   }
 
@@ -112,6 +110,8 @@ export class UserService {
     // clear up broadcast items, just in case user had some lying around
     this.localStorageService.removeItem('broadcastCreateRequest');
     this.localStorageService.removeItem('broadcastCreateStep');
+
+    this.localStorageService.clearCaches();
 
     this.cookieService.clearUserLoggedIn();
   }
@@ -135,7 +135,7 @@ export class UserService {
     return this.httpClient.post(this.updateProfileUrl, null, {params: params})
       .map(result => {
         let message = result['message'];
-        console.log("here is the result: ", message);
+        //console.log("here is the result: ", message);
         if (message == "UPDATED") {
           let updatedUser: AuthenticatedUser = result['data'];
           this.storeAuthUser(updatedUser, updatedUser.token);

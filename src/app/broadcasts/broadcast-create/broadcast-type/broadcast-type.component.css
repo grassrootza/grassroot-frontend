@@ -6,6 +6,10 @@
   color: #2CBC4C;
 }
 
+.icon-disabled {
+  color: grey;
+}
+
 .fb-logo {
   color: #3b5998;
 }
