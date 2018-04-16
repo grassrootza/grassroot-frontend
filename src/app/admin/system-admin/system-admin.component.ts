@@ -14,6 +14,7 @@ export class SystemAdminComponent implements OnInit {
 
   public userUid:string;
   public userNotFoundMessage:string;
+  public groupsNotFoundMessage:string;
   public invalidOtpMessage:string;
   public groupToActivateOrDeactivateUid:string;
   public searchTerm:string;
@@ -24,9 +25,6 @@ export class SystemAdminComponent implements OnInit {
   
   constructor(private adminService:AdminService,
               private router:Router) { 
-    this.router.routeReuseStrategy.shouldReuseRoute = function(){
-      return false;
-    }
   }
 
   ngOnInit() {
@@ -80,6 +78,12 @@ export class SystemAdminComponent implements OnInit {
     this.adminService.findGroups(groupName).subscribe(resp => {
       console.log("Resp ....",resp)
       this.groups = resp;
+      if(this.groups.length === 0){
+        this.groupsNotFoundMessage = "No groups found!";
+        setTimeout(()=>{
+          this.groupsNotFoundMessage = "";
+        },2000);
+      }
     },error => {
       console.log("Error loading goups",error);
     });
@@ -100,7 +104,6 @@ export class SystemAdminComponent implements OnInit {
     console.log("Group uid.....",this.groupToActivateOrDeactivateUid);
     this.adminService.deactivateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
       $('#deactivate-group-modal').modal("hide");
-      this.refreshComponent();
     },error => {
       console.log("Error deactivating group...",error);
     });
@@ -109,8 +112,6 @@ export class SystemAdminComponent implements OnInit {
   confirmActivate(){
     this.adminService.activateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
       $('#activate-group-modal').modal("hide");
-      this.refreshComponent();
-      console.log("Was looking for groups with name ...",this.searchTerm);
     },error => {
       console.log("Error Activatin Group...",error);
     });
@@ -133,8 +134,4 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  refreshComponent(){
-      this.router.navigated = false;
-      this.router.navigate([this.router.url]);
-  }
 }
