@@ -296,6 +296,7 @@ export class BroadcastService {
             bc => new Broadcast(
               bc.broadcastUid,
               bc.title,
+              bc.succeeded,
               bc.shortMessageSent,
               bc.emailSent,
               bc.smsCount,

@@ -3,6 +3,7 @@ import {DatePipe} from '@angular/common';
 export class Broadcast {
   constructor(public broadcastUid: string,
               public title: string,
+              public succeeded : boolean,
               public shortMessageSent: boolean,
               public emailSent: boolean,
               public smsCount:number,
