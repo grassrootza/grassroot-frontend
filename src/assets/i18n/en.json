@@ -136,15 +136,17 @@
     "my-agenda": {
       "title": "My agenda",
       "group-label": "Group",
-      "no-tasks": "You have no upcoming tasks. To create a task, just use one of the options in the 'create action' dropdown on one of your groups"
+      "no-tasks-sub": "You have no upcoming tasks",
+      "no-tasks-para": "To create one go to your groups and click on the '<b>create action</b>' dropdown"
     },
     "new-members": {
       "title": "New members",
-      "no-members": "No members have joined any of your groups this week. To recruit members, use the join code, join words, or import features on any of your groups"
+      "no-members-sub": "No members have joined any of your groups this week",
+      "no-members-para": "Find your <b>join code</b> & add <b>join words</b> on your group's page. Or navigate to your members tab to <b>import members</b> to any of your groups"
     },
     "starred-groups": {
       "title": "Starred groups",
-      "empty": "You currently have no starred (favourite) groups. You can pin groups by clicking on the star next to them in your group list, or creating a new one",
+      "empty": "You can pin groups to your homepage by <strong>clicking on the start</strong> next to them in your group list",
       "group-list": "View all my groups",
       "create-group": "create a group"
     },
