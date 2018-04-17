@@ -90,9 +90,9 @@ export class SystemAdminComponent implements OnInit {
   }
 
   triggerActivateOrDeactivateModal(active:boolean,groupUid:string){
-    console.log("Choosing modal....",active);
-    console.log("Group uid m activating or deactivating....",groupUid);
+    
     this.groupToActivateOrDeactivateUid = groupUid;
+
     if(active){
       $('#deactivate-group-modal').modal("show");
     }else{
@@ -102,7 +102,13 @@ export class SystemAdminComponent implements OnInit {
 
   confirmDeactivate(){
     console.log("Group uid.....",this.groupToActivateOrDeactivateUid);
+
     this.adminService.deactivateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
+      for(let grp of this.groups){
+        if(grp.groupUid === this.groupToActivateOrDeactivateUid){
+          grp.active = false;
+        }
+      }
       $('#deactivate-group-modal').modal("hide");
     },error => {
       console.log("Error deactivating group...",error);
@@ -111,6 +117,11 @@ export class SystemAdminComponent implements OnInit {
 
   confirmActivate(){
     this.adminService.activateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
+      for(let grp of this.groups){
+        if(grp.groupUid === this.groupToActivateOrDeactivateUid){
+          grp.active = true;
+        }
+      }
       $('#activate-group-modal').modal("hide");
     },error => {
       console.log("Error Activatin Group...",error);
@@ -128,10 +139,14 @@ export class SystemAdminComponent implements OnInit {
 
   addMember(displayName:string,phoneNumber:string){
     this.adminService.addMember(phoneNumber,displayName,this.userRole,this.groupUid).subscribe(resp => {
+      for(let grp of this.groups){
+        if(grp.groupUid === this.groupUid){
+          grp.memberCount += 1;
+        }
+      }
       $('#add-member-modal').modal("hide");
     },error => {
       console.log("Error adding member to group",error);
     });
   }
-
 }

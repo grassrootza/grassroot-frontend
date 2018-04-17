@@ -63,7 +63,7 @@
         </div>
       </div>
 
-      <div *ngFor="let group of groups" class="row group-list">
+      <div *ngFor="let group of groups | slice:0:10;" class="row group-list">
         <div class="col-2">{{group.name}}</div>
         <div class="col-2">{{group.creatingUserName}}</div>
         <div class="col-2">{{group.memberCount}}</div>
@@ -84,8 +84,7 @@
       <div class="modal-content">
         <span class="alert-modal-image-close">&times;</span>
         <div class="modal-header">
-          <h5 class="modal-title">{{'user.opt-out.otp-note' |
-            translate}}</h5>
+          <h5 class="modal-title">{{'user.opt-out.otp-note' | translate}}</h5>
           <button type="button" class="close" data-dismiss="modal"
                   aria-label="Close">
             <span aria-hidden="true">&times;</span>
