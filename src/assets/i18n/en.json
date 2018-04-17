@@ -1193,7 +1193,10 @@
       "otp-confirm": "Confirmed, delete profile",
       "otp-error": "Sorry, the code you entered is incorrect. Please try again. If you continue to encounter errors, please email <a href=\"mailto:contact@grassroot.org.za?subject=Delete%20account\">contact@grassroot.org.za</a>",
       "done": "Done. Your profile is deleted. Goodbye."
-    }
+    },
+    "opt-out":{
+    	"otp-note": "If your email or phone matched one we have on file, we have sent an OTP to your phone, or if you do not have a phone, to your email. Please enter it below to opt-out or change password."
+  	}
   },
   "login": {
     "title": "Login",
