@@ -1,0 +1,217 @@
+<div class="container primary-container">
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <h1 class="main-title">Manage User</h1>
+      <div class="form-group">
+        <label for="phoneNumber" class="control-label">Enter a phone
+          number or email address:</label>
+        <input type="text" id="phoneNumber"
+               class="form-control" name="searchTerm" #searchTerm/>
+      </div>
+
+      <div class="alert alert-danger my-lg-3" role="alert"
+           *ngIf="userNotFoundMessage">{{ userNotFoundMessage }}
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary"
+                (click)="loadUsers(searchTerm.value)">Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <h1 class="main-title">Find Group(s)</h1>
+      <div class="form-group">
+        <label for="groupName" class="control-label">Enter group
+          name:</label>
+        <input type="text" id="groupName"
+               class="form-control" name="groupName" #groupName/>
+      </div>
+
+      <div class="alert alert-danger my-lg-3" role="alert"
+           *ngIf="groupsNotFoundMessage">{{ groupsNotFoundMessage }}
+      </div>
+
+      <div class="form-group">
+        <button class="btn btn-primary"
+                (click)="searchGroups(groupName.value)">Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="groups.length > 0" class="card">
+    <div class="card-body">
+      <div class="row groups-header">
+        <div class="col-2">
+          Group Name
+        </div>
+        <div class="col-2">
+          Creating user
+        </div>
+        <div class="col-2">
+          Number of members
+        </div>
+        <div class="col-2">
+
+        </div>
+        <div class="col-2">
+
+        </div>
+      </div>
+
+      <div *ngFor="let group of groups | slice:0:10;" class="row group-list">
+        <div class="col-2">{{group.name}}</div>
+        <div class="col-2">{{group.creatingUserName}}</div>
+        <div class="col-2">{{group.memberCount}}</div>
+        <div class="col-2">
+          <a class="btn btn-secondary" (click)="triggerActivateOrDeactivateModal(group.active,group.groupUid)">{{group.active? "Diactivate" : "Activate"}}</a>
+        </div>
+        <div class="col-2">
+          <a class="btn btn-secondary" (click)="triggerAddMemberModal(group.groupUid)">Add member</a>
+        </div>
+      </div>
+      <hr/>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog"
+       id="user-opt-out-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <span class="alert-modal-image-close">&times;</span>
+        <div class="modal-header">
+          <h5 class="modal-title">{{'user.opt-out.otp-note' | translate}}</h5>
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <input class="form-control" type="text" id="headline-text"
+                   name="otp" #otp>
+          </div>
+        </div>
+
+        <div class="alert alert-danger my-lg-3" role="alert" *ngIf="invalidOtpMessage">{{ invalidOtpMessage }}</div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" (click)="resetUserPwd(otp.value)">Reset user's password</button>
+          <button class="btn btn-danger" (click)="optOutUser(otp.value)">Opt-out</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog"
+       id="deactivate-group-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <span class="alert-modal-image-close">&times;</span>
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm deactivate?</h5>
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <p>
+              Are you sure you want to deactivate the group? After doing so, no users will be able to access it.
+            </p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" (click)="confirmDeactivate()">Confirm</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog"
+       id="activate-group-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <span class="alert-modal-image-close">&times;</span>
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm activation?</h5>
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="form-group">
+            <p>Are you sure you want to reactivate the group?</p>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" (click)="confirmActivate()">Confirm</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog"
+       id="add-member-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <span class="alert-modal-image-close">&times;</span>
+        <div class="modal-header">
+          <h5 class="modal-title">Add member to group</h5>
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="new-member-name" class="control-label">Name</label>
+            <input type="text" class="form-control" id="new-member-name" name="displayName" #displayName/>
+          </div>
+          <div class="form-group">
+            <label for="new-member-phone" class="control-label">Phone number</label>
+            <input type="text" class="form-control" id="new-member-phone" name="phoneNumber" #phoneNumber/>
+          </div>
+          <div class="form-group">
+            <label for="new-member-role" class="control-label">Role</label>
+            <select class="form-control" id="new-member-role" name="roleName"
+                    (change)="onChangeSelectRole($event.target.value)">
+              <option value="ROLE_ORDINARY_MEMBER">Ordinary member</option>
+              <option value="ROLE_COMMITTEE_MEMBER">Committee member</option>
+              <option value="ROLE_GROUP_ORGANIZER">Group organizer</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" (click)="addMember(displayName.value,phoneNumber.value)">Add</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

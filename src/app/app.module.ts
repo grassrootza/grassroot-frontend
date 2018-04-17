@@ -39,6 +39,7 @@ import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
 import {TimeAgoPipe} from "time-ago-pipe";
+import { SystemAdminComponent } from './admin/system-admin/system-admin.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import {TimeAgoPipe} from "time-ago-pipe";
     TermsOfUseComponent,
     AboutUsComponent,
     ContributeComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    SystemAdminComponent
   ],
   imports: [
     BrowserModule,
