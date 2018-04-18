@@ -20,6 +20,7 @@ export class SystemAdminComponent implements OnInit {
   public searchTerm:string;
   public userRole:string = "ROLE_ORDINARY_MEMBER";
   public groupUid:string;
+  public userGroups:number;
 
   public groups:GroupAdmin[] = [];
   
@@ -31,22 +32,28 @@ export class SystemAdminComponent implements OnInit {
   }
 
   loadUsers(searchTerm:string){
-    console.log("Searching....",searchTerm);
     this.adminService.loadUser(searchTerm).subscribe(resp => {
-      console.log("Response....",resp);
       if(resp === ""){
         this.userNotFoundMessage = "User not found,type correct number or email";
-        console.log("Message:",this.userNotFoundMessage);
         setTimeout(() => {
           this.userNotFoundMessage = "";
         }, 2000)
       }else{
         this.userUid = resp;
+        this.numberOfUserGrooups(this.userUid);
         $('#user-opt-out-modal').modal("show");
       }
 
     },error => {
       console.log("Error loading user..",error);
+    });
+  }
+
+  numberOfUserGrooups(userUid:string){
+    this.adminService.numberOfGroupsUserIsPartOf(userUid).subscribe(resp => {
+      this.userGroups = resp;
+    },error => {
+      console.log("Error getting number of user groups...",error);
     });
   }
   
@@ -73,10 +80,8 @@ export class SystemAdminComponent implements OnInit {
   }
 
   searchGroups(groupName:string){
-    console.log("Searching for group....",groupName);
     this.searchTerm = groupName;
     this.adminService.findGroups(groupName).subscribe(resp => {
-      console.log("Resp ....",resp)
       this.groups = resp;
       if(this.groups.length === 0){
         this.groupsNotFoundMessage = "No groups found!";
@@ -101,7 +106,6 @@ export class SystemAdminComponent implements OnInit {
   }
 
   confirmDeactivate(){
-    console.log("Group uid.....",this.groupToActivateOrDeactivateUid);
 
     this.adminService.deactivateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
       for(let grp of this.groups){

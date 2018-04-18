@@ -8,6 +8,7 @@ import {GroupAdmin} from "../groups/model/group-admin.model";
 export class AdminService {
 
   private loadUsersUrl = environment.backendAppUrl + "/api/admin/user/load";
+  private numberOfGroupsUserIsPartOfUrl = environment.backendAppUrl + "/api/admin/user/groups/number";
   private optOutUserUrl = environment.backendAppUrl + "/api/admin/user/optout";
   private resetUserPwdUrl = environment.backendAppUrl + "/api/admin/user/pwd/reset";
   private loadGroupsUrl = environment.backendAppUrl + "/api/admin/groups/search";
@@ -61,5 +62,10 @@ export class AdminService {
       .set('roleName',roleName);
 
     return this.httpClient.post(this.addMemberToGroupUrl,null,{responseType:'text',params:params});
+  }
+
+  numberOfGroupsUserIsPartOf(userUid:string):Observable<any>{
+    let params = new HttpParams().set('userUid',userUid);
+    return this.httpClient.get(this.numberOfGroupsUserIsPartOfUrl,{params:params});
   }
 }

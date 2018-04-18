@@ -1,50 +1,55 @@
 <div class="container primary-container">
-  <div class="row">
-    <div class="col-md-6 col-sm-12">
-      <h1 class="main-title">Manage User</h1>
-      <div class="form-group">
-        <label for="phoneNumber" class="control-label">Enter a phone
-          number or email address:</label>
-        <input type="text" id="phoneNumber"
-               class="form-control" name="searchTerm" #searchTerm/>
-      </div>
+	<div class="card">
+		<div class="card-body">
+		  <div class="row">
+		  	<div class="col-6">
+		  		<h1 class="main-title">Manage User</h1>
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-6">
+		  		<input type="text" id="phoneNumber" class="form-control" placeholder="Enter a phone number or email address" name="searchTerm" #searchTerm/>
+		  	</div>
+		  	<div class="col-2">
+		  		<button class="btn btn-primary"
+		                (click)="loadUsers(searchTerm.value)">Search
+		        </button>
+		  	</div>
+		  </div>
+		  <div class="alert alert-danger my-lg-3" role="alert"
+		           *ngIf="userNotFoundMessage">{{ userNotFoundMessage }}
+		  </div>
+		  <hr />
 
-      <div class="alert alert-danger my-lg-3" role="alert"
-           *ngIf="userNotFoundMessage">{{ userNotFoundMessage }}
-      </div>
-
-      <div class="form-group">
-        <button class="btn btn-primary"
-                (click)="loadUsers(searchTerm.value)">Search
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-6 col-sm-12">
-      <h1 class="main-title">Find Group(s)</h1>
-      <div class="form-group">
-        <label for="groupName" class="control-label">Enter group
-          name:</label>
-        <input type="text" id="groupName"
-               class="form-control" name="groupName" #groupName/>
-      </div>
-
-      <div class="alert alert-danger my-lg-3" role="alert"
-           *ngIf="groupsNotFoundMessage">{{ groupsNotFoundMessage }}
-      </div>
-
-      <div class="form-group">
-        <button class="btn btn-primary"
-                (click)="searchGroups(groupName.value)">Search
-        </button>
-      </div>
-    </div>
-  </div>
+		  <div class="row">
+		  	<div class="col-6">
+		  		<h1 class="main-title">Find Group(s)</h1>
+		  	</div>
+		  </div>
+		  <div class="row">
+		  	<div class="col-6">
+		  		<input type="text" id="groupName" placeholder="Enter group name" 
+		               class="form-control" name="groupName" #groupName/>
+		  	</div>
+		  	<div class="col-2">
+		  		<button class="btn btn-primary"
+		                (click)="searchGroups(groupName.value)">Search
+		        </button>
+		  	</div>
+		  </div>
+		  <div class="alert alert-danger my-lg-3" role="alert"
+		           *ngIf="groupsNotFoundMessage">{{ groupsNotFoundMessage }}
+		  </div>
+		</div>
+	</div>
 
   <div *ngIf="groups.length > 0" class="card">
     <div class="card-body">
+      <div class="row">
+      	<div class="col-6">
+      		<h1 class="main-title">Found Group(s)</h1>
+      	</div>
+      </div>
       <div class="row groups-header">
         <div class="col-2">
           Group Name
@@ -68,7 +73,7 @@
         <div class="col-2">{{group.creatingUserName}}</div>
         <div class="col-2">{{group.memberCount}}</div>
         <div class="col-2">
-          <a class="btn btn-secondary" (click)="triggerActivateOrDeactivateModal(group.active,group.groupUid)">{{group.active? "Diactivate" : "Activate"}}</a>
+          <a class="btn btn-secondary" (click)="triggerActivateOrDeactivateModal(group.active,group.groupUid)">{{group.active? "Deactivate" : "Activate"}}</a>
         </div>
         <div class="col-2">
           <a class="btn btn-secondary" (click)="triggerAddMemberModal(group.groupUid)">Add member</a>
@@ -82,9 +87,8 @@
        id="user-opt-out-modal" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
-        <span class="alert-modal-image-close">&times;</span>
         <div class="modal-header">
-          <h5 class="modal-title">{{'user.opt-out.otp-note' | translate}}</h5>
+          <h5 class="modal-title">User</h5>
           <button type="button" class="close" data-dismiss="modal"
                   aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -92,6 +96,8 @@
         </div>
 
         <div class="modal-body">
+          <h5>User is part of {{userGroups}} group(s).</h5>
+          <h5>{{'user.opt-out.otp-note' | translate}}</h5>
           <div class="form-group">
             <input class="form-control" type="text" id="headline-text"
                    name="otp" #otp>
@@ -114,7 +120,6 @@
        id="deactivate-group-modal" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
-        <span class="alert-modal-image-close">&times;</span>
         <div class="modal-header">
           <h5 class="modal-title">Confirm deactivate?</h5>
           <button type="button" class="close" data-dismiss="modal"
@@ -144,11 +149,9 @@
        id="activate-group-modal" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
-        <span class="alert-modal-image-close">&times;</span>
         <div class="modal-header">
           <h5 class="modal-title">Confirm activation?</h5>
-          <button type="button" class="close" data-dismiss="modal"
-                  aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -170,11 +173,9 @@
     </div>
   </div>
 
-  <div class="modal fade" tabindex="-1" role="dialog"
-       id="add-member-modal" aria-hidden="true">
+  <div class="modal fade" tabindex="-1" role="dialog" id="add-member-modal" aria-hidden="true">
     <div class="modal-dialog modal-md" role="document">
       <div class="modal-content">
-        <span class="alert-modal-image-close">&times;</span>
         <div class="modal-header">
           <h5 class="modal-title">Add member to group</h5>
           <button type="button" class="close" data-dismiss="modal"
