@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import { saveAs } from 'file-saver';
+import {saveAs} from 'file-saver';
 import {UserService} from '../../../../user/user.service';
 import {GroupService} from '../../../group.service';
 import {Membership, MembersPage} from '../../../model/membership.model';
@@ -8,6 +8,7 @@ import {Group} from '../../../model/group.model';
 import {AlertService} from "../../../../utils/alert-service/alert.service";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 import {GroupInfo} from "../../../model/group-info.model";
+import {getCreateModalId} from "../../../../task/task-type";
 
 declare var $: any;
 
@@ -27,6 +28,7 @@ export class GroupAllMembersComponent implements OnInit {
   bulkSelectedTopics: string[] = [];
 
   bulkManageMembers: Membership[] = [];
+  bulkMemberUids: string[] = [];
   filterMembersPage: string[] = [];
   groupsToCopyMembersTo: GroupInfo[] = [];
 
@@ -119,6 +121,11 @@ export class GroupAllMembersComponent implements OnInit {
     }
   }
 
+  showCreateTaskModal(taskType: string) {
+    this.bulkMemberUids = this.bulkManageMembers.map(member => member.user.uid);
+    $("#" + getCreateModalId(taskType)).modal('show');
+  }
+
   goToFirstPage() {
     this.goToPage(0, []);
   }
@@ -157,6 +164,11 @@ export class GroupAllMembersComponent implements OnInit {
     }, error => {
       console.log("error getting the file: ", error);
     });
+  }
+
+  taskCreated(saveResponse, type: string) {
+    console.log(saveResponse);
+    $("#" + getCreateModalId(type)).modal("hide");
   }
 
 }

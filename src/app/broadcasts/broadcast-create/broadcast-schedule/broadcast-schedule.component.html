@@ -55,20 +55,20 @@
         </div>
 
         <div class="form-row">
-          <div class="col-sm-4 pull-left">
-            <button type="button" (click)="cancel()" class="btn btn-secondary cancel-button">
+          <div class="col-md-auto col-12 cancel-holder">
+            <button type="button" (click)="cancel()" class="btn btn-secondary cancel-button text-sm-center">
               {{ 'action.cancel' | translate }}</button>
           </div>
-          <div class="col-sm-8">
 
-            <button type="submit" class="btn btn-primary next-button float-right"> {{ 'action.next' | translate }}
+          <div class="col-md text-md-right col-12 next-holder">
+            <button type="button" (click)="back()" class="btn btn-secondary back-button float-md-right">
+              {{ 'action.back' | translate }}</button>
+          </div>
+
+          <div class="col-md-auto text-md-right col-12 next-holder">
+            <button type="submit" class="btn btn-primary next-button">
+              {{ 'action.next' | translate }}
             </button>
-
-            <button type="button" (click)="back()" class="btn btn-secondary back-button float-right">
-              {{ 'action.back' | translate }}
-            </button>
-
-
           </div>
         </div>
 

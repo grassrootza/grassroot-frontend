@@ -13,17 +13,28 @@
   <div class="col-sm-3 col-lg-2 filter-item">
     <label for="province" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.province' | translate }}</label>
   </div>
-  <div class=" col-sm-9 col-lg-10 filter-item">
+  <div class=" col-sm-9 col-lg-4 filter-item">
     <select id="province" class="form-control provinces-multi-select" multiple="multiple" style="width: 100%">
       <option *ngFor="let p of provinceKeys" [value]="p" [translate]="'enum.UserProvince.' + p">Province</option>
     </select>
   </div>
 
   <div class="col-sm-3 col-lg-2 filter-item">
-    <label class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.topics'">Topics</label>
+    <label for="role" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.role' | translate }}</label>
   </div>
-  <div class=" col-sm-9 col-lg-10 filter-item">
-    <select class="form-control topics-multi-select-filter" multiple="multiple" style="width: 100%">
+  <div class=" col-sm-9 col-lg-4 filter-item">
+    <select id="role" class="form-control form-control-em" [formControl]="filterForm?.controls['role']">
+      <option value="ANY">Any</option>
+      <option *ngFor="let r of roleKeys" [value]="r" [translate]="'enum.GroupRole.' + r">Role name
+      </option>
+    </select>
+  </div>
+
+  <div class="col-sm-3 col-lg-2 filter-item">
+    <label for="topics" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.topics'">Topics</label>
+  </div>
+  <div class=" col-sm-9 col-lg-4 filter-item">
+    <select id="topics" class="form-control topics-multi-select-filter" multiple="multiple" style="width: 100%">
       <option *ngFor="let tp of topics" [value]="tp">{{ tp }}</option>
     </select>
   </div>
@@ -31,7 +42,7 @@
   <div class="col-sm-3 col-lg-2 filter-item">
     <label for="taskTeams" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.taskTeam' | translate }}</label>
   </div>
-  <div class=" col-sm-9 col-lg-10 filter-item">
+  <div class=" col-sm-9 col-lg-4 filter-item">
     <select id="taskTeams" class="form-control task-teams-multi-select" multiple="multiple" style="width: 100%">
       <option *ngFor="let tt of taskTeams" [value]="tt.groupUid">{{tt.name}}</option>
     </select>
@@ -40,7 +51,7 @@
   <div class="col-sm-3 col-lg-2 filter-item">
     <label for="affiliations" class="grassroot-label-em">{{ 'group.allMembers.filterMembers.affiliations' | translate }}</label>
   </div>
-  <div class="col-sm-9 col-lg-10 filter-item">
+  <div class="col-sm-9 col-lg-4 filter-item">
     <select id="affiliations" class="form-control affiliations-multi-select" multiple="multiple" style="width: 100%">
       <option *ngFor="let af of affiliations" [value]="af">{{ af }}</option>
     </select>
@@ -51,19 +62,18 @@
     <label for="joinMethods" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.joinMethods'">Joined
       source</label>
   </div>
-  <div class=" col-sm-9 col-lg-10 filter-item">
+  <div class=" col-sm-9 col-lg-4 filter-item">
     <select id="joinMethods" class="form-control join-methods-multi-select" multiple="multiple" style="width: 100%">
       <option *ngFor="let jm of joinMethods" [value]="jm" [translate]="'enum.GroupJoinMethod.' + jm">Join method
       </option>
     </select>
   </div>
 
-
   <div class="col-sm-3 col-lg-2 filter-item" *ngIf="hasCampaigns">
     <label for="campaigns" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.campaigns'">Joined
       via campaign</label>
   </div>
-  <div class=" col-sm-9 col-lg-10 filter-item" *ngIf="hasCampaigns">
+  <div class=" col-sm-9 col-lg-4 filter-item" *ngIf="hasCampaigns">
     <select id="campaigns" class="form-control campaigns-multi-select" multiple="multiple" style="width: 100%">
       <option *ngFor="let cm of campaigns" [value]="cm.campaignUid"> {{cm.name}}</option>
     </select>
@@ -73,13 +83,15 @@
     <label for="userLanguage" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.userLanguage'">User
       language</label>
   </div>
-  <div class=" col-sm-9 col-lg-10 filter-item">
+  <div class=" col-sm-9 col-lg-4 filter-item">
     <select id="userLanguage" class="form-control language-multi-select" multiple="multiple" style="width: 100%">
       <option *ngFor="let language of userLanguages" [value]="language.twoDigitCode"> {{language.fullName}}</option>
     </select>
   </div>
 
+</div>
 
+<div class="row">
   <div class="col-sm-3 col-lg-2 filter-item">
     <label for="campaigns" class="grassroot-label-em" [translate]="'group.allMembers.filterMembers.joinDate'">Joined
       on date</label>

@@ -1,13 +1,21 @@
 .main-content {
-  padding-top: 66px;
+  padding-top: 70px;
 }
 
 .navbar {
   padding-bottom: 0 !important;
 }
 
+.navbar-fixed-top {
+  height: 70px;
+}
+
 .navbar-brand {
   margin-bottom: 0.5rem;
+}
+
+.navbar-brand img {
+  max-height: 38px;
 }
 
 .navbar-light .navbar-nav.main-nav .nav-link {

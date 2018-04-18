@@ -35,8 +35,8 @@
                   [translateParams]="{ channel: !!selectedChannel ? selectedChannel : 'all'}">Topic Interest: </h5>
                 {{ campaign?.joinTopics }}
                 <h5 [translate]="'campaign.statistics.engagement.view'">View by: </h5>
-                <button (click)="loadChannelEngagement()" class="btn btn-outline-primary">{{ 'campaign.statistics.engagement.channels' | translate }}</button>
-                <button (click)="loadProvinceEngagement()" class="btn btn-outline-primary">{{ 'campaign.statistics.engagement.provinces' | translate }}</button>
+                <button (click)="loadChannelEngagement()" class="btn btn-secondary btn-outline hover-primary">{{ 'campaign.statistics.engagement.channels' | translate }}</button>
+                <button (click)="loadProvinceEngagement()" class="btn btn-secondary btn-outline hover-primary">{{ 'campaign.statistics.engagement.provinces' | translate }}</button>
               </div>
             </div>
           </div>
@@ -49,16 +49,26 @@
           <div class="container">
             <div class="row">
               <div class="col-12 form-inline">
-                <span [translate]="'campaign.statistics.activity.title'">Activity</span>
-                <select class="form-control-sm" [(ngModel)]="activityDataDivision" (ngModelChange)="loadActivityStats()">
-                  <option [translate]="'campaign.statistics.activity.select_channel'" [value]="'by_channel'"></option>
-                  <option [translate]="'campaign.statistics.activity.select_province'" [value]="'by_province'"></option>
-                </select>
-                <select class="form-control-sm" [(ngModel)]="activityTimePeriod" (ngModelChange)="loadActivityStats()">
-                  <option *ngFor="let option of timeUnitOptions"
-                          [translate]="'campaign.statistics.activity.time.' + option" [value]="option">This week</option>
-                </select>
-                <canvas id="activityStackedChart" height="200" width="200"></canvas>
+                <div class="row col-12">
+                  <h5 [translate]="'campaign.statistics.activity.title'">Activity</h5>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                  <select class="form-control form-control-sm" [(ngModel)]="activityDataDivision" (ngModelChange)="loadActivityStats()">
+                    <option [translate]="'campaign.statistics.activity.select_channel'" [value]="'by_channel'"></option>
+                    <option [translate]="'campaign.statistics.activity.select_province'" [value]="'by_province'"></option>
+                  </select>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <select class="form-control form-control-sm" [(ngModel)]="activityTimePeriod" (ngModelChange)="loadActivityStats()">
+                      <option *ngFor="let option of timeUnitOptions"
+                            [translate]="'campaign.statistics.activity.time.' + option" [value]="option">This week</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row col-12">
+                    <canvas id="activityStackedChart" height="200" width="200"></canvas>
+                </div>                
               </div>
             </div>
           </div>

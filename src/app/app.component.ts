@@ -4,9 +4,9 @@ import {Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
 import {TranslateService} from '@ngx-translate/core';
 import {AlertService} from "./utils/alert-service/alert.service";
-import {DISPLAYED_NOTIFICATIONS_STORAGE_KEY, NotificationService} from "./user/notification.service";
+import {NotificationService} from "./user/notification.service";
 import {Notification} from "./user/model/notification.model";
-import {LocalStorageService} from "./utils/local-storage.service";
+import {LocalStorageService, STORE_KEYS} from "./utils/local-storage.service";
 import {isPlatformBrowser} from "@angular/common";
 
 declare var $: any;
@@ -131,7 +131,7 @@ export class AppComponent implements OnInit {
     }
 
     this.notificationService.fetchUnreadNotifications().subscribe(notifications => {
-          let displayedNotifications: string = this.localStorageService.getItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+          let displayedNotifications: string = this.localStorageService.getItem(STORE_KEYS.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
           if (!displayedNotifications)
             displayedNotifications = "";
 
@@ -164,10 +164,10 @@ export class AppComponent implements OnInit {
       }, 4000);
 
 
-      let displayedNotifications: string = this.localStorageService.getItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
+      let displayedNotifications: string = this.localStorageService.getItem(STORE_KEYS.DISPLAYED_NOTIFICATIONS_STORAGE_KEY);
       displayedNotifications = displayedNotifications ? displayedNotifications : "";
       displayedNotifications = displayedNotifications + ";" + this.popupNotification.uid;
-      this.localStorageService.setItem(DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
+      this.localStorageService.setItem(STORE_KEYS.DISPLAYED_NOTIFICATIONS_STORAGE_KEY, displayedNotifications);
 
       this.currentPopupNotificationIndex++;
     }

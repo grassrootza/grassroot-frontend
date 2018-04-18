@@ -48,7 +48,7 @@ export class BroadcastTypeComponent implements OnInit {
       let fbPage = this.typesForm.get("facebookPages").value;
       if (!(fbPage) || fbPage == "") {
         console.log("settting fb page to default");
-        this.typesForm.get("facebookPages").reset(this.createParams.facebookPages[0].providerUserId);
+        this.typesForm.get("facebookPages").reset(this.createParams.facebookPages[0].pageId);
       }
     }
     console.log("form values: ", this.typesForm.value);

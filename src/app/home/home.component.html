@@ -37,8 +37,10 @@
 
             <div class="my-agenda-tasks">
               <div class="day-task" *ngIf="baseDateFilteredTasks.length == 0">
-                <p><span [translate]="'home.my-agenda.no-tasks'">You have no upcoming tasks. To create a task, just use one of the options in the 'create action' dropdown on one of your groups</span>
-                 <a class="grassroot-link" [routerLink]="['/groups']"> (go to groups)</a></p>
+                <p class="text-center"><img class="img-responsive" style="max-width: 80px; max-height: 78px" src="assets/graphics/empty_task_list@2x.png" /></p>
+                <p class="text-center"><span [translate]="'home.my-agenda.no-tasks-sub'">You have no upcoming tasks</span></p>
+                <p class="text-center" [innerHtml]="'home.my-agenda.no-tasks-para' | translate">To create a task ...</p>
+                <!-- <p class="text-center"><img class="img-responsive" style="max-width: 331px; max-height: 188px" src="assets/graphics/agenda-tutorial-screenshot@2x.png/" /></p> -->
               </div>
               <div *ngFor="let dayTasks of baseDateFilteredTasks" class="day">
                 <div class="col-sm-8 day-label">
@@ -89,8 +91,9 @@
           <div class="new-members-body">
             <div *ngIf="newMembersPage">
               <div *ngIf="!newMembersListRendered || newMembersListRendered.length == 0" class="mt-3">
-                <p><span [translate]="'home.new-members.no-members'"></span>
-                  <a class="grassroot-link" [routerLink]="['/groups']"> (go to groups)</a></p>
+                <p class="text-center"><img class="img-responsive" style="max-width: 80px; max-height: 83px" src="assets/graphics/member_empty_state_icon@2x.png" /></p>
+                <p class="text-center"><span [translate]="'home.new-members.no-members-sub'"></span></p>
+                <p class="text-center" [innerHtml]="'home.new-members.no-members-para' | translate"></p>
               </div>
               <div *ngFor="let member of newMembersListRendered" class="row member-row">
                 <div class="col-1 justify-content-center new-members-icon">
@@ -130,12 +133,16 @@
                           [extendedInfoVisible]="pinnedGroups.length == 1">
           </app-group-info>
 
-          <div *ngIf="pinnedGroups.length == 0" class="padding-vertical">
-            <p><span [translate]="'home.starred-groups.empty'">You have no pinned groups currently.</span>
-            <a class="grassroot-link" [routerLink]="['/groups']" [translate]="'home.starred-groups.group-list'">View all my groups</a> or
-              <a href="#" class="grassroot-link" (click)="showCreateGroupDialog()" [translate]="'home.starred-groups.create-group'">create a group</a>
-            </p>
-          </div>
+          <div *ngIf="pinnedGroups.length == 0" class="row padding-vertical">
+            <div class="col-md-3 col-12 stared-groups-none-text">
+              <p><span [innerHtml]="'home.starred-groups.empty' | translate">You have no pinned groups currently.</span></p>
+              <p>OR</p>
+              <p><button type="button" class="btn btn-primary save-button" (click)="showCreateGroupDialog()">Create New Group</button></p>
+            </div>
+            <div class="col-md-9 col-12 text-center">
+              <img class="img-responsive starred-group-tutorial-screenshot" src="assets/graphics/group-tutorial-screenshot@2x.png" />
+            </div>
+          </div>  
 
         </div>
       </div>

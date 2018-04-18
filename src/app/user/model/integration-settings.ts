@@ -20,3 +20,8 @@ export class ManagedPage {
   imageUrl: string = "";
 
 }
+
+export class FacebookPage {
+  pageName: string;
+  pageId: string;
+}

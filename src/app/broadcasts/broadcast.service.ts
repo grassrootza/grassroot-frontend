@@ -200,7 +200,7 @@ export class BroadcastService {
 
   private getFbDisplayNames(fbUserIds: string[]): string[] {
     if (this._createParams.facebookPages && fbUserIds) {
-      return fbUserIds.map(fbUserId => this._createParams.facebookPages.find(page => page.providerUserId == fbUserId).displayName);
+      return fbUserIds.map(fbUserId => this._createParams.facebookPages.find(page => page.pageId == fbUserId).pageName);
     } else {
       return [];
     }
@@ -296,6 +296,7 @@ export class BroadcastService {
             bc => new Broadcast(
               bc.broadcastUid,
               bc.title,
+              bc.succeeded,
               bc.shortMessageSent,
               bc.emailSent,
               bc.smsCount,

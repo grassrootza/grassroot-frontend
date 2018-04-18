@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Membership, MembersPage} from "../../../model/membership.model";
-import {MembersFilter} from "../../../member-filter/filter.model";
+import {copyFilter, MembersFilter} from "../../../member-filter/filter.model";
 import {GroupService} from "../../../group.service";
 import {Group} from "../../../model/group.model";
 import {ActivatedRoute, Params} from "@angular/router";
@@ -8,6 +8,7 @@ import {CampaignService} from "../../../../campaigns/campaign.service";
 import {CampaignInfo} from "../../../../campaigns/model/campaign-info";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 import {GroupInfo} from "../../../model/group-info.model";
+import {getCreateModalId} from "../../../../task/task-type";
 
 declare var $: any;
 
@@ -21,6 +22,8 @@ export class GroupCustomFilterComponent implements OnInit {
   currentPage: MembersPage = null;
   currentFilter: MembersFilter = new MembersFilter();
   filteredMembers: Membership[] = [];
+  filteredMemberUids: string[] = [];
+
   membersToManage: Membership[] = [];
   groupsToCopyMembersTo: GroupInfo[] = [];
 
@@ -47,7 +50,7 @@ export class GroupCustomFilterComponent implements OnInit {
       this.groupService.loadGroupDetailsCached(groupUid, false)
         .subscribe(groupDetails => {
           this.renderGroupDetails(groupDetails);
-          this.membersFilterChanged(new MembersFilter()); //load all members (empty filter)
+          this.membersFilterChanged(new MembersFilter(), true); //load all members (empty filter)
           }, error => {
             console.log("Error loading groups", error.status)
           }
@@ -69,22 +72,36 @@ export class GroupCustomFilterComponent implements OnInit {
       );
   }
 
-  membersFilterChanged(filter: MembersFilter) {
-    this.loading = true;
-    // console.log("loading filtered members, filter = ", filter);
-    this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(
+  membersFilterChanged(filter: MembersFilter, forceFetch: boolean = false) {
+    // console.log(`filter fired, has change: ${filter.hasNonRoleChanged(this.currentFilter)}`)
+    if (forceFetch || filter.hasNonRoleChanged(this.currentFilter)) {
+      this.loading = true;
+      this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(
         members => {
           // console.log("got members back, refreshing ... members = ", members);
           this.loading = false;
-          this.filteredMembers = members;
-          this.currentFilter = filter;
-          this.currentPage = new MembersPage(0, 1, members.length, members.length, true, true, members);
+          this.currentFilter = copyFilter(filter); // otherwise change detection fails, because child is actually modifying same thing
+          this.setFilteredMembers(members);
         },
         error => {
           this.loading = false;
           console.log("Error fetching members", error);
         }
       );
+    } else {
+      this.currentFilter = copyFilter(filter);
+      console.log(`must have been role change, to: ${this.currentFilter.role}`);
+      this.setFilteredMembers(this.filteredMembers);
+    }
+  }
+
+  setFilteredMembers(members: Membership[]) {
+    this.filteredMembers = members;
+    if (this.currentFilter.role !== 'ANY') {
+      members = members.filter(member => member.roleName == this.currentFilter.role);
+      // console.log(`filtered by ${this.currentFilter.role}, number members: ${this.filteredMembers.length}`);
+    }
+    this.currentPage = new MembersPage(0, 1, members.length, members.length, true, true, members);
   }
 
   setMembersToManage() {
@@ -127,7 +144,16 @@ export class GroupCustomFilterComponent implements OnInit {
         && g.groupUid !== this.group.groupUid);
       $('#bulk-copy-members-to-group').modal('show');
     });
+  }
 
+  showCreateTaskModal(taskType: string) {
+    this.filteredMemberUids = this.filteredMembers.map(member => member.user.uid);
+    $("#" + getCreateModalId(taskType)).modal('show');
+  }
+
+  taskCreated(saveResponse, type: string) {
+    console.log(saveResponse);
+    $("#" + getCreateModalId(type)).modal("hide");
   }
 
 }
