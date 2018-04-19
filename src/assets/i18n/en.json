@@ -75,6 +75,26 @@
       "CREATED_ALERT": "issued a news alert",
       "SENT_BROADCAST": "sent a broadcast",
       "CREATED_CAMPAIGN": "created a campaign"
+    },
+    "CampaignLog": {
+      "CAMPAIGN_FOUND": "Dialed code",
+      "CAMPAIGN_EXITED_NEG": "Did not sign",
+      "CAMPAIGN_PETITION_SIGNED": "Signed petititon",
+      "CAMPAIGN_USER_ADDED_TO_MASTER_GROUP": "Joined group",
+      "CAMPAIGN_SHARED": "Shared campaign",
+      "CAMPAIGN_USER_TAGGED": "Chose topic"
+    },
+    "UserInterface": {
+      "USSD": "USSD",
+      "INCOMING_SMS": "Inbound SMS",
+      "ANDROID": "Android app",
+      "ANDROID_2": "Android app",
+      "WEB": "Website",
+      "WEB_2": "Website",
+      "FACEBOOK": "Facebook",
+      "TWITTER": "Twitter",
+      "EMAIL": "Email link",
+      "WHATSAPP": "WhatsApp"
     }
   },
   "menu": {
@@ -116,15 +136,17 @@
     "my-agenda": {
       "title": "My agenda",
       "group-label": "Group",
-      "no-tasks": "You have no upcoming tasks. To create a task, just use one of the options in the 'create action' dropdown on one of your groups"
+      "no-tasks-sub": "You have no upcoming tasks",
+      "no-tasks-para": "To create one go to your groups and click on the '<b>create action</b>' dropdown"
     },
     "new-members": {
       "title": "New members",
-      "no-members": "No members have joined any of your groups this week. To recruit members, use the join code, join words, or import features on any of your groups"
+      "no-members-sub": "No members have joined any of your groups this week",
+      "no-members-para": "Find your <b>join code</b> & add <b>join words</b> on your group's page. Or navigate to your members tab to <b>import members</b> to any of your groups"
     },
     "starred-groups": {
       "title": "Starred groups",
-      "empty": "You currently have no starred (favourite) groups. You can pin groups by clicking on the star next to them in your group list, or creating a new one",
+      "empty": "You can pin groups to your homepage by <strong>clicking on the start</strong> next to them in your group list",
       "group-list": "View all my groups",
       "create-group": "create a group"
     },
@@ -324,6 +346,8 @@
       "bulkManage":{
         "bulkManage": "Bulk manage",
         "meeting": "Call a meeting",
+        "vote": "Call a vote",
+        "todo": "Create an action",
         "broadcast": "Send a broadcast",
         "topics": "Assign topics",
         "taskTeam": "Add to task team",
@@ -368,6 +392,7 @@
       },
       "filterMembers": {
         "province": "Province",
+        "role": "Role",
         "taskTeam": "Task team",
         "topics": "Topics",
         "affiliations": "Affiliations",
@@ -647,10 +672,10 @@
         "title": "Broadcast message",
         "broadcastVia": "Broadcast via",
         "sms": "SMS ({{smsCount}})",
-        "facebook": "Facebook: {{fbPage}}",
+        "facebook": "Facebook: {{ fbPages }}",
         "email": "Email ({{emailCount}})",
         "twitter": "Twitter: {{twitterAccount}}",
-        "previewMessages": "Preview messages",
+        "sentMessages": "Broadcast content",
         "smsTab": "SMS",
         "facebookTab": "Facebook",
         "emailTab": "Email",
@@ -1170,7 +1195,10 @@
       "otp-confirm": "Confirmed, delete profile",
       "otp-error": "Sorry, the code you entered is incorrect. Please try again. If you continue to encounter errors, please email <a href=\"mailto:contact@grassroot.org.za?subject=Delete%20account\">contact@grassroot.org.za</a>",
       "done": "Done. Your profile is deleted. Goodbye."
-    }
+    },
+    "opt-out":{
+    	"otp-note": "If your email or phone matched one we have on file, we have sent an OTP to your phone, or if you do not have a phone, to your email. Please enter it below to opt-out or change password."
+  	}
   },
   "login": {
     "title": "Login",

@@ -18,6 +18,7 @@
 *.launch
 .settings/
 *.sublime-workspace
+/.vscode
 
 # IDE - VSCode
 .vscode/*
@@ -49,9 +50,9 @@ package-lock.json
 
 # Some deployment scripts
 /deploy*
-Dockerrun.aws.json
+Dockerrun.aws.json*
 *.zip
-/Dockerrun.aws.json
+/Dockerrun.aws.json*
 .elasticbeanstalk/
 
 # Elastic Beanstalk Files

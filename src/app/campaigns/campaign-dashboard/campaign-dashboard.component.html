@@ -17,7 +17,7 @@
         <div class="col-md-8 campaign-description">
           <div class="row">
             <div class="col-md-7">
-              <p>{{campaign.description}}</p>
+              <p>{{campaign.description}} {{ 'enum.CampaignLog.CAMPAIGN_SHARED' | translate }} </p>
               <!-- some details -->
               <div class="campaign-info creation-info">
                 <strong>{{'campaign.dashboard.creationLabel' | translate}}</strong>
@@ -32,6 +32,7 @@
               <div class="campaign-info">
                 {{ 'campaign.dashboard.groupLabel' | translate }}
                 <a [routerLink]="['/group', campaign.masterGroupUid]" class="grassroot-link">// {{ campaign.masterGroupName }}</a>
+              </div>
             </div>
             <div class="col-md-5 text-right">
               <div class="campaign-info">

@@ -1,0 +1,12 @@
+.group-list {
+	margin-top: 0.5%;
+}
+
+.groups-header {
+	background-color: #929BAF;
+	color: white;
+	font-weight: 600;
+	text-transform: uppercase;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}

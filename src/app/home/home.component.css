@@ -31,6 +31,10 @@
   .new-members-card {
     margin-top: 1rem;
   }
+
+  .stared-groups-none-text {
+    text-align: center;
+  }
 }
 
 .groups-content {
@@ -151,6 +155,11 @@
   padding-top: 0;
 }
 
+.starred-group-tutorial-screenshot {
+  max-width: 100%;
+  max-height: 100%;
+}
+
 .member-row {
   margin-bottom: 1rem;
 }
@@ -182,10 +191,6 @@
   text-align: center;
 }
 
-.new-members-body {
-  /*margin-top: 1rem;*/
-}
-
 .new-members-none {
   padding-left: 10px;
   padding-right: 10px;
@@ -206,6 +211,11 @@
   .my-agenda-tasks {
     height: 18rem;
     overflow: auto;
+  }
+
+  .starred-group-tutorial-screenshot {
+    max-width: 638px;
+    max-height: 223px;
   }
 
 }

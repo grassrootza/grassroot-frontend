@@ -4,7 +4,7 @@ import {BroadcastService} from "../../broadcast.service";
 import {Router} from "@angular/router";
 import {BroadcastConfirmation, BroadcastContent} from "../../model/broadcast-request";
 import {AlertService} from "../../../utils/alert-service/alert.service";
-import {emailStyleHeader} from "../../../media/media-utils";
+import {emailStyleHeader, limitImageSizesInRichText, replaceImagesInRichText} from "../../../media/media-utils";
 
 @Component({
   selector: 'app-broadcast-confirm',
@@ -24,11 +24,12 @@ export class BroadcastConfirmComponent implements OnInit {
 
   ngOnInit() {
     this.confirmFields = this.broadcastService.getConfirmationFields();
-    console.log("confirmation fields: ", this.confirmFields);
+    // console.log("confirmation fields: ", this.confirmFields);
     this.contentFields = this.broadcastService.getContent();
     if (this.contentFields.emailContent) {
-      this.strippedEmailContent = this.contentFields.emailContent.replace(emailStyleHeader, '');
-      console.log("stripped email content, now = ", this.strippedEmailContent);
+      // console.log("prior to stripping, email content = ", this.contentFields.emailContent);
+      this.strippedEmailContent = replaceImagesInRichText(this.contentFields.emailContent.replace(emailStyleHeader, ''));
+      // console.log("stripped email content, now = ", this.strippedEmailContent);
     }
   }
 
@@ -38,7 +39,7 @@ export class BroadcastConfirmComponent implements OnInit {
   }
 
   confirm() {
-    console.log("create request = ", this.broadcastService.createRequest);
+    // console.log("create request = ", this.broadcastService.createRequest);
     this.alertService.showLoading();
     this.broadcastService.sendBroadcast().subscribe(result => {
       let redirectRoute = this.broadcastService.parentViewRoute();

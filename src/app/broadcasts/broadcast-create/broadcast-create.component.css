@@ -29,8 +29,34 @@
   font-size: 1.1em;
 }
 
-@media(max-width: 768) {
+@media(max-width: 768px) {
   .stage-buttons {
     display: none !important;
+  }
+
+  .card {
+    padding-left: 0;
+    padding-right: 0;
+    border: 1px red !important;
+  }
+
+  .broadcast-main {
+    padding-left: 0;
+    padding-right: 0;
+    border: 1px green !important;
+  }
+
+  .cancel-holder {
+    padding-top: 20px;
+    text-align: center;
+  }
+
+  .next-holder {
+    text-align: center;
+    padding-top: 20px;
+  }
+
+  .next-button {
+    margin: 0 !important;
   }
 }

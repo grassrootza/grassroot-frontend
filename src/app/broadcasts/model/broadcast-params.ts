@@ -1,4 +1,4 @@
-import {ManagedPage} from "../../user/model/integration-settings";
+import {FacebookPage, ManagedPage} from "../../user/model/integration-settings";
 
 export class BroadcastParams {
 
@@ -8,7 +8,7 @@ export class BroadcastParams {
   smsCostCents: number = 0;
 
   fbConnected: boolean = true;
-  facebookPages: ManagedPage[] = [];
+  facebookPages: FacebookPage[] = [];
 
   twitterConnected: boolean = true;
   twitterAccount: ManagedPage = new ManagedPage();
@@ -19,7 +19,7 @@ export class BroadcastParams {
   mergeFields: string[];
 
   getFbPageNames(): string[] {
-    return this.facebookPages.map(page => page.displayName);
+    return this.facebookPages.map(page => page.pageName);
   }
 
 }

@@ -24,14 +24,13 @@
   box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
 }
 
-.card-header {
-  background-color: #929BAF;
-  color: white;
-  font-weight: 600;
-  text-transform: uppercase;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
+.card-header  {
+	background-color: #929BAF;
+	color: white;
+	font-weight: 600;
+	text-transform: uppercase;
+	padding-top: 10px;
+	padding-bottom: 10px;}
 
 .card-title {
   font-size: 14px;

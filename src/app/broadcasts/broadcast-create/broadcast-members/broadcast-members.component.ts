@@ -114,7 +114,7 @@ export class BroadcastMembersComponent implements OnInit {
     this.memberFilter = filter;
     this.groupService.filterGroupMembers(this.group.groupUid, filter)
       .subscribe(members => {
-          let users = members.map(m => m.user);
+          let users = filter.role == 'ANY' ? members.map(m => m.user) : members.filter(m => m.roleName == filter.role).map(m => m.user);
           this.calculateCosts(users);
           if (users && users.length > 0 && users.length < 10) {
             this.filteredMemberNames = users.map(user => user.displayName);

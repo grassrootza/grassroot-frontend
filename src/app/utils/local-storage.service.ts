@@ -1,6 +1,13 @@
 import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 
+export const STORE_KEYS = {
+  NEW_MEMBERS_DATA_CACHE: "NEW_MEMBERS_DATA_CACHE",
+  MY_GROUPS_DATA_CACHE: "MY_GROUPS_DATA_CACHE",
+  MY_AGENDA_DATA_CACHE: "MY_AGENDA_DATA_CACHE",
+  DISPLAYED_NOTIFICATIONS_STORAGE_KEY:  "displayedNotifications"
+}
+
 @Injectable()
 export class LocalStorageService {
 
@@ -20,6 +27,12 @@ export class LocalStorageService {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem(key);
     }
+  }
+
+  clearCaches() {
+    if (isPlatformBrowser(this.platformId)) {
+      Object.keys(STORE_KEYS).forEach(key => localStorage.removeItem(STORE_KEYS[key]));
+    } 
   }
 
 }

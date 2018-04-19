@@ -19,6 +19,7 @@ import {PrivacyPolicyComponent} from "./landing/static/privacy-policy.component"
 import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
+import { SystemAdminComponent } from './admin/system-admin/system-admin.component';
 
 const routes: Routes = [
 
@@ -77,7 +78,8 @@ const routes: Routes = [
   {path: 'contribute/success', component: ContributeComponent},
 
   {path: 'privacy', component: PrivacyPolicyComponent},
-  {path: 'terms', component: TermsOfUseComponent}
+  {path: 'terms', component: TermsOfUseComponent},
+  {path: 'system-admin', component: SystemAdminComponent}
 ];
 
 @NgModule({

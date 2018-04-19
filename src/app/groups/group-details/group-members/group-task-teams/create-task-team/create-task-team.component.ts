@@ -54,14 +54,13 @@ export class CreateTaskTeamComponent implements OnInit {
   }
 
   membersFilterChanged(filter: MembersFilter) {
-    console.log("Members filter change, loading members... filter has content: ", filter.hasContent());
     if (filter.hasContent()) {
       this.groupService.filterGroupMembers(this.group.groupUid, filter)
         .subscribe(
           members => {
-            console.log("Fetched filtered members: ", members);
-            this.filteredMembers = members;
-            this.createTaskTeamForm.controls['membersCount'].setValue(members.length);
+            this.filteredMembers = filter.role == 'ANY' ? members : members.filter(m => m.roleName == filter.role);
+            console.log(`filtered on role: ${filter.role}, used role = ${filter.role == 'ANY'}`);
+            this.createTaskTeamForm.controls['membersCount'].setValue(this.filteredMembers.length);
           },
           error => console.log("Error fetching members", error)
         );

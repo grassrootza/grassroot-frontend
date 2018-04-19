@@ -10,7 +10,7 @@ import {AlertService} from "../../utils/alert-service/alert.service";
 })
 export class IntegrationsComponent implements OnInit {
 
-  facebookImageUrl = "https://graph.facebook.com/v2.5/{}/picture";
+  facebookImageUrl = "https://graph.facebook.com/{}/picture";
 
   settingsList: IntegrationSettingsList = new IntegrationSettingsList();
 

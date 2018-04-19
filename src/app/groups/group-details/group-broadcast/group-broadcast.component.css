@@ -27,12 +27,11 @@
 }
 
 .title{
-  height: 19px;
+  height: 24px;
   width: 373px;
-  color: #7A7D8C;
-  font-family: Nunito;
-  font-size: 14px;
-  line-height: 19px;
+  color: #4A4A4A;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .scheduled-broadcast{

@@ -3,6 +3,7 @@ import {DatePipe} from '@angular/common';
 export class Broadcast {
   constructor(public broadcastUid: string,
               public title: string,
+              public succeeded : boolean,
               public shortMessageSent: boolean,
               public emailSent: boolean,
               public smsCount:number,
@@ -19,7 +20,8 @@ export class Broadcast {
               public hasFilter: boolean,
               public totalSent: number,
               public provinces: string [],
-              public topics: string[]){
+              public topics: string[],
+              public createdByUser: boolean) {
 
 
     // this.formatteddateTimeSent = new DatePipe("en").transform(this.dateTimeSent,"d MMM y, hh:MM a");

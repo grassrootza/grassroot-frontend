@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="col-2">
-                  {{broadcast.fbPages?.join(", ")}}
+                  {{broadcast.fbPages ? Array.prototype.join.call(broadcast.fbPages, ", ") : ""}}
                 </div>
 
                 <div class="col-2">
@@ -99,55 +99,53 @@
           <div class="container group-info-header d-none d-md-block">
             <div class="row">
               <div class="col-2"> {{'group.broadcast.table.sendOn' | translate}}</div>
-              <div class="col-3">{{'group.broadcast.table.sendTo' | translate}}</div>
+              <div class="col-2">{{'group.broadcast.table.sendTo' | translate}}</div>
               <div class="col-1">{{'group.broadcast.table.sms' | translate}}</div>
               <div class="col-1">{{'group.broadcast.table.email' | translate}}</div>
               <div class="col-2">{{'group.broadcast.table.facebook' | translate}}</div>
               <div class="col-2">{{'group.broadcast.table.twitter' | translate}}</div>
-              <div class="col-1">{{'group.broadcast.table.actions' | translate}}</div>
+              <div class="col-2">{{'group.broadcast.table.actions' | translate}}</div>
             </div>
           </div>
           <div *ngFor="let broadcast of currentSentPage.content">
             <div class="container group-info-row">
               <div class="row flex flex-wrap">
-                <div class="col-2">
-                  {{broadcast.getFormattedDateTimeSent()}}
-                </div>
-
-                <div class="col-3">
-                  {{broadcast.hasFilter ? "Sent to filtered members" : "Sent to everyone in group"}}
-                </div>
-
-                <div class="col-1">
-                  {{broadcast.smsCount}}
-                </div>
-
-                <div class="col-1">
-                  {{broadcast.emailCount}}
-                </div>
-
-                <div class="col-2">
-                  {{broadcast.fbPages?.join(", ")}}
-                </div>
-
-                <div class="col-2">
-                  {{broadcast.twitterAccount}}
-                </div>
-
-                <div class="col-1">
-                  <div class="dropdown">
-                    <a class="dropdown-toggle" id="sentActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-                    <div class="dropdown-menu" aria-labelledby="sentActionsDropdown">
-                      <a class="dropdown-item" (click)="showViewModal(broadcast)">{{'group.broadcast.table.sentActions.view' | translate}}</a>
-                      <a class="dropdown-item">{{'group.broadcast.table.sentActions.resend' | translate}}</a>
-                      <a class="dropdown-item" (click)="donwloadBroadcastErrorReport(broadcast)">{{'group.broadcast.table.sentActions.downloadReport' | translate}}</a>
-                    </div>
-                  </div>
+                <div class="col-12 title">
+                  {{broadcast.title}}
                 </div>
               </div>
               <div class="row flex flex-wrap">
-                <div class="col-12 title">
-                  Title: {{broadcast.title}}
+                <div class="col-md-2 col-sm-6">
+                  {{broadcast.getFormattedDateTimeSent()}}
+                </div>
+
+                <div class="col-md-2 col-sm-6">
+                  {{broadcast.succeeded  ? "Sent successfully" : "Some errors" }}
+                </div>
+
+                <div class="col-md-1 col-sm-6">
+                  {{broadcast.smsCount > 0 ? broadcast.smsCount : '-' }}
+                </div>
+
+                <div class="col-md-1 col-sm-6">
+                  {{broadcast.emailCount > 0 ? broadcast.emailCount : '-'}}
+                </div>
+
+                <div class="col-md-4 col-sm-12" *ngIf="broadcast.fbPages || broadcast.twitterAccount">
+                  <span *ngIf="broadcast.fbPages">FB: {{broadcast.fbPages?.join(", ")}}</span>
+                  <span *ngIf="broadcast.fbPages && broadcast.twitterAccount">, </span>
+                  <span *ngIf="broadcast.twitterAccount">Twitter: {{broadcast.twitterAccount}}</span>
+                </div>
+
+                <div [ngClass]="{'col-md-2 col-sm-12': true, 'offset-md-4': !broadcast.fbPages && !broadcast.twitterAccount}">
+                  <div class="dropdown">
+                    <a class="dropdown-toggle" id="sentActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage</a>
+                    <div class="dropdown-menu" aria-labelledby="sentActionsDropdown">
+                      <a class="dropdown-item" (click)="showViewModal(broadcast)">{{'group.broadcast.table.sentActions.view' | translate}}</a>
+                      <a class="dropdown-item" *ngIf="broadcast.createdByUser" (click)="showResendModal(broadcast)">{{'group.broadcast.table.sentActions.resend' | translate}}</a>
+                      <a class="dropdown-item" *ngIf="!broadcast.succeeded" (click)="donwloadBroadcastErrorReport(broadcast)">{{'group.broadcast.table.sentActions.downloadReport' | translate}}</a>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -156,7 +154,6 @@
                           (onPageSelected)="goToSentPage($event)"></app-pagination>
 
         </div>
-
       </div>
     </div>
 
@@ -184,17 +181,17 @@
         </div>
         <div class="row">
           <div class="col-11 offset-1">
-            <h5 [translate]="'group.broadcast.viewModal.sms'" [translateParams]="modalBroadcast"></h5>
-            <h5 [translate]="'group.broadcast.viewModal.email'" [translateParams]="modalBroadcast"></h5>
-            <h5 [translate]="'group.broadcast.viewModal.facebook'" [translateParams]="modalBroadcast"></h5>
-            <h5 [translate]="'group.broadcast.viewModal.twitter'" [translateParams]="modalBroadcast"></h5>
+            <h5 *ngIf="modalBroadcast.smsContent" [translate]="'group.broadcast.viewModal.sms'" [translateParams]="modalBroadcast"></h5>
+            <h5 *ngIf="modalBroadcast.emailContent" [translate]="'group.broadcast.viewModal.email'" [translateParams]="modalBroadcast"></h5>
+            <h5 *ngIf="modalBroadcast.fbPost" [translate]="'group.broadcast.viewModal.facebook'" [translateParams]="{fbPages: modalBroadcast.fbPages?.join(',')}"></h5>
+            <h5 *ngIf="modalBroadcast.twitterPost" [translate]="'group.broadcast.viewModal.twitter'" [translateParams]="modalBroadcast"></h5>
           </div>
         </div>
 
         <div class="row">
           <div class="col-12">
             <h4>
-              <strong>{{'group.broadcast.viewModal.previewMessages' | translate}}</strong>
+              <strong>{{'group.broadcast.viewModal.sentMessages' | translate}}</strong>
             </h4>
           </div>
         </div>
@@ -202,45 +199,45 @@
         <div class="row" style="margin-bottom: 1rem !important;">
           <div class="col-11 offset-1">
             <ul class="nav nav-tabs" id="sent-view-tabs" role="tablist">
-              <li class="nav-item">
-                <a class="nav-link active" id="sent-sms-tab" data-toggle="tab" href="#sent-sms" role="tab" aria-controls="sent-sms" aria-selected="true">
+              <li class="nav-item" *ngIf="modalBroadcast.smsContent">
+                <a [ngClass]="{'nav-link': true, 'active': (firstModalTab == 'sms')}" id="sent-sms-tab" data-toggle="tab" href="#sent-sms" role="tab" aria-controls="sent-sms" aria-selected="true">
                   {{'group.broadcast.viewModal.smsTab' | translate}}
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" id="sent-email-tab" data-toggle="tab" href="#sent-email" role="tab" aria-controls="sent-email" aria-selected="false">
+              <li class="nav-item" *ngIf="modalBroadcast.emailContent">
+                <a [ngClass]="{'nav-link': true, 'active': (firstModalTab == 'email')}"  id="sent-email-tab" data-toggle="tab" href="#sent-email" role="tab" aria-controls="sent-email" aria-selected="false">
                   {{'group.broadcast.viewModal.emailTab' | translate}}
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" id="sent-facebook-tab" data-toggle="tab" href="#sent-facebook" role="tab" aria-controls="sent-facebook" aria-selected="false">
+              <li class="nav-item" *ngIf="modalBroadcast.fbPost">
+                <a [ngClass]="{'nav-link': true, 'active': (firstModalTab == 'facebook')}"  id="sent-facebook-tab" data-toggle="tab" href="#sent-facebook" role="tab" aria-controls="sent-facebook" aria-selected="false">
                   {{'group.broadcast.viewModal.facebookTab' | translate}}
                 </a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" id="sent-twitter-tab" data-toggle="tab" href="#sent-twitter" role="tab" aria-controls="sent-twitter" aria-selected="false">
+              <li class="nav-item" *ngIf="modalBroadcast.twitterPost">
+                <a [ngClass]="{'nav-link': true, 'active': (firstModalTab == 'twitter')}"  id="sent-twitter-tab" data-toggle="tab" href="#sent-twitter" role="tab" aria-controls="sent-twitter" aria-selected="false">
                   {{'group.broadcast.viewModal.twitterTab' | translate}}
                 </a>
               </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="sent-sms" role="tabpanel" aria-labelledby="sent-sms-tab">
-                <textarea class="form-control" rows="5" name="sent-sms-text" [(ngModel)]="modalBroadcast.smsContent"></textarea>
+              <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'sms')}" id="sent-sms" role="tabpanel" aria-labelledby="sent-sms-tab" *ngIf="modalBroadcast.smsContent">
+                <p class="form-control" rows="5" name="sent-sms-text" [(ngModel)]="modalBroadcast.smsContent"></p>
               </div>
-              <div class="tab-pane fade" id="sent-email" role="tabpanel" aria-labelledby="sent-email-tab">
-                <textarea class="form-control" rows="5" name="sent-email-text" [(ngModel)]="modalBroadcast.emailContent"></textarea>
+              <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'email')}" id="sent-email" role="tabpanel" aria-labelledby="sent-email-tab" *ngIf="modalBroadcast.emailContent">
+                <p textarea class="form-control" rows="5" name="sent-email-text" [(ngModel)]="modalBroadcast.emailContent"></p>
               </div>
-              <div class="tab-pane fade" id="sent-facebook" role="tabpanel" aria-labelledby="sent-facebook-tab">
-                <textarea class="form-control" rows="5" name="sent-fbPost-text" [(ngModel)]="modalBroadcast.fbPost"></textarea>
+              <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'facebook')}" id="sent-facebook" role="tabpanel" aria-labelledby="sent-facebook-tab" *ngIf="modalBroadcast.fbPost">
+                <p class="form-control" rows="5" name="sent-fbPost-text" [(ngModel)]="modalBroadcast.fbPost"></p>
               </div>
-              <div class="tab-pane fade" id="sent-twitter" role="tabpanel" aria-labelledby="sent-twitter-tab">
-                <textarea class="form-control" rows="5" name="sent-twitter-text" [(ngModel)]="modalBroadcast.twitterPost"></textarea>
+              <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'email')}" id="sent-twitter" role="tabpanel" aria-labelledby="sent-twitter-tab" *ngIf="modalBroadcast.twitterPost">
+                <p class="form-control" rows="5" name="sent-twitter-text" [(ngModel)]="modalBroadcast.twitterPost"></p>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="modalBroadcast.emailContent || modalBroadcast.smsContent">
           <div class="col-12">
             <h4>
               <strong [translate]="'group.broadcast.viewModal.sentTo'" [translateParams]="modalBroadcast"></strong>
@@ -256,7 +253,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row" *ngIf="modalBroadcast.costEstimate > 0">
           <div class="col-6 offset-6">
             <div class="row">
               <h5>
@@ -272,10 +269,68 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+        <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">
           {{ 'action.close' | translate }}
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="broadcast-resend-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Resend broadcast</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="resendBroadcast">
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <p>
+              Which parts of the broadcast would you like to resend? Note that this will resend
+              these messages <strong>exactly</strong> as in the original broadcast, to the same
+              recipients and/or pages and accounts.
+            </p>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-md-3 col-sm-6 form-group-inline" *ngIf="resendBroadcast.smsContent">
+            <label>
+              <input type="checkbox" [formControl]="resendForm.controls['resendText']">
+              Resend SMS
+            </label>
+          </div>
+          <div class="col-md-3 col-sm-6 form-group-inline" *ngIf="resendBroadcast.emailContent">
+            <label>
+                <input type="checkbox" [formControl]="resendForm.controls['resendText']">
+                Resend Email
+            </label>
+          </div>
+          <div class="col-md-3 col-sm-6 form-group-inline" *ngIf="resendBroadcast.fbPost">
+              <label>
+                  <input type="checkbox" [formControl]="resendForm.controls['resendFb']">
+                  Repost to Facebook
+              </label>
+          </div>
+          <div class="col-md-3 col-sm-6 form-group-inline" *ngIf="resendBroadcast.twitterPost">
+              <label>
+                  <input type="checkbox" [formControl]="resendForm.controls['resendFb']">
+                  Repost to Twitter
+              </label>
+          </div>          
+        </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
+            {{ 'action.close' | translate }}
+          </button>
+          <button type="button" class="btn btn-primary save-button" (click)="resendModalComplete(resendBroadcast)">
+            {{ 'action.send' | translate }}
+          </button>
+        </div>
     </div>
   </div>
 </div>

@@ -36,6 +36,10 @@ export class AuthenticatedUser {
     return this.systemRoles && this.systemRoles.indexOf('ROLE_ACCOUNT_ADMIN') != -1;
   }
 
+  hasLiveWireAdmin() {
+    return this.systemRoles && this.systemRoles.indexOf('ROLE_LIVEWIRE_USER') != -1;
+  }
+
   hasSystemAdmin() {
     return this.systemRoles && this.systemRoles.indexOf('ROLE_SYSTEM_ADMIN') != -1;
   }
