@@ -1,5 +1,5 @@
 <div class="container primary-container">
-	<div class="card">
+  <div class="card">
 		<div class="card-body">
 		  <div class="row">
 		  	<div class="col-6">
@@ -202,12 +202,31 @@
               <option value="ROLE_GROUP_ORGANIZER">Group organizer</option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="new-member-email" class="control-label">Email address</label>
+            <input type="email" class="form-control" id="new-member-email" name="email" #email/>
+          </div>
+          <div>
+            <label for="new-member-province" class="control-label">Province</label>
+            <select class="form-control" id="new-member-province" name="roleName"
+                    (change)="onChangeSelectProvince($event.target.value)">
+              <option value="gauteng">Gauteng</option>
+              <option value="western cape">Western Cape</option>
+              <option value="eastern cape">Eastern Cape</option>
+              <option value="northern cape">Northern Cape</option>
+              <option value="limpopo">Limpopo</option>
+              <option value="north west">North West</option>
+              <option value="free state">Free State</option>
+              <option value="Mpumalanga">Mpumalanga</option>
+              <option value="foreign">Eastern Cape</option>
+            </select>
+          </div>
 
         </div>
 
         <div class="modal-footer">
           <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button class="btn btn-danger" (click)="addMember(displayName.value,phoneNumber.value)">Add</button>
+          <button class="btn btn-danger" (click)="addMember(displayName.value,phoneNumber.value,email.value)">Add</button>
         </div>
 
       </div>

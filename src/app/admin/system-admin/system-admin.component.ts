@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
 import { Router } from '@angular/router';
 import { GroupAdmin } from '../../groups/model/group-admin.model';
+import { AlertService } from '../../utils/alert-service/alert.service';
 
 declare var $: any;
 
@@ -21,11 +22,15 @@ export class SystemAdminComponent implements OnInit {
   public userRole:string = "ROLE_ORDINARY_MEMBER";
   public groupUid:string;
   public userGroups:number;
+  public province:string;
+  public memberAddOrUpdateMessage:string;
+  public showMessage:boolean;
 
   public groups:GroupAdmin[] = [];
   
   constructor(private adminService:AdminService,
-              private router:Router) { 
+              private router:Router,
+              private alertService:AlertService) { 
   }
 
   ngOnInit() {
@@ -60,7 +65,6 @@ export class SystemAdminComponent implements OnInit {
   optOutUser(otp:string){
     this.adminService.optOutUser(otp,this.userUid).subscribe(resp => {
       $('#user-opt-out-modal').modal("hide");
-      this.router.navigate(["/home"]);
     },error => {
       console.log("Error opting user out...",error);
       this.invalidOtpMessage = "Error! invalid OTP";
@@ -73,7 +77,6 @@ export class SystemAdminComponent implements OnInit {
   resetUserPwd(otp:string){
     this.adminService.resetUserPassword(otp,this.userUid).subscribe(resp => {
       $('#user-opt-out-modal').modal("hide");
-      this.router.navigate(["/home"]);
     },error => {
       console.log("Error updating password",error);
     });
@@ -141,14 +144,27 @@ export class SystemAdminComponent implements OnInit {
     this.userRole = role;
   }
 
-  addMember(displayName:string,phoneNumber:string){
-    this.adminService.addMember(phoneNumber,displayName,this.userRole,this.groupUid).subscribe(resp => {
-      for(let grp of this.groups){
-        if(grp.groupUid === this.groupUid){
-          grp.memberCount += 1;
-        }
-      }
+  onChangeSelectProvince(province:string){
+    this.province = province;
+  }
+
+  addMember(displayName:string,phoneNumber:string,email:string){
+    this.adminService.addMember(phoneNumber,displayName,this.userRole,this.groupUid,email,this.province).subscribe(resp => {
+      console.log("Response...",resp);
       $('#add-member-modal').modal("hide");
+      if(resp == "UPLOADED"){;
+        console.log(this.memberAddOrUpdateMessage);
+        this.alertService.alert("group.allMembers.addMember.complete");
+        for(let grp of this.groups){
+          if(grp.groupUid === this.groupUid){
+            grp.memberCount += 1;
+          }
+        }
+      }else if(resp == "UPDATED"){
+        console.log(this.memberAddOrUpdateMessage);
+        this.alertService.alert("group.allMembers.addMember.updated");
+      }
+      
     },error => {
       console.log("Error adding member to group",error);
     });

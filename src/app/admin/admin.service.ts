@@ -54,12 +54,14 @@ export class AdminService {
     return this.httpClient.post(this.activateGroupUrl,null,{responseType:'text',params:params});
   }
 
-  addMember(phoneNumber:string,displayName:string,roleName:string,groupUid:string):Observable<any>{
+  addMember(phoneNumber:string,displayName:string,roleName:string,groupUid:string,email:string,province:string):Observable<any>{
     let params = new HttpParams()
       .set('groupUid',groupUid)
       .set('displayName',displayName)
       .set('phoneNumber',phoneNumber)
-      .set('roleName',roleName);
+      .set('roleName',roleName)
+      .set('email',email)
+      .set('province',province);
 
     return this.httpClient.post(this.addMemberToGroupUrl,null,{responseType:'text',params:params});
   }

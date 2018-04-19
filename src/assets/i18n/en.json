@@ -388,7 +388,8 @@
         "failed": "Sorry, there was an error adding the member",
         "errors":{
           "name": "Please enter member name"
-        }
+        },
+        "updated":"Done! Member details updated"
       },
       "filterMembers": {
         "province": "Province",
