@@ -28,6 +28,8 @@ export class ProfileFormComponent implements OnInit {
   public imageErrors: string[] = [];
   public currentImageUrl: string;
 
+  public accessToken: string = "";
+
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,
               private alertService: AlertService,

@@ -18,6 +18,7 @@ export class UserService {
   private updatePasswordUrl: string = environment.backendAppUrl + "/api/user/profile/password/update";
   private updateImageUrl: string = environment.backendAppUrl + "/api/user/profile/image/change";
   private loggedInUserImageUrlBase = environment.backendAppUrl + "/api/user/profile/image/view";
+  private fetchApiTokenUrl: string = environment.backendAppUrl + "/api/user/profile/token/obtain";
 
   private deleteUserInitiate: string = environment.backendAppUrl + "/api/user/profile/delete/initiate";
   private deleteUserConfirm: string = environment.backendAppUrl + "/api/user/profile/delete/confirm";
@@ -197,6 +198,10 @@ export class UserService {
       }
       return result;
     });
+  }
+
+  fetchAccessToken(): Observable<string> {
+    return this.httpClient.get(this.fetchApiTokenUrl, { responseType: 'text' });
   }
 
 }
