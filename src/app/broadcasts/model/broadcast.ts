@@ -20,7 +20,8 @@ export class Broadcast {
               public hasFilter: boolean,
               public totalSent: number,
               public provinces: string [],
-              public topics: string[]){
+              public topics: string[],
+              public createdByUser: boolean) {
 
 
     // this.formatteddateTimeSent = new DatePipe("en").transform(this.dateTimeSent,"d MMM y, hh:MM a");

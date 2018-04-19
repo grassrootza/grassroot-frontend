@@ -1,7 +1,7 @@
 <div class="jumbotron" id="banner">
   <div class="container text-center">
     <div class="banner-content text-center">
-      <h1 [translate]="'livewire.title'">Grassroot LiveWire</h1>
+      <h1 [translate]="'livewire.public.title'">Grassroot LiveWire</h1>
     </div><!-- /.intro-content -->
   </div>
 </div><!-- /.jumbotron -->
@@ -15,7 +15,7 @@
     </div>
   </div>
   <div *ngIf="showLatest">
-    <div *ngFor="let alert of news" class="card col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12">
+    <div *ngFor="let alert of news" class="card col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-sm-12" [id]="alert.serverUid">
       <div class="card-header alert-header">
         <div class="row">
           <div class="col-md-9 alert-headline">
