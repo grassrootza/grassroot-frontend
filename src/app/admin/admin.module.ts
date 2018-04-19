@@ -7,6 +7,7 @@ import {ADMIN_ROUTES} from "./admin-routes";
 import {LiveWireAdminService} from "./livewire/livewire-admin-service";
 import {LiveWireListComponent} from "./livewire/alert-list/live-wire-list.component";
 import {ViewAlertComponent} from "./livewire/alert-view/view-alert.component";
+import {AdminRoleGuard} from "./admin-role.guard";
 
 @NgModule({
   imports: [
@@ -20,6 +21,7 @@ import {ViewAlertComponent} from "./livewire/alert-view/view-alert.component";
     ViewAlertComponent
   ],
   providers: [
+    AdminRoleGuard,
     LiveWireAdminService
   ]
 })

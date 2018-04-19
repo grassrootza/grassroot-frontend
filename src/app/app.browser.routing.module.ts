@@ -25,6 +25,7 @@ const routes: Routes = [
 
   {path: '', component: HomeScreenRoutingComponent},
   {path: 'news', component: NewsComponent},
+  {path: 'news/:id', component: NewsComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},

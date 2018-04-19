@@ -43,6 +43,10 @@ export class AuthenticatedUser {
   hasSystemAdmin() {
     return this.systemRoles && this.systemRoles.indexOf('ROLE_SYSTEM_ADMIN') != -1;
   }
+
+  hasLiveWireRole() {
+    return this.systemRoles && this.systemRoles.indexOf('ROLE_LIVEWIRE_USER') != -1;
+  }
 }
 
 export const getAuthUser = (au: AuthenticatedUser): AuthenticatedUser => {
