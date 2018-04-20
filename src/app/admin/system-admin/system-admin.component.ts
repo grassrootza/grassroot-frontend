@@ -3,6 +3,7 @@ import { AdminService } from '../admin.service';
 import { Router } from '@angular/router';
 import { GroupAdmin } from '../../groups/model/group-admin.model';
 import { AlertService } from '../../utils/alert-service/alert.service';
+import { UserProvince } from 'app/user/model/user-province.enum';
 
 declare var $: any;
 
@@ -27,10 +28,14 @@ export class SystemAdminComponent implements OnInit {
   public totalGroupsLoaded:number;
 
   public groups:GroupAdmin[] = [];
+
+  userProvince = UserProvince;
+  provinceKeys: string[];
   
   constructor(private adminService:AdminService,
               private router:Router,
               private alertService:AlertService) { 
+    this.provinceKeys = Object.keys(this.userProvince);
   }
 
   ngOnInit() {

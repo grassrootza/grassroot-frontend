@@ -217,15 +217,10 @@
             <label for="new-member-province" class="control-label">Province</label>
             <select class="form-control" id="new-member-province" name="roleName"
                     (change)="onChangeSelectProvince($event.target.value)">
-              <option value="gauteng">Gauteng</option>
-              <option value="western cape">Western Cape</option>
-              <option value="eastern cape">Eastern Cape</option>
-              <option value="northern cape">Northern Cape</option>
-              <option value="limpopo">Limpopo</option>
-              <option value="north west">North West</option>
-              <option value="free state">Free State</option>
-              <option value="Mpumalanga">Mpumalanga</option>
-              <option value="foreign">Eastern Cape</option>
+                <option value="null">Select</option>
+                <option *ngFor="let p of provinceKeys" [value]="p" [translate]="'enum.UserProvince.' + p">User
+                  province
+                </option>
             </select>
           </div>
 
