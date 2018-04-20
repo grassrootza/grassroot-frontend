@@ -26,7 +26,8 @@ export class BroadcastService {
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
   costThisMonthUrl = environment.backendAppUrl + "/api/broadcast/cost-this-month";
   shortenLinkUrl = environment.backendAppUrl + "/api/broadcast/shorten/link";
-  downloadErrorReportUrl = environment.backendAppUrl + "/api/broadcast/error-report/";
+  downloadErrorReportUrl = environment.backendAppUrl + "/api/broadcast/error-report";
+  resendUrl = environment.backendAppUrl + "/api/broadcast/resend";
 
   public createRequest: BroadcastRequest = new BroadcastRequest();
   private createCounts: BroadcastCost = new BroadcastCost();
@@ -313,7 +314,8 @@ export class BroadcastService {
               bc.hasFilter,
               bc.smsCount + bc.emailCount,
               bc.provinces,
-              bc.topics
+              bc.topics,
+              bc.createdByUser
             )
           );
           return new BroadcastPage(
@@ -348,9 +350,15 @@ export class BroadcastService {
   }
 
   downloadBroadcastErrorReport(broadcastUid: string) {
-    const fullUrl = this.downloadErrorReportUrl  + broadcastUid + '/download';
-
+    const fullUrl = this.downloadErrorReportUrl + "/" + broadcastUid + '/download';
     return this.httpClient.get(fullUrl, { responseType: 'blob' });
+  }
+
+  resendBroadcast(broadcastId: string, resendParams) {
+    const fullUrl = this.resendUrl + '/' + broadcastId;
+    let params = new HttpParams().set('resendText', resendParams['resendText']).set('resendEmail', resendParams['resendEmail'])
+      .set('resendFb', resendParams['resendFb']).set('resendTwitter', resendParams['resendTwitter']);
+    return this.httpClient.post(fullUrl, null, {params: params});
   }
 
 }

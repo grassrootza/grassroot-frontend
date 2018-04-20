@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {IntegrationsService} from "./integrations.service";
 import {IntegrationSettingsList, ManagedPage} from "../model/integration-settings";
 import {AlertService} from "../../utils/alert-service/alert.service";
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-integrations',
@@ -11,10 +12,11 @@ import {AlertService} from "../../utils/alert-service/alert.service";
 export class IntegrationsComponent implements OnInit {
 
   facebookImageUrl = "https://graph.facebook.com/{}/picture";
+  accessToken: string = "";
 
   settingsList: IntegrationSettingsList = new IntegrationSettingsList();
 
-  constructor(private intService: IntegrationsService, private alertService: AlertService) {}
+  constructor(private intService: IntegrationsService, private userService: UserService, private alertService: AlertService) {}
 
   ngOnInit() {
     // fetch the current status: note, thought about using a router here, but don't want
@@ -73,8 +75,12 @@ export class IntegrationsComponent implements OnInit {
     return false;
   }
 
-  connectGoogle() {
+  fetchAccessToken() {
+    this.userService.fetchAccessToken().subscribe(token => this.accessToken = token);
+  }
 
+  clearAccessToken() {
+    this.accessToken = null;
   }
 
 }
