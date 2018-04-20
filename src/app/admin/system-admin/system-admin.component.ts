@@ -23,8 +23,8 @@ export class SystemAdminComponent implements OnInit {
   public groupUid:string;
   public userGroups:number;
   public province:string;
-  public memberAddOrUpdateMessage:string;
-  public showMessage:boolean;
+  public numberOfGroups:number = 10;
+  public totalGroupsLoaded:number;
 
   public groups:GroupAdmin[] = [];
   
@@ -85,7 +85,9 @@ export class SystemAdminComponent implements OnInit {
   searchGroups(groupName:string){
     this.searchTerm = groupName;
     this.adminService.findGroups(groupName).subscribe(resp => {
+      console.log("Response....",resp);
       this.groups = resp;
+      this.totalGroupsLoaded = this.groups.length;
       if(this.groups.length === 0){
         this.groupsNotFoundMessage = "No groups found!";
         setTimeout(()=>{
@@ -152,8 +154,7 @@ export class SystemAdminComponent implements OnInit {
     this.adminService.addMember(phoneNumber,displayName,this.userRole,this.groupUid,email,this.province).subscribe(resp => {
       console.log("Response...",resp);
       $('#add-member-modal').modal("hide");
-      if(resp == "UPLOADED"){;
-        console.log(this.memberAddOrUpdateMessage);
+      if(resp == "UPLOADED"){
         this.alertService.alert("group.allMembers.addMember.complete");
         for(let grp of this.groups){
           if(grp.groupUid === this.groupUid){
@@ -161,12 +162,23 @@ export class SystemAdminComponent implements OnInit {
           }
         }
       }else if(resp == "UPDATED"){
-        console.log(this.memberAddOrUpdateMessage);
         this.alertService.alert("group.allMembers.addMember.updated");
       }
       
     },error => {
       console.log("Error adding member to group",error);
     });
+  }
+
+  showMore(){
+    if(this.totalGroupsLoaded > this.numberOfGroups){
+      this.numberOfGroups += 10;
+    }
+  }
+
+  showLess(){
+    if(this.numberOfGroups > 10){
+      this.numberOfGroups -= 10;
+    }
   }
 }
