@@ -1,0 +1,35 @@
+<div class="container primary-container">
+  <div class="card">
+    <div class="card-body">
+      <div class="row text-center">
+          <h1 class="main-title text-center">Livewire Subscribers</h1>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <h3>Subscriber Accounts</h3>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary">New Subscriber</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-4">
+            <h5>List of accounts</h5>
+        </div>
+      </div>
+
+      <div class="row" *ngFor="let subscriber of subscribers">
+        <div class="col-10">
+          <div class="row">
+            <a class="list-header" href="">
+              <span>{{subscriber.displayName}}</span>
+            </a>
+          </div>
+        </div>
+        <div class="col-2"></div>
+      </div>
+
+    </div>
+  </div>
+</div>

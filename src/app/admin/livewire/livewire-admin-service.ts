@@ -24,6 +24,7 @@ export class LiveWireAdminService {
   private releaseAlertUrl = environment.backendAppUrl + "/api/livewire/admin/release";
   private postFBUrl = environment.backendAppUrl + "/api/livewire/admin/post/facebook";
   private postTwitterUrl = environment.backendAppUrl + "/api/livewire/admin/post/twitter";
+  private allSubscribersUrl = environment.backendAppUrl + "/api/livewire/admin/list/subscribers";
 
   constructor(private httpClient:HttpClient) { }
 
@@ -123,5 +124,10 @@ export class LiveWireAdminService {
       .set('imageMediaFunction',tweet.imageMediaFunction)
       .set('imageKey',tweet.imageKey);
     return this.httpClient.post(this.postTwitterUrl,null,{params:params});
+  }
+
+  allSubscribers():Observable<DataSubscriber[]>{
+    return this.httpClient.get<DataSubscriber[]>(this.allSubscribersUrl)
+    .map(resp => resp.map(data => DataSubscriber.createInstance(data)));
   }
 }
