@@ -22,12 +22,17 @@
       <div class="row" *ngFor="let subscriber of subscribers">
         <div class="col-10">
           <div class="row">
-            <a class="list-header" href="">
+            <a class="list-header" [routerLink]="['/admin/view-subscriber']">
               <span>{{subscriber.displayName}}</span>
             </a>
           </div>
+          <div class="row">
+            {{subscriber.creationTime | date: 'dd MMM yyyy'}}
+          </div>
         </div>
-        <div class="col-2"></div>
+        <div class="col-2">
+          {{subscriber.active ? 'Active' : 'Disabled'}}
+        </div>
       </div>
 
     </div>
