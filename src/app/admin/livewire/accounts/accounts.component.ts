@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { LiveWireAdminService } from '../livewire-admin-service';
 import { DataSubscriber } from '../model/data-subscriber.model';
 
+declare var $: any;
+
 @Component({
   selector: 'app-accounts',
   templateUrl: './accounts.component.html',
@@ -11,7 +13,13 @@ export class AccountsComponent implements OnInit {
 
   public subscribers:DataSubscriber[] = [];
 
-  constructor(private livewireAdminService:LiveWireAdminService) { }
+  public addPrimaryEmail:boolean;
+  public makeAccountActive:boolean;
+
+  constructor(private livewireAdminService:LiveWireAdminService) {
+    this.addPrimaryEmail = false;
+    this.makeAccountActive = false;
+  }
 
   ngOnInit() {
     this.livewireAdminService.allSubscribers().subscribe(resp => {
@@ -22,4 +30,17 @@ export class AccountsComponent implements OnInit {
     });
   }
 
+  triggerCreateSubscriberModal(){
+    $('#create-subscriber-modal').modal("show");
+  }
+
+  createSubscriber(subscriberName:string,primaryEmail:string,otherEmails:string){
+    console.log("Add primary email....",this.addPrimaryEmail);
+    console.log("Make account active....",this.makeAccountActive);
+    this.livewireAdminService.createSubscriber(subscriberName,primaryEmail,this.addPrimaryEmail,otherEmails,this.makeAccountActive).subscribe(resp => {
+      console.log("Response.....",resp);
+    },error => {
+      console.log("Error creating subscriber......",error);
+    });
+  }
 }

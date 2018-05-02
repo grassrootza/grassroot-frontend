@@ -25,6 +25,8 @@ export class LiveWireAdminService {
   private postFBUrl = environment.backendAppUrl + "/api/livewire/admin/post/facebook";
   private postTwitterUrl = environment.backendAppUrl + "/api/livewire/admin/post/twitter";
   private allSubscribersUrl = environment.backendAppUrl + "/api/livewire/admin/list/subscribers";
+  private createSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/create/subscriber";
+  private loadSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/load";
 
   constructor(private httpClient:HttpClient) { }
 
@@ -129,5 +131,21 @@ export class LiveWireAdminService {
   allSubscribers():Observable<DataSubscriber[]>{
     return this.httpClient.get<DataSubscriber[]>(this.allSubscribersUrl)
     .map(resp => resp.map(data => DataSubscriber.createInstance(data)));
+  }
+
+  createSubscriber(displayName:string,primaryEmail:string,addToPushEmails:boolean,emailsForPush:string,active:boolean):Observable<any>{
+    let params = new HttpParams()
+      .set('displayName',displayName)
+      .set('primaryEmail',primaryEmail)
+      .set('addToPushEmails',addToPushEmails + "")
+      .set('emailsForPush',emailsForPush)
+      .set('active',active + "");
+
+    return this.httpClient.post(this.createSubscriberUrl,null,{params:params});
+  }
+
+  loadSubscriber(subscriberUid:string):Observable<DataSubscriber>{
+    let params = new HttpParams().set('subscriberUid',subscriberUid);
+    return this.httpClient.get<DataSubscriber>(this.loadSubscriberUrl,{params:params});
   }
 }

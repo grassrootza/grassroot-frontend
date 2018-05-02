@@ -1,3 +1,30 @@
-<p>
-  view-subscriber works!
-</p>
+<div class="container primary-container">
+  <div class="card">
+    <div class="card-body">
+      <div class="row text-center">
+        <h1 class="main-title text-center">View Subscriber</h1>
+      </div>
+
+      <div *ngIf="subscriber" class="row">
+        <div class="col-md-6 col-sm-12">
+          <p class="subscriber-name-para">
+            <span class="subscriber-name">Name: </span>
+            {{subscriber.displayName}}
+          </p>
+          <p class="subscriber-email-para">
+            <span class="subscriber-email">Primary email: </span>
+            {{subscriber.primaryEmail}}
+          </p>
+          <p class="subscriber-creation-time-para">
+            <span class="subscriber-creation-time">Creation time: </span>
+            {{subscriber.creationTime | date: 'fullDate'}}
+          </p>
+          <p class="subscriber-creation-time-para">
+            <span class="subscriber-creation-time">Subscriber type: </span>
+            {{subscriber.subscriberType}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
