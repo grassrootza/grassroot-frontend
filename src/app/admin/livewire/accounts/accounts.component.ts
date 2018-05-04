@@ -35,8 +35,6 @@ export class AccountsComponent implements OnInit {
   }
 
   createSubscriber(subscriberName:string,primaryEmail:string,otherEmails:string){
-    console.log("Add primary email....",this.addPrimaryEmail);
-    console.log("Make account active....",this.makeAccountActive);
     this.livewireAdminService.createSubscriber(subscriberName,primaryEmail,this.addPrimaryEmail,otherEmails,this.makeAccountActive).subscribe(resp => {
       console.log("Response.....",resp);
     },error => {

@@ -7,6 +7,7 @@ import {TwitterPost} from "./model/twitter-post.model";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
+import { AdminUser } from "../../user/model/admin-user.model";
 
 @Injectable()
 export class LiveWireAdminService {
@@ -27,6 +28,9 @@ export class LiveWireAdminService {
   private allSubscribersUrl = environment.backendAppUrl + "/api/livewire/admin/list/subscribers";
   private createSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/create/subscriber";
   private loadSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/load";
+  private loadSubscriberUsersWithAccessUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/access/users";
+  private addPushEmailsToSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/emails/add";
+  private removePushEmailsToSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/emails/remove";
 
   constructor(private httpClient:HttpClient) { }
 
@@ -147,5 +151,25 @@ export class LiveWireAdminService {
   loadSubscriber(subscriberUid:string):Observable<DataSubscriber>{
     let params = new HttpParams().set('subscriberUid',subscriberUid);
     return this.httpClient.get<DataSubscriber>(this.loadSubscriberUrl,{params:params});
+  }
+
+  loadSubscriberUsersWithAccess(subscriberUid:string):Observable<AdminUser[]>{
+    let params = new HttpParams().set('subscriberUid',subscriberUid);
+    return this.httpClient.get<AdminUser[]>(this.loadSubscriberUsersWithAccessUrl,{params:params})
+      .map(resp => resp.map(data => AdminUser.createInstance(data)));
+  }
+
+  addPushEmailsToSubscriber(subscriberUid:string,emailsToAdd:string):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('emailsToAdd',emailsToAdd);
+      return this.httpClient.post(this.addPushEmailsToSubscriberUrl,null,{params:params});
+  }
+
+  removePushEmailsFromSubscriber(subscriberUid:string,emailsToRemove:string):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('emailsToRemove',emailsToRemove);
+      return this.httpClient.post(this.removePushEmailsToSubscriberUrl,null,{params:params});
   }
 }

@@ -12,7 +12,7 @@ export const ADMIN_ROUTES : Routes = [
     {path: 'livewire/:id', component: ViewAlertComponent, canActivate: [LoggedInGuard, AdminRoleGuard],
       data: {roles: ['ROLE_LIVEWIRE_USER']}},
     {path: 'livewire-accounts',component:AccountsComponent, canActivate: [LoggedInGuard, AdminRoleGuard],
-      data: {roles: ['ROLE_LIVEWIRE_USER']}},
+      data: {roles: ['ROLE_SYSTEM_ADMIN']}},
     {path: 'view-subscriber/:id',component: ViewSubscriberComponent, canActivate: [LoggedInGuard,AdminRoleGuard],
-      data: {roles: ['ROLE_LIVEWIRE_USER']}}
+      data: {roles: ['ROLE_SYSTEM_ADMIN']}}
   ];

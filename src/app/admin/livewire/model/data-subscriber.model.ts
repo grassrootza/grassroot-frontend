@@ -7,7 +7,9 @@ export class DataSubscriber {
               public creationTime:any,
               public active:any,
               public primaryEmail:any,
-              public subscriberType:any){
+              public subscriberType:any,
+              public pushEmails:string[],
+              public usersWithAccess:string[]){
   
   }
   public static createInstance(dataSubscriber:DataSubscriber):DataSubscriber{
@@ -16,6 +18,8 @@ export class DataSubscriber {
                               moment(dataSubscriber.creationTime),
                               dataSubscriber.active,
                               dataSubscriber.primaryEmail,
-                              dataSubscriber.subscriberType);
+                              dataSubscriber.subscriberType,
+                              dataSubscriber.pushEmails,
+                              dataSubscriber.usersWithAccess);
   }
 }
