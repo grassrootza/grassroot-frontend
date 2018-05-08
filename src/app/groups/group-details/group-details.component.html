@@ -207,7 +207,7 @@
                     </span>
                   </div>
                   <div class="alert alert-danger" role="alert"
-                       *ngIf="addJoinWordForm.controls.joinWord?.errors?.wordTaken">
+                       *ngIf="addJoinWordForm.controls['joinWord']?.errors?.wordTaken">
                     {{ 'group.joinMethods.joinWordTaken' | translate }}
                   </div>
               </form>

@@ -17,7 +17,7 @@ export class UserService {
   private updateProfileUrl: string = environment.backendAppUrl + "/api/user/profile/data/update";
   private updatePasswordUrl: string = environment.backendAppUrl + "/api/user/profile/password/update";
   private updateImageUrl: string = environment.backendAppUrl + "/api/user/profile/image/change";
-  private loggedInUserImageUrlBase = environment.backendAppUrl + "/api/user/profile/image/view";
+  private loggedInUserImageUrlBase = environment.backendAppUrl.replace('/v2', '') + "/image/user";
   private fetchApiTokenUrl: string = environment.backendAppUrl + "/api/user/profile/token/obtain";
 
   private deleteUserInitiate: string = environment.backendAppUrl + "/api/user/profile/delete/initiate";
@@ -42,7 +42,8 @@ export class UserService {
     }
     let params = new HttpParams()
       .set("name", name)
-      .set("password", password);
+      .set("password", password)
+      .set("interfaceType", "WEB_2");
 
     // this can happen (java - javascript JSON conversion loveliness)
     if (phone && phone != "null") {
@@ -138,7 +139,7 @@ export class UserService {
         let message = result['message'];
         //console.log("here is the result: ", message);
         if (message == "UPDATED") {
-          let updatedUser: AuthenticatedUser = result['data'];
+          let updatedUser: AuthenticatedUser = getAuthUser(result['data']);
           this.storeAuthUser(updatedUser, updatedUser.token);
         }
         return message;
@@ -176,7 +177,7 @@ export class UserService {
     if (!this._loggedInUser || !this._loggedInUser.hasImage) {
       return null;
     }
-    // query param is to force reload
+    // query param is to force reload, replacing of v2 is because this is non-api
     return this.loggedInUserImageUrlBase + "/" + this._loggedInUser.userUid + (cacheBust ? "?cb=" + Date.now() : "");
   }
 

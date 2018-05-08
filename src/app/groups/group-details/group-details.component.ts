@@ -75,8 +75,9 @@ export class GroupDetailsComponent implements OnInit {
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
-            this.flyerUrlJpg = this.baseUrl + "/api/group/fetch/flyer?typeOfFile=JPEG&groupUid=" + groupUid + "&color=true&language=en";
-            this.flyerUrlPDF = this.baseUrl + "/api/group/fetch/flyer?typeOfFile=PDF&groupUid=" + groupUid + "&color=true&language=en";
+            const imageBaseUrl = this.baseUrl.replace('/v2', '') + '/image/flyer/group/';
+            this.flyerUrlJpg = imageBaseUrl + groupUid + "?typeOfFile=JPEG&color=true&language=en";
+            this.flyerUrlPDF = imageBaseUrl + groupUid + "?typeOfFile=PDF&color=true&language=en";
             this.setupJoinParams();
             this.alertService.hideLoading();
           },

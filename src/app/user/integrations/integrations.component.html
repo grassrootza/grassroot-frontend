@@ -19,14 +19,24 @@
     </div>
   </div>
   <hr>
-  <div class="row bottom-buffer" *ngIf="(settingsList.facebook?.userConnectionValid)">
-    <ng-container *ngFor="let page of settingsList.facebook?.managedPages">
+  <div class="row bottom-buffer" *ngIf="!fbFetched">
+    <div class="col-12">
+      <p>Loading Facebook connection settings ...</p>
+    </div>
+  </div>
+  <div class="row bottom-buffer" *ngIf="fbFetched && !fbPages">
+    <div class="col-12">
+      <p>You have no Facebook pages linked to this account</p>
+    </div>
+  </div>
+  <div class="row bottom-buffer" *ngIf="fbPages">
+    <ng-container *ngFor="let page of fbPages">
         <div class="col-md-2 col-sm-4 col-4">
-          <img class="img-fluid pull-left page-image" src="https://graph.facebook.com/v2.5/{{page.providerUserId}}/picture" />
+          <img class="img-fluid pull-left page-image" src="https://graph.facebook.com/v2.5/{{page.pageId}}/picture" />
         </div>
         <div class="col-md-4 col-sm-8 col-8">
           <p class="page-title">
-            {{ page.displayName }}
+            {{ page.pageName }}
           </p>
           <p>
             <a href="" class="remove-link" (click)="removeFb(page)">{{ 'user.integrations.remove' | translate }}</a>
@@ -35,10 +45,12 @@
     </ng-container>
   </div>
   <div class="row bottom-buffer">
-    <p>We will only ask to publish to your Facebook page. We do not read or store any data about your Facebook account, aside from what we require to
-      publish posts. Specifically, we store only your page names and their respective Facebook IDs, under the strict terms of our  
-      <a class="grassroot-link" [routerLink]="['/privacy']">privacy policy</a>. 
-    </p>
+    <div class="col-12">
+      <p class="small">We will only ask to publish to your Facebook page. We do not read or store any data about your Facebook account, aside from what we require to
+        publish posts. Specifically, we store only your page names and their respective Facebook IDs, under the strict terms of our
+        <a class="grassroot-link" [routerLink]="['/privacy']">privacy policy</a>.
+      </p>
+    </div>
   </div>
   <div class="row top-buffer">
     <div class="col-md-6 col-sm-12 col-12">
@@ -51,20 +63,28 @@
     </div>
   </div>
   <hr>
-  <div class="row bottom-buffer" *ngIf="(settingsList.twitter?.userConnectionValid)">
-    <ng-container *ngFor="let page of settingsList.twitter?.managedPages">
-      <div class="col-md-2 col-sm-4 col-4">
-        <img class="img-fluid pull-left page-image" src="{{ page.imageUrl }}" />
-      </div>
-      <div class="col-md-4 col-sm-8 col-8">
-        <p class="page-title">{{ page.displayName }}</p>
-        <p><a href="" class="remove-link" (click)="removeTwitter(page)">{{ 'user.integrations.remove' | translate }}</a>
-      </div>
-    </ng-container>
+  <div class="row bottom-buffer" *ngIf="!twitterFetched">
+    <div class="col-12">
+      <p>Loading Twitter settings ...</p>
+    </div>
+  </div>
+  <div class="row bottom-buffer" *ngIf="twitterFetched && !twitterAccount">
+    <div class="col-12">
+      <p>You have no Twitter account linked to this account</p>
+    </div>
+  </div>
+  <div class="row bottom-buffer" *ngIf="twitterAccount">
+    <div class="col-md-2 col-sm-4 col-4">
+      <img class="img-fluid pull-left page-image" src="{{ twitterAccount.profileImageUrl }}" />
+    </div>
+    <div class="col-md-4 col-sm-8 col-8">
+      <p class="page-title">{{ twitterAccount.displayName }}</p>
+      <p><a href="" class="remove-link" (click)="removeTwitter(page)">{{ 'user.integrations.remove' | translate }}</a>
+    </div>
   </div>
   <div class="row top-buffer">
     <div class="col-md-6 col-sm-12 col-12">
-      <h3>Access token for API (e.g., to use in form submissions)</h3>
+      <h3>Access token for joining API</h3>
     </div>
     <div class="col-md-6 col-sm-12 col-12">
       <button *ngIf="!accessToken" type="button" class="btn btn-success float-right btn-responsive" (click)="fetchAccessToken()">
@@ -77,9 +97,9 @@
   </div>
   <hr />
   <div class="row">
-    <div class="col-12"><p>This will provide you with a token that you can add to email sign up forms, etc., and will add users to your group (with its ID specified in a paramater).
+    <div class="col-12"><p class="small">This will provide you with a token that you can add to email sign up forms, etc., and will add users to your group (with its ID specified in a paramater).
       Only use this if you are a developer or have one supporting you.</p></div>
-  </div> 
+  </div>
   <div class="row" *ngIf="accessToken">
     <div class="col-12">
       <p><code style="word-break: break-all">{{ accessToken }}</code></p>

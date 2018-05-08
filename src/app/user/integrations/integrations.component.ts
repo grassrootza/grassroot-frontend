@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {IntegrationsService} from "./integrations.service";
-import {IntegrationSettingsList, ManagedPage} from "../model/integration-settings";
+import {FacebookPage, IntegrationSettingsList, ManagedPage, TwitterAccount} from "../model/integration-settings";
 import {AlertService} from "../../utils/alert-service/alert.service";
-import { UserService } from '../user.service';
+import {UserService} from '../user.service';
 
 @Component({
   selector: 'app-integrations',
@@ -16,20 +16,32 @@ export class IntegrationsComponent implements OnInit {
 
   settingsList: IntegrationSettingsList = new IntegrationSettingsList();
 
+  fbPages: FacebookPage[];
+  fbFetched: boolean = false;
+
+  twitterAccount: TwitterAccount;
+  twitterFetched: boolean = false;
+
   constructor(private intService: IntegrationsService, private userService: UserService, private alertService: AlertService) {}
 
   ngOnInit() {
-    // fetch the current status: note, thought about using a router here, but don't want
-    // user to have to go back if something goes wrong with getting connection status, etc.
-    // and we can display the list of services while getting pages
-    this.alertService.showLoading();
-    this.intService.fetchCurrentConnections().subscribe(settingsList => {
-      this.settingsList = settingsList;
-      this.alertService.hideLoadingDelayed();
-    }, error => {
-      console.log("error!", error);
-      this.alertService.hideLoadingDelayed();
-    });
+    this.fetchFbStatus();
+    this.fetchTwitterStatus();
+  }
+
+  fetchFbStatus() {
+    this.intService.fetchFbAccounts().subscribe(fbPages => {
+      this.fbPages = fbPages;
+      this.fbFetched = true;
+    })
+  }
+
+  fetchTwitterStatus() {
+    this.intService.fetchTwitterAccount().subscribe(twitterAccount => {
+      console.log("fetched twitter account: ", twitterAccount);
+      this.twitterAccount = twitterAccount;
+      this.twitterFetched = true;
+    })
   }
 
   connectFacebook() {
