@@ -388,7 +388,8 @@
         "failed": "Sorry, there was an error adding the member",
         "errors":{
           "name": "Please enter member name"
-        }
+        },
+        "updated":"Done! Member details updated"
       },
       "filterMembers": {
         "province": "Province",
@@ -1197,7 +1198,7 @@
       "done": "Done. Your profile is deleted. Goodbye."
     },
     "opt-out":{
-    	"otp-note": "If your email or phone matched one we have on file, we have sent an OTP to your phone, or if you do not have a phone, to your email. Please enter it below to opt-out or change password."
+    	"otp-note": "We have sent an OTP to your phone. Please enter it below to opt-out or change password."
   	}
   },
   "login": {

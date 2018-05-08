@@ -8,6 +8,7 @@ import {GroupAdmin} from "../groups/model/group-admin.model";
 export class AdminService {
 
   private loadUsersUrl = environment.backendAppUrl + "/api/admin/user/load";
+  private numberOfGroupsUserIsPartOfUrl = environment.backendAppUrl + "/api/admin/user/groups/number";
   private optOutUserUrl = environment.backendAppUrl + "/api/admin/user/optout";
   private resetUserPwdUrl = environment.backendAppUrl + "/api/admin/user/pwd/reset";
   private loadGroupsUrl = environment.backendAppUrl + "/api/admin/groups/search";
@@ -53,13 +54,20 @@ export class AdminService {
     return this.httpClient.post(this.activateGroupUrl,null,{responseType:'text',params:params});
   }
 
-  addMember(phoneNumber:string,displayName:string,roleName:string,groupUid:string):Observable<any>{
+  addMember(phoneNumber:string,displayName:string,roleName:string,groupUid:string,email:string,province:string):Observable<any>{
     let params = new HttpParams()
       .set('groupUid',groupUid)
       .set('displayName',displayName)
       .set('phoneNumber',phoneNumber)
-      .set('roleName',roleName);
+      .set('roleName',roleName)
+      .set('email',email)
+      .set('province',province);
 
     return this.httpClient.post(this.addMemberToGroupUrl,null,{responseType:'text',params:params});
+  }
+
+  numberOfGroupsUserIsPartOf(userUid:string):Observable<any>{
+    let params = new HttpParams().set('userUid',userUid);
+    return this.httpClient.get(this.numberOfGroupsUserIsPartOfUrl,{params:params});
   }
 }

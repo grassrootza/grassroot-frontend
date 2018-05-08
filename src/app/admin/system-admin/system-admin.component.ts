@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
 import { Router } from '@angular/router';
 import { GroupAdmin } from '../../groups/model/group-admin.model';
+import { AlertService } from '../../utils/alert-service/alert.service';
+import { UserProvince } from 'app/user/model/user-province.enum';
 
 declare var $: any;
 
@@ -20,28 +22,35 @@ export class SystemAdminComponent implements OnInit {
   public searchTerm:string;
   public userRole:string = "ROLE_ORDINARY_MEMBER";
   public groupUid:string;
+  public userGroups:number;
+  public province:string;
+  public numberOfGroups:number = 10;
+  public totalGroupsLoaded:number;
 
   public groups:GroupAdmin[] = [];
+
+  userProvince = UserProvince;
+  provinceKeys: string[];
   
   constructor(private adminService:AdminService,
-              private router:Router) { 
+              private router:Router,
+              private alertService:AlertService) { 
+    this.provinceKeys = Object.keys(this.userProvince);
   }
 
   ngOnInit() {
   }
 
   loadUsers(searchTerm:string){
-    console.log("Searching....",searchTerm);
     this.adminService.loadUser(searchTerm).subscribe(resp => {
-      console.log("Response....",resp);
       if(resp === ""){
         this.userNotFoundMessage = "User not found,type correct number or email";
-        console.log("Message:",this.userNotFoundMessage);
         setTimeout(() => {
           this.userNotFoundMessage = "";
         }, 2000)
       }else{
         this.userUid = resp;
+        this.numberOfUserGrooups(this.userUid);
         $('#user-opt-out-modal').modal("show");
       }
 
@@ -49,11 +58,18 @@ export class SystemAdminComponent implements OnInit {
       console.log("Error loading user..",error);
     });
   }
+
+  numberOfUserGrooups(userUid:string){
+    this.adminService.numberOfGroupsUserIsPartOf(userUid).subscribe(resp => {
+      this.userGroups = resp;
+    },error => {
+      console.log("Error getting number of user groups...",error);
+    });
+  }
   
   optOutUser(otp:string){
     this.adminService.optOutUser(otp,this.userUid).subscribe(resp => {
       $('#user-opt-out-modal').modal("hide");
-      this.router.navigate(["/home"]);
     },error => {
       console.log("Error opting user out...",error);
       this.invalidOtpMessage = "Error! invalid OTP";
@@ -66,18 +82,17 @@ export class SystemAdminComponent implements OnInit {
   resetUserPwd(otp:string){
     this.adminService.resetUserPassword(otp,this.userUid).subscribe(resp => {
       $('#user-opt-out-modal').modal("hide");
-      this.router.navigate(["/home"]);
     },error => {
       console.log("Error updating password",error);
     });
   }
 
   searchGroups(groupName:string){
-    console.log("Searching for group....",groupName);
     this.searchTerm = groupName;
     this.adminService.findGroups(groupName).subscribe(resp => {
-      console.log("Resp ....",resp)
+      console.log("Response....",resp);
       this.groups = resp;
+      this.totalGroupsLoaded = this.groups.length;
       if(this.groups.length === 0){
         this.groupsNotFoundMessage = "No groups found!";
         setTimeout(()=>{
@@ -101,7 +116,6 @@ export class SystemAdminComponent implements OnInit {
   }
 
   confirmDeactivate(){
-    console.log("Group uid.....",this.groupToActivateOrDeactivateUid);
 
     this.adminService.deactivateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
       for(let grp of this.groups){
@@ -137,16 +151,39 @@ export class SystemAdminComponent implements OnInit {
     this.userRole = role;
   }
 
-  addMember(displayName:string,phoneNumber:string){
-    this.adminService.addMember(phoneNumber,displayName,this.userRole,this.groupUid).subscribe(resp => {
-      for(let grp of this.groups){
-        if(grp.groupUid === this.groupUid){
-          grp.memberCount += 1;
-        }
-      }
+  onChangeSelectProvince(province:string){
+    this.province = province;
+  }
+
+  addMember(displayName:string,phoneNumber:string,email:string){
+    this.adminService.addMember(phoneNumber,displayName,this.userRole,this.groupUid,email,this.province).subscribe(resp => {
+      console.log("Response...",resp);
       $('#add-member-modal').modal("hide");
+      if(resp == "UPLOADED"){
+        this.alertService.alert("group.allMembers.addMember.complete");
+        for(let grp of this.groups){
+          if(grp.groupUid === this.groupUid){
+            grp.memberCount += 1;
+          }
+        }
+      }else if(resp == "UPDATED"){
+        this.alertService.alert("group.allMembers.addMember.updated");
+      }
+      
     },error => {
       console.log("Error adding member to group",error);
     });
+  }
+
+  showMore(){
+    if(this.totalGroupsLoaded > this.numberOfGroups){
+      this.numberOfGroups += 10;
+    }
+  }
+
+  showLess(){
+    if(this.numberOfGroups > 10){
+      this.numberOfGroups -= 10;
+    }
   }
 }
