@@ -1,12 +1,19 @@
 <div class="container primary-container">
   <div class="card">
     <div class="card-body">
-      <div class="row text-center">
-        <h1 class="main-title text-center">Subscriber</h1>
+      <div class="row">
+        <div class="col-10">
+            <h1 class="main-title ">Subscriber</h1>
+          <div class="row text-center">
+            
+          </div>
+        </div>
       </div>
       <div class="row">
-        <a [routerLink]="['/system-admin']" class="grassroot-breadcrumb"><i
-          class="fas fa-arrow-left"></i>BACK TO ADMIN PANEL</a>
+        <div class="col-10">
+          <a [routerLink]="['/system-admin']" class="grassroot-breadcrumb"><i
+            class="fas fa-arrow-left"></i>BACK TO ADMIN PANEL</a>
+        </div>
       </div>
 
       <div *ngIf="subscriber" style="margin-top: 2%">
@@ -34,14 +41,16 @@
                     <button class="btn btn-primary" (click)="triggerAddEmailsModal()">Add email</button>
                 </div>
               </div>
-              <div class="row" *ngFor="let email of subscriber.pushEmails;let i=index" style="margin-top: 1%">
-                <div class="col-8">
-                  {{email}}
-                </div>
-                <input type="hidden" name="emailToRemove" [value]="email" #emailToRemove/>
-                <div class="col-2">
-                  <button class="btn btn-secondary" (click)="triggerConfirmRemoveEmailModal(emailToRemove.value,i)">Remove</button>
-                </div>
+              <div *ngIf="subscriber.pushEmails">
+                  <div class="row" *ngFor="let email of subscriber.pushEmails;let i=index" style="margin-top: 1%">
+                      <div class="col-8">
+                        {{email}}
+                      </div>
+                      <input type="hidden" name="emailToRemove" [value]="email" #emailToRemove/>
+                      <div class="col-2">
+                        <button class="btn btn-secondary" (click)="triggerConfirmRemoveEmailModal(emailToRemove.value,i)">Remove</button>
+                      </div>
+                    </div>
               </div>
               <hr />
             </div>
@@ -127,7 +136,7 @@
           <div class="row" style="margin-top: 1%">
             <div class="col-2"></div>
             <div class="col-10">
-              <a class="btn btn-secondary" (click)="activateOrDeactivateSubscriber()">{{subscriber.active?'Disable':'Enable'}}</a>
+              <a class="btn btn-secondary" (click)="activateOrDeactivateSubscriber()">{{subscriberActiveStatus?'Disable':'Enable'}}</a>
             </div>
           </div>
 

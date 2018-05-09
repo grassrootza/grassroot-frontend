@@ -30,11 +30,11 @@ export class SystemAdminComponent implements OnInit {
   public totalGroupsLoaded:number;
 
   public groups:GroupAdmin[] = [];
-  public subscribers:DataSubscriber[] = [];
 
+  //Fields used in livewire subscriber account management
+  public livewireSubscribers:DataSubscriber[] = [];
   public addPrimaryEmail:boolean;
   public makeAccountActive:boolean;
-
   public errorCreatingSubscriberMessage:string;
 
   userProvince = UserProvince;
@@ -52,7 +52,7 @@ export class SystemAdminComponent implements OnInit {
   ngOnInit() {
     this.livewireAdminService.allSubscribers().subscribe(resp => {
       console.log("Subscribers........",resp);
-      this.subscribers = resp;
+      this.livewireSubscribers = resp;
     },error => {
       console.log("Error loading subscribers...",error);
     });

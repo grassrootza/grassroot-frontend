@@ -26,6 +26,7 @@ export class SubscriberComponent implements OnInit {
   public changeActiveStatusErrorMessage:string;
   public userToRemoveIndex:any;
   public emailToRemoveIndex:any;
+  public subscriberActiveStatus:boolean;
 
   dataSubscriberType = DataSubscriberType;
   dataSubscriberTypeKeys:string[];
@@ -55,6 +56,7 @@ export class SubscriberComponent implements OnInit {
       console.log("Response.....",resp);
       this.subscriber = resp;
       this.subscriberType = this.subscriber.subscriberType;
+      this.subscriberActiveStatus = this.subscriber.active;
     },error =>{
       console.log("Error loading subscriber....",error);
     });
@@ -177,6 +179,7 @@ export class SubscriberComponent implements OnInit {
           this.changeActiveStatusErrorMessage = "";
         },2000);
       }else if(resp == 'UPDATED'){
+        this.loadSubscriber(this.subscriberUid);
         $('#change-active-status-modal').modal("hide");
         this.alertService.alert("Done,subscriber active status changed.");
       }
