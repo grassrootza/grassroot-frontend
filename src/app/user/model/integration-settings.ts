@@ -25,3 +25,9 @@ export class FacebookPage {
   pageName: string;
   pageId: string;
 }
+
+export class TwitterAccount {
+  displayName: string;
+  twitterUserId: string;
+  profileImageUrl: string;
+}

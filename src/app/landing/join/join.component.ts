@@ -138,15 +138,16 @@ export class JoinComponent implements OnInit {
 
   signUpUser(password: string) {
     this.alertService.showLoading();
+    console.log('initiating sign up ...');
     this.userService.register(this.joinedUser.displayName, this.joinedUser.phoneNumber, this.joinedUser.email,
       password).subscribe(loginResult => {
-      if (loginResult.errorCode == null) {
-        this.alertService.alert('join.done.registered', true);
-        this.router.navigate(['']);
-      } else {
         this.alertService.hideLoading();
-        console.log("error! but shouldn't happen, unless someone trying to spoof, error: ", loginResult);
-      }
+        if (loginResult.errorCode == null) {
+          this.alertService.alert('join.done.registered', true);
+          this.router.navigate(['']);
+        } else {
+          console.log("error! but shouldn't happen, unless someone trying to spoof, error: ", loginResult);
+        }
     })
   }
 
