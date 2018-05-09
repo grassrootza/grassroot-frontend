@@ -151,7 +151,7 @@ export class LiveWireAdminService {
       .set('emailsForPush',emailsForPush)
       .set('active',active + "");
 
-    return this.httpClient.post(this.createSubscriberUrl,null,{params:params});
+    return this.httpClient.post(this.createSubscriberUrl,null,{params:params,responseType:'text'});
   }
 
   loadSubscriber(subscriberUid:string):Observable<DataSubscriber>{

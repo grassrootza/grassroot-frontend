@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { GroupAdmin } from '../../groups/model/group-admin.model';
 import { AlertService } from '../../utils/alert-service/alert.service';
 import { UserProvince } from 'app/user/model/user-province.enum';
+import { LiveWireAdminService } from '../livewire/livewire-admin-service';
+import { DataSubscriber } from '../livewire/model/data-subscriber.model';
 
 declare var $: any;
 
@@ -28,17 +30,32 @@ export class SystemAdminComponent implements OnInit {
   public totalGroupsLoaded:number;
 
   public groups:GroupAdmin[] = [];
+  public subscribers:DataSubscriber[] = [];
+
+  public addPrimaryEmail:boolean;
+  public makeAccountActive:boolean;
+
+  public errorCreatingSubscriberMessage:string;
 
   userProvince = UserProvince;
   provinceKeys: string[];
   
   constructor(private adminService:AdminService,
               private router:Router,
-              private alertService:AlertService) { 
+              private alertService:AlertService,
+              private livewireAdminService:LiveWireAdminService) { 
     this.provinceKeys = Object.keys(this.userProvince);
+    this.addPrimaryEmail = false;
+    this.makeAccountActive = false;
   }
 
   ngOnInit() {
+    this.livewireAdminService.allSubscribers().subscribe(resp => {
+      console.log("Subscribers........",resp);
+      this.subscribers = resp;
+    },error => {
+      console.log("Error loading subscribers...",error);
+    });
   }
 
   loadUsers(searchTerm:string){
@@ -185,5 +202,28 @@ export class SystemAdminComponent implements OnInit {
     if(this.numberOfGroups > 10){
       this.numberOfGroups -= 10;
     }
+  }
+
+  triggerCreateSubscriberModal(){
+    $('#create-subscriber-modal').modal("show");
+  }
+
+  createSubscriber(subscriberName:string,primaryEmail:string,otherEmails:string){
+    console.log("Add email?",this.addPrimaryEmail);
+    console.log("Make acc active?",this.makeAccountActive);
+    this.livewireAdminService.createSubscriber(subscriberName,primaryEmail,this.addPrimaryEmail,otherEmails,this.makeAccountActive).subscribe(resp => {
+      console.log("Response.....",resp);
+      if(resp == 'ACCOUNT_CREATED'){
+        $('#create-subscriber-modal').modal("hide");
+        this.alertService.alert("Done,Subscriber created successfully.");
+      }else if(resp == 'ERROR'){
+        this.errorCreatingSubscriberMessage = "Error! Subscriber account not created. Please make sure all input fields are valid.";
+        setTimeout(()=>{
+          this.errorCreatingSubscriberMessage = "";
+        },2000);
+      }
+    },error => {
+      console.log("Error creating subscriber......",error);
+    });
   }
 }

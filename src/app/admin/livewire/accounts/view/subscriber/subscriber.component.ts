@@ -8,13 +8,12 @@ import { AlertService } from '../../../../../utils/alert-service/alert.service';
 
 declare var $: any;
 
-
 @Component({
-  selector: 'app-view-subscriber',
-  templateUrl: './view-subscriber.component.html',
-  styleUrls: ['./view-subscriber.component.css']
+  selector: 'app-subscriber',
+  templateUrl: './subscriber.component.html',
+  styleUrls: ['./subscriber.component.css']
 })
-export class ViewSubscriberComponent implements OnInit {
+export class SubscriberComponent implements OnInit {
 
   public subscriberUid:string;
   public subscriber:DataSubscriber;
@@ -185,4 +184,5 @@ export class ViewSubscriberComponent implements OnInit {
       console.log("Error changing active status...",error);
     });
   }
+
 }
