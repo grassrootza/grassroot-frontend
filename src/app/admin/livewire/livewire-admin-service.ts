@@ -7,6 +7,7 @@ import {TwitterPost} from "./model/twitter-post.model";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
+import { AdminUser } from "../../user/model/admin-user.model";
 
 @Injectable()
 export class LiveWireAdminService {
@@ -24,6 +25,18 @@ export class LiveWireAdminService {
   private releaseAlertUrl = environment.backendAppUrl + "/api/livewire/admin/release";
   private postFBUrl = environment.backendAppUrl + "/api/livewire/admin/post/facebook";
   private postTwitterUrl = environment.backendAppUrl + "/api/livewire/admin/post/twitter";
+  private allSubscribersUrl = environment.backendAppUrl + "/api/livewire/admin/list/subscribers";
+  private createSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/create/subscriber";
+  private loadSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/load";
+  private loadSubscriberUsersWithAccessUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/access/users";
+  private addPushEmailsToSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/emails/add";
+  private removePushEmailsToSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/emails/remove";
+  private addUserToSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/user/add";
+  private removeUserFromSubscriberUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/user/remove";
+  private updateSubscriberPermissionsUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/permissions/change";
+  private updateSubscriberTypeUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/type/change";
+  private toggleOtpUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/active/otp";
+  private changeSubscriberActiveStatusUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/active/status";
 
   constructor(private httpClient:HttpClient) { }
 
@@ -123,5 +136,86 @@ export class LiveWireAdminService {
       .set('imageMediaFunction',tweet.imageMediaFunction)
       .set('imageKey',tweet.imageKey);
     return this.httpClient.post(this.postTwitterUrl,null,{params:params});
+  }
+
+  allSubscribers():Observable<DataSubscriber[]>{
+    return this.httpClient.get<DataSubscriber[]>(this.allSubscribersUrl)
+    .map(resp => resp.map(data => DataSubscriber.createInstance(data)));
+  }
+
+  createSubscriber(displayName:string,primaryEmail:string,addToPushEmails:boolean,emailsForPush:string,active:boolean):Observable<any>{
+    let params = new HttpParams()
+      .set('displayName',displayName)
+      .set('primaryEmail',primaryEmail)
+      .set('addToPushEmails',addToPushEmails + "")
+      .set('emailsForPush',emailsForPush)
+      .set('active',active + "");
+
+    return this.httpClient.post(this.createSubscriberUrl,null,{params:params,responseType:'text'});
+  }
+
+  loadSubscriber(subscriberUid:string):Observable<DataSubscriber>{
+    let params = new HttpParams().set('subscriberUid',subscriberUid);
+    return this.httpClient.get<DataSubscriber>(this.loadSubscriberUrl,{params:params});
+  }
+
+  loadSubscriberUsersWithAccess(subscriberUid:string):Observable<AdminUser[]>{
+    let params = new HttpParams().set('subscriberUid',subscriberUid);
+    return this.httpClient.get<AdminUser[]>(this.loadSubscriberUsersWithAccessUrl,{params:params})
+      .map(resp => resp.map(data => AdminUser.createInstance(data)));
+  }
+
+  addPushEmailsToSubscriber(subscriberUid:string,emailsToAdd:string):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('emailsToAdd',emailsToAdd);
+      return this.httpClient.post(this.addPushEmailsToSubscriberUrl,null,{params:params,responseType:'text'});
+  }
+
+  removePushEmailsFromSubscriber(subscriberUid:string,emailsToRemove:string):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('emailsToRemove',emailsToRemove);
+      return this.httpClient.post(this.removePushEmailsToSubscriberUrl,null,{params:params,responseType:'text'});
+  }
+
+  addUserToSubscriber(subscriberUid:string,phoneNumber:string):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('addUserPhone',phoneNumber);
+    return this.httpClient.post(this.addUserToSubscriberUrl,null,{params:params,responseType:'text'});
+  }
+
+  removeUserFromSubscriber(subscriberUid:string,userToRemoveUid:string):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('userToRemoveUid',userToRemoveUid);
+    return this.httpClient.post(this.removeUserFromSubscriberUrl,null,{params:params,responseType:'text'});
+  }
+
+  updateSubscriberPermissions(subscriberUid:string,canTag:boolean,canRelease:boolean):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('canTag',canTag + "")
+      .set('canRelease',canRelease + "");
+    return this.httpClient.post(this.updateSubscriberPermissionsUrl,null,{params:params,responseType:'text'});
+  }
+
+  updateSubscriberType(subscriberUid:string,subscriberType:string):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('subscriberType',subscriberType);
+    return this.httpClient.post(this.updateSubscriberTypeUrl,null,{params:params,responseType:'text'});
+  }
+
+  getOtp():Observable<any>{
+    return this.httpClient.get(this.toggleOtpUrl,{responseType:'text'});
+  }
+
+  changeSubscriberActiveStatus(subscriberUid:string,otpEntered:string):Observable<any>{
+    let params = new HttpParams()
+      .set('subscriberUid',subscriberUid)
+      .set('otpEntered',otpEntered);
+    return this.httpClient.post(this.changeSubscriberActiveStatusUrl,null,{params:params,responseType:'text'});
   }
 }

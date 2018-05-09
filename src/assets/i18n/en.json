@@ -95,6 +95,11 @@
       "TWITTER": "Twitter",
       "EMAIL": "Email link",
       "WHATSAPP": "WhatsApp"
+    },
+    "DataSubscriberType": {
+      "PUBLIC": "PUBLIC",
+      "SYSTEM": "SYSTEM",
+      "PRIVATE": "PRIVATE"
     }
   },
   "menu": {

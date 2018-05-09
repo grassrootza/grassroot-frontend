@@ -1,0 +1,281 @@
+<div class="container primary-container">
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-10">
+            <h1 class="main-title ">Subscriber</h1>
+          <div class="row text-center">
+            
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-10">
+          <a [routerLink]="['/system-admin']" class="grassroot-breadcrumb"><i
+            class="fas fa-arrow-left"></i>BACK TO ADMIN PANEL</a>
+        </div>
+      </div>
+
+      <div *ngIf="subscriber" style="margin-top: 2%">
+        <div class="row">
+          <div class="col-2" style="font-weight: bold;">
+            Name
+          </div>
+          <div class="col-10">
+              {{subscriber.displayName}}
+          </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 1%">
+            <div class="col-2" style="font-weight: bold;">
+              Emails
+            </div>
+            
+            <div class="col-10">
+              <div class="row">
+                <div class="col-8">
+                  {{subscriber.pushEmails.length}} email addresses are on this account.
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-primary" (click)="triggerAddEmailsModal()">Add email</button>
+                </div>
+              </div>
+              <div *ngIf="subscriber.pushEmails">
+                  <div class="row" *ngFor="let email of subscriber.pushEmails;let i=index" style="margin-top: 1%">
+                      <div class="col-8">
+                        {{email}}
+                      </div>
+                      <input type="hidden" name="emailToRemove" [value]="email" #emailToRemove/>
+                      <div class="col-2">
+                        <button class="btn btn-secondary" (click)="triggerConfirmRemoveEmailModal(emailToRemove.value,i)">Remove</button>
+                      </div>
+                    </div>
+              </div>
+              <hr />
+            </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 1%">
+            <div class="col-2" style="font-weight: bold;">
+              Users
+            </div>
+            <div class="col-10" *ngIf="usersWithAccess.length == 0">
+              <div class="row">
+                <div class="col-8">
+                  No users added to subscriber yet.
+                </div>
+                <div class="col-2">
+                  <button class="btn btn-primary" (click)="triggerAddUserModal()">Add user</button>
+                </div>
+              </div>
+            </div>
+            <div class="col-10" *ngIf="usersWithAccess.length > 0">
+              <div class="row">
+                <div class="col-8" *ngFor="let user of usersWithAccess;let i=index">
+                  <div class="row">
+                    {{user.displayName}} &nbsp;&nbsp;<a class="grassroot-link" (click)="triggerRemoveUserModal(usersWithAccess[i].userUid,i)"><i class="far fa-trash-alt"></i></a>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <button class="btn btn-primary" (click)="triggerAddUserModal()">Add user</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row" style="margin-top: 1%">
+              <div class="col-2" style="font-weight: bold;">
+                Permissions
+              </div>
+              <div class="col-10">
+                <div class="row">
+                  <div class="col-4">
+                      <label>
+                          <input type="checkbox" [checked]="( canTag === true )" (change)="canTag = $event.target.checked;" />
+                          Users can tag alerts
+                      </label>
+                  </div>
+
+                  <div class="col-4">
+                      <label>
+                          <input type="checkbox" [checked]="( canRelease === true )" (change)="canRelease = $event.target.checked;" />
+                          Users can release alerts
+                      </label>
+                  </div>
+
+                  <div class="col-2">
+                    <button class="btn btn-primary" (click)="updatePermissions()">Update</button>
+                  </div>
+                </div>
+                
+              </div>
+          </div>
+
+          <div class="row" style="margin-top: 1%">
+            <div class="col-2" style="font-weight: bold;">
+                Type
+            </div>
+            <div class="col-10">
+              <div class="row">
+                <div class="col-8">
+                  <select class="form-control" (change)="onchangeSelectedType($event.target.value)">
+                      <option *ngFor="let subscriberType of dataSubscriberTypeKeys" 
+                              [selected]="subscriber.subscriberType === subscriberType">{{subscriberType}}</option>
+                  </select>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-primary" (click)="updateSubscriberType()">Update</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top: 1%">
+            <div class="col-2"></div>
+            <div class="col-10">
+              <a class="btn btn-secondary" (click)="activateOrDeactivateSubscriber()">{{subscriberActiveStatus?'Disable':'Enable'}}</a>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="add-emails-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Emails</h5>
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="text" class="form-control" id="emails" 
+              placeholder="Please enter the emails to add, one after the other separated by a comma" name="emails" #emails/>
+          </div>
+  
+        </div>
+  
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" (click)="addEmails(emails.value)">Add</button>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="confirm-remove-email-modal" aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Are you sure?</h5>
+            <button type="button" class="close" data-dismiss="modal"
+                    aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+    
+          <div class="modal-body">
+            <p>Remove email from the list receiving alerts. Are you sure?</p>
+          </div>
+    
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-danger" (click)="removeEmail()">Remove</button>
+          </div>
+    
+        </div>
+      </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="add-user-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add user</h5>
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+  
+        <div class="modal-body">
+          <p>Please enter the phone number of the user to add below</p>
+          <div class="form-group">
+            <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" #phoneNumber/>
+          </div>
+        </div>
+  
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" (click)="addUser(phoneNumber.value)">Add</button>
+        </div>
+  
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="confirm-remove-user-modal" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Are you sure?</h5>
+        <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>Remove this user from the LiveWire subscription. Are you sure?</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" (click)="removeUser()">Remove</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="change-active-status-modal" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Change active status</h5>
+        <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>Are you sure? Enter OTP send to admin user's phone</p>
+        <div class="form-group">
+          <input type="text" class="form-control" name="otpSend" id="otpSend" #otpSend/>
+        </div>
+        <div class="alert alert-danger" *ngIf="changeActiveStatusErrorMessage">
+          {{changeActiveStatusErrorMessage}}
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" (click)="changeActiveStatus(otpSend.value)">Confirmed</button>
+      </div>
+
+    </div>
+  </div>
+</div>
