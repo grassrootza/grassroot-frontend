@@ -40,6 +40,7 @@ import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
 import {TimeAgoPipe} from "time-ago-pipe";
 import { SystemAdminComponent } from './admin/system-admin/system-admin.component';
+import { LiveWireAdminService } from './admin/livewire/livewire-admin-service';
 
 @NgModule({
   declarations: [
@@ -92,7 +93,8 @@ import { SystemAdminComponent } from './admin/system-admin/system-admin.componen
     PublicActivityService,
     PublicNewsService,
     MediaService,
-    IncomingResponseService
+    IncomingResponseService,
+    LiveWireAdminService
   ]
 })
 export class AppModule { }

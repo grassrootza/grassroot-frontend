@@ -39,7 +39,41 @@
 		  </div>
 		  <div class="alert alert-danger my-lg-3" role="alert"
 		           *ngIf="groupsNotFoundMessage">{{ groupsNotFoundMessage }}
-		  </div>
+      </div>
+      
+      <div class="row" style="margin-top: 2%">
+        <!-- <div class="col-6">
+          <a [routerLink]="['/admin/livewire-accounts']" class="grassroot-link">Livewire accounts</a>
+        </div> -->
+        <div class="col-6">
+          <h3>Subscriber Accounts</h3>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-primary" (click)="triggerCreateSubscriberModal()">New Subscriber</button>
+        </div>
+        
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="row" *ngFor="let subscriber of livewireSubscribers">
+            <div class="col-6">
+              <div class="row">
+                <a class="list-header grassroot-link" [routerLink]="['/admin/view-subscriber',subscriber.uid]">
+                  <span>{{subscriber.displayName}}</span>
+                </a>
+              </div>
+              <div class="row">
+                Est.{{subscriber.creationTime | date: 'dd MMM yyyy'}}
+              </div>
+            </div>
+            <div class="col-2">
+              {{subscriber.active ? 'Active' : 'Disabled'}}
+            </div>
+            
+          </div>
+        </div>
+      </div>
 		</div>
 	</div>
 
@@ -232,6 +266,55 @@
         </div>
 
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="create-subscriber-modal" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create a LiveWire subscriber</h5>
+        <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="text" class="form-control" id="new-subscriber-name" placeholder="Subscriber Name" name="subscriberName" #subscriberName/>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="primary-email" placeholder="Primary Email" name="primaryEmail" #primaryEmail/>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" [checked]="( addPrimaryEmail === true )" (change)="addPrimaryEmail = $event.target.checked;" />
+            Add primary email to list of addresses for push alerts
+          </label>
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="other-emails" placeholder="Other emails for push subscriber" name="otherEmails" #otherEmails/>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" [checked]="( makeAccountActive === true )" (change)="makeAccountActive = $event.target.checked;" />
+            Make account active
+          </label>
+        </div>
+
+        <div class="alert alert-danger" *ngIf="errorCreatingSubscriberMessage">
+          {{errorCreatingSubscriberMessage}}
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" (click)="createSubscriber(subscriberName.value,primaryEmail.value,otherEmails.value)">Create Subscriber</button>
+      </div>
+
     </div>
   </div>
 </div>
