@@ -68,15 +68,16 @@ export class IntegrationsComponent implements OnInit {
     })
   }
 
-  removeTwitter(page: ManagedPage) {
-    this.removeAccount("twitter", page);
+  removeTwitter() {
+    this.removeAccount("twitter");
     return false;
   }
 
-  removeAccount(provider: string, page: ManagedPage) {
+  removeAccount(provider: string, page?: ManagedPage) {
     console.log("removing: ", provider);
     this.alertService.showLoading();
-    this.intService.removeProviderPage(provider, page.providerUserId).subscribe(settingsList => {
+    const pageId = provider == 'twitter' ? this.twitterAccount.twitterUserId : page.providerUserId;
+    this.intService.removeProviderPage(provider, pageId).subscribe(settingsList => {
       console.log("settings list received: ", settingsList);
       this.settingsList = settingsList;
       this.alertService.hideLoadingDelayed();

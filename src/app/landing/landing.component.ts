@@ -7,7 +7,8 @@ import {
   Inject,
   OnInit,
   PLATFORM_ID,
-  ViewChild
+  ViewChild,
+  OnDestroy
 } from '@angular/core';
 import * as _ from 'lodash';
 import {Observable} from 'rxjs/Observable';
@@ -19,6 +20,7 @@ import {AlertService} from "../utils/alert-service/alert.service";
 import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PublicLivewire} from "../livewire/public-livewire.model";
+import { Subscription } from 'rxjs';
 
 declare var $: any;
 
@@ -27,7 +29,7 @@ declare var $: any;
   templateUrl: './landing.component.html',
   styleUrls: [ './landing.component.css', './news-style.css' ]
 })
-export class LandingComponent implements OnInit, AfterViewInit {
+export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('tasknote') carouselPlaceHolder: ElementRef;
   @ViewChild('activitiesRow') activitiesRow: ElementRef;
@@ -35,6 +37,10 @@ export class LandingComponent implements OnInit, AfterViewInit {
 
   public activitiesList: PublicActivity[] = [];
   public newsList: PublicLivewire[] = [];
+
+  private activitiesPoller: Subscription;
+  private newsPoller: Subscription;
+
   public carouselContainerWidth: number = 0;
   public activitiesHeight: number = 0;
 
@@ -72,8 +78,9 @@ export class LandingComponent implements OnInit, AfterViewInit {
         });
 
       //load new public activity every half minute after that (30000 ms = 1min), remove this if we dont need to update news when user is on page.
-      Observable.interval(30000)
+      this.activitiesPoller = Observable.interval(30000)
         .subscribe(() => {
+          console.log("fetching new public activity ...");
           this.loadPublicActivity();
         });
 
@@ -81,7 +88,7 @@ export class LandingComponent implements OnInit, AfterViewInit {
       this.loadNews();
 
       //load news every 2 mins after that (120000 ms = 2min), remove this if we dont need to update news when user is on page.
-      Observable.interval(120000)
+      this.newsPoller = Observable.interval(120000)
         .subscribe(() => {
             this.loadNews();
           }
@@ -101,6 +108,13 @@ export class LandingComponent implements OnInit, AfterViewInit {
           this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
         })
     }
+  }
+
+  ngOnDestroy(): void {
+    if (this.activitiesPoller)
+      this.activitiesPoller.unsubscribe();
+    if (this.newsPoller)
+      this.newsPoller.unsubscribe();
   }
 
   navigateTo(route: string, fragment?: string) {

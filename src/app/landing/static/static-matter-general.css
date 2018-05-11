@@ -22,6 +22,11 @@
   font-weight: normal;
 }
 
+.team-list-header {
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
 .team-list {
   border: 1px solid #efefef;
   border-radius: 0 !important;
@@ -29,7 +34,7 @@
 }
 
 .team-list .list-group-item {
-  font-size: 18px;
+  font-size: 16px;
   padding-left: 10px;
   background: #FFFFFF;
   border: 0 solid #efefef;
@@ -54,7 +59,7 @@
 }
 
 .team-bio-para {
-  font-size: 18px;
+  font-size: 16px;
   color: #4f4f4f;
   font-weight: bolder;
 }
@@ -208,13 +213,11 @@ img.display-photo {
   color: #1F1F1F;
 }
 
+
+
 @media (max-width: 768px) {
   .mission-statement {
     padding-top: 10px;
-  }
-
-  .mission-statement .mission-para {
-    text-align: justify;
   }
 
   #about_banner .meet-vote-act {

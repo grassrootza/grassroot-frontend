@@ -146,14 +146,16 @@ export class CreateTodoComponent implements OnInit {
 
   assignedMemberUidsPicked() {
     let memberUids: string[] = this.createTodoForm.controls['assignedMemberUids'].value;
-    this.possibleConfirmingMembers = memberUids.length == 0 ? this.groupMembers :
-      this.possibleConfirmingMembers = this.groupMembers.filter(member => memberUids.indexOf(member.user.uid) == -1);
+    // user feedback suggests removing this contraint (user can't be both assigned and confirming at once), but leaving code in here in case change back in future
+    // this.possibleConfirmingMembers = memberUids.length == 0 ? this.groupMembers :
+    //   this.possibleConfirmingMembers = this.groupMembers.filter(member => memberUids.indexOf(member.user.uid) == -1);
   }
 
   confirmingMemberUidsPicked() {
     let memberUids: string[] = this.createTodoForm.controls['confirmingMemberUids'].value;
-    this.possibleAssignedMembers = memberUids.length == 0 ? this.groupMembers :
-      this.groupMembers.filter(member => memberUids.indexOf(member.user.uid) == -1);
+    // user feedback suggests removing this contraint, but leaving code in here in case change back in future
+    // this.possibleAssignedMembers = memberUids.length == 0 ? this.groupMembers :
+    //   this.groupMembers.filter(member => memberUids.indexOf(member.user.uid) == -1);
   }
 
   next() {
