@@ -22,6 +22,7 @@ export class UserService {
 
   private deleteUserInitiate: string = environment.backendAppUrl + "/api/user/profile/delete/initiate";
   private deleteUserConfirm: string = environment.backendAppUrl + "/api/user/profile/delete/confirm";
+  private checkUserExistsUrl:string = environment.backendAppUrl + "/api/auth/web/user/check";
 
   private _loggedInUser: AuthenticatedUser = null;
   public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
@@ -36,14 +37,24 @@ export class UserService {
     }
   }
 
-  register(name: string, phone: string, email: string, password: string): Observable<AuthorizationResponse> {
+  checkUserExists(phone:string,email:string):Observable<any>{
+    let params = new HttpParams()
+      .set('phone',phone)
+      .set('email',email);
+    return this.httpClient.get(this.checkUserExistsUrl,{params:params,responseType:'text'});
+  }
+
+  register(name: string, phone: string, email: string, password: string,otpEntered:string,withOtp:boolean): Observable<AuthorizationResponse> {
     if (isValidNumber(phone, "ZA")) {
       phone = PhoneNumberUtils.convertToSystem(phone);
     }
     let params = new HttpParams()
       .set("name", name)
       .set("password", password)
-      .set("interfaceType", "WEB_2");
+      .set("interfaceType", "WEB_2")
+      .set('withOtp',withOtp + "")
+      .set('otpEntered',otpEntered);
+    
 
     // this can happen (java - javascript JSON conversion loveliness)
     if (phone && phone != "null") {

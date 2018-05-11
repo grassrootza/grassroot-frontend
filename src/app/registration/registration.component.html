@@ -94,3 +94,29 @@
     </div>
   </div>
 </div>
+<div class="modal fade" tabindex="-1" role="dialog" id="reg-otp-modal" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Enter OTP send</h5>
+        <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>Enter OTP send to phone number provided</p>
+        <div class="form-group">
+          <input type="text" class="form-control" name="otpSend" id="otpSend" #otpSend/>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" (click)="registerWithOtp(otpSend.value)">Confirmed</button>
+      </div>
+
+    </div>
+  </div>
+</div>
