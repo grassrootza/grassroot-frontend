@@ -129,12 +129,9 @@ footer .row {
   border: none;
 }
 
-.dropdown.help {
+.help {
   margin-right: 1rem;
-}
-
-.help .dropdown-toggle::after, .notifications .dropdown-toggle::after {
-  display: none
+  padding-top: 0.4rem;
 }
 
 .nav-login {
@@ -160,6 +157,10 @@ footer .row {
 .grassroot-snackbar .close:hover {
   color: white;
   font-weight: bolder;
+}
+
+.notifications {
+  padding-top: 0.4rem;
 }
 
 .notifications .dropdown-item {

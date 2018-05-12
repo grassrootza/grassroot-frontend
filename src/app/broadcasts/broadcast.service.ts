@@ -14,7 +14,7 @@ import {DateTimeUtils} from "../utils/DateTimeUtils";
 import {BroadcastParams, getBroadcastParams} from "./model/broadcast-params";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
-import {Broadcast, BroadcastPage} from './model/broadcast';
+import {Broadcast, BroadcastPage, transform} from './model/broadcast';
 import * as moment from 'moment';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {LocalStorageService} from "../utils/local-storage.service";
@@ -72,7 +72,6 @@ export class BroadcastService {
       this.createRequest.type = type;
       this.createRequest.parentId = parentId;
       this.createRequest.broadcastId = this._createParams.broadcastId;
-      console.log("create request done, broadcastId = ", this.createRequest.broadcastId);
       this.latestStep = 1;
     }
   }
@@ -89,7 +88,6 @@ export class BroadcastService {
   }
 
   setTypes(types: BroadcastTypes) {
-    console.log("setting types to : ", types);
     this.createRequest.sendShortMessages = types.shortMessage;
     this.createRequest.sendEmail = types.email;
     this.createRequest.postToFacebook = types.facebook;
@@ -280,7 +278,6 @@ export class BroadcastService {
   }
 
   getGroupBroadcasts(groupUid: string, broadcastSchedule: string, pageNo: number, pageSize: number): Observable<BroadcastPage>{
-    console.log("Fetching group broadcasts");
     let params = new HttpParams()
       .set('page', pageNo.toString())
       .set('size', pageSize.toString())
@@ -292,32 +289,7 @@ export class BroadcastService {
       .map(
         result => {
           console.log("Group broadcasts json object from server: ", result);
-          let transformetContent = result.content.map(
-
-            bc => new Broadcast(
-              bc.broadcastUid,
-              bc.title,
-              bc.succeeded,
-              bc.shortMessageSent,
-              bc.emailSent,
-              bc.smsCount,
-              bc.emailCount,
-              bc.fbPages,
-              bc.twitterAccount != null ? bc.twitterAccount : "",
-              bc.dateTimeSent != null ? DateTimeUtils.getDateFromJavaInstant(bc.dateTimeSent) : null,
-              bc.scheduledSendTime != null ? DateTimeUtils.getDateFromJavaInstant(bc.scheduledSendTime) : null,
-              bc.costEstimate,
-              bc.smsContent,
-              bc.emailContent,
-              bc.fbPost,
-              bc.twitterPost,
-              bc.hasFilter,
-              bc.smsCount + bc.emailCount,
-              bc.provinces,
-              bc.topics,
-              bc.createdByUser
-            )
-          );
+          let transformetContent = result.content.map(transform);
           return new BroadcastPage(
             result.number,
             result.totalPages,
@@ -329,6 +301,12 @@ export class BroadcastService {
           )
         }
       )
+  }
+
+  // highly unlikely a campaign will have enough broadcasts to merit pagination
+  getCampaignBroadcasts(campaignUid: string): Observable<Broadcast[]> {
+    const fullUrl = this.fetchUrlBase + 'campaign/' + campaignUid;
+    return this.httpClient.get<Broadcast[]>(fullUrl).map(list => list.map(transform));
   }
 
   sendMeetingBroadcast(meetingUid: string, message: string, sendToOnlyYes: boolean) {

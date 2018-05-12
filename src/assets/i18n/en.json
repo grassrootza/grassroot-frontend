@@ -114,7 +114,8 @@
     "password": "Change password",
     "account": "Account settings",
     "integrations": "Integration settings",
-    "livewire": "Live Wire admin",
+    "admin": "System admin",
+    "livewire": "LiveWire admin",
     "logout": "Logout",
     "delete": "Delete account",
     "landing": {
@@ -142,7 +143,7 @@
       "title": "My agenda",
       "group-label": "Group",
       "no-tasks-sub": "You have no upcoming tasks",
-      "no-tasks-para": "To create one go to your groups and click on the '<b>create action</b>' dropdown"
+      "no-tasks-para": "To create one go to <a class=\"grassroot-link\" href=\"groups\">your groups</a> and click on the '<b>create action</b>' dropdown"
     },
     "new-members": {
       "title": "New members",
@@ -960,6 +961,10 @@
         "success": "Done! The messages have been set",
         "error": "Sorry, there was an error updating"
       }
+    },
+    "broadcasts": {
+      "title": "Campaign broadcasts",
+      "send": "Broadcast to campaign"
     },
     "settings": {
       "title": "Update Campaign Settings",

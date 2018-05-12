@@ -1,0 +1,24 @@
+<div class="container primary-container grassroot-help">
+  <div class="row mt-3 pb-3">
+    <div class="col-12">
+      <h2 class="text-center">Help</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div id="accordion">
+        <div *ngFor="let topic of helpTopics; let i = index" class="card">
+          <div class="card-header" id="{{ 'header' + i }}">
+            <h5 class="mb-0">
+              <button class="btn btn-link topic-heading" data-toggle="collapse" [attr.data-target]="'#collapse' + i" aria-expanded="true"
+                      [attr.aria-controls]="'collapse' + i">{{ topic }}</button>
+            </h5>
+          </div>
+          <div id="{{ 'collapse' + i }}" class="collapse hide" [attr.aria-labelledby]="'header' + i" data-parent="#accordion">
+            <div class="card-body">{{ helpContent[topic] }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

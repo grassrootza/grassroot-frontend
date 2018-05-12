@@ -39,8 +39,6 @@ import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
 import {TimeAgoPipe} from "time-ago-pipe";
-import { SystemAdminComponent } from './admin/system-admin/system-admin.component';
-import { LiveWireAdminService } from './admin/livewire/livewire-admin-service';
 
 @NgModule({
   declarations: [
@@ -64,8 +62,7 @@ import { LiveWireAdminService } from './admin/livewire/livewire-admin-service';
     TermsOfUseComponent,
     AboutUsComponent,
     ContributeComponent,
-    TimeAgoPipe,
-    SystemAdminComponent
+    TimeAgoPipe
   ],
   imports: [
     BrowserModule,
@@ -93,8 +90,7 @@ import { LiveWireAdminService } from './admin/livewire/livewire-admin-service';
     PublicActivityService,
     PublicNewsService,
     MediaService,
-    IncomingResponseService,
-    LiveWireAdminService
+    IncomingResponseService
   ]
 })
 export class AppModule { }

@@ -237,6 +237,7 @@ h6 {
   cursor: pointer;
   background: #26A041;
   color: white;
+  border-color: #26A041;
 }
 
 .hover-danger:hover {
