@@ -37,14 +37,13 @@ export class UserService {
     }
   }
 
-  checkUserExists(phone:string,email:string):Observable<any>{
+  checkUserExists(phone:string):Observable<any>{
     let params = new HttpParams()
-      .set('phone',phone)
-      .set('email',email);
-    return this.httpClient.get(this.checkUserExistsUrl,{params:params,responseType:'text'});
+      .set('phone',phone);
+    return this.httpClient.get(this.checkUserExistsUrl,{params:params});
   }
 
-  register(name: string, phone: string, email: string, password: string,otpEntered:string,withOtp:boolean): Observable<AuthorizationResponse> {
+  register(name: string, phone: string, email: string, password: string,otpEntered:string): Observable<AuthorizationResponse> {
     if (isValidNumber(phone, "ZA")) {
       phone = PhoneNumberUtils.convertToSystem(phone);
     }
@@ -52,7 +51,6 @@ export class UserService {
       .set("name", name)
       .set("password", password)
       .set("interfaceType", "WEB_2")
-      .set('withOtp',withOtp + "")
       .set('otpEntered',otpEntered);
     
 

@@ -140,7 +140,7 @@ export class JoinComponent implements OnInit {
     this.alertService.showLoading();
     console.log('initiating sign up ...');
     this.userService.register(this.joinedUser.displayName, this.joinedUser.phoneNumber, this.joinedUser.email,
-      password,"",false).subscribe(loginResult => {
+      password,"").subscribe(loginResult => {
         this.alertService.hideLoading();
         if (loginResult.errorCode == null) {
           this.alertService.alert('join.done.registered', true);

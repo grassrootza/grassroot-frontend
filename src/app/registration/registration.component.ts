@@ -21,7 +21,6 @@ export class RegistrationComponent {
   message: string = "";
   regForm: FormGroup;
   public otpEntered:string = "";
-  public withOtp:boolean = false;
 
   constructor(private userService: UserService, private router: Router, private fb: FormBuilder) {
     this.regForm = fb.group({
@@ -36,28 +35,27 @@ export class RegistrationComponent {
   register(): boolean {
     this.message = '';
 
-    this.userService.checkUserExists(this.regForm.get('phone').value,this.regForm.get('email').value).subscribe(resp =>{
-      if(resp === "USER_NO_ACCOUNT"){
+    this.userService.checkUserExists(this.regForm.get('phone').value).subscribe(resp =>{
+      console.log("Response.....",resp);
+
+      if(resp.errorCode === "USER_NO_ACCOUNT"){
         //call enter otp modal
         $('#reg-otp-modal').modal("show");
-        this.withOtp = true;
-      }else if(resp === "USER_ALREADY_EXISTS"){
+      }else if(resp.errorCode === "USER_ALREADY_EXISTS"){
         this.message = "A user with that phone number or email already exists";
         setTimeout(()=>{
           this.message = "";
         },2000);
-      }else if(resp === "USER_DOES_NOT_EXIST"){
+      }else if(resp.errorCode === "USER_DOES_NOT_EXIST"){
         this.registerUser();
-        return false;
       }
     });
-
     return false;
   }
 
   registerUser(){
     this.userService.register(this.regForm.get('name').value, this.regForm.get('phone').value,
-      this.regForm.get('email').value, this.regForm.get('password').value,this.otpEntered,this.withOtp).subscribe(
+      this.regForm.get('email').value, this.regForm.get('password').value,this.otpEntered).subscribe(
       loginResponse => {
         console.log("Login response: ", loginResponse);
         if (loginResponse.errorCode == null) {
@@ -73,7 +71,7 @@ export class RegistrationComponent {
           else if (errMsg === "USER_ALREADY_EXISTS")
             this.message = "A user with that phone number or email already exists";
           else if (errMsg === "INVALID_OTP")
-            this.message = "Error! please enter a valid otp sent to your phone.";
+            this.message = "Error! please enter a valid otp sent to your phone or email.";
           else this.message = "Unknown error: " + errMsg;
 
           console.log("Registration error!", errMsg);
