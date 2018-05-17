@@ -53,9 +53,9 @@ export class RegistrationComponent {
             this.message = "The phone number you entered is invalid";
           else if (errMsg === "INVALID_USERNAME")
             this.message = "Please enter a valid name (without special characters)";
-          else if (errMsg === "USER_ALREADY_EXISTS")
-            this.message = "A user with that phone number or email already exists";
-          else if(errMsg === "USER_NO_ACCOUNT"){
+          else if (errMsg === "USER_REGISTRATION_FAILED")
+            this.message = "Sorry, registration failed. If you are trying to register with an existing account, try resetting your password.";
+          else if(errMsg === "OTP_REQUIRED"){
             $('#reg-otp-modal').modal("show");
           }
           else if (errMsg === "INVALID_OTP")
