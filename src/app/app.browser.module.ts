@@ -46,8 +46,7 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
 @NgModule({
   declarations: [
     GroupMembersImportComponent,
-    FileImportComponent,
-    HelpComponent
+    FileImportComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'grassroot-frontend'}),

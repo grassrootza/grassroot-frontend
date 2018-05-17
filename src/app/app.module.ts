@@ -39,6 +39,7 @@ import {TermsOfUseComponent} from "./landing/static/terms-of-use.component";
 import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
 import {TimeAgoPipe} from "time-ago-pipe";
+import { HelpComponent } from './help/help.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import {TimeAgoPipe} from "time-ago-pipe";
     TermsOfUseComponent,
     AboutUsComponent,
     ContributeComponent,
+    HelpComponent, // cli complaining on server build if this isn't here, though it's only really needed in browser routes
     TimeAgoPipe
   ],
   imports: [
