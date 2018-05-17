@@ -57,9 +57,23 @@ h6 {
 p {
   color: #5a5a5a; }
 
+.no-top-padding {
+  padding-top: 0 !important;
+}
+
 @media (min-width: 1200px) {
   .container {
-    max-width: 1170px; } }
+    max-width: 1170px; } 
+  .choose-how-to-use-grassroot .box {
+    min-height: 460px;
+    margin-bottom: 0;
+  }
+
+  .choose-how-to-use-grassroot .box .img-wrap img {
+    max-width: 310px; 
+    max-height: 267px;
+  }
+}
 @media (min-width: 320px) {
   .login-register {
     margin-bottom: 15px;
@@ -85,11 +99,17 @@ p {
   .choose-how-to-use-grassroot .box {
     margin-bottom: 30px; }
 
+  .choose-how-to-use-grassroot .box .img-wrap img {
+    max-width: 310px; 
+    max-height: 267px;
+  }
+
   .about-our-org {
     margin-top: 30px; }
 
   .donors .logos img {
-    margin-bottom: 15px; }
+    margin-bottom: 15px; 
+  }
 
   .contribute h3 {
     color: #FFFFFF;
@@ -145,9 +165,6 @@ p {
     margin-left: 0;
     padding-left: 0; }
 
-  .choose-how-to-use-grassroot .box {
-    margin-bottom: 0px; }
-
   .about-our-org {
     margin-top: 0px; }
 
@@ -181,7 +198,25 @@ p {
 
   #intro .intro-content {
     max-width: 75%; }
+
+  .choose-how-to-use-grassroot .box {
+    min-height: 535px;
+    margin-bottom: 0; 
+  }
+
+  .choose-how-to-use-grassroot .box .img-wrap img {
+    max-width: 225px; 
+    max-height: 267px;
+  }
 }
+
+@media (min-width: 1060px) {
+  .choose-how-to-use-grassroot .box .img-wrap img {
+    max-width: 310px; 
+    max-height: 267px;
+  }
+}
+
 @media (min-width: 1200px) {
   #intro .intro-content {
     max-width: 55%; } }
@@ -266,6 +301,10 @@ p {
   -ms-border-radius: 25px;
   border-radius: 25px; }
 
+.call-to-action:hover {
+  background-color: #2BA445;
+}
+
 #intro {
   border-radius: 0px;
   margin-bottom: 0px;
@@ -317,12 +356,16 @@ p {
 .tools .tools-inner {
   margin-top: 60px; }
 .tools .tools-inner h3 {
-  font-weight: 600; }
+  font-weight: 500; }
 .tools .tool {
   margin-bottom: 35px;
   overflow: hidden; }
 .tools .tool .icon-wrapper {
   float: left; }
+.tools .tool .icon-wrapper img {
+  max-width: 65px;
+  max-height: 65px;
+}
 .tools .tool .tool-info {
   margin-left: 90px; }
 .tools .tool .tool-info p {
@@ -375,7 +418,7 @@ p {
 .additional-tools .section-content {
   margin-top: 40px; }
 .additional-tools .section-content h3 {
-  font-weight: 600;
+  font-weight: 500;
   margin-top: 5px; }
 .additional-tools .section-content ul {
   padding-left: 15px; }
@@ -391,7 +434,7 @@ p {
   line-height: 26px; }
 .campaigns h3 {
   color: #FFFFFF;
-  font-weight: 600; }
+  font-weight: 500; }
 .campaigns .img-right img {
   box-shadow: 0px 0px 20px #7a7d8c; }
 
@@ -416,6 +459,7 @@ p {
   background: #f6fdf6; }
 .our-vision .section-content ul li a .imgwrap {
   display: inline-block;
+  margin-right: 10px;
   width: 44px;
   height: 44px;
   line-height: 44px;
@@ -426,11 +470,13 @@ p {
   background: #ebf8ee; }
 .our-vision .section-content ul li a i {
   position: absolute;
-  right: 15px;
   top: 50%;
   transform: translate(0, -50%);
   -moz-transform: translate(0, -50%);
   -webkit-transform: translate(0, -50%); }
+.our-vision .section-content ul li a .arrow {
+  margin-left: 8px;
+}
 .our-vision .section-content ul li:last-child a {
   border-bottom: 0px solid #fff; }
 

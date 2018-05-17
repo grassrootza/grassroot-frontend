@@ -1,4 +1,5 @@
 import {DatePipe} from '@angular/common';
+import { DateTimeUtils } from '../../utils/DateTimeUtils';
 
 export class Broadcast {
   constructor(public broadcastUid: string,
@@ -84,3 +85,28 @@ export class BroadcastPage {
 
 }
 
+export const transform = (bc: Broadcast): Broadcast => {
+  return new Broadcast(
+    bc.broadcastUid,
+    bc.title,
+    bc.succeeded,
+    bc.shortMessageSent,
+    bc.emailSent,
+    bc.smsCount,
+    bc.emailCount,
+    bc.fbPages,
+    bc.twitterAccount != null ? bc.twitterAccount : "",
+    bc.dateTimeSent != null ? DateTimeUtils.getDateFromJavaInstant(bc.dateTimeSent) : null,
+    bc.scheduledSendTime != null ? DateTimeUtils.getDateFromJavaInstant(bc.scheduledSendTime) : null,
+    bc.costEstimate,
+    bc.smsContent,
+    bc.emailContent,
+    bc.fbPost,
+    bc.twitterPost,
+    bc.hasFilter,
+    bc.smsCount + bc.emailCount,
+    bc.provinces,
+    bc.topics,
+    bc.createdByUser
+  )
+} 

@@ -8,8 +8,7 @@
 </div><!-- /.jumbotron -->
 
 <div class="row">
-  <div class="col-xl-10 offset-xl-1 col-md-9 offset-md-1">
-
+  <div class="col-xl-10 offset-xl-1 col-md-10 offset-md-1">
     <div class="section-grey bg-grey">
       <div class="container padded-card">
         <div class="section-header text-center">
@@ -32,7 +31,11 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
 
+<div class="row bg-white no-top-padding">
+  <div class="col-xl-10 offset-xl-1 col-md-10 offset-md-1">
     <div id="team"></div>
     <div class="our-vision bg-white">
       <div class="container">
@@ -41,7 +44,7 @@
         </div><!-- /.section-header -->
         <div class="padded-card">
           <div class="section-content row">
-            <div class="col-12"><h3>Board</h3></div>
+            <div class="col-12"><h3 class="team-list-header">Board</h3></div>
           </div>
           <div class="section-content row">
             <div class="col-md-4 col-sm-12">
@@ -78,7 +81,7 @@
         </div>
         <div class="padded-card">
           <div class="section-content row">
-            <div class="col-12"><h3>Staff</h3></div>
+            <div class="col-12"><h3 class="team-list-header">Staff</h3></div>
           </div>
           <div class="section-content row">
             <div class="col-md-4 col-sm-12">
@@ -115,7 +118,7 @@
         </div>
         <div class="padded-card">
           <div class="section-content row">
-            <div class="col-12"><h3>Ambassadors & Past Contributors</h3></div>
+            <div class="col-12"><h3 class="team-list-header">Ambassadors & Past Contributors</h3></div>
             <div class="col-md-3 col-sm-6 team-name-container" *ngFor="let name of teamList">
               <span class="team-name-list">{{ name }}</span>
             </div>
@@ -126,6 +129,11 @@
         </div>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="row bg-grey no-top-padding">
+  <div class="col-xl-10 offset-xl-1 col-md-10 offset-md-1">
 
     <div id="partners"></div>
     <div class="choose-how-to-use-grassroot bg-grey">
@@ -236,6 +244,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>

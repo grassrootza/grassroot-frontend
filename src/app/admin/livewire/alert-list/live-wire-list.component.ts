@@ -22,10 +22,8 @@ export class LiveWireListComponent implements OnInit {
 
   loadAlerts(pageNumber:number,sort:string){
     this.liveWireAlertService.loadLivewireAlerts(pageNumber,sort).subscribe(resp => {
-      console.log("Loaded alerts......",resp);
       this.alertList = resp.content;
       this.totalPages = resp.totalPages;
-      console.log("Alerts from server.....",this.alertList);
     },error =>{
       console.log("Erro loading alerts.......",error);
     });
@@ -53,6 +51,5 @@ export class LiveWireListComponent implements OnInit {
   onchangeSort(value:string){
     this.sort = value;
     this.loadAlerts(this.pageNumber,this.sort);
-    console.log("Tyring to sort alerts......................",value);
   }
 }

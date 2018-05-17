@@ -24,6 +24,7 @@
   padding-top: 1rem;
   border-bottom: solid #ffffff 2px !important;
   cursor: pointer;
+  font-weight: 400;
 }
 
 .navbar-light .navbar-nav .active > .nav-link {
@@ -128,12 +129,9 @@ footer .row {
   border: none;
 }
 
-.dropdown.help {
+.help {
   margin-right: 1rem;
-}
-
-.help .dropdown-toggle::after, .notifications .dropdown-toggle::after {
-  display: none
+  padding-top: 0.4rem;
 }
 
 .nav-login {
@@ -141,6 +139,7 @@ footer .row {
   padding-right: 40px;
   margin-left: 1rem;
   margin-right: 1rem;
+  border-color: #292929;
 }
 
 .nav-register {
@@ -158,6 +157,10 @@ footer .row {
 .grassroot-snackbar .close:hover {
   color: white;
   font-weight: bolder;
+}
+
+.notifications {
+  padding-top: 0.4rem;
 }
 
 .notifications .dropdown-item {

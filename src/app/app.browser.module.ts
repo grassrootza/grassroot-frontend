@@ -33,6 +33,7 @@ import {BrowserCookiesService} from "./utils/cookie-service/browser-cookies.serv
 import {CookieModule} from "ngx-cookie";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AdminService} from './admin/admin.service';
+import {HelpComponent} from "./help/help.component";
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -45,12 +46,12 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
 @NgModule({
   declarations: [
     GroupMembersImportComponent,
-    FileImportComponent
+    FileImportComponent,
+    HelpComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'grassroot-frontend'}),
     BrowserTransferStateModule,
-    // TransferHttpCacheModule,
     AppModule,
     BrowserAnimationsModule,
     LoggedInServicesModule,

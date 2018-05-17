@@ -1,3 +1,22 @@
-<p>
-  campaign-broadcasts works!
-</p>
+<div class="card-body events-box">
+  <div class="row">
+    <div class="col-6">
+      <h2>
+        {{'campaign.broadcasts.title' | translate}}
+      </h2>
+    </div>
+    <div class="col-6">
+      <div class="float-right text-right">
+        <a *ngIf="campaignUid" [routerLink]="['/broadcast/create/campaign', campaignUid]" class="btn btn-success">
+          <img src="assets/icon_megaphone.png"/>
+          {{'campaign.broadcasts.send' | translate}}
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row" *ngIf="serverFetched && !broadcasts">
+    <div class="col-12">
+      You have not sent any broadcasts to this campaign yet
+    </div>
+  </div>
+</div>

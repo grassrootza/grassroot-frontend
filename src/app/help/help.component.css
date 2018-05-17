@@ -1,0 +1,20 @@
+.grassroot-help {
+  padding-left: 0;
+  padding-right: 0;
+  background: white;
+  border: 1px solid #E5E9F2;
+  box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
+}
+
+.topic-heading {
+  color: #2CBC4C;
+  font-weight: 500;
+}
+
+.card-header {
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 0;
+  border: none;
+}

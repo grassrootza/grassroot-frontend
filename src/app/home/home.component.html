@@ -40,7 +40,7 @@
                 <p class="text-center"><img class="img-responsive" style="max-width: 80px; max-height: 78px" src="assets/graphics/empty_task_list@2x.png" /></p>
                 <p class="text-center"><span [translate]="'home.my-agenda.no-tasks-sub'">You have no upcoming tasks</span></p>
                 <p class="text-center" [innerHtml]="'home.my-agenda.no-tasks-para' | translate">To create a task ...</p>
-                <!-- <p class="text-center"><img class="img-responsive" style="max-width: 331px; max-height: 188px" src="assets/graphics/agenda-tutorial-screenshot@2x.png/" /></p> -->
+                <p class="text-center"><button type="button" class="btn btn-secondary hover-primary" data-toggle="modal" data-target="#agenda-tutorial-modal">View screenshot</button></p>
               </div>
               <div *ngFor="let dayTasks of baseDateFilteredTasks" class="day">
                 <div class="col-sm-8 day-label">
@@ -94,6 +94,7 @@
                 <p class="text-center"><img class="img-responsive" style="max-width: 80px; max-height: 83px" src="assets/graphics/member_empty_state_icon@2x.png" /></p>
                 <p class="text-center"><span [translate]="'home.new-members.no-members-sub'"></span></p>
                 <p class="text-center" [innerHtml]="'home.new-members.no-members-para' | translate"></p>
+                <p class="text-center"><button type="button" class="btn btn-secondary hover-primary" data-toggle="modal" data-target="#groups-tutorial-modal">View screen guide</button></p>
               </div>
               <div *ngFor="let member of newMembersListRendered" class="row member-row">
                 <div class="col-1 justify-content-center new-members-icon">
@@ -228,6 +229,35 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="agenda-tutorial-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+          <span [innerHtml]="'home.my-agenda.no-tasks-para' | translate"></span>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <img class="alert-modal-image" alt="" src="assets/graphics/agenda-tutorial-screenshot@2x.png">
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="groups-tutorial-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+          <span [innerHtml]="'home.new-members.no-members-para' | translate"></span>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        <div class="modal-body">
+          <img class="alert-modal-image" alt="" src="assets/graphics/group-tutorial-screenshot@2x.png" />
+        </div>
+    </div>
+  </div>
+</div>
+
 
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>

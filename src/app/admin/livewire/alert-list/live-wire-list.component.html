@@ -28,7 +28,7 @@
       <div *ngFor="let alert of alertList" class="alert-list">
         <div class="row">
           <div class="col-md-4 secondary-entity-link">
-            <a [routerLink]="['/admin/livewire', alert.serverUid]" class="grassroot-link">{{alert.headline}}</a>
+            <a [routerLink]="['/admin/livewire/alert', alert.serverUid]" class="grassroot-link">{{alert.headline}}</a>
           </div>
           <div class="col-md-4">{{alert.contactUserName}}</div>
           <div class="col-md-4">{{alert.contactUserPhone}}</div>

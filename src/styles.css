@@ -83,7 +83,7 @@ h6 {
 
 .btn-primary:hover {
   cursor: pointer;
-  background: #26A041;
+  background: #2BA445;
 }
 
 /* none of these are working, nothing gets rid of bootstrap blue crappiness, good old CSS */
@@ -237,6 +237,7 @@ h6 {
   cursor: pointer;
   background: #26A041;
   color: white;
+  border-color: #26A041;
 }
 
 .hover-danger:hover {
