@@ -1252,7 +1252,11 @@
     "footnote": "* At least one of mobile number or email address is required",
     "password": "Set a password",
     "haveAccountQ": "Already have an account?",
-    "haveAccountLink": "Click here to login"
+    "haveAccountLink": "Click here to login",
+    "otp-modal":{
+      "title": "OTP required",
+      "label": "For security, we need to verify these contact details are yours. We have sent a code to your phone or email. Please check them and enter it below:"
+    }
   },
   "pagination":{
     "previous": "Prev",

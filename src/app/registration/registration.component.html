@@ -94,11 +94,12 @@
     </div>
   </div>
 </div>
+
 <div class="modal fade" tabindex="-1" role="dialog" id="reg-otp-modal" aria-hidden="true">
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">OTP required</h5><!-- i18n -->
+        <h5 class="modal-title">{{'registration.otp-modal.title' | translate}}</h5>
         <button type="button" class="close" data-dismiss="modal"
                 aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -106,7 +107,7 @@
       </div>
 
       <div class="modal-body">
-        <p>For security, we need to verify these contact details are yours. We have sent a code to your phone or email. Please check them and enter it below:</p>
+        <p>{{'registration.otp-modal.label' | translate}}</p>
         <div class="form-group">
           <input type="text" class="form-control" name="otpSend" id="otpSend" #otpSend/>
         </div>
