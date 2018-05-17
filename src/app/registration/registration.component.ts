@@ -34,22 +34,7 @@ export class RegistrationComponent {
 
   register(): boolean {
     this.message = '';
-
-    this.userService.checkUserExists(this.regForm.get('phone').value).subscribe(resp =>{
-      console.log("Response.....",resp);
-
-      if(resp.errorCode === "USER_NO_ACCOUNT"){
-        //call enter otp modal
-        $('#reg-otp-modal').modal("show");
-      }else if(resp.errorCode === "USER_ALREADY_EXISTS"){
-        this.message = "A user with that phone number or email already exists";
-        setTimeout(()=>{
-          this.message = "";
-        },2000);
-      }else if(resp.errorCode === "USER_DOES_NOT_EXIST"){
-        this.registerUser();
-      }
-    });
+    this.registerUser();
     return false;
   }
 
@@ -70,6 +55,9 @@ export class RegistrationComponent {
             this.message = "Please enter a valid name (without special characters)";
           else if (errMsg === "USER_ALREADY_EXISTS")
             this.message = "A user with that phone number or email already exists";
+          else if(errMsg === "USER_NO_ACCOUNT"){
+            $('#reg-otp-modal').modal("show");
+          }
           else if (errMsg === "INVALID_OTP")
             this.message = "Error! please enter a valid otp sent to your phone or email.";
           else this.message = "Unknown error: " + errMsg;

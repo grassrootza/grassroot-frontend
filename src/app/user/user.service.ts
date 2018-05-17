@@ -22,7 +22,6 @@ export class UserService {
 
   private deleteUserInitiate: string = environment.backendAppUrl + "/api/user/profile/delete/initiate";
   private deleteUserConfirm: string = environment.backendAppUrl + "/api/user/profile/delete/confirm";
-  private checkUserExistsUrl:string = environment.backendAppUrl + "/api/auth/web/user/check";
 
   private _loggedInUser: AuthenticatedUser = null;
   public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
@@ -35,12 +34,6 @@ export class UserService {
     if (this.localStorageService.getItem("loggedInUser")) {
       this._loggedInUser = getAuthUser(JSON.parse(this.localStorageService.getItem("loggedInUser")))
     }
-  }
-
-  checkUserExists(phone:string):Observable<any>{
-    let params = new HttpParams()
-      .set('phone',phone);
-    return this.httpClient.get(this.checkUserExistsUrl,{params:params});
   }
 
   register(name: string, phone: string, email: string, password: string,otpEntered:string): Observable<AuthorizationResponse> {
