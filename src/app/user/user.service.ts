@@ -36,14 +36,16 @@ export class UserService {
     }
   }
 
-  register(name: string, phone: string, email: string, password: string): Observable<AuthorizationResponse> {
+  register(name: string, phone: string, email: string, password: string,otpEntered:string): Observable<AuthorizationResponse> {
     if (isValidNumber(phone, "ZA")) {
       phone = PhoneNumberUtils.convertToSystem(phone);
     }
     let params = new HttpParams()
       .set("name", name)
       .set("password", password)
-      .set("interfaceType", "WEB_2");
+      .set("interfaceType", "WEB_2")
+      .set('otpEntered',otpEntered);
+    
 
     // this can happen (java - javascript JSON conversion loveliness)
     if (phone && phone != "null") {
