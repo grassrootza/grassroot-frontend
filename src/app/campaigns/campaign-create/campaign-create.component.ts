@@ -56,7 +56,7 @@ export class CampaignCreateComponent implements OnInit {
       'groupName': ['', hasGroupNameIfNeeded],
       'amandlaUrl': ['', optionalUrlValidator],
       'smsShare': ['false'],
-      'smsLimit': [0, smsLimitAboveZero],
+      'smsLimit': [10, smsLimitAboveZero],
       'landingPage': ['GRASSROOT'],
       'landingUrl': ['', hasValidLandingUrlIfNeeded]
     }, { validate: 'onBlur' });

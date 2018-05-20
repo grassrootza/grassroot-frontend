@@ -294,4 +294,23 @@ export class CampaignSettingsComponent implements OnInit {
     this.campaignSettingsForm.reset({onlySelf: true});
     this.setUpForm();
   }
+
+  confirmCampaignEnd() {
+    $('#confirm-end-modal').modal('show');
+  }
+
+  endCampaign() {
+    this.alertService.showLoading();
+    this.campaignService.endCampaign(this.campaign.campaignUid).subscribe(endedCampaign => {
+      this.alertService.hideLoading();
+      $('#confirm-end-modal').modal('hide');
+      this.alertService.alert('campaign.settings.ended');
+      this.cleanUpAndReset(endedCampaign);
+    }, error => {
+      $('#confirm-end-modal').modal('hide');
+      console.log('error ending campaign: ', error);
+      this.alertService.hideLoading();
+      this.alertService.alert('campaign.settings.end-error');
+    })
+  }
 }

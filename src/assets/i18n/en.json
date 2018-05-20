@@ -990,7 +990,9 @@
       "cost_estimate": ". You have spent {{ spent }} to date",
       "landing": "Landing page: ",
       "url": "URL",
-      "done": "Done! Campaign has been updated"
+      "done": "Done! Campaign has been updated",
+      "ended": "Done! The campaign has been ended",
+      "end-error": "Sorry, there was an error ending the campaign"
     }
   },
   "broadcasts": {

@@ -40,18 +40,61 @@
 		  <div class="alert alert-danger my-lg-3" role="alert"
 		           *ngIf="groupsNotFoundMessage">{{ groupsNotFoundMessage }}
       </div>
+
+      <div *ngIf="groups.length > 0" class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <h1 class="main-title">Found Group(s)</h1>
+            </div>
+          </div>
+          <div class="row groups-header">
+            <div class="col-2">
+              Group Name
+            </div>
+            <div class="col-2">
+              Creating user
+            </div>
+            <div class="col-2">
+              Number of members
+            </div>
+            <div class="col-2">
+    
+            </div>
+            <div class="col-2">
+    
+            </div>
+          </div>
+    
+          <div *ngFor="let group of groups | slice:0:numberOfGroups;" class="row group-list">
+            <div class="col-2">{{group.name}}</div>
+            <div class="col-2">{{group.creatingUserName}}</div>
+            <div class="col-2">{{group.memberCount}}</div>
+            <div class="col-2">
+              <a class="btn btn-secondary" (click)="triggerActivateOrDeactivateModal(group.active,group.groupUid)">{{group.active? "Deactivate" : "Activate"}}</a>
+            </div>
+            <div class="col-2">
+              <a class="btn btn-secondary" (click)="triggerAddMemberModal(group.groupUid)">Add member</a>
+            </div>
+          </div>
+          <hr/>
+          <div class="row" style="float: right;">
+            <ul class="pagination justify-content-end">
+              <a class="page-indicator" style="font-weight: bold;" (click)="showLess()"><i class="fa fa-chevron-left"></i> Show less</a>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <a class="page-indicator " style="font-weight: bold;" (click)="showMore()">Show more <i class="fa fa-chevron-right"></i></a>
+            </ul>
+          </div>
+        </div>
+      </div>
       
       <div class="row" style="margin-top: 2%">
-        <!-- <div class="col-6">
-          <a [routerLink]="['/admin/livewire-accounts']" class="grassroot-link">Livewire accounts</a>
-        </div> -->
         <div class="col-6">
           <h3>Subscriber Accounts</h3>
         </div>
         <div class="col-2">
           <button class="btn btn-primary" (click)="triggerCreateSubscriberModal()">New Subscriber</button>
         </div>
-        
       </div>
 
       <div class="card">
@@ -74,55 +117,16 @@
           </div>
         </div>
       </div>
+
+      <div class="row" style="margin-top: 2%">
+        <div class="col-12">
+          <button type="btn" class="btn btn-primary" (click)="initiateUserGraphTransfer()">Transfer users to graph</button>
+          <button type="btn" class="btn btn-primary" (click)="initiateGroupsGraphTransfer()">Transfer groups to graph</button>
+        </div>
+      </div>
+
 		</div>
 	</div>
-
-  <div *ngIf="groups.length > 0" class="card">
-    <div class="card-body">
-      <div class="row">
-      	<div class="col-6">
-      		<h1 class="main-title">Found Group(s)</h1>
-      	</div>
-      </div>
-      <div class="row groups-header">
-        <div class="col-2">
-          Group Name
-        </div>
-        <div class="col-2">
-          Creating user
-        </div>
-        <div class="col-2">
-          Number of members
-        </div>
-        <div class="col-2">
-
-        </div>
-        <div class="col-2">
-
-        </div>
-      </div>
-
-      <div *ngFor="let group of groups | slice:0:numberOfGroups;" class="row group-list">
-        <div class="col-2">{{group.name}}</div>
-        <div class="col-2">{{group.creatingUserName}}</div>
-        <div class="col-2">{{group.memberCount}}</div>
-        <div class="col-2">
-          <a class="btn btn-secondary" (click)="triggerActivateOrDeactivateModal(group.active,group.groupUid)">{{group.active? "Deactivate" : "Activate"}}</a>
-        </div>
-        <div class="col-2">
-          <a class="btn btn-secondary" (click)="triggerAddMemberModal(group.groupUid)">Add member</a>
-        </div>
-      </div>
-      <hr/>
-      <div class="row" style="float: right;">
-        <ul class="pagination justify-content-end">
-          <a class="page-indicator" style="font-weight: bold;" (click)="showLess()"><i class="fa fa-chevron-left"></i> Show less</a>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <a class="page-indicator " style="font-weight: bold;" (click)="showMore()">Show more <i class="fa fa-chevron-right"></i></a>
-        </ul>
-      </div>
-    </div>
-  </div>
 
   <div class="modal fade" tabindex="-1" role="dialog"
        id="user-opt-out-modal" aria-hidden="true">

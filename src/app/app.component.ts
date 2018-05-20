@@ -59,18 +59,6 @@ export class AppComponent implements OnInit {
       this.userHasNoImage = true;
     }
 
-    // this.router.events.subscribe(ev => {
-    //   if (ev instanceof RouteConfigLoadStart) {
-    //     console.log("start routing to lazy module, navigating");
-    //     this.loadingModule = true;
-    //   }
-    //
-    //   if (ev instanceof NavigationEnd) {
-    //     console.log("navigation has ended");
-    //     this.currentUrl = ev.url;
-    //   }
-    // });
-
     this.userService.loggedInUser.subscribe(user => {
       // console.log("user emitted!");
       this.loggedInUser = user;
@@ -145,7 +133,7 @@ export class AppComponent implements OnInit {
           else this.popupNotification = null;
         },
         error => {
-          if (error.status == 401)
+          if (error.status == 401 || error.status == 403)
             this.userService.logout(true, '/login');
           else console.log("Notifications error: ", error);
         }

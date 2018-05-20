@@ -4,7 +4,7 @@
       <h2>{{'campaign.settings.title' | translate}}</h2>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="campaign">
     <div class="col-12 justify-content-center">
       <form [formGroup]="campaignSettingsForm" (submit)="updateCampaign()" novalidate>
 
@@ -258,10 +258,11 @@
               {{ 'action.cancel' | translate }}
             </button>
           </div>
-          <div class="col-sm-8 ">
+          <div class="col-sm-8">
             <button type="submit" [disabled]="!campaignSettingsForm.valid" class="btn btn-lg btn-primary float-right save-button"> {{ 'action.save' |
               translate }}
             </button>
+            <button type="button" *ngIf="campaign.isActive()" (click)="confirmCampaignEnd()" class="btn btn-lg btn-secondary float-right hover-danger mr-3">End campaign</button>
           </div>
         </div>
 
@@ -333,3 +334,27 @@
   </div>
 </div>
 
+<div class="modal fade" id="confirm-end-modal" tabindex="-1" role="dialog"
+  aria-labelledby="confirm-end-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Are you sure you want to end the campaign?</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+           If you end the campaign, you can reactive it later (but you may have to change the campaign code). Are you sure? 
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button data-dismiss="modal" type="button" class="btn btn-secondary">{{ 'action.close' | translate }}</button>
+        <button (click)="endCampaign()" type="button" class="btn btn-secondary hover-danger">{{ 'action.confirm' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -254,7 +254,6 @@
               </div>
             </div>
 
-            <!-- todo : pull message cost from server -->
             <div class="row" *ngIf="createCampaignForm.controls.smsShare?.value == 'true'">
               <div class="col-sm-3">
                 <label for="sms-limit" class="grassroot-label-em">{{ 'campaign.create.sms-share.sms-limit' | translate }}</label>
@@ -264,6 +263,14 @@
               </div>
               <div class="col-sm-3 text-left">
                 {{ 'campaign.create.sms-share.sms-cost' | translate }}
+              </div>
+            </div>
+
+            <div class="row" *ngIf="createCampaignForm.controls.smsShare?.value == 'true' && createCampaignForm.controls.smsLimit?.errors?.minShare">
+              <div class="col-12">
+                <div class="alert alert-danger alert-inline" role="alert">
+                  The minimum number of SMS shares is 10
+                </div>
               </div>
             </div>
 

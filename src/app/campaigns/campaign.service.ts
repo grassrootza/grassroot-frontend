@@ -33,6 +33,8 @@ export class CampaignService {
   changeBasicSettingsUrl = environment.backendAppUrl + "/api/campaign/manage/update/settings";
   changeSmsSharingUrl = environment.backendAppUrl + "/api/campaign/manage/update/sharing";
 
+  endCampaignUrl = environment.backendAppUrl + "/api/campaign/manage/end";
+
   private _campaigns: CampaignInfo[];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
   public campaignInfoList: Observable<CampaignInfo[]> = this.campaignInfoList_.asObservable();
@@ -195,6 +197,11 @@ export class CampaignService {
     let sharingMsgs:CampaignMsgServerDTO[] = sharingTemplates ? sharingTemplates.map(req =>
       new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags)) : null;
     return this.httpClient.post<CampaignInfo>(fullUrl, sharingMsgs, { params: params }).map(getCampaignEntity);
+  }
+
+  endCampaign(campaignUid: string): Observable<CampaignInfo> {
+    const fullUrl = this.endCampaignUrl + "/" + campaignUid;
+    return this.httpClient.get<CampaignInfo>(fullUrl).map(getCampaignEntity);
   }
 
 }

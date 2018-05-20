@@ -60,6 +60,7 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
       let oldLanguages = changes['languages'].previousValue;
       let removedLanguages = oldLanguages.filter(lang => this.languages.indexOf(lang) == -1);
       let addedLanguages = this.languages.filter(lang => oldLanguages.indexOf(lang) == -1);
+      console.log('adding languages? : ', addedLanguages);
       addedLanguages.forEach(lang => this.formGroup.addControl(lang.threeDigitCode, this.fb.control('', Validators.required)));
       removedLanguages.forEach(lang => {
         console.log("removing control with name: ", lang.threeDigitCode);
@@ -82,6 +83,7 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
   private setMessages(messages: Map<string, string>) {
     this.languages.forEach(language => {
         let value = (this.priorMessages && this.priorMessages.has(language.threeDigitCode)) ? this.priorMessages.get(language.threeDigitCode) : '';
+        console.log('setting value for control: ', value);
         this.formGroup.controls[language.threeDigitCode].setValue(value);
         this.charsLeft[language.threeDigitCode] = this.MAX_MESSAGE_LENGTH - value.length;
       }

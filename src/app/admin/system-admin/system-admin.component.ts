@@ -226,4 +226,12 @@ export class SystemAdminComponent implements OnInit {
       console.log("Error creating subscriber......",error);
     });
   }
+
+  initiateUserGraphTransfer() {
+    this.adminService.initiateUserGraphTransfer().subscribe(result => this.alertService.alert('transfer.done'));
+  }
+
+  initiateGroupsGraphTransfer() {
+    this.adminService.initiateGroupGraphTransfer().subscribe(result => this.alertService.alert('transfer.initiated'));
+  }
 }
