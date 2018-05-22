@@ -159,8 +159,8 @@ export class GroupAllMembersComponent implements OnInit {
 
   downloadErrorReport() {
     this.groupService.downloadErrorReport(this.groupUid).subscribe(data => {
-      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
-      saveAs(blob, "error-report.xls");
+      let blob = new Blob([data], { type: 'application/xlsx' });
+      saveAs(blob, "error-report.xlsx");
     }, error => {
       console.log("error getting the file: ", error);
     });

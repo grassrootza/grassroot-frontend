@@ -3,6 +3,7 @@ import {CampaignService} from "../../../campaigns/campaign.service";
 import {CampaignInfo} from "../../../campaigns/model/campaign-info";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {UserService} from "../../../user/user.service";
+import { AlertService } from '../../../utils/alert-service/alert.service';
 
 @Component({
   selector: 'app-my-campaigns',
@@ -18,13 +19,16 @@ export class MyCampaignsComponent implements OnInit {
   constructor(private campaignService: CampaignService,
               private userService:UserService,
               private route:ActivatedRoute,
-              private router:Router) { }
+              private router:Router,
+              private alertService:AlertService) { }
 
   ngOnInit() {
+    this.alertService.showLoading();
     this.userUid = this.userService.getLoggedInUser().userUid;
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
       this.loadUserCampaignsWithWithSearchTerm(this.searchTerm);
+      this.alertService.hideLoadingDelayed();
     });
   }
 

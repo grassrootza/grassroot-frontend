@@ -4,6 +4,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {Task} from '../../../task/task.model'
 import {SearchService} from "../../search.service";
 import {TaskService} from "../../../task/task.service";
+import { AlertService } from '../../../utils/alert-service/alert.service';
 
 declare var $: any;
 
@@ -32,13 +33,16 @@ export class MyActivitiesComponent implements OnInit {
   constructor(private userService:UserService,
               private route:ActivatedRoute,
               private searchService:SearchService,
-              private taskService:TaskService) { }
+              private taskService:TaskService,
+              private alertService:AlertService) { }
 
   ngOnInit() {
+    this.alertService.showLoading();
     this.userUid = this.userService.getLoggedInUser().userUid;
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
       this.loadUserTasksWithSearchTerm(this.searchTerm);
+      this.alertService.hideLoadingDelayed();
       console.log("Filtered tasks....",this.userTasksFiltered)
     });
   }

@@ -4,6 +4,7 @@ import {ActivatedRoute, Params, Router} from "@angular/router";
 import {UserService} from "../../../user/user.service";
 import {GroupInfo} from "../../../groups/model/group-info.model";
 import {Group} from "../../../groups/model/group.model";
+import { AlertService } from '../../../utils/alert-service/alert.service';
 
 @Component({
   selector: 'app-my-groups',
@@ -32,15 +33,17 @@ export class MyGroupsComponent implements OnInit {
   constructor(private userService:UserService,
               private route:ActivatedRoute,
               private searchService:SearchService,
-              private router:Router) { }
+              private router:Router,
+              private alertService:AlertService) { }
 
   ngOnInit() {
+    this.alertService.showLoading();
     this.userUid = this.userService.getLoggedInUser().userUid;
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
 
       this.loadUserGroups(this.searchTerm);
-
+      this.alertService.hideLoadingDelayed();
     });
   }
 

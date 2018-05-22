@@ -4,6 +4,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {UserService} from "../../../user/user.service";
 import {Task} from "../../../task/task.model";
 import {TaskInfo} from "../../../task/task-info.model";
+import { AlertService } from '../../../utils/alert-service/alert.service';
 
 declare var $: any;
 
@@ -28,13 +29,16 @@ export class PublicMeetingsComponent implements OnInit {
 
   constructor(private userService:UserService,
               private route:ActivatedRoute,
-              private searchService:SearchService) { }
+              private searchService:SearchService,
+              private alertService:AlertService) { }
 
   ngOnInit() {
+    this.alertService.showLoading();
     this.userUid = this.userService.getLoggedInUser().userUid;
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
       this.loadPublicMeetings(this.searchTerm);
+      this.alertService.hideLoadingDelayed();
     });
   }
 

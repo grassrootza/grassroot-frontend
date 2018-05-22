@@ -3,6 +3,7 @@ import {SearchService} from "../../search.service";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {UserService} from "../../../user/user.service";
 import {Group} from "../../../groups/model/group.model";
+import { AlertService } from '../../../utils/alert-service/alert.service';
 
 declare var $: any;
 @Component({
@@ -29,13 +30,16 @@ export class PublicGroupsComponent implements OnInit {
   constructor(private searchService:SearchService,
               private route:ActivatedRoute,
               private router:Router,
-              private userService:UserService) { }
+              private userService:UserService,
+              private alertService:AlertService) { }
 
   ngOnInit() {
+    this.alertService.showLoading();
     this.userUid = this.userService.getLoggedInUser().userUid;
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
       this.loadPublicGroups(this.searchTerm);
+      this.alertService.hideLoadingDelayed();
     });
   }
 
