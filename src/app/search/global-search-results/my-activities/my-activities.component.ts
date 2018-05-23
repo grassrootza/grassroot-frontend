@@ -42,7 +42,6 @@ export class MyActivitiesComponent implements OnInit {
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
       this.loadUserTasksWithSearchTerm(this.searchTerm);
-      this.alertService.hideLoadingDelayed();
       console.log("Filtered tasks....",this.userTasksFiltered)
     });
   }
@@ -57,6 +56,10 @@ export class MyActivitiesComponent implements OnInit {
         this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
         this.currentPage = 1;
         this.generatePageList(this.numberOfPages);
+        this.alertService.hideLoadingDelayed();
+    },error =>{
+      console.log(`Error loading tasks ${{error}}`);
+      this.alertService.hideLoadingDelayed();
     });
   }
 

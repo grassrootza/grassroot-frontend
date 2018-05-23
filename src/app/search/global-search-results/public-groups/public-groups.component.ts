@@ -39,7 +39,6 @@ export class PublicGroupsComponent implements OnInit {
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
       this.loadPublicGroups(this.searchTerm);
-      this.alertService.hideLoadingDelayed();
     });
   }
 
@@ -53,9 +52,10 @@ export class PublicGroupsComponent implements OnInit {
       this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
       this.currentPage = 1;
       this.generatePageList(this.numberOfPages);
-
+      this.alertService.hideLoadingDelayed();
     },error =>{
       console.log("Error loading public groups..............",error);
+      this.alertService.hideLoadingDelayed();
     })
   }
 

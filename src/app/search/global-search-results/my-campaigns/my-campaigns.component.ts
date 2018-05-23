@@ -19,16 +19,13 @@ export class MyCampaignsComponent implements OnInit {
   constructor(private campaignService: CampaignService,
               private userService:UserService,
               private route:ActivatedRoute,
-              private router:Router,
-              private alertService:AlertService) { }
+              private router:Router) { }
 
   ngOnInit() {
-    this.alertService.showLoading();
     this.userUid = this.userService.getLoggedInUser().userUid;
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
       this.loadUserCampaignsWithWithSearchTerm(this.searchTerm);
-      this.alertService.hideLoadingDelayed();
     });
   }
 

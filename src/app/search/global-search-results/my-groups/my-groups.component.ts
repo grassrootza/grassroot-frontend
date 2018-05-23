@@ -43,7 +43,6 @@ export class MyGroupsComponent implements OnInit {
       this.searchTerm = params['searchTerm'];
 
       this.loadUserGroups(this.searchTerm);
-      this.alertService.hideLoadingDelayed();
     });
   }
 
@@ -58,9 +57,11 @@ export class MyGroupsComponent implements OnInit {
       this.currentPage = 1;
       this.generatePageList(this.numberOfPages);
 
-      console.log("Pages.....",this.numberOfPages)
+      console.log("Pages.....",this.numberOfPages);
+      this.alertService.hideLoadingDelayed();
     },error => {
-      console.log("Error.........",error)
+      console.log("Error.........",error);
+      this.alertService.hideLoadingDelayed();
     })
   }
 

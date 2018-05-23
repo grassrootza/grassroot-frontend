@@ -212,7 +212,7 @@ export class ViewAlertComponent implements OnInit {
     this.liveWireAlertService.releaseAlert(this.alertUid,this.subscriberUids).subscribe(resp => {
       console.log("Alert released....",resp);
 
-      this.alertService.alert("Done! Alert sent.");
+      this.alertService.alert('livewire.view-alert.released');
 
       if(this.shareOnFB){
         this.shareAlertOnFacebook(this.liveWireAlert);
