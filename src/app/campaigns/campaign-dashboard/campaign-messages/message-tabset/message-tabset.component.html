@@ -23,7 +23,7 @@
                     placeholder="{{ placeHolderKey | translate }}"
                     formControlName="{{ language.threeDigitCode }}"
                     (keyup)="updateCharCount($event, language.threeDigitCode)"></textarea>
-          <p class="character-count">{{ 'general.charsRemaining' | translate }}: {{ charsLeft[language.threeDigitCode] }}</p>
+          <p [ngClass]="{'character-count': true, 'char-count-exceeded': charsLeft[language.threeDigitCode] < 0}">{{ 'general.charsRemaining' | translate }}: {{ charsLeft[language.threeDigitCode] }}</p>
         </ng-template>
       </ngb-tab>
     </ngb-tabset>

@@ -236,6 +236,29 @@
           </div>
         </div>
 
+        <div *ngIf="group?.paidFor && group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS') && isAccountAdmin">
+        <div class="row join-words-add-container">
+          <div class="col-12">
+            <h4>Set a welcome message</h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <textarea class="form-control" [formControl]="welcomeMessageInput" 
+            placeholder="You can set an SMS here that anyone joining the group will receive, whether you add them or they join by any other means"></textarea>
+          </div>
+        </div>
+        <div class="row mt-3" *ngIf="welcomeMessageInput?.dirty || welcomeMessageInput.touched || welcomeMsgResult">
+          <div class="col-md-9 col-sm-6">
+            <p *ngIf="welcomeMsgResult">{{ welcomeMsgResult }}</p>
+          </div>
+          <div class="col-md-3 col-sm-6 float-right">
+            <button type="button" (click)="setWelcomeMessage()" class="btn btn-secondary hover-primary float-right">Update</button>
+          </div>
+        </div>
+      </div>
+
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" *ngIf="joinTopicsChanged" (click)="setJoinTopics()">

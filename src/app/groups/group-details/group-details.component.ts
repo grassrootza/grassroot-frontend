@@ -32,6 +32,10 @@ export class GroupDetailsComponent implements OnInit {
   public joinMethodParams: any;
   public addJoinWordForm: FormGroup;
 
+  public isAccountAdmin: boolean = false;
+  public welcomeMessageInput: FormControl;
+  public welcomeMsgResult: string;
+
   public activeJoinWords: string[] = [];
   public joinWordCbString: string = "";
 
@@ -65,6 +69,9 @@ export class GroupDetailsComponent implements OnInit {
       'joinWord': ['', Validators.compose([Validators.required, Validators.minLength(3),
           this.checkJoinWordAvailability.bind(this)])]
     });
+
+    this.welcomeMessageInput = this.formBuilder.control('');
+    this.isAccountAdmin = this.userService.getLoggedInUser().hasAccountAdmin();
   }
 
   ngOnInit() {
@@ -79,6 +86,7 @@ export class GroupDetailsComponent implements OnInit {
             this.flyerUrlJpg = imageBaseUrl + groupUid + "?typeOfFile=JPEG&color=true&language=en";
             this.flyerUrlPDF = imageBaseUrl + groupUid + "?typeOfFile=PDF&color=true&language=en";
             this.setupJoinParams();
+            this.checkWelcomeMessage();
             this.alertService.hideLoading();
           },
           error => {
@@ -198,6 +206,28 @@ export class GroupDetailsComponent implements OnInit {
       this.groupService.loadGroupDetailsFromServer(this.group.groupUid).subscribe(group => this.group = group);
     }, error => {
       console.log("nope, that didn't work: ", error);
+    })
+  }
+
+  checkWelcomeMessage() {
+    if (this.group.paidFor) {
+      this.groupService.fetchGroupWelcomeMessage(this.group.groupUid).subscribe(welcomeMsg => {
+        console.log('received welcome msg: ', welcomeMsg);
+        this.welcomeMessageInput.reset(welcomeMsg);
+      }, error => console.log("error fetching welcome msg: ", error));
+    }
+  }
+
+  setWelcomeMessage() {
+    const message = this.welcomeMessageInput.value;
+    this.groupService.setGroupWelcomeMessage(this.group.groupUid, message).subscribe(() => {
+      this.welcomeMessageInput.reset(message);
+      this.welcomeMsgResult = 'Done! Group welcome message updated';
+      setTimeout(() => this.welcomeMsgResult = '', 3000);
+    }, error => {
+      console.log('error setting group welcome message: ', error);
+      this.welcomeMsgResult = 'Sorry, there was an error updating';
+      setTimeout(() => this.welcomeMsgResult = '', 3000);
     })
   }
 

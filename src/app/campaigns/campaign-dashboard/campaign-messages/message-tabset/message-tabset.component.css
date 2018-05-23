@@ -40,3 +40,7 @@
   color: yellow;
   font-weight: 700;
 }
+
+.char-count-exceeded {
+  color: red;
+}

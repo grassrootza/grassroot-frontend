@@ -84,6 +84,9 @@ export class GroupService {
   groupSearchUserByTermUrl = environment.backendAppUrl + "/api/user/related/user/names";
   groupSetTopicsUrl = environment.backendAppUrl + "/api/group/modify/topics/set";
   groupSetJoinTopicsUrl = environment.backendAppUrl + "/api/group/modify/topics/join";
+  
+  groupFetchWelcomeMsgUrl = environment.backendAppUrl + "/api/group/modify/welcome/check";
+  groupSetWelcomeMsgUrl = environment.backendAppUrl + "/api/group/modify/welcome/update";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -378,6 +381,16 @@ export class GroupService {
     return this.httpClient.post(fullUrl, null, { params: {
       "joinWord": joinWord
       }});
+  }
+
+  fetchGroupWelcomeMessage(groupUid: string): Observable<string> {
+    return this.httpClient.get(this.groupFetchWelcomeMsgUrl + "/" + groupUid, { responseType: 'text'});
+  }
+
+  setGroupWelcomeMessage(groupUid: string, message: string): Observable<any> {
+    const fullUrl = this.groupSetWelcomeMsgUrl + "/" + groupUid;
+    const params = new HttpParams().set("message", message);
+    return this.httpClient.post(fullUrl, null, { params: params});
   }
 
   fetchMemberGrowthStats(groupUid: string, year: number, month: number): Observable<any> {

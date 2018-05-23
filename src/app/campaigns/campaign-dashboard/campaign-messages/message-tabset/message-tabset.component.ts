@@ -12,8 +12,6 @@ import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 })
 export class MessageTabsetComponent implements OnInit, OnChanges {
 
-  private MAX_MESSAGE_LENGTH = 160;
-
   @Input() titleKey: string;
   @Input() blockIndex: number;
   @Input() placeHolderKey: string;
@@ -23,6 +21,8 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
 
   @Input() languages: Language[];
   @Input() priorMessages: Map<string, string>;
+
+  @Input() maxMessageLength: number = 160;
 
   private _campaignMsgs: Map<string, string>;
   @Output() messagesUpdated = new EventEmitter<Map<string, string>>();
@@ -42,7 +42,7 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
     this.languages.forEach(language => {
         let value = (this.priorMessages && this.priorMessages.has(language.threeDigitCode)) ? this.priorMessages.get(language.threeDigitCode) : '';
         this.formGroup.addControl(language.threeDigitCode, this.fb.control(value, Validators.required));
-        this.charsLeft[language.threeDigitCode] = this.MAX_MESSAGE_LENGTH - value.length;
+        this.charsLeft[language.threeDigitCode] = this.maxMessageLength - value.length;
         this.formGroupSetup = true;
       }
     );
@@ -85,7 +85,7 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
         let value = (this.priorMessages && this.priorMessages.has(language.threeDigitCode)) ? this.priorMessages.get(language.threeDigitCode) : '';
         console.log('setting value for control: ', value);
         this.formGroup.controls[language.threeDigitCode].setValue(value);
-        this.charsLeft[language.threeDigitCode] = this.MAX_MESSAGE_LENGTH - value.length;
+        this.charsLeft[language.threeDigitCode] = this.maxMessageLength - value.length;
       }
     );
   }
@@ -96,7 +96,7 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
   }
 
   updateCharCount(event, languageCode) {
-    this.charsLeft[languageCode] = this.MAX_MESSAGE_LENGTH - event.target.value.length;
+    this.charsLeft[languageCode] = this.maxMessageLength - event.target.value.length;
   }
 
 }
