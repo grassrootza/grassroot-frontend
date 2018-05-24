@@ -5,4 +5,21 @@ jobs:
       - image: circleci/node:9.4
     steps:
       - checkout
-      - run: echo "A first hello"
+      - run: echo "Initiating build"
+      - restore_cache:
+          key:
+            - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Install local dependencies
+          command: npm install
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run: 
+          name: Build server and browser
+          command: npm run build:uni
+      - save_cache:
+          key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - dist-server
