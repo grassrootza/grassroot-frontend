@@ -35,6 +35,10 @@ export class CampaignService {
 
   endCampaignUrl = environment.backendAppUrl + "/api/campaign/manage/end";
 
+  fetchCampaignWelcomeMsgUrl = environment.backendAppUrl + "/api/campaign/manage/update/welcome/current";
+  setCampaignWelcomeMsgUrl = environment.backendAppUrl + "/api/campaign/manage/update/welcome/set";
+  clearCampaignWelcomeMsgUrl = environment.backendAppUrl + "/api/campaign/manage/update/welcome/clear";
+
   private _campaigns: CampaignInfo[];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
   public campaignInfoList: Observable<CampaignInfo[]> = this.campaignInfoList_.asObservable();
@@ -202,6 +206,22 @@ export class CampaignService {
   endCampaign(campaignUid: string): Observable<CampaignInfo> {
     const fullUrl = this.endCampaignUrl + "/" + campaignUid;
     return this.httpClient.get<CampaignInfo>(fullUrl).map(getCampaignEntity);
+  }
+
+  setCampaignWelcomeMsg(campaignUid: string, message: string): Observable<any> {
+    const fullUrl = this.setCampaignWelcomeMsgUrl + "/" + campaignUid;
+    const params = new HttpParams().set("message", message);
+    return this.httpClient.post(fullUrl, null, { params: params });
+  }
+
+  clearCampaignWelcomeMsg(campaignUid: string): Observable<any> {
+    const fullUrl = this.clearCampaignWelcomeMsgUrl + "/" + campaignUid;
+    return this.httpClient.post(fullUrl, null);
+  }
+
+  fetchCurrentWelcomeMsg(campaignUid: string): Observable<string> {
+    const fullUrl = this.fetchCampaignWelcomeMsgUrl + "/" + campaignUid;
+    return this.httpClient.get(fullUrl, { responseType: 'text'});
   }
 
 }

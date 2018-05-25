@@ -80,14 +80,14 @@ export class CampaignSettingsComponent implements OnInit {
         if (!this.campaignLanguages || this.campaignLanguages.length == 0) {
           this.campaignLanguages = [ENGLISH];
         }
-        if (this.campaign.smsSharingEnabled) {
-          this.smsSpent = this.currencyPipe.transform(this.campaign.smsSharingSpent, "ZAR", "symbol-narrow");
-          this.calculateSmsBudget(this.campaign.smsSharingLimit);
+        if (this.campaign.outboundSmsEnabled) {
+          this.smsSpent = this.currencyPipe.transform(this.campaign.outboundSmsSpent, "ZAR", "symbol-narrow");
+          this.calculateSmsBudget(this.campaign.outboundSmsLimit);
         } else {
           this.calculateSmsBudget(0); // in case switched on
         }
         this.setUpForm();
-        this.setUpTopicSelector();
+        setTimeout(() => this.setUpTopicSelector(), 300); // otherwise component may not be initialized and this will fail
       });
     });
   }
@@ -101,8 +101,8 @@ export class CampaignSettingsComponent implements OnInit {
       'endDate': [{value: ngbDateFromMoment(this.campaign.campaignEndDate), disabled: true}, Validators.required],
       'campaignType': [this.campaign.campaignType],
       'masterGroup': [''],
-      'smsShare': [{value: this.campaign.smsSharingEnabled.toString(), disabled: true}],
-      'smsLimit': [this.campaign.smsSharingLimit, smsLimitAboveZero],
+      'smsShare': [{value: this.campaign.outboundSmsEnabled.toString(), disabled: true}],
+      'smsLimit': [this.campaign.outboundSmsLimit, smsLimitAboveZero],
       'amandlaUrl': ['', optionalUrlValidator],
       'landingPage': [this.landingPageType()],
       'landingUrl': [this.campaign.campaignUrl, hasValidLandingUrlIfNeeded]
@@ -177,7 +177,7 @@ export class CampaignSettingsComponent implements OnInit {
     console.log("campaign languages: ", this.campaign.getLanguages());
     console.log("campaign validation: ", this.campaignSettingsForm.controls['smsLimit'].errors);
     this.campaignSettingsForm.controls['smsShare'].valueChanges.subscribe(value => {
-      if (value == 'true' && !this.campaign.smsSharingEnabled && !this.campaign.hasMessageType('SHARE_PROMPT')) {
+      if (value == 'true' && !this.campaign.outboundSmsEnabled && !this.campaign.hasMessageType('SHARE_PROMPT')) {
         let messageIdBase = "message_" + moment().valueOf() + "_";
         this.sharingMessages.push(new CampaignMsgRequest(messageIdBase + "1", "SHARE_PROMPT"));
         this.sharingMessages.push(new CampaignMsgRequest(messageIdBase + "2", "SHARE_SEND"));
@@ -188,7 +188,7 @@ export class CampaignSettingsComponent implements OnInit {
   }
 
   calculateSmsBudget(numberSms: number) {
-    this.smsBudget = this.currencyPipe.transform(numberSms * this.campaign.smsSharingUnitCost / 100, "ZAR", "symbol-narrow");
+    this.smsBudget = this.currencyPipe.transform(numberSms * this.campaign.outboundSmsUnitCost / 100, "ZAR", "symbol-narrow");
   }
 
   updateCampaign() {
@@ -231,7 +231,7 @@ export class CampaignSettingsComponent implements OnInit {
 
     const changedBasics = Object.keys(params).length > 0;
     let changedSharing = this.changingSharing && this.campaignSettingsForm.controls['smsShare'].value
-      != this.campaign.smsSharingEnabled.toString();
+      != this.campaign.outboundSmsEnabled.toString();
     console.log("changing sharing? : ", changedSharing);
 
     if (changedBasics) {

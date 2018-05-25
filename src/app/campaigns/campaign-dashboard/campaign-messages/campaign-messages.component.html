@@ -13,8 +13,15 @@
     </div>
   </div>
 
+  <div class="row mt-md-3" *ngIf="campaign.outboundSmsEnabled">
+    <div class="col-12">
+      <h3>Include a welcome SMS (optional, delete content to disable)</h3>
+      <textarea class="form-control" [formControl]="campaignWelcomeMsg" rows="2" placeholder="A welcome message is an SMS that will be sent to anyone who dials the campaign code. It can be used to include links or other pieces of information, and the campaign code, even if someone does not join or sign the petition right away"></textarea>
+    </div>
+  </div>
+
   <div *ngFor="let type of currentTypes; let i = index">
-    <hr *ngIf="i > 0" class="section-separator" />
+    <hr *ngIf="campaign.outboundSmsEnabled || i > 0" class="section-separator" />
     <campaign-message-tabset [blockIndex]="i+1" [languages]="selectedLanguages" [responseOptions]="messageSequences[this.campaign.campaignType][type]"
                              (messagesUpdated)="storeMessages($event, type)" [priorMessages]="priorMessages[type]?.messages"
                              [titleKey]="'campaign.messages.titles.' + type" [maxMessageLength]="i > 0 ? 130 : 110"
@@ -24,7 +31,6 @@
 
   <div class="row mt-md-3">
     <div class="col-sm-12">
-      <button class="btn btn-secondary preview-button float-right">{{ 'action.preview' | translate }}</button>
       <button (click)="setMessages()" type="button" class="btn btn-primary save-button float-right">{{ 'action.save' | translate }}</button>
     </div>
   </div>

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ENGLISH, Language, MSG_LANGUAGES} from "../../../utils/language";
 import {CampaignMsgRequest} from "../../campaign-create/campaign-request";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, FormControl} from "@angular/forms";
 import {CampaignService} from "../../campaign.service";
 import {AlertService} from "../../../utils/alert-service/alert.service";
 import {ActivatedRoute} from "@angular/router";
@@ -53,7 +53,11 @@ export class CampaignMessagesComponent implements OnInit {
   public existingMessages: boolean = false;
   public priorMessages: CampaignMsgRequest[] = [];
 
+  private messagesChanged: boolean = false;
   private _currentMessages: CampaignMsgRequest[];
+
+  public campaignWelcomeMsg: FormControl;
+  public priorCampaignMsg: string = '';
 
   constructor(private campaignService: CampaignService,
               private alertService: AlertService,
@@ -65,6 +69,7 @@ export class CampaignMessagesComponent implements OnInit {
 
   ngOnInit() {
     this.languageForm = this.fb.group({});
+    this.campaignWelcomeMsg = this.fb.control('');
 
     this.availableLanguages.forEach(language => {
       this.languageForm.addControl(language.threeDigitCode,
@@ -76,6 +81,9 @@ export class CampaignMessagesComponent implements OnInit {
       this.campaignService.loadCampaign(this.campaignUid).subscribe(campaign => {
         this.campaign = campaign;
         this.setUpMessages();
+        if (campaign.outboundSmsEnabled) {
+          this.checkForCurrentWelcomeMsg();
+        }
       });
     });
   }
@@ -83,7 +91,7 @@ export class CampaignMessagesComponent implements OnInit {
   setUpMessages() {
     this.existingMessages = this.campaign.campaignMessages && this.campaign.campaignMessages.length > 0;
     this.currentTypes = this.messageTypes[this.campaign.campaignType];
-    if (!this.campaign.smsSharingEnabled) {
+    if (!this.campaign.outboundSmsEnabled) {
       console.log("slicing out share prompt ...");
       this.sliceOutMessageType('SHARE_PROMPT');
       this.sliceOutMessageType('SHARE_SEND');
@@ -136,19 +144,60 @@ export class CampaignMessagesComponent implements OnInit {
   }
 
   storeMessages(event: object, actionType: string) {
+    this.messagesChanged = true;
     this._currentMessages.find(msg => msg.linkedActionType == actionType).messages = event as Map<string, string>;
     // console.log("current messages: ", this._currentMessages);
   }
 
   setMessages() {
     // console.log("okay, trying to save messages: {}", this._currentMessages);
-    this.campaignService.setCampaignMessages(this.campaignUid, this._currentMessages).subscribe(campaignInfo => {
-      this.alertService.alert("campaign.messages.done.success");
-    }, error => {
-      // console.log("well that didn't work: ", error);
-      this.alertService.alert("campaign.messages.done.error");
-    });
+    if (this.messagesChanged) {
+      this.campaignService.setCampaignMessages(this.campaignUid, this._currentMessages).subscribe(campaignInfo => {
+        this.alertService.alert("campaign.messages.done.success");
+      }, error => {
+        // console.log("well that didn't work: ", error);
+        this.alertService.alert("campaign.messages.done.error");
+      });
+    }
+
+    let outboundMsgChanged = this.campaign.outboundSmsEnabled && (this.campaignWelcomeMsg.dirty || this.campaignWelcomeMsg.touched);
+    if (outboundMsgChanged) {
+      const msgValue = this.campaignWelcomeMsg.value;
+      if (!!msgValue && msgValue != this.priorCampaignMsg) {
+        this.updateWelcomeMsg();
+      } else if (!!this.priorCampaignMsg && msgValue != this.priorCampaignMsg) {
+        this.clearWelcomeMsg();
+      }
+    }
     return false;
+  }
+
+  checkForCurrentWelcomeMsg() {
+    this.campaignService.fetchCurrentWelcomeMsg(this.campaign.campaignUid).subscribe(message => {
+      if (message) {
+        this.priorCampaignMsg = message;
+        this.campaignWelcomeMsg.reset(message);
+      }
+    }, error => console.log('error fetching message: ', error));
+  }
+
+  updateWelcomeMsg() {
+    this.campaignService.setCampaignWelcomeMsg(this.campaign.campaignUid, this.campaignWelcomeMsg.value).subscribe(result => {
+      this.alertService.alert('Done, message updated');
+      this.priorCampaignMsg = this.campaignWelcomeMsg.value;
+    }, error => {
+      console.log('error setting welcome msg: ', error);
+      this.alertService.alert('Sorry, there was an error updating the message');
+    })
+  }
+  
+  clearWelcomeMsg() {
+    this.campaignService.clearCampaignWelcomeMsg(this.campaign.campaignUid).subscribe(result => {
+      this.alertService.alert('Done, message disabled');
+      this.priorCampaignMsg = '';
+    }, error => {
+      this.alertService.alert('Error updating the message');
+    })
   }
 
 }

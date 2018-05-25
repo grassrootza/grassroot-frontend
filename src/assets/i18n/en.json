@@ -822,7 +822,7 @@
       "petition-link": "Do you want to add an Amandla Awethu petition?",
       "petition-place": "Address of your Amandla Awethu petition (https://...)",
       "sms-share": {
-        "allow-toggle": "Allow SMS sharing:",
+        "allow-toggle": "Allow SMS shares & welcomes:",
         "sms-limit": "SMS limit: ",
         "sms-cost": "Estimated cost: R"
       },
@@ -984,7 +984,7 @@
       "new": "Change to new group",
       "existing": "Change to existing group",
       "petition": "Amandla URL: ",
-      "sms_sharing": "Allow SMS sharing: ",
+      "sms_sharing": "Allow SMS sharing or welcome: ",
       "sms_limit": "SMS limit ",
       "budget_estimate": "Budget estimate: {{ budget }}",
       "cost_estimate": ". You have spent {{ spent }} to date",

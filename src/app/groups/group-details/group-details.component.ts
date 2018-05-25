@@ -231,4 +231,15 @@ export class GroupDetailsComponent implements OnInit {
     })
   }
 
+  clearWelcomeMessage() {
+    this.groupService.clearGroupWelcomeMessage(this.group.groupUid).subscribe(success => {
+      this.welcomeMessageInput.reset('');
+      this.welcomeMsgResult = 'Done! Welcome message deactivated';
+    }, error => {
+      console.log('error clearing group welcome message: ', error);
+      this.welcomeMsgResult = 'Sorry, there was an error deactivating';
+      setTimeout(() => this.welcomeMsgResult = '', 3000);
+    });
+  }
+
 }

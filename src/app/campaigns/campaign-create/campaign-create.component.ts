@@ -73,7 +73,7 @@ export class CampaignCreateComponent implements OnInit {
     });
     this.groupService.groupInfoList.subscribe(result => this.loadGroupSelector(result));
     this.alertService.hideLoadingDelayed();
-    this.setUpTopicSelector();
+    setTimeout(() => this.setUpTopicSelector(), 300); // else may not be initialized
   }
 
   loadGroupSelector(groups: GroupInfo[]) {

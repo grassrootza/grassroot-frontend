@@ -248,11 +248,12 @@
             placeholder="You can set an SMS here that anyone joining the group will receive, whether you add them or they join by any other means"></textarea>
           </div>
         </div>
-        <div class="row mt-3" *ngIf="welcomeMessageInput?.dirty || welcomeMessageInput.touched || welcomeMsgResult">
-          <div class="col-md-9 col-sm-6">
+        <div class="row mt-3" *ngIf="welcomeMessageInput?.dirty || welcomeMessageInput?.touched || welcomeMessageInput?.value || welcomeMsgResult">
+          <div class="col-md-6 col-sm-12">
             <p *ngIf="welcomeMsgResult">{{ welcomeMsgResult }}</p>
           </div>
-          <div class="col-md-3 col-sm-6 float-right">
+          <div class="col-md-6 col-sm-12 float-right">
+            <button type="submit" *ngIf="welcomeMessageInput?.value" (click)="clearWelcomeMessage()" class="btn btn-secondary hover-danger float-right">Deactivate</button>
             <button type="button" (click)="setWelcomeMessage()" class="btn btn-secondary hover-primary float-right">Update</button>
           </div>
         </div>
