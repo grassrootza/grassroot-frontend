@@ -6,6 +6,8 @@ jobs:
     steps:
       - checkout
       - run: echo "Initiating build"
+      - run: sudo npm install -g npm@latest
+      - run: sudo npm install -g @angular/cli
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run:
