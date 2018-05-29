@@ -6,8 +6,8 @@ jobs:
     steps:
       - checkout
       - run: echo "Initiating build"
-      - run: sudo npm install -g npm@latest
-      - run: sudo npm install -g @angular/cli
+    #   - run: sudo npm install -g npm@latest
+    #   - run: sudo npm install -g @angular/cli
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run:
@@ -17,6 +17,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
+      - run:
+          name: List packages, for debugging
+          command: npm ls  
       - run: 
           name: Build server and browser
           command: npm run build:uni
