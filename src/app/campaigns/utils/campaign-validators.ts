@@ -21,6 +21,18 @@ export class ValidateCodeNotTaken {
   }
 }
 
+export class ValidateWordNotTaken {
+  static createValidator(cs: CampaignService, campaignUid?: string) {
+    return (control: AbstractControl) => {
+      return Observable.timer(500).switchMap(() => {
+        return cs.checkJoinWordAvailability(control.value, campaignUid).map(res => {
+          return res ? null : { wordTaken: true }
+        })
+      })
+    }
+  }
+}
+
 export const hasGroupNameIfNeeded = (input: FormControl) => {
   if (!input.root) {
     return null;

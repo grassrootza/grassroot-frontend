@@ -19,7 +19,9 @@ export class CampaignService {
   campaignCreateUrl = environment.backendAppUrl + "/api/campaign/manage/create";
   campaignFetchUrl = environment.backendAppUrl + "/api/campaign/manage/fetch";
   campaignActiveCodesUrl = environment.backendAppUrl + "/api/campaign/manage/codes/list/active";
+
   checkCodeAvaliabilityUrl = environment.backendAppUrl + "/api/campaign/manage/codes/check";
+  checkJoinWordAvailabilityUrl = environment.backendAppUrl + "/api/campaign/manage/words/check";
 
   campaignMessageSetUrl = environment.backendAppUrl + "/api/campaign/manage/messages/set";
 
@@ -155,6 +157,15 @@ export class CampaignService {
     return this.httpClient.get<boolean>(fullUrl, {params: params});
   }
 
+  checkJoinWordAvailability(joinWord: string, campaignUid?: string): Observable<boolean> {
+    const fullUrl = this.checkJoinWordAvailabilityUrl;
+    let params = new HttpParams().set("word", joinWord);
+    if (campaignUid) {
+      params = params.set("currentCampaignUid", campaignUid);
+    }
+    return this.httpClient.get<boolean>(fullUrl, {params: params});
+  }
+
   changeCampaignSettings(campaignUid: string, updateParams: CampaignUpdateParams) {
     const fullUrl = this.changeBasicSettingsUrl + "/" + campaignUid;
     let params = new HttpParams();
@@ -175,6 +186,9 @@ export class CampaignService {
 
     if (updateParams.newCode)
       params = params.set("newCode", updateParams.newCode);
+
+    if (updateParams.textWord)
+      params = params.set("newJoinWord", updateParams.textWord);
 
     if (updateParams.joinTopics)
       params = params.set("joinTopics", updateParams.joinTopics.join(","));

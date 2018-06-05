@@ -18,6 +18,7 @@ export class AdminService {
   
   private initiateUserGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/users";
   private initiateGroupsGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/groups";
+  private initiateTasksGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/tasks";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -80,5 +81,9 @@ export class AdminService {
 
   initiateGroupGraphTransfer():Observable<any> {
     return this.httpClient.get(this.initiateGroupsGraphUrl);
+  }
+
+  initiateTasksGraphTransfer():Observable<any> {
+    return this.httpClient.get(this.initiateTasksGraphUrl);
   }
 }

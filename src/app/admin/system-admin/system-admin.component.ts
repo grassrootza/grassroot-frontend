@@ -234,4 +234,8 @@ export class SystemAdminComponent implements OnInit {
   initiateGroupsGraphTransfer() {
     this.adminService.initiateGroupGraphTransfer().subscribe(result => this.alertService.alert('transfer.initiated'));
   }
+
+  initiateTasksGraphTransfer() {
+    this.adminService.initiateTasksGraphTransfer().subscribe(result => this.alertService.alert('transfer.initiated'));
+  }
 }

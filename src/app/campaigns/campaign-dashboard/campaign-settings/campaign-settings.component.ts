@@ -11,7 +11,8 @@ import {
   checkCodeIsNumber,
   hasValidLandingUrlIfNeeded,
   smsLimitAboveZero,
-  ValidateCodeNotTaken
+  ValidateCodeNotTaken,
+  ValidateWordNotTaken
 } from "../../utils/campaign-validators";
 import {CampaignMsgRequest, CampaignUpdateParams} from "../../campaign-create/campaign-request";
 import {AlertService} from "../../../utils/alert-service/alert.service";
@@ -52,6 +53,7 @@ export class CampaignSettingsComponent implements OnInit {
   public changingSharing: boolean = false;
   public smsBudget = "0";
   public smsSpent = "0";
+  public changedSharingBudget: boolean = false;
 
   public campaignLanguages: Language[];
   public sharingMessages: CampaignMsgRequest[] = [];
@@ -98,6 +100,7 @@ export class CampaignSettingsComponent implements OnInit {
       'description': [this.campaign.description, Validators.compose([Validators.required, Validators.minLength(10)])],
       'code': [this.campaign.campaignCode, [], ValidateCodeNotTaken.createValidator(this.campaignService, this.campaign.campaignUid),
         Validators.minLength(3), Validators.maxLength(3), checkCodeIsNumber],
+      'textWord': [this.campaign.textJoinWord, [], ValidateWordNotTaken.createValidator(this.campaignService, this.campaign.campaignUid)],
       'endDate': [{value: ngbDateFromMoment(this.campaign.campaignEndDate), disabled: true}, Validators.required],
       'campaignType': [this.campaign.campaignType],
       'masterGroup': [''],
@@ -108,7 +111,10 @@ export class CampaignSettingsComponent implements OnInit {
       'landingUrl': [this.campaign.campaignUrl, hasValidLandingUrlIfNeeded]
     }, { validate: 'onBlur' });
 
-    this.campaignSettingsForm.controls['smsLimit'].valueChanges.subscribe(value => this.calculateSmsBudget(value));
+    this.campaignSettingsForm.controls['smsLimit'].valueChanges.subscribe(value => {
+      this.calculateSmsBudget(value);
+      this.changedSharingBudget = true;
+    });
     this.groupService.groupInfoList.subscribe(groups => {
       this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_CREATE_CAMPAIGN"));
     });
@@ -188,13 +194,14 @@ export class CampaignSettingsComponent implements OnInit {
   }
 
   calculateSmsBudget(numberSms: number) {
+    console.log(`number SMS: ${numberSms}, outbound unit cost: ${this.campaign.outboundSmsUnitCost}`);
     this.smsBudget = this.currencyPipe.transform(numberSms * this.campaign.outboundSmsUnitCost / 100, "ZAR", "symbol-narrow");
   }
 
   updateCampaign() {
     let params: CampaignUpdateParams = {};
 
-    let textFields = ['name', 'code', 'description', 'amandlaUrl', 'landingUrl'];
+    let textFields = ['name', 'code', 'textWord', 'description', 'amandlaUrl', 'landingUrl'];
     textFields.filter(field => this.campaignSettingsForm.controls[field].dirty)
       .forEach(field => params[field] = this.campaignSettingsForm.controls[field].value);
 
@@ -230,9 +237,9 @@ export class CampaignSettingsComponent implements OnInit {
     console.log("updating campaign, params: ", params);
 
     const changedBasics = Object.keys(params).length > 0;
-    let changedSharing = this.changingSharing && this.campaignSettingsForm.controls['smsShare'].value
-      != this.campaign.outboundSmsEnabled.toString();
-    console.log("changing sharing? : ", changedSharing);
+    let changedSharing = (this.changingSharing && this.campaignSettingsForm.controls['smsShare'].value != this.campaign.outboundSmsEnabled.toString()) 
+      || this.changedSharingBudget;
+    // console.log("changing sharing? : ", changedSharing);
 
     if (changedBasics) {
       this.updateBasicSettings(params, changedSharing);
@@ -245,7 +252,7 @@ export class CampaignSettingsComponent implements OnInit {
     this.alertService.showLoading();
     this.campaignService.changeCampaignSettings(this.campaign.campaignUid, params).subscribe(changedCampaign => {
       this.campaign = changedCampaign;
-      if (changedSharing) {
+      if (changedSharing || this.changedSharingBudget) {
         this.alterCampaignSharing();
       } else {
         this.cleanUpAndReset(changedCampaign);
@@ -292,6 +299,7 @@ export class CampaignSettingsComponent implements OnInit {
     this.changingGroup = false;
     this.changingSharing = false;
     this.campaignSettingsForm.reset({onlySelf: true});
+    this.calculateSmsBudget(this.campaign.outboundSmsLimit);
     this.setUpForm();
   }
 

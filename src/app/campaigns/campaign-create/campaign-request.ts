@@ -70,6 +70,8 @@ export class CampaignMsgPair {
 }
 
 export const getCampaignMsg = (cm: CampaignMsgServerDTO): CampaignMsgServerDTO => {
+  console.log('transforming campaign message: ', cm);
+  console.log('and messages: ', cm.messages);
   let cmDTO = new CampaignMsgServerDTO(
     cm.messageId,
     cm.linkedActionType,
@@ -78,11 +80,12 @@ export const getCampaignMsg = (cm: CampaignMsgServerDTO): CampaignMsgServerDTO =
     cm.tags
   );
   cmDTO.messages = cm.messages;
+  console.log('okay, and messages: ')
   return cmDTO;
 };
 
 export interface CampaignUpdateParams {
   name?: string, description?: string, mediaFileUid?: string, removeImage?: boolean, campaignType?: string,
-  endDateMillis?: number, newCode?: string, newMasterGroupUid?: string, joinTopics?: string[],
+  endDateMillis?: number, newCode?: string, textWord?: string, newMasterGroupUid?: string, joinTopics?: string[],
   landingUrl?: string, petitionApi?: string
 }

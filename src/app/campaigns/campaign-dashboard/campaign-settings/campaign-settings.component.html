@@ -9,14 +9,14 @@
       <form [formGroup]="campaignSettingsForm" (submit)="updateCampaign()" novalidate>
 
         <div class="form-row">
-          <div class="form-group col-md-8 col-sm-12">
+          <div class="form-group col-md-6 col-sm-12">
             <label class="form-label grassroot-label-em" for="name">{{ 'campaign.settings.name' | translate }}</label>
             <input type="text" class="form-control form-control-em" id="name" [formControl]="campaignSettingsForm.controls['name']" />
             <div class="alert alert-danger alert-inline" role="alert"
                  *ngIf="campaignSettingsForm.controls.name?.errors?.required && (campaignSettingsForm.controls.name?.touched || campaignSettingsForm.controls.name?.dirty)">
               {{ 'campaign.create.errors.fieldRequired' | translate }}</div>
           </div>
-          <div class="form-group col-md-4 col-sm-12">
+          <div class="form-group col-md-3 col-sm-12">
             <label class="form-label grassroot-label-em" for="code">{{ 'campaign.settings.code' | translate }}</label>
             <input type = "text" class="form-control form-control-em" id="code" [disabled]="campaign?.isActive() || extendingCampaign"
                    [formControl]="campaignSettingsForm.controls['code']"/>
@@ -34,6 +34,15 @@
                  *ngIf="!campaignSettingsForm.controls.code?.errors?.codeNumber &&
                    (campaignSettingsForm.controls.code?.errors?.minlength || campaignSettingsForm.controls.code?.errors?.maxlength)">
               {{ 'campaign.create.errors.codeLength' | translate }}</div>
+          </div>
+          <div class="form-group col-md-3 col-sm-12">
+            <label class="form-lable grassroot-label-em" for="textWord">Join word</label>
+            <input type = "text" class="form-control form-control-em" id="textWord" [disabled]="campaign?.isActive() || extendingCampaign"
+                   [formControl]="campaignSettingsForm.controls['textWord']"/>
+            <div class="alert alert-danger alert-inline mt-1" role="alert"
+                 *ngIf="campaignSettingsForm.controls.textWord?.errors?.wordTaken">
+              {{ 'campaign.create.errors.codeTaken' | translate }}
+            </div>
           </div>
         </div>
 

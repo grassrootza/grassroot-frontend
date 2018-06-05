@@ -94,7 +94,8 @@
       "FACEBOOK": "Facebook",
       "TWITTER": "Twitter",
       "EMAIL": "Email link",
-      "WHATSAPP": "WhatsApp"
+      "WHATSAPP": "WhatsApp",
+      "PLEASE_CALL_ME": "Please call me"
     },
     "DataSubscriberType": {
       "PUBLIC": "PUBLIC",

@@ -58,6 +58,8 @@ export class CampaignMessagesComponent implements OnInit {
 
   public campaignWelcomeMsg: FormControl;
   public priorCampaignMsg: string = '';
+  public welcomeCharsLeft: number;
+  private MAX_MSG_LENGTH = 160;
 
   constructor(private campaignService: CampaignService,
               private alertService: AlertService,
@@ -82,7 +84,7 @@ export class CampaignMessagesComponent implements OnInit {
         this.campaign = campaign;
         this.setUpMessages();
         if (campaign.outboundSmsEnabled) {
-          this.checkForCurrentWelcomeMsg();
+          this.setUpWelcomeMsg();
         }
       });
     });
@@ -92,10 +94,11 @@ export class CampaignMessagesComponent implements OnInit {
     this.existingMessages = this.campaign.campaignMessages && this.campaign.campaignMessages.length > 0;
     this.currentTypes = this.messageTypes[this.campaign.campaignType];
     if (!this.campaign.outboundSmsEnabled) {
-      console.log("slicing out share prompt ...");
       this.sliceOutMessageType('SHARE_PROMPT');
       this.sliceOutMessageType('SHARE_SEND');
     }
+
+    console.log('campaign messages from server: ', this.campaign.campaignMessages);
     this.currentTypes.forEach((type, index) => {
       this.typeIndexes[type] = index;
 
@@ -109,6 +112,12 @@ export class CampaignMessagesComponent implements OnInit {
       this.typeMsgIds[type] = msgId;
       this._currentMessages.push(msgRequest);
       this.priorMessages[type] = msgRequest;
+
+      msgRequest.messages.forEach((value, key) => {
+        let lang = this.getLanguage(key);
+        if (lang && this.selectedLanguages.indexOf(lang) == -1)
+          this.selectedLanguages.push(lang);
+      });
     });
 
     console.log("prior messages: ", this.priorMessages);
@@ -117,11 +126,9 @@ export class CampaignMessagesComponent implements OnInit {
     this._currentMessages
       .filter(msg => !!this.messageSequences[this.campaign.campaignType][msg.linkedActionType])
       .forEach(msg => {
-        console.log("hooking up this message: ", msg);
         msg.nextMsgIds = this.messageSequences[this.campaign.campaignType][msg.linkedActionType]
           .filter(mt => this.typeMsgIds[mt] != undefined)
           .map(mt => this.typeMsgIds[mt]);
-        console.log("okay, next IDs: ", msg.nextMsgIds);
     });
 
   }
@@ -172,13 +179,19 @@ export class CampaignMessagesComponent implements OnInit {
     return false;
   }
 
-  checkForCurrentWelcomeMsg() {
+  setUpWelcomeMsg() {
+    this.welcomeCharsLeft = this.MAX_MSG_LENGTH;
     this.campaignService.fetchCurrentWelcomeMsg(this.campaign.campaignUid).subscribe(message => {
       if (message) {
         this.priorCampaignMsg = message;
         this.campaignWelcomeMsg.reset(message);
+        this.welcomeCharsLeft = this.MAX_MSG_LENGTH - message.length;
       }
     }, error => console.log('error fetching message: ', error));
+  }
+
+  updateWelcomeCharCount(event) { 
+    this.welcomeCharsLeft = this.MAX_MSG_LENGTH - event.target.value.length;
   }
 
   updateWelcomeMsg() {

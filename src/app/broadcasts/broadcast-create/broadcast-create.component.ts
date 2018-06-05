@@ -12,6 +12,8 @@ export class BroadcastCreateComponent implements OnInit, AfterViewInit {
 
   type: string;
   parentId: string;
+  
+  private currentTab: string = "types";
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -34,8 +36,6 @@ export class BroadcastCreateComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
-  private currentTab: string = "types";
 
   ngOnInit() {
 
