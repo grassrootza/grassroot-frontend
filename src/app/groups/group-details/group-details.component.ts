@@ -242,4 +242,38 @@ export class GroupDetailsComponent implements OnInit {
     });
   }
 
+  triggerUnsubscribeModal(){
+    $('#unsubscribe-modal').modal('show');
+    return false;
+  }
+
+  unsubscribeFromGroup(){
+    console.log("Group uid=",this.group.groupUid);
+    this.groupService.unsubscribeUser(this.group.groupUid).subscribe(resp => {
+      console.log("User removed from group",resp);
+      $('#unsubscribe-modal').modal('hide');
+      this.router.navigate(["/groups"]);
+    },error => {
+      console.log("Error removing user from group",error);
+    });
+  }
+
+
+  triggerAliasModal(){
+    console.log("Calling alias modal..............");
+    $('#alias-modal').modal('show');
+    return false;
+  }
+
+
+  changeName(alias:string){
+    console.log("Changing name in group to:",alias);
+    this.groupService.updateMemberAlias(this.group.groupUid,alias).subscribe(resp => {
+      console.log("Alias changed.........",resp);
+      $('#alias-modal').modal('hide');
+    },error => {
+      console.log("Error updating alias",error);
+    });
+  }
+
 }
