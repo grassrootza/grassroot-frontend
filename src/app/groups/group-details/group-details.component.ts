@@ -11,6 +11,7 @@ import {JoinCodeInfo} from "../model/join-code-info";
 import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
 import {AlertService} from "../../utils/alert-service/alert.service";
 import { saveAs } from 'file-saver';
+import { MembershipInfo } from '../model/membership.model';
 
 declare var $: any;
 
@@ -43,6 +44,8 @@ export class GroupDetailsComponent implements OnInit {
   public joinTopicsChanged: boolean = false;
 
   public justCopied: boolean = false;
+
+  public membership:MembershipInfo;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -82,6 +85,11 @@ export class GroupDetailsComponent implements OnInit {
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
+            
+            this.group.members.forEach(mem => {this.membership = mem.memberUid === this.userService.getLoggedInUser().userUid ? mem : null});
+
+            console.log("Membership for logged in use is......",this.membership);
+
             const imageBaseUrl = this.baseUrl.replace('/v2', '') + '/image/flyer/group/';
             this.flyerUrlJpg = imageBaseUrl + groupUid + "?typeOfFile=JPEG&color=true&language=en";
             this.flyerUrlPDF = imageBaseUrl + groupUid + "?typeOfFile=PDF&color=true&language=en";
@@ -252,7 +260,10 @@ export class GroupDetailsComponent implements OnInit {
     this.groupService.unsubscribeUser(this.group.groupUid).subscribe(resp => {
       console.log("User removed from group",resp);
       $('#unsubscribe-modal').modal('hide');
-      this.router.navigate(["/groups"]);
+      this.alertService.alert("group.unsubscribe-alert.text");
+      setTimeout(() => {
+        this.router.navigate(["/groups"]);
+      },2000);
     },error => {
       console.log("Error removing user from group",error);
     });
@@ -271,6 +282,7 @@ export class GroupDetailsComponent implements OnInit {
     this.groupService.updateMemberAlias(this.group.groupUid,alias).subscribe(resp => {
       console.log("Alias changed.........",resp);
       $('#alias-modal').modal('hide');
+      this.alertService.alert("group.alias.alert-text");
     },error => {
       console.log("Error updating alias",error);
     });

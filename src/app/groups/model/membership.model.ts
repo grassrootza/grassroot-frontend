@@ -22,7 +22,8 @@ export const getUserFromMembershipInfo = (memb: MembershipInfo): User => {
 
 export class Membership {
 
-  constructor(public selected: boolean,
+  constructor(public displayName:string,
+              public selected: boolean,
               public user: User,
               public group: GroupInfo,
               public roleName: GroupRole,
@@ -63,7 +64,7 @@ export class Membership {
   }
 
   public static createInstance(membershipData: Membership): Membership {
-    return new Membership(false, membershipData.user, membershipData.group, GroupRole[<string>membershipData.roleName], membershipData.topics, membershipData.joinMethod, membershipData.joinMethodDescriptor, membershipData.affiliations, membershipData.canEditDetails);
+    return new Membership(membershipData.displayName,false, membershipData.user, membershipData.group, GroupRole[<string>membershipData.roleName], membershipData.topics, membershipData.joinMethod, membershipData.joinMethodDescriptor, membershipData.affiliations, membershipData.canEditDetails);
   }
 }
 

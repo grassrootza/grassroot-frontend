@@ -267,10 +267,14 @@
     	"title":"Are you sure?",
     	"header":"You are about to unsubscribe from this group. You will only be able to rejoin if someone adds you back. Are you sure you want to leave?"
     },
+    "unsubscribe-alert":{
+    	"text":"Done! User removed from group."
+    },
     "alias":{
     	"link":"Change your name in this group",
     	"title":"Change my name in group",
-    	"header":"What name will you use in this group? (Leave it blank to reset to your normal name)"
+    	"header":"What name will you use in this group? (Leave it blank to reset to your normal name)",
+    	"alert-text":"Done! You name in this group was changed."
     },
     "nav": {
       "dashboard": "Group Dashboard",

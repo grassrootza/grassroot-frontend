@@ -19,6 +19,14 @@
 
         <div class="col-md-8 group-description">
           <p [innerHtml]="group.description"></p>
+          <p *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
+            You are known as {{membership.displayName}} in this group
+            <a class="grassroot-link flyer-link" href="#" (click)="triggerAliasModal()">(Change)</a>
+          </p>
+          <p *ngIf="group.userRole === 'ROLE_GROUP_ORGANIZER'">
+              You are known as {{group.groupCreatorName}} in this group
+              <a class="grassroot-link flyer-link" href="#" (click)="triggerAliasModal()">(Change)</a>
+          </p>
           <div class="row">
             <div class="col-md-7">
               <div class="group-info creation-info">
@@ -35,7 +43,10 @@
                 <strong>{{'group.myRole' | translate}} </strong>
                 <span class="my-role badge badge-success" [translate]="'enum.GroupRole.' + group.userRole">
                     User group role
-                  </span>
+                </span>
+                <span *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
+                  <a class="grassroot-link flyer-link" href="#" (click)="triggerUnsubscribeModal()">(Unsubscribe)</a>
+                </span>
               </div>
 
               <div class="group-info" *ngIf="group?.hasPermission('GROUP_PERMISSION_SEE_MEMBER_DETAILS')">
@@ -47,13 +58,13 @@
                 <a class="grassroot-link flyer-link" target="_blank" href="{{ flyerUrlPDF }}">{{ 'group.flyer' | translate }}</a>
               </div>
 
-              <div class="group-info" *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
+              <!-- <div class="group-info" *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
                 <a class="grassroot-link flyer-link" href="#" (click)="triggerUnsubscribeModal()">Unsubscribe</a>
-              </div>
+              </div> -->
 
-              <div class="group-info">
+              <!-- <div class="group-info">
                 <a class="grassroot-link flyer-link" href="#" (click)="triggerAliasModal()">{{'group.alias.link' | translate}}</a>
-              </div>
+              </div> -->
 
               <!-- <div class="group-info" *ngIf="!group.paidFor ">
                 This group is not linked to a Grassroot Extra account, which is required for some functions, such as broadcasts.
