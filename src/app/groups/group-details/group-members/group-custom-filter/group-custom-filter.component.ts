@@ -9,6 +9,7 @@ import {CampaignInfo} from "../../../../campaigns/model/campaign-info";
 import {MemberTopicsManageComponent} from "../member-topics-manage/member-topics-manage.component";
 import {GroupInfo} from "../../../model/group-info.model";
 import {getCreateModalId} from "../../../../task/task-type";
+import { AlertService } from '../../../../utils/alert-service/alert.service';
 
 declare var $: any;
 
@@ -40,17 +41,20 @@ export class GroupCustomFilterComponent implements OnInit {
 
   constructor(private groupService: GroupService,
               private campaignService: CampaignService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private alertService:AlertService) {
   }
 
 
   ngOnInit() {
+    this.alertService.showLoading();
     this.route.parent.parent.params.subscribe((params: Params) => {
       const groupUid = params['id'];
       this.groupService.loadGroupDetailsCached(groupUid, false)
         .subscribe(groupDetails => {
           this.renderGroupDetails(groupDetails);
           this.membersFilterChanged(new MembersFilter(), true); //load all members (empty filter)
+          this.alertService.hideLoadingDelayed();
           }, error => {
             console.log("Error loading groups", error.status)
           }

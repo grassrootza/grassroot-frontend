@@ -82,6 +82,7 @@ export class MemberListComponent implements OnInit {
   }
 
   ngOnInit() {
+    //this.alertService.showLoading();
   }
 
   refreshGroupAndList() {

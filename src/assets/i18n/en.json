@@ -1360,7 +1360,7 @@
         "failed": "Sorry, something went wrong recording your response. Please try again later or just dial *134*1994#",
         "already": {
           "title": "Already responded",
-          "body": "You have already responded to this action item. Each member cannot respond more than once. If you would like to change your response, please contact the organizer, {{ caller }}. Thanks for participating!"
+          "body": "You have already responded to this action item. Each member cannot respond more than once. If you would like to change your response, please contact the organizer, {{ caller }} at email: {{callerEmail}} or phone: {{callerPhone}}. Thanks for participating!"
         },
         "closed": {
           "title": "Already past",
@@ -1446,7 +1446,9 @@
   		"header":"Alert list"
   		},
   	"view-alert":{
-  		"title":"Live Wire Alert"
+  		"title":"Live Wire Alert",
+      "released": "Done! Alert sent.",
+      "blocked":"Done! Alert blocked."
   		},
   	"headline-modal":{
   		"title":"Change headline",

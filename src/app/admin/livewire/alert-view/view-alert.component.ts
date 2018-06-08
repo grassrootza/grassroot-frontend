@@ -9,6 +9,7 @@ import {TwitterPost} from "../model/twitter-post.model";
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {LiveWireAdminService} from "../livewire-admin-service";
+import { AlertService } from "../../../utils/alert-service/alert.service";
 
 declare var $: any;
 
@@ -38,7 +39,8 @@ export class ViewAlertComponent implements OnInit {
               private mediaService:MediaService,
               private router:Router,
               private integrationService:IntegrationsService,
-              private userService:UserService) {
+              private userService:UserService,
+              private alertService:AlertService) {
     this.router.routeReuseStrategy.shouldReuseRoute = function(){
       return false;
     }
@@ -209,6 +211,9 @@ export class ViewAlertComponent implements OnInit {
     console.log("Data subscriber list in release method.....",this.subscriberUids);
     this.liveWireAlertService.releaseAlert(this.alertUid,this.subscriberUids).subscribe(resp => {
       console.log("Alert released....",resp);
+
+      this.alertService.alert('livewire.view-alert.released');
+
       if(this.shareOnFB){
         this.shareAlertOnFacebook(this.liveWireAlert);
       }
