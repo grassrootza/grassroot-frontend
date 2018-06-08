@@ -31,6 +31,8 @@ export class GroupAddMemberComponent implements OnInit {
 
   @Input() groupUid: string = "";
 
+  public input:any;
+
   public addMemberForm: FormGroup;
   public group: Group = null;
 
@@ -83,14 +85,14 @@ export class GroupAddMemberComponent implements OnInit {
     return "Name: " + x.name + ", Phone number: " + x.phone;
   }
 
-  pickedItem(pickedUser: GroupRelatedUserResponse){
+  pickedItem(pickedUser: GroupRelatedUserResponse,input:any){
     console.log("picked user: ", pickedUser);
     this.addMemberForm.controls['displayName'].setValue(pickedUser.name);
     this.addMemberForm.controls['roleName'].setValue(GroupRole.ROLE_ORDINARY_MEMBER);
     this.addMemberForm.controls['phoneNumber'].setValue(pickedUser.phone);
     this.addMemberForm.controls['memberEmail'].setValue(pickedUser.email);
     this.addMemberForm.controls['province'].setValue(pickedUser.province);
-
+    this.input = input;
   }
 
   postMember() {
@@ -103,6 +105,9 @@ export class GroupAddMemberComponent implements OnInit {
       $('#add-member-modal').modal("hide");
       this.addMemberForm.reset();
       this.onMemberAdded.emit(result);
+      
+      this.input.value = '';
+
     }, error => {
       console.log("well that didn't work: ", error);
       $('#add-member-modal').modal("hide");

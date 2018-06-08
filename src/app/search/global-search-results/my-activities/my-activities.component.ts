@@ -4,6 +4,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {Task} from '../../../task/task.model'
 import {SearchService} from "../../search.service";
 import {TaskService} from "../../../task/task.service";
+import { AlertService } from '../../../utils/alert-service/alert.service';
 
 declare var $: any;
 
@@ -32,9 +33,11 @@ export class MyActivitiesComponent implements OnInit {
   constructor(private userService:UserService,
               private route:ActivatedRoute,
               private searchService:SearchService,
-              private taskService:TaskService) { }
+              private taskService:TaskService,
+              private alertService:AlertService) { }
 
   ngOnInit() {
+    this.alertService.showLoading();
     this.userUid = this.userService.getLoggedInUser().userUid;
     this.route.parent.params.subscribe((params:Params) =>{
       this.searchTerm = params['searchTerm'];
@@ -53,6 +56,10 @@ export class MyActivitiesComponent implements OnInit {
         this.numberOfPages = Math.ceil(this.totalCount / this.pageSize);
         this.currentPage = 1;
         this.generatePageList(this.numberOfPages);
+        this.alertService.hideLoadingDelayed();
+    },error =>{
+      console.log(`Error loading tasks ${{error}}`);
+      this.alertService.hideLoadingDelayed();
     });
   }
 

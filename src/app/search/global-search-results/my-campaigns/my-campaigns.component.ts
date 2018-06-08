@@ -3,6 +3,7 @@ import {CampaignService} from "../../../campaigns/campaign.service";
 import {CampaignInfo} from "../../../campaigns/model/campaign-info";
 import {ActivatedRoute, Params, Router} from "@angular/router";
 import {UserService} from "../../../user/user.service";
+import { AlertService } from '../../../utils/alert-service/alert.service';
 
 @Component({
   selector: 'app-my-campaigns',

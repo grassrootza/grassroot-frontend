@@ -13,9 +13,9 @@
             <ng-template #rt let-r="result" let-t="term">
               {{r.name}}
             </ng-template>
-            <input id="typeahead-basic" type="text" class="form-control form-control-em" [ngbTypeahead]="search"
+            <input id="typeahead-basic" type="text" class="form-control form-control-em" [ngbTypeahead]="search" #input
                    [resultTemplate]="rt" [inputFormatter]="formatter"
-                   placeholder="{{'group.allMembers.addMember.searchMemberField' | translate}}" (selectItem)="pickedItem($event.item)"/>
+                   placeholder="{{'group.allMembers.addMember.searchMemberField' | translate}}" (selectItem)="pickedItem($event.item,input)"/>
             <div class="invalid-feedback" *ngIf="searchFailed">Sorry, suggestions could not be loaded.</div>
             <span *ngIf="lengthInvalid">{{'group.allMembers.addMember.minimumLetters' | translate}}</span>
           </div>
