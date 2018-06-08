@@ -864,7 +864,7 @@
     },
     "statistics": {
       "members": {
-        "title": "Members opting in to group through campaign",
+        "title": "{{ total }} people have joined the campaign",
         "prior": "Prior members",
         "opted_out": "Opted out of joining",
         "joined": "Joined",
@@ -872,7 +872,8 @@
         "conversion": "{{ conversionRate }}% Conversion"
       },
       "engagement": {
-        "title": "Campaign Engagement",
+        "title": "Engagement by channel",
+        "title-count": "{{ total }} people engaged",
         "topic": "Topic Interest: {{ channel }}",
         "count_total": "People Engaged",
         "count_spec": "People via {{ desc }}",
@@ -1113,6 +1114,7 @@
   "join": {
     "title": "Join \"{{ groupName }}\"",
     "intro": "Just enter your details below to join \"{{ groupName }}\". By joining, you are agreeing to give the details below to the group's organizer, through the Grassroot platform",
+    "intro-campaign": "Just enter your details below to join \"{{ groupName }}\". By joining, you are agreeing to give the details below to the campaign's organizer, through the Grassroot platform",
     "privacy": "privacy policy",
     "name": "Your name (what people know you by)",
     "phone": "Your mobile number",
@@ -1124,6 +1126,7 @@
     "submit": "Join",
     "footnote": "* At least one of mobile number or email address are required",
     "about-group": "About this group: ",
+    "about-campaign": "About this campaign: ",
     "topics": {
       "title": "What are you interested in?",
       "description": "Select topics that you would like to hear about:",
@@ -1131,7 +1134,8 @@
     },
     "done": {
       "title": "Thanks for Joining!",
-      "body": "You've successfully join the \"{{ groupName }}\" group. You'll now be able to get involved with group activities, campaigns, and petitions.",
+      "body": "You've successfully joined the \"{{ groupName }}\" group. You'll now be able to get involved with group activities, campaigns, and petitions.",
+      "body-campaign": "You've successfully joined the \"{{ groupName }}\" campaign. You'll now be able to get involved with more campaign actions.",    
       "register": "Register for Grassroot?",
       "about": "Grassroot is a platform for organizing your community. <a href='/home' target='_blank' class='grassroot-link'>See what you can do with Grassroot here.</a> Just enter a password below, and your username will be your email orphone number.",
       "pwd": "Set a password",
@@ -1139,6 +1143,7 @@
     },
     "completed": {
       "hasPasswordAlert": "Done! You have joined the group",
+      "hasPasswordAlert-campaign": "Done! You have joined the campaign",
       "signUpModal": {
         "title": "Register for Grassroot?",
         "intro": "Thanks! You've joined {{ groupName }}. Do you want to sign up for Grassroot too? It's a platform for organizing your community. You'll still receive communcation from {{ groupName }} even if you don't, but if you want to sign up just enter a password below. Your username will be your email or phone number.",

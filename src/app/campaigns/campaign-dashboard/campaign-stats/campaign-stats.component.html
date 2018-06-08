@@ -7,10 +7,11 @@
           <div class="container">
             <div class="row">
               <div class="col-md-8 col-sm-12">
-                <h5 [translate]="'campaign.statistics.members.title'">Members growth</h5>
+                <h5 [translate]="'campaign.statistics.members.title'" [translateParams]="{total: totalJoined}">Members growth</h5>
                 <canvas id="memberGrowthChart" height="200" width="400"></canvas>
               </div>
-              <div class="col-md-4 col-sm-12 pt-5">
+              <div class="col-md-4 col-sm-12">
+                <h5 class="text-center" *ngIf="totalEngaged" [translate]="'campaign.statistics.engagement.title-count'" [translateParams]="{total: totalEngaged}">Members growth</h5>
                 <canvas id="conversionRatesChart" height="200" width="200"></canvas>
               </div>
             </div>

@@ -13,6 +13,8 @@ export class JoinInfo {
 
   groupJoinTopics: string[];
 
+  hasActiveCampaign: boolean;
+
 }
 
 export class JoinRequest {

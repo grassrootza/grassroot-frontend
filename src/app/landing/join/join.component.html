@@ -6,7 +6,7 @@
           <div class="col-12">
             <h2 class="text-center group-name-title">{{ joinInfo?.groupName }}</h2>
             <p class="privacy-statement">
-              {{ 'join.intro' | translate:joinInfo }}
+              {{ (joinInfo?.hasActiveCampaign ? 'join.intro-campaign' : 'join.intro') | translate:joinInfo }}
               (<a [routerLink]="['/privacy']">{{ 'join.privacy' | translate }}</a>).
             </p>
           </div>
@@ -22,7 +22,7 @@
             <img src="assets/join_group_icon.png" />
           </div>
           <div class="col-md-10 col-sm-12">
-            <h3 class="group-description-title">{{ 'join.about-group' | translate }}</h3>
+            <h3 class="group-description-title">{{ (joinInfo?.hasActiveCampaign ? 'join.about-campaign' : 'join.about-group') | translate }}</h3>
             <p class="group-description-body" [innerHtml]="descriptionText"></p>
           </div>
         </div>
@@ -108,7 +108,8 @@
         </div>
         <div class="row">
           <div class="col-12">
-            <p class="privacy-statement" [translate]="'join.done.body'" [translateParams]="{groupName: joinInfo.groupName}"></p>
+            <p class="privacy-statement" [translate]="joinInfo?.hasActiveCampaign ? 'join.done.body-campaign' : 'join.done.body'" 
+              [translateParams]="{groupName: joinInfo.groupName}"></p>
           </div>
         </div>
         <div class="row mt-3 mb-3 register-grassroot" *ngIf="joinedUser && !joinedUser.hasPassword">

@@ -19,6 +19,8 @@ export class CampaignStatsComponent implements OnInit {
   public campaign: CampaignInfo;
 
   public selectedChannel: string = null;
+  public totalEngaged: number;
+  public totalJoined: number;
 
   public activityDataDivision = "by_channel";
   public activityTimePeriod = "this_week";
@@ -53,9 +55,9 @@ export class CampaignStatsComponent implements OnInit {
       timeUnits.forEach(
         tu => values.push(results[tu])
       );
+      this.totalJoined = values.reduce((accumulator, currentValue) => accumulator + currentValue)
       const chart = new Chart('memberGrowthChart', {
         type: 'line',
-
         data: {
           labels: timeUnits,
           datasets: [
@@ -76,7 +78,10 @@ export class CampaignStatsComponent implements OnInit {
               display: true
             }],
             yAxes: [{
-              display: true
+              display: true,
+              ticks: {
+                beginAtZero: true
+              }
             }],
           }
         }
@@ -103,10 +108,11 @@ export class CampaignStatsComponent implements OnInit {
         }
       );
 
+      this.totalEngaged = counts.reduce((accumulator, currentValue) => accumulator + currentValue)
+      console.log("TOTAL ENGAGED: ", this.totalEngaged);
 
       const chart = new Chart('conversionRatesChart', {
         type: 'doughnut',
-
         data: {
           labels: stageNames,
           datasets: [
