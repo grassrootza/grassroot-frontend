@@ -30,6 +30,8 @@ export class CreateMeetingComponent implements OnInit {
   public imageName;
   public imageKey;
 
+  public meetingImportance:string = "ORDINARY";
+
   constructor( private taskService: TaskService,
                private formBuilder: FormBuilder,
                private groupService: GroupService,
@@ -134,8 +136,9 @@ export class CreateMeetingComponent implements OnInit {
     }
 
     this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis,
-      publicMeeting, meetingDesc, this.imageKey, assignedMemberUids).subscribe(task => {
+      publicMeeting, meetingDesc, this.imageKey, assignedMemberUids,this.meetingImportance).subscribe(task => {
           console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
+          console.log("Created meeting with importance",task);
           this.initCreateMeetingForm();
           this.confirmingSend = false;
           this.meetingSaved.emit(true)
@@ -167,6 +170,11 @@ export class CreateMeetingComponent implements OnInit {
     this.imageKey = undefined;
     this.imageName = undefined;
     return false;
+  }
+
+  onChangeSelectImportance(importance:string){
+    this.meetingImportance = importance;
+    console.log("Setting meeting importance to.....",this.meetingImportance);
   }
 
 }

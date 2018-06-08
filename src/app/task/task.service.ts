@@ -96,7 +96,7 @@ export class TaskService {
 
   createMeeting(parentType: string, parentUid: string, subject: string, location: string,
                 dateTimeEpochMillis: number, publicMeeting: boolean, description: string,
-                imageKey: string, assignedMemberUids: string[]):Observable<Task> {
+                imageKey: string, assignedMemberUids: string[],meetingImportance:string):Observable<Task> {
     const fullUrl = this.groupCreateMeetingUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -104,7 +104,8 @@ export class TaskService {
       .set('location', location)
       .set('dateTimeEpochMillis', dateTimeEpochMillis.toString())
       .set('publicMeeting', publicMeeting.toString())
-      .set('assignedMemberUids', assignedMemberUids.join(','));
+      .set('assignedMemberUids', assignedMemberUids.join(','))
+      .set('meetingImportance',meetingImportance);
 
     if (description)
       params = params.set("description", description);

@@ -101,6 +101,10 @@
       "PUBLIC": "PUBLIC",
       "SYSTEM": "SYSTEM",
       "PRIVATE": "PRIVATE"
+    },
+    "MeetingImportance": {
+      "ORDINARY": "ORDINARY",
+      "SPECIAL": "SPECIAL"
     }
   },
   "menu": {

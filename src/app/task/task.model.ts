@@ -24,7 +24,8 @@ export class Task {
               public canEdit: boolean,
               public voteOptions: string[],
               public voteResults: Map<string, string>,
-              public errorReport: boolean) {
+              public errorReport: boolean,
+              public meetingImportance:any) {
   }
 
   public getEventIconName(): string {
@@ -64,7 +65,8 @@ export class Task {
       taskData.canEdit,
       taskData.voteOptions,
       taskData.voteResults,
-      taskData.errorReport
+      taskData.errorReport,
+      taskData.meetingImportance
     )
   }
 
