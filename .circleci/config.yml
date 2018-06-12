@@ -6,8 +6,11 @@ jobs:
     steps:
       - checkout
       - run: echo "Initiating build"
-    #   - run: sudo npm install -g npm@latest
-    #   - run: sudo npm install -g @angular/cli
+      - run:
+          name: Get Webpack
+          run: |
+            npm i -g webpack
+            npm i -g webpack-dev-server
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run:
