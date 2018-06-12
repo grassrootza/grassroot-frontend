@@ -8,7 +8,7 @@ jobs:
       - run: echo "Initiating build"
       - run:
           name: Get Webpack
-          run: |
+          command: |
             npm i -g webpack
             npm i -g webpack-dev-server
       - restore_cache:
