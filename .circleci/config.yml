@@ -9,8 +9,8 @@ jobs:
       - run:
           name: Get Webpack
           command: |
-            npm i -g webpack
-            npm i -g webpack-dev-server
+            sudo npm i -g webpack
+            sudo npm i -g webpack-dev-server
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run:
