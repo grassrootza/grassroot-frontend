@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:9.4
+    steps:
+      - checkout
+      - run: echo "Initiating build"
+      - run:
+          name: Get Webpack
+          command: |
+            sudo npm i -g webpack
+            sudo npm i -g webpack-dev-server
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Install local dependencies
+          command: npm install
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+    #   - run:
+    #       name: List packages, for debugging
+    #       command: npm ls  
+      - run: 
+          name: Build server and browser
+          command: npm run build:uni
+      - save_cache:
+          key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - dist-server

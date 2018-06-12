@@ -14,7 +14,8 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/schematics": "^0.0.48",
+    "@angular-devkit/core": "^0.6.5",
+    "@angular-devkit/schematics": "0.0.48",
     "@angular/animations": "^5.2.0",
     "@angular/common": "^5.2.0",
     "@angular/compiler": "^5.2.0",
@@ -75,8 +76,6 @@
     "source-map-explorer": "^1.5.0",
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
-    "typescript": "^2.4.2",
-    "webpack": "^3.10.0",
-    "webpack-bundle-analyzer": "^2.9.2"
+    "typescript": "^2.4.2"
   }
 }
