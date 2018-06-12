@@ -20,9 +20,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - run:
-          name: List packages, for debugging
-          command: npm ls  
+    #   - run:
+    #       name: List packages, for debugging
+    #       command: npm ls  
       - run: 
           name: Build server and browser
           command: npm run build:uni
