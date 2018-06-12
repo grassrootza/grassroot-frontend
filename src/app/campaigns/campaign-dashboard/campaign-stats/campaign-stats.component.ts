@@ -28,6 +28,7 @@ export class CampaignStatsComponent implements OnInit {
   public timeUnitOptions = ['this_week', 'this_month', 'last_week', 'last_month', 'all_time'];
 
   activityChart: any;
+  channelProvinceChart: any;
 
   constructor(private campaignService: CampaignService,
               private route: ActivatedRoute, private translateService: TranslateService) { }
@@ -55,7 +56,8 @@ export class CampaignStatsComponent implements OnInit {
       timeUnits.forEach(
         tu => values.push(results[tu])
       );
-      this.totalJoined = values.reduce((accumulator, currentValue) => accumulator + currentValue)
+      this.totalJoined = values[values.length - 1];
+      console.log('correct total joined: ', this.totalJoined);
       const chart = new Chart('memberGrowthChart', {
         type: 'line',
         data: {
@@ -149,29 +151,19 @@ export class CampaignStatsComponent implements OnInit {
         }
       );
 
-      const chart = new Chart('engagementPieChart', {
-        type: 'doughnut',
-
-        data: {
-          labels: channelNames,
-          datasets: [
-            {
-              data: counts,
-              backgroundColor: colors,
-            }
-          ]
-        },
-        options: {
-          legend: {
-            position: 'bottom',
-            display: true
-          }
-        }
-      });
+      if (!this.channelProvinceChart) {
+        this.createChannelProvinceChart(counts, colors, channelNames);
+      } else {
+        this.setChannelProvinceData(counts, colors, channelNames);
+      }
     })
   }
 
+  public provinceStats = [];
+  public channelStats = [];
+
   public loadProvinceEngagement() {
+    console.log('Loading provincial stats');
     this.campaignService.fetchProvinceStats(this.campaignUid).subscribe(results => {
       console.log("province stats: ", results);
       let provinces = Object.keys(results);
@@ -188,26 +180,44 @@ export class CampaignStatsComponent implements OnInit {
         }
       );
 
-      const chart = new Chart('engagementPieChart', {
-        type: 'doughnut',
-
-        data: {
-          labels: provinceNames,
-          datasets: [
-            {
-              data: counts,
-              backgroundColor: colors,
-            }
-          ]
-        },
-        options: {
-          legend: {
-            position: 'bottom',
-            display: true
-          }
-        }
-      });
+      if (!this.channelProvinceChart) {
+        this.createChannelProvinceChart(counts, colors, provinceNames);
+      } else {
+        console.log('Channel chart exists, resetting data');
+        this.setChannelProvinceData(counts, colors, provinceNames);
+      }
     })
+  }
+
+  private createChannelProvinceChart(counts, colors, labels) {
+    this.channelProvinceChart = new Chart('engagementPieChart', {
+      type: 'doughnut',
+
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            data: counts,
+            backgroundColor: colors,
+          }
+        ]
+      },
+      options: {
+        legend: {
+          position: 'bottom',
+          display: true
+        }
+      }
+    });
+  }
+
+  private setChannelProvinceData(counts, colors, labels) {
+    console.log('updating channel / province data ...');
+    let data = this.channelProvinceChart.config.data;
+    data.datasets[0].data = counts;
+    data.datasets[0].backgroundColor = colors;
+    data.labels = labels;
+    this.channelProvinceChart.update();
   }
 
   public loadActivityStats() {

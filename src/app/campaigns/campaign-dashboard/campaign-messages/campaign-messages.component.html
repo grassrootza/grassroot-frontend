@@ -16,6 +16,10 @@
   <div class="row mt-md-3" *ngIf="campaign.outboundSmsEnabled">
     <div class="col-12">
       <h3>Include a welcome SMS (optional, delete content to disable)</h3>
+      <p>A welcome message is an SMS that will be sent to anyone who dials the campaign code (the USSD), to include information you want them to keep even if they do not 
+        sign the petition or join the group. If it is set, this will also be used to reply to inbound SMSs. It can be slightly longer than the welcome screen below, which is only 
+        shown to people who dial in by USSD. 
+      </p>
       <textarea class="form-control" [formControl]="campaignWelcomeMsg" rows="2" (keyup)="updateWelcomeCharCount($event)"
       placeholder="A welcome message is an SMS that will be sent to anyone who dials the campaign code. It can be used to include links or other pieces of information, and the campaign code, even if someone does not join or sign the petition right away"></textarea>
       <p [ngClass]="{'character-count': true, 'char-count-exceeded': welcomeCharsLeft < 0}">{{ 'general.charsRemaining' | translate }}: {{ welcomeCharsLeft }}</p>

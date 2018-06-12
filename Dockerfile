@@ -1,22 +1,21 @@
-FROM node:9.4.0-alpine as node
+FROM keymetrics/pm2:latest-alpine
 
 WORKDIR /app
 
 COPY package.json /app/
 
-#RUN npm install
-
 COPY ./ /app/
+
+ENV NPM_CONFIG_LOGLEVEL warn
+ENV PORT 4200
 
 ARG env=prod
 ARG NODE_ENV=production
 
-#RUN ng build --environment=prod --target=production --output-hashing none
-#RUN npm run build -- --aot --build-optimizer --environment=$env
+RUN npm install --production
 
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
-FROM nginx:1.13.8-alpine
+# RUN ls -al -R
 
-COPY --from=node /app/dist/ /usr/share/nginx/html
+EXPOSE 4200
 
-COPY ./nginx-custom.conf /etc/nginx/conf.d/default.conf
+CMD [ "pm2-runtime", "start", "pm2.json", "--env", "production" ]
