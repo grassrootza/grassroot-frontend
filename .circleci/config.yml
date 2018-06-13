@@ -27,6 +27,8 @@ jobs:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - dist-server
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build Docker image
           command: docker build -f Dockerfile -t grassroot-frontend:latest-$CIRCLE_BRANCH .
