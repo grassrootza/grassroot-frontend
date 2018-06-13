@@ -113,7 +113,9 @@ workflows:
           - build
         filters:
           branches:
-            only: preprod, master
+            only: 
+              - preprod
+              - master
     - deploy_staging:
         requires:
           - build_docker
