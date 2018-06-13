@@ -27,6 +27,12 @@ jobs:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - dist-server
+  build_docker:
+      docker:
+        - image: circleci/node:9.4 
+      steps:
+      - restore_cache:
+          keys: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
@@ -44,3 +50,46 @@ jobs:
           command: |
             docker tag grassroot-frontend:latest-$CIRCLE_BRANCH ${ECR_URL}/grassroot-frontend:latest-$CIRCLE_BRANCH
             docker push ${ECR_URL}/grassroot-frontend:latest-$CIRCLE_BRANCH
+      - run:
+          name: And retag image in ECR
+          command: |
+            MANIFEST=$(aws ecr batch-get-image --repository-name grassroot-frontend --image-ids imageTag=latest --query images[].imageManifest --output text)
+            aws ecr put-image --repository-name grassroot-frontend --image-tag $CIRCLE_BRANCH-$CIRCLE_BUILD_NUM --image-manifest "$MANIFEST"
+  deploy_beanstalk:
+      docker:
+        - image: circleci/node:9.4
+          environment:
+            VERSION: $CIRCLE_BRANCH-$CIRCLE_BUILD_NUM
+      steps:
+      - checkout
+      - run:
+          name: Install AWS CLI and log in
+          command: |
+            sudo apt-get update && sudo apt-get install python && sudo apt-get install python-pip && sudo apt-get install python-dev
+            pip install awscli --upgrade --user
+            export PATH=~/.local/bin:$PATH
+      - run:
+          name: Modify Beanstalk file
+          command: |
+            cp Dockerrun.aws.json.template Dockerrun.aws.json
+            sed -i "s/__version__/$VERSION/g" Dockerrun.aws.json
+            zip -r $ZIP Dockerrun.aws.json
+            zip -r $ZIP .ebextensions/
+      - run:
+          name: Deploy to Beanstalk
+          command: |
+            aws s3 cp $ZIP s3://$EB_BUCKET/$EB_FOLDER/$ZIP
+            aws elasticbeanstalk create-application-version --application-name gr-frontend --version-label $VERSION --source-bundle S3Bucket=$EB_BUCKET,S3Key=$EB_FOLDER/$ZIP
+            aws elasticbeanstalk update-environment --environment-name gr-frontend-staging --version-label $VERSION
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+    - build
+    - build_docker:
+        requires:
+          - build
+    - deploy_beanstalk:
+        requires:
+          - build_docker
