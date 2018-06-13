@@ -37,9 +37,10 @@ jobs:
           command: |
             sudo apt-get update && sudo apt-get install python && sudo apt-get install python-pip && sudo apt-get install python-dev
             pip install awscli --upgrade --user
+            export PATH=~/.local/bin:$PATH
             eval $(aws ecr get-login --no-include-email --region eu-west-1)
-      - run:
-          name: Tag and upload image to ECR          
-          command: |
-            docker tag grassroot-frontend:latest-$CIRCLE_BRANCH ${ECR_URL}/grassroot-frontend:latest-$CIRCLE_BRANCH
-            docker push ${ECR_URL}/grassroot-frontend:latest-$CIRCLE_BRANCH
+      # - run:
+      #     name: Tag and upload image to ECR          
+      #     command: |
+      #       docker tag grassroot-frontend:latest-$CIRCLE_BRANCH ${ECR_URL}/grassroot-frontend:latest-$CIRCLE_BRANCH
+      #       docker push ${ECR_URL}/grassroot-frontend:latest-$CIRCLE_BRANCH
