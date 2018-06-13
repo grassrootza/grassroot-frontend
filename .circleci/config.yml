@@ -62,8 +62,6 @@ jobs:
   deploy_beanstalk:
       docker:
         - image: circleci/node:9.4
-          environment:
-            VERSION: $CIRCLE_BRANCH-$CIRCLE_BUILD_NUM
       steps:
       - checkout
       - run:
@@ -76,15 +74,16 @@ jobs:
           name: Modify Beanstalk file
           command: |
             cp Dockerrun.aws.json.template Dockerrun.aws.json
-            sed -i "s/__version__/$VERSION/g" Dockerrun.aws.json
-            zip -r $ZIP Dockerrun.aws.json
-            zip -r $ZIP .ebextensions/
+            sed -i "s/__version__/${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}/g" Dockerrun.aws.json
+            sed -i "s/__repo__/${ECR_URL}/g" Dockerrun.aws.json
+            zip -r ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip Dockerrun.aws.json
+            zip -r ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip .ebextensions/
       - run:
           name: Deploy to Beanstalk
           command: |
-            aws s3 cp $ZIP s3://$EB_BUCKET/$EB_FOLDER/$ZIP
-            aws elasticbeanstalk create-application-version --application-name gr-frontend --version-label $VERSION --source-bundle S3Bucket=$EB_BUCKET,S3Key=$EB_FOLDER/$ZIP
-            aws elasticbeanstalk update-environment --environment-name gr-frontend-staging --version-label $VERSION
+            aws s3 cp $ZIP s3://$EB_BUCKET/$EB_FOLDER/${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip
+            aws elasticbeanstalk create-application-version --application-name gr-frontend --version-label ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM} --source-bundle S3Bucket=$EB_BUCKET,S3Key=$EB_FOLDER/${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip
+            aws elasticbeanstalk update-environment --environment-name gr-frontend-staging --version-label ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
 
 workflows:
   version: 2
