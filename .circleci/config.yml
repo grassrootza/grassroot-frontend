@@ -46,19 +46,19 @@ jobs:
           name: Build Docker image
           command: |
             echo $VERSION
-            docker build -f Dockerfile -t grassroot-frontend:$VERSION .
-      - run:
-          name: Install AWS CLI and log in
-          command: |
-            sudo apt-get update && sudo apt-get install python && sudo apt-get install python-pip && sudo apt-get install python-dev
-            pip install awscli --upgrade --user
-            export PATH=~/.local/bin:$PATH
-            eval $(aws ecr get-login --no-include-email --region eu-west-1)
-      - run:
-          name: Tag and upload image to ECR          
-          command: |
-            docker tag grassroot-frontend:$VERSION $ECR_URL/grassroot-frontend:$VERSION
-            docker push $ECR_URL/grassroot-frontend:latest-$VERSION
+      #       docker build -f Dockerfile -t grassroot-frontend:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM} .
+      # - run:
+      #     name: Install AWS CLI and log in
+      #     command: |
+      #       sudo apt-get update && sudo apt-get install python && sudo apt-get install python-pip && sudo apt-get install python-dev
+      #       pip install awscli --upgrade --user
+      #       export PATH=~/.local/bin:$PATH
+      #       eval $(aws ecr get-login --no-include-email --region eu-west-1)
+      # - run:
+      #     name: Tag and upload image to ECR          
+      #     command: |
+      #       docker tag grassroot-frontend:$VERSION $ECR_URL/grassroot-frontend:$VERSION
+      #       docker push $ECR_URL/grassroot-frontend:latest-$VERSION
   deploy_beanstalk:
       docker:
         - image: circleci/node:9.4
