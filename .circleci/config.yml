@@ -40,13 +40,10 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Set version number
-          command: export VERSION=$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM
-      - run:
           name: Build Docker image
           command: |
-            echo $VERSION
-            docker build -f Dockerfile -t grassroot-frontend:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM} .
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker build -f Dockerfile -t grassroot-frontend:${VERSION} .
       - run:
           name: Install AWS CLI and log in
           command: |
@@ -57,8 +54,9 @@ jobs:
       - run:
           name: Tag and upload image to ECR          
           command: |
-            docker tag grassroot-frontend:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM} ${ECR_URL}/grassroot-frontend:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
-            docker push ${ECR_URL}/grassroot-frontend:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker tag grassroot-frontend:${VERSION} ${ECR_URL}/grassroot-frontend:${VERSION}
+            docker push ${ECR_URL}/grassroot-frontend:${VERSION}
   deploy_beanstalk:
       docker:
         - image: circleci/node:9.4
@@ -73,16 +71,17 @@ jobs:
       - run:
           name: Modify Beanstalk file
           command: |
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
             cp Dockerrun.aws.json.template Dockerrun.aws.json
-            sed -i "s/__version__/${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}/g" Dockerrun.aws.json
+            sed -i "s/__version__/${VERSION}/g" Dockerrun.aws.json
             sed -i "s/__repo__/${ECR_URL}/g" Dockerrun.aws.json
-            zip -r ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip Dockerrun.aws.json
-            zip -r ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip .ebextensions/
+            zip -r ${VERSION}.zip Dockerrun.aws.json
+            zip -r ${VERSION}.zip .ebextensions/
       - run:
           name: Deploy to Beanstalk
           command: |
             export PATH=~/.local/bin:$PATH
-            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
             aws s3 cp ${VERSION}.zip s3://$EB_BUCKET/$EB_FOLDER/${VERSION}.zip --region eu-west-1
             aws elasticbeanstalk create-application-version --application-name gr-frontend --version-label ${VERSION} --source-bundle S3Bucket=$EB_BUCKET,S3Key=$EB_FOLDER/${VERSION}.zip --region eu-west-1
             aws elasticbeanstalk update-environment --environment-name gr-frontend-staging --version-label ${VERSION} --region eu-west-1
