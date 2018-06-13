@@ -5,7 +5,6 @@ jobs:
       - image: circleci/node:9.4
     steps:
       - checkout
-      - run: echo "Initiating build"
       - run:
           name: Get Webpack
           command: |
@@ -31,8 +30,10 @@ jobs:
       docker:
         - image: circleci/node:9.4 
       steps:
+      - checkout
       - restore_cache:
-          keys: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+          keys:
+          - v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
