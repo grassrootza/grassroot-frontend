@@ -82,7 +82,8 @@ jobs:
           name: Deploy to Beanstalk
           command: |
             export PATH=~/.local/bin:$PATH
-            aws s3 cp $ZIP s3://$EB_BUCKET/$EB_FOLDER/${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+            aws s3 cp ${VERSION}.zip s3://$EB_BUCKET/$EB_FOLDER/${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip
             aws elasticbeanstalk create-application-version --application-name gr-frontend --version-label ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM} --source-bundle S3Bucket=$EB_BUCKET,S3Key=$EB_FOLDER/${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}.zip
             aws elasticbeanstalk update-environment --environment-name gr-frontend-staging --version-label ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
 
