@@ -32,7 +32,7 @@ jobs:
       docker:
         - image: circleci/node:9.4 
           environment:
-            VERSION: {{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_BUILD_NUM }}
+            VERSION: $CIRCLE_BUILD_NUM
       steps:
       - checkout
       - restore_cache:
