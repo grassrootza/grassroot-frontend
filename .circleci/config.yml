@@ -29,13 +29,14 @@ jobs:
       #       - dist-server
       - setup_remote_docker:
           docker_layer_caching: true
-      - run:
-          name: Build Docker image
-          command: docker build -f Dockerfile -t grassroot-frontend:latest-$CIRCLE_BRANCH .
+      # - run:
+      #     name: Build Docker image
+      #     command: docker build -f Dockerfile -t grassroot-frontend:latest-$CIRCLE_BRANCH .
       - run:
           name: Install AWS CLI and log in
           command: |
             sudo apt-get install python3
+            sudo apt-get install python3-pip
             pip install awscli --upgrade --user
             eval $(aws ecr get-login --no-include-email --region eu-west-1)
       - run:
