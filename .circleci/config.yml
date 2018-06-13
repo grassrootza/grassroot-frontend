@@ -41,10 +41,10 @@ jobs:
           docker_layer_caching: true
       - run:
           name: Set version number
-          command: export VERSION=${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
+          command: export VERSION=$CIRCLE_BRANCH-$CIRCLE_BUILD_NUM
       - run:
           name: Build Docker image
-          command: docker build -f Dockerfile -t grassroot-frontend:${VERSION} .
+          command: docker build -f Dockerfile -t grassroot-frontend:$VERSION .
       - run:
           name: Install AWS CLI and log in
           command: |
@@ -55,8 +55,8 @@ jobs:
       - run:
           name: Tag and upload image to ECR          
           command: |
-            docker tag grassroot-frontend:${VERSION} ${ECR_URL}/grassroot-frontend:${VERSION}
-            docker push ${ECR_URL}/grassroot-frontend:latest-${VERSION}
+            docker tag grassroot-frontend:$VERSION $ECR_URL/grassroot-frontend:$VERSION
+            docker push $ECR_URL/grassroot-frontend:latest-$VERSION
   deploy_beanstalk:
       docker:
         - image: circleci/node:9.4
