@@ -1,0 +1,14 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "__repo__/grassroot-frontend:__version__",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "4200"
+    }
+  ],
+  "Volumes": [],
+  "Logging": "/var/log/nginx"
+}
