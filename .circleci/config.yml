@@ -31,8 +31,6 @@ jobs:
   build_docker:
       docker:
         - image: circleci/node:9.4 
-        environment:
-            VERSION: ${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
       steps:
       - checkout
       - restore_cache:
@@ -41,6 +39,9 @@ jobs:
           - v1-dist-
       - setup_remote_docker:
           docker_layer_caching: true
+      - run:
+          name: Set version number
+          command: export VERSION=${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM}
       - run:
           name: Build Docker image
           command: docker build -f Dockerfile -t grassroot-frontend:${VERSION} .
