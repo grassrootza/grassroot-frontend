@@ -35,8 +35,7 @@ jobs:
       - run:
           name: Install AWS CLI and log in
           command: |
-            sudo apt-get install python3
-            curl https://bootstrap.pypa.io/get-pip.py | sudo python3
+            sudo apt-get update && apt-get install python && apt-get install python-pip
             pip install awscli --upgrade --user
             eval $(aws ecr get-login --no-include-email --region eu-west-1)
       - run:
