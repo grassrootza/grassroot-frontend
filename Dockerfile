@@ -14,8 +14,6 @@ ARG NODE_ENV=production
 
 RUN npm install --production
 
-# RUN ls -al -R
-
 EXPOSE 4200
 
 CMD [ "pm2-runtime", "start", "pm2.json", "--env", "production" ]

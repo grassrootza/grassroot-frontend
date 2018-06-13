@@ -54,6 +54,7 @@ Dockerrun.aws.json*
 *.zip
 /Dockerrun.aws.json*
 .elasticbeanstalk/
+!Dockerrun.aws.json.template
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
