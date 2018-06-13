@@ -31,6 +31,8 @@ jobs:
   build_docker:
       docker:
         - image: circleci/node:9.4 
+          environment:
+            VERSION: $CIRCLE_BRANCH-$CIRCLE_BUILD_NUM
       steps:
       - checkout
       - restore_cache:
@@ -41,7 +43,7 @@ jobs:
           docker_layer_caching: true
       - run:
           name: Build Docker image
-          command: docker build -f Dockerfile -t grassroot-frontend:latest-$CIRCLE_BRANCH .
+          command: docker build -f Dockerfile -t grassroot-frontend:$VERSION .
       - run:
           name: Install AWS CLI and log in
           command: |
@@ -52,13 +54,8 @@ jobs:
       - run:
           name: Tag and upload image to ECR          
           command: |
-            docker tag grassroot-frontend:latest-$CIRCLE_BRANCH ${ECR_URL}/grassroot-frontend:latest-$CIRCLE_BRANCH
-            docker push ${ECR_URL}/grassroot-frontend:latest-$CIRCLE_BRANCH
-      - run:
-          name: And retag image in ECR
-          command: |
-            MANIFEST=$(aws ecr batch-get-image --repository-name grassroot-frontend --image-ids imageTag=latest --query images[].imageManifest --output text)
-            aws ecr put-image --repository-name grassroot-frontend --image-tag $CIRCLE_BRANCH-$CIRCLE_BUILD_NUM --image-manifest "$MANIFEST"
+            docker tag grassroot-frontend:$VERSION ${ECR_URL}/grassroot-frontend:$VERSION
+            docker push ${ECR_URL}/grassroot-frontend:${VERSION}
   deploy_beanstalk:
       docker:
         - image: circleci/node:9.4
