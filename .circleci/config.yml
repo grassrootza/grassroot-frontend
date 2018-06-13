@@ -6,11 +6,11 @@ jobs:
     steps:
       - checkout
       - run: echo "Initiating build"
-      - run:
-          name: Get Webpack
-          command: |
-            sudo npm i -g webpack
-            sudo npm i -g webpack-dev-server
+      # - run:
+      #     name: Get Webpack
+      #     command: |
+      #       sudo npm i -g webpack
+      #       sudo npm i -g webpack-dev-server
       - restore_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
       - run:
@@ -35,7 +35,7 @@ jobs:
       - run:
           name: Install AWS CLI and log in
           command: |
-            pip install awscli --upgrade --user
+            sudo apt-get -y -qq install awscli
             eval $(aws ecr get-login --no-include-email --region eu-west-1)
       - run:
           name: Tag and upload image to ECR          
