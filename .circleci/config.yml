@@ -29,4 +29,4 @@ jobs:
             - dist-server
       - run:
           name: Build Docker image
-          command: docker build -f Dockerfile -t grassroot-frontend:latest-{{ .Environment.CIRCLE_BRANCH }} .
+          command: docker build -f Dockerfile -t grassroot-frontend:latest-$CIRCLE_BRANCH .
