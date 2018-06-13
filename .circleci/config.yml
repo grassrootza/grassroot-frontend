@@ -46,7 +46,7 @@ jobs:
           name: Build Docker image
           command: |
             echo $VERSION
-      #       docker build -f Dockerfile -t grassroot-frontend:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM} .
+            docker build -f Dockerfile -t grassroot-frontend:${CIRCLE_BRANCH}-${CIRCLE_BUILD_NUM} .
       # - run:
       #     name: Install AWS CLI and log in
       #     command: |
