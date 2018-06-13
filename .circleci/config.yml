@@ -19,10 +19,7 @@ jobs:
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
-            - node_modules
-    #   - run:
-    #       name: List packages, for debugging
-    #       command: npm ls  
+            - node_modules  
       - run: 
           name: Build server and browser
           command: npm run build:uni
@@ -30,3 +27,6 @@ jobs:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - dist-server
+      - run:
+          name: Build Docker image
+          command: docker build -f Dockerfile -t grassroot-frontend:latest-{{ .Environment.CIRCLE_BRANCH }} .
