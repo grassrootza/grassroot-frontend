@@ -42,6 +42,7 @@ export class TaskService {
   public upcomingTaskError: Observable<any> = this.upcomingTasksErrorSubject.asObservable();
 
   private cancelTaskUrl = environment.backendAppUrl + "/api/task/modify/cancel";
+  private changeTaskDateUrl = environment.backendAppUrl + "/api/task/modify/change/date";
 
   private downloadErrorReportUrl = environment.backendAppUrl + "/api/task/fetch/error-report";
 
@@ -239,6 +240,19 @@ export class TaskService {
         this.loadUpcomingUserTasks();
       }
     });
+  }
+
+  changeTaskTime(taskUid: string, taskType: TaskType, newTaskTimeMillis: number) {
+    const fullUrl = this.changeTaskDateUrl + "/" + taskType + "/" + taskUid;
+
+    let params = new HttpParams()
+      .set('taskUid', taskUid)
+      .set('newTaskTimeMills', newTaskTimeMillis.toString());
+
+    return this.httpClient.post<Task>(fullUrl, null, {params: params}).map(response => {
+      this.loadUpcomingUserTasks(); // to refresh agenda
+      return Task.createInstanceFromData(response);
+    }); 
   }
 
   downloadBroadcastErrorReport(taskType: string, taskUid: string) {
