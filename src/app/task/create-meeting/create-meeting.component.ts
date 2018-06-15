@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {TaskService} from '../task.service';
-import {GroupService} from '../../groups/group.service';
 import {Membership} from '../../groups/model/membership.model';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
@@ -32,7 +31,6 @@ export class CreateMeetingComponent implements OnInit {
 
   constructor( private taskService: TaskService,
                private formBuilder: FormBuilder,
-               private groupService: GroupService,
                private mediaService: MediaService,
                private alertService: AlertService) {
     this.initCreateMeetingForm();

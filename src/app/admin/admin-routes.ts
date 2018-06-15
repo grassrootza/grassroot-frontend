@@ -5,6 +5,7 @@ import {ViewAlertComponent} from "./livewire/alert-view/view-alert.component";
 import {AdminRoleGuard} from "./admin-role.guard";
 import { SubscriberComponent } from "./livewire/accounts/view/subscriber/subscriber.component";
 import {SystemAdminComponent} from "./system-admin/system-admin.component";
+import { AnalyticsComponent } from "./analytics/analytics.component";
 
 export const ADMIN_ROUTES : Routes = [
     {path: '', component: SystemAdminComponent, canActivate: [LoggedInGuard, AdminRoleGuard],
@@ -14,5 +15,7 @@ export const ADMIN_ROUTES : Routes = [
     {path: 'livewire/alert/:id', component: ViewAlertComponent, canActivate: [LoggedInGuard, AdminRoleGuard],
       data: {roles: ['ROLE_LIVEWIRE_USER']}},
     {path: 'livewire/subscriber/:id',component: SubscriberComponent, canActivate: [LoggedInGuard,AdminRoleGuard],
+      data: {roles: ['ROLE_SYSTEM_ADMIN']}},
+    {path: 'analytics', component: AnalyticsComponent, canActivate: [LoggedInGuard, AdminRoleGuard],
       data: {roles: ['ROLE_SYSTEM_ADMIN']}}
   ];

@@ -8,15 +8,17 @@
   <div class="card">
     <div class="card-body">
       <div class="row">
-        <div class="col-md-8 col-sm-12">
+        <div class="col-md-6 col-sm-12">
           <h3>
             <img src="assets/icon_meeting.png"/>&nbsp;
             {{ 'task.meeting.details.title-field' | translate }}: {{meeting?.title}}
           </h3>
         </div>
-        <div class="col-md-4 col-sm-12 text-md-right text-sm-left">
+        <div class="col-md-6 col-sm-12 text-md-right text-sm-left">
           <button type="button" (click)="confirmCancel()" class="btn btn-secondary hover-danger cancel-button">
             {{ 'task.meeting.details.cancel-button' | translate }}</button>
+          <button type="button" (click)="showDateChange()" class="btn btn-secondary hover-primary cancel-button">
+            {{ 'task.meeting.change.button' | translate }}</button>
         </div>
       </div>
       <div class="row pl-3" *ngIf="meeting?.errorReport">
@@ -94,6 +96,55 @@
       <div class="modal-footer">
         <button data-dismiss="modal" type="button" class="btn btn-secondary">{{ 'action.close' | translate }}</button>
         <button (click)="cancelMeeting()" type="button" class="btn btn-secondary hover-danger">{{ 'action.confirm' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="change-date-modal" tabindex="-1" role="dialog"
+  aria-labelledby="change-date-modal-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'task.meeting.change.title' | translate }}</h5>
+        <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <form *ngIf="changeDateTimeForm" [formGroup]="changeDateTimeForm" (ngSubmit)="cancelMeeting()">
+              <div class="form-group row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control" placeholder="yyyy-mm-dd" id="meeting-date-time"
+                              name="dp" [formControl]="changeDateTimeForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                          <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                  <div class="col-sm-6">
+                    <ngb-timepicker [formControl]="changeDateTimeForm.controls['time']" [spinners]="false"></ngb-timepicker>
+                  </div>
+                </div>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <p>{{ 'task.meeting.change.note' | translate }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button data-dismiss="modal" type="button" class="btn btn-secondary">{{ 'action.close' | translate }}</button>
+        <button (click)="changeMtgDate()" type="button" class="btn btn-primary hover-danger">{{ 'action.confirm' | translate }}</button>
       </div>
     </div>
   </div>

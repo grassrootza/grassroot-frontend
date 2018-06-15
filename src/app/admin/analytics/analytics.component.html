@@ -1,0 +1,31 @@
+<div class="container primary-container">
+    <div class="row metrics-table">
+      <div class="col-12">
+        <div class="card">
+          <div class="row table-header">
+            <div class="col-6 text-left">
+              Metric
+            </div>
+            <div class="col-6 text-right">
+              Count
+            </div>
+          </div>
+          <div *ngFor="let metric of metrics" class="row">
+            <div class="col-6 text-left">
+              {{ 'metric.' + metric | translate }}
+            </div>
+            <div class="col-6 text-right">
+              {{ metricTotals[metric] }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row metrics-table mt-5">
+      <div class="col-12">
+        <div class="card">
+          <canvas id="metricCountChart" height="200" width="400"></canvas>
+        </div>
+      </div>
+    </div>
+</div>

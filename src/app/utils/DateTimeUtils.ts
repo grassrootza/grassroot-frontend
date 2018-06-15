@@ -1,11 +1,9 @@
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import * as moment from "moment";
 import {Moment} from "moment";
-import {AbstractControl, FormGroup} from "@angular/forms";
-import {urlPattern} from "../validators/CustomValidators";
+import {FormGroup} from "@angular/forms";
 
 export class DateTimeUtils {
-
 
   public static parseDate(dateValue): Date {
     if (dateValue != null) {
@@ -71,6 +69,10 @@ export class DateTimeUtils {
       ]
     )
   }
+}
+
+export const epochMillisFromDateTime = (ngbDate: NgbDateStruct, ngbTime: NgbTimeStruct) => {
+  return DateTimeUtils.momentFromNgbStruct(ngbDate, ngbTime).valueOf();
 }
 
 export const epochMillisFromDate = (ngbDate: NgbDateStruct) => {

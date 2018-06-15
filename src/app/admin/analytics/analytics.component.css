@@ -1,0 +1,15 @@
+.metrics-table .card {
+    border-radius: 2px;
+    border: 1px solid #E5E9F2;
+    box-shadow: 0 0 20px 0 rgba(0,0,0,0.1);
+    font-size: 1.2em;
+}
+
+.metrics-table .row {
+    padding: 10px;
+}
+
+.metrics-table .table-header {
+    font-weight: bold;
+    border-bottom: 1px;
+}
