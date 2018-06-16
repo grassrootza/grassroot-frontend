@@ -1522,14 +1522,10 @@
     "ALL_USERS": "Total users",
     "VOTES": "Votes called",
     "USSD_USERS": "Session users",
-<<<<<<< HEAD
     "TODO": "Action items created",
     "USERS_NON_ENGLISH": "Non-English users",
     "NOTIFICATIONS_DELIVERED": "Notifications delivered",
     "NOTIFICATIONS_ALL": "Notifications generated",
     "IZWE_LAMI_SESSIONS": "Izwe Lami sessions"
-=======
-    "TODO": "Action items created"
->>>>>>> master
   }
 }
