@@ -16,8 +16,7 @@ export class AdminService {
   private activateGroupUrl = environment.backendAppUrl + "/api/admin/groups/activate";
   private addMemberToGroupUrl = environment.backendAppUrl + "/api/admin/groups/member/add";
   
-  private initiateUserGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/users";
-  private initiateGroupsGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/groups";
+  private initiateMembershipsGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/memberships";
   private initiateTasksGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/tasks";
 
   constructor(private httpClient: HttpClient) { }
@@ -75,12 +74,8 @@ export class AdminService {
     return this.httpClient.get(this.numberOfGroupsUserIsPartOfUrl,{params:params});
   }
 
-  initiateUserGraphTransfer():Observable<any> {
-    return this.httpClient.get(this.initiateUserGraphUrl);
-  }
-
-  initiateGroupGraphTransfer():Observable<any> {
-    return this.httpClient.get(this.initiateGroupsGraphUrl);
+  initiateMembershipGraphTransfer():Observable<any> {
+    return this.httpClient.get(this.initiateMembershipsGraphUrl);
   }
 
   initiateTasksGraphTransfer():Observable<any> {

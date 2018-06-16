@@ -209,13 +209,10 @@ export class SystemAdminComponent implements OnInit {
   }
 
   createSubscriber(subscriberName:string,primaryEmail:string,otherEmails:string){
-    console.log("Add email?",this.addPrimaryEmail);
-    console.log("Make acc active?",this.makeAccountActive);
     this.livewireAdminService.createSubscriber(subscriberName,primaryEmail,this.addPrimaryEmail,otherEmails,this.makeAccountActive).subscribe(resp => {
-      console.log("Response.....",resp);
       if(resp == 'ACCOUNT_CREATED'){
         $('#create-subscriber-modal').modal("hide");
-        this.alertService.alert("Done,Subscriber created successfully.");
+        this.alertService.alert("Done, subscriber created successfully.");
       }else if(resp == 'ERROR'){
         this.errorCreatingSubscriberMessage = "Error! Subscriber account not created. Please make sure all input fields are valid.";
         setTimeout(()=>{
@@ -227,15 +224,11 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  initiateUserGraphTransfer() {
-    this.adminService.initiateUserGraphTransfer().subscribe(result => this.alertService.alert('transfer.done'));
-  }
-
-  initiateGroupsGraphTransfer() {
-    this.adminService.initiateGroupGraphTransfer().subscribe(result => this.alertService.alert('transfer.initiated'));
+  initiateMembershipsGraphTransfer() {
+    this.adminService.initiateMembershipGraphTransfer().subscribe(_ => this.alertService.alert('transfer.initiated'));
   }
 
   initiateTasksGraphTransfer() {
-    this.adminService.initiateTasksGraphTransfer().subscribe(result => this.alertService.alert('transfer.initiated'));
+    this.adminService.initiateTasksGraphTransfer().subscribe(_ => this.alertService.alert('transfer.initiated'));
   }
 }

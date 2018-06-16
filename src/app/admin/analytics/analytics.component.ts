@@ -12,6 +12,8 @@ export class AnalyticsComponent implements OnInit {
 
   public DEFAULT_GRAPH = 'ALL_USERS';
 
+  public SEQUENCE = ['ALL_USERS', 'USSD_USERS', 'USERS_NON_ENGLISH', 'MEETINGS', 'VOTES', 'TODO', 'NOTIFICATIONS_ALL'];
+
   public metrics: string[];
   public metricTotals: any;
 
@@ -23,7 +25,7 @@ export class AnalyticsComponent implements OnInit {
     this.analyticsService.loadAnalyticsKeys().subscribe(results => {
       console.log('results: ', results);
       this.metricTotals = results;
-      this.metrics = Object.keys(results);
+      this.metrics = Object.keys(results).sort((a, b) => this.SEQUENCE.indexOf(a) - this.SEQUENCE.indexOf(b));
       console.log('metric keys: ', this.metrics);
       this.loadCumulativeCounts(this.DEFAULT_GRAPH);
     })
