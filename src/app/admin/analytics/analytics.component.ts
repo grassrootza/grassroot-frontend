@@ -12,12 +12,16 @@ export class AnalyticsComponent implements OnInit {
 
   public DEFAULT_GRAPH = 'ALL_USERS';
 
-  public SEQUENCE = ['ALL_USERS', 'USSD_USERS', 'USERS_NON_ENGLISH', 'MEETINGS', 'VOTES', 'TODO', 'NOTIFICATIONS_ALL'];
+  // note: this is reverse order, i.e., last items are top of screen, so that ones not in here go to bottom
+  public SEQUENCE = ['USERS_NON_ENGLISH', 'VOTES', 'TODO', 'MEETINGS',  'NOTIFICATIONS_ALL', 'ALL_USERS'];
+  private SUB_ITEMS = ['USSD_USERS'];
 
   public metrics: string[];
   public metricTotals: any;
 
   public currentMetricData: any;
+
+  lineChart: any;
 
   constructor(private analyticsService: AnalyticsService) { }
 
@@ -25,7 +29,9 @@ export class AnalyticsComponent implements OnInit {
     this.analyticsService.loadAnalyticsKeys().subscribe(results => {
       console.log('results: ', results);
       this.metricTotals = results;
-      this.metrics = Object.keys(results).sort((a, b) => this.SEQUENCE.indexOf(a) - this.SEQUENCE.indexOf(b));
+      this.metrics = Object.keys(results)
+        .filter(metric => this.SUB_ITEMS.indexOf(metric) == -1)
+        .sort((a, b) => this.SEQUENCE.indexOf(b) - this.SEQUENCE.indexOf(a));
       console.log('metric keys: ', this.metrics);
       this.loadCumulativeCounts(this.DEFAULT_GRAPH);
     })
@@ -36,12 +42,20 @@ export class AnalyticsComponent implements OnInit {
       console.log('data: ', data);
       this.currentMetricData = data;
 
-      let timeStamps = Object.keys(data);
+      let timeStamps = Object.keys(data).sort((a, b) => parseInt(a) - parseInt(b));
       let values = timeStamps.map(ts => data[ts]);
       let timeLabels = timeStamps.map(ts =>  moment(parseInt(ts)).format('DD-MM-YY hh:00'));
       console.log('values: ', values);
 
-      const chart = new Chart('metricCountChart', {
+      if (!this.lineChart)
+        this.createLineChartWithData(timeLabels, values);
+      else
+        this.setLineChartData(timeLabels, values);
+    });
+  }
+
+  createLineChartWithData(timeLabels, values) {
+      this.lineChart = new Chart('metricCountChart', {
         type: 'line',
         data: {
           labels: timeLabels,
@@ -61,15 +75,18 @@ export class AnalyticsComponent implements OnInit {
               display: true
             }],
             yAxes: [{
-              display: true,
-              ticks: {
-                beginAtZero: true
-              }
+              display: true
             }],
           }
         }
       });
-    });
+  }
+
+  setLineChartData(timeLabels, values) {
+    let data = this.lineChart.config.data;
+    data.datasets[0].data = values;
+    data.labels = timeLabels;
+    this.lineChart.update();
   }
 
 }

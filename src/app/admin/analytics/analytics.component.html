@@ -6,22 +6,28 @@
             <div class="col-6 text-left">
               Metric
             </div>
-            <div class="col-6 text-right">
+            <div class="col-3 text-right">
               Count
+            </div>
+            <div class="col-3 text-center">
+              Chart
             </div>
           </div>
           <div *ngFor="let metric of metrics" class="row">
             <div class="col-6 text-left">
               {{ 'metric.' + metric | translate }}
             </div>
-            <div class="col-6 text-right">
-              {{ metricTotals[metric] }}
+            <div class="col-3 text-right">
+              {{ metricTotals[metric] | number }}
+            </div>
+            <div class="col-3 text-center">
+              <button type="button" class="btn btn-secondary hover-primary" (click)="loadCumulativeCounts(metric)">Show</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="row metrics-table mt-5">
+    <div class="row metrics-table mt-3">
       <div class="col-12">
         <div class="card">
           <canvas id="metricCountChart" height="200" width="400"></canvas>

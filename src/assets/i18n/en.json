@@ -359,6 +359,7 @@
         "topics": "Assign topics",
         "taskTeam": "Add to task team",
         "copyToGroup": "Copy to group",
+        "download": "Download as Excel",
         "role": "Change role",
         "remove": "Remove",
         "noMembersSelectedModal": {
@@ -1526,6 +1527,8 @@
     "USERS_NON_ENGLISH": "Non-English users",
     "NOTIFICATIONS_DELIVERED": "Notifications delivered",
     "NOTIFICATIONS_ALL": "Notifications generated",
-    "IZWE_LAMI_SESSIONS": "Izwe Lami sessions"
+    "NOTIFICATIONS_FAILED": "Notifications failed", 
+    "IZWE_LAMI_SESSIONS": "Izwe Lami sessions",
+    "IZWE_LAMI_USERS": "Izwe Lami users"
   }
 }
