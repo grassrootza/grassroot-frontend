@@ -68,6 +68,7 @@ export class GroupService {
   groupRemoveTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/deactivate/taskteam";
   groupRenametaskTeamUrl = environment.backendAppUrl + "/api/group/modify/rename/taskteam";
   groupUploadImageUrl = environment.backendAppUrl + "/api/group/modify/image/upload";
+  groupDownloadFilteredMembersUrl = environment.backendAppUrl + "/api/group/fetch/members/filter/download";
 
   groupJoinWordsListUrl = environment.backendAppUrl + "/api/group/modify/joincodes/list/active";
   groupJoinWordAddUrl = environment.backendAppUrl + "/api/group/modify/joincodes/add";
@@ -229,6 +230,12 @@ export class GroupService {
   downloadGroupMembers(groupUid: string) {
     const fullUrl = this.groupMemberExportUrl + "/" + groupUid;
     return this.httpClient.get(fullUrl, { responseType: 'blob' });
+  }
+
+  downloadFilteredGroupMembers(groupUid: string, filteredMemberUids: string[]) {
+    const fullUrl = this.groupDownloadFilteredMembersUrl + "/" + groupUid;
+    let params = new HttpParams().set('filteredMemberUids', filteredMemberUids.join(','));
+    return this.httpClient.get(fullUrl, { params: params, responseType : 'blob' });
   }
 
   fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number) {

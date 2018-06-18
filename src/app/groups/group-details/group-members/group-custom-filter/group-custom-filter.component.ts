@@ -11,6 +11,8 @@ import {GroupInfo} from "../../../model/group-info.model";
 import {getCreateModalId} from "../../../../task/task-type";
 import { AlertService } from '../../../../utils/alert-service/alert.service';
 
+import { saveAs } from 'file-saver';
+
 declare var $: any;
 
 @Component({
@@ -158,6 +160,15 @@ export class GroupCustomFilterComponent implements OnInit {
   taskCreated(saveResponse, type: string) {
     console.log(saveResponse);
     $("#" + getCreateModalId(type)).modal("hide");
+  }
+
+  downloadFilteredMembersExcel() {
+    this.filteredMemberUids = this.filteredMembers.map(member => member.user.uid);
+    this.groupService.downloadFilteredGroupMembers(this.group.groupUid, this.filteredMemberUids).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/xls' });
+      console.log('got Excel back, saving it ...');
+      saveAs(blob, 'filtered_members.xls');
+    })
   }
 
 }
