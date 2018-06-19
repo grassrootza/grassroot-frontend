@@ -1529,6 +1529,14 @@
     "NOTIFICATIONS_ALL": "Notifications generated",
     "NOTIFICATIONS_FAILED": "Notifications failed", 
     "IZWE_LAMI_SESSIONS": "Izwe Lami sessions",
-    "IZWE_LAMI_USERS": "Izwe Lami users"
+    "IZWE_LAMI_USERS": "Izwe Lami users",
+    "GROUPS_TOKEN": "Groups with join codes",
+    "GROUPS_ALL": "Active groups",
+    "TASKS_ALL": "Total tasks",
+    "SAFETY_ALERTS": "Safety alerts triggered",
+    "LIVE_WIRE_RELEASED": "LiveWire alerts released",
+    "LIVE_WIRE_CREATED": "LiveWire alerts created",
+    "LIVE_WIRE_USERS": "LiveWire contacts active",
+    "ALERTS_ALL": "Total alerts"
   }
 }

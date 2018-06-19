@@ -12,12 +12,14 @@ import {SubscriberComponent} from './livewire/accounts/view/subscriber/subscribe
 import {SystemAdminComponent} from "./system-admin/system-admin.component";
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { AnalyticsService } from './analytics.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     LoggedInServicesModule,
+    NgbModule,
     RouterModule.forChild(ADMIN_ROUTES)
   ],
   declarations: [
