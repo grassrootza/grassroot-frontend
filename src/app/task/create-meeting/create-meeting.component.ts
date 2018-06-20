@@ -141,7 +141,8 @@ export class CreateMeetingComponent implements OnInit {
           console.log("Created meeting with importance",task);
           this.initCreateMeetingForm();
           this.confirmingSend = false;
-          this.meetingSaved.emit(true)
+          this.meetingSaved.emit(true);
+          this.meetingImportance = "ORDINARY";
         }, error => {
           console.log("Error creating task: ", error);
           this.confirmingSend = false;

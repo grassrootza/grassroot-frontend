@@ -47,6 +47,8 @@ export class GroupDetailsComponent implements OnInit {
 
   public membership:MembershipInfo;
 
+  public displayName:string;
+
   constructor(private router: Router,
               private route: ActivatedRoute,
               private formBuilder: FormBuilder,
@@ -85,10 +87,10 @@ export class GroupDetailsComponent implements OnInit {
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
-            
-            this.group.members.forEach(mem => {this.membership = mem.memberUid === this.userService.getLoggedInUser().userUid ? mem : null});
 
-            console.log("Membership for logged in use is......",this.membership);
+            this.membership = this.group.members.find(member => member.memberUid == this.userService.getLoggedInUser().userUid);
+
+            this.displayName = this.membership == null ? "" : this.membership.displayName;
 
             const imageBaseUrl = this.baseUrl.replace('/v2', '') + '/image/flyer/group/';
             this.flyerUrlJpg = imageBaseUrl + groupUid + "?typeOfFile=JPEG&color=true&language=en";

@@ -20,7 +20,7 @@
         <div class="col-md-8 group-description">
           <p [innerHtml]="group.description"></p>
           <p *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
-            You are known as {{membership.displayName}} in this group
+            You are known as {{displayName}} in this group
             <a class="grassroot-link flyer-link" href="#" (click)="triggerAliasModal()">(Change)</a>
           </p>
           <p *ngIf="group.userRole === 'ROLE_GROUP_ORGANIZER'">
