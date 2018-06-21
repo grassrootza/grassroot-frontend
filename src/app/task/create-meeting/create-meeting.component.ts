@@ -30,6 +30,8 @@ export class CreateMeetingComponent implements OnInit {
   public imageName;
   public imageKey;
 
+  public isGroupPaidFor:boolean;
+
   public meetingImportance:string = "ORDINARY";
 
   constructor( private taskService: TaskService,
@@ -61,6 +63,11 @@ export class CreateMeetingComponent implements OnInit {
         this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
           this.membersList = members.content;
           this.setAssignedMembers();
+        });
+
+        this.groupService.loadGroupDetailsFromServer(this.groupUid).subscribe(resp => {
+          this.isGroupPaidFor = resp.paidFor;
+          console.log("Is this group paid for???",this.isGroupPaidFor);
         });
       }
     }.bind(this))

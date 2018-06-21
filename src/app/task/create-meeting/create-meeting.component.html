@@ -103,7 +103,7 @@
             </div>
           </div>
 
-          <div class="form-group row">
+          <div *ngIf="isGroupPaidFor" class="form-group row">
             <div class="col-sm-4 col-form-label text-md-right text-sm-left">
               <label for="meeting-date-time">Importance</label>
             </div>
@@ -111,7 +111,7 @@
               <select class="form-control" id="meeting-importance" name="meeting-importance"
                     (change)="onChangeSelectImportance($event.target.value)">
                 <option value="ORDINARY">Ordinary</option>
-                <option value="SPECIAL">Special</option>
+                <option value="SPECIAL">Important</option>
               </select>
             </div>
             
