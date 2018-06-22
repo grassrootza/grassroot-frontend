@@ -19,14 +19,11 @@
 
         <div class="col-md-8 group-description">
           <p [innerHtml]="group.description"></p>
-          <p *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
+          <p>
             You are known as {{displayName}} in this group
             <a class="grassroot-link flyer-link" href="#" (click)="triggerAliasModal()">(Change)</a>
           </p>
-          <p *ngIf="group.userRole === 'ROLE_GROUP_ORGANIZER'">
-              You are known as {{group.groupCreatorName}} in this group
-              <a class="grassroot-link flyer-link" href="#" (click)="triggerAliasModal()">(Change)</a>
-          </p>
+          
           <div class="row">
             <div class="col-md-7">
               <div class="group-info creation-info">

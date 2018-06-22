@@ -67,7 +67,6 @@ export class CreateMeetingComponent implements OnInit {
 
         this.groupService.loadGroupDetailsFromServer(this.groupUid).subscribe(resp => {
           this.isGroupPaidFor = resp.paidFor;
-          console.log("Is this group paid for???",this.isGroupPaidFor);
         });
       }
     }.bind(this))
@@ -143,9 +142,8 @@ export class CreateMeetingComponent implements OnInit {
     }
 
     this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis,
-      publicMeeting, meetingDesc, this.imageKey, assignedMemberUids,this.meetingImportance).subscribe(task => {
+      publicMeeting, meetingDesc, this.imageKey, assignedMemberUids,this.isGroupPaidFor ? this.meetingImportance : null).subscribe(task => {
           console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
-          console.log("Created meeting with importance",task);
           this.initCreateMeetingForm();
           this.confirmingSend = false;
           this.meetingSaved.emit(true);
@@ -182,7 +180,6 @@ export class CreateMeetingComponent implements OnInit {
 
   onChangeSelectImportance(importance:string){
     this.meetingImportance = importance;
-    console.log("Setting meeting importance to.....",this.meetingImportance);
   }
 
 }

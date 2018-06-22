@@ -263,9 +263,8 @@ export class GroupDetailsComponent implements OnInit {
       console.log("User removed from group",resp);
       $('#unsubscribe-modal').modal('hide');
       this.alertService.alert("group.unsubscribe-alert.text");
-      setTimeout(() => {
-        this.router.navigate(["/groups"]);
-      },2000);
+      
+      this.router.navigate(["/groups"]);
     },error => {
       console.log("Error removing user from group",error);
     });
