@@ -359,6 +359,7 @@
         "topics": "Assign topics",
         "taskTeam": "Add to task team",
         "copyToGroup": "Copy to group",
+        "download": "Download as Excel",
         "role": "Change role",
         "remove": "Remove",
         "noMembersSelectedModal": {
@@ -1388,6 +1389,12 @@
         "body": "Are you sure? This will generate a notification to all members that the meeting is cancelled",
         "done": "Done. The meeting has been cancelled and members notified"
       },
+      "change": {
+        "button": "Change date",
+        "title": "Enter new date and time",
+        "note": "Note: This will send a message to all meeting attendees to notify them of the changed date and time.",
+        "done": "Done! The meeting date and time have been changed and members notified"
+      },
       "respond": {
         "title": "Are you attending?",
         "body": "{{ caller }} has called a meeting about {{ title }}, at {{ location }}, on {{ date }}. Will you attend?",
@@ -1510,5 +1517,26 @@
     "GROUP_PERMISSION_ALTER_TODO": "Edit an action item",
     "GROUP_PERMISSION_SEND_BROADCAST": "Send broadcasts",
     "GROUP_PERMISSION_CREATE_CAMPAIGN": "Create campaign"
+  },
+  "metric": {
+    "MEETINGS": "Meetings called",
+    "ALL_USERS": "Total users",
+    "VOTES": "Votes called",
+    "USSD_USERS": "Session users",
+    "TODO": "Action items created",
+    "USERS_NON_ENGLISH": "Non-English users",
+    "NOTIFICATIONS_DELIVERED": "Notifications delivered",
+    "NOTIFICATIONS_ALL": "Notifications generated",
+    "NOTIFICATIONS_FAILED": "Notifications failed", 
+    "IZWE_LAMI_SESSIONS": "Izwe Lami sessions",
+    "IZWE_LAMI_USERS": "Izwe Lami users",
+    "GROUPS_TOKEN": "Groups with join codes",
+    "GROUPS_ALL": "Active groups",
+    "TASKS_ALL": "Total tasks",
+    "SAFETY_ALERTS": "Safety alerts triggered",
+    "LIVE_WIRE_RELEASED": "LiveWire alerts released",
+    "LIVE_WIRE_CREATED": "LiveWire alerts created",
+    "LIVE_WIRE_USERS": "LiveWire contacts active",
+    "ALERTS_ALL": "Total alerts"
   }
 }

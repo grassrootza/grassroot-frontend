@@ -1,13 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {TaskService} from '../task.service';
-import {GroupService} from '../../groups/group.service';
 import {Membership} from '../../groups/model/membership.model';
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
 import {MediaService} from "../../media/media.service";
 import {MediaFunction} from "../../media/media-function.enum";
 import {AlertService} from "../../utils/alert-service/alert.service";
+import { GroupService } from '../../groups/group.service';
 
 declare var $: any;
 
@@ -32,8 +32,8 @@ export class CreateMeetingComponent implements OnInit {
 
   constructor( private taskService: TaskService,
                private formBuilder: FormBuilder,
-               private groupService: GroupService,
                private mediaService: MediaService,
+               private groupService: GroupService,
                private alertService: AlertService) {
     this.initCreateMeetingForm();
     this.meetingSaved = new EventEmitter<boolean>();
@@ -54,10 +54,12 @@ export class CreateMeetingComponent implements OnInit {
 
   ngOnInit() {
     $('#create-meeting-modal').on('shown.bs.modal', function () {
-      console.log("Create meeting dialog shown for group: " + this.groupUid);
+      console.log('Create meeting dialog shown for group: ', this.groupUid);
       if (this.groupUid != "" && this.groupUid != undefined) {
+        console.log('fetching group members ...');
         this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
           this.membersList = members.content;
+          console.log('member list: ', this.membersList);
           this.setAssignedMembers();
         });
       }

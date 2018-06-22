@@ -1,0 +1,52 @@
+<div class="container primary-container">
+    <div class="row metrics-table">
+      <div class="col-12">
+        <div class="card">
+          <div class="row table-header">
+            <div class="col-6 text-left">
+              Metric
+            </div>
+            <div class="col-3 text-right">
+              Count
+            </div>
+            <div class="col-3 text-center">
+              Chart
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <ngb-accordion #acc="ngbAccordion">
+                <ngb-panel *ngFor="let metric of TOP_LEVEL">
+                  <ng-template ngbPanelTitle>
+                    <span style="color: #2CBC4C">{{ 'metric.' + metric | translate }} 
+                      <span *ngIf="metricTotals[metric]" style="text-align: right; font-style: italic">({{ metricTotals[metric] | number }})</span></span>
+                  </ng-template>
+                  <ng-template ngbPanelContent>
+                      <div *ngFor="let submetric of LEVEL_TREE[metric]" class="row">
+                          <div class="col-6 text-left">
+                            {{ 'metric.' + submetric | translate }}
+                          </div>
+                          <div class="col-3 text-right">
+                            {{ metricTotals[submetric] | number }}
+                          </div>
+                          <div class="col-3 text-center">
+                            <button type="button" class="btn btn-secondary hover-primary" (click)="loadCumulativeCounts(submetric)">Show</button>
+                          </div>
+                      </div>
+                  </ng-template>
+                </ngb-panel>
+              </ngb-accordion>
+            </div>
+          </div>
+          <!--  -->
+        </div>
+      </div>
+    </div>
+    <div class="row metrics-table mt-3">
+      <div class="col-12">
+        <div class="card">
+          <canvas id="metricCountChart" height="200" width="400"></canvas>
+        </div>
+      </div>
+    </div>
+</div>

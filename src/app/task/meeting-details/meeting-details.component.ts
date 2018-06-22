@@ -8,6 +8,9 @@ import {AlertService} from "../../utils/alert-service/alert.service";
 import {TaskType} from "../task-type";
 import {MediaFunction} from "../../media/media-function.enum";
 import {MediaService} from "../../media/media.service";
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { DateTimeUtils, epochMillisFromDateTime } from '../../utils/DateTimeUtils';
+import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 
 const RESP_ORDER = {
   'YES': 4, 'NO': 3, 'MAYBE': 2, 'NO_RESPONSE': 1
@@ -33,8 +36,10 @@ export class MeetingDetailsComponent implements OnInit {
 
   public imageUrl;
 
+  public changeDateTimeForm: FormGroup;
+
   constructor(private route: ActivatedRoute,
-              private router: Router,
+              private router: Router, private fb: FormBuilder,
               private alertService: AlertService,
               private taskService:TaskService,
               private mediaService: MediaService) {
@@ -87,6 +92,28 @@ export class MeetingDetailsComponent implements OnInit {
         this.imageUrl = '';
       }
     });
+  }
+
+  showDateChange() {
+    console.log('meeting date: ', DateTimeUtils.dateFromDate(this.meeting.deadlineDate));
+    this.changeDateTimeForm = this.fb.group({
+      'date': [DateTimeUtils.dateFromDate(this.meeting.deadlineDate), Validators.required],
+      'time': [DateTimeUtils.timeFromDate(this.meeting.deadlineDate), Validators.required]
+    });
+    $('#change-date-modal').modal('show');
+  }
+
+  changeMtgDate() {
+    let newDate: NgbDateStruct = this.changeDateTimeForm.get('date').value;
+    let newTime: NgbTimeStruct = this.changeDateTimeForm.get('time').value;
+    
+    console.log('changing date to: ', newDate, newTime);
+
+    this.taskService.changeTaskTime(this.meetingUid, TaskType.MEETING, epochMillisFromDateTime(newDate, newTime)).subscribe(changedMtg => {
+      this.alertService.alert('task.meeting.change.done', true);
+      this.meeting = changedMtg;
+      $('#change-date-modal').modal('hide');
+    })
   }
 
   confirmCancel() {

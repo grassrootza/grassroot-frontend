@@ -1,32 +1,130 @@
 version: 2
+
+step-library:
+  - &fetch-aws-cli
+      run:
+        name: Download pip and install AWS CLI
+        command: |
+          sudo apt-get update && sudo apt-get install python && sudo apt-get install python-pip && sudo apt-get install python-dev
+          pip install awscli --upgrade --user
+  - &create-beanstalk-version
+      run:
+        name: Modify Dockerrun file for version and repo
+        command: |
+            export PATH=~/.local/bin:$PATH    
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            cp Dockerrun.aws.json.template Dockerrun.aws.json
+            sed -i "s/__version__/${VERSION}/g" Dockerrun.aws.json
+            sed -i "s/__repo__/${ECR_URL}/g" Dockerrun.aws.json
+            zip -r ${VERSION}.zip Dockerrun.aws.json
+            zip -r ${VERSION}.zip .ebextensions/
+            aws s3 cp ${VERSION}.zip s3://$EB_BUCKET/$EB_FOLDER/${VERSION}.zip --region eu-west-1
+            aws elasticbeanstalk create-application-version --application-name gr-frontend --version-label ${VERSION} --source-bundle S3Bucket=$EB_BUCKET,S3Key=$EB_FOLDER/${VERSION}.zip --region eu-west-1
+
 jobs:
   build:
     docker:
       - image: circleci/node:9.4
     steps:
       - checkout
-      - run: echo "Initiating build"
       - run:
           name: Get Webpack
           command: |
             sudo npm i -g webpack
             sudo npm i -g webpack-dev-server
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
+          keys: 
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       - run:
           name: Install local dependencies
           command: npm install
       - save_cache:
           key: v1-dependencies-{{ checksum "package.json" }}
           paths:
-            - node_modules
-    #   - run:
-    #       name: List packages, for debugging
-    #       command: npm ls  
+            - node_modules  
       - run: 
           name: Build server and browser
           command: npm run build:uni
       - save_cache:
           key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           paths:
+            - dist
             - dist-server
+  build_docker:
+      docker:
+        - image: circleci/node:9.4 
+      steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+          - v1-dist-
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: |
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker build -f Dockerfile -t grassroot-frontend:${VERSION} .
+      - *fetch-aws-cli
+      - run:
+          name: Tag and upload image to ECR          
+          command: |
+            export PATH=~/.local/bin:$PATH
+            eval $(aws ecr get-login --no-include-email --region eu-west-1)
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            docker tag grassroot-frontend:${VERSION} ${ECR_URL}/grassroot-frontend:${VERSION}
+            docker push ${ECR_URL}/grassroot-frontend:${VERSION}
+  deploy_staging:
+      docker:
+        - image: circleci/node:9.4
+      steps:
+      - checkout
+      - *fetch-aws-cli
+      - *create-beanstalk-version
+      - run:
+          name: Trigger Beanstalk to update preprod
+          command: |
+            export PATH=~/.local/bin:$PATH
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            aws elasticbeanstalk update-environment --environment-name gr-frontend-staging --version-label ${VERSION} --region eu-west-1
+  deploy_production:
+      docker:
+            - image: circleci/node:9.4
+      steps:
+      - checkout
+      - *fetch-aws-cli
+      - *create-beanstalk-version
+      - run:
+          name: Trigger Beanstalk to update production
+          command: |
+            export PATH=~/.local/bin:$PATH
+            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+            aws elasticbeanstalk update-environment --environment-name gr-frontend-prod --version-label ${VERSION} --region eu-west-1
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+    - build
+    - build_docker:
+        requires:
+          - build
+        filters:
+          branches:
+            only: 
+              - preprod
+              - master
+    - deploy_staging:
+        requires:
+          - build_docker
+        filters:
+          branches:
+            only: preprod
+    - deploy_production:
+        requires:
+          - build_docker
+        filters:
+          branches:
+            only: master

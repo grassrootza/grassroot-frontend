@@ -10,23 +10,29 @@ import {ViewAlertComponent} from "./livewire/alert-view/view-alert.component";
 import {AdminRoleGuard} from "./admin-role.guard";
 import {SubscriberComponent} from './livewire/accounts/view/subscriber/subscriber.component';
 import {SystemAdminComponent} from "./system-admin/system-admin.component";
+import { AnalyticsComponent } from './analytics/analytics.component';
+import { AnalyticsService } from './analytics.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     LoggedInServicesModule,
+    NgbModule,
     RouterModule.forChild(ADMIN_ROUTES)
   ],
   declarations: [
     LiveWireListComponent,
     ViewAlertComponent,
     SubscriberComponent,
-    SystemAdminComponent
+    SystemAdminComponent,
+    AnalyticsComponent
   ],
   providers: [
     AdminRoleGuard,
-    LiveWireAdminService
+    LiveWireAdminService,
+    AnalyticsService
   ]
 })
 export class AdminModule {
