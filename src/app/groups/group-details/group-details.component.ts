@@ -258,12 +258,9 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   unsubscribeFromGroup(){
-    console.log("Group uid=",this.group.groupUid);
     this.groupService.unsubscribeUser(this.group.groupUid).subscribe(resp => {
-      console.log("User removed from group",resp);
       $('#unsubscribe-modal').modal('hide');
-      this.alertService.alert("group.unsubscribe-alert.text");
-      
+      this.alertService.alert("group.unsubscribe-alert.text", true);
       this.router.navigate(["/groups"]);
     },error => {
       console.log("Error removing user from group",error);
@@ -272,7 +269,6 @@ export class GroupDetailsComponent implements OnInit {
 
 
   triggerAliasModal(){
-    console.log("Calling alias modal..............");
     $('#alias-modal').modal('show');
     return false;
   }
@@ -284,8 +280,10 @@ export class GroupDetailsComponent implements OnInit {
       console.log("Alias changed.........",resp);
       $('#alias-modal').modal('hide');
       this.alertService.alert("group.alias.alert-text");
+      this.displayName = alias;
     },error => {
       console.log("Error updating alias",error);
+      this.alertService.alert('group.alias.alert-error');
     });
   }
 

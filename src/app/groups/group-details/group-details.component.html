@@ -19,9 +19,9 @@
 
         <div class="col-md-8 group-description">
           <p [innerHtml]="group.description"></p>
-          <p>
+          <p *ngIf="group?.paidFor">
             You are known as {{displayName}} in this group
-            <a class="grassroot-link flyer-link" href="#" (click)="triggerAliasModal()">(Change)</a>
+            <a class="grassroot-link" href="#" (click)="triggerAliasModal()">(change)</a>
           </p>
           
           <div class="row">
@@ -54,14 +54,6 @@
               <div class="group-info">
                 <a class="grassroot-link flyer-link" target="_blank" href="{{ flyerUrlPDF }}">{{ 'group.flyer' | translate }}</a>
               </div>
-
-              <!-- <div class="group-info" *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
-                <a class="grassroot-link flyer-link" href="#" (click)="triggerUnsubscribeModal()">Unsubscribe</a>
-              </div> -->
-
-              <!-- <div class="group-info">
-                <a class="grassroot-link flyer-link" href="#" (click)="triggerAliasModal()">{{'group.alias.link' | translate}}</a>
-              </div> -->
 
               <!-- <div class="group-info" *ngIf="!group.paidFor ">
                 This group is not linked to a Grassroot Extra account, which is required for some functions, such as broadcasts.

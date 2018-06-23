@@ -763,7 +763,7 @@ export class GroupService {
     return this.httpClient.post(this.groupMemberUnsubscribeUrl,null,{params:params,responseType:'text'});
   }
 
-  updateMemberAlias(grouoUid:string,alias:string):Observable<any>{
+  updateMemberAlias(grouoUid:string, alias:string):Observable<any>{
     let params = new HttpParams()
         .set("groupUid",grouoUid)
         .set("alias",alias);

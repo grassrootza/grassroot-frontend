@@ -65,7 +65,8 @@ export class CreateMeetingComponent implements OnInit {
           this.setAssignedMembers();
         });
 
-        this.groupService.loadGroupDetailsFromServer(this.groupUid).subscribe(resp => {
+        // since it will be down by definition (if in this modal)
+        this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(resp => {
           this.isGroupPaidFor = resp.paidFor;
         });
       }
