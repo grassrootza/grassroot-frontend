@@ -70,8 +70,6 @@ export class CampaignMsgPair {
 }
 
 export const getCampaignMsg = (cm: CampaignMsgServerDTO): CampaignMsgServerDTO => {
-  console.log('transforming campaign message: ', cm);
-  console.log('and messages: ', cm.messages);
   let cmDTO = new CampaignMsgServerDTO(
     cm.messageId,
     cm.linkedActionType,

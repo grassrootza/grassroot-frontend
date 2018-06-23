@@ -19,12 +19,12 @@ export class BroadcastTypeComponent implements OnInit {
 
   constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService,
               private alertService: AlertService) {
-    this.alertService.showLoading();
     this.typesForm = this.formBuilder.group(new BroadcastTypes(), {validator: Validators.compose([oneItemSelected, fbPageSelectedIfFb])});
   }
 
   ngOnInit() {
     this.typesForm.setValue(this.broadcastService.getTypes());
+    this.alertService.showLoading();
     this.broadcastService.createParams.subscribe(createParams => {
       this.createParams = createParams;
       this.alertService.hideLoading();
