@@ -13,6 +13,8 @@ import {SystemAdminComponent} from "./system-admin/system-admin.component";
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { AnalyticsService } from './analytics.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AccountsComponent } from './accounts/accounts.component';
+import { AccountsService } from './accounts.service';
 
 @NgModule({
   imports: [
@@ -27,12 +29,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     ViewAlertComponent,
     SubscriberComponent,
     SystemAdminComponent,
-    AnalyticsComponent
+    AnalyticsComponent,
+    AccountsComponent
   ],
   providers: [
     AdminRoleGuard,
     LiveWireAdminService,
-    AnalyticsService
+    AnalyticsService,
+    AccountsService
   ]
 })
 export class AdminModule {
