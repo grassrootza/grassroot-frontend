@@ -19,6 +19,11 @@
 
         <div class="col-md-8 group-description">
           <p [innerHtml]="group.description"></p>
+          <p *ngIf="group?.paidFor">
+            You are known as {{displayName}} in this group
+            <a class="grassroot-link" href="#" (click)="triggerAliasModal()">(change)</a>
+          </p>
+          
           <div class="row">
             <div class="col-md-7">
               <div class="group-info creation-info">
@@ -35,7 +40,10 @@
                 <strong>{{'group.myRole' | translate}} </strong>
                 <span class="my-role badge badge-success" [translate]="'enum.GroupRole.' + group.userRole">
                     User group role
-                  </span>
+                </span>
+                <span *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
+                  <a class="grassroot-link flyer-link" href="#" (click)="triggerUnsubscribeModal()">(Unsubscribe)</a>
+                </span>
               </div>
 
               <div class="group-info" *ngIf="group?.hasPermission('GROUP_PERMISSION_SEE_MEMBER_DETAILS')">
@@ -264,6 +272,61 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" *ngIf="joinTopicsChanged" (click)="setJoinTopics()">
           {{ 'action.save' | translate }}
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="unsubscribe-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ 'group.unsubscribe-modal.title' | translate }}</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>{{ 'group.unsubscribe-modal.header' | translate }}</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="unsubscribeFromGroup()">
+          Unsubscribe
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="alias-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ 'group.alias.title' | translate }}</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>{{ 'group.alias.header' | translate }}</h5>
+
+        <div class="form-group">
+          <input class="form-control" type="text" name="alias" id="alias" #alias>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="changeName(alias.value)">
+          Rename
         </button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           {{ 'action.close' | translate }}

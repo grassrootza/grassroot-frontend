@@ -34,12 +34,13 @@
               </div>
             </div>
             <div class="col-11">
-              <div class="row" (click)="handleTaskClicked(task)">
+              <div (click)="handleTaskClicked(task)" class="row">
                 <span class="font-weight-bold">
                   <img [src]="'assets/' + task.getEventIconName() "/>
                   {{task.type}}:&nbsp;
                 </span>
-                {{task.title}}
+                {{task.title }}&nbsp;&nbsp;
+                <i *ngIf="task.type == taskTypes.MEETING && task.meetingImportance == 'SPECIAL'" class="fas fa-exclamation-circle" style="font-size:20px;color:lime"></i>
               </div>
               <div class="row" *ngIf="task.errorReport">
                 <a (click)="downloadEventErrorReport(task)" class="grassroot-link download-error-report">Download error report</a>

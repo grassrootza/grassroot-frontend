@@ -101,6 +101,10 @@
       "PUBLIC": "PUBLIC",
       "SYSTEM": "SYSTEM",
       "PRIVATE": "PRIVATE"
+    },
+    "MeetingImportance": {
+      "ORDINARY": "ORDINARY",
+      "SPECIAL": "SPECIAL"
     }
   },
   "menu": {
@@ -263,6 +267,20 @@
     "noJoinWordsCanSet": " None. Click to add",
     "noJoinWordsCantSet": " None.",
     "flyer": "Download flyer",
+    "unsubscribe-modal":{
+    	"title":"Are you sure?",
+    	"header":"You are about to unsubscribe from this group. You will only be able to rejoin if someone adds you back. Are you sure you want to leave?"
+    },
+    "unsubscribe-alert":{
+    	"text":"Done! You have been removed from the group"
+    },
+    "alias":{
+    	"link":"Change your name in this group",
+    	"title":"Change my name in group",
+    	"header":"What name will you use in this group? (Leave it blank to reset to your normal name)",
+      "alert-text":"Done! You name in this group was changed",
+      "alert-error": "Sorry, there was an error changing your group alias"
+    },
     "nav": {
       "dashboard": "Group Dashboard",
       "activity": "Activity",

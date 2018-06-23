@@ -58,6 +58,7 @@
                            [topics]="group.topics"
                            [affiliations]="group.affiliations"
                            [includeNameFilter]="true"
+                           [campaigns]="campaign ? [campaign] : null"
                            (filterChanged)="membersFilterChanged($event)">
         </app-member-filter>
 

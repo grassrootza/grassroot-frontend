@@ -50,11 +50,13 @@ export class MemberFilterComponent implements OnInit, OnChanges {
     this.joinMethods = Object.keys(GroupJoinMethod);
     this.userLanguages = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
     this.roleKeys = Object.keys(GroupRole);
+    console.log('on filter set up, campaigns: ', this.campaigns);
     // console.log(this.userLanguages);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes && changes['campaigns'] && !changes['campaigns'].firstChange) {
+    console.log('changes: ', changes);
+    if (changes && changes['campaigns']) {
       this.hasCampaigns = this.campaigns && this.campaigns.length > 0;
       console.log("campaigns changed, setting up? : ", this.hasCampaigns);
       if (this.hasCampaigns)
