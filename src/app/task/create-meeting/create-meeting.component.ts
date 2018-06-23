@@ -30,6 +30,10 @@ export class CreateMeetingComponent implements OnInit {
   public imageName;
   public imageKey;
 
+  public isGroupPaidFor:boolean;
+
+  public meetingImportance:string = "ORDINARY";
+
   constructor( private taskService: TaskService,
                private formBuilder: FormBuilder,
                private mediaService: MediaService,
@@ -61,6 +65,11 @@ export class CreateMeetingComponent implements OnInit {
           this.membersList = members.content;
           console.log('member list: ', this.membersList);
           this.setAssignedMembers();
+        });
+
+        // since it will be down by definition (if in this modal)
+        this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(resp => {
+          this.isGroupPaidFor = resp.paidFor;
         });
       }
     }.bind(this))
@@ -136,11 +145,12 @@ export class CreateMeetingComponent implements OnInit {
     }
 
     this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis,
-      publicMeeting, meetingDesc, this.imageKey, assignedMemberUids).subscribe(task => {
+      publicMeeting, meetingDesc, this.imageKey, assignedMemberUids,this.isGroupPaidFor ? this.meetingImportance : null).subscribe(task => {
           console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
           this.initCreateMeetingForm();
           this.confirmingSend = false;
-          this.meetingSaved.emit(true)
+          this.meetingSaved.emit(true);
+          this.meetingImportance = "ORDINARY";
         }, error => {
           console.log("Error creating task: ", error);
           this.confirmingSend = false;
@@ -169,6 +179,10 @@ export class CreateMeetingComponent implements OnInit {
     this.imageKey = undefined;
     this.imageName = undefined;
     return false;
+  }
+
+  onChangeSelectImportance(importance:string){
+    this.meetingImportance = importance;
   }
 
 }

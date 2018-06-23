@@ -19,7 +19,7 @@
               <label for="meeting-subject">{{ 'group.activity.meetingModal.subject' | translate }}</label>
             </div>
             <div class="col-sm-8">
-              <input type="text" class="form-control" id="meeting-subject" maxlength="50"
+              <input type="text" class="form-control" id="meeting-subject" maxlength="70"
                      placeholder="{{ 'group.activity.meetingModal.subject' | translate }}"
                      name="subject" [formControl]="createMeetingForm.controls['subject']">
             </div>
@@ -56,19 +56,6 @@
             </div>
             <div class="col-sm-4">
               <ngb-timepicker [formControl]="createMeetingForm.controls['time']" [spinners]="false"></ngb-timepicker>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="col-sm-4 col-form-label text-md-right text-sm-left">
-              <label>{{ 'group.activity.meetingModal.public' | translate }}</label>
-            </div>
-            <div class="col-sm-8">
-              <label for="meeting-public">
-                <input type="checkbox" class="form-check-input" id="meeting-public"
-                       [formControl]="createMeetingForm.controls['publicMeeting']">
-                {{ 'group.activity.meetingModal.public-explain' | translate }}
-              </label>
             </div>
           </div>
 
@@ -113,6 +100,33 @@
                   {{member.user.displayName}}
                 </option>
               </select>
+            </div>
+          </div>
+
+          <div *ngIf="isGroupPaidFor" class="form-group row">
+            <div class="col-sm-4 col-form-label text-md-right text-sm-left">
+              <label for="meeting-date-time">Importance</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" id="meeting-importance" name="meeting-importance"
+                    (change)="onChangeSelectImportance($event.target.value)">
+                <option value="ORDINARY">Ordinary</option>
+                <option value="SPECIAL">Important</option>
+              </select>
+            </div>
+            
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-4 col-form-label text-md-right text-sm-left">
+              <label>{{ 'group.activity.meetingModal.public' | translate }}</label>
+            </div>
+            <div class="col-sm-8">
+              <label for="meeting-public">
+                <input type="checkbox" class="form-check-input" id="meeting-public"
+                       [formControl]="createMeetingForm.controls['publicMeeting']">
+                {{ 'group.activity.meetingModal.public-explain' | translate }}
+              </label>
             </div>
           </div>
 

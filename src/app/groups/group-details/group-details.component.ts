@@ -11,6 +11,7 @@ import {JoinCodeInfo} from "../model/join-code-info";
 import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
 import {AlertService} from "../../utils/alert-service/alert.service";
 import { saveAs } from 'file-saver';
+import { MembershipInfo } from '../model/membership.model';
 
 declare var $: any;
 
@@ -43,6 +44,10 @@ export class GroupDetailsComponent implements OnInit {
   public joinTopicsChanged: boolean = false;
 
   public justCopied: boolean = false;
+
+  public membership:MembershipInfo;
+
+  public displayName:string;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -82,6 +87,11 @@ export class GroupDetailsComponent implements OnInit {
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
+
+            this.membership = this.group.members.find(member => member.memberUid == this.userService.getLoggedInUser().userUid);
+
+            this.displayName = this.membership == null ? "" : this.membership.displayName;
+
             const imageBaseUrl = this.baseUrl.replace('/v2', '') + '/image/flyer/group/';
             this.flyerUrlJpg = imageBaseUrl + groupUid + "?typeOfFile=JPEG&color=true&language=en";
             this.flyerUrlPDF = imageBaseUrl + groupUid + "?typeOfFile=PDF&color=true&language=en";
@@ -239,6 +249,41 @@ export class GroupDetailsComponent implements OnInit {
       console.log('error clearing group welcome message: ', error);
       this.welcomeMsgResult = 'Sorry, there was an error deactivating';
       setTimeout(() => this.welcomeMsgResult = '', 3000);
+    });
+  }
+
+  triggerUnsubscribeModal(){
+    $('#unsubscribe-modal').modal('show');
+    return false;
+  }
+
+  unsubscribeFromGroup(){
+    this.groupService.unsubscribeUser(this.group.groupUid).subscribe(resp => {
+      $('#unsubscribe-modal').modal('hide');
+      this.alertService.alert("group.unsubscribe-alert.text", true);
+      this.router.navigate(["/groups"]);
+    },error => {
+      console.log("Error removing user from group",error);
+    });
+  }
+
+
+  triggerAliasModal(){
+    $('#alias-modal').modal('show');
+    return false;
+  }
+
+
+  changeName(alias:string){
+    console.log("Changing name in group to:",alias);
+    this.groupService.updateMemberAlias(this.group.groupUid,alias).subscribe(resp => {
+      console.log("Alias changed.........",resp);
+      $('#alias-modal').modal('hide');
+      this.alertService.alert("group.alias.alert-text");
+      this.displayName = alias;
+    },error => {
+      console.log("Error updating alias",error);
+      this.alertService.alert('group.alias.alert-error');
     });
   }
 
