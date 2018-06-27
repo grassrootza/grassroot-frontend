@@ -45,6 +45,10 @@ export class Task {
     return this.deadlineMillis > moment().valueOf();
   }
 
+  public fetchVoteOptions() {
+    return this.voteOptions ? this.voteOptions : ['YES', 'NO', 'ABSTAIN'];
+  }
+
   public static createInstanceFromData(taskData: Task) {
     return new Task(
       taskData.taskUid,
