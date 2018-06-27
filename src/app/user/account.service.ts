@@ -1,44 +1,57 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {environment} from "../../environments/environment";
-import {AuthenticatedUser, AuthorizationResponse, UserProfile} from "./user.model";
-import {Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
-import {isValidNumber} from "libphonenumber-js";
-import {Account} from "./model/account.model";
-import {AccountType} from "./model/account-type.enum";
-import {AccountBillingRecords} from "./model/account-billing-records.model";
 
 @Injectable()
 export class AccountService {
 
+  public MONTHLY_SUBSCRIPTION_FEE = 30000; // R300 in cents
+
+  private createAccountUrl = environment.backendAppUrl + "/api/account/create";
+
   private accountFetchUrl = environment.backendAppUrl + "/api/account/settings/fetch";
   private updateAccountUrl = environment.backendAppUrl + "/api/account/settings/update";
-  private getAccountFeesUrl = environment.backendAppUrl + "/api/account/account-fees";
   private getCostSinceLastBillUrl = environment.backendAppUrl + "/api/account/last-cost";
-  private getAccountBillingRecordsUrl = environment.backendAppUrl + "/api/account/billing-records";
-  private downloadAccountBillingRecordUrl = environment.backendAppUrl + "/api/account/statement";
   private closeAccountUrl = environment.backendAppUrl + "/api/account/close";
 
+  private updatePaymentRefUrl = environment.backendAppUrl + "/api/account/change/payment";
 
-  constructor(private httpClient: HttpClient, private router: Router) {
+  constructor(private httpClient: HttpClient) {
   }
 
-  fetchAccountDetails(): Observable<Account>{
-    return this.httpClient.get<Account>(this.accountFetchUrl)
-      .map(account => {
-        if(account)
-          return Account.transformDates(account);
-    })
+  // gets a checkout ID for first month's subscription fee
+  initiateCCardPayment(): Observable<string> {
+    let params = new HttpParams().set('amountZAR', '' + this.MONTHLY_SUBSCRIPTION_FEE);
+    return this.httpClient.get('payment', { params: params, responseType: 'text' });
   }
 
-  getAccountFees(): Observable<any> {
-    return this.httpClient.get(this.getAccountFeesUrl).map(resp => {
-      return resp;
-    })
+  updatePaymentRef(accountId: string, paymentRef: string) {
+    const fullUrl = this.updatePaymentRefUrl + "/" + accountId;
+    const params = new HttpParams().set('paymentRef', paymentRef);
+    return this.httpClient.post(fullUrl, null, {params: params});
   }
 
+  createAccount(accountName: string, billingEmail: string, addAllGroupsToAccount: boolean = true, 
+      otherAdmins?: string[], existingAccountId?: string, ) {
+    let params = new HttpParams().set('accountName', accountName).set('billingEmail', billingEmail)
+      .set('addAllGroupsToAccount', '' + addAllGroupsToAccount);
+    
+    if (existingAccountId) {
+      params = params.set('existingAccountId', existingAccountId);
+    }
+
+    if (otherAdmins) {
+      params = params.set('otherAdmins', otherAdmins.join(','));
+    }
+
+    return this.httpClient.post(this.createAccountUrl, null, { params: params });
+  }
+
+  fetchAccountDetails() {
+    return this.httpClient.get(this.accountFetchUrl);
+  }
+  
   getCostSinceLastBill(accountUid: string): Observable<any> {
     let params = new HttpParams()
       .set("accountUid", accountUid);
@@ -46,25 +59,6 @@ export class AccountService {
     return this.httpClient.get(this.getCostSinceLastBillUrl, {params: params}).map(resp => {
       return resp;
     })
-  }
-
-  getPastPayments(accountUid: string): Observable<AccountBillingRecords[]> {
-    let params = new HttpParams()
-      .set("accountUid", accountUid);
-
-    return this.httpClient.get<AccountBillingRecords[]>(this.getAccountBillingRecordsUrl, {params: params})
-      .map(abrs =>
-        abrs.map(
-          abr => AccountBillingRecords.transformDates(abr)
-        )
-      );
-  }
-
-  downloadPastInvoice(paymentUid: string, accountUid: string){
-    let params = new HttpParams()
-      .set("paymentUid", paymentUid)
-      .set("accountUid", accountUid);
-    return this.httpClient.get(this.downloadAccountBillingRecordUrl, { params: params, responseType: 'blob' });
   }
 
   closeAccount(accountUid: string): Observable<any> {
@@ -81,9 +75,7 @@ export class AccountService {
     let params = new HttpParams()
       .set("accountUid", accountUid)
       .set("accountName", accountName)
-      .set("billingEmail", billingUserEmail)
-      .set("accountType",type)
-      .set("billingCycle", billingCycle);
+      .set("billingEmail", billingUserEmail);
     return this.httpClient.post(this.updateAccountUrl, null, {params: params})
       .map(result => {
         let message = result['message'];

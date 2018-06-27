@@ -15,6 +15,7 @@ import { AnalyticsService } from './analytics.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AccountsComponent } from './accounts/accounts.component';
 import { AccountsService } from './accounts.service';
+import { AccountDetailComponent } from './accounts/account-detail/account-detail.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import { AccountsService } from './accounts.service';
     SubscriberComponent,
     SystemAdminComponent,
     AnalyticsComponent,
-    AccountsComponent
+    AccountsComponent,
+    AccountDetailComponent
   ],
   providers: [
     AdminRoleGuard,

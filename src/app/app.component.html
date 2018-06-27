@@ -83,7 +83,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
                   <a class="dropdown-item" [routerLink]="['/user']">{{ 'menu.profile' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/password']">{{ 'menu.password' | translate }}</a>
-                  <a class="dropdown-item" [routerLink]="['/user/account']">{{ 'menu.account' | translate }}</a>
+                  <a class="dropdown-item" [routerLink]="['/user/signup']">{{ 'menu.account' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/integrations']">{{ 'menu.integrations' | translate }}</a>
                   <a class="dropdown-item" *ngIf="loggedInUser.hasSystemAdmin()" [routerLink]="['/admin']">{{ 'menu.admin' | translate }}</a>
                   <a class="dropdown-item" *ngIf="loggedInUser.hasLiveWireAdmin()" [routerLink]="['/admin/livewire/list']">{{'menu.livewire' | translate}}</a>

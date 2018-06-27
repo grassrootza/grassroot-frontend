@@ -40,6 +40,7 @@ import {AboutUsComponent} from "./landing/static/about-us.component";
 import {ContributeComponent} from "./landing/static/contribute.component";
 import {TimeAgoPipe} from "time-ago-pipe";
 import { HelpComponent } from './help/help.component';
+import { PaymentsService } from './payments.service';
 
 @NgModule({
   declarations: [
@@ -92,7 +93,8 @@ import { HelpComponent } from './help/help.component';
     PublicActivityService,
     PublicNewsService,
     MediaService,
-    IncomingResponseService
+    IncomingResponseService,
+    PaymentsService
   ]
 })
 export class AppModule { }

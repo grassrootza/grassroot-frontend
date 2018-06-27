@@ -5,6 +5,7 @@ import {environment} from "../../../environments/environment";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../utils/alert-service/alert.service";
+import { PaymentsService } from "../../payments.service";
 
 @Component({
   selector: 'app-front-contribute',
@@ -12,12 +13,8 @@ import {AlertService} from "../../utils/alert-service/alert.service";
   styleUrls: [ '../landing.component.css', './contribute.component.css', './static-matter-general.css' ]
 })
 export class ContributeComponent implements OnInit {
-
+  
   public donateError: boolean;
-
-  private donationInitUrl = environment.backendAppUrl + "/api/donate/initiate";
-  private donationResultUrl = environment.backendAppUrl + "/api/donate/result";
-  private shareDonateEmailUrl = environment.backendAppUrl + "/api/donate/share";
 
   public displayDonateInput: boolean = true;
   public displayDonateForm: boolean = false;
@@ -32,7 +29,8 @@ export class ContributeComponent implements OnInit {
 
   // breaking pattern of only services having http client, but this is _extremely_ specialized, so a whole service
   // would be overkill just to preserve a bit of consistency
-  constructor(private httpClient: HttpClient, private router: Router, private route: ActivatedRoute,
+  constructor(private paymentService: PaymentsService, 
+              private route: ActivatedRoute,
               private alertService: AlertService,
               private fb: FormBuilder, @Inject(PLATFORM_ID) protected platformId: Object) {
     this.shareDonationForm = this.fb.group({
@@ -70,9 +68,8 @@ export class ContributeComponent implements OnInit {
 
   initiateDonation(amountZAR: number) {
     console.log("amount ZAR: ", amountZAR);
-    let params = new HttpParams().set("amountZAR", "" + amountZAR);
     this.alertService.showLoading();
-    this.httpClient.get(this.donationInitUrl, { params: params, responseType: 'text' }).subscribe(result => {
+    this.paymentService.initiatePayment(amountZAR).subscribe(result => {
       this.alertService.hideLoadingDelayed();
       this.setUpCreditCardForm(result);
     }, error => {
@@ -82,11 +79,7 @@ export class ContributeComponent implements OnInit {
 
   setUpCreditCardForm(checkoutId: string) {
     if (isPlatformBrowser(this.platformId)) {
-      let script = document.createElement('script');
-      script.src = `https://test.oppwa.com/v1/paymentWidgets.js?checkoutId=${checkoutId}`;
-      script.async = true;
-      script.defer = true;
-      document.body.appendChild(script);
+      this.paymentService.appendCardScript(document, checkoutId);
       this.displayDonateInput = false;
       this.displayDonateForm = true;
     }
@@ -94,8 +87,7 @@ export class ContributeComponent implements OnInit {
 
   checkDonationResult(resourcePath: string) {
     if (resourcePath) {
-      let params = new HttpParams().set("resourcePath", resourcePath);
-      this.httpClient.get(this.donationResultUrl, {params: params}).subscribe(result => {
+      this.paymentService.checkPaymentResult(resourcePath).subscribe(result => {
         console.log(`checked payment result, we have : ${result}`);
         if (result === 'PAYMENT_SUCCESS') {
           this.displayDonateForm = false;
@@ -114,10 +106,9 @@ export class ContributeComponent implements OnInit {
   sendShareDonationEmail() {
     // do the thing, then:
     if (this.shareDonationForm.valid) {
-      let params = new HttpParams().set("senderName", this.shareDonationForm.controls['senderName'].value)
-        .set("emailAddress", this.shareDonationForm.controls['emailAddress'].value);
       this.alertService.showLoading();
-      this.httpClient.get(this.shareDonateEmailUrl, { params: params }).subscribe(result => {
+      this.paymentService.sendDonationShareEmail(this.shareDonationForm.controls['senderName'].value,
+        this.shareDonationForm.controls['emailAddress'].value).subscribe(result => {
         this.alertService.hideLoading();
         this.showShareCompleted = true;
       });

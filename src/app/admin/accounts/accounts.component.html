@@ -1,3 +1,13 @@
-<p>
-  accounts works!
-</p>
+<div class="container primary-container">
+  <div class="card">
+    <div class="card-header">
+      <div class="col-12">
+        <h4>Grassroot Extra subscriptions</h4>
+      </div>
+    </div>
+    <div class="card-body" *ngIf="accounts">
+      <app-account-detail  *ngFor="let account of accounts" [account]="account"></app-account-detail>  
+    </div>
+  </div>
+
+</div>

@@ -27,6 +27,7 @@ export class GroupCopyMembersComponent implements OnChanges {
 
   createNewGroup: boolean = false;
   newGroupName: string = "";
+  topicAssignment: string = "";
 
   constructor(private groupService: GroupService,
               private alertService: AlertService) { }
@@ -54,10 +55,12 @@ export class GroupCopyMembersComponent implements OnChanges {
     }
   }
 
-  saveCopyMemberToGroup(groupUid: string = null){
+  saveCopyMemberToGroup(groupUid: string = null) {
     let groupAddMemberInfo: GroupAddMemberInfo[] = [];
     console.log("copying members into group, currently: ", this.members);
+    
     this.members.forEach(member => {
+      let newGroupTopics = this.topicAssignment ? member.topics.concat(this.topicAssignment) : member.topics;
       const memberInfo = new GroupAddMemberInfo(
         member.user.phoneNumber,
         member.user.displayName,
@@ -68,7 +71,7 @@ export class GroupCopyMembersComponent implements OnChanges {
         UserProvince[member.user.province],
         member.affiliations,
         [],
-        member.topics
+        newGroupTopics
       );
       groupAddMemberInfo.push(memberInfo);
     });

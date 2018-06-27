@@ -36,7 +36,7 @@ export class GroupAllMembersComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private alertService: AlertService) {
-    console.log("constructing all members component");
+    // console.log("constructing all members component");
   }
 
   ngOnInit() {
@@ -46,7 +46,7 @@ export class GroupAllMembersComponent implements OnInit {
       this.groupService.loadGroupDetailsCached(this.groupUid, false)
         .subscribe(
           groupDetails => {
-            console.log("got a result on group details: ", groupDetails);
+            // console.log("got a result on group details: ", groupDetails);
             this.group = groupDetails;
           },
           error => {
@@ -69,7 +69,7 @@ export class GroupAllMembersComponent implements OnInit {
     if (!this.currentPage) {
       this.alertService.showLoading();
     }
-    console.log("sorting users, retrieved sort: ", sort);
+    // console.log("sorting users, retrieved sort: ", sort);
     this.filterMembersPage = sort;
     this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort).subscribe(
         membersPage => {
@@ -78,7 +78,7 @@ export class GroupAllMembersComponent implements OnInit {
         },
         error => {
           this.alertService.hideLoading();
-          console.log('Error loading group members', error.status);
+          // console.log('Error loading group members', error.status);
         }
       )
   }

@@ -58,15 +58,6 @@
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group col-sm-12">
-            <label class="form-label" for="billingCycle">{{ 'user.account.billingPeriod' | translate }}</label>
-            <select id="billingCycle" formControlName="billingCycle" class="form-control">
-              <option *ngFor="let bc of billingCyclesKeys" [value]="bc">{{ billingCycles[bc] | titlecase }}</option>
-            </select>
-          </div>
-        </div>
-
         <div class="card mb-3 w-100">
           <div class="card-body">
             <p class="bill-summary">

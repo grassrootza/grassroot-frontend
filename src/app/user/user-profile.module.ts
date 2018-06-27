@@ -11,6 +11,7 @@ import {LoggedInServicesModule} from "../logged-in-services.module";
 import {SharedModule} from "../shared.module";
 import {Ng2ImgMaxModule} from "ng2-img-max";
 import {UserDeleteComponent} from "./delete/user-delete.component";
+import { SignupComponent } from './account/signup/signup.component';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import {UserDeleteComponent} from "./delete/user-delete.component";
     PasswordComponent,
     AccountComponent,
     IntegrationsComponent,
-    UserDeleteComponent
+    UserDeleteComponent,
+    SignupComponent
   ]
 })
 export class UserProfileModule {

@@ -51,7 +51,7 @@
               <span>{{vote.title}}</span>
             </div>
           </div>
-          <div *ngIf="votes?.length == 0">
+          <div *ngIf="votes != null && votes?.length == 0">
             {{ 'group.dashboard.no-votes' | translate }}
           </div>
         </div>
