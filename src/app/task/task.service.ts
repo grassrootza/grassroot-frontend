@@ -105,14 +105,16 @@ export class TaskService {
       .set('location', location)
       .set('dateTimeEpochMillis', dateTimeEpochMillis.toString())
       .set('publicMeeting', publicMeeting.toString())
-      .set('assignedMemberUids', assignedMemberUids.join(','))
-      .set('meetingImportance',meetingImportance);
+      .set('assignedMemberUids', assignedMemberUids.join(','));
 
     if (description)
       params = params.set("description", description);
 
     if (imageKey)
       params = params.set("mediaFileUid", imageKey);
+
+    if (meetingImportance)
+      params = params.set('meetingImportance', meetingImportance);
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
