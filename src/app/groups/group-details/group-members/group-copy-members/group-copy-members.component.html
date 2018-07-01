@@ -55,6 +55,15 @@
           </div>
 
           <div class="row mt-3">
+            <div class="col-md-6 col-sm-12">
+              <label class="grassroot-label">Assign topic in destination group (optional)</label>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <input class="from-control" type="text" [(ngModel)]="topicAssignment" />
+            </div>
+          </div>
+
+          <div class="row mt-3">
             <div class="col-md-4 col-sm-12">
               <button [ngClass]="['btn', (createNewGroup ? 'btn-primary' : 'btn-secondary'), 'create-group']"
                       (click)="toggleCreateNewGroup()"><i class="fas fa-plus"></i> {{ 'group.allMembers.copyMembers.copyToNewGroup' | translate }}</button>

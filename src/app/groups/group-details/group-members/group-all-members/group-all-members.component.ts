@@ -36,7 +36,7 @@ export class GroupAllMembersComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private alertService: AlertService) {
-    console.log("constructing all members component");
+    // console.log("constructing all members component");
   }
 
   ngOnInit() {
@@ -46,7 +46,7 @@ export class GroupAllMembersComponent implements OnInit {
       this.groupService.loadGroupDetailsCached(this.groupUid, false)
         .subscribe(
           groupDetails => {
-            console.log("got a result on group details: ", groupDetails);
+            // console.log("got a result on group details: ", groupDetails);
             this.group = groupDetails;
           },
           error => {
