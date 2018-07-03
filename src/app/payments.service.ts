@@ -12,9 +12,11 @@ export class PaymentsService {
 
   constructor(private httpClient: HttpClient) { }
 
-  initiatePayment(amountZAR: number) {
+  initiatePayment(amountZAR: number, recurring?: boolean) {
     console.log("amount ZAR: ", amountZAR);
     let params = new HttpParams().set("amountZAR", "" + amountZAR);
+    if (recurring)
+      params = params.set('recurring', 'true')
     return this.httpClient.get(this.paymentInitUrl, { params: params, responseType: 'text' }).map(result => {
       return result;
     }, error => {
@@ -30,8 +32,11 @@ export class PaymentsService {
     document.body.appendChild(script);
   }
 
-  checkPaymentResult(resourcePath: string) {
+  checkPaymentResult(resourcePath: string, accountId?: string) {
     let params = new HttpParams().set("resourcePath", resourcePath);
+    if (accountId)
+      params = params.set('accountId', accountId);
+
     return this.httpClient.get(this.paymentResultUrl, {params: params, responseType: 'text'}); 
   }
 

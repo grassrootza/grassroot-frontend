@@ -26,9 +26,11 @@ export class AccountService {
     return this.httpClient.get('payment', { params: params, responseType: 'text' });
   }
 
-  updatePaymentRef(accountId: string, paymentRef: string) {
+  updatePaymentRef(accountId: string, paymentRef: string, addAllGroupsToAccount?: boolean) {
     const fullUrl = this.updatePaymentRefUrl + "/" + accountId;
-    const params = new HttpParams().set('paymentRef', paymentRef);
+    let params = new HttpParams().set('paymentRef', paymentRef);
+    if (addAllGroupsToAccount)
+      params = params.set('addAllGroups', '' + addAllGroupsToAccount);
     return this.httpClient.post(fullUrl, null, {params: params});
   }
 

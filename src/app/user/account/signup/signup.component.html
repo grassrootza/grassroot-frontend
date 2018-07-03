@@ -27,22 +27,31 @@
           <div class="col-12">
             <form [formGroup]="creationForm">
               <div class="row">
-                <div class="col-6">Give the account a name (e.g., your company):</div>
-                <div class="col-6"><input type="text" class="form-control" [formControl]="creationForm.controls['accountName']" /></div>
+                <div class="col-12">Give the account a name (e.g., your company):</div>
               </div>
               <div class="row">
-                <div class="col-6">Enter the email for billing invoices:</div>
-                <div class="col-6"><input type="text" class="form-control" [formControl]="creationForm.controls['billingEmail']" /></div>
+                <div class="col-12"><input type="text" class="form-control" [formControl]="creationForm.controls['accountName']" /></div>
               </div>
               <div class="row">
-                <div class="col-6">Add all of the groups you organize to this account?</div>
-                <div class="col-6"><input type="checkbox" checked [formControl]="creationForm.controls['addAllGroups']" /></div>
+                <div class="col-12">Enter the email for billing invoices:</div>
               </div>
               <div class="row">
-                <div class="col-6">Do you want to add extra administrators to this account? Account admins can add groups to the account, send broadcasts, 
-                  and set up campaigns. To add admins, just enter their phone numbers or email addresses, separated by a comma. You can also change this later.
+                <div class="col-12"><input type="text" class="form-control" [formControl]="creationForm.controls['billingEmail']" /></div>
+              </div>
+              <div class="row">
+                <div class="col-12">Add all of the groups you organize to this account?
+                  <input type="checkbox" checked [formControl]="creationForm.controls['addAllGroups']" />
                 </div>
-                <div class="col-6"><input type="text" class="form-control" [formControl]="creationForm.controls['accountAdmins']" /></div>
+              </div>
+              <div class="row">
+                <div class="col-12"><label>Do you want to add extra administrators to this account?</label> 
+                  <p class="small">Account admins can add groups to the account, send broadcasts, 
+                  and set up campaigns. To add admins, just enter their phone numbers or email addresses, separated by a comma. 
+                  You can also change this later.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12"><input type="text" class="form-control" [formControl]="creationForm.controls['accountAdmins']" /></div>
               </div>
               <div class="row">
                 <div class="col-12 text-center">
@@ -63,8 +72,11 @@
         <div class="row" *ngIf="currentStage == 'COMPLETE_TO_PAY'">
           Thanks! But you still need to pay us
         </div>
-        <div class="row" *ngIf="currentStage == 'ERROR'">
+        <div class="row" *ngIf="currentStage == 'PAYMENT_ERROR'">
           Sorry, that went wrong. Please send us an email at <a href="mailto:accounts@grassroot.org.za">accounts@grassroot.org.za</a>
+        </div>
+        <div class="row" *ngIf="currentStage == 'LOADING'">
+          Loading ...
         </div>
     </div>
   </div>
