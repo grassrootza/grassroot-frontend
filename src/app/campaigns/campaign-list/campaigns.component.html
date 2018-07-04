@@ -13,9 +13,9 @@
 </div>
 
 <div class="container primary-container" *ngIf="canCreateOrManageCampaigns">
-  <a [routerLink]="['/campaigns/create']" type="button" class="btn btn-success float-right">
+  <button [routerLink]="['/campaigns/create']" type="button" class="btn btn-primary create-button float-right">
     {{ 'campaigns.create' | translate }}
-  </a>
+  </button>
   <h1 class="main-title">{{ 'campaigns.title' | translate }}</h1>
 
   <h2 *ngIf="activeCampaigns.length > 0">

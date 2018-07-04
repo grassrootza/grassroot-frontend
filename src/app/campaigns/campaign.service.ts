@@ -10,6 +10,8 @@ import {
   CampaignRequest,
   CampaignUpdateParams
 } from "./campaign-create/campaign-request";
+import { Language } from '../utils/language';
+import { lang } from 'moment';
 
 @Injectable()
 export class CampaignService {
@@ -40,15 +42,16 @@ export class CampaignService {
   fetchCampaignWelcomeMsgUrl = environment.backendAppUrl + "/api/campaign/manage/update/welcome/current";
   setCampaignWelcomeMsgUrl = environment.backendAppUrl + "/api/campaign/manage/update/welcome/set";
   clearCampaignWelcomeMsgUrl = environment.backendAppUrl + "/api/campaign/manage/update/welcome/clear";
+  updateCampaignDefaultLangUrl = environment.backendAppUrl + "/api/campaign/manage/update/language";
 
-  private _campaigns: CampaignInfo[];
+  private _campaigns: CampaignInfo[] = [];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
   public campaignInfoList: Observable<CampaignInfo[]> = this.campaignInfoList_.asObservable();
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+  }
 
   loadCampaigns() {
-
     this.httpClient.get<CampaignInfo[]>(this.campaignListUrl)
       .map(data => {
           // console.log("Campaign json object from server: ", data);
@@ -82,22 +85,34 @@ export class CampaignService {
   }
 
   setCampaignMessages(campaignUid: string, messageRequests: CampaignMsgRequest[]): Observable<CampaignInfo> {
-    console.log("sending message requests: ", messageRequests);
     let fullUrl = this.campaignMessageSetUrl + "/" + campaignUid;
     let serverMsgRequests: CampaignMsgServerDTO[] = messageRequests.map(req =>
       new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags));
-    console.log("server msg requests: ", serverMsgRequests);
     // console.log("message request, messages: ", messageRequests.map(mr => mr.messages));
-    return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests);
+    return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests).map(result => this.stashChangedCampaign(result));
+  }
+
+  stashChangedCampaign(result): CampaignInfo {
+    let campaignEntity = getCampaignEntity(result);
+    if (!this._campaigns)
+      this._campaigns = [];
+
+    let index = this._campaigns.findIndex(c => c.campaignUid == campaignEntity.campaignUid);
+    if (index != -1)
+      this._campaigns[index] = campaignEntity;
+    else
+      this._campaigns.push(campaignEntity);
+    return getCampaignEntity(result);
   }
 
   loadCampaign(campaignUid: string): Observable<CampaignInfo> {
     // should probably chain these better, but will clean up later
+    let index = this._campaigns.findIndex(c => c.campaignUid == campaignUid);
     if (this._campaigns && this._campaigns.find(c => c.campaignUid == campaignUid)) {
       return this.campaignInfoList.map(campaigns => campaigns.find(c => c.campaignUid == campaignUid));
     } else {
       let fullUrl = this.campaignFetchUrl + "/" + campaignUid;
-      return this.httpClient.get<CampaignInfo>(fullUrl).map(cp => getCampaignEntity(cp));
+      return this.httpClient.get<CampaignInfo>(fullUrl).map(this.stashChangedCampaign);
     }
   }
 
@@ -236,6 +251,13 @@ export class CampaignService {
   fetchCurrentWelcomeMsg(campaignUid: string): Observable<string> {
     const fullUrl = this.fetchCampaignWelcomeMsgUrl + "/" + campaignUid;
     return this.httpClient.get(fullUrl, { responseType: 'text'});
+  }
+
+  updateCampaignDefaultLanguage(campaignUid: string, languageTwoDigitCode: string) {
+    const fullUrl = this.updateCampaignDefaultLangUrl + "/" + campaignUid;
+    console.log('setting new default language: ', languageTwoDigitCode);
+    const params = new HttpParams().set('defaultLanguage', languageTwoDigitCode);
+    return this.httpClient.post<CampaignInfo>(fullUrl, null, { params: params}).map(response => this.stashChangedCampaign(response));
   }
 
 }

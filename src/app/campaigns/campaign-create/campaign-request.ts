@@ -78,7 +78,6 @@ export const getCampaignMsg = (cm: CampaignMsgServerDTO): CampaignMsgServerDTO =
     cm.tags
   );
   cmDTO.messages = cm.messages;
-  console.log('okay, and messages: ')
   return cmDTO;
 };
 

@@ -17,3 +17,12 @@ export const SOTHO = new Language("st", "sot", "Sotho", "Sesotho");
 export const AFRIKAANS = new Language("af", "afr", "Afr", "Afrikaans");
 
 export const MSG_LANGUAGES = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
+
+export const findByTwoDigitCode = (code: string, defaultLang?: Language): Language => {
+  if (!code)
+    return defaultLang ? defaultLang : undefined;
+  const index = MSG_LANGUAGES.findIndex(lang => lang.twoDigitCode == code);
+  console.log('index of language: ', index);
+  console.log('returning: ', MSG_LANGUAGES[index]);
+  return index != -1 ? MSG_LANGUAGES[index] : (defaultLang ? defaultLang : undefined); 
+}

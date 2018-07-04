@@ -29,7 +29,8 @@ export class CampaignInfo {
               public petitionConnected: boolean,
               public campaignUrl: string,
               public petitionUrl: string,
-              public campaignImageKey: string) {
+              public campaignImageKey: string,
+              public defaultLanguage: string) {
   }
 
   public isActive(): boolean {
@@ -77,6 +78,7 @@ export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
     cp.petitionConnected,
     cp.campaignUrl,
     cp.petitionUrl,
-    cp.campaignImageKey
+    cp.campaignImageKey,
+    cp.defaultLanguage
   );
 };

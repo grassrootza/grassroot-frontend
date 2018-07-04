@@ -146,6 +146,8 @@ export class CampaignCreateComponent implements OnInit {
     request.startDateEpochMillis = epochMillisFromDate(this.createCampaignForm.controls.startDate.value);
     request.endDateEpochMillis = epochMillisFromDate(this.createCampaignForm.controls.endDate.value);
 
+    console.log('end date epoch millis: ', request.endDateEpochMillis);
+
     request.smsShare = this.createCampaignForm.controls.smsShare.value;
     if (request.smsShare) {
       request.smsLimit = this.createCampaignForm.controls.smsLimit.value;

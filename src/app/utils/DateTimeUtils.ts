@@ -76,7 +76,7 @@ export const epochMillisFromDateTime = (ngbDate: NgbDateStruct, ngbTime: NgbTime
 }
 
 export const epochMillisFromDate = (ngbDate: NgbDateStruct) => {
-  return moment(ngbDate).valueOf()
+  return DateTimeUtils.momentFromNgbStruct(ngbDate).valueOf();
 };
 
 export const ngbDateFromMoment = (date: Moment): NgbDateStruct => {

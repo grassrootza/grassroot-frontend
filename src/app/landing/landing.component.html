@@ -1,3 +1,79 @@
+<!-- the full CSS takes a while to come down as it's within the JS bundle, and this is first that people see, hence -->
+<style>
+  #intro {
+  border-radius: 0px;
+  margin-bottom: 0px;
+  background:#929BAF url(/assets/landing/banner_bg_prog.jpg) no-repeat;
+  background-size: cover;
+  position: relative }
+#intro .intro-content {
+  /*max-width: 770px;*/
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%); }
+#intro .meet-vote-act {
+  font-size: 25px;
+  line-height: 36px;
+  color: #ffffff; }
+#intro h1 {
+  color: #ffffff;
+  font-weight: 100; }
+
+  @media (min-width: 320px) {
+      #intro {
+        min-height: 340px; 
+      }
+
+      #intro h1 {
+        font-size: 20px;
+        line-height: 28px;
+        margin-bottom: 30px;
+        margin-top: 15px; 
+      }
+      
+      #intro .intro-content {
+        max-width: 65%; 
+      }
+  }
+
+  @media (min-width: 576px) {
+    #intro h1 {
+      font-size: 20px;
+      line-height: 28px;
+    }
+
+    #intro .intro-content {
+      max-width: 55%;
+    }
+  }
+
+  @media (min-width: 768px) {
+    #intro {
+      min-height: 530px; }
+
+    #intro h1 {
+      font-size: 55px;
+      line-height: 65px; }
+    
+    #intro .intro-content {
+      max-width: 90%; }
+  }
+
+  @media (min-width: 992px) {
+    #intro .intro-content {
+      max-width: 75%; }
+  }
+
+  @media (min-width: 1200px) {
+    #intro .intro-content {
+      max-width: 55%; } 
+  }
+
+</style>
 <!--<div class="container">-->
 <div class="jumbotron" id="intro">
   <div class="container text-center">
