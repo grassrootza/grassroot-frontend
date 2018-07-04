@@ -40,7 +40,7 @@
                   {{task.type}}:&nbsp;
                 </span>
                 {{task.title }}&nbsp;&nbsp;
-                <i *ngIf="task.type == taskTypes.MEETING && task.meetingImportance == 'SPECIAL'" class="fas fa-exclamation-circle" style="font-size:20px;color:lime"></i>
+                <i *ngIf="task.type == taskTypes.MEETING && task.meetingImportance == 'IMPORTANT_MEETING'" class="fas fa-exclamation-circle" style="font-size:20px;color:lime"></i>
               </div>
               <div class="row" *ngIf="task.errorReport">
                 <a (click)="downloadEventErrorReport(task)" class="grassroot-link download-error-report">Download error report</a>

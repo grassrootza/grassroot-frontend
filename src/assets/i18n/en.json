@@ -103,8 +103,8 @@
       "PRIVATE": "PRIVATE"
     },
     "MeetingImportance": {
-      "ORDINARY": "ORDINARY",
-      "SPECIAL": "SPECIAL"
+      "ORDINARY": "Ordinary",
+      "IMPORTANT_MEETING": "Important"
     }
   },
   "menu": {
