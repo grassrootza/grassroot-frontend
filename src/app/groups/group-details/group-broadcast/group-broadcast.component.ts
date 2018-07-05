@@ -88,6 +88,7 @@ export class GroupBroadcastComponent implements OnInit {
 
   showViewModal(broadcast: Broadcast){
     this.modalBroadcast = broadcast;
+    console.log('modal broadcast: ', this.modalBroadcast);
     this.firstModalTab = broadcast.smsContent ? 'sms' : broadcast.emailContent ? 'email' : broadcast.fbPost ? 'facebook' : 'twitter';
     $('#broadcast-view-modal').modal('show');
   }

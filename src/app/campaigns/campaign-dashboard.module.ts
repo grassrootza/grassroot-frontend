@@ -10,12 +10,14 @@ import {CampaignSettingsComponent} from './campaign-dashboard/campaign-settings/
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {MessageTabsetComponent} from "./campaign-dashboard/campaign-messages/message-tabset/message-tabset.component";
 import {RouterModule} from "@angular/router";
+import { LoggedInServicesModule } from '../logged-in-services.module';
 
 @NgModule({
   imports: [
     CommonModule,
     SharedModule,
     NgbModule,
+    LoggedInServicesModule,
     RouterModule.forChild(CAMPAIGN_DASHBOARD_ROUTES)
   ],
   declarations: [

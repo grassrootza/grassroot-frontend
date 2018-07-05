@@ -25,6 +25,7 @@ export class CampaignBroadcastsComponent implements OnInit {
       this.broadcastService.getCampaignBroadcasts(this.campaignUid).subscribe(broadcasts => {
         console.log('fetched broadcasts from server: ', broadcasts);
         this.serverFetched = true;
+        this.broadcasts = broadcasts;
       });
     });
   }
