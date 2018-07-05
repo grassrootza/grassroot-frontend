@@ -89,6 +89,8 @@ export class GroupService {
   groupFetchWelcomeMsgUrl = environment.backendAppUrl + "/api/group/modify/welcome/check";
   groupSetWelcomeMsgUrl = environment.backendAppUrl + "/api/group/modify/welcome/update";
   groupClearWelcomeMsgUrl = environment.backendAppUrl + "/api/group/modify/welcome/clear";
+  groupMemberUnsubscribeUrl = environment.backendAppUrl + "/api/group/modify/member/unsubscribe";
+  groupMemberAliasUpdateUrl = environment.backendAppUrl + "/api/group/modify/member/alias/update";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -760,6 +762,20 @@ export class GroupService {
     const fullUrl = this.groupDownloadMembersErrorReportUrl + '/' + groupUid + '/download';
 
     return this.httpClient.get(fullUrl, { responseType: 'blob' });
+  }
+
+  unsubscribeUser(groupUid: string):Observable<any>{
+    let params = new HttpParams().set("groupUid",groupUid);
+
+    return this.httpClient.post(this.groupMemberUnsubscribeUrl,null,{params:params,responseType:'text'});
+  }
+
+  updateMemberAlias(grouoUid:string, alias:string):Observable<any>{
+    let params = new HttpParams()
+        .set("groupUid",grouoUid)
+        .set("alias",alias);
+
+    return this.httpClient.post(this.groupMemberAliasUpdateUrl,null,{params:params,responseType:'text'});
   }
 }
 

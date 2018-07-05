@@ -111,7 +111,7 @@
                 <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
                   {{ !!response ? (response) : '(Select)' }}</button>
                 <div class="dropdown-menu">
-                  <a class="dropdown-item" *ngFor="let option of task.voteOptions" (click)="response = option">
+                  <a class="dropdown-item" *ngFor="let option of task.fetchVoteOptions()" (click)="response = option">
                     {{ option }}
                   </a>
                 </div>

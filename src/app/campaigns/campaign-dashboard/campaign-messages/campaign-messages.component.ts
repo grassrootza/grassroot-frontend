@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {ENGLISH, Language, MSG_LANGUAGES} from "../../../utils/language";
+import {ENGLISH, Language, MSG_LANGUAGES, findByTwoDigitCode} from "../../../utils/language";
 import {CampaignMsgRequest} from "../../campaign-create/campaign-request";
 import {FormBuilder, FormGroup, FormControl} from "@angular/forms";
 import {CampaignService} from "../../campaign.service";
 import {AlertService} from "../../../utils/alert-service/alert.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import * as moment from "moment";
 import {CampaignInfo} from "../../model/campaign-info";
 
@@ -45,6 +45,7 @@ export class CampaignMessagesComponent implements OnInit {
 
   public availableLanguages = MSG_LANGUAGES;
   public selectedLanguages: Language[];
+  public defaultLanguage: Language;
   public languageForm: FormGroup;
 
   private campaignUid: string;
@@ -64,7 +65,7 @@ export class CampaignMessagesComponent implements OnInit {
   constructor(private campaignService: CampaignService,
               private alertService: AlertService,
               private fb: FormBuilder,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute, private router: Router) {
     this.selectedLanguages = [ENGLISH]; // start with this as default
     this._currentMessages = [];
   }
@@ -82,12 +83,19 @@ export class CampaignMessagesComponent implements OnInit {
       this.campaignUid = params['id'];
       this.campaignService.loadCampaign(this.campaignUid).subscribe(campaign => {
         this.campaign = campaign;
+        this.setupDefaultLanguage();
         this.setUpMessages();
         if (campaign.outboundSmsEnabled) {
           this.setUpWelcomeMsg();
         }
       });
     });
+  }
+
+  setupDefaultLanguage() {
+    let defaultLang = findByTwoDigitCode(this.campaign.defaultLanguage, ENGLISH);
+    this.languageForm.addControl('defaultLanguage', this.fb.control(defaultLang.twoDigitCode));
+    this.defaultLanguage = defaultLang;
   }
 
   setUpMessages() {
@@ -98,7 +106,7 @@ export class CampaignMessagesComponent implements OnInit {
       this.sliceOutMessageType('SHARE_SEND');
     }
 
-    console.log('campaign messages from server: ', this.campaign.campaignMessages);
+    console.log('campaign messages from cache: ', this.campaign.campaignMessages);
     this.currentTypes.forEach((type, index) => {
       this.typeIndexes[type] = index;
 
@@ -121,6 +129,7 @@ export class CampaignMessagesComponent implements OnInit {
     });
 
     console.log("prior messages: ", this.priorMessages);
+    console.log('selected languages: ', this.selectedLanguages);
 
     // have to do a quick second loop because msg IDs may not have been set
     this._currentMessages
@@ -130,6 +139,10 @@ export class CampaignMessagesComponent implements OnInit {
           .filter(mt => this.typeMsgIds[mt] != undefined)
           .map(mt => this.typeMsgIds[mt]);
     });
+
+    this.selectedLanguages
+      .filter(lang => this.languageForm.controls[lang.threeDigitCode])
+      .forEach(lang => this.languageForm.controls[lang.threeDigitCode].patchValue(true, {onlySelf: true}));
 
   }
 
@@ -141,9 +154,30 @@ export class CampaignMessagesComponent implements OnInit {
   }
 
   updateLanguages() {
-    this.selectedLanguages = Object.keys(this.languageForm.value).filter(key => this.languageForm.value[key])
+    this.selectedLanguages = Object.keys(this.languageForm.value)
+      .filter(key => key !== 'defaultLanguage')
+      .filter(key => this.languageForm.value[key])
       .map(key => this.getLanguage(key));
+      console.log('after update, selected change: ', this.selectedLanguages);
+    // here, check for altered language
     $('#select-language-modal').modal("hide");
+    this.checkForUpdatedDefaultLang();
+  }
+
+  checkForUpdatedDefaultLang() {
+    console.log('default language control: ', this.languageForm.controls['defaultLanguage']);
+    if (this.languageForm.controls['defaultLanguage'] && this.languageForm.controls['defaultLanguage'].value != this.defaultLanguage) {
+      this.alertService.showLoading();
+      this.campaignService.updateCampaignDefaultLanguage(this.campaignUid, this.languageForm.controls['defaultLanguage'].value).subscribe(campaign => {
+        console.log('Updated, done');
+        this.alertService.hideLoading();
+        this.campaign = campaign;
+        this.setupDefaultLanguage();
+      }, error => {
+        console.log('error changing default language: ', error);
+        this.alertService.hideLoading();
+      })
+    }
   }
 
   getLanguage(code: string) {
@@ -159,10 +193,15 @@ export class CampaignMessagesComponent implements OnInit {
   setMessages() {
     // console.log("okay, trying to save messages: {}", this._currentMessages);
     if (this.messagesChanged) {
+      this.alertService.showLoading();
       this.campaignService.setCampaignMessages(this.campaignUid, this._currentMessages).subscribe(campaignInfo => {
-        this.alertService.alert("campaign.messages.done.success");
+        this.alertService.alert("campaign.messages.done.success", true);
+        this.alertService.hideLoading();
+        this.campaign = campaignInfo;
+        this.setUpMessages();
       }, error => {
-        // console.log("well that didn't work: ", error);
+        console.log("Error updating messages: ", error);
+        this.alertService.hideLoading();
         this.alertService.alert("campaign.messages.done.error");
       });
     }

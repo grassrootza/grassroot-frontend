@@ -31,7 +31,7 @@ export class BroadcastCreateComponent implements OnInit, AfterViewInit {
       if (ev instanceof NavigationEnd) {
         let uri = ev.urlAfterRedirects;
         this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
-        console.log("current tab: ", this.currentTab);
+        // console.log("current tab: ", this.currentTab);
         this.broadcastService.currentStep = this.broadcastService.pages.indexOf(this.currentTab) + 1;
       }
     });

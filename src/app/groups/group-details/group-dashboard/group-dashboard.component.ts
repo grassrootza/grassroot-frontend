@@ -23,9 +23,15 @@ export class GroupDashboardComponent implements OnInit {
   private groupUid: string = null;
 
   public group: Group = null;
+<<<<<<< HEAD
   public meetings: Task[] = [];
   public votes: Task[];
   public todos: Task[] = [];
+=======
+  public meetings: Task[];
+  public votes: Task[];
+  public todos: Task[];
+>>>>>>> master
 
   public meetingToView: Task;
   public voteToView: Task;

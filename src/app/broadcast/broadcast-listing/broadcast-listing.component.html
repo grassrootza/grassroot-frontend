@@ -1,0 +1,41 @@
+<div class="container broadcast-info-row">
+  <div class="row flex flex-wrap">
+    <div class="col-12 title">
+      {{broadcast.title}}
+    </div>
+  </div>
+  <div class="row flex flex-wrap">
+    <div class="col-md-2 col-sm-6">
+      {{broadcast.getFormattedDateTimeSent()}}
+    </div>
+
+    <div class="col-md-2 col-sm-6">
+      {{broadcast.succeeded  ? "Sent successfully" : "Some errors" }}
+    </div>
+
+    <div class="col-md-1 col-sm-6">
+      {{broadcast.smsCount > 0 ? broadcast.smsCount : '-' }}
+    </div>
+
+    <div class="col-md-1 col-sm-6">
+      {{broadcast.emailCount > 0 ? broadcast.emailCount : '-'}}
+    </div>
+
+    <div class="col-md-4 col-sm-12" *ngIf="broadcast.fbPages || broadcast.twitterAccount">
+      <span *ngIf="broadcast.fbPages">FB: {{broadcast.fbPages?.join(", ")}}</span>
+      <span *ngIf="broadcast.fbPages && broadcast.twitterAccount">, </span>
+      <span *ngIf="broadcast.twitterAccount">Twitter: {{broadcast.twitterAccount}}</span>
+    </div>
+
+    <div [ngClass]="{'col-md-2 col-sm-12': true, 'offset-md-4': !broadcast.fbPages && !broadcast.twitterAccount}">
+      <div class="dropdown">
+        <a class="dropdown-toggle" id="sentActionsDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Manage</a>
+        <div class="dropdown-menu" aria-labelledby="sentActionsDropdown">
+          <a class="dropdown-item" (click)="showViewModal()">{{'group.broadcast.table.sentActions.view' | translate}}</a>
+          <a class="dropdown-item" *ngIf="broadcast.createdByUser" (click)="showResendModal()">{{'group.broadcast.table.sentActions.resend' | translate}}</a>
+          <a class="dropdown-item" *ngIf="!broadcast.succeeded" (click)="donwloadBroadcastErrorReport(broadcast)">{{'group.broadcast.table.sentActions.downloadReport' | translate}}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -53,11 +53,11 @@
         </button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" [formGroup]="languageForm">
         <div class="row col-12">
           <p>{{ 'campaign.messages.languages.modal-sub' | translate }}</p>
         </div>
-        <div class="row" [formGroup]="languageForm">
+        <div class="row">
           <div *ngFor="let language of availableLanguages" class="form-group col-sm-4">
             <div class="form-check form-check-inline">
               <label class="form-check-label">
@@ -67,6 +67,12 @@
               </label>
             </div>
           </div>
+        </div>
+        <div class="row col-12" *ngIf="defaultLanguage && selectedLanguages && selectedLanguages.length > 1">
+          <label>Default language: </label>
+          <select class="form-control" formControlName="defaultLanguage">
+            <option *ngFor="let language of selectedLanguages" [value]="language.twoDigitCode">{{ language.fullName }}</option>
+          </select>
         </div>
       </div>
 

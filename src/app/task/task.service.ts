@@ -97,7 +97,7 @@ export class TaskService {
 
   createMeeting(parentType: string, parentUid: string, subject: string, location: string,
                 dateTimeEpochMillis: number, publicMeeting: boolean, description: string,
-                imageKey: string, assignedMemberUids: string[]):Observable<Task> {
+                imageKey: string, assignedMemberUids: string[],meetingImportance:string):Observable<Task> {
     const fullUrl = this.groupCreateMeetingUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -112,6 +112,9 @@ export class TaskService {
 
     if (imageKey)
       params = params.set("mediaFileUid", imageKey);
+
+    if (meetingImportance)
+      params = params.set('meetingImportance', meetingImportance);
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }

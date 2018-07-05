@@ -109,7 +109,7 @@ export class FrontPageRespondComponent implements OnInit {
       console.log(`response positive: ${responsePositive}`);
       this.setSuccessParaKey(this.taskType, responsePositive);
     }, error => {
-      console.log(`error responding to task, result: ${error}`);
+      console.log('error responding to task, result: ', error);
       this.succeeded = false;
       this.failed = true;
     })

@@ -19,4 +19,28 @@
       You have not sent any broadcasts to this campaign yet
     </div>
   </div>
+  
+  <div class="card" *ngIf="broadcasts?.length > 0">
+    <div class="card-body events-box">
+      <div class="row">
+        <div class="col-7">
+          <h1>Sent broadcasts</h1>
+        </div>
+      </div>
+      <div class="container group-info-header d-none d-md-block">
+        <div class="row">
+          <div class="col-2"> {{'group.broadcast.table.sendOn' | translate}}</div>
+          <div class="col-2">{{'group.broadcast.table.sendTo' | translate}}</div>
+          <div class="col-1">{{'group.broadcast.table.sms' | translate}}</div>
+          <div class="col-1">{{'group.broadcast.table.email' | translate}}</div>
+          <div class="col-2">{{'group.broadcast.table.facebook' | translate}}</div>
+          <div class="col-2">{{'group.broadcast.table.twitter' | translate}}</div>
+          <div class="col-2">{{'group.broadcast.table.actions' | translate}}</div>
+        </div>
+      </div>
+      <div *ngFor="let broadcast of broadcasts">
+        <app-broadcast-listing [broadcast]="broadcast"></app-broadcast-listing>
+      </div>
+    </div>
+  </div>
 </div>

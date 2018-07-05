@@ -70,8 +70,6 @@ export class CampaignMsgPair {
 }
 
 export const getCampaignMsg = (cm: CampaignMsgServerDTO): CampaignMsgServerDTO => {
-  console.log('transforming campaign message: ', cm);
-  console.log('and messages: ', cm.messages);
   let cmDTO = new CampaignMsgServerDTO(
     cm.messageId,
     cm.linkedActionType,
@@ -80,7 +78,6 @@ export const getCampaignMsg = (cm: CampaignMsgServerDTO): CampaignMsgServerDTO =
     cm.tags
   );
   cmDTO.messages = cm.messages;
-  console.log('okay, and messages: ')
   return cmDTO;
 };
 
