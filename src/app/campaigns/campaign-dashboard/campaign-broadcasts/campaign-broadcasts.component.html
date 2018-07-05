@@ -39,10 +39,7 @@
         </div>
       </div>
       <div *ngFor="let broadcast of broadcasts">
-        <app-broadcast-listing [broadcast]="broadcast"
-          (onViewDetailsClicked)="showViewModal(broadcast)"
-          (onResendClicked)="showResendModal(broadcast)"
-          (onDownloadErrorsClicked)="donwloadBroadcastErrorReport(broadcast)"></app-broadcast-listing>
+        <app-broadcast-listing [broadcast]="broadcast"></app-broadcast-listing>
       </div>
     </div>
   </div>
