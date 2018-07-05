@@ -13,12 +13,10 @@ export const USER_PROFILE_ROUTES: Routes = [
     {path: '', redirectTo: 'profile', pathMatch: 'full'},
     {path: 'profile', component: ProfileFormComponent, canActivate: [LoggedInGuard]},
     {path: 'password', component: PasswordComponent, canActivate: [LoggedInGuard]},
-    // {path: 'account', component: AccountComponent, canActivate: [LoggedInGuard]},
-    
+    {path: 'account', component: AccountComponent, canActivate: [LoggedInGuard]},
     {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard]},
     {path: 'delete', component: UserDeleteComponent, canActivate: [LoggedInGuard]},
-
-    {path: 'signup', component: SignupComponent, canActivate: [LoggedInGuard]},
-    {path: 'signup/payment/:accountId', component: SignupComponent, canActivate: [LoggedInGuard]}
-  ]}
+  ]},
+  {path: 'signup', component: SignupComponent, canActivate: [LoggedInGuard]},
+  {path: 'signup/payment/:accountId', component: SignupComponent, canActivate: [LoggedInGuard]}
 ];
