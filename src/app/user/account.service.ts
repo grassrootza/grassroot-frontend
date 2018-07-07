@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
+import { UserExtraAccount, getEntity } from './account/account.user.model';
 
 @Injectable()
 export class AccountService {
@@ -10,12 +11,21 @@ export class AccountService {
 
   private createAccountUrl = environment.backendAppUrl + "/api/account/create";
 
-  private accountFetchUrl = environment.backendAppUrl + "/api/account/settings/fetch";
+  private accountFetchUrl = environment.backendAppUrl + "/api/account/fetch";
   private updateAccountUrl = environment.backendAppUrl + "/api/account/settings/update";
+  private getGroupNotificationsSinceLastBillUrl = environment.backendAppUrl + "/api/account/fetch/group/notification_count";
   private getCostSinceLastBillUrl = environment.backendAppUrl + "/api/account/last-cost";
   private closeAccountUrl = environment.backendAppUrl + "/api/account/close";
 
   private updatePaymentRefUrl = environment.backendAppUrl + "/api/account/change/payment";
+  
+  private setAccountPrimaryUrl = environment.backendAppUrl + "/api/account/primary/set";
+  private removeAccountAdminUrl = environment.backendAppUrl + "/api/account/remove/admin";
+  private addAccountAdminUrl = environment.backendAppUrl + "/api/account/add/admin";
+  
+  private addGroupUrl = environment.backendAppUrl + "/api/account/add/group";
+  private removeGroupUrl = environment.backendAppUrl + "/api/account/remove/group";
+  private fetchCandidateGroupsUrl = environment.backendAppUrl + "/api/account/fetch/groups/candidates";
 
   constructor(private httpClient: HttpClient) {
   }
@@ -50,8 +60,21 @@ export class AccountService {
     return this.httpClient.post(this.createAccountUrl, null, { params: params });
   }
 
-  fetchAccountDetails() {
-    return this.httpClient.get(this.accountFetchUrl);
+  fetchAccountDetails(accountUid?: string): Observable<UserExtraAccount> {
+    if (accountUid) {
+      let params = new HttpParams().set('accountUid', accountUid);
+      return this.httpClient.get<UserExtraAccount>(this.accountFetchUrl, { params: params}).map(getEntity);
+    } else {
+      return this.httpClient.get<UserExtraAccount>(this.accountFetchUrl).map(getEntity);
+    }
+  }
+
+  getGroupNotifications(accountUid: string, groupUid: string): Observable<number> {
+    let params = new HttpParams().set('accountUid', accountUid).set('groupUid', groupUid);
+    return this.httpClient.get(this.getGroupNotificationsSinceLastBillUrl, { params: params, responseType: 'text'}).map(response => {
+      console.log('response from server: ', response);
+      return parseInt(response);
+    })
   }
   
   getCostSinceLastBill(accountUid: string): Observable<any> {
@@ -84,5 +107,45 @@ export class AccountService {
         console.log("here is the result: ", result);
         return message;
       });
+  }
+
+  makeAccountPrimary(accountUid: string): Observable<UserExtraAccount> {
+    const fullUrl = this.setAccountPrimaryUrl + "/" + accountUid;
+    return this.httpClient.post<UserExtraAccount>(fullUrl, null).map(getEntity);
+  }
+
+  addGroups(accountUid: string, groupUids: string[]): Observable<UserExtraAccount> {
+    const fullUrl = this.addGroupUrl + "/" + accountUid;
+    let params = new HttpParams().set('groupUids', groupUids.join(','));
+    return this.httpClient.post<UserExtraAccount>(fullUrl, null, { params: params }).map(getEntity);
+  }
+
+  addAllGroups(accountUid: string): Observable<UserExtraAccount> {
+    const fullUrl = this.addGroupUrl + "/" + accountUid + "/all";;
+    return this.httpClient.post<UserExtraAccount>(fullUrl, null).map(getEntity);
+  }
+
+  fetchGroupsThatCanAddToAccount(accountUid: string): Observable<any> {
+    let params = new HttpParams().set('accountUid', accountUid);
+    return this.httpClient.get(this.fetchCandidateGroupsUrl, { params: params });    
+  }
+
+  removeGroup(accountUid: string, groupUid: string) {
+    const fullUrl = this.removeGroupUrl + "/" + accountUid;
+    let params = new HttpParams().set('groupIds', groupUid);
+    return this.httpClient.post<UserExtraAccount>(fullUrl, { params: params }).map(getEntity);
+  }
+
+  addAdmin(accountUid: string, phoneOrEmail: string): Observable<string[]> {
+    const fullUrl = this.addAccountAdminUrl + "/" + accountUid;
+    let params = new HttpParams().set('userToAddPhoneOrEmail', phoneOrEmail);
+    console.log('adding admin: ', params);
+    return this.httpClient.post<string[]>(fullUrl, null, {params: params});
+  }
+
+  removeAdmin(accountUid: string, adminUid: string): Observable<UserExtraAccount> {
+    const fullUrl = this.removeAccountAdminUrl + "/" + accountUid;
+    let params = new HttpParams().set('adminUid', adminUid);
+    return this.httpClient.post<UserExtraAccount>(fullUrl, null, {params: params}).map(getEntity);
   }
 }

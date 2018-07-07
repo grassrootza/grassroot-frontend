@@ -4,10 +4,10 @@ import {AlertService} from "../../utils/alert-service/alert.service";
 import {UserService} from "../user.service";
 import {AuthenticatedUser, UserProfile} from "../user.model";
 import {AccountService} from "../account.service";
-import { saveAs } from 'file-saver';
+import { UserExtraAccount } from './account.user.model';
+import { ActivatedRoute } from '@angular/router';
 
 declare var $: any;
-
 
 @Component({
   selector: 'app-account',
@@ -23,49 +23,85 @@ export class AccountComponent implements OnInit {
   accountFees: any;
 
   loggedInUser: AuthenticatedUser;
-  account: Account;
+  account: UserExtraAccount;
   accountForm: FormGroup;
 
   costSinceLastBill: number = 0;
 
+  paidForGroupUids: string[];
+  otherAdminUids: string[];
+  otherAccountUids: string[];
+
+  removingAdminUid: string;
+
+  groupCandidatesMap: any;
+  groupCandidatesUids: string[];
+  selectedGroupUidsToAdd: string[];
+
   constructor(private userService: UserService,
               private accountService: AccountService,
               private formBuilder: FormBuilder,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+              private route: ActivatedRoute) {
 
     this.accountForm = this.formBuilder.group({
-      name:new FormControl('',Validators.required),
-      billingUserEmail:new FormControl('',[Validators.required,Validators.pattern("[^ @]*@[^ @]*"),Validators.email]),
-      type:new FormControl('',Validators.required),
-      billingCycle: new FormControl('', Validators.required)
+      name:['',Validators.required],
+      adminPhoneOrEmail: ['']
     });
   }
 
   ngOnInit() {
     this.loggedInUser = this.userService.getLoggedInUser();
+    
+    this.route.params.subscribe(params => {
+      let accountUid = params['id'];
+      console.log('Have account uid? ', accountUid);
+      if (accountUid) {
+        this.fetchAccount(accountUid);
+      } else {
+        this.fetchAccount();
+      }
+    })
+    
+  }
 
-    // this.accountService.fetchAccountDetails().subscribe(account => {
-    //   this.account = account;
+  fetchAccount(accountUid?: string) {
+    this.accountService.fetchAccountDetails(accountUid).subscribe(account => {
+      console.log('account: ', account);
+      this.account = account;
+      this.accountForm.get('name').setValue(account.name);
+      
+      this.paidForGroupUids = Object.keys(account.paidForGroups);
+      this.otherAdminUids = Object.keys(account.otherAdmins);
+      
+      if (account.otherAccounts) {
+        this.otherAccountUids = Object.keys(account.otherAccounts);
+        console.log('other account uids: ', this.otherAccountUids);
+      }
 
-    //   if(account) {
-    //     this.accountForm.get('name').setValue(account.name);
-    //     this.accountForm.get('billingUserEmail').setValue(account.billingUserEmail);
+      this.fetchCandidateGroupsToAdd(account.uid);
+    });
+  }
 
-    //     if(account.billingUserUid !== this.loggedInUser.userUid) {
-    //       this.accountForm.get('billingUserEmail').disable()
-    //     }
-    //     this.accountForm.get('type').setValue(account.type);
-    //     this.accountForm.get('billingCycle').setValue(account.billingCycle);
+  fetchGroupNotifications(groupUid: string) {
+    this.accountService.getGroupNotifications(this.account.uid, groupUid).subscribe(count => {
+      console.log('count: ', count);
+    })
+    return false;
+  }
 
-    //     this.accountService.getCostSinceLastBill(this.account.uid).subscribe(resp => {
-    //       this.costSinceLastBill = resp / 100;
-    //     });
+  fetchCandidateGroupsToAdd(accountUid: string) {
+    this.accountService.fetchGroupsThatCanAddToAccount(accountUid).subscribe(groupsMap => {
+      console.log('returned groups map: ', groupsMap);
+      this.groupCandidatesMap = groupsMap;
+      this.groupCandidatesUids = Object.keys(groupsMap);
+      console.log('and keys: ', this.groupCandidatesUids);
+      setTimeout(() => this.showCandidateGroups(groupsMap), 300);
+    })
+  }
 
-    //     this.accountService.getPastPayments(this.account.uid).subscribe(abr => {
-    //       this.accountBillingRecords = abr;
-    //     })
-    //   }
-    // });
+  showCandidateGroups(groupsMap: any) {
+    $(".groups-add-select").select2({placeholder: "Select groups"});
   }
 
   showCloseModal() {
@@ -73,7 +109,7 @@ export class AccountComponent implements OnInit {
   }
 
   confirmCloseAccount() {
-    this.accountService.closeAccount(this.account.id).subscribe(resp => {
+    this.accountService.closeAccount(this.account.uid).subscribe(resp => {
       $("#close-account-modal").modal("hide");
     });
   }
@@ -85,12 +121,66 @@ export class AccountComponent implements OnInit {
     const type = this.accountForm.get('type').value;
     const billingCycle = this.accountForm.get('billingCycle').value;
 
-    this.accountService.updateAccount(this.account.id, accountName, billingUserEmail, type, billingCycle)
+    this.accountService.updateAccount(this.account.uid, accountName, billingUserEmail, type, billingCycle)
       .subscribe(message => {
         this.alertService.alert("user.account.completed");
       }, error => {
         console.log("that didn't work, error: ", error);
       })
+  }
+
+  makeAccountPrimary(accountUid: string) {
+    this.accountService.makeAccountPrimary(accountUid).subscribe(account => {
+      this.account = account;
+    })
+    return false;
+  }
+
+  addAdminMember() {
+    let valueEntered = this.accountForm.get('adminPhoneOrEmail').value;
+    console.log('value entered: ', valueEntered);
+    this.accountService.addAdmin(this.account.uid, valueEntered).subscribe(failures => {
+      console.log('failed admin adds: ', failures);
+      this.accountForm.controls['adminPhoneOrEmail'].reset();
+      this.fetchAccount(this.account.uid);
+    })
+  }
+
+  removeAdminMember(adminUid: string) {
+    this.removingAdminUid = adminUid;
+    $('#remove-admin-modal').modal('show');
+    return false;
+  }
+
+  confirmRemoveAdmin() {
+    this.accountService.removeAdmin(this.account.uid, this.removingAdminUid).subscribe(account => {
+      this.account = account;
+      $('#remove-admin-modal').modal('hide');
+      delete this.removingAdminUid;
+    })
+  }
+
+  addGroupsToAccount() {
+    const data = $('.groups-add-select').select2('data');
+    console.log('selected groups data entity: ', data);
+    this.selectedGroupUidsToAdd = data && data.length > 0 ? data.map(tt => tt.id) : null;
+    console.log('groupUids to add: ', this.selectedGroupUidsToAdd);
+    if (this.selectedGroupUidsToAdd) {
+      this.alertService.showLoading();
+      this.accountService.addGroups(this.account.uid, this.selectedGroupUidsToAdd).subscribe(account => {
+        this.account = account;
+        this.paidForGroupUids = Object.keys(account.paidForGroups);
+        this.alertService.hideLoading();
+        $('.groups-add-select').val(null).trigger('change');
+      }, error => {
+        this.alertService.hideLoading();
+        console.log('Error adding groups: ', error);
+      })
+    }
+  }
+
+  showGroupModal(groupUid: string) {
+    return false;
   }
 
 

@@ -14,6 +14,7 @@ export const USER_PROFILE_ROUTES: Routes = [
     {path: 'profile', component: ProfileFormComponent, canActivate: [LoggedInGuard]},
     {path: 'password', component: PasswordComponent, canActivate: [LoggedInGuard]},
     {path: 'account', component: AccountComponent, canActivate: [LoggedInGuard]},
+    {path: 'account/:id', component: AccountComponent, canActivate: [LoggedInGuard]},
     {path: 'integrations', component: IntegrationsComponent, canActivate: [LoggedInGuard]},
     {path: 'delete', component: UserDeleteComponent, canActivate: [LoggedInGuard]},
   ]},
