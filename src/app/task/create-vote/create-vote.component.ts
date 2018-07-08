@@ -32,6 +32,8 @@ export class CreateVoteComponent implements OnInit {
   @Input() preAssignedMemberUids: string[] = [];
   @Output() voteSaved: EventEmitter<boolean>;
 
+  public isGroupPaidFor = false;
+
   constructor(private taskService: TaskService,
               private formBuilder: FormBuilder,
               private groupService: GroupService,
@@ -48,6 +50,12 @@ export class CreateVoteComponent implements OnInit {
           this.membersList = members.content;
           this.setAssignedMembers();
         });
+
+        console.log('alright, checking if this is paid for or not ... groupUid: ', this.groupUid);
+        this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(resp => {
+          console.log('response: ', resp);
+          this.isGroupPaidFor = resp.paidFor;
+        });    
       }
     }.bind(this));
   }
@@ -61,9 +69,11 @@ export class CreateVoteComponent implements OnInit {
       'description': '',
       'date': [this.dateFromDate(new Date()), Validators.required],
       'time': [timeStruct, Validators.required],
+      'specialForm': ['ORDINARY'],
       'parentType': 'GROUP',
       'assignedMemberUids': []
-    }, { validator: isDateTimeFuture("date", "time") })
+    }, { validator: isDateTimeFuture("date", "time") });
+
   }
 
   initVoteOptions() {
@@ -187,7 +197,9 @@ export class CreateVoteComponent implements OnInit {
       }
     }
 
-    this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, this.imageKey, assignedMemberUids)
+    let specialForm = this.isGroupPaidFor ? this.createVoteForm.get('specialForm').value : 'ORDINARY';
+
+    this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, this.imageKey, assignedMemberUids, specialForm)
       .subscribe(task => {
           console.log("Vote successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
           this.yesNoVote = true;

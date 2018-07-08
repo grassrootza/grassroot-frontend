@@ -65,13 +65,14 @@ export class TaskService {
       .map(data => data.map(task => Task.createInstanceFromData(task)));
   }
 
-  public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
-    let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
-    return this.httpClient.get(url).map(
-      res => {
-          console.log("results: ", res);
-        let tasks = res["addedAndUpdated"]  as Task[];
+  public loadAllGroupTasks(groupUid:string): Observable<Task[]>{
+    let url = this.allGroupTasksUrl + "/" + groupUid;
+    return this.httpClient.get(url).map(response => {
+        console.log("results: ", response);
+        let tasks = response["addedAndUpdated"]  as Task[];
         return tasks.map(t => Task.createInstanceFromData(t))
+      }, error => {
+        console.log('error fetching tasks: ', error);
       });
   }
 
@@ -119,7 +120,8 @@ export class TaskService {
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
-  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, imageKey: string, assignedMemberUids: string[]):Observable<Task>{
+  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, 
+            imageKey: string, assignedMemberUids: string[], specialForm?: string):Observable<Task>{
     const fullUrl = this.groupCreateVoteUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -131,6 +133,10 @@ export class TaskService {
 
     if (imageKey) {
       params = params.set("mediaFileUid", imageKey);
+    }
+
+    if (specialForm) {
+      params = params.set('specialForm', specialForm);
     }
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
