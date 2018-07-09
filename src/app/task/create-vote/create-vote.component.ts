@@ -52,7 +52,7 @@ export class CreateVoteComponent implements OnInit {
     }.bind(this));
   }
 
-  initCreateVoteForm(){
+  initCreateVoteForm() {
     let timeStruct = DateTimeUtils.futureTimeStruct(5);
     console.log("time structure: ", timeStruct);
     this.createVoteForm = this.formBuilder.group({

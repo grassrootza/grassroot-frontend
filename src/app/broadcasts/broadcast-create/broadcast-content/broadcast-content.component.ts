@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 import {BroadcastService} from "../../broadcast.service";
 import {BroadcastParams} from "../../model/broadcast-params";
 import {optionalUrlValidator} from "../../../validators/CustomValidators";
-import {environment} from "../../../../environments/environment";
+import {environment} from "environments/environment";
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {AlertService} from "../../../utils/alert-service/alert.service";
 import {limitImageSizesInRichText} from "../../../media/media-utils";

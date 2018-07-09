@@ -1,11 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder,  FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {UserService} from "../user.service";
-import {AuthenticatedUser, UserProfile} from "../user.model";
+import {AuthenticatedUser} from "../user.model";
 import {AccountService} from "../account.service";
 import { UserExtraAccount } from './account.user.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Group } from '../../groups/model/group.model';
+import { GroupService } from '../../groups/group.service';
+
+import * as moment from "moment";
 
 declare var $: any;
 
@@ -26,7 +30,8 @@ export class AccountComponent implements OnInit {
   account: UserExtraAccount;
   accountForm: FormGroup;
 
-  costSinceLastBill: number = 0;
+  dateOfLastBill: string;
+  notificationsSinceLastBill: number = 0;
 
   paidForGroupUids: string[];
   otherAdminUids: string[];
@@ -38,11 +43,16 @@ export class AccountComponent implements OnInit {
   groupCandidatesUids: string[];
   selectedGroupUidsToAdd: string[];
 
+  groupToView: Group;
+  groupToViewCount: number;
+
   constructor(private userService: UserService,
               private accountService: AccountService,
+              private groupService: GroupService,
               private formBuilder: FormBuilder,
               private alertService: AlertService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
 
     this.accountForm = this.formBuilder.group({
       name:['',Validators.required],
@@ -73,6 +83,11 @@ export class AccountComponent implements OnInit {
       
       this.paidForGroupUids = Object.keys(account.paidForGroups);
       this.otherAdminUids = Object.keys(account.otherAdmins);
+
+      this.notificationsSinceLastBill = account.notificationsSinceLastBill;
+      console.log('last billing date millis: ', account.lastBillingDateMillis);
+      this.dateOfLastBill = moment(account.lastBillingDateMillis).format('Do MMMM YYYY');
+      console.log(`${this.notificationsSinceLastBill} since ${this.dateOfLastBill}`);
       
       if (account.otherAccounts) {
         this.otherAccountUids = Object.keys(account.otherAccounts);
@@ -83,11 +98,38 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  viewGroup(groupUid: string) {
+    this.groupService.loadGroupDetailsFromServer(groupUid).subscribe(group => {
+      this.groupToView = group;
+      this.fetchGroupNotifications(groupUid);
+    });
+    return false;
+  }
+
   fetchGroupNotifications(groupUid: string) {
     this.accountService.getGroupNotifications(this.account.uid, groupUid).subscribe(count => {
       console.log('count: ', count);
+      this.groupToViewCount = count;
+      $('#account-group-modal').modal('show');
     })
-    return false;
+  }
+
+  // have to close modal, hence through here
+  goToGroupDashboard(groupUid: string) {
+    $('#account-group-modal').modal('hide');
+    this.router.navigate(['/group', groupUid]);
+  }
+
+  removeGroupFromAccount(groupUid: string) {
+    this.accountService.removeGroup(this.account.uid, groupUid).subscribe(account => {
+      this.account = account;
+      this.paidForGroupUids = Object.keys(account.paidForGroups);
+      $('#account-group-modal').modal('hide');  
+    }, error => {
+      console.log('error removing group from account: ', error);
+      this.alertService.alert('Sorry, there was an error removing the group');
+      $('#account-group-modal').modal('hide');
+    })
   }
 
   fetchCandidateGroupsToAdd(accountUid: string) {

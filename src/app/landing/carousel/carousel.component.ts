@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 // import { CarouselItemDirective } from './carousel-item.directive';
 import {animate, AnimationBuilder, AnimationFactory, AnimationPlayer, style} from '@angular/animations';
-import {Observable} from 'rxjs/Rx';
+import {Observable} from 'rxjs';
 import {isPlatformBrowser} from "@angular/common";
 import {PublicLivewire} from "../../livewire/public-livewire.model";
 

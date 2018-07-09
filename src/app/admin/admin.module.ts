@@ -13,8 +13,8 @@ import {SystemAdminComponent} from "./system-admin/system-admin.component";
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { AnalyticsService } from './analytics.service';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { AccountsComponent } from './accounts/accounts.component';
-import { AccountsService } from './accounts.service';
+import { AdminAccountsComponent } from './accounts/admin-accounts.component';
+import { AccountsAdminService } from './admin-accounts.service';
 import { AccountDetailComponent } from './accounts/account-detail/account-detail.component';
 
 @NgModule({
@@ -31,14 +31,14 @@ import { AccountDetailComponent } from './accounts/account-detail/account-detail
     SubscriberComponent,
     SystemAdminComponent,
     AnalyticsComponent,
-    AccountsComponent,
+    AdminAccountsComponent,
     AccountDetailComponent
   ],
   providers: [
     AdminRoleGuard,
     LiveWireAdminService,
     AnalyticsService,
-    AccountsService
+    AccountsAdminService
   ]
 })
 export class AdminModule {

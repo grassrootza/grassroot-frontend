@@ -1,19 +1,18 @@
 <div class="row">
     <div class="col-6">
-      {{ account.account_name }}
+      {{ account.name }}
     </div>
     <div class="col-6 text-right">
-      <button type="button" class="btn btn-secondary hover-primary" *ngIf="account.status == 'ACTIVE'">Disable</button>
-      <button type="button" class="btn btn-secondary hover-primary" *ngIf="account.status != 'ACTIVE'">Enable</button>
+      <button type="button" class="btn btn-secondary hover-primary" *ngIf="account.enabled">Disable</button>
+      <button type="button" class="btn btn-secondary hover-primary" *ngIf="!account.enabled">Enable</button>
       <button type="button" class="btn btn-secondary hover-primary">Admins</button>
-      <button type="button" class="btn btn-secondary hover-primary" (click)="toggleAccountDetails()">Billing details</button>
+      <button type="button" class="btn btn-secondary hover-primary" (click)="toggleAccountDetails()">Details details</button>
     </div>
     <div class="col-12 pb-3" *ngIf="viewDetails">
       <table>
-        <tr><td>Total notifications sent</td><td>(count)</td></tr>
-        <tr><td>Notifications</td><td>(count)</td></tr>
-        <tr><td>Number of invoices due</td><td>{{ account.due_invoices }}</td></tr>
-        <tr><td>Next billing date</td><td>{{ account.nextBillingDate() }}</td></tr>
+        <tr><td>Notifications since last bill</td><td>{{ account.notificationsSinceLastBill }}</td></tr>
+        <tr><td>Last billing date</td><td>{{ account.lastBillingDateMillis }}</td></tr>
+        <tr><td>Number of groups</td><td>{{ account.paidForGroups?.size }}</td></tr>
       </table>
     </div>
   </div>

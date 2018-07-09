@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {UserService} from "../../user/user.service";
 import {IncomingResponseService} from "../incoming-response.service";
-import {environment} from "../../../environments/environment";
+import {environment} from "environments/environment";
 import {RECAPTCHA_URL} from "../../utils/recaptcha.directive";
 import {ActivatedRoute, Params} from "@angular/router";
 import {FormBuilder, FormControl} from "@angular/forms";

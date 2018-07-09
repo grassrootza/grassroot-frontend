@@ -3,7 +3,7 @@ import {UserService} from "../user/user.service";
 import {Router} from "@angular/router";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../validators/CustomValidators";
-import {environment} from "../../environments/environment";
+import {environment} from "environments/environment";
 import {RECAPTCHA_URL} from "../utils/recaptcha.directive";
 declare var $: any;
 

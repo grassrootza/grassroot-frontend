@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { SubscriptionAccount } from '../account.model';
-import { AccountsService } from '../../accounts.service';
+import { SubscriptionAccount } from '../subscription-account.model';
+import { AccountsAdminService } from '../../admin-accounts.service';
+import { UserExtraAccount } from '../../../user/account/account.user.model';
 
 @Component({
   selector: 'app-account-detail',
@@ -9,10 +10,10 @@ import { AccountsService } from '../../accounts.service';
 })
 export class AccountDetailComponent implements OnInit {
 
-  @Input() public account: SubscriptionAccount;
+  @Input() public account: UserExtraAccount;
   public viewDetails: boolean = false;
 
-  constructor(private accountsService: AccountsService) { }
+  constructor(private accountsService: AccountsAdminService) { }
 
   ngOnInit() {
   }

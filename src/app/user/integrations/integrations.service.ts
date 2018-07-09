@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {environment} from "../../../environments/environment";
+import {environment} from "environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {FacebookPage, IntegrationSettingsList, TwitterAccount} from "../model/integration-settings";
 import {Observable} from "rxjs/Observable";

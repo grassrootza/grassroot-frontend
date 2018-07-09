@@ -1,4 +1,4 @@
-import {environment} from "../../../environments/environment";
+import {environment} from "environments/environment";
 import {MediaFunction} from "../../media/media-function.enum";
 import {DataSubscriber} from "./model/data-subscriber.model";
 import {LiveWireAlert, LiveWireAlertPage} from "../../livewire/live-wire-alert.model";

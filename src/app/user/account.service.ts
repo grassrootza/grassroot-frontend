@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {environment} from "../../environments/environment";
+import {environment} from "environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import { UserExtraAccount, getEntity } from './account/account.user.model';
 
@@ -133,7 +133,7 @@ export class AccountService {
   removeGroup(accountUid: string, groupUid: string) {
     const fullUrl = this.removeGroupUrl + "/" + accountUid;
     let params = new HttpParams().set('groupIds', groupUid);
-    return this.httpClient.post<UserExtraAccount>(fullUrl, { params: params }).map(getEntity);
+    return this.httpClient.post<UserExtraAccount>(fullUrl, null, { params: params }).map(getEntity);
   }
 
   addAdmin(accountUid: string, phoneOrEmail: string): Observable<string[]> {

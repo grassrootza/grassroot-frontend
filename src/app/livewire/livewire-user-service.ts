@@ -1,7 +1,7 @@
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import {environment} from "../../environments/environment";
+import {environment} from "environments/environment";
 import {LiveWireAlertType} from "./live-wire-alert-type.enum";
 import {LiveWireAlertDestType} from "./live-wire-alert-dest-type.enum";
 import {MediaFunction} from "../media/media-function.enum";

@@ -3,7 +3,7 @@ import { AdminService } from '../admin.service';
 import { Router } from '@angular/router';
 import { GroupAdmin } from '../../groups/model/group-admin.model';
 import { AlertService } from '../../utils/alert-service/alert.service';
-import { UserProvince } from 'app/user/model/user-province.enum';
+import { UserProvince } from '../../user/model/user-province.enum';
 import { LiveWireAdminService } from '../livewire/livewire-admin-service';
 import { DataSubscriber } from '../livewire/model/data-subscriber.model';
 

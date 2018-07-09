@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { LiveWireAdminService } from 'app/admin/livewire/livewire-admin-service';
+import { LiveWireAdminService } from '../../../livewire-admin-service';
 import { DataSubscriber } from '../../../model/data-subscriber.model';
 import { AdminUser } from '../../../../../user/model/admin-user.model';
 import { DataSubscriberType } from '../../../model/data-subscriber-type.enum';

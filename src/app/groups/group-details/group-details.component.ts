@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Params, Router} from "@angular/router";
 import {GroupService} from "../group.service";
 import {Group} from "../model/group.model";
-import {environment} from "../../../environments/environment";
+import {environment} from "environments/environment";
 import {UserService} from "../../user/user.service";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {TranslateService} from "@ngx-translate/core";
