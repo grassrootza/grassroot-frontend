@@ -1,5 +1,5 @@
 <div class="card-body events-box">
-  <div class="row">
+  <div class="row mb-3">
     <div class="col-6">
       <h2>
         {{'campaign.broadcasts.title' | translate}}
@@ -19,14 +19,8 @@
       You have not sent any broadcasts to this campaign yet
     </div>
   </div>
-  
   <div class="card" *ngIf="broadcasts?.length > 0">
     <div class="card-body events-box">
-      <div class="row">
-        <div class="col-7">
-          <h1>Sent broadcasts</h1>
-        </div>
-      </div>
       <div class="container group-info-header d-none d-md-block">
         <div class="row">
           <div class="col-2"> {{'group.broadcast.table.sendOn' | translate}}</div>
@@ -39,7 +33,8 @@
         </div>
       </div>
       <div *ngFor="let broadcast of broadcasts">
-        <app-broadcast-listing [broadcast]="broadcast"></app-broadcast-listing>
+        <app-broadcast-listing [broadcast]="broadcast"
+          (onDownloadErrorsClicked)="downloadBroadcastErrorReport(broadcast)"></app-broadcast-listing>
       </div>
     </div>
   </div>
