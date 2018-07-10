@@ -7,6 +7,7 @@ import {TodoDetailsComponent} from "./todo-details/todo-details.component";
 import {LoggedInServicesModule} from "../logged-in-services.module";
 import {SharedModule} from "../shared.module";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TaskPreviewComponent } from './preview/task-preview.component';
 
 export const TASK_DETAILS_ROUTES: Routes = [
   {path:'meeting/:id', component: MeetingDetailsComponent,canActivate:[LoggedInGuard]},
@@ -23,7 +24,8 @@ export const TASK_DETAILS_ROUTES: Routes = [
   ],
   declarations: [
     MeetingDetailsComponent,
-    TodoDetailsComponent
+    TodoDetailsComponent,
+    TaskPreviewComponent
   ]
 })
 export class TaskDetailsModule { }

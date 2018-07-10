@@ -8,6 +8,7 @@ import {MediaFunction} from "../../media/media-function.enum";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {MediaService} from "../../media/media.service";
 import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
+import { TaskPreview } from '../task-preview.model';
 
 declare var $: any;
 
@@ -43,6 +44,7 @@ export class CreateTodoComponent implements OnInit {
 
   public confirmingSend: boolean;
   public confirmParams: {};
+  public taskPreview: TaskPreview;
 
   constructor(private taskService: TaskService,
               private groupService: GroupService,
@@ -189,6 +191,13 @@ export class CreateTodoComponent implements OnInit {
     };
 
     this.confirmingSend = true;
+
+    this.taskService.loadPreviewTodo(this.confirmParams['type'], this.groupUid, this.confirmParams['subject'], this.extractDeadlineMillis(), 
+        '', this.imageKey).subscribe(preview => {
+          this.taskPreview = preview;
+        }, error => {
+          console.log('error generating preview: ', error);
+        })
   }
 
   createTodo(){
@@ -196,15 +205,12 @@ export class CreateTodoComponent implements OnInit {
     let parentType: string = this.createTodoForm.get("parentType").value;
     let subject: string = this.createTodoForm.get("subject").value;
 
-
     let responseTag: string = "";
     if(this.createTodoForm.get("responseTag") != null){
       responseTag = this.createTodoForm.get("responseTag").value;
     }
 
-    let todoDate: NgbDateStruct = this.createTodoForm.get('date').value;
-    let todoTime: NgbTimeStruct = this.createTodoForm.get('time').value;
-    let dueTimemilis: number = DateTimeUtils.momentFromNgbStruct(todoDate, todoTime).valueOf();
+    let dueTimemilis: number = this.extractDeadlineMillis();
 
     let assignedMemberUids: string[] = this.createTodoForm.get("assignedMemberUids").value;
 
@@ -239,6 +245,12 @@ export class CreateTodoComponent implements OnInit {
         console.log("Error creating task: ", error);
         this.todoSaved.emit(false);
       })
+  }
+
+  extractDeadlineMillis(): number {
+    let todoDate: NgbDateStruct = this.createTodoForm.get('date').value;
+    let todoTime: NgbTimeStruct = this.createTodoForm.get('time').value;
+    return DateTimeUtils.momentFromNgbStruct(todoDate, todoTime).valueOf();
   }
 
   addTodoImage(event){

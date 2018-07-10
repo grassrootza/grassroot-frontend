@@ -6,7 +6,7 @@ import 'rxjs/add/operator/first';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/observable/concat';
 
-import {environment} from '../../environments/environment';
+import {environment} from 'environments/environment';
 import {GroupInfo} from './model/group-info.model';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {getGroupEntity, Group} from './model/group.model';

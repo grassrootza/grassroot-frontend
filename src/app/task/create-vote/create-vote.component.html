@@ -159,6 +159,10 @@
           </div>
         </div>
 
+        <div class="row" *ngIf="confirmingSend && taskPreview">
+          <app-task-preview [taskPreview]="taskPreview"></app-task-preview>
+        </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" *ngIf="confirmingSend" (click)="confirmingSend = false" class="btn btn-secondary back-button">

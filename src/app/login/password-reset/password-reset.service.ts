@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {environment} from "../../../environments/environment";
+import {environment} from "environments/environment";
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/observable/of';
 import {isValidNumber} from "libphonenumber-js";

@@ -3,7 +3,7 @@ import {PasswordResetService} from "../password-reset.service";
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {isValidNumber} from "libphonenumber-js";
 import {Router} from "@angular/router";
-import {environment} from "../../../../environments/environment";
+import {environment} from "environments/environment";
 import {RECAPTCHA_URL} from "../../../utils/recaptcha.directive";
 
 @Component({

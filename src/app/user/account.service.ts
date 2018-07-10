@@ -1,13 +1,9 @@
-import {EventEmitter, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from "rxjs/Observable";
-import {environment} from "../../environments/environment";
-import {AuthenticatedUser, AuthorizationResponse, UserProfile} from "./user.model";
+import {environment} from "environments/environment";
 import {Router} from "@angular/router";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
-import {isValidNumber} from "libphonenumber-js";
 import {Account} from "./model/account.model";
-import {AccountType} from "./model/account-type.enum";
 import {AccountBillingRecords} from "./model/account-billing-records.model";
 
 @Injectable()
