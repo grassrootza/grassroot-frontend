@@ -16,6 +16,7 @@
   <div class=" col-sm-9 col-lg-4 filter-item">
     <select id="province" class="form-control provinces-multi-select" multiple="multiple" style="width: 100%">
       <option *ngFor="let p of provinceKeys" [value]="p" [translate]="'enum.UserProvince.' + p">Province</option>
+      <option value="UNKNOWN">Unknown</option>
     </select>
   </div>
 

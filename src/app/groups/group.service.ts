@@ -607,6 +607,10 @@ export class GroupService {
       params = params.set("provinces", filter.provinces.join(","));
     }
 
+    if (filter.noProvince == 'UNKNOWN') {
+      params = params.set('noProvince', 'true');
+    }
+
     if (filter.taskTeams != null) {
       params = params.set("taskTeams", filter.taskTeams.join(","));
     }

@@ -55,10 +55,10 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes: ', changes);
+    // console.log('changes: ', changes);
     if (changes && changes['campaigns']) {
       this.hasCampaigns = this.campaigns && this.campaigns.length > 0;
-      console.log("campaigns changed, setting up? : ", this.hasCampaigns);
+      console.log('campaigns changed, setting up? :', this.hasCampaigns);
       if (this.hasCampaigns)
         setTimeout(() => this.setUpCampaignsSelect(), 100);
     }
@@ -105,7 +105,8 @@ export class MemberFilterComponent implements OnInit, OnChanges {
 
     $(".provinces-multi-select").on('change.select2', function () {
       const data = $('.provinces-multi-select').select2('data');
-      this.filter.provinces = data.length > 0 ? data.map(p => p.id) : null;
+      this.filter.provinces = data.length > 0 ? data.map(p => p.id).filter(p => p != 'UNKNOWN') : null;
+      this.filter.noProvince = data.length > 0 ? data.map(p => p.id).filter(p => p == 'UNKNOWN') : null; // because is actually null on back end (and have decided not to introduce as existing entity)
       this.fireFilterChange();
     }.bind(this));
 

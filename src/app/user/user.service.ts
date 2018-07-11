@@ -56,7 +56,7 @@ export class UserService {
       params = params.set("email", email);
     }
 
-    return this.httpClient.get<AuthorizationResponse>(this.registerUrl, {params: params})
+    return this.httpClient.post<AuthorizationResponse>(this.registerUrl, null, {params: params})
       .map(authResponse => {
         if (authResponse.errorCode == null) {
           this.storeAuthUser(getAuthUser(authResponse.user), authResponse.user.token);
@@ -77,7 +77,7 @@ export class UserService {
       .set('password', password)
       .set("interfaceType", "WEB_2");
 
-    return this.httpClient.get<AuthorizationResponse>(this.loginUrl, {params: params})
+    return this.httpClient.post<AuthorizationResponse>(this.loginUrl, null, {params: params})
       .map(authResponse => {
           console.log("AuthResponse: ", authResponse);
           if (authResponse.errorCode == null) {
