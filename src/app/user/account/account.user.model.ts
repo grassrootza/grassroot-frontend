@@ -1,3 +1,5 @@
+import * as moment from "moment";
+
 export class UserExtraAccount {
 
     constructor(public uid: string,
@@ -12,6 +14,10 @@ export class UserExtraAccount {
         public otherAccounts: any,
         public lastBillingDateMillis: number,
         public notificationsSinceLastBill?: number) { }
+
+    getLastBillingDate(): string {
+        return moment(this.lastBillingDateMillis).format('Do MMMM YYYY');
+    }
     
 }
 

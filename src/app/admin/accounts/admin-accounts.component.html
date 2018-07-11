@@ -10,4 +10,38 @@
     </div>
   </div>
 
+  <div class="card mt-4" *ngIf="disabledUids">
+    <div class="card-header">
+      <div class="col-12">
+        <h4>Disabled accounts</h4>
+      </div>
+    </div>
+    <div class="card-body" *ngIf="accounts">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let uid of disabledUids">
+          {{ disabledMap[uid] }} // <a href="#" (click)="viewDisabledAccount(uid)" class="grassroot-link">details</a> 
+          // <a href="#" (click)="enableDisabledAccount(uid)" class="grassroot-link">enable</a>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="disabled-account-modal" aria-hidden="true" *ngIf="viewDisabledAccount">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">View disabled account</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <app-account-detail [account]="disabledAccountToView"></app-account-detail>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+          </div>
+      </div>
+    </div>
+  </div>

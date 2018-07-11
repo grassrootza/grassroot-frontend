@@ -10,6 +10,7 @@ export class AccountsAdminService {
 
   private listEnabledUserAccountsUrl: string = environment.backendAppUrl + "/api/admin/accounts/list/enabled";
   private listDisabledUserAccountsUrl: string = environment.backendAppUrl + "/api/admin/accounts/list/disabled";
+  private accountFetchUrl = environment.backendAppUrl + "/api/account/fetch";
 
   private updateLastBillingDateUrl: string = environment.backendAppUrl + "/api/admin/accounts/update/billing";
   private updateSubscriptionRefUrl: string = environment.backendAppUrl + "/api/admin/accounts/update/subscription";
@@ -27,6 +28,11 @@ export class AccountsAdminService {
 
   public fetchDisabledAccounts(): Observable<any> {
     return this.httpClient.get(this.listDisabledUserAccountsUrl);
+  }
+
+  public fetchDisabledAccount(accountUid: string): Observable<UserExtraAccount> {
+    let params = new HttpParams().set('accountUid', accountUid);
+    return this.httpClient.get<UserExtraAccount>(this.accountFetchUrl, { params: params}).map(getEntity);
   }
 
   public updateLastBillingDate(accountUid: string, newLastBillingDateMillis: number): Observable<UserExtraAccount> {

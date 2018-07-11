@@ -9,8 +9,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Group } from '../../groups/model/group.model';
 import { GroupService } from '../../groups/group.service';
 
-import * as moment from "moment";
-
 declare var $: any;
 
 @Component({
@@ -86,7 +84,7 @@ export class AccountComponent implements OnInit {
 
       this.notificationsSinceLastBill = account.notificationsSinceLastBill;
       console.log('last billing date millis: ', account.lastBillingDateMillis);
-      this.dateOfLastBill = moment(account.lastBillingDateMillis).format('Do MMMM YYYY');
+      this.dateOfLastBill = account.getLastBillingDate();
       console.log(`${this.notificationsSinceLastBill} since ${this.dateOfLastBill}`);
       
       if (account.otherAccounts) {
