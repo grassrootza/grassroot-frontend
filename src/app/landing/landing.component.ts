@@ -21,6 +21,8 @@ import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PublicLivewire} from "../livewire/public-livewire.model";
 import { Subscription } from 'rxjs';
+import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/observable/interval';
 
 declare var $: any;
 

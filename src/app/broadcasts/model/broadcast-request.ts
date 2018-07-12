@@ -37,6 +37,7 @@ export class BroadcastRequest {
   selectionType: string = "ALL_MEMBERS";
   taskTeams: string[] = [];
   provinces: string[] = [];
+  noProvince: boolean = null;
   affiliations: string[] = null;
   joinMethods: string[] = null;
   topics: string[] = [];
@@ -75,6 +76,7 @@ export class BroadcastRequest {
     this.selectionType = "ALL_MEMBERS";
     this.taskTeams = [];
     this.provinces = [];
+    this.noProvince = null;
     this.topics = [];
     this.affiliations = [];
     this.joinMethods = [];
@@ -115,6 +117,7 @@ export class BroadcastRequest {
     this.selectionType = br.selectionType;
     this.taskTeams = br.taskTeams;
     this.provinces = br.provinces;
+    this.noProvince = br.noProvince;
     this.topics = br.topics;
     this.filterNamePhoneEmail = br.filterNamePhoneEmail;
 
@@ -131,6 +134,7 @@ export class BroadcastRequest {
     this.selectionType = selectionType;
     this.topics = filter.topics;
     this.provinces = filter.provinces;
+    this.noProvince = filter.noProvince && filter.noProvince == 'UNKNOWN';
     this.taskTeams = filter.taskTeams;
     this.affiliations = filter.affiliations;
     this.joinMethods = filter.joinSources;
@@ -144,6 +148,7 @@ export class BroadcastRequest {
     let filter = new MembersFilter();
     filter.topics = this.topics;
     filter.provinces = this.provinces;
+    filter.noProvince = this.noProvince ? 'UNKNOWN' : null;
     filter.taskTeams = this.taskTeams;
     filter.affiliations = this.affiliations;
     filter.joinSources = this.joinMethods;

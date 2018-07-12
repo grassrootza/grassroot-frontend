@@ -105,7 +105,7 @@
 
           <div *ngIf="isGroupPaidFor" class="form-group row">
             <div class="col-sm-4 col-form-label text-md-right text-sm-left">
-              <label for="meeting-date-time">Importance</label>
+              <label for="meeting-importance">Importance</label>
             </div>
             <div class="col-sm-8">
               <select class="form-control" id="meeting-importance" name="meeting-importance"
@@ -139,6 +139,10 @@
               You are about to call a meeting about (subject) on (day). The following will be invited: (people)
             </p>
           </div>
+        </div>
+
+        <div class="row" *ngIf="confirmingSend && taskPreview">
+          <app-task-preview [taskPreview]="taskPreview"></app-task-preview>
         </div>
 
       </div>

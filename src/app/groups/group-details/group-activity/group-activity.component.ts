@@ -22,54 +22,34 @@ export class GroupActivityComponent implements OnInit {
   public taskTypes = TaskType;
   public pastTasks : Task[] = [];
 
+  public finishedLoading: boolean = false;
+
   public createTaskGroupUid: string = null;
 
   public taskToView: Task;
 
-  constructor(private router: Router,
-              private route: ActivatedRoute,
-              private userService: UserService,
-              private groupService: GroupService,
+  constructor(private route: ActivatedRoute,
               private taskService: TaskService) {
   }
 
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
       this.groupUid = params['id'];
-      console.log("User uid={},group uid={}",this.userService.getLoggedInUser().userUid,this.groupUid);
-      this.loadTasks();
+      // console.log("User uid={},group uid={}",this.userService.getLoggedInUser().userUid,this.groupUid);
       this.loadAllGroupTasks();
     });
   }
 
-  loadTasks(){
-    this.taskService.loadUpcomingGroupTasks(this.groupUid)
-      .subscribe(
-        tasks => {
-          console.log(tasks);
-          this.upcomingTasks = tasks;
-        },
-        error => {
-          console.log("Error loading tasks for group", error.status);
-        }
-      );
-  }
-
   loadAllGroupTasks(){
-    console.log("calling subscribe");
-    this.taskService.loadAllGroupTasks(this.userService.getLoggedInUser().userUid, this.groupUid)
-      .subscribe(tasks => {
-          let now = new Date();
-          this.pastTasks = tasks.filter(t => new Date(t.deadlineMillis) < now);
-          console.log("Old Tasks @@@@", this.pastTasks.length);
+    this.taskService.loadAllGroupTasks(this.groupUid).subscribe(tasks => {
+          console.log('all tasks: ', tasks.length);
+          this.upcomingTasks = tasks.filter(t => t.isActive());
+          this.pastTasks = tasks.filter(t => !t.isActive());
+          console.log("Old Tasks: ", this.pastTasks.length);
+          this.finishedLoading = true;
         }, error =>{
-
-        if(error.status == 401){
-          console.log("Error @@@@@@@", error.status);
-        }
-        console.log(error.getmessage);
-      }
-      );
+        console.log('Error loading tasks: ', error.getmessage);
+    });
   }
 
   handleTaskClicked(task: Task) {
@@ -92,7 +72,7 @@ export class GroupActivityComponent implements OnInit {
     console.log(saveResponse);
     $("#create-meeting-modal").modal("hide");
     if(saveResponse)
-      this.loadTasks();
+      this.loadAllGroupTasks();
   }
 
   showCreateVoteModal(){
@@ -104,7 +84,7 @@ export class GroupActivityComponent implements OnInit {
     console.log(saveResponse);
     $("#create-vote-modal").modal("hide");
     if(saveResponse)
-      this.loadTasks();
+      this.loadAllGroupTasks();
   }
 
   showCreateTodoModal(){
@@ -116,7 +96,7 @@ export class GroupActivityComponent implements OnInit {
     console.log(saveResponse);
     $("#create-todo-modal").modal("hide");
     if(saveResponse)
-      this.loadTasks();
+      this.loadAllGroupTasks();
   }
 
   downloadEventErrorReport(task: Task) {

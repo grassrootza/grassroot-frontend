@@ -17,6 +17,7 @@ export class AccountsAdminService {
 
   private enableAccountUrl: string = environment.backendAppUrl + "/api/admin/accounts/enable/account";
   private disableAccountUrl: string = environment.backendAppUrl + "/api/admin/accounts/disable/account";
+  private closeAccountUrl: string = environment.backendAppUrl + "/api/admin/accounts/close/account";
 
   private listBillingAccountsUrl: string = environment.backendAppUrl + '/api/admin/accounts/list/billing';
 
@@ -53,6 +54,11 @@ export class AccountsAdminService {
   public disableAccount(accountUid: string, reasonToRecord: string) {
     let params = new HttpParams().set('accountUid', accountUid).set('logMessage', reasonToRecord);
     return this.httpClient.post<UserExtraAccount>(this.disableAccountUrl, null, {params: params}).map(getEntity);
+  }
+
+  public closeAccount(accountUid: string, reasonToRecord: string) {
+    let params = new HttpParams().set('accountUid', accountUid).set('logMessage', reasonToRecord);
+    return this.httpClient.post(this.closeAccountUrl, null, { params: params, responseType: 'text'});
   }
 
   public listCurrentSubscriptions(): Observable<SubscriptionAccount[]> {

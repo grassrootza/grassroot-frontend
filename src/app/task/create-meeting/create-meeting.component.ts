@@ -8,6 +8,8 @@ import {MediaService} from "../../media/media.service";
 import {MediaFunction} from "../../media/media-function.enum";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import { GroupService } from '../../groups/group.service';
+import { TaskPreview } from '../task-preview.model';
+import { TaskType } from '../task-type';
 
 declare var $: any;
 
@@ -26,6 +28,7 @@ export class CreateMeetingComponent implements OnInit {
 
   public confirmingSend: boolean = false;
   public confirmParams;
+  public taskPreview: TaskPreview;
 
   public imageName;
   public imageKey;
@@ -112,6 +115,13 @@ export class CreateMeetingComponent implements OnInit {
     };
 
     this.confirmingSend = true;
+
+    this.taskService.loadPreviewEvent(TaskType.MEETING, this.groupUid, this.confirmParams.subject, this.extractMeetingTimeMillis(), this.createMeetingForm.get('description').value,
+        this.meetingImportance, this.imageKey, this.confirmParams['location']).subscribe(preview => {
+          this.taskPreview = preview;
+        }, error => {
+          console.log('error getting meeting preview: ', error);
+        });
   }
 
   cancel() {
@@ -126,14 +136,7 @@ export class CreateMeetingComponent implements OnInit {
     let meetingLocation: string = this.createMeetingForm.get("location").value;
     let meetingDesc: string = this.createMeetingForm.get("description").value;
 
-    let voteDate: NgbDateStruct = this.createMeetingForm.get('date').value;
-    let voteTime: NgbTimeStruct = this.createMeetingForm.get('time').value;
-    let dateTimeEpochMillis: number = new Date(voteDate.year,
-      voteDate.month-1,
-      voteDate.day,
-      voteTime.hour,
-      voteTime.minute,
-      voteTime.second).getTime();
+    let dateTimeEpochMillis: number = this.extractMeetingTimeMillis();
 
     let publicMeeting: boolean = this.createMeetingForm.get("publicMeeting").value;
 
@@ -156,6 +159,12 @@ export class CreateMeetingComponent implements OnInit {
           this.confirmingSend = false;
           this.meetingSaved.emit(false);
       });
+  }
+
+  extractMeetingTimeMillis(): number {
+    let mtgDate: NgbDateStruct = this.createMeetingForm.get('date').value;
+    let mtgTime: NgbTimeStruct = this.createMeetingForm.get('time').value;
+    return DateTimeUtils.momentFromNgbStruct(mtgDate, mtgTime).valueOf();
   }
 
   addMeetingImage(event){

@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="card-body" *ngIf="accounts">
-      <app-account-detail  *ngFor="let account of accounts" [account]="account"></app-account-detail>  
+      <app-account-detail  *ngFor="let account of accounts" [account]="account" (onChangeBillingDateClicked)="initiateDateChange(account)"></app-account-detail>  
     </div>
   </div>
 
@@ -20,6 +20,7 @@
       <ul class="list-group">
         <li class="list-group-item" *ngFor="let uid of disabledUids">
           {{ disabledMap[uid] }} // <a href="#" (click)="viewDisabledAccount(uid)" class="grassroot-link">details</a> 
+          // <a href="#" (click)="closeAccount(uid)" class="grassroot-link">close</a>
           // <a href="#" (click)="enableDisabledAccount(uid)" class="grassroot-link">enable</a>
         </li>
       </ul>
@@ -27,7 +28,50 @@
   </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="disabled-account-modal" aria-hidden="true" *ngIf="viewDisabledAccount">
+<div class="modal fade" tabindex="-1" role="dialog" id="change-billing-date-account-modal" aria-hidden="true" *ngIf="accountDateToChange">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Change last billing date</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <app-account-detail [account]="accountDateToChange"></app-account-detail>
+          <form>
+            <div class="row">
+              <div class="col-4">
+                Enter new billing date/time:
+              </div>
+              <div class="col-4">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control" placeholder="yyyy-mm-dd" id="meeting-date-time"
+                              name="dp" [formControl]="accountDateChangeForm.controls['date']" ngbDatepicker #d="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                          <img src="assets/icon-calendar.png" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                        </button>
+                      </div>
+                    </div>
+                  </div>    
+              </div>
+              <div class="col-4">
+                  <ngb-timepicker [formControl]="accountDateChangeForm.controls['time']" [spinners]="false"></ngb-timepicker>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+          <button type="button" class="btn btn-primary" (click)="completeDateChange()">Submit</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="disabled-account-modal" aria-hidden="true" *ngIf="disabledAccountToView">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
           <div class="modal-header">

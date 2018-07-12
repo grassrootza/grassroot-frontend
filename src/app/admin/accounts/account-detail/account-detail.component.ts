@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AccountsAdminService } from '../../admin-accounts.service';
 import { UserExtraAccount } from '../../../user/account/account.user.model';
 
@@ -10,6 +10,7 @@ import { UserExtraAccount } from '../../../user/account/account.user.model';
 export class AccountDetailComponent implements OnInit {
 
   @Input() public account: UserExtraAccount;
+  @Output() public onChangeBillingDateClicked: EventEmitter<UserExtraAccount> = new EventEmitter();
   
   public viewDetails: boolean = false;
   public numberGroups: number;
@@ -36,6 +37,11 @@ export class AccountDetailComponent implements OnInit {
     this.accountsService.disableAccount(this.account.uid, 'Disabled by Admin via console').subscribe(account => {
       this.account = account;
     })
+  }
+
+  changeAccountDate() {
+    this.onChangeBillingDateClicked.emit(this.account);
+    return false;
   }
 
 }

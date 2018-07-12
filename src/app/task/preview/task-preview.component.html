@@ -1,0 +1,11 @@
+<div class="col-12">
+  <h4>SMS preview:</h4>
+  <p>
+    {{ taskPreview.smsMessage }}
+  </p>
+  <h4>USSD preview:</h4>
+  <p>
+    <span>{{ taskPreview.ussdPrompt }}</span>
+  </p>
+  <ol><li *ngFor="let option of taskPreview.ussdOptions">{{ option }}</li></ol>
+</div>

@@ -33,6 +33,7 @@ export class BroadcastListingComponent implements OnInit {
   }
 
   public donwloadBroadcastErrorReport() {
+    console.log('broadcast error clicked');
     this.onDownloadErrorsClicked.emit(this.broadcast);
   }
 

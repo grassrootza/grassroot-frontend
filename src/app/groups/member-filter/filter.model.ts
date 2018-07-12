@@ -1,10 +1,10 @@
 import {Moment} from "moment";
 import {JoinDateCondition} from "./joindatecondition.enum";
-import {CampaignInfo} from "../../campaigns/model/campaign-info";
 
 export class MembersFilter {
 
   provinces: string[] = null;
+  noProvince: string = null; // instead of boolean, as not confident enough of JS handling of checks below 
   taskTeams: string[] = null;
   topics: string[] = null;
   affiliations: string[] = null;
@@ -18,13 +18,13 @@ export class MembersFilter {
   role: string = 'ANY';
 
   hasContent(): boolean {
-    return !!this.provinces || !!this.taskTeams || !!this.topics || !!this.affiliations || !!this.joinSources || !!this.campaigns
+    return !!this.provinces || !!this.noProvince || !!this.taskTeams || !!this.topics || !!this.affiliations || !!this.joinSources || !!this.campaigns
       || !!this.joinDate || !!this.joinDaysAgo || !!this.joinDateCondition || !!this.namePhoneOrEmail || !this.language
       || this.role !== 'ANY';
   }
 
   hasNonRoleChanged(other: MembersFilter): boolean {
-    return this.provinces !== other.provinces || this.taskTeams !== other.taskTeams || this.topics !== other.topics ||
+    return this.provinces !== other.provinces || this.noProvince !== other.noProvince || this.taskTeams !== other.taskTeams || this.topics !== other.topics ||
       this.affiliations !== other.affiliations || this.joinSources !== other.joinSources || this.campaigns !== other.campaigns ||
       this.joinDate !== other.joinDate || this.joinDaysAgo !== other.joinDaysAgo || this.joinDateCondition !== other.joinDateCondition
     || this.namePhoneOrEmail !== other.namePhoneOrEmail || this.language !== other.language;
@@ -35,6 +35,7 @@ export class MembersFilter {
 export const copyFilter = (filter: MembersFilter): MembersFilter => {
   let newFilter = new MembersFilter();
   newFilter.provinces = filter.provinces;
+  newFilter.noProvince = filter.noProvince;
   newFilter.taskTeams = filter.taskTeams;
   newFilter.topics = filter.topics;
   newFilter.affiliations = filter.affiliations;

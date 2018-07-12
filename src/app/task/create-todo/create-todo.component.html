@@ -152,9 +152,13 @@
           <div class="col-12">
             <h4 [translate]="'group.activity.todoModal.confirmTitle'">Confirm action item</h4>
             <p [translate]="'group.activity.todoModal.confirmPara'" [translateParams]="confirmParams">
-              You are about to call a vote about (subject), closing at (time). The following will be asked to vote: (people)
+              You are about to create a todo about (subject), closing at (time). The following will be asked to vote: (people)
             </p>
           </div>
+        </div>
+
+        <div class="row" *ngIf="confirmingSend && taskPreview">
+          <app-task-preview [taskPreview]="taskPreview"></app-task-preview>
         </div>
 
       </div>

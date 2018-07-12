@@ -8,6 +8,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {MediaFunction} from "../media/media-function.enum";
 import {LocalStorageService, STORE_KEYS} from "../utils/local-storage.service";
+import { TaskPreview } from './task-preview.model';
 
 @Injectable()
 export class TaskService {
@@ -15,6 +16,9 @@ export class TaskService {
   private upcomingGroupTasksUrl = environment.backendAppUrl + "/api/task/fetch/upcoming/group";
   private upcomingUserTasksUrl = environment.backendAppUrl + "/api/task/fetch/upcoming/user";
   private specificTasksUrl = environment.backendAppUrl + "/api/task/fetch";
+
+  private taskPreviewEventUrl = environment.backendAppUrl + "/api/task/preview/event"; // for votes and meetings
+  private taskPreviewTodoUrl = environment.backendAppUrl + "/api/task/preview/todo"; // for those
 
   private groupCreateMeetingUrl = environment.backendAppUrl + '/api/task/create/meeting';
   private groupCreateVoteUrl = environment.backendAppUrl + '/api/task/create/vote';
@@ -58,20 +62,20 @@ export class TaskService {
     }
   }
 
-
   public loadUpcomingGroupTasks(groupId: string): Observable<Task[]> {
     let fullUrl = this.upcomingGroupTasksUrl + "/" + groupId;
     return this.httpClient.get<Task[]>(fullUrl)
       .map(data => data.map(task => Task.createInstanceFromData(task)));
   }
 
-  public loadAllGroupTasks(userUid:string,groupUid:string): Observable<Task[]>{
-    let url = this.allGroupTasksUrl + "/" + userUid + "/" + groupUid;
-    return this.httpClient.get(url).map(
-      res => {
-          console.log("results: ", res);
-        let tasks = res["addedAndUpdated"]  as Task[];
+  public loadAllGroupTasks(groupUid:string): Observable<Task[]>{
+    let url = this.allGroupTasksUrl + "/" + groupUid;
+    return this.httpClient.get(url).map(response => {
+        console.log("results: ", response);
+        let tasks = response["addedAndUpdated"]  as Task[];
         return tasks.map(t => Task.createInstanceFromData(t))
+      }, error => {
+        console.log('error fetching tasks: ', error);
       });
   }
 
@@ -93,6 +97,53 @@ export class TaskService {
   public loadTask(taskUid: string, taskType: string): Observable<Task> {
     const fullUrl = this.specificTasksUrl + "/" + taskType + "/" + taskUid;
     return this.httpClient.get<Task>(fullUrl).map(Task.createInstanceFromData);
+  }
+
+  public loadPreviewEvent(taskType: string, parentUid: string, subject: string, dateTimeEpochMillis: number, description: string,
+                          specialForm?: string, imageKey?: string, location?: string, voteOptions?: string[], todoType?: string) {
+    
+    const fullUrl = this.taskPreviewEventUrl + "/" + taskType + "/" + parentUid;
+    let params = new HttpParams()
+      .set('subject', subject)
+      .set('dateTimeEpochMillis', '' + dateTimeEpochMillis);
+
+    if (description)
+      params = params.set('description', description);
+
+    if (imageKey)
+      params = params.set('mediaFileUid', imageKey);
+
+    if (specialForm)
+      params = params.set('specialForm', specialForm);
+
+    if (location)
+      params = params.set('location', location);
+    
+    if (voteOptions && voteOptions.length > 0)
+      params = params.set('voteOptions', voteOptions.join(','));
+    
+    if (todoType)
+      params = params.set('todoType', todoType);
+
+    return this.httpClient.get<TaskPreview>(fullUrl, {params: params});
+  }
+
+  public loadPreviewTodo(todoType: string, parentUid: string, subject: string, dateTimeEpochMillis: number, description?: string, imageKey?: string, responseTag?: string) {
+    const fullUrl = this.taskPreviewTodoUrl + "/" + todoType + "/" + parentUid;
+    let params = new HttpParams()
+      .set('subject', subject)
+      .set('dateTimeEpochMillis', '' + dateTimeEpochMillis);
+
+    if (description)
+      params = params.set('description', description);
+
+    if (imageKey)
+      params = params.set('imageKey', imageKey);
+
+    if (responseTag)
+      params = params.set('responseTag', responseTag);
+
+    return this.httpClient.get<TaskPreview>(fullUrl, {params: params});
   }
 
   createMeeting(parentType: string, parentUid: string, subject: string, location: string,
@@ -119,7 +170,8 @@ export class TaskService {
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
   }
 
-  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, imageKey: string, assignedMemberUids: string[]):Observable<Task>{
+  createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, 
+            imageKey: string, assignedMemberUids: string[], specialForm?: string):Observable<Task>{
     const fullUrl = this.groupCreateVoteUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -131,6 +183,10 @@ export class TaskService {
 
     if (imageKey) {
       params = params.set("mediaFileUid", imageKey);
+    }
+
+    if (specialForm) {
+      params = params.set('specialForm', specialForm);
     }
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});

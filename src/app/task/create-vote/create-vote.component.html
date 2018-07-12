@@ -121,6 +121,19 @@
             </div>
           </div>
 
+          <div *ngIf="isGroupPaidFor" class="form-group row">
+            <div class="col-sm-4 col-form-label text-md-right text-sm-left">
+              <label for="vote-special-form">Special vote?</label>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" name="vote-special-form" id="vote-special-form" [formControl]="createVoteForm.controls['specialForm']">
+                <option value="ORDINARY">Ordinary</option>
+                <option value="MASS_VOTE">Mass vote</option>
+              </select>
+            </div>
+            
+          </div>
+
           <div class="form-group row">
             <div class="col-sm-4 col-form-label text-md-right text-sm-left">
               <label for="todo-confirming-members">{{ 'group.activity.voteModal.assignedMembers' | translate }}</label>
@@ -144,6 +157,10 @@
               You are about to call a vote about (subject), closing at (time). The following will be asked to vote: (people)
             </p>
           </div>
+        </div>
+
+        <div class="row" *ngIf="confirmingSend && taskPreview">
+          <app-task-preview [taskPreview]="taskPreview"></app-task-preview>
         </div>
 
       </div>

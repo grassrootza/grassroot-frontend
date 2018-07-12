@@ -8,6 +8,8 @@ import {MediaFunction} from "../../media/media-function.enum";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {MediaService} from "../../media/media.service";
 import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
+import { TaskPreview } from '../task-preview.model';
+import { TaskType } from '../task-type';
 
 declare var $: any;
 
@@ -27,10 +29,13 @@ export class CreateVoteComponent implements OnInit {
 
   public confirmingSend: boolean;
   public confirmParams: {};
+  public taskPreview: TaskPreview;
 
   @Input() groupUid: string;
   @Input() preAssignedMemberUids: string[] = [];
   @Output() voteSaved: EventEmitter<boolean>;
+
+  public isGroupPaidFor = false;
 
   constructor(private taskService: TaskService,
               private formBuilder: FormBuilder,
@@ -48,6 +53,12 @@ export class CreateVoteComponent implements OnInit {
           this.membersList = members.content;
           this.setAssignedMembers();
         });
+
+        console.log('alright, checking if this is paid for or not ... groupUid: ', this.groupUid);
+        this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(resp => {
+          console.log('response: ', resp);
+          this.isGroupPaidFor = resp.paidFor;
+        });    
       }
     }.bind(this));
   }
@@ -61,9 +72,11 @@ export class CreateVoteComponent implements OnInit {
       'description': '',
       'date': [this.dateFromDate(new Date()), Validators.required],
       'time': [timeStruct, Validators.required],
+      'specialForm': ['ORDINARY'],
       'parentType': 'GROUP',
       'assignedMemberUids': []
-    }, { validator: isDateTimeFuture("date", "time") })
+    }, { validator: isDateTimeFuture("date", "time") });
+
   }
 
   initVoteOptions() {
@@ -157,6 +170,26 @@ export class CreateVoteComponent implements OnInit {
     };
 
     this.confirmingSend = true;
+    let specialForm = this.isGroupPaidFor ? this.createVoteForm.get('specialForm').value : 'ORDINARY';
+    
+    let voteOptions: string[] = [];
+    if( this.createVoteForm.get("voteOptions") != null){
+      let voteOptionsObjects = this.createVoteForm.get("voteOptions").value;
+      if(voteOptionsObjects.length > 0){
+        for(let i = 0; i < voteOptionsObjects.length; i++){
+          voteOptions.push(voteOptionsObjects[i].option)
+        }
+      }
+    }
+    
+    let voteMilis: number = this.extractVoteDeadlineMillis();
+    this.taskService.loadPreviewEvent(TaskType.VOTE, this.groupUid, this.confirmParams['subject'], voteMilis, this.createVoteForm.get("description").value,
+      specialForm, this.imageKey, null, voteOptions).subscribe(taskPreview => {
+        this.taskPreview = taskPreview;
+        console.log('got a preview! : ', this.taskPreview);
+      }, error => {
+        console.log('error generating preview! : ', error);
+      })
   }
 
   createVote() {
@@ -175,10 +208,7 @@ export class CreateVoteComponent implements OnInit {
     }
 
     let description: string = this.createVoteForm.get("description").value;
-
-    let voteDate: NgbDateStruct = this.createVoteForm.get('date').value;
-    let voteTime: NgbTimeStruct = this.createVoteForm.get('time').value;
-    let voteMilis: number = DateTimeUtils.momentFromNgbStruct(voteDate, voteTime).valueOf();
+    let voteMilis: number = this.extractVoteDeadlineMillis();
 
     let assignedMemberUids: string[] = [];
     if(this.createVoteForm.get("assignedMemberUids").value != null){
@@ -187,7 +217,9 @@ export class CreateVoteComponent implements OnInit {
       }
     }
 
-    this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, this.imageKey, assignedMemberUids)
+    let specialForm = this.isGroupPaidFor ? this.createVoteForm.get('specialForm').value : 'ORDINARY';
+
+    this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, this.imageKey, assignedMemberUids, specialForm)
       .subscribe(task => {
           console.log("Vote successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
           this.yesNoVote = true;
@@ -201,6 +233,12 @@ export class CreateVoteComponent implements OnInit {
           this.confirmingSend = false;
           this.voteSaved.emit(false);
         })
+  }
+
+  extractVoteDeadlineMillis(): number {
+    let voteDate: NgbDateStruct = this.createVoteForm.get('date').value;
+    let voteTime: NgbTimeStruct = this.createVoteForm.get('time').value;
+    return DateTimeUtils.momentFromNgbStruct(voteDate, voteTime).valueOf();
   }
 
   addVoteImage(event){

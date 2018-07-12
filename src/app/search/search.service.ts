@@ -5,7 +5,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Task} from '../task/task.model';
 import {getGroupEntity, Group} from "../groups/model/group.model";
 import {TaskInfo} from "../task/task-info.model";
-import {GroupRef} from "../groups/model/group-ref.model";
+import {GroupRef,GroupMembersRef} from "../groups/model/group-ref.model";
 
 @Injectable()
 export class SearchService {

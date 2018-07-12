@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CampaignInfo } from '../../model/campaign-info';
 import { BroadcastService } from '../../../broadcasts/broadcast.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Broadcast } from '../../../broadcasts/model/broadcast';
+import { saveAs } from 'file-saver';
+
+declare var $: any;
 
 @Component({
   selector: 'app-campaign-broadcasts',
@@ -16,6 +18,9 @@ export class CampaignBroadcastsComponent implements OnInit {
   public broadcasts: Broadcast[];
   public serverFetched: boolean = false;
 
+  public modalBroadcast: Broadcast;
+  public firstModalTab: string;
+
   constructor(private broadcastService: BroadcastService,
               private route: ActivatedRoute) { }
 
@@ -28,6 +33,22 @@ export class CampaignBroadcastsComponent implements OnInit {
         this.broadcasts = broadcasts;
       });
     });
+  }
+
+  downloadBroadcastErrorReport(broadcast: Broadcast) {
+    this.broadcastService.downloadBroadcastErrorReport(broadcast.broadcastUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "broadcast-error-report.xls");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
+  }
+
+  showViewModal(broadcast: Broadcast){
+    this.modalBroadcast = broadcast;
+    console.log('modal broadcast: ', this.modalBroadcast);
+    this.firstModalTab = broadcast.smsContent ? 'sms' : broadcast.emailContent ? 'email' : broadcast.fbPost ? 'facebook' : 'twitter';
+    $('#broadcast-view-modal').modal('show');
   }
 
 }
