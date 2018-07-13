@@ -24,7 +24,7 @@
                 {{ 'action.save' | translate }}</button>
           </div>
         </div>            
-        <div class="form-row" *ngIf="account.otherAccounts">
+        <div class="form-row" *ngIf="otherAccountUids && otherAccountUids.length > 0">
           <div class="col-12">
             <p class="small">
               You are part of other Grassroot Extra accounts too. Your other accounts are: 
@@ -39,12 +39,21 @@
           </div>
         </div>
 
+        <hr />
+
         <div class="form-row" *ngIf="!account.enabled">
           <div class="col-12">
             <h4>Your account is not enabled</h4>
             <p>
               Your account is disabled at present, as the account subscription or messaging costs have not been paid. To enable the account, please 
-              contact <a href="accounts@grassroot.org.za">accounts@grassroot.org.za</a>
+              pay the subscription fee (R300) to the bank details below, and email proof of payment to <a class="grassroot-link" href="accounts@grassroot.org.za">accounts@grassroot.org.za</a>
+            </p>
+            <p>
+              Bank: FNB<br>Account: Grassroot Nation NPC<br>Account: 62532765966<br>Branch: 251905
+            </p>
+            <p>
+              If you have made payment and we have confirmed your account is reenabled, but you are still seeing this message, we suggest 
+              <a href="#" class="grassroot-link" (click)="logout()">logging out</a> and logging back in again to refresh your profile.
             </p>
           </div>
         </div>

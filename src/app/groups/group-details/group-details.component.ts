@@ -48,6 +48,8 @@ export class GroupDetailsComponent implements OnInit {
   public membership:MembershipInfo;
 
   public displayName:string;
+  
+  public canAddToAccount: boolean;
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -87,16 +89,16 @@ export class GroupDetailsComponent implements OnInit {
         .subscribe(
           groupDetails => {
             this.group = groupDetails;
-
+            this.canAddToAccount = !this.group.paidFor && this.userService.hasActivePaidAccount();
             this.membership = this.group.members.find(member => member.memberUid == this.userService.getLoggedInUser().userUid);
-
             this.displayName = this.membership == null ? "" : this.membership.displayName;
-
             const imageBaseUrl = this.baseUrl.replace('/v2', '') + '/image/flyer/group/';
             this.flyerUrlJpg = imageBaseUrl + groupUid + "?typeOfFile=JPEG&color=true&language=en";
             this.flyerUrlPDF = imageBaseUrl + groupUid + "?typeOfFile=PDF&color=true&language=en";
+            
             this.setupJoinParams();
             this.checkWelcomeMessage();
+
             this.alertService.hideLoading();
           },
           error => {
@@ -285,6 +287,17 @@ export class GroupDetailsComponent implements OnInit {
       console.log("Error updating alias",error);
       this.alertService.alert('group.alias.alert-error');
     });
+  }
+
+  addToAccount() {
+    this.groupService.addToAccount(this.group.groupUid).subscribe(result => {
+      this.alertService.alert('Done! Group added to your account');
+      this.group.paidFor = true;
+    }, error => {
+      console.log('Well, that failed: ', error);
+      this.alertService.alert('Sorry, there was an error updating the group');
+    })
+    return false;
   }
 
 }

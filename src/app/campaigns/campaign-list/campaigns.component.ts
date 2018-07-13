@@ -11,8 +11,10 @@ import {UserService} from "../../user/user.service";
 })
 export class CampaignsComponent implements OnInit {
 
-  public canCreateOrManageCampaigns = false;
-
+  public hasDisabledAccount = false;
+  public canCreateCampaigns = false;
+  public canManageCampaigns = false;
+  
   public activeCampaigns: CampaignInfo[] = [];
   public pastCampaigns: CampaignInfo[] = [];
 
@@ -21,12 +23,15 @@ export class CampaignsComponent implements OnInit {
               private alertService: AlertService) { }
 
   ngOnInit() {
-    this.canCreateOrManageCampaigns = this.userService.hasActivePaidAccount();
+    this.canCreateCampaigns = this.userService.hasActivePaidAccount();
+    this.hasDisabledAccount = this.userService.hasDisabledAccount();
+    
     this.campaignService.campaignInfoList.subscribe(
       campaignList => {
         console.log("Retrieved campaign list ", campaignList);
         this.activeCampaigns = campaignList.filter(cp => cp.isActive());
         this.pastCampaigns = campaignList.filter(cp => !cp.isActive());
+        this.canManageCampaigns = campaignList && campaignList.length > 0;
         this.alertService.hideLoadingDelayed();
       }
     );

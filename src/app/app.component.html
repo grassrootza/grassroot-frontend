@@ -81,7 +81,7 @@
                     #profileImage />
                   <span *ngIf="userHasNoImage"><i class="far fa-user"></i> </span>{{loggedInUser.displayName}}</a>
                 <div class="dropdown-menu" aria-labelledby="dropdown01">
-                  <a class="dropdown-item" *ngIf="!loggedInUser.hasAccountAdmin()" [routerLink="['/user/signup']">Sign up for Grassroot Extra</a>
+                  <a class="dropdown-item" *ngIf="!loggedInUser.hasAccountAdmin()" [routerLink]="['/user/signup']">Grassroot Extra</a>
                   <a class="dropdown-item" [routerLink]="['/user']">{{ 'menu.profile' | translate }}</a>
                   <a class="dropdown-item" [routerLink]="['/user/password']">{{ 'menu.password' | translate }}</a>
                   <a class="dropdown-item" *ngIf="loggedInUser.hasAccountAdmin()" [routerLink]="['/user/account']">{{ 'menu.account' | translate }}</a>

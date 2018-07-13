@@ -3,6 +3,7 @@ import {Observable} from "rxjs/Observable";
 import {environment} from "environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import { UserExtraAccount, getEntity } from './account/account.user.model';
+import { AccountSignupResponse } from './account/signup/signup.response.model';
 
 @Injectable()
 export class AccountService {
@@ -44,20 +45,17 @@ export class AccountService {
     return this.httpClient.post(fullUrl, null, {params: params});
   }
 
-  createAccount(accountName: string, billingEmail: string, addAllGroupsToAccount: boolean = true, 
-      otherAdmins?: string[], existingAccountId?: string, ) {
-    let params = new HttpParams().set('accountName', accountName).set('billingEmail', billingEmail)
+  createAccount(accountName: string, billingEmail: string, addAllGroupsToAccount: boolean = true, otherAdmins?: string[]) {
+    let params = new HttpParams()
+      .set('accountName', accountName)
+      .set('billingEmail', billingEmail)
       .set('addAllGroupsToAccount', '' + addAllGroupsToAccount);
     
-    if (existingAccountId) {
-      params = params.set('existingAccountId', existingAccountId);
-    }
-
     if (otherAdmins) {
       params = params.set('otherAdmins', otherAdmins.join(','));
     }
 
-    return this.httpClient.post(this.createAccountUrl, null, { params: params });
+    return this.httpClient.post<AccountSignupResponse>(this.createAccountUrl, null, { params: params });
   }
 
   fetchAccountDetails(accountUid?: string): Observable<UserExtraAccount> {
@@ -90,10 +88,7 @@ export class AccountService {
     let params = new HttpParams()
       .set("accountUid", accountUid);
 
-    return this.httpClient.post(this.closeAccountUrl, null, {params: params})
-      .map(resp => {
-        return resp;
-      })
+    return this.httpClient.post(this.closeAccountUrl, null, {params: params, responseType: 'text'});
   }
 
   updateAccount(accountUid: string, accountName: string, billingUserEmail: string, type: string, billingCycle: string) {

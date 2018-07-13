@@ -106,7 +106,7 @@ export class AccountComponent implements OnInit {
 
   fetchGroupNotifications(groupUid: string) {
     this.accountService.getGroupNotifications(this.account.uid, groupUid).subscribe(count => {
-      console.log('count: ', count);
+      // console.log('count: ', count);
       this.groupToViewCount = count;
       $('#account-group-modal').modal('show');
     })
@@ -132,10 +132,10 @@ export class AccountComponent implements OnInit {
 
   fetchCandidateGroupsToAdd(accountUid: string) {
     this.accountService.fetchGroupsThatCanAddToAccount(accountUid).subscribe(groupsMap => {
-      console.log('returned groups map: ', groupsMap);
+      // console.log('returned groups map: ', groupsMap);
       this.groupCandidatesMap = groupsMap;
       this.groupCandidatesUids = Object.keys(groupsMap);
-      console.log('and keys: ', this.groupCandidatesUids);
+      // console.log('and keys: ', this.groupCandidatesUids);
       setTimeout(() => this.showCandidateGroups(groupsMap), 300);
     })
   }
@@ -151,11 +151,22 @@ export class AccountComponent implements OnInit {
   confirmCloseAccount() {
     this.accountService.closeAccount(this.account.uid).subscribe(resp => {
       $("#close-account-modal").modal("hide");
+      if (resp == 'closed') {
+        this.alertService.alert('Done! Account closed', true);
+        if (this.otherAccountUids && this.otherAccountUids.length > 0)
+          this.router.navigate(['/user', 'account']);
+        else
+          this.router.navigate(['/home']);
+      } else {
+        this.alertService.alert('Sorry, there was an error closing the account. Please contact accounts');
+      }
+    }, error => {
+      $("#close-account-modal").modal("hide");
     });
   }
 
   saveChanges() {
-    console.log("saving changes! form looks like: ", this.accountForm.value);
+    // console.log("saving changes! form looks like: ", this.accountForm.value);
     const accountName = this.accountForm.get('name').value;
     const billingUserEmail = this.accountForm.get('billingUserEmail').value;
     const type = this.accountForm.get('type').value;
@@ -219,7 +230,8 @@ export class AccountComponent implements OnInit {
     }
   }
 
-  showGroupModal(groupUid: string) {
+  logout() {
+    this.userService.logout(false, '/login');
     return false;
   }
 

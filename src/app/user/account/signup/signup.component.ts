@@ -6,6 +6,9 @@ import { environment } from 'environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AlertService } from '../../../utils/alert-service/alert.service';
+import { AccountSignupResponse } from './signup.response.model';
+import { UserService } from '../../user.service';
+import { getAuthUser } from '../../user.model';
 
 @Component({
   selector: 'app-signup',
@@ -25,7 +28,7 @@ export class SignupComponent implements OnInit {
 
   public accountId: string;
 
-  constructor(private accountService: AccountService, private paymentService: PaymentsService, private alertService: AlertService,
+  constructor(private accountService: AccountService, private userService: UserService, private paymentService: PaymentsService, private alertService: AlertService,
               private route: ActivatedRoute, private fb: FormBuilder, @Inject(PLATFORM_ID) protected platformId: Object) { }
 
   ngOnInit() {
@@ -69,6 +72,12 @@ export class SignupComponent implements OnInit {
       })
   }
 
+  storeToken(response: AccountSignupResponse) {
+    let adjustedUser = response.refreshedUser;
+    console.log('adjusted user: ', adjustedUser);
+    this.userService.storeAuthUser(getAuthUser(adjustedUser), adjustedUser.token);
+  }
+
   triggerInitialPayment(accountId: string) {
     this.accountId = accountId;
     this.paymentResultUrl =  environment.frontendAppUrl + "/user/signup/payment/" + accountId;
@@ -100,6 +109,11 @@ export class SignupComponent implements OnInit {
         })
       });
     })
+  }
+
+  logout() {
+    this.userService.logout(false);
+    return false;
   }
 
 }

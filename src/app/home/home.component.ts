@@ -67,7 +67,6 @@ export class HomeComponent implements OnInit {
     this.canManageCampaigns = this.userService.hasActivePaidAccount();
 
     if (!this.tasksLoadFinished || !this.newMembersLoadFinished || !this.newMembersLoadFinished) {
-      console.log("Showing spinner");
       this.alertService.showLoading();
     }
 

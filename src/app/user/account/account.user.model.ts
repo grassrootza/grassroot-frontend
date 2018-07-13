@@ -13,7 +13,8 @@ export class UserExtraAccount {
         public primary: boolean,
         public otherAccounts: any,
         public lastBillingDateMillis: number,
-        public notificationsSinceLastBill?: number) { }
+        public notificationsSinceLastBill?: number,
+        public chargedUssdSinceLastBill?: number) { }
 
     getLastBillingDate(): string {
         return moment(this.lastBillingDateMillis).format('Do MMMM YYYY');
@@ -36,6 +37,9 @@ export const getEntity = (account: UserExtraAccount): UserExtraAccount => {
 
     if (account.notificationsSinceLastBill)
         acc.notificationsSinceLastBill = account.notificationsSinceLastBill;
+
+    if (account.chargedUssdSinceLastBill)
+        acc.chargedUssdSinceLastBill = account.chargedUssdSinceLastBill;
 
     return acc;
 } 

@@ -29,7 +29,8 @@ export class AuthenticatedUser {
               public province: string,
               public hasImage: boolean,
               public token: string,
-              public systemRoles: string[]) {
+              public systemRoles: string[],
+              public hasAccount: boolean) {
   }
 
   hasAccountAdmin() {
@@ -59,7 +60,8 @@ export const getAuthUser = (au: AuthenticatedUser): AuthenticatedUser => {
     au.province,
     au.hasImage,
     au.token,
-    au.systemRoles
+    au.systemRoles,
+    au.hasAccount
   );
 };
 
