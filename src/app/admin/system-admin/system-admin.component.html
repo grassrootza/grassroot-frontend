@@ -16,8 +16,7 @@
 		        </button>
 		  	</div>
 		  </div>
-		  <div class="alert alert-danger my-lg-3" role="alert"
-		           *ngIf="userNotFoundMessage">{{ userNotFoundMessage }}
+		  <div class="alert alert-danger my-lg-3" role="alert" *ngIf="userNotFoundMessage">{{ userNotFoundMessage }}
 		  </div>
 		  <hr />
 
@@ -28,17 +27,14 @@
 		  </div>
 		  <div class="row">
 		  	<div class="col-6">
-		  		<input type="text" id="groupName" placeholder="Enter group name" 
-		               class="form-control" name="groupName" #groupName/>
+		  		<input type="text" id="groupName" placeholder="Enter group name" class="form-control" name="groupName" #groupName/>
 		  	</div>
 		  	<div class="col-2">
-		  		<button class="btn btn-primary"
-		                (click)="searchGroups(groupName.value)">Search
+		  		<button class="btn btn-primary" (click)="searchGroups(groupName.value)">Search
 		        </button>
 		  	</div>
 		  </div>
-		  <div class="alert alert-danger my-lg-3" role="alert"
-		           *ngIf="groupsNotFoundMessage">{{ groupsNotFoundMessage }}
+		  <div class="alert alert-danger my-lg-3" role="alert" *ngIf="groupsNotFoundMessage">{{ groupsNotFoundMessage }}
       </div>
 
       <div *ngIf="groups.length > 0" class="card">
@@ -49,9 +45,7 @@
             </div>
           </div>
           <div class="row groups-header">
-            <div class="col-2">
-              Group Name
-            </div>
+            <div class="col-2">Group Name</div>
             <div class="col-2">
               Creating user
             </div>
@@ -120,8 +114,10 @@
 
       <div class="row" style="margin-top: 2%">
         <div class="col-12">
-          <button type="btn" class="btn btn-primary" (click)="initiateMembershipsGraphTransfer()">Transfer membeships to graph</button>
           <button type="btn" class="btn btn-primary" (click)="initiateTasksGraphTransfer()">Transfer tasks to graph</button>
+          <button type="btn" class="btn btn-primary" (click)="initiateGraphAnnotationTransfer('groups')">Annotate groups</button>
+          <button type="btn" class="btn btn-primary" (click)="initiateGraphAnnotationTransfer('memberships')">Annotate memberships</button>
+          <button type="btn" class="btn btn-primary" (click)="initiateGraphAnnotationTransfer('tasks')">Annotate tasks</button>
         </div>
       </div>
 

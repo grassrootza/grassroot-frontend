@@ -17,6 +17,9 @@ export class BroadcastListingComponent implements OnInit {
   public onResendClicked: EventEmitter<Broadcast> = new EventEmitter();
 
   @Output()
+  public onDownloadAllClicked: EventEmitter<Broadcast> = new EventEmitter();
+
+  @Output()
   public onDownloadErrorsClicked: EventEmitter<Broadcast>  = new EventEmitter();
 
   constructor() { }
@@ -30,6 +33,10 @@ export class BroadcastListingComponent implements OnInit {
 
   public showResendModal() {
     this.onResendClicked.emit(this.broadcast);
+  }
+
+  public downloadAllMessagesReport() {
+    this.onDownloadAllClicked.emit(this.broadcast);
   }
 
   public donwloadBroadcastErrorReport() {

@@ -21,6 +21,7 @@ import {ViewTodoComponent} from "./task/view-todo/view-todo.component";
 import {LivewireUserService} from "./livewire/livewire-user-service";
 import { BroadcastListingComponent } from './broadcast/broadcast-listing/broadcast-listing.component';
 import { TaskPreviewComponent } from './task/preview/task-preview.component';
+import { BroadcastViewComponent } from './broadcast/broadcast-view/broadcast-view.component';
 
 @NgModule({
   imports: [
@@ -47,7 +48,8 @@ import { TaskPreviewComponent } from './task/preview/task-preview.component';
     PaginationComponent,
     MemberFilterComponent,
     BroadcastListingComponent,
-    TaskPreviewComponent
+    TaskPreviewComponent,
+    BroadcastViewComponent
   ],
   entryComponents: [
     GroupInfoComponent,
@@ -61,13 +63,14 @@ import { TaskPreviewComponent } from './task/preview/task-preview.component';
     ViewMeetingComponent,
     ViewVoteComponent,
     MeetingResponsesComponent,
-    TaskPreviewComponent
+    TaskPreviewComponent,
+    BroadcastViewComponent
   ],
   providers: [
     LivewireUserService
   ],
   exports: [
-    GroupInfoComponent, CampaignInfoComponent, BroadcastListingComponent,
+    GroupInfoComponent, CampaignInfoComponent, BroadcastListingComponent, BroadcastViewComponent,
     CreateGroupComponent, CreateMeetingComponent, CreateVoteComponent, CreateTodoComponent, CreateLivewireComponent, TaskPreviewComponent,
     ViewTodoComponent, ViewMeetingComponent, ViewVoteComponent, MeetingResponsesComponent, PaginationComponent, MemberFilterComponent
   ]

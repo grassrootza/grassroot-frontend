@@ -224,11 +224,11 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  initiateMembershipsGraphTransfer() {
-    this.adminService.initiateMembershipGraphTransfer().subscribe(_ => this.alertService.alert('transfer.initiated'));
-  }
-
   initiateTasksGraphTransfer() {
     this.adminService.initiateTasksGraphTransfer().subscribe(_ => this.alertService.alert('transfer.initiated'));
+  }
+
+  initiateGraphAnnotationTransfer(endSegment: string) {
+    this.adminService.initiateGraphAnnotation(endSegment).subscribe(_ => this.alertService.alert('annotation.initiated'));
   }
 }

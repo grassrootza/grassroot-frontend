@@ -1,0 +1,114 @@
+<div class="modal fade" tabindex="-1" role="dialog" id="broadcast-view-modal" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document *ngIf="modalBroadcast>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ 'group.broadcast.viewModal.title' | translate }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="modalBroadcast">
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <h4>
+              <strong>{{'group.broadcast.viewModal.broadcastVia' | translate}}</strong>
+            </h4>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-11 offset-1">
+            <h5 *ngIf="modalBroadcast.smsContent" [translate]="'group.broadcast.viewModal.sms'" [translateParams]="modalBroadcast"></h5>
+            <h5 *ngIf="modalBroadcast.emailContent" [translate]="'group.broadcast.viewModal.email'" [translateParams]="modalBroadcast"></h5>
+            <h5 *ngIf="modalBroadcast.fbPost" [translate]="'group.broadcast.viewModal.facebook'" [translateParams]="{fbPages: modalBroadcast.fbPages?.join(',')}"></h5>
+            <h5 *ngIf="modalBroadcast.twitterPost" [translate]="'group.broadcast.viewModal.twitter'" [translateParams]="modalBroadcast"></h5>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <h4>
+              <strong>{{'group.broadcast.viewModal.sentMessages' | translate}}</strong>
+            </h4>
+          </div>
+        </div>
+
+        <div class="row" style="margin-bottom: 1rem !important;">
+          <div class="col-11 offset-1">
+            <ul class="nav nav-tabs" id="sent-view-tabs" role="tablist">
+              <li class="nav-item" *ngIf="modalBroadcast.smsContent">
+                <a [ngClass]="{'nav-link': true, 'active': (firstModalTab == 'sms')}" id="sent-sms-tab" data-toggle="tab" href="#sent-sms" role="tab" aria-controls="sent-sms" aria-selected="true">
+                  {{'group.broadcast.viewModal.smsTab' | translate}}
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="modalBroadcast.emailContent">
+                <a [ngClass]="{'nav-link': true, 'active': (firstModalTab == 'email')}"  id="sent-email-tab" data-toggle="tab" href="#sent-email" role="tab" aria-controls="sent-email" aria-selected="false">
+                  {{'group.broadcast.viewModal.emailTab' | translate}}
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="modalBroadcast.fbPost">
+                <a [ngClass]="{'nav-link': true, 'active': (firstModalTab == 'facebook')}"  id="sent-facebook-tab" data-toggle="tab" href="#sent-facebook" role="tab" aria-controls="sent-facebook" aria-selected="false">
+                  {{'group.broadcast.viewModal.facebookTab' | translate}}
+                </a>
+              </li>
+              <li class="nav-item" *ngIf="modalBroadcast.twitterPost">
+                <a [ngClass]="{'nav-link': true, 'active': (firstModalTab == 'twitter')}"  id="sent-twitter-tab" data-toggle="tab" href="#sent-twitter" role="tab" aria-controls="sent-twitter" aria-selected="false">
+                  {{'group.broadcast.viewModal.twitterTab' | translate}}
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+              <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'sms')}" id="sent-sms" role="tabpanel" aria-labelledby="sent-sms-tab" *ngIf="modalBroadcast.smsContent">
+                <p class="form-control" rows="5" name="sent-sms-text" [(ngModel)]="modalBroadcast.smsContent"></p>
+              </div>
+              <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'email')}" id="sent-email" role="tabpanel" aria-labelledby="sent-email-tab" *ngIf="modalBroadcast.emailContent">
+                <p [innerHTML]="modalBroadcast.emailContent"></p>
+              </div>
+              <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'facebook')}" id="sent-facebook" role="tabpanel" aria-labelledby="sent-facebook-tab" *ngIf="modalBroadcast.fbPost">
+                <p class="form-control" rows="5" name="sent-fbPost-text" [(ngModel)]="modalBroadcast.fbPost"></p>
+              </div>
+              <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'email')}" id="sent-twitter" role="tabpanel" aria-labelledby="sent-twitter-tab" *ngIf="modalBroadcast.twitterPost">
+                <p class="form-control" rows="5" name="sent-twitter-text" [(ngModel)]="modalBroadcast.twitterPost"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="modalBroadcast.emailContent || modalBroadcast.smsContent">
+          <div class="col-12">
+            <h4>
+              <strong [translate]="'group.broadcast.viewModal.sentTo'" [translateParams]="modalBroadcast"></strong>
+            </h4>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12">
+            <h4>
+              <strong [translate]="'group.broadcast.viewModal.when'" [translateParams]="{formattedDate: modalBroadcast.getFormattedDateTimeSent()}"></strong>
+            </h4>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="modalBroadcast.costEstimate > 0">
+          <div class="col-6 offset-6">
+            <div class="row">
+              <h5>
+                <strong>{{'group.broadcast.viewModal.reviewCosts' | translate}}</strong>
+              </h5>
+            </div>
+            <div class="row">
+              <div class="col-6">SMS's: {{modalBroadcast.smsCount}}</div>
+              <div class="col-6" [translate]="'group.broadcast.viewModal.estimatedCost'" [translateParams]="modalBroadcast"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary close-button" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

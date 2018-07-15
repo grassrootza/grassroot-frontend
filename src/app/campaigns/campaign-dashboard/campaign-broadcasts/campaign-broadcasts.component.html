@@ -34,8 +34,12 @@
       </div>
       <div *ngFor="let broadcast of broadcasts">
         <app-broadcast-listing [broadcast]="broadcast"
+          (onViewDetailsClicked)="showViewModal(broadcast)"
+          (onDownloadAllClicked)="downloadAllMsgReport(broadcast)"
           (onDownloadErrorsClicked)="downloadBroadcastErrorReport(broadcast)"></app-broadcast-listing>
       </div>
     </div>
   </div>
 </div>
+
+<app-broadcast-view [modalBroadcast]="modalBroadcast"></app-broadcast-view>

@@ -4,4 +4,7 @@
     vertical-align: middle;
     border-top: solid #ECEEF1 1px;
 }
-  
+
+#sentActionsDropdown .dropdown-item:hover {
+    cursor: pointer;
+}

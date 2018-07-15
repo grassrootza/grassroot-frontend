@@ -44,10 +44,19 @@ export class CampaignBroadcastsComponent implements OnInit {
     });
   }
 
+  downloadAllMsgReport(broadcast: Broadcast) {
+    this.broadcastService.downloadBroadcastMsgsReport(broadcast.broadcastUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "broadcast-error-report.xls");      
+    }, error => {
+      console.log('error downloading report: ', error);
+    })
+  }
+
   showViewModal(broadcast: Broadcast){
     this.modalBroadcast = broadcast;
     console.log('modal broadcast: ', this.modalBroadcast);
-    this.firstModalTab = broadcast.smsContent ? 'sms' : broadcast.emailContent ? 'email' : broadcast.fbPost ? 'facebook' : 'twitter';
+    // this.firstModalTab = broadcast.smsContent ? 'sms' : broadcast.emailContent ? 'email' : broadcast.fbPost ? 'facebook' : 'twitter';
     $('#broadcast-view-modal').modal('show');
   }
 
