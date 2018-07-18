@@ -15,6 +15,8 @@
             </h4>
           </div>
         </div>
+
+        <!-- display what messages were sent-->
         <div class="row">
           <div class="col-11 offset-1">
             <h5 *ngIf="modalBroadcast.smsContent" [translate]="'group.broadcast.viewModal.sms'" [translateParams]="modalBroadcast"></h5>
@@ -32,6 +34,7 @@
           </div>
         </div>
 
+        <!-- the actual tabs -->
         <div class="row" style="margin-bottom: 1rem !important;">
           <div class="col-11 offset-1">
             <ul class="nav nav-tabs" id="sent-view-tabs" role="tablist">
@@ -58,21 +61,22 @@
             </ul>
             <div class="tab-content" id="myTabContent">
               <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'sms')}" id="sent-sms" role="tabpanel" aria-labelledby="sent-sms-tab" *ngIf="modalBroadcast.smsContent">
-                <p class="form-control" rows="5" name="sent-sms-text" [(ngModel)]="modalBroadcast.smsContent"></p>
+                <p class="form-control" rows="5" name="sent-sms-text">{{ modalBroadcast.smsContent }}</p>
               </div>
               <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'email')}" id="sent-email" role="tabpanel" aria-labelledby="sent-email-tab" *ngIf="modalBroadcast.emailContent">
                 <p [innerHTML]="modalBroadcast.emailContent"></p>
               </div>
               <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'facebook')}" id="sent-facebook" role="tabpanel" aria-labelledby="sent-facebook-tab" *ngIf="modalBroadcast.fbPost">
-                <p class="form-control" rows="5" name="sent-fbPost-text" [(ngModel)]="modalBroadcast.fbPost"></p>
+                <p class="form-control" rows="5" name="sent-fbPost-text">{{ modalBroadcast.fbPost }}</p>
               </div>
               <div [ngClass]="{'tab-pane fade': true, 'show active': (firstModalTab == 'email')}" id="sent-twitter" role="tabpanel" aria-labelledby="sent-twitter-tab" *ngIf="modalBroadcast.twitterPost">
-                <p class="form-control" rows="5" name="sent-twitter-text" [(ngModel)]="modalBroadcast.twitterPost"></p>
+                <p class="form-control" rows="5" name="sent-twitter-text">{{ modalBroadcast.twitterPost }}</p>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- the message counts  -->
         <div class="row" *ngIf="modalBroadcast.emailContent || modalBroadcast.smsContent">
           <div class="col-12">
             <h4>

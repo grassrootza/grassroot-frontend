@@ -14,7 +14,7 @@ export class BroadcastViewComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    // this.firstModalTab = broadcast.smsContent ? 'sms' : broadcast.emailContent ? 'email' : broadcast.fbPost ? 'facebook' : 'twitter';
+    this.firstModalTab = this.modalBroadcast.smsContent ? 'sms' : this.modalBroadcast.emailContent ? 'email' : this.modalBroadcast.fbPost ? 'facebook' : 'twitter';
   }
 
 }

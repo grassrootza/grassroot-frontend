@@ -21,7 +21,7 @@
         <div class="card-body events-box">
           <div class="row">
             <div class="col-7">
-              <h1>Scheduled messages</h1>
+              <h3>Scheduled messages</h3>
             </div>
           </div>
           <div class="container group-info-header d-none d-md-block">
@@ -91,9 +91,9 @@
 
       <div class="card" *ngIf="currentSentPage.content.length > 0">
         <div class="card-body events-box">
-          <div class="row">
+          <div class="row" *ngIf="currentScheduledPage.content.length > 0"> <!-- since if not just put this up -->
             <div class="col-7">
-              <h1>Sent messages</h1>
+              <h3>Sent messages</h3>
             </div>
           </div>
           <div class="container group-info-header d-none d-md-block">
