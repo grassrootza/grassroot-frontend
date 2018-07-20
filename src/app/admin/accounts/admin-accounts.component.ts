@@ -15,8 +15,12 @@ declare var $: any;
 export class AdminAccountsComponent implements OnInit {
 
   public accounts: UserExtraAccount[];
+  
   public accountDateToChange: UserExtraAccount;
   public accountDateChangeForm: FormGroup;
+
+  public accountDataSetsToChange: UserExtraAccount;
+  public accountDataSetChangeForm: FormGroup;
   
   public disabledMap: any;
   public disabledUids: string[];
@@ -31,6 +35,11 @@ export class AdminAccountsComponent implements OnInit {
     this.accountDateChangeForm = this.fb.group({
       'date': [DateTimeUtils.dateFromDate(new Date()), Validators.required],
       'time': [DateTimeUtils.timeFromDate(new Date()), Validators.required],
+    });
+
+    this.accountDataSetChangeForm = this.fb.group({
+      'datasets': [''],
+      'updateRefTable': ['false']
     });
   }
 
@@ -74,6 +83,25 @@ export class AdminAccountsComponent implements OnInit {
     }, error => {
       console.log('that failed, error: ', error);
       $('#change-billing-date-account-modal').modal('hide');
+    })
+  }
+
+  initiateDataSetChange(account: UserExtraAccount) {
+    this.accountDataSetsToChange = account;
+    $('#change-datasets-modal').modal('show');
+  }
+
+  completeDataSetChange() {
+    let updateDD = !!this.accountDataSetChangeForm.get('updateRefTable').value;
+    console.log('update DD table: ', updateDD);
+    this.accountsService.updateAccountDatasets(this.accountDataSetsToChange.uid, this.accountDataSetChangeForm.get('datasets').value, updateDD).subscribe(account => {
+      this.accountDataSetsToChange = account;
+      let index = this.accounts.findIndex(acc => acc.uid == account.uid);
+      this.accounts[index] = account;
+      $('#change-datasets-modal').modal('hide');
+    }, error => {
+      console.log('that failed, error: ', error);
+      $('#change-datasets-modal').modal('hide');
     })
   }
 

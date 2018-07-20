@@ -28,7 +28,7 @@ export class CampaignsComponent implements OnInit {
     
     this.campaignService.campaignInfoList.subscribe(
       campaignList => {
-        console.log("Retrieved campaign list ", campaignList);
+        // console.log('Retrieved campaign list ', campaignList);
         this.activeCampaigns = campaignList.filter(cp => cp.isActive());
         this.pastCampaigns = campaignList.filter(cp => !cp.isActive());
         this.canManageCampaigns = campaignList && campaignList.length > 0;

@@ -59,6 +59,25 @@
         </div>
 
         <ng-container *ngIf="account.enabled">
+        <div class="form-row" *ngIf="account.geoDataSets">
+          <div class="col-12" *ngIf="!dataSetCounts">
+            <h4>Loading datasets ...</h4>
+          </div>
+          <div class="col-12" *ngIf="dataSetCounts?.length > 1">
+            <h4>Datasets on this account</h4>
+          </div>
+          <div class="col-12" *ngIf="dataSetCounts?.length == 1">
+            <h4>Dashboard for {{ dataSetCounts[0].description }}</h4>
+            <p>
+              Since the last bill, there have been {{ dataSetCounts[0].usersCount }} unique users of the service,
+              generating {{ dataSetCounts[0].userSessionCount }} USSD sessions and {{ dataSetCounts[0].notificationsCount }}
+              messages.
+            </p>
+          </div>
+        </div>
+
+        <hr *ngIf="account.geoDataSets" />
+
         <div class="form-row">
           <div class="col-12">
             <h4>Groups on this account</h4>

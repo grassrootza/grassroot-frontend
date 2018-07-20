@@ -6,7 +6,9 @@
       </div>
     </div>
     <div class="card-body" *ngIf="accounts">
-      <app-account-detail  *ngFor="let account of accounts" [account]="account" (onChangeBillingDateClicked)="initiateDateChange(account)"></app-account-detail>  
+      <app-account-detail  *ngFor="let account of accounts" [account]="account" 
+        (onChangeBillingDateClicked)="initiateDateChange(account)"
+        (onChangeDatasetsClicked)="initiateDataSetChange(account)"></app-account-detail>  
     </div>
   </div>
 
@@ -66,6 +68,39 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
           <button type="button" class="btn btn-primary" (click)="completeDateChange()">Submit</button>
+        </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="change-datasets-modal" aria-hidden="true" *ngIf="accountDataSetsToChange">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Change account datasets</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="row">
+              <div class="col-12 form-group">
+                <label class="control-label">Enter datasets:</label>
+                <input type="text" class="form-control" [formControl]="accountDataSetChangeForm.controls['datasets']" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 form-group">
+                <label class="control-label">Update external ref table?</label>
+                <input type="checkbox" class="form-control" [formControl]="accountDataSetChangeForm.controls['updateRefTable']" />
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+          <button type="button" class="btn btn-primary" (click)="completeDataSetChange()">Submit</button>
         </div>
     </div>
   </div>

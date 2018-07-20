@@ -12,7 +12,8 @@
           Notifications since last bill: {{ account.notificationsSinceLastBill }} // 
           Last billing date: {{ account.getLastBillingDate() }} <a href="#" (click)="changeAccountDate()" class="grassroot-link">(change)</a> //
           Number of groups: {{ numberGroups }} //
-          Account admins: {{ accountAdmins }} 
+          Account admins: {{ accountAdmins }} // 
+          Datasets: {{ account.geoDataSets ? account.geoDataSets.join(', ') : 'None' }} <a href="#" (click)="changeDataSets()" class="grassroot-link">(change)</a>
       </div>
     </div>
   </div>

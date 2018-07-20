@@ -171,7 +171,7 @@ export class TaskService {
   }
 
   createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, 
-            imageKey: string, assignedMemberUids: string[], specialForm?: string):Observable<Task>{
+            imageKey: string, assignedMemberUids: string[], specialForm?: string, randomize: boolean = false):Observable<Task>{
     const fullUrl = this.groupCreateVoteUrl + '/' + parentType + '/' + parentUid;
 
     let params = new HttpParams()
@@ -179,7 +179,8 @@ export class TaskService {
       .set('voteOptions', voteOptions.join(","))
       .set('description', description)
       .set('time', time.toString())
-      .set('assignedMemberUids', assignedMemberUids.join(','));
+      .set('assignedMemberUids', assignedMemberUids.join(','))
+      .set('randomizeOptions', '' + randomize);
 
     if (imageKey) {
       params = params.set("mediaFileUid", imageKey);

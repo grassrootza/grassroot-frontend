@@ -8,6 +8,7 @@ import { UserExtraAccount } from './account.user.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Group } from '../../groups/model/group.model';
 import { GroupService } from '../../groups/group.service';
+import { DataSetCounts } from './dataset.count.model';
 
 declare var $: any;
 
@@ -43,6 +44,8 @@ export class AccountComponent implements OnInit {
 
   groupToView: Group;
   groupToViewCount: number;
+
+  dataSetCounts: DataSetCounts[];
 
   constructor(private userService: UserService,
               private accountService: AccountService,
@@ -92,8 +95,21 @@ export class AccountComponent implements OnInit {
         console.log('other account uids: ', this.otherAccountUids);
       }
 
+      if (account.geoDataSets) {
+        this.fetchDataSetDetails();
+      }
+
       this.fetchCandidateGroupsToAdd(account.uid);
     });
+  }
+
+  fetchDataSetDetails() {
+    this.accountService.getDetailsOfDataSets().subscribe(counts => {
+      console.log('dataset counts: ', counts);
+      this.dataSetCounts = counts;
+    }, error => {
+      console.log('error fetching counts: ', error);
+    })
   }
 
   viewGroup(groupUid: string) {

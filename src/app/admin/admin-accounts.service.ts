@@ -14,6 +14,7 @@ export class AccountsAdminService {
 
   private updateLastBillingDateUrl: string = environment.backendAppUrl + "/api/admin/accounts/update/billing";
   private updateSubscriptionRefUrl: string = environment.backendAppUrl + "/api/admin/accounts/update/subscription";
+  private updateDatasetRefUrl: string = environment.backendAppUrl + '/api/admin/accounts/update/datasets';
 
   private enableAccountUrl: string = environment.backendAppUrl + "/api/admin/accounts/enable/account";
   private disableAccountUrl: string = environment.backendAppUrl + "/api/admin/accounts/disable/account";
@@ -63,6 +64,13 @@ export class AccountsAdminService {
 
   public listCurrentSubscriptions(): Observable<SubscriptionAccount[]> {
     return this.httpClient.get<SubscriptionAccount[]>(this.listBillingAccountsUrl).map(accounts => accounts.map(getAccountEntity));
+  }
+
+  public updateAccountDatasets(accountUid: string, dataSetLabels: string, updateRefs: boolean) {
+    let params = new HttpParams().set('accountUid', accountUid)
+      .set('geoDataSets', dataSetLabels)
+      .set('updateDynamoReference', '' + updateRefs);
+    return this.httpClient.post<UserExtraAccount>(this.updateDatasetRefUrl, null, { params: params }).map(getEntity);
   }
 
 }

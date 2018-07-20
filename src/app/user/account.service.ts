@@ -4,6 +4,7 @@ import {environment} from "environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import { UserExtraAccount, getEntity } from './account/account.user.model';
 import { AccountSignupResponse } from './account/signup/signup.response.model';
+import { DataSetCounts, getCountsEntity } from './account/dataset.count.model';
 
 @Injectable()
 export class AccountService {
@@ -27,6 +28,9 @@ export class AccountService {
   private addGroupUrl = environment.backendAppUrl + "/api/account/add/group";
   private removeGroupUrl = environment.backendAppUrl + "/api/account/remove/group";
   private fetchCandidateGroupsUrl = environment.backendAppUrl + "/api/account/fetch/groups/candidates";
+
+  private fetchAllDataSetDetailsUrl = environment.backendAppUrl + "/api/account/fetch/all/dataset";
+  private fetchDataSetCountsUrl = environment.backendAppUrl + "/api/account/fetch/dataset";
 
   constructor(private httpClient: HttpClient) {
   }
@@ -82,6 +86,24 @@ export class AccountService {
     return this.httpClient.get(this.getCostSinceLastBillUrl, {params: params}).map(resp => {
       return resp;
     })
+  }
+
+  getDetailsOfDataSets(accountUid?: string): Observable<DataSetCounts[]> {
+    let params = new HttpParams();
+    if (accountUid)
+      params = params.set('accountUid', accountUid);
+
+    return this.httpClient.get<DataSetCounts[]>(this.fetchAllDataSetDetailsUrl, {params: params})
+      .map(results => results.map(getCountsEntity));
+  }
+
+  getDataSetCounts(datasetLabel: string, accountUid?: string) {
+    let fullUrl = this.fetchDataSetCountsUrl + "/" + datasetLabel;
+    let params = new HttpParams();
+    if (accountUid)
+      params = params.set('accountUid', accountUid);
+    
+    return this.httpClient.get<DataSetCounts>(fullUrl, { params: params }).map(getCountsEntity);
   }
 
   closeAccount(accountUid: string): Observable<any> {

@@ -36,6 +36,7 @@ export class CreateVoteComponent implements OnInit {
   @Output() voteSaved: EventEmitter<boolean>;
 
   public isGroupPaidFor = false;
+  public canRandomize = false;
 
   constructor(private taskService: TaskService,
               private formBuilder: FormBuilder,
@@ -74,7 +75,8 @@ export class CreateVoteComponent implements OnInit {
       'time': [timeStruct, Validators.required],
       'specialForm': ['ORDINARY'],
       'parentType': 'GROUP',
-      'assignedMemberUids': []
+      'assignedMemberUids': [],
+      'randomize': ['']
     }, { validator: isDateTimeFuture("date", "time") });
 
   }
@@ -96,6 +98,7 @@ export class CreateVoteComponent implements OnInit {
     const control = < FormArray > this.createVoteForm.controls['voteOptions'];
     control.push(this.initVoteOptions());
   }
+
   removeOption(i: number) {
     const control = < FormArray > this.createVoteForm.controls['voteOptions'];
     control.removeAt(i);
@@ -122,10 +125,12 @@ export class CreateVoteComponent implements OnInit {
     this.shouldValidateVoteOptions();
     if(this.yesNoVote){
       this.createVoteForm.removeControl('voteOptions');
+      this.canRandomize = false;
     } else {
       this.createVoteForm.addControl('voteOptions', this.formBuilder.array([
         this.initVoteOptions(),
-      ]))
+      ]));
+      this.canRandomize = this.isGroupPaidFor;
     }
   }
 
@@ -170,6 +175,7 @@ export class CreateVoteComponent implements OnInit {
     };
 
     this.confirmingSend = true;
+
     let specialForm = this.isGroupPaidFor ? this.createVoteForm.get('specialForm').value : 'ORDINARY';
     
     let voteOptions: string[] = [];
@@ -186,7 +192,7 @@ export class CreateVoteComponent implements OnInit {
     this.taskService.loadPreviewEvent(TaskType.VOTE, this.groupUid, this.confirmParams['subject'], voteMilis, this.createVoteForm.get("description").value,
       specialForm, this.imageKey, null, voteOptions).subscribe(taskPreview => {
         this.taskPreview = taskPreview;
-        console.log('got a preview! : ', this.taskPreview);
+        // console.log('got a preview! : ', this.taskPreview);
       }, error => {
         console.log('error generating preview! : ', error);
       })
@@ -198,6 +204,8 @@ export class CreateVoteComponent implements OnInit {
     let title: string = this.createVoteForm.get("title").value;
 
     let voteOptions: string[] = [];
+    let randomize = false;
+    
     if( this.createVoteForm.get("voteOptions") != null){
       let voteOptionsObjects = this.createVoteForm.get("voteOptions").value;
       if(voteOptionsObjects.length > 0){
@@ -205,7 +213,10 @@ export class CreateVoteComponent implements OnInit {
           voteOptions.push(voteOptionsObjects[i].option)
         }
       }
+      randomize = this.createVoteForm.get('randomize').value;
     }
+
+    console.log('randomize: ', randomize);
 
     let description: string = this.createVoteForm.get("description").value;
     let voteMilis: number = this.extractVoteDeadlineMillis();
@@ -219,8 +230,8 @@ export class CreateVoteComponent implements OnInit {
 
     let specialForm = this.isGroupPaidFor ? this.createVoteForm.get('specialForm').value : 'ORDINARY';
 
-    this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, this.imageKey, assignedMemberUids, specialForm)
-      .subscribe(task => {
+    this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, this.imageKey, 
+      assignedMemberUids, specialForm, randomize).subscribe(task => {
           console.log("Vote successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
           this.yesNoVote = true;
           this.shouldValidateVoteOptions();

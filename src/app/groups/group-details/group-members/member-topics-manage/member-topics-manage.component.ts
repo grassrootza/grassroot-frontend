@@ -17,7 +17,7 @@ export class MemberTopicsManageComponent implements OnInit{
   @Input() selectId: string = "topics-multi-select-member";
 
   @Input() group: Group = null;
-  @Input() members: Membership[] = null;
+  @Input() memberUids: string[] = null;
 
   priorTopics: string[] = [];
   modalSelectedTopics: string[] = [];
@@ -53,22 +53,24 @@ export class MemberTopicsManageComponent implements OnInit{
 
 
   saveAssignTopicToMember() {
-    let memberUids: string[] = this.members.map(member => member.user.uid);
-    let onlyAddTopics: boolean = this.members.length > 1; // if it's multiple members (so don't overwrite)
-    this.groupService.assignTopicToMember(this.group.groupUid, memberUids, this.modalSelectedTopics, onlyAddTopics).subscribe(response => {
-      this.members.forEach(member => onlyAddTopics ? member.topics.push.apply(this.modalSelectedTopics) : member.topics = this.modalSelectedTopics);
-      this.alertService.alert("group.allMembers.assignTopic.assigned");
+    let onlyAddTopics: boolean = this.memberUids.length > 1; // if it's multiple members (so don't overwrite)
+    console.log('Assigning members to topics ...');
+    this.alertService.showLoading();
+    this.groupService.assignTopicToMember(this.group.groupUid, this.memberUids, this.modalSelectedTopics, onlyAddTopics).subscribe(response => {
+      this.alertService.hideLoading();
       $('#' + this.modalId).modal('hide');
+      this.alertService.alert("group.allMembers.assignTopic.assigned");
       this.topicsAssigned.emit(true);
     }, error => {
-      console.log("well that didn't work");
+      this.alertService.hideLoading();
+      console.log('well that failed: ', error);
     });
 
     // if we have multiple members and deliberately removed a topic from all, tell backend to remove it too
     let removedTopics = this.priorTopics.filter(topic => this.modalSelectedTopics.indexOf(topic) == -1);
     if (onlyAddTopics && removedTopics && removedTopics.length > 0) {
       console.log("change in topics on bulk modal, remove = ", removedTopics);
-      this.groupService.removeTopicFromMembers(this.group.groupUid, memberUids, removedTopics).subscribe(response => {
+      this.groupService.removeTopicFromMembers(this.group.groupUid, this.memberUids, removedTopics).subscribe(response => {
         console.log("removal result: ", response);
       }, error => {
         console.log("error on removal: ", error);

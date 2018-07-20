@@ -318,15 +318,12 @@ export class GroupService {
   // members will retain their existing topics
   assignTopicToMember(groupUid: string, membersUids: string[], topics: string[], onlyAdd: boolean = false): Observable<boolean> {
     const fullUrl = this.groupAssignTopicsToMembersUrl + "/" + groupUid;
-    const params = {
-      'memberUids': membersUids,
-      'topics': topics,
-      'onlyAdd': onlyAdd.toString()
-    };
+    const params = new HttpParams().set('memberUids', membersUids.join(','))
+      .set('topics', topics.join(','))
+      .set('onlyAdd', '' + onlyAdd);
     console.log("posting topic assignment ...");
 
-    return this.httpClient.post(fullUrl, null, {params: params})
-      .map(response => {
+    return this.httpClient.post(fullUrl, null, {params: params}).map(response => {
         console.log(response);
         return true;
       })

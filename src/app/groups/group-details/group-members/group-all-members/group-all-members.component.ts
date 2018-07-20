@@ -87,6 +87,7 @@ export class GroupAllMembersComponent implements OnInit {
     if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
       $('#bulk-manage-no-members-selected').modal('show');
     } else {
+      this.bulkMemberUids = this.bulkManageMembers.map(member => member.user.uid);
       this.bulkSelectedTopics = this.group.topics.filter(topic => {
         // js type weirdness makes this unpredictable if made into more elegant single line
         let topicsContained = this.bulkManageMembers.map(member => member.topics.indexOf(topic) != -1);
