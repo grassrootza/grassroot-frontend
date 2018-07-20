@@ -26,6 +26,8 @@ export class BroadcastService {
   createUrlBase = environment.backendAppUrl + "/api/broadcast/create/";
   costThisMonthUrl = environment.backendAppUrl + "/api/broadcast/cost-this-month";
   shortenLinkUrl = environment.backendAppUrl + "/api/broadcast/shorten/link";
+  
+  downloadMsgsReportUrl = environment.backendAppUrl + "/api/broadcast/sending-report";
   downloadErrorReportUrl = environment.backendAppUrl + "/api/broadcast/error-report";
   resendUrl = environment.backendAppUrl + "/api/broadcast/resend";
 
@@ -325,6 +327,11 @@ export class BroadcastService {
   shortenLink(link: string): Observable<string> {
     let params = new HttpParams().set("link", link);
     return this.httpClient.get(this.shortenLinkUrl, {params: params, responseType: 'text'});
+  }
+
+  downloadBroadcastMsgsReport(broadcastUid: string) {
+    const fullUrl = this.downloadMsgsReportUrl + "/" + broadcastUid + "/download";
+    return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
 
   downloadBroadcastErrorReport(broadcastUid: string) {

@@ -89,8 +89,16 @@ export class GroupBroadcastComponent implements OnInit {
   showViewModal(broadcast: Broadcast){
     this.modalBroadcast = broadcast;
     console.log('modal broadcast: ', this.modalBroadcast);
-    this.firstModalTab = broadcast.smsContent ? 'sms' : broadcast.emailContent ? 'email' : broadcast.fbPost ? 'facebook' : 'twitter';
     $('#broadcast-view-modal').modal('show');
+  }
+
+  downloadBroadcastAllReport(broadcast: Broadcast) {
+    this.broadcastService.downloadBroadcastMsgsReport(broadcast.broadcastUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/vnd.ms-excel' });
+      saveAs(blob, "broadcast-sending-report.xls");
+    }, error => {
+      console.log('error retrieving report xls: ', error);
+    })
   }
 
   donwloadBroadcastErrorReport(broadcast: Broadcast) {

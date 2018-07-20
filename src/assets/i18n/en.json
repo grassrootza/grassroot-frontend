@@ -692,7 +692,8 @@
         "sentActions": {
           "view": "View",
           "resend": "Resend",
-          "downloadReport": "Download report"
+          "downloadReport": "Download report",
+          "downloadErrors": "Download errors"
         }
       },
       "viewModal": {

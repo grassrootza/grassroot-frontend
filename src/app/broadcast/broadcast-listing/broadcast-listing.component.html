@@ -1,7 +1,7 @@
 <div class="container broadcast-info-row">
   <div class="row flex flex-wrap">
     <div class="col-12 title">
-      {{broadcast.title}}
+      <b>Subject: </b> {{broadcast.title}}
     </div>
   </div>
   <div class="row flex flex-wrap">
@@ -33,7 +33,8 @@
         <div class="dropdown-menu" aria-labelledby="sentActionsDropdown">
           <a class="dropdown-item" (click)="showViewModal()">{{'group.broadcast.table.sentActions.view' | translate}}</a>
           <a class="dropdown-item" *ngIf="broadcast.createdByUser" (click)="showResendModal()">{{'group.broadcast.table.sentActions.resend' | translate}}</a>
-          <a class="dropdown-item" *ngIf="!broadcast.succeeded" (click)="donwloadBroadcastErrorReport(broadcast)">{{'group.broadcast.table.sentActions.downloadReport' | translate}}</a>
+          <a class="dropdown-item" *ngIf="broadcast.createdByUser" (click)="downloadAllMessagesReport()">{{'group.broadcast.table.sentActions.downloadReport' | translate}}</a>
+          <a class="dropdown-item" *ngIf="!broadcast.succeeded" (click)="donwloadBroadcastErrorReport()">{{'group.broadcast.table.sentActions.downloadErrors' | translate}}</a>
         </div>
       </div>
     </div>
