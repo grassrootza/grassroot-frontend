@@ -1,0 +1,100 @@
+<div class="container container-primary">
+  <div class="card col-md-8 offset-md-2">
+    <div class="card-body">
+        <div class="row" *ngIf="currentStage == 'SELECT_METHOD'">
+          <div class="col-12">
+            <h2 class="text-center">Set up a Grassroot Extra account</h2>
+            <p>Grassroot is free for groups of up to 300 people and 10 meetings, votes and actions per month. For larger and more active groups,
+              and to run campaigns or create movements, you will need to set up a Grassroot Extra account. An account will unlock larger groups,
+              more frequent activity, campaigns, movements, and a wide range of other features.
+            </p>
+            <p>
+              Grassroot Extra costs R300 per month, including 1,000 free SMSs per month, and 25c per SMS (including VAT) for each one ahead. You
+              can create an account here, but you will need to pay by EFT and send the proof of payment to
+              <a href="mailto:accounts@grassroot.org.za">accounts@grassroot.org.za</a> to enable it.
+            </p>
+          </div>
+        </div>
+        <div class="row" *ngIf="currentStage == 'SELECT_METHOD'">
+          <!-- <div class="col-6 text-center">
+            <button type="button" class="btn btn-primary save-button" (click)="initiateAccountCreation(true)">Pay by Credit Card</button>
+          </div> -->
+          <div class="col-12 text-center">
+            <button type="button" class="btn btn-primary save-button" (click)="initiateAccountCreation(false)">Create account</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="currentStage == 'DETAILS'">
+          <div class="col-12">
+            <form [formGroup]="creationForm">
+              <div class="row">
+                <div class="col-12">Give the account a name (e.g., your company):</div>
+              </div>
+              <div class="row">
+                <div class="col-12"><input type="text" class="form-control" [formControl]="creationForm.controls['accountName']" /></div>
+              </div>
+              <div class="row">
+                <div class="col-12">Enter the email for billing invoices:</div>
+              </div>
+              <div class="row">
+                <div class="col-12"><input type="text" class="form-control" [formControl]="creationForm.controls['billingEmail']" /></div>
+              </div>
+              <div class="row">
+                <div class="col-12">Add all of the groups you organize to this account?
+                  <input type="checkbox" checked [formControl]="creationForm.controls['addAllGroups']" />
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12"><label>Do you want to add extra administrators to this account?</label> 
+                  <p class="small">Account admins can add groups to the account, send broadcasts, 
+                  and set up campaigns. To add admins, just enter their phone numbers or email addresses, separated by a comma. 
+                  You can also change this later.</p>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12"><input type="text" class="form-control" [formControl]="creationForm.controls['accountAdmins']" /></div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-center">
+                  <button type="button" class="btn btn-primary save-button" (click)="submitAccountCreation()">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row" *ngIf="currentStage == 'PAYMENT'">
+          <div class="col-12 text-center">
+            <form [action]="paymentResultUrl" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form>
+          </div>
+        </div>
+        <div class="row" *ngIf="currentStage == 'COMPLETE_PAID'">
+          Done! You now have an account
+        </div>
+        <div class="row" *ngIf="currentStage == 'COMPLETE_TO_PAY'">
+          <div class="col-12">
+            <p>
+              Done! Your account has been created. Please enable it by making a transfer for the first month's subscription fee (R300) to the 
+              following account:
+            </p>
+            <p class="blockquote">
+              Bank: FNB<br>Account: Grassroot Nation NPC<br>Account: 62532765966<br>Branch: 251905
+            </p>
+            <p>
+              When you have made the transfer, please send proof of payment to <a href="mailto:accounts@grassroot.org.za">accounts@grassroot.org.za</a>.
+              You will then receive a monthly invoice for your usage. Thanks for signing up. As always, we hope our tools are useful, and please don't
+              hesitate to send us feedback.
+            </p>
+            <p>
+              Note: We suggest <a class="grassroot-link" (click)="logout()">logging out</a> and logging back in to refresh your profile (otherwise you may still see messages requiring you to sign up 
+              for an account).
+            </p>
+          </div> 
+        </div>
+        <div class="row" *ngIf="currentStage == 'PAYMENT_ERROR'">
+          Sorry, that went wrong. Please send us an email at <a href="mailto:accounts@grassroot.org.za">accounts@grassroot.org.za</a>
+        </div>
+        <div class="row" *ngIf="currentStage == 'LOADING'">
+          Loading ...
+        </div>
+    </div>
+  </div>
+</div>

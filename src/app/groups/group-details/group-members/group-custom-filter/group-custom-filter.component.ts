@@ -28,8 +28,11 @@ export class GroupCustomFilterComponent implements OnInit {
   filteredMemberUids: string[] = [];
 
   membersToManage: Membership[] = [];
-  groupsToCopyMembersTo: GroupInfo[] = [];
 
+  topicMemberUids: string[] = [];
+  topicMemberNames: string[] = [];
+
+  groupsToCopyMembersTo: GroupInfo[] = [];
 
   @Input() group: Group;
   groupCampaigns: CampaignInfo[] = [];
@@ -118,19 +121,32 @@ export class GroupCustomFilterComponent implements OnInit {
     }
 }
 
+setMembersToManageLite() {
+  console.log('setting up uids and names');
+  if (this.currentPage.getSelectedMembers().length > 0) {
+    this.topicMemberUids = this.currentPage.getSelectedMembers().map(member => member.user.uid);
+  } else {
+    this.topicMemberUids = this.filteredMembers.map(member => member.user.uid);
+  }
+  console.log('alright, set up: ', this.topicMemberUids);
+}
+
   addFilteredMembersToTaskTeam() {
     this.setMembersToManage();
     $('#filtered-add-to-task-team').modal('show');
   }
 
   bulkManageTopics() {
-    this.setMembersToManage();
+    this.setMembersToManageLite();
+    console.log('topic uids set up');
     this.bulkTopics = this.group.topics.filter(topic => {
       // js type weirdness makes this unpredictable if made into more elegant single line
       let topicsContained = this.membersToManage.map(member => member.topics.indexOf(topic) != -1);
-      return topicsContained.reduce((prior, current) => prior && current);
+      return topicsContained && topicsContained.length > 0 ? topicsContained.reduce((prior, current) => prior && current) : false;
     });
+    console.log('also topics set up');
     this.topicManageModal.setupTopicSelect(this.bulkTopics);
+    console.log('showing modal');
     $('#bulk-member-assign-topics').modal('show');
   }
 

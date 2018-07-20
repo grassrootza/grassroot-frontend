@@ -4,6 +4,9 @@ import {GroupRole} from "./group-role";
 import {TaskType} from "../../task/task-type";
 import {DatePipe} from "@angular/common";
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
+import { environment } from "environments/environment";
+
+const imgBaseUrl = environment.backendAppUrl + "/api/image/group";
 
 export class GroupInfo {
 
@@ -43,6 +46,10 @@ export class GroupInfo {
         return "icon_todo.png";
     }
     return "";
+  }
+
+  public getImageUrl() {
+    return this.profileImageUrl ? imgBaseUrl + "/" + this.groupUid : '';
   }
 
   public static createInstance(groupInfoData: GroupInfo): GroupInfo {

@@ -11,6 +11,7 @@ import {AlertService} from "../../utils/alert-service/alert.service";
 export class UserProfileComponent implements OnInit, AfterViewInit {
 
   public currentTab: string = "profile";
+  public showAccountSettings: boolean = false;
 
   constructor(private userService: UserService, private router: Router, private alertService: AlertService) {
     this.router.events.subscribe(ev => {
@@ -19,6 +20,8 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
         this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
       }
     });
+
+    this.showAccountSettings = this.userService.getLoggedInUser().hasAccountAdmin();
   }
 
   ngOnInit() { }

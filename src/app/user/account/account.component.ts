@@ -1,17 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder,  FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {UserService} from "../user.service";
-import {AuthenticatedUser, UserProfile} from "../user.model";
+import {AuthenticatedUser} from "../user.model";
 import {AccountService} from "../account.service";
-import {AccountType} from "../model/account-type.enum";
-import {Account} from "../model/account.model";
-import {AccountBillingCycle} from "../model/account-billing-cycle.enum";
-import {AccountBillingRecords} from "../model/account-billing-records.model";
-import { saveAs } from 'file-saver';
+import { UserExtraAccount } from './account.user.model';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Group } from '../../groups/model/group.model';
+import { GroupService } from '../../groups/group.service';
+import { DataSetCounts } from './dataset.count.model';
 
 declare var $: any;
-
 
 @Component({
   selector: 'app-account',
@@ -20,76 +19,145 @@ declare var $: any;
 })
 export class AccountComponent implements OnInit {
 
-  types = AccountType;
   typesKeys: string[];
 
-  billingCycles = AccountBillingCycle;
   billingCyclesKeys: string[];
-  accountBillingRecords: AccountBillingRecords[] = [];
 
   accountFees: any;
 
   loggedInUser: AuthenticatedUser;
-  account: Account;
+  account: UserExtraAccount;
   accountForm: FormGroup;
 
-  costSinceLastBill: number = 0;
+  dateOfLastBill: string;
+  notificationsSinceLastBill: number = 0;
+
+  paidForGroupUids: string[];
+  otherAdminUids: string[];
+  otherAccountUids: string[];
+
+  removingAdminUid: string;
+
+  groupCandidatesMap: any;
+  groupCandidatesUids: string[];
+  selectedGroupUidsToAdd: string[];
+
+  groupToView: Group;
+  groupToViewCount: number;
+
+  dataSetCounts: DataSetCounts[];
 
   constructor(private userService: UserService,
               private accountService: AccountService,
+              private groupService: GroupService,
               private formBuilder: FormBuilder,
-              private alertService: AlertService) {
-    this.typesKeys = Object.keys(this.types);
-    this.billingCyclesKeys = Object.keys(this.billingCycles);
+              private alertService: AlertService,
+              private route: ActivatedRoute,
+              private router: Router) {
 
     this.accountForm = this.formBuilder.group({
-      name:new FormControl('',Validators.required),
-      billingUserEmail:new FormControl('',[Validators.required,Validators.pattern("[^ @]*@[^ @]*"),Validators.email]),
-      type:new FormControl('',Validators.required),
-      billingCycle: new FormControl('', Validators.required)
+      name:['',Validators.required],
+      adminPhoneOrEmail: ['']
     });
   }
 
   ngOnInit() {
     this.loggedInUser = this.userService.getLoggedInUser();
-
-    this.accountService.getAccountFees().subscribe(resp => {
-      this.accountFees = resp;
-    });
-
-    this.accountService.fetchAccountDetails().subscribe(account => {
-      this.account = account;
-
-      if(account) {
-        this.accountForm.get('name').setValue(account.name);
-        this.accountForm.get('billingUserEmail').setValue(account.billingUserEmail);
-
-        if(account.billingUserUid !== this.loggedInUser.userUid) {
-          this.accountForm.get('billingUserEmail').disable()
-        }
-        this.accountForm.get('type').setValue(account.type);
-        this.accountForm.get('billingCycle').setValue(account.billingCycle);
-
-        this.accountService.getCostSinceLastBill(this.account.uid).subscribe(resp => {
-          this.costSinceLastBill = resp / 100;
-        });
-
-        this.accountService.getPastPayments(this.account.uid).subscribe(abr => {
-          this.accountBillingRecords = abr;
-        })
+    
+    this.route.params.subscribe(params => {
+      let accountUid = params['id'];
+      console.log('Have account uid? ', accountUid);
+      if (accountUid) {
+        this.fetchAccount(accountUid);
+      } else {
+        this.fetchAccount();
       }
+    })
+    
+  }
+
+  fetchAccount(accountUid?: string) {
+    this.accountService.fetchAccountDetails(accountUid).subscribe(account => {
+      console.log('account: ', account);
+      this.account = account;
+      this.accountForm.get('name').setValue(account.name);
+      
+      this.paidForGroupUids = Object.keys(account.paidForGroups);
+      this.otherAdminUids = Object.keys(account.otherAdmins);
+
+      this.notificationsSinceLastBill = account.notificationsSinceLastBill;
+      console.log('last billing date millis: ', account.lastBillingDateMillis);
+      this.dateOfLastBill = account.getLastBillingDate();
+      console.log(`${this.notificationsSinceLastBill} since ${this.dateOfLastBill}`);
+      
+      if (account.otherAccounts) {
+        this.otherAccountUids = Object.keys(account.otherAccounts);
+        console.log('other account uids: ', this.otherAccountUids);
+      }
+
+      if (account.geoDataSets) {
+        this.fetchDataSetDetails();
+      }
+
+      this.fetchCandidateGroupsToAdd(account.uid);
     });
   }
 
-  downloadSelectedInvoice() {
-    const selectedInvoiceId = $('#pastInvoices').find(":selected").val();
-    this.accountService.downloadPastInvoice(selectedInvoiceId, this.account.uid).subscribe(data => {
-      let blob = new Blob([data], { type: 'application/pdf' });
-      saveAs(blob, "statement.pdf");
+  fetchDataSetDetails() {
+    this.accountService.getDetailsOfDataSets().subscribe(counts => {
+      console.log('dataset counts: ', counts);
+      this.dataSetCounts = counts;
     }, error => {
-      console.log("error getting the file: ", error);
+      console.log('error fetching counts: ', error);
     })
+  }
 
+  viewGroup(groupUid: string) {
+    this.groupService.loadGroupDetailsFromServer(groupUid).subscribe(group => {
+      this.groupToView = group;
+      this.fetchGroupNotifications(groupUid);
+    });
+    return false;
+  }
+
+  fetchGroupNotifications(groupUid: string) {
+    this.accountService.getGroupNotifications(this.account.uid, groupUid).subscribe(count => {
+      // console.log('count: ', count);
+      this.groupToViewCount = count;
+      $('#account-group-modal').modal('show');
+    })
+  }
+
+  // have to close modal, hence through here
+  goToGroupDashboard(groupUid: string) {
+    $('#account-group-modal').modal('hide');
+    this.router.navigate(['/group', groupUid]);
+  }
+
+  removeGroupFromAccount(groupUid: string) {
+    this.accountService.removeGroup(this.account.uid, groupUid).subscribe(account => {
+      this.account = account;
+      this.paidForGroupUids = Object.keys(account.paidForGroups);
+      $('#account-group-modal').modal('hide');  
+    }, error => {
+      console.log('error removing group from account: ', error);
+      this.alertService.alert('Sorry, there was an error removing the group');
+      $('#account-group-modal').modal('hide');
+    })
+  }
+
+  fetchCandidateGroupsToAdd(accountUid: string) {
+    this.accountService.fetchGroupsThatCanAddToAccount(accountUid).subscribe(groupsMap => {
+      // console.log('returned groups map: ', groupsMap);
+      this.groupCandidatesMap = groupsMap;
+      this.groupCandidatesUids = Object.keys(groupsMap);
+      // console.log('and keys: ', this.groupCandidatesUids);
+      setTimeout(() => this.showCandidateGroups(groupsMap), 300);
+    })
+  }
+
+  showCandidateGroups(groupsMap: any) {
+    $(".groups-add-select").select2({placeholder: "Select groups"});
   }
 
   showCloseModal() {
@@ -99,11 +167,22 @@ export class AccountComponent implements OnInit {
   confirmCloseAccount() {
     this.accountService.closeAccount(this.account.uid).subscribe(resp => {
       $("#close-account-modal").modal("hide");
+      if (resp == 'closed') {
+        this.alertService.alert('Done! Account closed', true);
+        if (this.otherAccountUids && this.otherAccountUids.length > 0)
+          this.router.navigate(['/user', 'account']);
+        else
+          this.router.navigate(['/home']);
+      } else {
+        this.alertService.alert('Sorry, there was an error closing the account. Please contact accounts');
+      }
+    }, error => {
+      $("#close-account-modal").modal("hide");
     });
   }
 
   saveChanges() {
-    console.log("saving changes! form looks like: ", this.accountForm.value);
+    // console.log("saving changes! form looks like: ", this.accountForm.value);
     const accountName = this.accountForm.get('name').value;
     const billingUserEmail = this.accountForm.get('billingUserEmail').value;
     const type = this.accountForm.get('type').value;
@@ -115,6 +194,61 @@ export class AccountComponent implements OnInit {
       }, error => {
         console.log("that didn't work, error: ", error);
       })
+  }
+
+  makeAccountPrimary(accountUid: string) {
+    this.accountService.makeAccountPrimary(accountUid).subscribe(account => {
+      this.account = account;
+    })
+    return false;
+  }
+
+  addAdminMember() {
+    let valueEntered = this.accountForm.get('adminPhoneOrEmail').value;
+    console.log('value entered: ', valueEntered);
+    this.accountService.addAdmin(this.account.uid, valueEntered).subscribe(failures => {
+      console.log('failed admin adds: ', failures);
+      this.accountForm.controls['adminPhoneOrEmail'].reset();
+      this.fetchAccount(this.account.uid);
+    })
+  }
+
+  removeAdminMember(adminUid: string) {
+    this.removingAdminUid = adminUid;
+    $('#remove-admin-modal').modal('show');
+    return false;
+  }
+
+  confirmRemoveAdmin() {
+    this.accountService.removeAdmin(this.account.uid, this.removingAdminUid).subscribe(account => {
+      this.account = account;
+      $('#remove-admin-modal').modal('hide');
+      delete this.removingAdminUid;
+    })
+  }
+
+  addGroupsToAccount() {
+    const data = $('.groups-add-select').select2('data');
+    console.log('selected groups data entity: ', data);
+    this.selectedGroupUidsToAdd = data && data.length > 0 ? data.map(tt => tt.id) : null;
+    console.log('groupUids to add: ', this.selectedGroupUidsToAdd);
+    if (this.selectedGroupUidsToAdd) {
+      this.alertService.showLoading();
+      this.accountService.addGroups(this.account.uid, this.selectedGroupUidsToAdd).subscribe(account => {
+        this.account = account;
+        this.paidForGroupUids = Object.keys(account.paidForGroups);
+        this.alertService.hideLoading();
+        $('.groups-add-select').val(null).trigger('change');
+      }, error => {
+        this.alertService.hideLoading();
+        console.log('Error adding groups: ', error);
+      })
+    }
+  }
+
+  logout() {
+    this.userService.logout(false, '/login');
+    return false;
   }
 
 

@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col-6">
+      {{ account.name }}
+    </div>
+    <div class="col-6 text-right">
+      <button type="button" class="btn btn-secondary hover-primary" (click)="disableAccount()" *ngIf="account.enabled">Disable</button>
+      <button type="button" class="btn btn-secondary hover-primary" (click)="enableAccount()" *ngIf="!account.enabled">Enable</button>
+      <button type="button" class="btn btn-secondary hover-primary" (click)="toggleAccountDetails()">Details</button>
+    </div>
+    <div class="col-12 pb-3" *ngIf="viewDetails">
+      <div class="col-12">
+          Notifications since last bill: {{ account.notificationsSinceLastBill }} // 
+          Last billing date: {{ account.getLastBillingDate() }} <a href="#" (click)="changeAccountDate()" class="grassroot-link">(change)</a> //
+          Number of groups: {{ numberGroups }} //
+          Account admins: {{ accountAdmins }} // 
+          Datasets: {{ account.geoDataSets ? account.geoDataSets.join(', ') : 'None' }} <a href="#" (click)="changeDataSets()" class="grassroot-link">(change)</a>
+      </div>
+    </div>
+  </div>
+  <hr class="mb-3" />

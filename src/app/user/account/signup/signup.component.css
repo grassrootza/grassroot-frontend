@@ -1,0 +1,9 @@
+.card {
+    border-radius: 2px;
+    border: 1px solid #E5E9F2;
+    font-size: 1.2em;
+}
+
+.row {
+    padding: 10px;
+}

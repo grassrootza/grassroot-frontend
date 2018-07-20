@@ -119,8 +119,7 @@
             <div class="dropdown-menu">
               <a class="dropdown-item" routerLink="../{{member.user.uid}}" [translate]="'group.allMembers.manage.view'">View</a>
               <a class="dropdown-item" (click)="showEditModal(member)" [translate]="'group.allMembers.manage.edit'">Edit</a>
-              <a class="dropdown-item" [translate]="'group.allMembers.manage.topics'"
-                  (click)="showAssignTopicToMemberModal(member)">Assign topic</a>
+              <a class="dropdown-item" [translate]="'group.allMembers.manage.topics'" (click)="showAssignTopicToMemberModal(member)">Assign topic</a>
               <a class="dropdown-item" *ngIf="!isTaskTeam" [translate]="'group.allMembers.manage.taskTeam'"
                  (click)="showAddMemberToTaskTeamModal(member)">Add to task team</a>
               <a class="dropdown-item" [translate]="'group.allMembers.manage.remove'" (click)="showMemberRemoveModal(member)">Remove</a>
@@ -138,7 +137,7 @@
   [group]="group" [members]="membersManage" (membersAdded)="refreshGroupAndList()"></app-add-to-task-team>
 
 <app-member-topics-manage #singleMemberTopicModal *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
-  [group]="group" [members]="membersManage" (topicsAssigned)="refreshGroupAndList()"></app-member-topics-manage>
+  [group]="group" [memberUids]="membersManage" (topicsAssigned)="refreshGroupAndList()"></app-member-topics-manage>
 
 <div class="modal fade" tabindex="-1" role="dialog" id="confirm-user-removal-modal" aria-hidden="true" *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')">
   <div class="modal-dialog modal-lg" role="document">

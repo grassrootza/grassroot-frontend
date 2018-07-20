@@ -27,6 +27,7 @@ import {FileImportResult} from "./group-details/group-members/group-members-impo
 import {GroupLog, GroupLogPage} from "./model/group-log.model";
 import {Moment} from "moment";
 import {STORE_KEYS, LocalStorageService} from "../utils/local-storage.service";
+import { UserExtraAccount } from '../user/account/account.user.model';
 
 
 @Injectable()
@@ -91,6 +92,8 @@ export class GroupService {
   groupClearWelcomeMsgUrl = environment.backendAppUrl + "/api/group/modify/welcome/clear";
   groupMemberUnsubscribeUrl = environment.backendAppUrl + "/api/group/modify/member/unsubscribe";
   groupMemberAliasUpdateUrl = environment.backendAppUrl + "/api/group/modify/member/alias/update";
+
+  groupAddToUserAccountUrl = environment.backendAppUrl + "/api/account/add/group";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -315,15 +318,12 @@ export class GroupService {
   // members will retain their existing topics
   assignTopicToMember(groupUid: string, membersUids: string[], topics: string[], onlyAdd: boolean = false): Observable<boolean> {
     const fullUrl = this.groupAssignTopicsToMembersUrl + "/" + groupUid;
-    const params = {
-      'memberUids': membersUids,
-      'topics': topics,
-      'onlyAdd': onlyAdd.toString()
-    };
+    const params = new HttpParams().set('memberUids', membersUids.join(','))
+      .set('topics', topics.join(','))
+      .set('onlyAdd', '' + onlyAdd);
     console.log("posting topic assignment ...");
 
-    return this.httpClient.post(fullUrl, null, {params: params})
-      .map(response => {
+    return this.httpClient.post(fullUrl, null, {params: params}).map(response => {
         console.log(response);
         return true;
       })
@@ -579,9 +579,7 @@ export class GroupService {
       .set("province", province != null ? province : "");
 
     return this.httpClient.post<Membership>(fullUrl, null, {params: params})
-      .map(resp => {
-        return resp;
-      })
+      .map(resp => Membership.createInstance(resp));
   }
 
   updateGroupMemberAssignments(groupUid: string, memberUid: string, taskTeams: string[], affiliations: string[], topics: string[]) {
@@ -780,6 +778,21 @@ export class GroupService {
         .set("alias",alias);
 
     return this.httpClient.post(this.groupMemberAliasUpdateUrl,null,{params:params,responseType:'text'});
+  }
+
+  addToAccount(groupUid: string): Observable<Boolean> {
+    let params = new HttpParams().set('groupUids', groupUid);
+    return this.httpClient.post<UserExtraAccount>(this.groupAddToUserAccountUrl, null, {params: params}).map(changedAccount => {
+      let indexOfGroup = Object.keys(changedAccount.paidForGroups).findIndex(uid => uid == groupUid);
+      console.log('found index? : ', indexOfGroup);
+      if (indexOfGroup != -1) {
+        this.loadGroupDetailsFromServer(groupUid); // to refresh it
+        return true;
+      } else {
+        console.log('Group not added to account, must already be paid for');
+        return false;
+      }
+    })
   }
 }
 

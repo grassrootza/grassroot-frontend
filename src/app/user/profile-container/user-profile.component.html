@@ -9,7 +9,7 @@
                 <li class="nav-item">
                   <a class="nav-link" [ngClass]="{active: currentTab === 'profile'}" [routerLink]="['profile']" [translate]="'menu.profile'">My profile</a>
                   <a class="nav-link" [ngClass]="{active: currentTab === 'password'}" [routerLink]="['password']" [translate]="'menu.password'"></a>
-                  <a class="nav-link" [ngClass]="{active: currentTab === 'account'}" [routerLink]="['account']" [translate]="'menu.account'"></a>
+                  <a class="nav-link" *ngIf="showAccountSettings" [ngClass]="{active: currentTab === 'account'}" [routerLink]="['account']" [translate]="'menu.account'"></a>
                   <a class="nav-link" [ngClass]="{active: currentTab === 'integrations'}" [routerLink]="['integrations']" [translate]="'menu.integrations'"></a>
                   <a class="nav-link" [ngClass]="{active: currentTab === 'delete'}" [routerLink]="['delete']" [translate]="'menu.delete'"></a>
                   <a class="nav-link" href="" (click)="logout()" [translate]="'menu.logout'"></a>

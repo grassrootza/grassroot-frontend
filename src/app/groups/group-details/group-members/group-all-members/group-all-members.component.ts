@@ -69,7 +69,7 @@ export class GroupAllMembersComponent implements OnInit {
     if (!this.currentPage) {
       this.alertService.showLoading();
     }
-    console.log("sorting users, retrieved sort: ", sort);
+    // console.log("sorting users, retrieved sort: ", sort);
     this.filterMembersPage = sort;
     this.groupService.fetchGroupMembers(this.groupUid, page, 10, sort).subscribe(
         membersPage => {
@@ -78,7 +78,7 @@ export class GroupAllMembersComponent implements OnInit {
         },
         error => {
           this.alertService.hideLoading();
-          console.log('Error loading group members', error.status);
+          // console.log('Error loading group members', error.status);
         }
       )
   }
@@ -87,6 +87,7 @@ export class GroupAllMembersComponent implements OnInit {
     if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
       $('#bulk-manage-no-members-selected').modal('show');
     } else {
+      this.bulkMemberUids = this.bulkManageMembers.map(member => member.user.uid);
       this.bulkSelectedTopics = this.group.topics.filter(topic => {
         // js type weirdness makes this unpredictable if made into more elegant single line
         let topicsContained = this.bulkManageMembers.map(member => member.topics.indexOf(topic) != -1);

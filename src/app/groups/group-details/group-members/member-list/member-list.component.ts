@@ -40,6 +40,7 @@ export class MemberListComponent implements OnInit {
   singleMemberManage: Membership = null;
 
   membersManage: Membership[] = [];
+  membersManageUid: string[] = [];
   currentTaskTeams: string[] = null;
 
   public editMemberForm: FormGroup;
@@ -124,6 +125,7 @@ export class MemberListComponent implements OnInit {
 
   showAssignTopicToMemberModal(member: Membership){
     this.singleMemberManage = member;
+    this.membersManageUid = [member.user.uid];
     this.membersManage = [member];
     this.memberTopicManage.setupTopicSelect(member.topics);
     $('#member-assign-topics').modal('show');

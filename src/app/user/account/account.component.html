@@ -6,104 +6,140 @@
       </div>
     </div>
   </div>
-  <div class="row" *ngIf="!account">
-    You do not have a Grassroot Extra account. To get started setting one up, please send an email to
-    <a href="mailto:accounts@grassroot.org.za?subject=Grassroot%20Extra%20Account" class="grassroot-link">accounts@grassroot.org.za</a>.
-    Soon, the sign-up process will be automated with a simple form.
-  </div>
   <div class="row" *ngIf="account">
-    <div class="col-md-8 offset-md-2 col-sm-10 offset-sm-1 justify-content-center">
-      <form [formGroup]="accountForm" (ngSubmit)="saveChanges()">
+    <div class="col-md-10 offset-md-1 col-sm-12 justify-content-center">
+      <form [formGroup]="accountForm">
         <div class="form-row">
           <div class="form-group col-sm-12">
-            <label class="form-label" for="name">{{ 'user.account.name' | translate }}</label>
+            <h4>{{ 'user.account.name' | translate }}</h4>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-lg-9 col-sm-12">  
             <input id="name" formControlName="name" type="text" class="form-control"/>
+            <span class="alert alert-danger" *ngIf="accountForm.controls['name'].hasError('required')"> This field is required</span>
           </div>
-
-          <div class="alert alert-danger"
-               *ngIf="accountForm.controls['name'].hasError('required')">
-            This field is required</div>
-
-        </div>
-        <div class="form-row">
-          <div class="form-group col-sm-12">
-            <label class="form-label" for="billingUserEmail">{{ 'user.account.billingEmail' | translate }}</label>
-            <input id="billingUserEmail" type="text" class="form-control" formControlName="billingUserEmail"/>
-
-            <div *ngIf="accountForm.controls['billingUserEmail'].hasError('required')" class="alert alert-danger">
-              This field is required</div>
-
-            <div *ngIf="accountForm.controls['billingUserEmail'].hasError('pattern')" class="alert alert-danger">
-              Email must contain @ character</div>
-
-            <div *ngIf="accountForm.controls['billingUserEmail'].hasError('email')" class="alert alert-danger">
-              Valid email Required</div>
-
+          <div class="col-lg-3 col-sm-12 text-sm-center text-md-right">
+              <button type="button" class="btn btn-primary save-button float-right" (click)="saveChanges()" [disabled]="accountForm.invalid">
+                {{ 'action.save' | translate }}</button>
           </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-sm-12">
-            <p class="form-label">
-              {{ 'user.account.billingEmailNote' | translate }}
+        </div>            
+        <div class="form-row" *ngIf="otherAccountUids && otherAccountUids.length > 0">
+          <div class="col-12">
+            <p class="small">
+              You are part of other Grassroot Extra accounts too. Your other accounts are: 
+              <span *ngFor="let accountUid of otherAccountUids; let last = last">
+                <a class="grassroot-link" [routerLink]="['/user', 'account', accountUid]">{{account.otherAccounts[accountUid]}}</a><span *ngIf="!last">, </span><span *ngIf="last">. </span>
+              </span>
+              <span *ngIf="account.primary">This is your primary account.</span>
+              <span *ngIf="!account.primary">This is not your primary account 
+                (<a class="grassroot-link" href="#" (click)="makeAccountPrimary(account.uid)">make it primary</a>).
+              </span>
             </p>
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group col-sm-12">
-            <label class="form-label" for="subscriptionOption">{{ 'user.account.subscriptionOption' | translate }}</label>
-            <select id="subscriptionOption" formControlName="type" class="form-control">
-              <option *ngFor="let t of typesKeys" [value]="t">{{ types[t] | titlecase }} (R{{accountFees[t] / 100}} / month)</option>
-            </select>
-          </div>
-        </div>
+        <hr />
 
-        <div class="form-row">
-          <div class="form-group col-sm-12">
-            <label class="form-label" for="billingCycle">{{ 'user.account.billingPeriod' | translate }}</label>
-            <select id="billingCycle" formControlName="billingCycle" class="form-control">
-              <option *ngFor="let bc of billingCyclesKeys" [value]="bc">{{ billingCycles[bc] | titlecase }}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="card mb-3 w-100">
-          <div class="card-body">
-            <p class="bill-summary">
-              <span class="field-name">Next charge: </span>
-              {{account.nextBillingDateMilli | date: 'd LLLL, yyyy'}}
+        <div class="form-row" *ngIf="!account.enabled">
+          <div class="col-12">
+            <h4>Your account is not enabled</h4>
+            <p>
+              Your account is disabled at present, as the account subscription or messaging costs have not been paid. To enable the account, please 
+              pay the subscription fee (R300) to the bank details below, and email proof of payment to <a class="grassroot-link" href="accounts@grassroot.org.za">accounts@grassroot.org.za</a>
             </p>
-            <p class="bill-summary">
-              <span class="field-name">Message cost since last bill: </span>
-              {{costSinceLastBill | currency: 'ZAR':'symbol-narrow'}}
+            <p>
+              Bank: FNB<br>Account: Grassroot Nation NPC<br>Account: 62532765966<br>Branch: 251905
+            </p>
+            <p>
+              If you have made payment and we have confirmed your account is reenabled, but you are still seeing this message, we suggest 
+              <a href="#" class="grassroot-link" (click)="logout()">logging out</a> and logging back in again to refresh your profile.
             </p>
           </div>
         </div>
 
+        <ng-container *ngIf="account.enabled">
+        <div class="form-row" *ngIf="account.geoDataSets">
+          <div class="col-12" *ngIf="!dataSetCounts">
+            <h4>Loading datasets ...</h4>
+          </div>
+          <div class="col-12" *ngIf="dataSetCounts?.length > 1">
+            <h4>Datasets on this account</h4>
+          </div>
+          <div class="col-12" *ngIf="dataSetCounts?.length == 1">
+            <h4>Dashboard for {{ dataSetCounts[0].description }}</h4>
+            <p>
+              Since the last bill, there have been {{ dataSetCounts[0].usersCount }} unique users of the service,
+              generating {{ dataSetCounts[0].userSessionCount }} USSD sessions and {{ dataSetCounts[0].notificationsCount }}
+              messages.
+            </p>
+          </div>
+        </div>
+
+        <hr *ngIf="account.geoDataSets" />
+
         <div class="form-row">
-          <div class="form-group col-sm-3">
-            <label class="form-label" for="pastInvoices">{{ 'user.account.pastInvoices' | translate }}</label>
+          <div class="col-12">
+            <h4>Groups on this account</h4>
+            <p class="small">
+              Groups on this account have sent {{ notificationsSinceLastBill }} messages since its last billing date, on 
+              {{ dateOfLastBill }}. The following groups' messages are billed to this account, with access to extra 
+              features and no size limit:
+              <span *ngFor="let groupUid of paidForGroupUids; let last = last">
+                <a class="grassroot-link" href="#" (click)="viewGroup(groupUid)">{{account.paidForGroups[groupUid]}}</a><span *ngIf="!last">, </span><span *ngIf="last">. </span>
+              </span>
+            </p>
           </div>
-          <div class="form-group col-sm-6">
-            <select id="pastInvoices" class="form-control">
-              <option *ngFor="let abr of accountBillingRecords" [value]="abr.paymentId">{{abr.createdDateTime | date: 'LLLL, yyyy'}}</option>
+        </div>
+        <div class="form-row">
+          <div class="col-lg-9 col-md-12">
+            <label class="form-label">Add more groups: </label>
+            <select id="groups" class="form-control groups-add-select" multiple="multiple" style="width: 100%" *ngIf="groupCandidatesMap">
+              <option *ngFor="let groupUid of groupCandidatesUids" [value]="groupUid">{{ groupCandidatesMap[groupUid] }}</option>
             </select>
+            <p class="small">
+                Note: New groups that you create will automatically be added to your account.
+            </p>
           </div>
-          <div class="form-group col-sm-3">
-            <div id="downloadPastInvoicesButton">
-              <button type="button" class="btn btn-outline-secondary hover-primary" (click)="downloadSelectedInvoice()">
-                <i class="fas fa-download"></i> {{ 'action.download' | translate }}</button>
+          <div class="col-lg-3 col-md-12 text-lg-right text-sm-center pt-3">
+              <button type="button" class="btn btn-primary save-button float-right" (click)="addGroupsToAccount()">Add</button>
             </div>
+        </div>
+        
+        <hr />
+
+        <div class="form-row" *ngIf="account.enabled">
+          <div class="form-group col-12">
+            <h4>Account administrators</h4>
+            <p *ngIf="otherAdminUids && otherAdminUids.length > 0" class="small">
+              The following people are also administrators on this account:
+              <span *ngFor="let adminUid of otherAdminUids; let last = last">
+                {{account.otherAdmins[adminUid]}} (<a class="grassroot-link" href="#" (click)="removeAdminMember(adminUid)">remove</a>)<span *ngIf="!last">, </span><span *ngIf="last">.</span>
+              </span> They can also add groups to it, and create broadcasts and campaigns (for groups where they are also organizers).
+              <label class="form-label">Add another admin (enter their mobile number or email):</label>
+            </p>
           </div>
         </div>
+        <div class="form-row">
+          <div class="form-group col-12">
+            <p *ngIf="!otherAdminUids || otherAdminUids.length == 0" class="small">
+              You are the only administrator on this account. Add another account admin by entering their phone number or email:
+            </p>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-lg-9 col-md-12">
+            <input type="text" class="form-control" formControlName="adminPhoneOrEmail" />
+          </div>
+          <div class="col-lg-3 col-md-12 text-lg-right text-md-center">
+            <button type="button" class="btn btn-primary save-button float-right" (click)="addAdminMember()">Add</button>
+          </div>
+        </div>
+        </ng-container>
 
         <div class="form-row mt-md-3">
           <div class="form-group col-sm-6">
             <button type="button" class="btn btn-secondary hover-danger close-button" (click)="showCloseModal()">{{ 'action.closeAccount' | translate}}</button>
-          </div>
-          <div class="form-group col-sm-6">
-            <button type="submit" class="btn btn-primary save-button float-right" [disabled]="accountForm.invalid">{{ 'action.save' | translate }}
-            </button>
           </div>
         </div>
       </form>
@@ -111,8 +147,7 @@
   </div>
 </div>
 
-
-<div class="modal fade" tabindex="-1" role="dialog" id="close-account-modal" aria-hidden="true">
+<div class="modal fade" tabindex="-1" role="dialog" id="close-account-modal" aria-hidden="true" *ngIf="account">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
@@ -127,8 +162,49 @@
         <div class="modal-footer">
           <button type="submit" class="btn btn-secondary"  (click)="confirmCloseAccount()">{{ 'action.closeAccount' | translate }}</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
-
         </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="remove-admin-modal" aria-hidden="true" *ngIf="account">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm remove admin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to remove {{ account.otherAdmins[removingAdminUid] }} as an administrator on this account?
+      </div>
+      <div class="modal-footer">
+          <button type="submit" class="btn btn-secondary"  (click)="confirmRemoveAdmin()">{{ 'action.confirm' | translate }}</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">{{ 'action.cancel' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="account-group-modal" aria-hidden="true" *ngIf="account">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">View account group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        This group, {{ groupToView?.name }}, has {{ groupToView?.memberCount }} members. Since your last bill, it has sent 
+        {{ groupToViewCount }} notifications.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary hover-danger" (click)="removeGroupFromAccount(groupToView?.groupUid)">Remove from account</button>
+        <button type="button" class="btn btn-secondary hover-primary" (click)="goToGroupDashboard(groupToView?.groupUid)">View group dashboard</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.close' | translate }}</button>
+      </div>
     </div>
   </div>
 </div>

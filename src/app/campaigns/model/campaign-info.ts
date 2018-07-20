@@ -40,10 +40,10 @@ export class CampaignInfo {
   public getLanguages(): Language[] {
     let languageCodes = new Set();
     this.campaignMessages.forEach(msgDto => {
-      console.log("campaign message: ", msgDto);
+      // console.log("campaign message: ", msgDto);
       msgDto.messages.forEach(msg => languageCodes.add(msg.language))
     });
-    console.log("extracted language codes: ", languageCodes);
+    // console.log("extracted language codes: ", languageCodes);
     return MSG_LANGUAGES.filter(lang => languageCodes.has(lang.threeDigitCode));
   }
 
@@ -60,13 +60,13 @@ export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
     cp.masterGroupName,
     cp.masterGroupUid,
     cp.description,
-    DateTimeUtils.getMomentFromJavaInstant(cp.campaignStartDate),
-    DateTimeUtils.getMomentFromJavaInstant(cp.campaignEndDate),
+    moment(cp.campaignStartDate),
+    moment(cp.campaignEndDate),
     cp.totalEngaged,
     cp.totalJoined,
     cp.creatingUserName,
     cp.creatingUserUid,
-    DateTimeUtils.getMomentFromJavaInstant(cp.createdDate),
+    moment(cp.createdDate),
     cp.campaignCode,
     cp.joinTopics,
     cp.textJoinWord,

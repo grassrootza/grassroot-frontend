@@ -1,44 +1,67 @@
-<div class="container primary-container" *ngIf="!canCreateOrManageCampaigns">
-  <div class="card">
+<div class="container primary-container">
+  <div class="card" *ngIf="!canCreateCampaigns">
     <div class="card-body">
       <div class="row">
         <div class="col-md-6 offset-md-3 col-sm-12 justify-content-center">
-          <p class="no-campaign" [innerHtml]="'campaign.no-account' | translate">Sorry, to create or manage campaigns you need a Grassroot Extra account. To set one up, please send an email to
+          <p class="no-campaign" *ngIf="!hasDisabledAccount" [innerHtml]="'campaign.no-account' | translate">Sorry, to create or manage campaigns you need a Grassroot Extra account. To set one up, please send an email to
             <a href="mailto:accounts@grassroot.org.za?subject=Grassroot%20Extra%20Account" class="grassroot-link">accounts@grassroot.org.za</a>.
             Soon, the sign-up process will be automated with a simple form.</p>
+          <p class="no-campaign" *ngIf="hasDisabledAccount">
+            You have a Grassroot Extra account but it is currently disabled. You will not be able to create campaigns until your account is enabled. Please
+            go to <a class="grassroot-link" [routerLink]="['/user', 'account']">account settings</a> for instructions on how to 
+            enable the account. If your account is enabled and you are still seeing this message, please try to log out and log in again.
+          </p>
         </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="container primary-container" *ngIf="canCreateOrManageCampaigns">
-  <button [routerLink]="['/campaigns/create']" type="button" class="btn btn-primary create-button float-right">
-    {{ 'campaigns.create' | translate }}
-  </button>
-  <h1 class="main-title">{{ 'campaigns.title' | translate }}</h1>
-
-  <h2 *ngIf="activeCampaigns.length > 0">
-    {{ 'campaigns.activeTitle' | translate }}
-  </h2>
-
-  <div *ngIf="activeCampaigns.length > 0" class="card">
-    <div class="card-body">
-      <app-campaign-info *ngFor="let cp of activeCampaigns"
-                      [campaign]="cp">
-      </app-campaign-info>
+  <div class="row">
+    <div class="col-12">
+      <button [routerLink]="['/campaigns/create']" type="button" class="btn btn-primary create-button float-right"  *ngIf="canCreateCampaigns">
+        {{ 'campaigns.create' | translate }}
+      </button>
     </div>
   </div>
 
-  <h2 *ngIf="pastCampaigns.length > 0" class="mt-5">
-    {{ 'campaigns.pastTitle' | translate }}
-  </h2>
-
-  <div *ngIf="pastCampaigns.length > 0" class="card">
+  <div *ngIf="!canManageCampaigns" class="card mt-3">
     <div class="card-body">
-      <app-campaign-info *ngFor="let cp of pastCampaigns"
-                         [campaign]="cp">
-      </app-campaign-info>
+      <div class="row">
+        <div class="col-12 justify-content-center">
+          <p class="no-campaign">
+            Campaigns allow you to acquire new members, ask them to sign petitions, or distribute information. To get started,
+            just click on <a [routerLink]="['/campaigns/create']" class="grassroot-link">create</a>, and define a name, dial in code, join word, and/or
+            link to <a href="https://amandla.mobi" target="_blank" class="grassroot-link">an Amandla.mobi campaign</a>.
+          </p>
+        </div>
+      </div>
     </div>
   </div>
+
+  <ng-container *ngIf="canManageCampaigns">
+    <h1 *ngIf="canCreateCampaigns" class="main-title">{{ 'campaigns.title' | translate }}</h1>
+    
+    <h2 *ngIf="activeCampaigns.length > 0">
+      {{ 'campaigns.activeTitle' | translate }}
+    </h2>
+    <div *ngIf="activeCampaigns.length > 0" class="card">
+      <div class="card-body">
+        <app-campaign-info *ngFor="let cp of activeCampaigns"
+                        [campaign]="cp">
+        </app-campaign-info>
+      </div>
+    </div>
+
+    <h2 *ngIf="pastCampaigns.length > 0" class="mt-5">
+      {{ 'campaigns.pastTitle' | translate }}
+    </h2>
+
+    <div *ngIf="pastCampaigns.length > 0" class="card">
+      <div class="card-body">
+        <app-campaign-info *ngFor="let cp of pastCampaigns"
+                          [campaign]="cp">
+        </app-campaign-info>
+      </div>
+    </div>
+  </ng-container>
 </div>

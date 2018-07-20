@@ -17,7 +17,7 @@ export class UserService {
   private updateProfileUrl: string = environment.backendAppUrl + "/api/user/profile/data/update";
   private updatePasswordUrl: string = environment.backendAppUrl + "/api/user/profile/password/update";
   private updateImageUrl: string = environment.backendAppUrl + "/api/user/profile/image/change";
-  private loggedInUserImageUrlBase = environment.backendAppUrl.replace('/v2', '') + "/image/user";
+  private loggedInUserImageUrlBase = environment.backendAppUrl + "/api/image/user";
   private fetchApiTokenUrl: string = environment.backendAppUrl + "/api/user/profile/token/obtain";
 
   private deleteUserInitiate: string = environment.backendAppUrl + "/api/user/profile/delete/initiate";
@@ -180,11 +180,17 @@ export class UserService {
       return null;
     }
     // query param is to force reload, replacing of v2 is because this is non-api
-    return this.loggedInUserImageUrlBase + "/" + this._loggedInUser.userUid + (cacheBust ? "?cb=" + Date.now() : "");
+    let imageUrl = this.loggedInUserImageUrlBase + "/" + this._loggedInUser.userUid + (cacheBust ? "?cb=" + Date.now() : "");
+    console.log('image url: ', imageUrl);
+    return imageUrl;
   }
 
   hasActivePaidAccount() {
-    return this._loggedInUser && this._loggedInUser.hasAccountAdmin();
+    return this._loggedInUser && this._loggedInUser.hasAccount;
+  }
+
+  hasDisabledAccount() {
+    return this._loggedInUser && this._loggedInUser.hasAccountAdmin() && !this._loggedInUser.hasAccount; // ie user has role but not enabled
   }
 
   initiateUserDelete(): Observable<string> {

@@ -118,7 +118,7 @@
                       (membersAdded)="goToFirstPage()"></app-add-to-task-team>
 
 <app-member-topics-manage #bulkMemberManageModal *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
-                          [group]="group" [members]="bulkManageMembers" [modalId]="'bulk-member-assign-topics'" [selectId]="'bulk-topics-multi-select'"
+                          [group]="group" [memberUids]="bulkMemberUids" [modalId]="'bulk-member-assign-topics'" [selectId]="'bulk-topics-multi-select'"
                           (topicsAssigned)="goToFirstPage()"></app-member-topics-manage>
 
 <app-group-copy-members *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
