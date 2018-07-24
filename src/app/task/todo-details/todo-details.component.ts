@@ -60,7 +60,7 @@ export class TodoDetailsComponent implements OnInit {
   }
 
   loadTodo() {
-    this.taskService.loadTask(this.todoUid, "TODO").subscribe(todo => {
+    this.taskService.loadTask(this.todoUid, 'TODO').subscribe(todo => {
       this.todo = todo;
     });
   }

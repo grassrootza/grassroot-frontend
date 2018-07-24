@@ -96,15 +96,15 @@ export class AccountComponent implements OnInit {
       }
 
       if (account.geoDataSets) {
-        this.fetchDataSetDetails();
+        this.fetchDataSetDetails(accountUid);
       }
 
       this.fetchCandidateGroupsToAdd(account.uid);
     });
   }
 
-  fetchDataSetDetails() {
-    this.accountService.getDetailsOfDataSets().subscribe(counts => {
+  fetchDataSetDetails(accountUid?: string) {
+    this.accountService.getDetailsOfDataSets(accountUid).subscribe(counts => {
       console.log('dataset counts: ', counts);
       this.dataSetCounts = counts;
     }, error => {

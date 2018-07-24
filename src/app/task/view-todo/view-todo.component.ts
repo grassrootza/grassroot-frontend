@@ -30,7 +30,7 @@ export class ViewTodoComponent implements OnInit {
   constructor(private taskService: TaskService,
               private alertService: AlertService,
               private router: Router,
-              private formBuilder: FormBuilder) {
+              formBuilder: FormBuilder) {
 
     this.completeActionForm = formBuilder.group({
       'information': ['', Validators.required],

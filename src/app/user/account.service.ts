@@ -93,6 +93,7 @@ export class AccountService {
     if (accountUid)
       params = params.set('accountUid', accountUid);
 
+    console.log('fetching datasets for account uid: ', accountUid);
     return this.httpClient.get<DataSetCounts[]>(this.fetchAllDataSetDetailsUrl, {params: params})
       .map(results => results.map(getCountsEntity));
   }

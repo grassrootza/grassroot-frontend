@@ -224,10 +224,6 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  initiateTasksGraphTransfer() {
-    this.adminService.initiateTasksGraphTransfer().subscribe(_ => this.alertService.alert('transfer.initiated'));
-  }
-
   initiateGraphAnnotationTransfer(endSegment: string) {
     this.adminService.initiateGraphAnnotation(endSegment).subscribe(_ => this.alertService.alert('annotation.initiated'));
   }
