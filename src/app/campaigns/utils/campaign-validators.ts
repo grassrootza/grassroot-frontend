@@ -1,6 +1,6 @@
 import {CampaignService} from "../campaign.service";
 import {AbstractControl, FormControl, Validators} from "@angular/forms";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import "rxjs/add/observable/timer";
 import "rxjs/add/operator/switchMap";
 import "rxjs/add/operator/map";

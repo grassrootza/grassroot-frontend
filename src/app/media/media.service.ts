@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {environment} from "environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {MediaFunction} from "./media-function.enum";
-import {Observable} from "rxjs/Observable";
-import 'rxjs/add/operator/map';
+import {Observable} from "rxjs";
+
 
 @Injectable()
 export class MediaService {

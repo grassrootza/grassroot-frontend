@@ -8,7 +8,7 @@ import {CampaignInfo} from "../../campaigns/model/campaign-info";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import * as moment from "moment";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {BehaviorSubject} from "rxjs";
 import "rxjs/add/operator/debounceTime";
 import {AFRIKAANS, ENGLISH, Language, SOTHO, XHOSA, ZULU} from "../../utils/language";
 import {GroupRole} from "../model/group-role";

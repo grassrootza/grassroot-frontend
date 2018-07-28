@@ -6,7 +6,7 @@ import {UserProvince} from '../../../../user/model/user-province.enum';
 import {GroupRole} from '../../../model/group-role';
 import {GroupModifiedResponse} from '../../../model/group-modified-response.model';
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../validators/CustomValidators';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {Group} from '../../../model/group.model';
 import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';
 // doing these manually as else there are warnings of very heavy import load if take all rxjs

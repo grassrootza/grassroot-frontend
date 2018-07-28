@@ -1,4 +1,4 @@
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {TranslateLoader} from '@ngx-translate/core';
 import {makeStateKey, StateKey, TransferState} from '@angular/platform-browser';
 

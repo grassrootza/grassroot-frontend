@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {IntegrationsService} from "../integrations.service";
 import {AlertService} from "../../../utils/alert-service/alert.service";
-import {Observable} from "rxjs/Observable";
-import 'rxjs/add/observable/combineLatest';
+import {Observable} from "rxjs";
+
 
 @Component({
   selector: 'app-integration-connect',

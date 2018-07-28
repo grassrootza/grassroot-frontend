@@ -1,11 +1,10 @@
 import {Injectable} from '@angular/core';
 import {environment} from "environments/environment";
-import {Observable} from "rxjs/Observable";
-import "rxjs/add/operator/map";
+import {Observable, BehaviorSubject} from "rxjs";
+import { map } from 'rxjs/operators';
 import {Task} from "./task.model";
 import {TaskType} from "./task-type";
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {MediaFunction} from "../media/media-function.enum";
 import {LocalStorageService, STORE_KEYS} from "../utils/local-storage.service";
 import { TaskPreview } from './task-preview.model';
@@ -65,23 +64,23 @@ export class TaskService {
   public loadUpcomingGroupTasks(groupId: string): Observable<Task[]> {
     let fullUrl = this.upcomingGroupTasksUrl + "/" + groupId;
     return this.httpClient.get<Task[]>(fullUrl)
-      .map(data => data.map(task => Task.createInstanceFromData(task)));
+      .pipe(map(data => data.map(task => Task.createInstanceFromData(task))));
   }
 
   public loadAllGroupTasks(groupUid:string): Observable<Task[]>{
     let url = this.allGroupTasksUrl + "/" + groupUid;
-    return this.httpClient.get(url).map(response => {
+    return this.httpClient.get(url).pipe(map(response => {
         console.log("results: ", response);
         let tasks = response["addedAndUpdated"]  as Task[];
         return tasks.map(t => Task.createInstanceFromData(t))
       }, error => {
         console.log('error fetching tasks: ', error);
-      });
+      }));
   }
 
   public loadUpcomingUserTasks() {
     this.httpClient.get<Task[]>(this.upcomingUserTasksUrl)
-      .map(data => data.map(task => Task.createInstanceFromData(task)))
+      .pipe(map(data => data.map(task => Task.createInstanceFromData(task))))
       .subscribe(
         tasks => {
           this.upcomingTasksSubject.next(tasks);
@@ -96,7 +95,7 @@ export class TaskService {
 
   public loadTask(taskUid: string, taskType: string): Observable<Task> {
     const fullUrl = this.specificTasksUrl + "/" + taskType + "/" + taskUid;
-    return this.httpClient.get<Task>(fullUrl).map(Task.createInstanceFromData);
+    return this.httpClient.get<Task>(fullUrl).pipe(map(Task.createInstanceFromData));
   }
 
   public loadPreviewEvent(taskType: string, parentUid: string, subject: string, dateTimeEpochMillis: number, description: string,
@@ -262,7 +261,7 @@ export class TaskService {
   castVote(taskUid:string, response:string):Observable<Task>{
     let fullUrl = this.castVoteUrl + "/" + taskUid;
     let params = new HttpParams().set("vote", response);
-    return this.httpClient.post<Task>(fullUrl, null, {params:params}).map(Task.createInstanceFromData);
+    return this.httpClient.post<Task>(fullUrl, null, {params:params}).pipe(map(Task.createInstanceFromData));
   }
 
   fetchMeetingResponses(taskUid: string): Observable<Map<string, string>> {
@@ -295,11 +294,11 @@ export class TaskService {
     const fullUrl = this.cancelTaskUrl + "/" + taskType + "/" + taskUid;
     console.log("send notification param: ", notifyMembers.toString());
     let params = new HttpParams().set("sendNotifications", notifyMembers.toString());
-    return this.httpClient.post(fullUrl, null, {params: params}).map(response => {
+    return this.httpClient.post(fullUrl, null, {params: params}).pipe(map(_ => {
       if (reloadAgenda) {
         this.loadUpcomingUserTasks();
       }
-    });
+    }));
   }
 
   changeTaskTime(taskUid: string, taskType: TaskType, newTaskTimeMillis: number) {
@@ -309,10 +308,10 @@ export class TaskService {
       .set('taskUid', taskUid)
       .set('newTaskTimeMills', newTaskTimeMillis.toString());
 
-    return this.httpClient.post<Task>(fullUrl, null, {params: params}).map(response => {
+    return this.httpClient.post<Task>(fullUrl, null, {params: params}).pipe(map(response => {
       this.loadUpcomingUserTasks(); // to refresh agenda
       return Task.createInstanceFromData(response);
-    }); 
+    }));
   }
 
   downloadBroadcastErrorReport(taskType: string, taskUid: string) {

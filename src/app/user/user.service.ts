@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {environment} from "environments/environment";
 import {AuthenticatedUser, AuthorizationResponse, getAuthUser, UserProfile} from "./user.model";
 import {Router} from "@angular/router";

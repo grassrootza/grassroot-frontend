@@ -7,8 +7,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from '../../model/permission.model';
 import {AlertService} from "../../../utils/alert-service/alert.service";
 import {GroupRole} from "../../model/group-role";
-import {Observable} from "rxjs/Observable";
-import 'rxjs/add/observable/forkJoin';
+import {Observable} from "rxjs";
+
 import {MediaService} from "../../../media/media.service";
 
 

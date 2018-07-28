@@ -1,14 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/first';
-import 'rxjs/add/observable/from';
-import 'rxjs/add/observable/concat';
-
+import {Observable, BehaviorSubject, concat, from} from 'rxjs';
+import { map, filter, first } from 'rxjs/operators';
 import {environment} from 'environments/environment';
 import {GroupInfo} from './model/group-info.model';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {getGroupEntity, Group} from './model/group.model';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {DateTimeUtils} from '../utils/DateTimeUtils';
@@ -134,7 +128,7 @@ export class GroupService {
 
   loadGroups() {
     const fullUrl = this.groupListUrl;
-    return this.httpClient.get<GroupInfo[]>(fullUrl).map(data => data.map(GroupInfo.createInstance)).subscribe(
+    return this.httpClient.get<GroupInfo[]>(fullUrl).pipe(map(data => data.map(GroupInfo.createInstance))).subscribe(
         groups => {
           this.groupInfoList_.next(groups);
           this.localStorageService.setItem(STORE_KEYS.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
@@ -146,23 +140,20 @@ export class GroupService {
   }
 
   loadGroupDetailsCached(groupUid: string, checkServerAfter: boolean = true): Observable<Group> {
-    let concatObs = Observable.concat(
+    let concatObs = concat(
       this.checkGroupCache(groupUid),
       this.loadGroupDetailsFromServer(groupUid));
-    return checkServerAfter ? concatObs : concatObs.first();
+    return checkServerAfter ? concatObs : concatObs.pipe(first());
   }
 
   checkGroupCache(groupUid: string): Observable<Group> {
-    return Observable.from(this.groupFullRetrieved_).filter(grp => grp.groupUid == groupUid)
-      .map(grp => {
-        return grp;
-      });
+    return from(this.groupFullRetrieved_).pipe(filter(grp => grp.groupUid == groupUid));
   }
 
   loadGroupDetailsFromServer(groupUid: string): Observable<Group> {
     const fullUrl = this.groupDetailsUrl + "/" + groupUid;
     return this.httpClient.get<Group>(fullUrl)
-      .map(
+      .pipe(map(
         gr => {
           let group = getGroupEntity(gr);
           let existingIndex = this.groupFullRetrieved_.findIndex(grp => grp.groupUid == group.groupUid);
@@ -173,14 +164,14 @@ export class GroupService {
           }
           return group;
         }
-      );
+      ));
   }
 
   loadTaskTeamDetails(parentUid: string, taskTeamUid: string): Observable<Group> {
     const fullUrl = this.taskTeamDetailsUrl + "/" + parentUid;
     let params = new HttpParams().set("taskTeamUid", taskTeamUid);
     // don't cache it, for the moment, as rare, and no need to crowd
-    return this.httpClient.get<Group>(fullUrl, {params: params}).map(getGroupEntity);
+    return this.httpClient.get<Group>(fullUrl, {params: params}).pipe(map(getGroupEntity));
   }
 
   createGroup(name: string,
@@ -216,7 +207,7 @@ export class GroupService {
     }
 
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
-      .map(
+      .pipe(map(
         result => {
           let transformedContent = result.content.map(m => Membership.createInstance(m));
           return new MembersPage(
@@ -229,7 +220,7 @@ export class GroupService {
             transformedContent
           )
         }
-      );
+      ));
   }
 
   downloadGroupMembers(groupUid: string) {
@@ -252,7 +243,7 @@ export class GroupService {
       .set('sort', 'joinTime,desc');
 
     this.httpClient.get<MembersPage>(this.newMembersLIstUrl, {params: params})
-      .map(
+      .pipe(map(
         result => {
           console.log("Fetched new members", result);
           let transformedContent = result.content.map(m => Membership.createInstance(m));
@@ -266,7 +257,7 @@ export class GroupService {
             transformedContent
           )
         }
-      )
+      ))
       .subscribe(
         newMembersPage => {
           this.newMembersInMyGroups_.next(newMembersPage);
@@ -295,10 +286,7 @@ export class GroupService {
     const params = {
       'memberUids': membersUids
     };
-    return this.httpClient.post<boolean>(fullUrl, null, {params: params})
-      .map(response => {
-        return response;
-      })
+    return this.httpClient.post<boolean>(fullUrl, null, {params: params});
   }
 
   addMembersToTaskTeam(parentGroupUid: string, childGroupUid: string, membersUids: string[]): Observable<boolean> {
@@ -308,10 +296,7 @@ export class GroupService {
       'memberUids': membersUids
     };
 
-    return this.httpClient.post(fullUrl, null, {params: params})
-      .map(response => {
-        return true;
-      });
+    return this.httpClient.post(fullUrl, null, {params: params}).pipe(map(_ => true));
   }
 
   // onlyAdd: if set to false, the passed topics will overwrite the prior topics for the members; if set to true, the
@@ -323,10 +308,7 @@ export class GroupService {
       .set('onlyAdd', '' + onlyAdd);
     console.log("posting topic assignment ...");
 
-    return this.httpClient.post(fullUrl, null, {params: params}).map(response => {
-        console.log(response);
-        return true;
-      })
+    return this.httpClient.post(fullUrl, null, {params: params}).pipe(map(response => true));
   }
 
   removeTopicFromMembers(groupUid: string, memberUids: string[], topics: string[]): Observable<any> {
@@ -342,19 +324,15 @@ export class GroupService {
   }
 
   importHeaderAnalyze(file, params):Observable<GroupMembersImportExcelSheetAnalysis>{
-    return  this.httpClient.post<GroupMembersImportExcelSheetAnalysis>(this.groupImportMembersAnalyzeUrl, file, {params: params})
-      .map(response => {
-          return response;
-        }
-      );
+    return this.httpClient.post<GroupMembersImportExcelSheetAnalysis>(this.groupImportMembersAnalyzeUrl, file, {params: params});
   }
 
   importAnalyzeMembers(params): Observable<FileImportResult>{
     return this.httpClient.post<FileImportResult>(this.groupImportMembersConfirmUrl, null, {params: params})
-      .map(data => {
+      .pipe(map(data => {
           return new FileImportResult(data.processedMembers.map(getAddMemberInfo), data.errorRows, data.errorFilePath);
         }
-      )
+      ));
   }
 
   downloadImportErrors(errorPath: string) {
@@ -365,11 +343,7 @@ export class GroupService {
     const fullUrl = this.groupMembersAddUrl + "/" + groupUid;
     const params = new HttpParams().set("joinMethod", joinMethod);
     membersInfoToAdd.forEach(member => member.phoneNumber = PhoneNumberUtils.convertIfPhone(member.phoneNumber));
-    return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd, { params: params })
-      .map(resp => {
-        return resp;
-      })
-
+    return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd, { params: params });
   }
 
   fetchActiveJoinWords(): Observable<string[]> {
@@ -481,23 +455,17 @@ export class GroupService {
       .set('isPublic', isPublic.toString())
       .set('reminderMinutes', reminderInMinutes.toString());
 
-    return this.httpClient.post<boolean>(fullUrl, null, {params: params}).map(resp => {
-      return resp;
-    })
+    return this.httpClient.post<boolean>(fullUrl, null, {params: params});
   }
 
   updateGroupPermissionsForRole(updatedPermissionsByRole: any, groupUid: string): Observable<any> {
     const fullUrl = this.groupUpdatePermissionsForRole + '/' + groupUid;
 
-    return this.httpClient.post<any>(fullUrl, updatedPermissionsByRole).map(resp => {
-      return resp;
-    })
+    return this.httpClient.post<any>(fullUrl, updatedPermissionsByRole);
   }
 
   fetchGroupPermissionsToDisplay(): Observable<string[]> {
-    return this.httpClient.get<string[]>(this.groupFetchPermissionsDisplayedUrl).map(resp => {
-      return resp;
-    })
+    return this.httpClient.get<string[]>(this.groupFetchPermissionsDisplayedUrl);
   }
 
   fetchGroupPermissionsForRole(groupUid: string, roleName: string[]): Observable<GroupPermissionsByRole> {
@@ -506,19 +474,15 @@ export class GroupService {
     let params = new HttpParams()
       .set('roleNames', roleName.join(","));
 
-    return this.httpClient.post<GroupPermissionsByRole>(fullUrl, null, {params: params}).map(resp => {
-      return new GroupPermissionsByRole(resp);
-    })
+    return this.httpClient.post<GroupPermissionsByRole>(fullUrl, null, {params: params})
+      .pipe(map(resp => new GroupPermissionsByRole(resp)));
   }
 
   searchForUsers(searchTerm: string): Observable<GroupRelatedUserResponse[]> {
     let params = new HttpParams()
       .set('fragment', searchTerm);
 
-    return this.httpClient.get<GroupRelatedUserResponse[]>(this.groupSearchUserByTermUrl, {params: params})
-      .map(resp => {
-        return resp;
-      })
+    return this.httpClient.get<GroupRelatedUserResponse[]>(this.groupSearchUserByTermUrl, {params: params});
   }
 
   fetchGroupMemberByMemberUid(groupUid:string, memberUid: string): Observable<Membership> {
@@ -528,9 +492,7 @@ export class GroupService {
       .set("memberUid", memberUid);
 
     return this.httpClient.get<Membership>(fullUrl, {params: params})
-      .map(m => {
-        return Membership.createInstance(m);
-      } )
+      .pipe(map(m => Membership.createInstance(m)));
   }
 
   fetchMemberActivity(groupUid: string, memberUid: string): Observable<GroupMemberActivity[]>{
@@ -540,7 +502,7 @@ export class GroupService {
       .set("memberUid", memberUid);
 
     return this.httpClient.get<GroupMemberActivity[]>(fullUrl, {params: params})
-      .map(resp => {
+      .pipe(map(resp => {
         return resp.map(a => new GroupMemberActivity(
           a.groupUid,
           a.memberUid,
@@ -553,7 +515,7 @@ export class GroupService {
           a.dateOfLogEpochMillis,
           a.topics
         ));
-      })
+      }));
   }
 
   updateGroupMemberRole(groupUid: string, memberUid: string, role: string): Observable<Membership>{
@@ -563,10 +525,7 @@ export class GroupService {
       .set("memberUid", memberUid)
       .set("roleName", role);
 
-    return this.httpClient.post<Membership>(fullUrl, null, {params: params})
-      .map(resp =>  {
-        return resp;
-      })
+    return this.httpClient.post<Membership>(fullUrl, null, {params: params});
   }
 
   updateGroupMemberDetails(groupUid: string, memberUid: string, name: string, email: string, phone: string, province: string):Observable<Membership>{
@@ -579,7 +538,7 @@ export class GroupService {
       .set("province", province != null ? province : "");
 
     return this.httpClient.post<Membership>(fullUrl, null, {params: params})
-      .map(resp => Membership.createInstance(resp));
+      .pipe(map(resp => Membership.createInstance(resp)));
   }
 
   updateGroupMemberAssignments(groupUid: string, memberUid: string, taskTeams: string[], affiliations: string[], topics: string[]) {
@@ -649,7 +608,7 @@ export class GroupService {
     let cbParams = params.set("cb", "" + (new Date()));
 
     return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
-      .map(resp => resp.map(m => Membership.createInstance(m)));
+      .pipe(map(resp => resp.map(m => Membership.createInstance(m))));
   }
 
   createTaskTeam(parentUid: string, taskTeamName: string, memberUids: string[]):Observable<any>{
@@ -659,10 +618,7 @@ export class GroupService {
       .set("taskTeamName", taskTeamName)
       .set("memberUids", memberUids.join(","));
 
-    return this.httpClient.post<any>(fullUrl, null, {params: params})
-      .map(resp => {
-        return resp;
-      })
+    return this.httpClient.post<any>(fullUrl, null, {params: params});
   }
 
   setGroupTopics(groupUid: string, topics: string[]): Observable<any> {
@@ -671,9 +627,7 @@ export class GroupService {
     let params = new HttpParams()
       .set("topics", topics.join(","));
 
-    return this.httpClient.post<any>(fullUrl, null, {params: params}).map(resp => {
-      return resp;
-    })
+    return this.httpClient.post<any>(fullUrl, null, {params: params});
   }
 
   setJoinTopics(groupUid: string, joinTopics: string[]): Observable<any> {
@@ -724,7 +678,7 @@ export class GroupService {
       params = params.set('sort', sort.join(','));
     }
 
-    return this.httpClient.get<GroupLogPage>(fullUrl, {params: params}).map(
+    return this.httpClient.get<GroupLogPage>(fullUrl, {params: params}).pipe(map(
       result => {
         console.log(result);
         let transformedContent = result.content.map(gl => GroupLog.createInstance(gl));
@@ -738,7 +692,7 @@ export class GroupService {
           transformedContent
         );
       }
-    );
+    ));
   }
 
   exportInboundMessages(groupUid: string, from: Moment, to: Moment, keyword: string) {
@@ -782,7 +736,7 @@ export class GroupService {
 
   addToAccount(groupUid: string): Observable<Boolean> {
     let params = new HttpParams().set('groupUids', groupUid);
-    return this.httpClient.post<UserExtraAccount>(this.groupAddToUserAccountUrl, null, {params: params}).map(changedAccount => {
+    return this.httpClient.post<UserExtraAccount>(this.groupAddToUserAccountUrl, null, {params: params}).pipe(map(changedAccount => {
       let indexOfGroup = Object.keys(changedAccount.paidForGroups).findIndex(uid => uid == groupUid);
       console.log('found index? : ', indexOfGroup);
       if (indexOfGroup != -1) {
@@ -792,7 +746,7 @@ export class GroupService {
         console.log('Group not added to account, must already be paid for');
         return false;
       }
-    })
+    }));
   }
 }
 

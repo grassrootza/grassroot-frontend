@@ -8,7 +8,6 @@ import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {TranslateService} from "@ngx-translate/core";
 import {JoinCodeInfo} from "../model/join-code-info";
 
-import {ClipboardService} from 'ng2-clipboard/ng2-clipboard';
 import {AlertService} from "../../utils/alert-service/alert.service";
 import { saveAs } from 'file-saver';
 import { MembershipInfo } from '../model/membership.model';
@@ -57,8 +56,7 @@ export class GroupDetailsComponent implements OnInit {
               private userService: UserService,
               private groupService: GroupService,
               private translateService: TranslateService,
-              private alertService: AlertService,
-              private clipboardService:ClipboardService) {
+              private alertService: AlertService) {
 
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
@@ -202,7 +200,7 @@ export class GroupDetailsComponent implements OnInit {
     };
     this.translateService.get("group.joinMethods.joinWordCbText", params).subscribe(text => {
       this.joinWordCbString = text;
-      this.clipboardService.copy(this.joinWordCbString);
+      // this.clipboardService.copy(this.joinWordCbString);
       this.justCopied = true;
       joinWord.copied = true;
       setTimeout(() => joinWord.copied = false, 2000);

@@ -12,11 +12,11 @@ import {
 } from "./model/broadcast-request";
 import {DateTimeUtils} from "../utils/DateTimeUtils";
 import {BroadcastParams, getBroadcastParams} from "./model/broadcast-params";
-import {Observable} from "rxjs/Observable";
+import {BehaviorSubject, Observable} from "rxjs";
+import { map } from 'rxjs/operators';
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage, transform} from './model/broadcast';
 import * as moment from 'moment';
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {LocalStorageService} from "../utils/local-storage.service";
 
 @Injectable()
@@ -288,7 +288,7 @@ export class BroadcastService {
     const fullUrl = this.fetchUrlBase + 'group/' + groupUid;
 
     return this.httpClient.get<BroadcastPage>(fullUrl, {params: params})
-      .map(
+      .pipe(map(
         result => {
           console.log("Group broadcasts json object from server: ", result);
           let transformetContent = result.content.map(transform);
@@ -302,13 +302,13 @@ export class BroadcastService {
             transformetContent
           )
         }
-      )
+      ))
   }
 
   // highly unlikely a campaign will have enough broadcasts to merit pagination
   getCampaignBroadcasts(campaignUid: string): Observable<Broadcast[]> {
     const fullUrl = this.fetchUrlBase + 'campaign/' + campaignUid;
-    return this.httpClient.get<Broadcast[]>(fullUrl).map(list => list.map(transform));
+    return this.httpClient.get<Broadcast[]>(fullUrl).pipe(map(list => list.map(transform)));
   }
 
   sendMeetingBroadcast(meetingUid: string, message: string, sendToOnlyYes: boolean) {
@@ -319,9 +319,9 @@ export class BroadcastService {
 
   getCostThisMonth(): Observable<number> {
     return this.httpClient.get<number>(this.costThisMonthUrl)
-      .map(resp => {
+      .pipe(map(resp => {
         return resp;
-      })
+      }))
   }
 
   shortenLink(link: string): Observable<string> {
