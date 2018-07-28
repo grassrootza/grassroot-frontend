@@ -7,6 +7,7 @@ import {TwitterPost} from "./model/twitter-post.model";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
+import { map } from 'rxjs/operators';
 import { AdminUser } from "../../user/model/admin-user.model";
 
 @Injectable()
@@ -46,9 +47,11 @@ export class LiveWireAdminService {
         .set('page',pageNumber + "")
         .set('size',10 + "");
     return this.httpClient.get<LiveWireAlertPage>(this.livewireAlertListUrl,{params:params})
-        .map(resp => {let formatedLiveWireAlert = resp.content.map(livewire => LiveWireAlert.createInstance(livewire));
-          return new LiveWireAlertPage(resp.number,resp.totalPages,resp.totalElements,resp.size,resp.first,resp.last,formatedLiveWireAlert)
-        })
+        .pipe(map(resp => {
+          let formatedLiveWireAlert = resp.content.map(livewire => LiveWireAlert.createInstance(livewire));
+          return new LiveWireAlertPage(resp.number,resp.totalPages,resp.totalElements,
+            resp.size,resp.first,resp.last,formatedLiveWireAlert)
+        }))
   }
 
   loadAlert(serverUid:string):Observable<LiveWireAlert>{
@@ -105,7 +108,7 @@ export class LiveWireAdminService {
 
   getSubscribers():Observable<DataSubscriber[]>{
     return this.httpClient.get<DataSubscriber[]>(this.subscriberListUrl)
-      .map(resp => resp.map(data => DataSubscriber.createInstance(data)));
+      .pipe(map(resp => resp.map(data => DataSubscriber.createInstance(data))));
   }
 
   releaseAlert(alertUid:string,dataSubscriberUids:string[]):Observable<LiveWireAlert>{
@@ -140,7 +143,7 @@ export class LiveWireAdminService {
 
   allSubscribers():Observable<DataSubscriber[]>{
     return this.httpClient.get<DataSubscriber[]>(this.allSubscribersUrl)
-    .map(resp => resp.map(data => DataSubscriber.createInstance(data)));
+    .pipe(map(resp => resp.map(data => DataSubscriber.createInstance(data))));
   }
 
   createSubscriber(displayName:string,primaryEmail:string,addToPushEmails:boolean,emailsForPush:string,active:boolean):Observable<any>{
@@ -162,7 +165,7 @@ export class LiveWireAdminService {
   loadSubscriberUsersWithAccess(subscriberUid:string):Observable<AdminUser[]>{
     let params = new HttpParams().set('subscriberUid',subscriberUid);
     return this.httpClient.get<AdminUser[]>(this.loadSubscriberUsersWithAccessUrl,{params:params})
-      .map(resp => resp.map(data => AdminUser.createInstance(data)));
+      .pipe(map(resp => resp.map(data => AdminUser.createInstance(data))));
   }
 
   addPushEmailsToSubscriber(subscriberUid:string,emailsToAdd:string):Observable<any>{

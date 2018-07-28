@@ -1,22 +1,16 @@
 import {CampaignService} from "../campaign.service";
 import {AbstractControl, FormControl, Validators} from "@angular/forms";
-import {Observable} from "rxjs";
-import "rxjs/add/observable/timer";
-import "rxjs/add/operator/switchMap";
-import "rxjs/add/operator/map";
+import { timer } from "rxjs";
+import { switchMap, map } from 'rxjs/operators';
 import {urlValidator} from "../../validators/CustomValidators";
-import {isNumeric} from "rxjs/util/isNumeric";
 
 export class ValidateCodeNotTaken {
   static createValidator(cs: CampaignService, campaignUid?: string) {
     return (control: AbstractControl) => {
-      return Observable.timer(500).switchMap(() => {
-        // console.log("checking a code");
-        return cs.checkCodeAvailability(control.value, campaignUid).map(res => {
-          // console.log("result: ", res);
-          return res ? null : { codeTaken: true }
-        })
-      })
+      return timer(500).pipe(
+        switchMap(_ => cs.checkCodeAvailability(control.value, campaignUid)),
+        map(res => res ? null : { codeTaken: true })
+      )
     }
   }
 }
@@ -24,11 +18,10 @@ export class ValidateCodeNotTaken {
 export class ValidateWordNotTaken {
   static createValidator(cs: CampaignService, campaignUid?: string) {
     return (control: AbstractControl) => {
-      return Observable.timer(500).switchMap(() => {
-        return cs.checkJoinWordAvailability(control.value, campaignUid).map(res => {
-          return res ? null : { wordTaken: true }
-        })
-      })
+      return timer(500).pipe(
+        switchMap(_ => cs.checkJoinWordAvailability(control.value, campaignUid)),
+        map(res => res ? null : { wordTaken: true })
+      )
     }
   }
 }
@@ -71,7 +64,7 @@ export const hasValidLandingUrlIfNeeded = (input: FormControl) => {
 
 export const checkCodeIsNumber = (control: FormControl) => {
   let code = control.value;
-  if ((code) && !isNumeric(code)) {
+  if ((code) && isNaN(code)) {
     return { codeNumber: true }
   }
   return null;

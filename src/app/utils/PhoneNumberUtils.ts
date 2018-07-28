@@ -8,7 +8,7 @@ export class PhoneNumberUtils {
       return phone;
     }
     let parsed = parse(phone, country);
-    return format(parsed, 'International_plaintext').substring(1);
+    return format(parsed.phone, 'International').substring(1);
   }
 
   public static convertFromSystem(phone: string, country: CountryCode = 'ZA') {

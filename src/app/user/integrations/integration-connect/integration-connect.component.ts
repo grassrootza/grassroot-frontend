@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {IntegrationsService} from "../integrations.service";
 import {AlertService} from "../../../utils/alert-service/alert.service";
-import {Observable} from "rxjs";
+import {combineLatest} from "rxjs";
 
 
 @Component({
@@ -19,7 +19,7 @@ export class IntegrationConnectComponent implements OnInit {
 
   ngOnInit() {
 
-    let navigation = Observable.combineLatest(this.route.params, this.route.queryParams,
+    let navigation = combineLatest(this.route.params, this.route.queryParams,
       (params, queryParams) => ({ params, queryParams} ));
 
     navigation.subscribe((navigation) => {

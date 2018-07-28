@@ -17,11 +17,7 @@ export class PaymentsService {
     let params = new HttpParams().set("amountZAR", "" + amountZAR);
     if (recurring)
       params = params.set('recurring', 'true')
-    return this.httpClient.get(this.paymentInitUrl, { params: params, responseType: 'text' }).map(result => {
-      return result;
-    }, error => {
-      console.log("error initiating payment: ", error);
-    })
+    return this.httpClient.get(this.paymentInitUrl, { params: params, responseType: 'text' });
   }
 
   appendCardScript(document, checkoutId: string) {

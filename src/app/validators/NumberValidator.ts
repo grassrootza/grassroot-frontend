@@ -1,5 +1,5 @@
 import {AbstractControl} from '@angular/forms';
-import {parse, format, asYouType, isValidNumber} from "libphonenumber-js";
+import {parse, format, isValidNumber} from "libphonenumber-js";
 
 export class NumberValidator{
 	static numberValidator(control:AbstractControl){

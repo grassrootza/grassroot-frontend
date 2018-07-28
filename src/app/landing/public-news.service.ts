@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import "rxjs/add/operator/map";
+import { map } from 'rxjs/operators';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from "environments/environment";
 import {PublicLivewire, PublicLivewirePage} from "../livewire/public-livewire.model";
@@ -23,7 +23,7 @@ export class PublicNewsService {
       .set("numberToFetch", "5");
 
     return this.httpClient.get<PublicLivewirePage>(this.publicNewsHeadlineUrl, {params: params})
-      .map(
+      .pipe(map(
         result => {
           let transformedContent = result.content.map(PublicLivewire.createInstance);
           return new PublicLivewirePage(
@@ -35,7 +35,7 @@ export class PublicNewsService {
             result.last,
             transformedContent);
         }
-      );
+      ));
   }
 
   loadNews(pageNumber:number):Observable<PublicLivewirePage>{
@@ -44,7 +44,7 @@ export class PublicNewsService {
       .set('sort', 'creationTime,desc')
       .set('page', pageNumber +"");
     return this.httpClient.get<PublicLivewirePage>(this.publicNewsAlertsUrl,{params:params})
-      .map(resp => {let formatedPublicLiveWire = resp.content.map(PublicLivewire.createInstance);
+      .pipe(map(resp => {let formatedPublicLiveWire = resp.content.map(PublicLivewire.createInstance);
           return new PublicLivewirePage(
             resp.number,
             resp.totalPages,
@@ -55,7 +55,7 @@ export class PublicNewsService {
             formatedPublicLiveWire
           )
         }
-      )
+      ));
   }
 
   findAlertPageNumber(alertUid:string):Observable<any>{

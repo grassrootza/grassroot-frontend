@@ -7,7 +7,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Permission} from '../../model/permission.model';
 import {AlertService} from "../../../utils/alert-service/alert.service";
 import {GroupRole} from "../../model/group-role";
-import {Observable} from "rxjs";
+import {forkJoin} from "rxjs";
 
 import {MediaService} from "../../../media/media.service";
 
@@ -57,7 +57,7 @@ export class GroupSettingsComponent implements OnInit {
     this.route.parent.params.subscribe((params: Params) => {
       let groupUid = params['id'];
 
-      Observable.forkJoin(
+      forkJoin(
         this.groupService.loadGroupDetailsCached(groupUid, false),
         this.groupService.fetchRawTopicInterestsStats(groupUid),
         this.groupService.fetchGroupPermissionsToDisplay()

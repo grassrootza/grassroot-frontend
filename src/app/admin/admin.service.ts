@@ -3,6 +3,7 @@ import {environment} from "environments/environment";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from "rxjs";
 import {GroupAdmin} from "../groups/model/group-admin.model";
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class AdminService {
@@ -45,7 +46,7 @@ export class AdminService {
     let params = new HttpParams()
       .set('searchTerm',searchterm);
     return this.httpClient.get<GroupAdmin[]>(this.loadGroupsUrl,{params:params})
-      .map(group => group.map(grp => GroupAdmin.createInstance(grp)));
+      .pipe(map(group => group.map(grp => GroupAdmin.createInstance(grp))));
   }
 
   deactivateGroup(groupUid:string):Observable<string>{

@@ -3,6 +3,7 @@ import {environment} from "environments/environment";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {MediaFunction} from "./media-function.enum";
 import {Observable} from "rxjs";
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -27,10 +28,10 @@ export class MediaService {
       params = params.set("mimeType", mimeType);
     }
 
-    return this.httpClient.post<any>(uploadFullUrl, formData, { params: params, responseType: 'json' }).map(response => {
+    return this.httpClient.post<any>(uploadFullUrl, formData, { params: params, responseType: 'json' }).pipe(map(response => {
       console.log("okay response from server: ", response);
       return response['data'];
-    });
+    }));
   }
 
   getImageUrl(mediaFunction: MediaFunction, imageKey: string): string {

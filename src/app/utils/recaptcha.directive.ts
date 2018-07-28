@@ -18,6 +18,7 @@ import {
 } from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
 import {environment} from "environments/environment";
+import { map } from 'rxjs/operators';
 
 declare const grecaptcha : any;
 
@@ -38,13 +39,13 @@ export class RecaptchaAsyncValidator {
 
   validateToken(token : string) {
     return (_ : AbstractControl ) => {
-      return this.httpClient.get(this.url, { params: { token } }).map(res => {
+      return this.httpClient.get(this.url, { params: { token } }).pipe(map(res => {
         console.log("response on token: ", res);
         if(!res || !res['success']) {
           return { tokenInvalid: true }
         }
         return null;
-      });
+      }));
     }
   }
 }
