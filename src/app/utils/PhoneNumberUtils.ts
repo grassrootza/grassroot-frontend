@@ -1,4 +1,4 @@
-import {CountryCode, format, isValidNumber, parse} from "libphonenumber-js";
+import {CountryCode, format, isValidNumber, parse, formatNumber} from "libphonenumber-js";
 
 // note: we use this much more in code than in templates, hence doing as static methods instead of pipe
 export class PhoneNumberUtils {
@@ -7,8 +7,9 @@ export class PhoneNumberUtils {
     if (!phone) {
       return phone;
     }
-    let parsed = parse(phone, country);
-    return format(parsed.phone, 'International').substring(1);
+    const parsed = parse(phone, country);
+    const result = formatNumber(parsed, 'E.164');
+    return result.substring(1);
   }
 
   public static convertFromSystem(phone: string, country: CountryCode = 'ZA') {

@@ -67,12 +67,11 @@ export class UserService {
   }
 
   login(user: string, password: string): Observable<AuthorizationResponse> {
-
-    if (isValidNumber(user, "ZA")) {
+    if (isValidNumber(user, 'ZA')) {
       user = PhoneNumberUtils.convertToSystem(user);
     }
 
-    console.log("submitting username: ", user);
+    console.log('submitting username: ', user);
     let params = new HttpParams()
       .set('username', user)
       .set('password', password)

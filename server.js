@@ -11,7 +11,7 @@ require('@angular/core').enableProdMode();
 const {
   AppServerModuleNgFactory,
   LAZY_MODULE_MAP
-} = require(`./dist-server/main.bundle`);
+} = require(`./dist-server/main`);
 
 const app = express();
 app.use(helmet());
