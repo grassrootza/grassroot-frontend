@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   public baseDateFilteredTasks: DayTasks[] = [];
   public pinnedGroups: GroupInfo[] = [];
   public activeCampaigns: CampaignInfo[] = [];
-  public newMembersPage: MembersPage = null;
+  public newMembersCount: number = 0;
   public newMembersListRendered: Membership[];
 
   public agendaBaseDate: Moment;
@@ -89,9 +89,13 @@ export class HomeComponent implements OnInit {
 
 
     this.groupService.newMembersInMyGroups.subscribe(newMembersPage => {
+        this.hideSpinnerIfAllLoaded();
+        console.log('new members page: ', newMembersPage);
         if (newMembersPage) {
-          this.newMembersPage = newMembersPage;
-          this.newMembersListRendered = newMembersPage.content.slice(0, 20); // otherwise if a big entrance lately, mammoth render time
+          this.newMembersCount = newMembersPage.length;
+          this.newMembersListRendered = !newMembersPage ? [] : 
+            newMembersPage.slice(0, 20).map(Membership.createInstance); // otherwise if a big entrance lately, mammoth render time
+          console.log('members list rendered: ', this.newMembersListRendered);
           this.newMembersLoadFinished = true;
           this.hideSpinnerIfAllLoaded();
         }

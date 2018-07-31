@@ -62,13 +62,11 @@ export class GroupCopyMembersComponent implements OnChanges {
     this.members.forEach(member => {
       let newGroupTopics = this.topicAssignment ? member.topics.concat(this.topicAssignment) : member.topics;
       const memberInfo = new GroupAddMemberInfo(
-        member.user.phoneNumber,
-        member.user.displayName,
-        member.user.firstName,
-        member.user.lastName,
+        member.phoneNumber,
+        member.displayName, '', '',
         GroupRole.ROLE_ORDINARY_MEMBER,
-        member.user.email,
-        UserProvince[member.user.province],
+        member.emailAddress,
+        UserProvince[member.province],
         member.affiliations,
         [],
         newGroupTopics

@@ -1,0 +1,20 @@
+<div class="container join-words-row">
+  <div class="row flex flex-wrap">
+    <div class="col-4">{{ wordInfo.word | uppercase }}</div>
+    <div class="col-4">{{ wordInfo.shortUrl }}</div>
+    <div class="col-4 text-right"><a href="" class="grassroot-link remove-button" (click)="removeWord.emit()">
+      <i class="fas fa-trash-alt"></i>
+    </a></div>
+    <div class="col-10">
+      <textarea rows="1" class="join-word-textarea" #clipboardText>{{ joinText }}</textarea>
+    </div>
+    <div class="col-2">
+        <button class="btn btn-secondary copy-button" [ngxClipboard]="clipboardText"
+          (cbOnSuccess)="clipboardWorked($event)" (cbOnError)="clipboardFailed($event)">
+          <i class="fas fa-copy"></i>
+           <span *ngIf="!wordInfo.copied">{{ 'action.copy' | translate | uppercase }}</span>
+           <span *ngIf="wordInfo.copied">{{ 'action.copied' | translate | uppercase }}</span>
+        </button>
+      </div>
+  </div>
+</div>

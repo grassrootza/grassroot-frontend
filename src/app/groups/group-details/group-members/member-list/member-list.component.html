@@ -72,7 +72,7 @@
     <div class="col-1"></div>
   </div>
 </div>
-<div *ngFor="let member of currentPage.content">
+<div *ngFor="let member of currentPage.content; trackBy: trackByUid">
   <div class="container group-info-row">
     <div class="row flex flex-wrap">
       <div class="col-md-1" *ngIf="!isTaskTeam">
@@ -80,8 +80,8 @@
       </div>
 
       <div class="col-md-2">
-        <p class="member-name" [ngClass]="{'user-has-errors': member.user.contactError}">{{member.displayName}}</p>
-        <p class="affiliation-subtitle text-nowrap" [ngClass]="{'user-has-errors': member.user.contactError}">
+        <p class="member-name" [ngClass]="{'user-has-errors': member.contactError}">{{member.displayName}}</p>
+        <p class="affiliation-subtitle text-nowrap" [ngClass]="{'user-has-errors': member.contactError}">
           <span *ngIf="hasAffiliations(member)">{{ 'group.allMembers.table.affiliation' | translate }}{{ member.affiliations.join(', ')}}</span>
           <span *ngIf="hasAffiliations(member) && member?.topics?.length > 0">; </span>
           <span *ngIf="member?.topics?.length > 0">Topics: {{member.topics.join(', ')}}</span>
@@ -95,18 +95,18 @@
       </div>
 
       <div class="col-md-2">
-        <span *ngIf="member.user.province" [translate]="'enum.UserProvince.' + member.user.province" [ngClass]="{'user-has-errors': member.user.contactError}">
+        <span *ngIf="member.province" [translate]="'enum.UserProvince.' + member.province" [ngClass]="{'user-has-errors': member.contactError}">
           User province
         </span>
-        <span *ngIf="!member.user.province" [translate]="'enum.UserProvince.UNKNOWN'" [ngClass]="{'user-has-errors': member.user.contactError}">Unknown</span>
+        <span *ngIf="!member.province" [translate]="'enum.UserProvince.UNKNOWN'" [ngClass]="{'user-has-errors': member.contactError}">Unknown</span>
       </div>
 
-      <div class="col-md-2" [ngClass]="{'user-has-errors': member.user.contactError}">
+      <div class="col-md-2" [ngClass]="{'user-has-errors': member.contactError}">
         {{member.nationalNumber()}}
       </div>
 
-      <div class="col-md-2" [ngClass]="{'user-has-errors': member.user.contactError}">
-        {{member.user.email}}
+      <div class="col-md-2" [ngClass]="{'user-has-errors': member.contactError}">
+        {{member.emailAddress}}
       </div>
 
       <div class="col-md-1">
@@ -117,7 +117,7 @@
               Manage
             </button>
             <div class="dropdown-menu">
-              <a class="dropdown-item" routerLink="../{{member.user.uid}}" [translate]="'group.allMembers.manage.view'">View</a>
+              <a class="dropdown-item" routerLink="../{{member.userUid}}" [translate]="'group.allMembers.manage.view'">View</a>
               <a class="dropdown-item" (click)="showEditModal(member)" [translate]="'group.allMembers.manage.edit'">Edit</a>
               <a class="dropdown-item" [translate]="'group.allMembers.manage.topics'" (click)="showAssignTopicToMemberModal(member)">Assign topic</a>
               <a class="dropdown-item" *ngIf="!isTaskTeam" [translate]="'group.allMembers.manage.taskTeam'"
@@ -164,23 +164,23 @@
         <div class="container group-info-row">
           <div class="row flex flex-wrap">
             <div class="col-3">
-              {{singleMemberManage?.user.displayName}}
+              {{singleMemberManage?.displayName}}
             </div>
             <div class="col-3">
               {{'enum.GroupRole.' + singleMemberManage?.roleName | translate }}
             </div>
             <div class="col-3">
-              {{singleMemberManage?.user.phoneNumber}}
+              {{singleMemberManage?.phoneNumber}}
             </div>
             <div class="col-3">
-              {{singleMemberManage?.user.email}}
+              {{singleMemberManage?.emailAddress}}
             </div>
           </div>
         </div>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="removeMember(singleMemberManage.user.uid)">
+        <button type="button" class="btn btn-primary" (click)="removeMember(singleMemberManage.userUid)">
           {{ 'group.members.yesButton' | translate }}
         </button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -256,7 +256,7 @@
             <div class="col-md-6 col-sm-12" *ngIf="group.subGroups.length > 0">
               <label for="task-teams" class="grassroot-label-em">{{ 'group.allMembers.addMember.taskTeam' | translate }}</label>
               <select id="task-teams" [formControl]="editMemberForm.controls['taskTeams']" class="form-control" multiple (change)="withinGroupDetailsChangedTrigger()">
-                <option *ngFor="let g of group.subGroups" [value]="g.groupUid" [selected]="g.hasMember(singleMemberManage?.user?.uid)">{{ g.name }}</option>
+                <option *ngFor="let g of group.subGroups" [value]="g.groupUid" [selected]="g.hasMember(singleMemberManage?.userUid)">{{ g.name }}</option>
               </select>
             </div>
             <div class="col-md-6 col-sm-12" *ngIf="group.topics.length > 0">

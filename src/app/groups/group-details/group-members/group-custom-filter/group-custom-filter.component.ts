@@ -24,6 +24,7 @@ export class GroupCustomFilterComponent implements OnInit {
 
   currentPage: MembersPage = null;
   currentFilter: MembersFilter = new MembersFilter();
+  
   filteredMembers: Membership[] = [];
   filteredMemberUids: string[] = [];
 
@@ -39,10 +40,11 @@ export class GroupCustomFilterComponent implements OnInit {
 
   @ViewChild('bulkTopicManageModal')
   private topicManageModal: MemberTopicsManageComponent;
+
   private bulkTopics: string[] = [];
 
-  private loading = false;
-  private loadStart = 0;
+  public loading = false;
+  public loadStart = 0;
 
   constructor(private groupService: GroupService,
               private campaignService: CampaignService,
@@ -124,9 +126,9 @@ export class GroupCustomFilterComponent implements OnInit {
 setMembersToManageLite() {
   console.log('setting up uids and names');
   if (this.currentPage.getSelectedMembers().length > 0) {
-    this.topicMemberUids = this.currentPage.getSelectedMembers().map(member => member.user.uid);
+    this.topicMemberUids = this.currentPage.getSelectedMembers().map(member => member.userUid);
   } else {
-    this.topicMemberUids = this.filteredMembers.map(member => member.user.uid);
+    this.topicMemberUids = this.filteredMembers.map(member => member.userUid);
   }
   console.log('alright, set up: ', this.topicMemberUids);
 }
@@ -169,7 +171,7 @@ setMembersToManageLite() {
   }
 
   showCreateTaskModal(taskType: string) {
-    this.filteredMemberUids = this.filteredMembers.map(member => member.user.uid);
+    this.filteredMemberUids = this.filteredMembers.map(member => member.userUid);
     $("#" + getCreateModalId(taskType)).modal('show');
   }
 
@@ -179,7 +181,7 @@ setMembersToManageLite() {
   }
 
   downloadFilteredMembersExcel() {
-    this.filteredMemberUids = this.filteredMembers.map(member => member.user.uid);
+    this.filteredMemberUids = this.filteredMembers.map(member => member.userUid);
     this.groupService.downloadFilteredGroupMembers(this.group.groupUid, this.filteredMemberUids).subscribe(data => {
       let blob = new Blob([data], { type: 'application/xls' });
       console.log('got Excel back, saving it ...');

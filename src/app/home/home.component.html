@@ -83,13 +83,13 @@
 
           <div class="float-right">
             <h4 class="float-right new-members-count-label">This week</h4>
-            <span class="new-members-count badge badge-secondary d-inline-block">{{newMembersPage != null ? newMembersPage.totalElements : 0}}</span>
+            <span class="new-members-count badge badge-secondary d-inline-block">{{newMembersCount}}</span>
           </div>
 
           <h2 [translate]="'home.new-members.title'">New members</h2>
 
           <div class="new-members-body">
-            <div *ngIf="newMembersPage">
+            <div>
               <div *ngIf="!newMembersListRendered || newMembersListRendered.length == 0" class="mt-3">
                 <p class="text-center"><img class="img-responsive" style="max-width: 80px; max-height: 83px" src="assets/graphics/member_empty_state_icon@2x.png" /></p>
                 <p class="text-center"><span [translate]="'home.new-members.no-members-sub'"></span></p>
@@ -101,8 +101,8 @@
                   <span style="padding-left: 8px"><i [class]="member.iconClass()"></i></span>
                 </div>
                 <div class="col-8">
-                  <h4>{{member.user.displayName}}</h4>
-                  <div><span>Group: </span> {{member.group.name}}</div>
+                  <h4>{{member.displayName}}</h4>
+                  <!-- <div><span>Group: </span> {{member.group.name}}</div> -->
                   <div>{{ member.joinMethodKey() | translate:member }}</div>
                 </div>
               </div>

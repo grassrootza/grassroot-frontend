@@ -324,7 +324,7 @@
       "joinWords": "2. <b>SMS</b> with a join word to {{ shortCode }}",
       "clickLink": "3. <b>Click</b> on one of your short links",
       "noWordsLeft": "You have run out of join words (each group can have up to three). To create a new one, please remove an old one first.",
-      "joinWordCbText": "To join {{ groupName }}, just text {{ joinWord }} to {{ shortCode}}, dial {{ ussdCode }}, or click here: {{ shortUrl }}",
+      "joinWordCbText": "To join {{ groupName }}, SMS {{ joinWord }} to {{ shortCode}}, dial {{ ussdCode }}, or click: {{ shortUrl }}",
       "addJoinWord": {
         "none": "You can help people join the group by creating join words: ",
         "some": "You can add {{ joinWordsLeft }} more join words to this group: "

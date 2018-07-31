@@ -41,6 +41,7 @@ export class MemberListComponent implements OnInit {
 
   membersManage: Membership[] = [];
   membersManageUid: string[] = [];
+  
   currentTaskTeams: string[] = null;
 
   public editMemberForm: FormGroup;
@@ -91,6 +92,10 @@ export class MemberListComponent implements OnInit {
     this.shouldReloadList.emit();
   }
 
+  trackByUid(index, member) {
+    return member.userUid;
+  }
+
   selectMember(member: Membership) {
     member.selected = !member.selected;
   }
@@ -107,7 +112,7 @@ export class MemberListComponent implements OnInit {
   }
 
   removeMember(memberUid: string){
-    let groupUid = this.currentPage.content[0].group.groupUid;
+    let groupUid = this.group.groupUid;
     let memberUids: string[] = [];
     memberUids.push(memberUid);
 
@@ -125,7 +130,7 @@ export class MemberListComponent implements OnInit {
 
   showAssignTopicToMemberModal(member: Membership){
     this.singleMemberManage = member;
-    this.membersManageUid = [member.user.uid];
+    this.membersManageUid = [member.userUid];
     this.membersManage = [member];
     this.memberTopicManage.setupTopicSelect(member.topics);
     $('#member-assign-topics').modal('show');
@@ -133,13 +138,13 @@ export class MemberListComponent implements OnInit {
 
   showEditModal(member: Membership){
     $('#member-edit-modal').modal('show');
-    this.editMemberForm.controls['displayName'].setValue(member.user.displayName);
+    this.editMemberForm.controls['displayName'].setValue(member.displayName);
     this.editMemberForm.controls['roleName'].setValue(member.roleName);
-    this.editMemberForm.controls['phoneNumber'].setValue(member.user.phoneNumber != null ? member.user.phoneNumber : "");
-    this.editMemberForm.controls['memberEmail'].setValue(member.user.email != null ? member.user.email : "");
-    this.editMemberForm.controls['province'].setValue(member.user.province);
+    this.editMemberForm.controls['phoneNumber'].setValue(member.phoneNumber != null ? member.phoneNumber : "");
+    this.editMemberForm.controls['memberEmail'].setValue(member.emailAddress != null ? member.emailAddress : "");
+    this.editMemberForm.controls['province'].setValue(member.province);
     this.editMemberForm.controls['affiliations'].setValue(member.affiliations.join(","));
-    this.editMemberForm.controls['taskTeams'].setValue(member.group.subGroups != null ? member.group.subGroups : "");
+    // this.editMemberForm.controls['taskTeams'].setValue(member.group.subGroups != null ? member.group.subGroups : "");
 
     if (!member.canEditDetails) {
       this.protectedEditControls.disable();
@@ -148,7 +153,7 @@ export class MemberListComponent implements OnInit {
     }
 
     this.singleMemberManage = member;
-    this.currentTaskTeams = this.group.subGroups.filter(g => g.hasMember(member.user.uid)).map(g => g.groupUid);
+    // this.currentTaskTeams = this.group.subGroups.filter(g => g.hasMember(member.user.uid)).map(g => g.groupUid);
   }
 
   roleChangedTrigger(){
@@ -226,11 +231,10 @@ export class MemberListComponent implements OnInit {
     this.groupService.shouldReloadPaginationPagesNumbers(true);
   }
 
-
   saveEditMember() {
     console.log("have core details changed?: ", this.coreDetailsChanged);
 
-    let memberUid = this.singleMemberManage.user.uid.toString();
+    let memberUid = this.singleMemberManage.userUid;
     let name = this.editMemberForm.controls['displayName'].value;
     let email = this.editMemberForm.controls['memberEmail'].value;
     let phone = this.editMemberForm.controls['phoneNumber'].value;

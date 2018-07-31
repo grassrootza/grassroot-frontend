@@ -12,7 +12,9 @@ export class Broadcast {
               public fbPages: string[],
               public twitterAccount: string,
               public dateTimeSent: Date,
+              public dateTimeSentMillis: number,
               public scheduledSendTime: Date,
+              public scheduledSendTimeMillis: number,
               public costEstimate: number,
               public smsContent: string,
               public emailContent: string,
@@ -23,10 +25,6 @@ export class Broadcast {
               public provinces: string [],
               public topics: string[],
               public createdByUser: boolean) {
-
-
-    // this.formatteddateTimeSent = new DatePipe("en").transform(this.dateTimeSent,"d MMM y, hh:MM a");
-
   }
 
   getFormattedDateTimeSent():string{
@@ -96,8 +94,10 @@ export const transform = (bc: Broadcast): Broadcast => {
     bc.emailCount,
     bc.fbPages,
     bc.twitterAccount != null ? bc.twitterAccount : "",
-    bc.dateTimeSent != null ? DateTimeUtils.getDateFromJavaInstant(bc.dateTimeSent) : null,
-    bc.scheduledSendTime != null ? DateTimeUtils.getDateFromJavaInstant(bc.scheduledSendTime) : null,
+    bc.dateTimeSent != null ? bc.dateTimeSent : (bc.dateTimeSentMillis != null ? new Date(bc.dateTimeSentMillis) : null),
+    bc.dateTimeSentMillis,
+    bc.scheduledSendTime != null ? bc.scheduledSendTime : (bc.scheduledSendTime != null ? new Date(bc.scheduledSendTimeMillis) : null),
+    bc.scheduledSendTimeMillis,
     bc.costEstimate,
     bc.smsContent,
     bc.emailContent,

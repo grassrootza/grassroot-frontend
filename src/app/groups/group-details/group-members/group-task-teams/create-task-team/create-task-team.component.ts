@@ -73,7 +73,7 @@ export class CreateTaskTeamComponent implements OnInit {
   createTaskTeam() {
     let memberUids: string[] = [];
     if (this.filteredMembers.length > 0){
-      this.filteredMembers.forEach(fm => memberUids.push(fm.user.uid.toString()));
+      this.filteredMembers.forEach(fm => memberUids.push(fm.userUid.toString()));
     }
     let taskTeamName = this.createTaskTeamForm.controls['taskTeamName'].value;
     this.groupService.createTaskTeam(this.group.groupUid, taskTeamName, memberUids).subscribe(

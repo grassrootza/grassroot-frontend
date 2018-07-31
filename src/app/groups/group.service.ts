@@ -32,7 +32,7 @@ export class GroupService {
   taskTeamDetailsUrl = environment.backendAppUrl + "/api/group/fetch/details/taskteam";
   groupMemberListUrl = environment.backendAppUrl + "/api/group/fetch/members";
   groupMemberExportUrl = environment.backendAppUrl + "/api/group/fetch/export";
-  newMembersLIstUrl = environment.backendAppUrl + "/api/group/fetch/members/new";
+  newMembersListUrl = environment.backendAppUrl + "/api/group/fetch/members/new";
   groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
@@ -102,8 +102,8 @@ export class GroupService {
   private shouldReloadPaginationNumbers_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public shouldReloadPaginationNumbers: Observable<boolean> = this.shouldReloadPaginationNumbers_.asObservable();
 
-  private newMembersInMyGroups_: BehaviorSubject<MembersPage> = new BehaviorSubject<MembersPage>(null);
-  public newMembersInMyGroups: Observable<MembersPage> = this.newMembersInMyGroups_.asObservable();
+  private newMembersInMyGroups_: BehaviorSubject<Membership[]> = new BehaviorSubject<Membership[]>(null);
+  public newMembersInMyGroups: Observable<Membership[]> = this.newMembersInMyGroups_.asObservable();
   private newMembersInMyGroupsError_: BehaviorSubject<any> = new BehaviorSubject<MembersPage>(null);
   public newMembersInMyGroupsError: Observable<any> = this.newMembersInMyGroupsError_.asObservable();
 
@@ -119,9 +119,10 @@ export class GroupService {
     }
 
     let cachedNewMembers = this.localStorageService.getItem(STORE_KEYS.NEW_MEMBERS_DATA_CACHE);
+    console.log('cached new members: ', cachedNewMembers);
     if (cachedNewMembers) {
       let cachedNewMembersData = JSON.parse(this.localStorageService.getItem(STORE_KEYS.NEW_MEMBERS_DATA_CACHE));
-      cachedNewMembersData.content = cachedNewMembersData.content.map(membership => Membership.createInstance(membership));
+      cachedNewMembersData.content = cachedNewMembersData.map(membership => Membership.createInstance(membership));
       this.newMembersInMyGroups_.next(cachedNewMembersData);
     }
   }
@@ -235,31 +236,17 @@ export class GroupService {
   }
 
   fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number) {
-    console.log("Fetching new members");
+    console.log('Fetching new members from server');
     let params = new HttpParams()
       .set('howRecentInDays', howRecentlyJoinedInDays.toString())
       .set('page', pageNo.toString())
       .set('size', pageSize.toString())
       .set('sort', 'joinTime,desc');
 
-    this.httpClient.get<MembersPage>(this.newMembersLIstUrl, {params: params})
-      .pipe(map(
-        result => {
-          console.log("Fetched new members", result);
-          let transformedContent = result.content.map(m => Membership.createInstance(m));
-          return new MembersPage(
-            result.number,
-            result.totalPages,
-            result.totalElements,
-            result.size,
-            result.first,
-            result.last,
-            transformedContent
-          )
-        }
-      ))
+    this.httpClient.get<Membership[]>(this.newMembersListUrl, {params: params})
       .subscribe(
         newMembersPage => {
+          console.log('new members page from server: ', newMembersPage);
           this.newMembersInMyGroups_.next(newMembersPage);
           this.localStorageService.setItem(STORE_KEYS.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
         },

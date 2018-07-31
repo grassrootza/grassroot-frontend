@@ -154,8 +154,8 @@
               <select class="form-control" id="todo-confirming-members"
                       [formControl]="createVoteForm.controls['assignedMemberUids']"
                       name="name-select" multiple>
-                <option *ngFor="let member of membersList" [ngValue]="member.user.uid">
-                  {{member.user.displayName}}
+                <option *ngFor="let member of membersList" [ngValue]="member.userUid">
+                  {{member.displayName}}
                 </option>
               </select>
             </div>

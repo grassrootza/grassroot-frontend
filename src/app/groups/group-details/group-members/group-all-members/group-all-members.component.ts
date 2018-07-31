@@ -33,7 +33,6 @@ export class GroupAllMembersComponent implements OnInit {
   groupsToCopyMembersTo: GroupInfo[] = [];
 
   constructor(private route: ActivatedRoute,
-              private userService: UserService,
               private groupService: GroupService,
               private alertService: AlertService) {
     // console.log("constructing all members component");
@@ -87,7 +86,7 @@ export class GroupAllMembersComponent implements OnInit {
     if(this.bulkManageCheckNumberOfSelectedMembers() == 0){
       $('#bulk-manage-no-members-selected').modal('show');
     } else {
-      this.bulkMemberUids = this.bulkManageMembers.map(member => member.user.uid);
+      this.bulkMemberUids = this.bulkManageMembers.map(member => member.userUid);
       this.bulkSelectedTopics = this.group.topics.filter(topic => {
         // js type weirdness makes this unpredictable if made into more elegant single line
         let topicsContained = this.bulkManageMembers.map(member => member.topics.indexOf(topic) != -1);
@@ -123,7 +122,7 @@ export class GroupAllMembersComponent implements OnInit {
   }
 
   showCreateTaskModal(taskType: string) {
-    this.bulkMemberUids = this.bulkManageMembers.map(member => member.user.uid);
+    this.bulkMemberUids = this.bulkManageMembers.map(member => member.userUid);
     $("#" + getCreateModalId(taskType)).modal('show');
   }
 
@@ -139,10 +138,9 @@ export class GroupAllMembersComponent implements OnInit {
     }
   }
 
-
   removeSelectedMembers(){
     let memberUids:string[] = [];
-    this.bulkManageMembers.forEach(m => memberUids.push(m.user.uid.toString()));
+    this.bulkManageMembers.forEach(m => memberUids.push(m.userUid));
     this.groupService.removeMembers(this.groupUid, memberUids).subscribe(response => {
       $('#bulk-remove-members-modal').modal('hide');
       this.goToPage(0, []);

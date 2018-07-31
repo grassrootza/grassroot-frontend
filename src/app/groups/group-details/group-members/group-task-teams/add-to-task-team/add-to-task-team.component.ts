@@ -50,7 +50,7 @@ export class AddToTaskTeamComponent implements OnInit, OnChanges {
   }
 
   saveAddMemberToTaskTeam(){
-    let memberUids: string[] = this.members.map(member => member.user.uid);
+    let memberUids: string[] = this.members.map(member => member.userUid);
     // console.log(`creating team: ${this.creatingTaskTeam}, and selected team: ${this.selectedTaskTeam}`);
     if (this.creatingTaskTeam) {
       this.groupService.createTaskTeam(this.group.groupUid, this.newTaskTeamName, memberUids).subscribe(response => {

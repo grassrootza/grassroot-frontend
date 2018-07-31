@@ -60,56 +60,7 @@ strong {
   line-height: 2rem;
 }
 
-.join-code-label {
-  display: block;
-  clear: both;
-}
-
-.join-words-header {
-  border-top: none;
-  border-bottom: none;
-  background-color: #F5F6FA;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 16px;
-}
-
-.join-words-row {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  vertical-align: middle;
-  border-top: solid #ECEEF1 1px;
-  font-size: 14px;
-  line-height: 22px;
-}
-
-.join-words-add-container {
-  margin-top: 20px;
-}
-
 .join-word {
   font-size: 1.1rem;
   line-height: 2rem;
-}
-
-.remove-button {
-  color: #7A7D8C;
-}
-
-.copy-button {
-  background: white;
-  color: #7A7D8C;
-  border: 2px solid #ECEEF1;
-  border-radius: 0;
-  padding: 0 10px;
-  margin: 0;
-}
-
-.copy-button:hover {
-  cursor: pointer;
-  font-weight: bold;
-  color: #2CBC4C;
-  border: 2px solid #2CBC4C;
 }
