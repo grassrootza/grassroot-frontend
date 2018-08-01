@@ -24,8 +24,10 @@ export class GroupCustomFilterComponent implements OnInit {
 
   currentPage: MembersPage = null;
   currentFilter: MembersFilter = new MembersFilter();
+  
   filteredMembers: Membership[] = [];
   filteredMemberUids: string[] = [];
+  filteredMemberNames: string[] = [];
 
   membersToManage: Membership[] = [];
 
@@ -39,17 +41,17 @@ export class GroupCustomFilterComponent implements OnInit {
 
   @ViewChild('bulkTopicManageModal')
   private topicManageModal: MemberTopicsManageComponent;
+
   private bulkTopics: string[] = [];
 
-  private loading = false;
-  private loadStart = 0;
+  public loading = false;
+  public loadStart = 0;
 
   constructor(private groupService: GroupService,
               private campaignService: CampaignService,
               private route: ActivatedRoute,
               private alertService:AlertService) {
   }
-
 
   ngOnInit() {
     this.alertService.showLoading();
@@ -87,10 +89,11 @@ export class GroupCustomFilterComponent implements OnInit {
       this.loading = true;
       this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(
         members => {
-          // console.log("got members back, refreshing ... members = ", members);
+          console.log('resulting member page: ', members);
           this.loading = false;
           this.currentFilter = copyFilter(filter); // otherwise change detection fails, because child is actually modifying same thing
-          this.setFilteredMembers(members);
+          this.currentPage = members;
+          this.setFilteredMembers(members.content);
         },
         error => {
           this.loading = false;
@@ -108,9 +111,7 @@ export class GroupCustomFilterComponent implements OnInit {
     this.filteredMembers = members;
     if (this.currentFilter.role !== 'ANY') {
       members = members.filter(member => member.roleName == this.currentFilter.role);
-      // console.log(`filtered by ${this.currentFilter.role}, number members: ${this.filteredMembers.length}`);
     }
-    this.currentPage = new MembersPage(0, 1, members.length, members.length, true, true, members);
   }
 
   setMembersToManage() {
@@ -119,17 +120,17 @@ export class GroupCustomFilterComponent implements OnInit {
     } else {
       this.membersToManage = this.filteredMembers;
     }
-}
-
-setMembersToManageLite() {
-  console.log('setting up uids and names');
-  if (this.currentPage.getSelectedMembers().length > 0) {
-    this.topicMemberUids = this.currentPage.getSelectedMembers().map(member => member.user.uid);
-  } else {
-    this.topicMemberUids = this.filteredMembers.map(member => member.user.uid);
   }
-  console.log('alright, set up: ', this.topicMemberUids);
-}
+
+  setMembersToManageLite() {
+    console.log('setting up uids and names');
+    if (this.currentPage.getSelectedMembers().length > 0) {
+      this.topicMemberUids = this.currentPage.getSelectedMembers().map(member => member.userUid);
+    } else {
+      this.topicMemberUids = this.filteredMembers.map(member => member.userUid);
+    }
+    console.log('alright, set up: ', this.topicMemberUids);
+  }
 
   addFilteredMembersToTaskTeam() {
     this.setMembersToManage();
@@ -169,7 +170,9 @@ setMembersToManageLite() {
   }
 
   showCreateTaskModal(taskType: string) {
-    this.filteredMemberUids = this.filteredMembers.map(member => member.user.uid);
+    this.setMembersToManage();
+    this.filteredMemberUids = this.membersToManage.map(member => member.userUid);
+    this.filteredMemberNames = this.membersToManage.map(member => member.displayName);
     $("#" + getCreateModalId(taskType)).modal('show');
   }
 
@@ -179,7 +182,7 @@ setMembersToManageLite() {
   }
 
   downloadFilteredMembersExcel() {
-    this.filteredMemberUids = this.filteredMembers.map(member => member.user.uid);
+    this.filteredMemberUids = this.filteredMembers.map(member => member.userUid);
     this.groupService.downloadFilteredGroupMembers(this.group.groupUid, this.filteredMemberUids).subscribe(data => {
       let blob = new Blob([data], { type: 'application/xls' });
       console.log('got Excel back, saving it ...');

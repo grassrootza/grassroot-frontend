@@ -16,22 +16,27 @@ export class MembershipInfo {
   }
 }
 
-export const getUserFromMembershipInfo = (memb: MembershipInfo): User => {
-  return new User(memb.memberUid, memb.displayName, memb.phoneNumber, memb.memberEmail, "", "", "true", "", memb.province, false, false);
-};
+export const getMemberFromMembershipInfo = (memb: MembershipInfo): Membership => {
+  return new Membership(memb.displayName, false, memb.memberUid, memb.province, memb.phoneNumber, memb.memberEmail,
+    memb.roleName, [], '', '', [], false);
+}
 
 export class Membership {
 
   constructor(public displayName:string,
               public selected: boolean,
-              public user: User,
-              public group: GroupInfo,
+              public userUid: string,
+              public province: string,
+              public phoneNumber: string,
+              public emailAddress: string, 
               public roleName: GroupRole,
               public topics: string[],
               public joinMethod: string,
               public joinMethodDescriptor: string,
               public affiliations: string[],
-              public canEditDetails: boolean) {
+              public canEditDetails: boolean,
+              public contactError?: boolean,
+              public groupName?: string) { // note we only use group name on front page, else don't expect it to be there
   }
 
   public joinMethodKey(): string {
@@ -52,22 +57,23 @@ export class Membership {
   }
 
   public formattedProvince(): string {
-    if (this.user.province) {
-      return UserProvince[this.user.province];
+    if (this.province) {
+      return UserProvince[this.province];
     } else {
       return "UNKNOWN";
     }
   }
 
   public nationalNumber(): string {
-    return PhoneNumberUtils.convertFromSystem(this.user.phoneNumber);
+    return PhoneNumberUtils.convertFromSystem(this.phoneNumber);
   }
 
-  public static createInstance(membershipData: Membership): Membership {
-    return new Membership(membershipData.displayName,false, membershipData.user, membershipData.group, GroupRole[<string>membershipData.roleName], membershipData.topics, membershipData.joinMethod, membershipData.joinMethodDescriptor, membershipData.affiliations, membershipData.canEditDetails);
+  public static createInstance(m: Membership): Membership {
+    return new Membership(m.displayName,false, m.userUid, m.province, m.phoneNumber, m.emailAddress,
+      GroupRole[<string>m.roleName], m.topics, m.joinMethod, m.joinMethodDescriptor, m.affiliations, m.canEditDetails, 
+      m.contactError, m.groupName);
   }
 }
-
 
 export class MembersPage {
 
@@ -84,5 +90,18 @@ export class MembersPage {
     return this.content.filter(membership => membership.selected);
   }
 
+}
+
+export const transformMemberPage = (result: MembersPage): MembersPage => {
+  let transformedContent = result.content.map(m => Membership.createInstance(m));
+  return new MembersPage(
+    result.number,
+    result.totalPages,
+    result.totalElements,
+    result.size,
+    result.first,
+    result.last,
+    transformedContent
+  )
 }
 

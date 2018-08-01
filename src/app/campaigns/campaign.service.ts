@@ -1,17 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "environments/environment";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {BehaviorSubject, Observable} from "rxjs";
+import { map } from 'rxjs/operators';
 import {CampaignInfo, getCampaignEntity} from "./model/campaign-info";
-import {Observable} from "rxjs/Observable";
 import {
   CampaignMsgRequest,
   CampaignMsgServerDTO,
   CampaignRequest,
   CampaignUpdateParams
 } from "./campaign-create/campaign-request";
-import { Language } from '../utils/language';
-import { lang } from 'moment';
 
 @Injectable()
 export class CampaignService {
@@ -53,10 +51,10 @@ export class CampaignService {
 
   loadCampaigns() {
     this.httpClient.get<CampaignInfo[]>(this.campaignListUrl)
-      .map(data => {
+      .pipe(map(data => {
           // console.log("Campaign json object from server: ", data);
           return data.map(cp => getCampaignEntity(cp))
-        })
+        }))
       .subscribe(
         campaigns => {
           this._campaigns = campaigns;
@@ -73,7 +71,7 @@ export class CampaignService {
       .set("groupUid", groupUid);
 
     return this.httpClient.get<CampaignInfo[]>(this.groupCampaignListUrl, {params: params})
-      .map(campaigns => campaigns.map(cp => getCampaignEntity(cp)))
+      .pipe(map(campaigns => campaigns.map(cp => getCampaignEntity(cp))))
   }
 
   fetchActiveCampaignCodes(): Observable<string[]> {
@@ -89,7 +87,7 @@ export class CampaignService {
     let serverMsgRequests: CampaignMsgServerDTO[] = messageRequests.map(req =>
       new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags));
     // console.log("message request, messages: ", messageRequests.map(mr => mr.messages));
-    return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests).map(result => this.stashChangedCampaign(result));
+    return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests).pipe(map(result => this.stashChangedCampaign(result)));
   }
 
   stashChangedCampaign(result): CampaignInfo {
@@ -109,10 +107,10 @@ export class CampaignService {
     // should probably chain these better, but will clean up later
     let index = this._campaigns.findIndex(c => c.campaignUid == campaignUid);
     if (this._campaigns && this._campaigns.find(c => c.campaignUid == campaignUid)) {
-      return this.campaignInfoList.map(campaigns => campaigns.find(c => c.campaignUid == campaignUid));
+      return this.campaignInfoList.pipe(map(campaigns => campaigns.find(c => c.campaignUid == campaignUid)));
     } else {
       let fullUrl = this.campaignFetchUrl + "/" + campaignUid;
-      return this.httpClient.get<CampaignInfo>(fullUrl).map(this.stashChangedCampaign);
+      return this.httpClient.get<CampaignInfo>(fullUrl).pipe(map(this.stashChangedCampaign));
     }
   }
 
@@ -220,7 +218,7 @@ export class CampaignService {
     if (updateParams.newMasterGroupUid)
       params = params.set("newMasterGroupUid", updateParams.newMasterGroupUid);
 
-    return this.httpClient.post<CampaignInfo>(fullUrl, null, {params: params}).map(getCampaignEntity);
+    return this.httpClient.post<CampaignInfo>(fullUrl, null, {params: params}).pipe(map(getCampaignEntity));
   }
 
   changeCampaignSharing(campaignUid: string, sharingEnabled: boolean, smsLimit: number,
@@ -229,12 +227,12 @@ export class CampaignService {
     let params = new HttpParams().set("sharingEnabled", sharingEnabled.toString()).set("smsLimit", smsLimit.toString());
     let sharingMsgs:CampaignMsgServerDTO[] = sharingTemplates ? sharingTemplates.map(req =>
       new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags)) : null;
-    return this.httpClient.post<CampaignInfo>(fullUrl, sharingMsgs, { params: params }).map(getCampaignEntity);
+    return this.httpClient.post<CampaignInfo>(fullUrl, sharingMsgs, { params: params }).pipe(map(getCampaignEntity));
   }
 
   endCampaign(campaignUid: string): Observable<CampaignInfo> {
     const fullUrl = this.endCampaignUrl + "/" + campaignUid;
-    return this.httpClient.get<CampaignInfo>(fullUrl).map(getCampaignEntity);
+    return this.httpClient.get<CampaignInfo>(fullUrl).pipe(map(getCampaignEntity));
   }
 
   setCampaignWelcomeMsg(campaignUid: string, message: string): Observable<any> {
@@ -257,7 +255,7 @@ export class CampaignService {
     const fullUrl = this.updateCampaignDefaultLangUrl + "/" + campaignUid;
     console.log('setting new default language: ', languageTwoDigitCode);
     const params = new HttpParams().set('defaultLanguage', languageTwoDigitCode);
-    return this.httpClient.post<CampaignInfo>(fullUrl, null, { params: params}).map(response => this.stashChangedCampaign(response));
+    return this.httpClient.post<CampaignInfo>(fullUrl, null, { params: params}).pipe(map(response => this.stashChangedCampaign(response)));
   }
 
 }

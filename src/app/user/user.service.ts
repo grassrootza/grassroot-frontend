@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {environment} from "environments/environment";
 import {AuthenticatedUser, AuthorizationResponse, getAuthUser, UserProfile} from "./user.model";
 import {Router} from "@angular/router";
@@ -8,6 +8,7 @@ import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {isValidNumber} from "libphonenumber-js";
 import {LocalStorageService} from "../utils/local-storage.service";
 import {CookiesService} from "../utils/cookie-service/cookies.service";
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class UserService {
@@ -57,35 +58,34 @@ export class UserService {
     }
 
     return this.httpClient.post<AuthorizationResponse>(this.registerUrl, null, {params: params})
-      .map(authResponse => {
+      .pipe(map(authResponse => {
         if (authResponse.errorCode == null) {
           this.storeAuthUser(getAuthUser(authResponse.user), authResponse.user.token);
         }
         return authResponse;
-      });
+      }));
   }
 
   login(user: string, password: string): Observable<AuthorizationResponse> {
-
-    if (isValidNumber(user, "ZA")) {
+    if (isValidNumber(user, 'ZA')) {
       user = PhoneNumberUtils.convertToSystem(user);
     }
 
-    console.log("submitting username: ", user);
+    console.log('submitting username: ', user);
     let params = new HttpParams()
       .set('username', user)
       .set('password', password)
       .set("interfaceType", "WEB_2");
 
     return this.httpClient.post<AuthorizationResponse>(this.loginUrl, null, {params: params})
-      .map(authResponse => {
+      .pipe(map(authResponse => {
           console.log("AuthResponse: ", authResponse);
           if (authResponse.errorCode == null) {
             this.storeAuthUser(getAuthUser(authResponse.user), authResponse.user.token);
           }
           return authResponse;
         }
-      );
+      ));
   }
 
   storeAuthUser(user: AuthenticatedUser, token?: string) {
@@ -137,7 +137,7 @@ export class UserService {
       params = params.set("validationOtp", otp);
     }
     return this.httpClient.post(this.updateProfileUrl, null, {params: params})
-      .map(result => {
+      .pipe(map(result => {
         let message = result['message'];
         //console.log("here is the result: ", message);
         if (message == "UPDATED") {
@@ -145,7 +145,7 @@ export class UserService {
           this.storeAuthUser(updatedUser, updatedUser.token);
         }
         return message;
-      });
+      }));
   }
 
   updatePassword(oldPwd: string, newPwd: string, confirmPwd: string) {
@@ -166,13 +166,13 @@ export class UserService {
   updateImage(image: any): Observable<string> {
     const formData: FormData = new FormData();
     formData.append("photo", image, image.name);
-    return this.httpClient.post(this.updateImageUrl, formData, { responseType: 'text'}).map(response => {
+    return this.httpClient.post(this.updateImageUrl, formData, { responseType: 'text'}).pipe(map(response => {
       console.log("image response from server: ", response);
       let updatedUser = this._loggedInUser;
       updatedUser.hasImage = true;
       this.storeAuthUser(updatedUser);
       return response;
-    });
+    }));
   }
 
   getProfileImageUrl(cacheBust: boolean = false) {
@@ -199,14 +199,14 @@ export class UserService {
 
   completeUserDelete(otp: string): Observable<any> {
     const params = new HttpParams().set("otp", otp);
-    return this.httpClient.post(this.deleteUserConfirm, null, { params: params, responseType: 'text' }).map(result => {
+    return this.httpClient.post(this.deleteUserConfirm, null, { params: params, responseType: 'text' }).pipe(map(result => {
       console.log("result from server: ", result);
       if (result == 'USER_DELETED') {
         console.log("okay, cleaning up user");
         this.cleanUpUser();
       }
       return result;
-    });
+    }));
   }
 
   fetchAccessToken(): Observable<string> {

@@ -24,7 +24,8 @@ export class GroupBroadcastComponent implements OnInit {
   public groupUid:string = "";
   public currentSentPage: BroadcastPage = new BroadcastPage(0,0,0,0, true, false, []);
   public currentScheduledPage: BroadcastPage = new BroadcastPage(0,0,0,0, true, false, []);
-  public modalBroadcast: Broadcast = null;
+  
+  public modalBroadcast: Broadcast;
   public resendBroadcast: Broadcast = null;
   public firstModalTab: string = "sms";
 
@@ -32,7 +33,6 @@ export class GroupBroadcastComponent implements OnInit {
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService,
               private groupService: GroupService,
               private broadcastService: BroadcastService,
               private alertService: AlertService,
@@ -71,7 +71,7 @@ export class GroupBroadcastComponent implements OnInit {
     this.broadcastService.getGroupBroadcasts(this.groupUid, "IMMEDIATE", page,5).subscribe(
       resp => {
         console.log(resp);
-        console.log(`first bc twitter: ${resp.content[0].twitterAccount}`);
+        // console.log(`first bc twitter: ${resp.content[0].twitterAccount}`);
         this.currentSentPage = resp;
       }
     );
@@ -88,7 +88,7 @@ export class GroupBroadcastComponent implements OnInit {
 
   showViewModal(broadcast: Broadcast){
     this.modalBroadcast = broadcast;
-    console.log('modal broadcast: ', this.modalBroadcast);
+    // console.log('modal broadcast: ', this.modalBroadcast);
     $('#broadcast-view-modal').modal('show');
   }
 

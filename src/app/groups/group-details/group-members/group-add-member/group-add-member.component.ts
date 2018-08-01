@@ -6,16 +6,10 @@ import {UserProvince} from '../../../../user/model/user-province.enum';
 import {GroupRole} from '../../../model/group-role';
 import {GroupModifiedResponse} from '../../../model/group-modified-response.model';
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from '../../../../validators/CustomValidators';
-import {Observable} from 'rxjs/Observable';
+import {Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, tap, switchMap, merge, catchError } from 'rxjs/operators';
 import {Group} from '../../../model/group.model';
 import {GroupRelatedUserResponse} from '../../../model/group-related-user.model';
-// doing these manually as else there are warnings of very heavy import load if take all rxjs
-import "rxjs/add/operator/do";
-import "rxjs/add/operator/catch";
-import "rxjs/add/operator/merge";
-import "rxjs/add/operator/switchMap";
-import "rxjs/add/operator/debounceTime";
-import "rxjs/add/operator/distinctUntilChanged";
 
 declare var $: any;
 
@@ -69,17 +63,15 @@ export class GroupAddMemberComponent implements OnInit {
 
   search = (text$: Observable<string>) =>
     text$
-      .debounceTime(300)
-      .distinctUntilChanged()
-      .do(term => term.length < 3 ? this.lengthInvalid = true : this.lengthInvalid = false)
-      .switchMap(term => term.length < 3 ?  Observable.of([]) :
-        this.groupService.searchForUsers(term)
-          .do(() => this.searchFailed = false)
-          .catch(() => {
-            this.searchFailed = true;
-            return Observable.of([]);
-          }))
-      .merge(this.hideSearchingWhenUnsubscribed);
+      .pipe(debounceTime(300),
+      distinctUntilChanged(),
+      tap(term => term.length < 3 ? this.lengthInvalid = true : this.lengthInvalid = false),
+      switchMap(term => term.length < 3 ?  
+        of([]) :
+        this.groupService.searchForUsers(term).pipe(
+          tap(_ => this.searchFailed = false), 
+          catchError(_ => { this.searchFailed = true; return of([]) }))),
+      merge(this.hideSearchingWhenUnsubscribed));
 
   formatter(x: { name: string, phone: string }) {
     return "Name: " + x.name + ", Phone number: " + x.phone;

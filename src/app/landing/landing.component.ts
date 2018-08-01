@@ -10,8 +10,8 @@ import {
   ViewChild,
   OnDestroy
 } from '@angular/core';
-import * as _ from 'lodash';
-import {Observable} from 'rxjs/Observable';
+import {Subscription, interval, fromEvent } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import {PublicActivityType} from './model/public-activity-type.enum';
 import {PublicActivity} from './model/public-activity.model';
 import {PublicActivityService} from './public-activity.service';
@@ -20,9 +20,8 @@ import {AlertService} from "../utils/alert-service/alert.service";
 import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PublicLivewire} from "../livewire/public-livewire.model";
-import { Subscription } from 'rxjs';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/observable/interval';
+
+
 
 declare var $: any;
 
@@ -80,7 +79,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
       //load new public activity every half minute after that (30000 ms = 1min), remove this if we dont need to update news when user is on page.
-      this.activitiesPoller = Observable.interval(30000)
+      this.activitiesPoller = interval(30000)
         .subscribe(() => {
           console.log("fetching new public activity ...");
           this.loadPublicActivity();
@@ -90,7 +89,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
       this.loadNews();
 
       //load news every 2 mins after that (120000 ms = 2min), remove this if we dont need to update news when user is on page.
-      this.newsPoller = Observable.interval(120000)
+      this.newsPoller = interval(120000)
         .subscribe(() => {
             this.loadNews();
           }
@@ -104,8 +103,8 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     this.cdr.detectChanges();
 
     if (isPlatformBrowser(this.platformId)) {
-      Observable.fromEvent(window, 'resize')
-        .debounceTime(200)
+      fromEvent(window, 'resize')
+        .pipe(debounceTime(200))
         .subscribe(() => {
           this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
         })
@@ -139,25 +138,13 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getNumberOfNewActivities(newActivities: PublicActivity[]): number {
-    const arrayAreEqual = _(this.activitiesList)
-      .differenceWith(newActivities, _.isEqual)
-      .isEmpty();
+    const numberActivites = newActivities.map(activity => {
+      let index = this.activitiesList.findIndex(existing => existing.equals(activity));
+      return index == -1 ? 1 : 0
+    }).reduce((a, b) => a + b, 0);
 
-    if (!arrayAreEqual) {
-      const mergedArrays = this.activitiesList.concat(newActivities);
-      const numberOfUniqueMembersInMergedArray = _.map(
-        _.uniq(
-          _.map(mergedArrays, function (obj) {
-            return JSON.stringify(obj);
-          })
-        ), function (obj) {
-          return JSON.parse(obj);
-        }
-      ).length;
-
-      return numberOfUniqueMembersInMergedArray - this.activitiesList.length;
-    }
-    return 0;
+    console.log('number new activities: ', numberActivites);
+    return numberActivites;
   }
 
   private playActivitiesAnimation(numberOfNewActivities: number, newActivities: PublicActivity[]): void {

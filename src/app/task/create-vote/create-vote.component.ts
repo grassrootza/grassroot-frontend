@@ -158,8 +158,8 @@ export class CreateVoteComponent implements OnInit {
   confirmVote() {
     let membersAssigned = this.createVoteForm.get("assignedMemberUids").value && this.createVoteForm.get("assignedMemberUids").value.length > 0;
     let assignedMemberUids = membersAssigned ? this.createVoteForm.get("assignedMemberUids").value : [];
-    let assignedMemberNames = membersAssigned ? this.membersList.filter(member => assignedMemberUids.indexOf(member.user.uid) != -1)
-        .map(member => member.user.displayName) : this.membersList.map(member => member.user.displayName);
+    let assignedMemberNames = membersAssigned ? this.membersList.filter(member => assignedMemberUids.indexOf(member.userUid) != -1)
+        .map(member => member.displayName) : this.membersList.map(member => member.displayName);
 
     let nameText = assignedMemberNames.length > 10 ?
       assignedMemberNames.slice(0, 10).join(", ") + " and " + (assignedMemberNames.length - 10) + " others" : assignedMemberNames.join(", ");

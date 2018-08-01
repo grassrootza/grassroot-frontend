@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import "rxjs/add/operator/map";
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from "environments/environment";
 import {PublicActivity} from "./model/public-activity.model";
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class PublicActivityService {
@@ -19,6 +20,6 @@ export class PublicActivityService {
       .set("numberToFetch", "5");
 
     return this.httpClient.get<PublicActivity[]>(this.activityUrl, {params: params})
-      .map(result => result.map(PublicActivity.createInstanceFromData));
+      .pipe(map(result => result.map(PublicActivity.createInstanceFromData)));
   }
 }

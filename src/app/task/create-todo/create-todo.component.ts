@@ -173,8 +173,8 @@ export class CreateTodoComponent implements OnInit {
 
     let membersAssigned = this.createTodoForm.get("assignedMemberUids").value && this.createTodoForm.get("assignedMemberUids").value.length > 0;
     let assignedMemberUids = membersAssigned ? this.createTodoForm.get("assignedMemberUids").value : [];
-    let assignedMemberNames = membersAssigned ? this.groupMembers.filter(member => assignedMemberUids.indexOf(member.user.uid) != -1)
-      .map(member => member.user.displayName) : this.groupMembers.map(member => member.user.displayName);
+    let assignedMemberNames = membersAssigned ? this.groupMembers.filter(member => assignedMemberUids.indexOf(member.userUid) != -1)
+      .map(member => member.displayName) : this.groupMembers.map(member => member.displayName);
 
     let nameText = assignedMemberNames.length > 10 ?
       assignedMemberNames.slice(0, 10).join(", ") + " and " + (assignedMemberNames.length - 10) + " others" : assignedMemberNames.join(", ");

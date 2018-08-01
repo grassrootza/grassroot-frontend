@@ -58,7 +58,7 @@ export class CreateTaskTeamComponent implements OnInit {
       this.groupService.filterGroupMembers(this.group.groupUid, filter)
         .subscribe(
           members => {
-            this.filteredMembers = filter.role == 'ANY' ? members : members.filter(m => m.roleName == filter.role);
+            this.filteredMembers = filter.role == 'ANY' ? members.content : members.content.filter(m => m.roleName == filter.role);
             console.log(`filtered on role: ${filter.role}, used role = ${filter.role == 'ANY'}`);
             this.createTaskTeamForm.controls['membersCount'].setValue(this.filteredMembers.length);
           },
@@ -73,7 +73,7 @@ export class CreateTaskTeamComponent implements OnInit {
   createTaskTeam() {
     let memberUids: string[] = [];
     if (this.filteredMembers.length > 0){
-      this.filteredMembers.forEach(fm => memberUids.push(fm.user.uid.toString()));
+      this.filteredMembers.forEach(fm => memberUids.push(fm.userUid.toString()));
     }
     let taskTeamName = this.createTaskTeamForm.controls['taskTeamName'].value;
     this.groupService.createTaskTeam(this.group.groupUid, taskTeamName, memberUids).subscribe(

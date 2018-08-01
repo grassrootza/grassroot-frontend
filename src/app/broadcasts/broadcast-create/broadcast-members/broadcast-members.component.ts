@@ -8,8 +8,7 @@ import {GroupService} from "../../../groups/group.service";
 import {Group} from "../../../groups/model/group.model";
 import {MembersFilter} from "../../../groups/member-filter/filter.model";
 import {AlertService} from "../../../utils/alert-service/alert.service";
-import {User} from "../../../user/user.model";
-import {getUserFromMembershipInfo} from "../../../groups/model/membership.model";
+import {Membership, getMemberFromMembershipInfo} from "../../../groups/model/membership.model";
 import { CampaignService } from '../../../campaigns/campaign.service';
 import { CampaignInfo } from '../../../campaigns/model/campaign-info';
 
@@ -75,7 +74,7 @@ export class BroadcastMembersComponent implements OnInit {
       this.createParams = params;
       if (this.group && this.broadcastService.currentType() != 'campaign') {
         console.log('group, calculate members of it');
-        this.recalculateTotals(this.group.members.map(getUserFromMembershipInfo));
+        this.recalculateTotals(this.group.members.map(getMemberFromMembershipInfo));
       }
 
       let selectedTypes = this.broadcastService.getTypes();
@@ -93,7 +92,7 @@ export class BroadcastMembersComponent implements OnInit {
     this.groupService.loadGroupDetailsCached(groupId).subscribe(group => {
       this.group = group;
       if (useGroupForCounts)
-        this.recalculateTotals(this.group.members.map(getUserFromMembershipInfo));
+        this.recalculateTotals(this.group.members.map(getMemberFromMembershipInfo));
     });
   }
 
@@ -108,11 +107,11 @@ export class BroadcastMembersComponent implements OnInit {
     console.log('have set up default counts, total number: ', this.countParams.totalNumber);
   }
 
-  recalculateTotals(members: User[] = []) {
+  recalculateTotals(members: Membership[] = []) {
     this.skipSmsIfEmail = this.memberForm.controls['skipSmsIfEmail'].value;
     this.countParams.totalNumber = members.length;
     this.countParams.smsNumber = members.reduce((total,m) => this.includeMemberInSms(m) ? total+1 : total, 0);
-    this.countParams.emailNumber = members.reduce((total, m) => m.email ? total+1 : total, 0);
+    this.countParams.emailNumber = members.reduce((total, m) => m.emailAddress ? total+1 : total, 0);
     this.countParams.broadcastCost = (this.countParams.smsNumber * this.createParams.smsCostCents / 100).toFixed(2);
     console.log('fetched members, count params now: ', this.countParams);
   }
@@ -143,10 +142,10 @@ export class BroadcastMembersComponent implements OnInit {
     this.memberFilter = filter;
     this.groupService.filterGroupMembers(this.group.groupUid, filter)
       .subscribe(members => {
-          let users = filter.role == 'ANY' ? members.map(m => m.user) : members.filter(m => m.roleName == filter.role).map(m => m.user);
-          this.recalculateTotals(users);
-          if (users && users.length > 0 && users.length < 10) {
-            this.filteredMemberNames = users.map(user => user.displayName);
+          let filteredMembers = filter.role == 'ANY' ? members.content : members.content.filter(m => m.roleName == filter.role);
+          this.recalculateTotals(filteredMembers);
+          if (filteredMembers && filteredMembers.length > 0 && filteredMembers.length < 10) {
+            this.filteredMemberNames = members.content.map(member => member.displayName);
           } else {
             this.filteredMemberNames = [];
           }
@@ -163,8 +162,8 @@ export class BroadcastMembersComponent implements OnInit {
     this.membersFilterChanged(this.memberFilter);
   }
 
-  includeMemberInSms(member: User): boolean {
-    return member && member.phoneNumber && (!this.skipSmsIfEmail || !member.email);
+  includeMemberInSms(member: Membership): boolean {
+    return member && member.phoneNumber && (!this.skipSmsIfEmail || !member.emailAddress);
   }
 
   saveMemberSelection() {

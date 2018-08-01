@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   public baseDateFilteredTasks: DayTasks[] = [];
   public pinnedGroups: GroupInfo[] = [];
   public activeCampaigns: CampaignInfo[] = [];
-  public newMembersPage: MembersPage = null;
+  public newMembersCount: number = 0;
   public newMembersListRendered: Membership[];
 
   public agendaBaseDate: Moment;
@@ -67,7 +67,7 @@ export class HomeComponent implements OnInit {
     this.canManageCampaigns = this.userService.hasActivePaidAccount();
 
     if (!this.tasksLoadFinished || !this.newMembersLoadFinished || !this.newMembersLoadFinished) {
-      this.alertService.showLoading();
+      // this.alertService.showLoading();
     }
 
     this.taskService.upcomingTasks.subscribe(tasks => {
@@ -77,7 +77,7 @@ export class HomeComponent implements OnInit {
           this.tasksLoadFinished = true;
           this.hideSpinnerIfAllLoaded();
         }
-        });
+    });
 
     this.taskService.upcomingTaskError.subscribe(error => {
         if (error) {
@@ -89,9 +89,12 @@ export class HomeComponent implements OnInit {
 
 
     this.groupService.newMembersInMyGroups.subscribe(newMembersPage => {
+        this.hideSpinnerIfAllLoaded();
+        console.log('new members page: ', newMembersPage);
         if (newMembersPage) {
-          this.newMembersPage = newMembersPage;
-          this.newMembersListRendered = newMembersPage.content.slice(0, 20); // otherwise if a big entrance lately, mammoth render time
+          this.newMembersCount = newMembersPage.totalElements;
+          this.newMembersListRendered = !newMembersPage ? [] : newMembersPage.content.slice(0, 20); // otherwise if a big entrance lately, mammoth render time
+          console.log('members list rendered: ', this.newMembersListRendered);
           this.newMembersLoadFinished = true;
           this.hideSpinnerIfAllLoaded();
         }
@@ -297,14 +300,14 @@ export class HomeComponent implements OnInit {
     if(this.searchService.isSearchTermJoinCode(searchTerm) != null){
       this.loadGroupWithJoinCode(searchTerm);
     }else{
-      console.log("Searching globally ..................");
+      // console.log("Searching globally ..................");
       this.router.navigate(["/search",searchTerm]);
     }
   }
 
   loadGroupWithJoinCode(joinCode:string){
     this.searchService.findGroupWithJoinCode(this.searchService.isSearchTermJoinCode(joinCode)).subscribe(resp =>{
-        console.log("Group found............",resp);
+        // console.log("Group found............",resp);
         if(resp === null){
           this.proposedSearchTerm = joinCode;
           $("#join-code-not-found-modal").modal("show");
@@ -320,11 +323,11 @@ export class HomeComponent implements OnInit {
 
   joinGroup(groupUid:string, joinCode:string){
      this.searchService.joinWithCode(groupUid,joinCode).subscribe(resp => {
-       console.log("Response from server..............",resp);
+      //  console.log("Response from server..............",resp);
        $("#join-group-modal").modal("hide");
        this.router.navigate(["/group",groupUid]);//Viewing group joined.
      },error => {
-       console.log("Error joining group.........................",error);
+      //  console.log("Error joining group.........................",error);
      });
   }
 

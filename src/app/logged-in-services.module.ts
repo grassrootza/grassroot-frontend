@@ -4,7 +4,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {TranslateModule} from "@ngx-translate/core";
 import {RouterModule} from "@angular/router";
-import {ClipboardModule} from "ng2-clipboard";
 import {CreateMeetingComponent} from "./task/create-meeting/create-meeting.component";
 import {CreateVoteComponent} from "./task/create-vote/create-vote.component";
 import {PaginationComponent} from "./pagination/pagination.component";
@@ -30,8 +29,7 @@ import { BroadcastViewComponent } from './broadcast/broadcast-view/broadcast-vie
     FormsModule,
     ReactiveFormsModule,
     TranslateModule,
-    NgbModule,
-    ClipboardModule
+    NgbModule
   ],
   declarations: [
     GroupInfoComponent,

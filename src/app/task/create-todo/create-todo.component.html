@@ -123,8 +123,8 @@
             <div class="col-md-8 col-sm-12">
               <select class="form-control" id="todo-assigned-members" [formControl]="createTodoForm.controls['assignedMemberUids']"
                       name="name-select" multiple (change)="assignedMemberUidsPicked()">
-                <option *ngFor="let member of possibleAssignedMembers" [ngValue]="member.user.uid">
-                  {{member.user.displayName}}
+                <option *ngFor="let member of possibleAssignedMembers" [ngValue]="member.userUid">
+                  {{member.displayName}}
                 </option>
               </select>
             </div>
@@ -139,8 +139,8 @@
               <select class="form-control" id="todo-confirming-members"
                       [formControl]="createTodoForm.controls['confirmingMemberUids']"
                       name="name-select" multiple (change)="confirmingMemberUidsPicked()">
-                <option *ngFor="let member of possibleConfirmingMembers" [ngValue]="member.user.uid">
-                  {{member.user.displayName}}
+                <option *ngFor="let member of possibleConfirmingMembers" [ngValue]="member.userUid">
+                  {{member.displayName}}
                 </option>
               </select>
             </div>

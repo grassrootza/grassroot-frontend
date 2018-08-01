@@ -27,6 +27,7 @@ export class MemberListComponent implements OnInit {
   @Output() memberRemoved: EventEmitter<any>;
   @Output() shouldReloadList: EventEmitter<boolean>;
   @Output() sortUserList: EventEmitter<string[]>;
+  @Output() toggleSelectAll: EventEmitter<boolean>;
 
   @ViewChild('singleMemberTopicModal')
   private memberTopicManage: MemberTopicsManageComponent;
@@ -41,6 +42,7 @@ export class MemberListComponent implements OnInit {
 
   membersManage: Membership[] = [];
   membersManageUid: string[] = [];
+  
   currentTaskTeams: string[] = null;
 
   public editMemberForm: FormGroup;
@@ -56,6 +58,8 @@ export class MemberListComponent implements OnInit {
   public coreDetailsChanged: boolean = false;
   public withinGroupAttrsChanged: boolean = false;
 
+  private allSelected: boolean = false;
+
   private editComplete = new EventEmitter<boolean>();
 
   constructor(private groupService: GroupService,
@@ -64,6 +68,7 @@ export class MemberListComponent implements OnInit {
     this.memberRemoved = new EventEmitter<any>();
     this.shouldReloadList = new EventEmitter<boolean>();
     this.sortUserList = new EventEmitter<string[]>();
+    this.toggleSelectAll = new EventEmitter<boolean>();
     this.editMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("memberEmail", "phoneNUmber")});
     this.provinceKeys = Object.keys(this.province);
     this.roleKeys = Object.keys(GroupRole);
@@ -91,14 +96,19 @@ export class MemberListComponent implements OnInit {
     this.shouldReloadList.emit();
   }
 
+  trackByUid(index, member) {
+    return member.userUid;
+  }
+
   selectMember(member: Membership) {
     member.selected = !member.selected;
   }
 
-  public selectAllOnPage(event): void {
+  selectAll(event): void {
     let target = event.target || event.srcElement || event.currentTarget;
-    let shouldSelectAll = target.checked;
-    this.currentPage.content.forEach(m => m.selected = shouldSelectAll);
+    this.allSelected = target.checked;
+    this.currentPage.content.forEach(m => m.selected = this.allSelected);
+    this.toggleSelectAll.emit(this.allSelected);
   }
 
   showMemberRemoveModal(member: Membership){
@@ -107,7 +117,7 @@ export class MemberListComponent implements OnInit {
   }
 
   removeMember(memberUid: string){
-    let groupUid = this.currentPage.content[0].group.groupUid;
+    let groupUid = this.group.groupUid;
     let memberUids: string[] = [];
     memberUids.push(memberUid);
 
@@ -125,7 +135,7 @@ export class MemberListComponent implements OnInit {
 
   showAssignTopicToMemberModal(member: Membership){
     this.singleMemberManage = member;
-    this.membersManageUid = [member.user.uid];
+    this.membersManageUid = [member.userUid];
     this.membersManage = [member];
     this.memberTopicManage.setupTopicSelect(member.topics);
     $('#member-assign-topics').modal('show');
@@ -133,13 +143,13 @@ export class MemberListComponent implements OnInit {
 
   showEditModal(member: Membership){
     $('#member-edit-modal').modal('show');
-    this.editMemberForm.controls['displayName'].setValue(member.user.displayName);
+    this.editMemberForm.controls['displayName'].setValue(member.displayName);
     this.editMemberForm.controls['roleName'].setValue(member.roleName);
-    this.editMemberForm.controls['phoneNumber'].setValue(member.user.phoneNumber != null ? member.user.phoneNumber : "");
-    this.editMemberForm.controls['memberEmail'].setValue(member.user.email != null ? member.user.email : "");
-    this.editMemberForm.controls['province'].setValue(member.user.province);
+    this.editMemberForm.controls['phoneNumber'].setValue(member.phoneNumber != null ? member.phoneNumber : "");
+    this.editMemberForm.controls['memberEmail'].setValue(member.emailAddress != null ? member.emailAddress : "");
+    this.editMemberForm.controls['province'].setValue(member.province);
     this.editMemberForm.controls['affiliations'].setValue(member.affiliations.join(","));
-    this.editMemberForm.controls['taskTeams'].setValue(member.group.subGroups != null ? member.group.subGroups : "");
+    // this.editMemberForm.controls['taskTeams'].setValue(member.group.subGroups != null ? member.group.subGroups : "");
 
     if (!member.canEditDetails) {
       this.protectedEditControls.disable();
@@ -148,7 +158,7 @@ export class MemberListComponent implements OnInit {
     }
 
     this.singleMemberManage = member;
-    this.currentTaskTeams = this.group.subGroups.filter(g => g.hasMember(member.user.uid)).map(g => g.groupUid);
+    // this.currentTaskTeams = this.group.subGroups.filter(g => g.hasMember(member.user.uid)).map(g => g.groupUid);
   }
 
   roleChangedTrigger(){
@@ -226,11 +236,10 @@ export class MemberListComponent implements OnInit {
     this.groupService.shouldReloadPaginationPagesNumbers(true);
   }
 
-
   saveEditMember() {
     console.log("have core details changed?: ", this.coreDetailsChanged);
 
-    let memberUid = this.singleMemberManage.user.uid.toString();
+    let memberUid = this.singleMemberManage.userUid;
     let name = this.editMemberForm.controls['displayName'].value;
     let email = this.editMemberForm.controls['memberEmail'].value;
     let phone = this.editMemberForm.controls['phoneNumber'].value;

@@ -1,6 +1,5 @@
 import {isValidNumber} from "libphonenumber-js";
 import {AbstractControl, FormGroup, Validators} from "@angular/forms";
-import {isNumeric} from "rxjs/util/isNumeric";
 
 export const optionalPhoneValidator = (control: AbstractControl) => {
   let inputStr = control.value;
@@ -45,7 +44,7 @@ export const eitherEmailOrPhoneValid = (control: AbstractControl) => {
     return null;
   }
 
-  if (isNumeric(inputStr)) {
+  if (!isNaN(inputStr)) {
     return optionalPhoneValidator(control);
   } else {
     return optionalEmailValidator(control);

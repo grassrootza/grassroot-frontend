@@ -1,8 +1,9 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {environment} from "environments/environment";
 import {Task} from "../task/task.model";
+import { map } from "rxjs/operators";
 
 @Injectable()
 export class IncomingResponseService {
@@ -27,7 +28,7 @@ export class IncomingResponseService {
 
   fetchTaskMinimumDetails(userId: string, taskType: string, taskId: string, token: string): Observable<Task> {
     const fullUrl = this.fetchTaskMinDetailsUrl + "/" + taskType + "/" + taskId + "/" + userId + "/" + token;
-    return this.httpClient.get<Task>(fullUrl).map(Task.createInstanceFromData);
+    return this.httpClient.get<Task>(fullUrl).pipe(map(Task.createInstanceFromData));
   }
 
   respondToTask(userId: string, taskType: string, taskId: string, token: string, response: string): Observable<string> {

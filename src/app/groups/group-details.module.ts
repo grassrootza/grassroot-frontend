@@ -22,6 +22,9 @@ import {SharedModule} from "../shared.module";
 import {MemberTopicsManageComponent} from "./group-details/group-members/member-topics-manage/member-topics-manage.component";
 import {GroupCopyMembersComponent} from "./group-details/group-members/group-copy-members/group-copy-members.component";
 import {GroupInboundMessagesComponent} from "./group-details/group-inbound-messages/group-inbound-messages.component";
+import { ClipboardModule } from 'ngx-clipboard';
+import { GroupJoinMethodsComponent } from './group-details/group-join-methods/group-join-methods.component';
+import { GroupJoinWordRowComponent } from './group-details/group-join-methods/join-word-row.component';
 
 @NgModule({
   imports: [
@@ -29,6 +32,7 @@ import {GroupInboundMessagesComponent} from "./group-details/group-inbound-messa
     SharedModule,
     LoggedInServicesModule,
     NgbModule,
+    ClipboardModule,
     RouterModule.forChild(GROUP_DETAILS_ROUTES)
   ],
   declarations: [
@@ -48,7 +52,9 @@ import {GroupInboundMessagesComponent} from "./group-details/group-inbound-messa
     AddToTaskTeamComponent,
     MemberTopicsManageComponent,
     GroupCopyMembersComponent,
-    GroupInboundMessagesComponent
+    GroupInboundMessagesComponent,
+    GroupJoinMethodsComponent,
+    GroupJoinWordRowComponent
   ]
 })
 export class GroupDetailsModule {

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 // import { CarouselItemDirective } from './carousel-item.directive';
 import {animate, AnimationBuilder, AnimationFactory, AnimationPlayer, style} from '@angular/animations';
-import {Observable} from 'rxjs';
+import {interval} from 'rxjs';
 import {isPlatformBrowser} from "@angular/common";
 import {PublicLivewire} from "../../livewire/public-livewire.model";
 
@@ -117,7 +117,7 @@ export class CarouselComponent<T> implements AfterViewInit, OnChanges {
 
   private startAutoScroll() {
     console.log("starting auto scroll with interval: ", this.durationBetweenScrolls);
-    Observable.interval(this.durationBetweenScrolls).subscribe(() => {
+    interval(this.durationBetweenScrolls).subscribe(() => {
       if(this.scrollDirection === 'left')
         this.left();
       else

@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {environment} from "environments/environment";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
+import {map} from 'rxjs/operators'
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Task} from '../task/task.model';
 import {getGroupEntity, Group} from "../groups/model/group.model";
 import {TaskInfo} from "../task/task-info.model";
-import {GroupRef,GroupMembersRef} from "../groups/model/group-ref.model";
+import {GroupRef} from "../groups/model/group-ref.model";
 
 @Injectable()
 export class SearchService {
@@ -28,26 +29,26 @@ export class SearchService {
   loadUserTasksUsingSearchTerm(searchTerm:string):Observable<Task[]>{
     let params = new HttpParams().set("searchTerm", searchTerm);
     return this.httpClient.get<Task[]>(this.allUserTasksUrl, {params: params})
-      .map(resp => resp.map(task => Task.createInstanceFromData(task)));
+      .pipe(map(resp => resp.map(task => Task.createInstanceFromData(task))));
   }
 
   loadUserGroups(searchTerm:string):Observable<Group[]>{
     let fullUrl = this.allUserGroupsUrl;
     let params = new HttpParams().set("searchTerm", searchTerm);
-    return this.httpClient.get<Group[]>(fullUrl, {params: params}).map(resp => resp.map(grp => getGroupEntity(grp)));
+    return this.httpClient.get<Group[]>(fullUrl, {params: params}).pipe(map(resp => resp.map(grp => getGroupEntity(grp))));
   }
 
   loadPublicGroups(searchTerm:string):Observable<Group[]>{
     let fullUrl = this.userPublicGroupsUrl;
     let params = new HttpParams().set("searchTerm", searchTerm)
       .set('useLocation', true + "");
-    return this.httpClient.get<Group[]>(fullUrl,{params:params}).map(resp => resp.map(grp => getGroupEntity(grp)));
+    return this.httpClient.get<Group[]>(fullUrl,{params:params}).pipe(map(resp => resp.map(grp => getGroupEntity(grp))));
   }
 
   loadPublicMeetings(searchTerm:string):Observable<TaskInfo[]>{
     let params = new HttpParams().set("searchTerm", searchTerm);
     return this.httpClient.get<TaskInfo[]>(this.publicMeetingsUrl, {params: params})
-      .map(resp => resp.map(task => TaskInfo.createInstance(task)));
+      .pipe(map(resp => resp.map(task => TaskInfo.createInstance(task))));
   }
 
   askToJoinGroup(groupUid:string,word:string):Observable<any>{
@@ -72,7 +73,7 @@ export class SearchService {
   findGroupWithJoinCode(joinCode:string):Observable<any>{
     let params = new HttpParams().set("joinCode",joinCode);
     return this.httpClient.get<GroupRef>(this.checkIfGroupJoinCodeUrl,{params:params})
-        .map(resp => (resp) ? new GroupRef(resp.groupUid,resp.name,resp.memberCount) : resp);
+        .pipe(map(resp => (resp) ? new GroupRef(resp.groupUid,resp.name,resp.memberCount) : resp));
   }
 
   joinWithCode(groupUid:string,joinCode:string):Observable<any>{

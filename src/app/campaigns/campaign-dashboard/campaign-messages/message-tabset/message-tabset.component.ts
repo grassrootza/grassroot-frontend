@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Language} from "../../../../utils/language";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import "rxjs/add/operator/debounceTime"
+import { debounceTime } from 'rxjs/operators'
 import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 
 
@@ -49,7 +49,7 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
 
     this.currentTabId = "tab-" + this.blockIndex + "-" + this.languages[0].threeDigitCode;
 
-    this.formGroup.valueChanges.debounceTime(300)
+    this.formGroup.valueChanges.pipe(debounceTime(300))
       .subscribe(term => {
         this.emitMessages(term);
       });
