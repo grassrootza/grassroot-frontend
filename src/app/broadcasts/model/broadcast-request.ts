@@ -2,8 +2,8 @@ import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
 import {MembersFilter} from "../../groups/member-filter/filter.model";
 import {JoinDateCondition} from "../../groups/member-filter/joindatecondition.enum";
-import * as moment from 'moment';
-import {Moment} from 'moment';
+import * as moment from 'moment-mini-ts';
+import {Moment} from 'moment-mini-ts';
 
 export class BroadcastRequest {
 

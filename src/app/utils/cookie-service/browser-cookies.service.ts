@@ -2,7 +2,7 @@ import {Injectable, isDevMode} from "@angular/core";
 import {CookiesService, USER_LOGGED_IN_KEY} from "./cookies.service";
 import {CookieService} from "ngx-cookie";
 
-import * as moment from 'moment';
+import * as moment from 'moment-mini-ts';
 
 @Injectable()
 export class BrowserCookiesService extends CookiesService {

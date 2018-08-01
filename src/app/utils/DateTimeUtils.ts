@@ -1,6 +1,6 @@
 import {NgbDateStruct, NgbTimeStruct} from '@ng-bootstrap/ng-bootstrap';
-import * as moment from "moment";
-import {Moment} from "moment";
+import * as moment from 'moment-mini-ts';
+import {Moment} from 'moment-mini-ts';
 import {FormGroup} from "@angular/forms";
 
 export class DateTimeUtils {

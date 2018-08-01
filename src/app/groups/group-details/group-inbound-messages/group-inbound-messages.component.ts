@@ -4,7 +4,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {GroupService} from "../../group.service";
 import {GroupLogPage} from "../../model/group-log.model";
-import * as moment from 'moment';
+import * as moment from 'moment-mini-ts';
 import {DateTimeUtils} from "../../../utils/DateTimeUtils";
 import { saveAs } from 'file-saver';
 

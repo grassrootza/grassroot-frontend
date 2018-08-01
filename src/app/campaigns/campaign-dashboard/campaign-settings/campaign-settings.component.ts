@@ -18,7 +18,7 @@ import {CampaignMsgRequest, CampaignUpdateParams} from "../../campaign-create/ca
 import {AlertService} from "../../../utils/alert-service/alert.service";
 import {CurrencyPipe} from "@angular/common";
 import {ENGLISH, Language} from "../../../utils/language";
-import * as moment from "moment";
+import * as moment from 'moment-mini-ts';
 import {GroupService} from "../../../groups/group.service";
 import {GroupInfo} from "../../../groups/model/group-info.model";
 

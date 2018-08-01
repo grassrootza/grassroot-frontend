@@ -5,7 +5,7 @@ import {FormBuilder, FormGroup, FormControl} from "@angular/forms";
 import {CampaignService} from "../../campaign.service";
 import {AlertService} from "../../../utils/alert-service/alert.service";
 import {ActivatedRoute, Router} from "@angular/router";
-import * as moment from "moment";
+import * as moment from 'moment-mini-ts';
 import {CampaignInfo} from "../../model/campaign-info";
 
 declare var $: any;

@@ -7,8 +7,8 @@ import {GroupInfo} from "../groups/model/group-info.model";
 import {Membership, MembersPage} from "../groups/model/membership.model";
 import {DayTasks} from "./day-task.model";
 
-import * as moment from 'moment';
-import {Moment} from 'moment';
+import * as moment from 'moment-mini-ts';
+import {Moment} from 'moment-mini-ts';
 import {GroupMembersRef, GroupRef} from "../groups/model/group-ref.model";
 import {Router} from "@angular/router";
 import {CampaignInfo} from "../campaigns/model/campaign-info";

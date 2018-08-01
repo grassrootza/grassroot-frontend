@@ -7,7 +7,7 @@ import {Task} from "../../task/task.model";
 import {ActivatedRoute} from "@angular/router";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {TodoType} from "../../task/todo-type";
-import * as moment from "moment";
+import * as moment from 'moment-mini-ts';
 import {FormControl} from "@angular/forms";
 
 @Component({

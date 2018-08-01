@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CampaignService} from "../../campaign.service";
 import {ActivatedRoute, Params} from "@angular/router";
-import * as moment from 'moment';
+import * as moment from 'moment-mini-ts';
 import {Chart} from 'chart.js';
 import {CampaignInfo} from "../../model/campaign-info";
 import { TranslateService } from '@ngx-translate/core';

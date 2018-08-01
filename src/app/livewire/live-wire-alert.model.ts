@@ -1,6 +1,6 @@
 import { LiveWireAlertDestType } from "./live-wire-alert-dest-type.enum";
 import { LiveWireAlertType } from "./live-wire-alert-type.enum";
-import * as moment from 'moment';
+import * as moment from 'moment-mini-ts';
 
 export class LiveWireAlert {
   

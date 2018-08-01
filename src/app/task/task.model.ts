@@ -1,6 +1,6 @@
 import {TaskType} from "./task-type";
 import {TodoType} from "./todo-type";
-import * as moment from "moment";
+import * as moment from 'moment-mini-ts';
 
 export class Task {
 

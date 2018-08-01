@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AnalyticsService } from '../analytics.service';
 import {Chart} from 'chart.js';
-import * as moment from 'moment';
+import * as moment from 'moment-mini-ts';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({

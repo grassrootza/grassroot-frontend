@@ -16,7 +16,7 @@ import {BehaviorSubject, Observable} from "rxjs";
 import { map } from 'rxjs/operators';
 import {Router} from "@angular/router";
 import {Broadcast, BroadcastPage, transform} from './model/broadcast';
-import * as moment from 'moment';
+import * as moment from 'moment-mini-ts';
 import {LocalStorageService} from "../utils/local-storage.service";
 
 @Injectable()

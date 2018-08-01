@@ -1,5 +1,5 @@
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
-import * as moment from "moment";
+import * as moment from 'moment-mini-ts';
 import {CampaignMsgServerDTO, getCampaignMsg} from "../campaign-create/campaign-request";
 import {Language, MSG_LANGUAGES} from "../../utils/language";
 

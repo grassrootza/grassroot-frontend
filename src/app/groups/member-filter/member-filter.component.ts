@@ -7,7 +7,7 @@ import {GroupJoinMethod} from "../model/join-method";
 import {CampaignInfo} from "../../campaigns/model/campaign-info";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
-import * as moment from "moment";
+import * as moment from 'moment-mini-ts';
 import {BehaviorSubject} from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 import {AFRIKAANS, ENGLISH, Language, SOTHO, XHOSA, ZULU} from "../../utils/language";

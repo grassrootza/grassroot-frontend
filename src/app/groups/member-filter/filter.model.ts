@@ -1,4 +1,4 @@
-import {Moment} from "moment";
+import {Moment} from 'moment-mini-ts';
 import {JoinDateCondition} from "./joindatecondition.enum";
 
 export class MembersFilter {

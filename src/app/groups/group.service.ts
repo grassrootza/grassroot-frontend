@@ -19,7 +19,7 @@ import {MembersFilter} from "./member-filter/filter.model";
 import {PhoneNumberUtils} from "../utils/PhoneNumberUtils";
 import {FileImportResult} from "./group-details/group-members/group-members-import/file-import/file-import-result";
 import {GroupLog, GroupLogPage} from "./model/group-log.model";
-import {Moment} from "moment";
+import {Moment} from 'moment-mini-ts';
 import {STORE_KEYS, LocalStorageService} from "../utils/local-storage.service";
 import { UserExtraAccount } from '../user/account/account.user.model';
 

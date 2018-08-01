@@ -5,7 +5,7 @@ import {ActivatedRoute, Params} from "@angular/router";
 import {Task} from "../../../task/task.model";
 import {Chart} from 'chart.js';
 import {GroupService} from "../../group.service";
-import * as moment from 'moment';
+import * as moment from 'moment-mini-ts';
 import {UserProvince} from "../../../user/model/user-province.enum";
 import {GroupJoinMethod} from "../../model/join-method";
 import {ItemPercentage} from "./member-detail-percent.model";
