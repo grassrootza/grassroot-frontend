@@ -6,7 +6,7 @@ import {GroupInfo} from './model/group-info.model';
 import {getGroupEntity, Group} from './model/group.model';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {DateTimeUtils} from '../utils/DateTimeUtils';
-import {Membership, MembersPage} from './model/membership.model';
+import {Membership, MembersPage, transformMemberPage} from './model/membership.model';
 import {GroupMembersImportExcelSheetAnalysis} from './model/group-members-import-excel-sheet-analysis.model';
 import {getAddMemberInfo, GroupAddMemberInfo} from './model/group-add-member-info.model';
 import {GroupModifiedResponse} from './model/group-modified-response.model';
@@ -36,6 +36,7 @@ export class GroupService {
   groupMembersAddUrl = environment.backendAppUrl + "/api/group/modify/members/add";
   groupCreateUrl = environment.backendAppUrl + "/api/group/modify/create";
   groupPinUrl = environment.backendAppUrl + "/api/group/modify/pin";
+  groupCopyMembersUrl = environment.backendAppUrl + '/api/group/modify/members/copy';
   groupUnpinUrl = environment.backendAppUrl + "/api/group/modify/unpin";
   groupRemoveMembersUrl = environment.backendAppUrl + "/api/group/modify/members/remove";
   groupAddMembersToTaskTeamUrl = environment.backendAppUrl + "/api/group/modify/members/add/taskteam";
@@ -102,8 +103,8 @@ export class GroupService {
   private shouldReloadPaginationNumbers_: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public shouldReloadPaginationNumbers: Observable<boolean> = this.shouldReloadPaginationNumbers_.asObservable();
 
-  private newMembersInMyGroups_: BehaviorSubject<Membership[]> = new BehaviorSubject<Membership[]>(null);
-  public newMembersInMyGroups: Observable<Membership[]> = this.newMembersInMyGroups_.asObservable();
+  private newMembersInMyGroups_: BehaviorSubject<MembersPage> = new BehaviorSubject<MembersPage>(null);
+  public newMembersInMyGroups: Observable<MembersPage> = this.newMembersInMyGroups_.asObservable();
   private newMembersInMyGroupsError_: BehaviorSubject<any> = new BehaviorSubject<MembersPage>(null);
   public newMembersInMyGroupsError: Observable<any> = this.newMembersInMyGroupsError_.asObservable();
 
@@ -113,7 +114,7 @@ export class GroupService {
     if (cachedMyGroups) {
       let cachedMyGroupsData = JSON.parse(this.localStorageService.getItem(STORE_KEYS.MY_GROUPS_DATA_CACHE));
       // console.log("cachedMyGroupsData before", cachedMyGroupsData);
-      cachedMyGroupsData = cachedMyGroupsData.map(gr => GroupInfo.createInstance(gr));
+      cachedMyGroupsData = cachedMyGroupsData ? cachedMyGroupsData.map(gr => GroupInfo.createInstance(gr)) : [];
       // console.log("cachedMyGroupsData after", cachedMyGroupsData);
       this.groupInfoList_.next(cachedMyGroupsData);
     }
@@ -121,8 +122,10 @@ export class GroupService {
     let cachedNewMembers = this.localStorageService.getItem(STORE_KEYS.NEW_MEMBERS_DATA_CACHE);
     console.log('cached new members: ', cachedNewMembers);
     if (cachedNewMembers) {
-      let cachedNewMembersData = JSON.parse(this.localStorageService.getItem(STORE_KEYS.NEW_MEMBERS_DATA_CACHE));
-      cachedNewMembersData.content = cachedNewMembersData.map(membership => Membership.createInstance(membership));
+      let cachedNewMembersData = JSON.parse(cachedNewMembers);
+      console.log('cached new members data : ', cachedNewMembersData);
+      cachedNewMembersData.content = (cachedNewMembers.content && cachedNewMembers.content.map === 'function') ?
+        cachedNewMembersData.content.map(membership => Membership.createInstance(membership)) : [];
       this.newMembersInMyGroups_.next(cachedNewMembersData);
     }
   }
@@ -208,20 +211,7 @@ export class GroupService {
     }
 
     return this.httpClient.get<MembersPage>(this.groupMemberListUrl, {params: params})
-      .pipe(map(
-        result => {
-          let transformedContent = result.content.map(m => Membership.createInstance(m));
-          return new MembersPage(
-            result.number,
-            result.totalPages,
-            result.totalElements,
-            result.size,
-            result.first,
-            result.last,
-            transformedContent
-          )
-        }
-      ));
+      .pipe(map(transformMemberPage));
   }
 
   downloadGroupMembers(groupUid: string) {
@@ -243,9 +233,9 @@ export class GroupService {
       .set('size', pageSize.toString())
       .set('sort', 'joinTime,desc');
 
-    this.httpClient.get<Membership[]>(this.newMembersListUrl, {params: params})
-      .subscribe(
-        newMembersPage => {
+    this.httpClient.get<MembersPage>(this.newMembersListUrl, {params: params})
+      .pipe(map(transformMemberPage))
+      .subscribe(newMembersPage => {
           console.log('new members page from server: ', newMembersPage);
           this.newMembersInMyGroups_.next(newMembersPage);
           this.localStorageService.setItem(STORE_KEYS.NEW_MEMBERS_DATA_CACHE, JSON.stringify(newMembersPage));
@@ -288,19 +278,22 @@ export class GroupService {
 
   // onlyAdd: if set to false, the passed topics will overwrite the prior topics for the members; if set to true, the
   // members will retain their existing topics
-  assignTopicToMember(groupUid: string, membersUids: string[], topics: string[], onlyAdd: boolean = false): Observable<boolean> {
+  assignTopicToMember(groupUid: string, membersUids: string[], topics: string[], applyToAll: boolean = false, onlyAdd: boolean = false): Observable<boolean> {
     const fullUrl = this.groupAssignTopicsToMembersUrl + "/" + groupUid;
     const params = new HttpParams().set('memberUids', membersUids.join(','))
       .set('topics', topics.join(','))
+      .set('applyToAll', '' + applyToAll)
       .set('onlyAdd', '' + onlyAdd);
     console.log("posting topic assignment ...");
 
-    return this.httpClient.post(fullUrl, null, {params: params}).pipe(map(response => true));
+    return this.httpClient.post(fullUrl, null, {params: params}).pipe(map(() => true));
   }
 
-  removeTopicFromMembers(groupUid: string, memberUids: string[], topics: string[]): Observable<any> {
+  removeTopicFromMembers(groupUid: string, memberUids: string[], topics: string[], applyToAll: boolean = false): Observable<any> {
     const fullUrl = this.groupRemoveTopicsFromMembersUrl + "/" + groupUid;
-    const params = {'memberUids': memberUids, 'topics': topics};
+    const params = new HttpParams().set('memberUids', memberUids.join(','))
+      .set('applyToAll', '' + applyToAll)    
+      .set('topics', topics.join(','));
     return this.httpClient.post(fullUrl, null, {params: params});
   }
 
@@ -331,6 +324,14 @@ export class GroupService {
     const params = new HttpParams().set("joinMethod", joinMethod);
     membersInfoToAdd.forEach(member => member.phoneNumber = PhoneNumberUtils.convertIfPhone(member.phoneNumber));
     return this.httpClient.post<GroupModifiedResponse>(fullUrl, membersInfoToAdd, { params: params });
+  }
+
+  copyMembersFromGroupToOther(fromGroupUid: string, toGroupUid: string, keepTopics: boolean, addTopic: string): Observable<any> {
+    const fullUrl = this.groupCopyMembersUrl + '/' + fromGroupUid;
+    let params = new HttpParams().set('toGroupUid', toGroupUid).set('keepTopics', '' + keepTopics);
+    if (addTopic)
+      params = params.set('addTopic', addTopic);
+    return this.httpClient.post(fullUrl, null, {params: params});
   }
 
   fetchActiveJoinWords(): Observable<string[]> {
@@ -540,12 +541,14 @@ export class GroupService {
 
   }
 
-  filterGroupMembers(groupUid: string,
-                     filter: MembersFilter): Observable<Membership[]> {
+  filterGroupMembers(groupUid: string, filter: MembersFilter, maxSize?: number): Observable<MembersPage> {
     // console.log("filtering group members ...");
 
+    let maxEntities = maxSize ? maxSize : 100;
+
     let params = new HttpParams()
-      .set("groupUid", groupUid);
+      .set('groupUid', groupUid)
+      .set('maxEntities', '' + maxEntities);
 
     if (filter.provinces != null) {
       params = params.set("provinces", filter.provinces.join(","));
@@ -592,10 +595,8 @@ export class GroupService {
       params = params.set("languages", filter.language.join(","));
     }
 
-    let cbParams = params.set("cb", "" + (new Date()));
-
-    return this.httpClient.get<Membership[]>(this.groupFilterMembersUrl, {params: params})
-      .pipe(map(resp => resp.map(m => Membership.createInstance(m))));
+    return this.httpClient.get<MembersPage>(this.groupFilterMembersUrl, {params: params})
+      .pipe(map(transformMemberPage));
   }
 
   createTaskTeam(parentUid: string, taskTeamName: string, memberUids: string[]):Observable<any>{

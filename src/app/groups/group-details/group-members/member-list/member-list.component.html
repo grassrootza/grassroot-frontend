@@ -1,7 +1,7 @@
 <div class="container group-info-header d-none d-md-block">
   <div class="row">
     <div class="col-1" *ngIf="!isTaskTeam">
-      <input type="checkbox" class="checkbox-shape" (click)="selectAllOnPage($event)"/>
+      <input type="checkbox" class="checkbox-shape" (click)="selectAll($event)"/>
     </div>
 
     <div class="col-2" (click)="sortData('user.displayName')"> {{'group.allMembers.table.name' | translate}}

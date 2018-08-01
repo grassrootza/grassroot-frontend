@@ -92,3 +92,16 @@ export class MembersPage {
 
 }
 
+export const transformMemberPage = (result: MembersPage): MembersPage => {
+  let transformedContent = result.content.map(m => Membership.createInstance(m));
+  return new MembersPage(
+    result.number,
+    result.totalPages,
+    result.totalElements,
+    result.size,
+    result.first,
+    result.last,
+    transformedContent
+  )
+}
+

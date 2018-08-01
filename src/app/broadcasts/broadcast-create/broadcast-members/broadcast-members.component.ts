@@ -142,10 +142,10 @@ export class BroadcastMembersComponent implements OnInit {
     this.memberFilter = filter;
     this.groupService.filterGroupMembers(this.group.groupUid, filter)
       .subscribe(members => {
-          let filteredMembers = filter.role == 'ANY' ? members : members.filter(m => m.roleName == filter.role);
+          let filteredMembers = filter.role == 'ANY' ? members.content : members.content.filter(m => m.roleName == filter.role);
           this.recalculateTotals(filteredMembers);
           if (filteredMembers && filteredMembers.length > 0 && filteredMembers.length < 10) {
-            this.filteredMemberNames = members.map(member => member.displayName);
+            this.filteredMemberNames = members.content.map(member => member.displayName);
           } else {
             this.filteredMemberNames = [];
           }

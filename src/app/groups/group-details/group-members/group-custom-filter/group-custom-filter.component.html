@@ -18,13 +18,12 @@
         </div>
       </div>
 
-
       <hr/>
 
       <div *ngIf="currentPage" class="row">
 
         <div class="col-9">
-          <h3 class="float-left">Matching members <span class="group-members-count">// {{filteredMembers.length}}</span></h3>
+          <h3 class="float-left">Matching members <span class="group-members-count">// {{currentPage.totalElements}}</span></h3>
           <img src="assets/small-spinner-bars.gif" *ngIf="loading"/>
         </div>
 

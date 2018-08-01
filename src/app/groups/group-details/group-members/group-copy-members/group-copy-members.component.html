@@ -20,7 +20,7 @@
           <div class="container group-info-row" *ngFor="let member of members">
             <div class="row flex flex-wrap">
               <div class="col-3">
-                {{member.user.displayName}}
+                {{member.displayName}}
               </div>
               <div class="col-3">
                 {{'enum.GroupRole.' + member.roleName | translate}}
@@ -29,7 +29,7 @@
                 {{member.nationalNumber()}}
               </div>
               <div class="col-3">
-                {{member.user.email}}
+                {{member.emailAddress}}
               </div>
             </div>
           </div>
@@ -41,7 +41,7 @@
             <div class="col-md-6 col-sm-12">
               <h4 *ngIf="members.length <= 5" [translate]="'group.allMembers.copyMembers.copyToGroupLabel'">Copy to group:</h4>
               <h4 *ngIf="members.length > 5" [translate]="'group.allMembers.copyMembers.copyCountMembers'"
-                  [translateParams]="{count: members.length}">Copy X members to group:</h4>
+                  [translateParams]="{count: applyToAllMembers ? 'all' : members.length}">Copy X members to group:</h4>
             </div>
           </div>
 

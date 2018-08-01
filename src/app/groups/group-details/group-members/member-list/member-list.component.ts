@@ -27,6 +27,7 @@ export class MemberListComponent implements OnInit {
   @Output() memberRemoved: EventEmitter<any>;
   @Output() shouldReloadList: EventEmitter<boolean>;
   @Output() sortUserList: EventEmitter<string[]>;
+  @Output() toggleSelectAll: EventEmitter<boolean>;
 
   @ViewChild('singleMemberTopicModal')
   private memberTopicManage: MemberTopicsManageComponent;
@@ -57,6 +58,8 @@ export class MemberListComponent implements OnInit {
   public coreDetailsChanged: boolean = false;
   public withinGroupAttrsChanged: boolean = false;
 
+  private allSelected: boolean = false;
+
   private editComplete = new EventEmitter<boolean>();
 
   constructor(private groupService: GroupService,
@@ -65,6 +68,7 @@ export class MemberListComponent implements OnInit {
     this.memberRemoved = new EventEmitter<any>();
     this.shouldReloadList = new EventEmitter<boolean>();
     this.sortUserList = new EventEmitter<string[]>();
+    this.toggleSelectAll = new EventEmitter<boolean>();
     this.editMemberForm = fb.group(new GroupAddMemberInfo(), { validator: emailOrPhoneEntered("memberEmail", "phoneNUmber")});
     this.provinceKeys = Object.keys(this.province);
     this.roleKeys = Object.keys(GroupRole);
@@ -100,10 +104,11 @@ export class MemberListComponent implements OnInit {
     member.selected = !member.selected;
   }
 
-  public selectAllOnPage(event): void {
+  selectAll(event): void {
     let target = event.target || event.srcElement || event.currentTarget;
-    let shouldSelectAll = target.checked;
-    this.currentPage.content.forEach(m => m.selected = shouldSelectAll);
+    this.allSelected = target.checked;
+    this.currentPage.content.forEach(m => m.selected = this.allSelected);
+    this.toggleSelectAll.emit(this.allSelected);
   }
 
   showMemberRemoveModal(member: Membership){

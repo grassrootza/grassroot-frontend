@@ -17,6 +17,7 @@ export class MemberTopicsManageComponent implements OnInit{
   @Input() selectId: string = "topics-multi-select-member";
 
   @Input() group: Group = null;
+  @Input() applyToAllMembers: boolean = false;
   @Input() memberUids: string[] = null;
 
   priorTopics: string[] = [];
@@ -54,9 +55,10 @@ export class MemberTopicsManageComponent implements OnInit{
 
   saveAssignTopicToMember() {
     let onlyAddTopics: boolean = this.memberUids.length > 1; // if it's multiple members (so don't overwrite)
-    console.log('Assigning members to topics ...');
+    console.log('Assigning members to topics ... apply to all ? ', this.applyToAllMembers);
     this.alertService.showLoading();
-    this.groupService.assignTopicToMember(this.group.groupUid, this.memberUids, this.modalSelectedTopics, onlyAddTopics).subscribe(response => {
+    this.groupService.assignTopicToMember(this.group.groupUid, this.memberUids, this.modalSelectedTopics, this.applyToAllMembers, onlyAddTopics)
+    .subscribe(() => {
       this.alertService.hideLoading();
       $('#' + this.modalId).modal('hide');
       this.alertService.alert("group.allMembers.assignTopic.assigned");
@@ -70,7 +72,7 @@ export class MemberTopicsManageComponent implements OnInit{
     let removedTopics = this.priorTopics.filter(topic => this.modalSelectedTopics.indexOf(topic) == -1);
     if (onlyAddTopics && removedTopics && removedTopics.length > 0) {
       console.log("change in topics on bulk modal, remove = ", removedTopics);
-      this.groupService.removeTopicFromMembers(this.group.groupUid, this.memberUids, removedTopics).subscribe(response => {
+      this.groupService.removeTopicFromMembers(this.group.groupUid, this.memberUids, removedTopics, this.applyToAllMembers).subscribe(response => {
         console.log("removal result: ", response);
       }, error => {
         console.log("error on removal: ", error);

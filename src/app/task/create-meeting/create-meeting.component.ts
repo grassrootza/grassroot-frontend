@@ -7,9 +7,10 @@ import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
 import {MediaService} from "../../media/media.service";
 import {MediaFunction} from "../../media/media-function.enum";
 import {AlertService} from "../../utils/alert-service/alert.service";
-import { GroupService } from '../../groups/group.service';
 import { TaskPreview } from '../task-preview.model';
 import { TaskType } from '../task-type';
+import { GroupService } from '../../groups/group.service';
+import { environment } from 'environments/environment.prod';
 
 declare var $: any;
 
@@ -21,10 +22,17 @@ declare var $: any;
 export class CreateMeetingComponent implements OnInit {
 
   public createMeetingForm: FormGroup;
+
   @Input() groupUid: string = "";
   @Input() preAssignedMemberUids: string[] = [];
+  @Input() preAssignedMemberNames: string[] = [];
+
   @Output() meetingSaved: EventEmitter<boolean>;
+  
+  public memberCount: number;
+  public showMemberAssignment: boolean = false;
   public membersList: Membership[] = [];
+  private assignedMemberUids: string[] = [];
 
   public confirmingSend: boolean = false;
   public confirmParams;
@@ -35,7 +43,7 @@ export class CreateMeetingComponent implements OnInit {
 
   public isGroupPaidFor:boolean;
 
-  public meetingImportance:string = "ORDINARY";
+  public meetingImportance:string = 'ORDINARY';
 
   constructor( private taskService: TaskService,
                private formBuilder: FormBuilder,
@@ -63,25 +71,49 @@ export class CreateMeetingComponent implements OnInit {
     $('#create-meeting-modal').on('shown.bs.modal', function () {
       console.log('Create meeting dialog shown for group: ', this.groupUid);
       if (this.groupUid != "" && this.groupUid != undefined) {
-        console.log('fetching group members ...');
-        this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
-          this.membersList = members.content;
-          console.log('member list: ', this.membersList);
-          this.setAssignedMembers();
-        });
-
         // since it will be down by definition (if in this modal)
         this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(resp => {
           this.isGroupPaidFor = resp.paidFor;
+          console.log('fetching group members ...');
+          this.memberCount = resp.memberCount;
+          this.setUpMemberPicker();
         });
       }
     }.bind(this))
+  }
+
+  setUpMemberPicker() {
+    if (this.memberCount < environment.memberFetchCutOff) {
+      console.log('member count low enough, showing assigned members');
+      this.fetchAssignedMembers();
+    } else {
+      console.log(`${this.memberCount} greater than ${environment.memberFetchCutOff} so not showing member assign`);
+      this.showMemberAssignment = false;
+    }
+  }
+
+  fetchAssignedMembers() {
+    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
+      this.membersList = members.content;
+      this.showMemberAssignment = true;
+      console.log('member list: ', this.membersList);
+      this.setAssignedMembers();
+    });
   }
 
   setAssignedMembers() {
     if (this.preAssignedMemberUids) {
       this.createMeetingForm.get('assignedMemberUids').setValue(this.preAssignedMemberUids, { onlySelf: true })
     }
+  }
+
+  toggleAssignedMembers() {
+    if (this.showMemberAssignment) {
+      this.showMemberAssignment = false;
+    } else {
+      this.fetchAssignedMembers();
+    }
+    return false;
   }
 
   next() {
@@ -95,12 +127,25 @@ export class CreateMeetingComponent implements OnInit {
   }
 
   confirmMeeting() {
-    let membersAssigned = this.createMeetingForm.get("assignedMemberUids").value && this.createMeetingForm.get("assignedMemberUids").value.length > 0;
-    let assignedMemberUids = membersAssigned ? this.createMeetingForm.get("assignedMemberUids").value : [];
-    let assignedMemberNames = membersAssigned ? this.membersList.filter(member => assignedMemberUids.indexOf(member.userUid) != -1)
-      .map(member => member.displayName) : this.membersList.map(member => member.displayName);
+    const membersSelected = this.createMeetingForm.get("assignedMemberUids").value && this.createMeetingForm.get("assignedMemberUids").value.length > 0;
+    const membersAssigned = membersSelected || this.preAssignedMemberUids.length > 0; // since may not show box but may have prior assigned
+    
+    this.assignedMemberUids = [];
+    let assignedMemberNames = [];
+    
+    if (this.memberCount > environment.memberFetchCutOff) {
+      // means members selected via a bulk manage etc but not selected here, so, retain
+      this.assignedMemberUids = this.preAssignedMemberUids;
+      assignedMemberNames = this.preAssignedMemberNames;
+    } else if (membersSelected) {
+      this.assignedMemberUids = this.createMeetingForm.get("assignedMemberUids").value;
+      assignedMemberNames = this.membersList.filter(member => this.assignedMemberUids.indexOf(member.userUid) != -1)
+        .map(member => member.displayName);
+    } else {
+      assignedMemberNames = this.membersList.map(member => member.displayName)
+    }
 
-    let nameText = assignedMemberNames.length > 10 ?
+    let nameText = !membersAssigned ? ' the whole group' : assignedMemberNames.length > 10 ?
       assignedMemberNames.slice(0, 10).join(", ") + " and " + (assignedMemberNames.length - 10) + " others" : assignedMemberNames.join(", ");
 
     let time = DateTimeUtils.momentFromNgbStruct(this.createMeetingForm.get('date').value,
@@ -110,7 +155,8 @@ export class CreateMeetingComponent implements OnInit {
       subject: this.createMeetingForm.get("subject").value,
       location: this.createMeetingForm.get("location").value,
       time: time,
-      assignedNumber: membersAssigned ? assignedMemberUids.length : this.membersList.length,
+      membersAssigned: membersAssigned,
+      assignedNumber: membersAssigned ? this.assignedMemberUids.length : this.memberCount,
       memberNames: nameText
     };
 
@@ -140,15 +186,9 @@ export class CreateMeetingComponent implements OnInit {
 
     let publicMeeting: boolean = this.createMeetingForm.get("publicMeeting").value;
 
-    let assignedMemberUids: string[] = [];
-    if( this.createMeetingForm.get("assignedMemberUids").value != null){
-      for(let i=0; i < this.createMeetingForm.get("assignedMemberUids").value.length; i++ ){
-        assignedMemberUids.push(this.createMeetingForm.get("assignedMemberUids").value[i]);
-      }
-    }
-
     this.taskService.createMeeting(parentType, this.groupUid, meetingSubject, meetingLocation, dateTimeEpochMillis,
-      publicMeeting, meetingDesc, this.imageKey, assignedMemberUids,this.isGroupPaidFor ? this.meetingImportance : null).subscribe(task => {
+      publicMeeting, meetingDesc, this.imageKey, this.assignedMemberUids, this.isGroupPaidFor ? this.meetingImportance : null)
+        .subscribe(task => {
           console.log("Meeting successfully created, groupUid: " + this.groupUid + ", taskuid:" + task.taskUid);
           this.initCreateMeetingForm();
           this.confirmingSend = false;

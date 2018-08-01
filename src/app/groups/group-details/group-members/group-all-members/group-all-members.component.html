@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <app-member-list [currentPage]="currentPage" [group]="group"  (memberRemoved)="memberRemoved()"
+    <app-member-list [currentPage]="currentPage" [group]="group"  (memberRemoved)="memberRemoved()"  (toggleSelectAll)="selectAllMembers($event)"
                      (shouldReloadList)="goToPage(0, [])" (sortUserList)="goToPage(0, $event)"></app-member-list>
 
   </div>
@@ -63,16 +63,16 @@
           <div class="container group-info-row">
             <div class="row flex flex-wrap">
               <div class="col-3">
-                {{member.user.displayName}}
+                {{member.displayName}}
               </div>
               <div class="col-3" [translate]="'enum.GroupRole.' + member.roleName">
                 Group role
               </div>
               <div class="col-3">
-                {{member.user.phoneNumber}}
+                {{member.phoneNumber}}
               </div>
               <div class="col-3">
-                {{member.user.email}}
+                {{member.emailAddress}}
               </div>
             </div>
           </div>
@@ -118,14 +118,15 @@
                       (membersAdded)="goToFirstPage()"></app-add-to-task-team>
 
 <app-member-topics-manage #bulkMemberManageModal *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
-                          [group]="group" [memberUids]="bulkMemberUids" [modalId]="'bulk-member-assign-topics'" [selectId]="'bulk-topics-multi-select'"
+                          [group]="group" [memberUids]="bulkMemberUids" [applyToAllMembers]="allMembersSelected" 
+                          [modalId]="'bulk-member-assign-topics'" [selectId]="'bulk-topics-multi-select'"
                           (topicsAssigned)="goToFirstPage()"></app-member-topics-manage>
 
 <app-group-copy-members *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
-                        [groups]="groupsToCopyMembersTo"  [members]="bulkManageMembers" [modalId]="'bulk-copy-members-to-group'"
-                        (membersAdded)="goToFirstPage()"></app-group-copy-members>
+                        [groups]="groupsToCopyMembersTo"  [members]="bulkManageMembers" [applyToAllMembers]="allMembersSelected" [fromGroupUid]="group.groupUid"
+                        [modalId]="'bulk-copy-members-to-group'" (membersAdded)="goToFirstPage()"></app-group-copy-members>
 
-<app-create-meeting [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids"
+<app-create-meeting [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids" [preAssignedMemberNames]="bulkMemberNames"
                     (meetingSaved)="taskCreated($event, 'MEETING')"></app-create-meeting>
 
 <app-create-vote [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids"

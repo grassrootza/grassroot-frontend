@@ -599,7 +599,8 @@
         "description-place": "Longer description of meeting (optional, will not be included in SMS, will be visible to web, email and Android users)",
         "assignedMembers": "Assigned members (optional)",
         "confirmTitle": "Confirm meeting",
-        "confirmPara": "You are about to call a meeting about {{ subject }} at {{ location }}, on {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}"
+        "confirmParaAssigned": "You are about to call a meeting about {{ subject }} at {{ location }}, on {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}",
+        "confirmParaAll": "You are about to call a meeting about {{ subject }} at {{ location }}, on {{ time }}. The whole group ({{ assignedNumber }} members) will be notified."
       },
       "voteModal":{
         "title": "Create new vote",

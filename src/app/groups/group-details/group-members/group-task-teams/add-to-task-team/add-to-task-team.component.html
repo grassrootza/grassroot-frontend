@@ -19,7 +19,7 @@
         <div class="container group-info-row" *ngFor="let member of members">
           <div class="row flex flex-wrap">
             <div class="col-3">
-              {{member.user.displayName}}
+              {{member.displayName}}
             </div>
             <div class="col-3">
               {{'enum.GroupRole.' + member.roleName | translate}}
@@ -28,7 +28,7 @@
               {{member.nationalNumber()}}
             </div>
             <div class="col-3">
-              {{member.user.email}}
+              {{member.emailAddress}}
             </div>
           </div>
         </div>

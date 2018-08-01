@@ -102,7 +102,7 @@
                 </div>
                 <div class="col-8">
                   <h4>{{member.displayName}}</h4>
-                  <!-- <div><span>Group: </span> {{member.group.name}}</div> -->
+                  <div><span>Group: </span> {{member.group.name}}</div>
                   <div>{{ member.joinMethodKey() | translate:member }}</div>
                 </div>
               </div>
@@ -258,10 +258,8 @@
   </div>
 </div>
 
-
 <app-create-group (onGroupCreated)="groupCreated($event)"
                   (onGroupCreationFailed)="groupCreationFailed($event)"></app-create-group>
-
 
 <app-create-meeting [groupUid]="createTaskGroupUid"
                     (meetingSaved)="meetingSaved($event)"></app-create-meeting>

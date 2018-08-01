@@ -27,6 +27,7 @@ export class GroupCustomFilterComponent implements OnInit {
   
   filteredMembers: Membership[] = [];
   filteredMemberUids: string[] = [];
+  filteredMemberNames: string[] = [];
 
   membersToManage: Membership[] = [];
 
@@ -51,7 +52,6 @@ export class GroupCustomFilterComponent implements OnInit {
               private route: ActivatedRoute,
               private alertService:AlertService) {
   }
-
 
   ngOnInit() {
     this.alertService.showLoading();
@@ -89,10 +89,11 @@ export class GroupCustomFilterComponent implements OnInit {
       this.loading = true;
       this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(
         members => {
-          // console.log("got members back, refreshing ... members = ", members);
+          console.log('resulting member page: ', members);
           this.loading = false;
           this.currentFilter = copyFilter(filter); // otherwise change detection fails, because child is actually modifying same thing
-          this.setFilteredMembers(members);
+          this.currentPage = members;
+          this.setFilteredMembers(members.content);
         },
         error => {
           this.loading = false;
@@ -110,9 +111,7 @@ export class GroupCustomFilterComponent implements OnInit {
     this.filteredMembers = members;
     if (this.currentFilter.role !== 'ANY') {
       members = members.filter(member => member.roleName == this.currentFilter.role);
-      // console.log(`filtered by ${this.currentFilter.role}, number members: ${this.filteredMembers.length}`);
     }
-    this.currentPage = new MembersPage(0, 1, members.length, members.length, true, true, members);
   }
 
   setMembersToManage() {
@@ -121,17 +120,17 @@ export class GroupCustomFilterComponent implements OnInit {
     } else {
       this.membersToManage = this.filteredMembers;
     }
-}
-
-setMembersToManageLite() {
-  console.log('setting up uids and names');
-  if (this.currentPage.getSelectedMembers().length > 0) {
-    this.topicMemberUids = this.currentPage.getSelectedMembers().map(member => member.userUid);
-  } else {
-    this.topicMemberUids = this.filteredMembers.map(member => member.userUid);
   }
-  console.log('alright, set up: ', this.topicMemberUids);
-}
+
+  setMembersToManageLite() {
+    console.log('setting up uids and names');
+    if (this.currentPage.getSelectedMembers().length > 0) {
+      this.topicMemberUids = this.currentPage.getSelectedMembers().map(member => member.userUid);
+    } else {
+      this.topicMemberUids = this.filteredMembers.map(member => member.userUid);
+    }
+    console.log('alright, set up: ', this.topicMemberUids);
+  }
 
   addFilteredMembersToTaskTeam() {
     this.setMembersToManage();
@@ -171,7 +170,9 @@ setMembersToManageLite() {
   }
 
   showCreateTaskModal(taskType: string) {
-    this.filteredMemberUids = this.filteredMembers.map(member => member.userUid);
+    this.setMembersToManage();
+    this.filteredMemberUids = this.membersToManage.map(member => member.userUid);
+    this.filteredMemberNames = this.membersToManage.map(member => member.displayName);
     $("#" + getCreateModalId(taskType)).modal('show');
   }
 
