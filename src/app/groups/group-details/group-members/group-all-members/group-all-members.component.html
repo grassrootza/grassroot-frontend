@@ -129,8 +129,8 @@
 <app-create-meeting [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids" [preAssignedMemberNames]="bulkMemberNames"
                     (meetingSaved)="taskCreated($event, 'MEETING')"></app-create-meeting>
 
-<app-create-vote [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids"
+<app-create-vote [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids" [preAssignedMemberNames]="bulkMemberNames"
                     (voteSaved)="taskCreated($event, 'VOTE')"></app-create-vote>
 
-<app-create-todo [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids"
+<app-create-todo [groupUid]="group?.groupUid" [preAssignedMemberUids]="bulkMemberUids" [preAssignedMemberUids]="bulkMemberNames"
                  (todoSaved)="taskCreated($event, 'TODO')"></app-create-todo>

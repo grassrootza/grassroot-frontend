@@ -615,7 +615,8 @@
         "addVoteOption": "Add vote option",
         "assignedMembers": "Assigned members (optional)",
         "confirmTitle": "Confirm vote",
-        "confirmPara": "You are about to call a vote on {{ subject }}, closing at {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}"
+        "confirmParaAssigned": "You are about to call a vote on {{ subject }}, closing at {{ time }}. The following {{ assignedNumber }} people will be invited: {{ memberNames }}",
+        "confirmParaAll": "You are about to call a vote on {{ subject }}, closing at {{ time }}. The whole group ({{ assignedNumber }} members) will be polled."
       },
       "todoModal":{
         "title": "Create new action",
@@ -623,7 +624,8 @@
         "todoType": "What must members do?",
         "dueDateTime": "Deadline",
         "confirmTitle": "Confirm action item",
-        "confirmPara": "You are about to create an action item, with the title {{ subject }}, due by {{ time }}. The action item is assigned to the following {{ assignedNumber }} members: {{ memberNames }}",
+        "confirmParaAssigned": "You are about to create an action item, with the title {{ subject }}, due by {{ time }}. The action item is assigned to the following {{ assignedNumber }} members: {{ memberNames }}",
+        "confirmParaAll": "You are about to create an action item, with the title {{ subject }}, due by {{ time }}. The action item is assigned to the whole group ({{ assignedNumber }} members)",
         "information": {
           "label": "Label for response information:",
           "placeholder": "How will you label the response e.g. ID"

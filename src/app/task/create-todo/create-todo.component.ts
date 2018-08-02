@@ -9,6 +9,7 @@ import {AlertService} from "../../utils/alert-service/alert.service";
 import {MediaService} from "../../media/media.service";
 import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
 import { TaskPreview } from '../task-preview.model';
+import { environment } from 'environments/environment';
 
 declare var $: any;
 
@@ -31,12 +32,19 @@ export class CreateTodoComponent implements OnInit {
   public createTodoForm: FormGroup;
   // private membersPage: MembersPage = new MembersPage(0, 0, 0, 0, true, false, []);
 
-  private groupMembers: Membership[] = [];
+  public memberCount: number;
+  public showMemberAssignment: boolean = false;
   public possibleAssignedMembers: Membership[] = [];
   public possibleConfirmingMembers: Membership[] = [];
 
+  private groupMembers: Membership[] = [];
+  private assignedMemberUids: string[];
+  private confirmingMemberUids: string[];
+
   @Input() groupUid: string;
   @Input() preAssignedMemberUids: string[] = [];
+  @Input() preAssignedMemberNames: string[] = [];
+
   @Output() todoSaved: EventEmitter<boolean>;
 
   public imageName;
@@ -58,19 +66,7 @@ export class CreateTodoComponent implements OnInit {
   ngOnInit() {
     $('#create-todo-modal').on('shown.bs.modal', function () {
       this.initCreateTodoForm();
-      this.fetchGroupMembers();
     }.bind(this));
-  }
-
-  fetchGroupMembers(){
-    if(this.groupUid != "" && this.groupUid != undefined) {
-      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members =>{
-        this.groupMembers = members.content;
-        this.possibleAssignedMembers = this.groupMembers;
-        this.possibleConfirmingMembers = this.groupMembers;
-        this.setAssignedMembers();
-      });
-    }
   }
 
   initCreateTodoForm(){
@@ -84,12 +80,44 @@ export class CreateTodoComponent implements OnInit {
 
     let selectedTodoType = this.createTodoForm.controls['todoType'].value;
     this.setControlsOnType(selectedTodoType);
+
+    if(this.groupUid != "" && this.groupUid != undefined) {
+      console.log('fetching group details ... ');;
+      this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(group => {
+        console.log('got group details, member count: ', group.memberCount);
+        this.memberCount = group.memberCount;
+        this.fetchGroupMembers();
+      })
+    }
+  }
+
+  fetchGroupMembers(){
+    if (this.memberCount < environment.memberFetchCutOff) {
+      this.showMemberAssignment = true;
+      this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members =>{
+        this.groupMembers = members.content;
+        this.possibleAssignedMembers = this.groupMembers;
+        this.possibleConfirmingMembers = this.groupMembers;
+        this.setAssignedMembers();
+      });
+    } else {
+      this.showMemberAssignment = false;
+    }
   }
 
   setAssignedMembers() {
     if (this.preAssignedMemberUids) {
       this.createTodoForm.get('assignedMemberUids').setValue(this.preAssignedMemberUids, { onlySelf: true })
     }
+  }
+
+  toggleAssignedMembers() {
+    if (this.showMemberAssignment) {
+      this.showMemberAssignment = false;
+    } else {
+      this.fetchGroupMembers();
+    }
+    return false;
   }
 
   initInformationRequiredTodo(){
@@ -170,13 +198,25 @@ export class CreateTodoComponent implements OnInit {
   }
 
   confirmTodo() {
+    const membersSelected = this.createTodoForm.get("assignedMemberUids").value && this.createTodoForm.get("assignedMemberUids").value.length > 0;
+    const membersAssigned = membersSelected || this.preAssignedMemberUids.length > 0;
+    
+    this.assignedMemberUids = [];
+    let assignedMemberNames = [];
+    
+    if (this.memberCount > environment.memberFetchCutOff) {
+      // means members selected via a bulk manage etc but not selected here, so, retain
+      this.assignedMemberUids = this.preAssignedMemberUids;
+      assignedMemberNames = this.preAssignedMemberNames;
+    } else if (membersSelected) {
+      this.assignedMemberUids = this.createTodoForm.get("assignedMemberUids").value;
+      assignedMemberNames = this.groupMembers.filter(member => this.assignedMemberUids.indexOf(member.userUid) != -1)
+        .map(member => member.displayName);
+    } else {
+      assignedMemberNames = this.groupMembers.map(member => member.displayName)
+    }
 
-    let membersAssigned = this.createTodoForm.get("assignedMemberUids").value && this.createTodoForm.get("assignedMemberUids").value.length > 0;
-    let assignedMemberUids = membersAssigned ? this.createTodoForm.get("assignedMemberUids").value : [];
-    let assignedMemberNames = membersAssigned ? this.groupMembers.filter(member => assignedMemberUids.indexOf(member.userUid) != -1)
-      .map(member => member.displayName) : this.groupMembers.map(member => member.displayName);
-
-    let nameText = assignedMemberNames.length > 10 ?
+    let nameText = !membersAssigned ? ' the whole group' : assignedMemberNames.length > 10 ?
       assignedMemberNames.slice(0, 10).join(", ") + " and " + (assignedMemberNames.length - 10) + " others" : assignedMemberNames.join(", ");
 
     let time = DateTimeUtils.momentFromNgbStruct(this.createTodoForm.get('date').value,
@@ -186,7 +226,8 @@ export class CreateTodoComponent implements OnInit {
       subject: this.createTodoForm.get("subject").value,
       type: this.createTodoForm.get("todoType").value,
       time: time,
-      assignedNumber: membersAssigned ? assignedMemberUids.length : this.groupMembers.length,
+      membersAssigned: membersAssigned,
+      assignedNumber: membersAssigned ? this.assignedMemberUids.length : this.memberCount,
       memberNames: nameText
     };
 
@@ -200,21 +241,21 @@ export class CreateTodoComponent implements OnInit {
         })
   }
 
-  createTodo(){
+  createTodo() {
     let todoType: string = this.createTodoForm.get("todoType").value;
     let parentType: string = this.createTodoForm.get("parentType").value;
     let subject: string = this.createTodoForm.get("subject").value;
 
     let responseTag: string = "";
-    if(this.createTodoForm.get("responseTag") != null){
+    if (this.createTodoForm.get("responseTag") != null){
       responseTag = this.createTodoForm.get("responseTag").value;
     }
 
     let dueTimemilis: number = this.extractDeadlineMillis();
 
-    let assignedMemberUids: string[] = this.createTodoForm.get("assignedMemberUids").value;
+    this.assignedMemberUids = this.createTodoForm.get("assignedMemberUids").value;
 
-    let confirmingMemberUids: string[] = this.createTodoForm.get("confirmingMemberUids") ?
+    this.confirmingMemberUids = this.createTodoForm.get("confirmingMemberUids") ?
       this.createTodoForm.get("confirmingMemberUids").value : [];
 
     let requireImages: boolean = false;
@@ -233,7 +274,7 @@ export class CreateTodoComponent implements OnInit {
     }
 
     this.taskService.createTodo(todoType, parentType, this.groupUid, subject, dueTimemilis, responseTag, requireImages,
-      recurring, recurringInterval, this.imageKey, assignedMemberUids, confirmingMemberUids)
+      recurring, recurringInterval, this.imageKey, this.assignedMemberUids, this.confirmingMemberUids)
       .subscribe(task => {
         console.log("Todo successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
         this.initCreateTodoForm();

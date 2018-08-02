@@ -10,6 +10,7 @@ import {MediaService} from "../../media/media.service";
 import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
 import { TaskPreview } from '../task-preview.model';
 import { TaskType } from '../task-type';
+import { environment } from 'environments/environment';
 
 declare var $: any;
 
@@ -20,9 +21,19 @@ declare var $: any;
 })
 export class CreateVoteComponent implements OnInit {
 
+  @Input() groupUid: string;
+  @Input() preAssignedMemberUids: string[] = [];
+  @Input() preAssignedMemberNames: string[] = [];
+
+  @Output() voteSaved: EventEmitter<boolean>;
+
   public createVoteForm: FormGroup;
   public yesNoVote: boolean = true;
+
   public membersList: Membership[] = [];
+  public memberCount: number;
+  public showMemberAssignment: boolean = false;
+  private assignedMemberUids: string[] = [];
 
   public imageKey: string;
   public imageName: string;
@@ -30,10 +41,6 @@ export class CreateVoteComponent implements OnInit {
   public confirmingSend: boolean;
   public confirmParams: {};
   public taskPreview: TaskPreview;
-
-  @Input() groupUid: string;
-  @Input() preAssignedMemberUids: string[] = [];
-  @Output() voteSaved: EventEmitter<boolean>;
 
   public isGroupPaidFor = false;
   public canRandomize = false;
@@ -50,15 +57,11 @@ export class CreateVoteComponent implements OnInit {
   ngOnInit() {
     $('#create-vote-modal').on('shown.bs.modal', function () {
       if (this.groupUid != "" && this.groupUid != undefined) {
-        this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
-          this.membersList = members.content;
-          this.setAssignedMembers();
-        });
-
-        console.log('alright, checking if this is paid for or not ... groupUid: ', this.groupUid);
         this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(resp => {
           console.log('response: ', resp);
           this.isGroupPaidFor = resp.paidFor;
+          this.memberCount = resp.memberCount;
+          this.setUpMemberPicker();
         });    
       }
     }.bind(this));
@@ -87,10 +90,38 @@ export class CreateVoteComponent implements OnInit {
     });
   }
 
+  setUpMemberPicker() {
+    if (this.memberCount < environment.memberFetchCutOff) {
+      console.log('member count low enough, showing assigned members');
+      this.fetchAssignedMembers();
+    } else {
+      console.log(`${this.memberCount} greater than ${environment.memberFetchCutOff} so not showing member assign`);
+      this.showMemberAssignment = false;
+    }
+  }
+
+  fetchAssignedMembers() {
+    this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
+      this.membersList = members.content;
+      this.showMemberAssignment = true;
+      console.log('member list: ', this.membersList);
+      this.setAssignedMembers();
+    });
+  }
+
   setAssignedMembers() {
     if (this.preAssignedMemberUids) {
       this.createVoteForm.get('assignedMemberUids').setValue(this.preAssignedMemberUids, { onlySelf: true })
     }
+  }
+
+  toggleAssignedMembers() {
+    if (this.showMemberAssignment) {
+      this.showMemberAssignment = false;
+    } else {
+      this.fetchAssignedMembers();
+    }
+    return false;
   }
 
   // todo : focus on new input (but non-trivial - https://github.com/angular/angular/issues/13158)
@@ -156,12 +187,25 @@ export class CreateVoteComponent implements OnInit {
   }
 
   confirmVote() {
-    let membersAssigned = this.createVoteForm.get("assignedMemberUids").value && this.createVoteForm.get("assignedMemberUids").value.length > 0;
-    let assignedMemberUids = membersAssigned ? this.createVoteForm.get("assignedMemberUids").value : [];
-    let assignedMemberNames = membersAssigned ? this.membersList.filter(member => assignedMemberUids.indexOf(member.userUid) != -1)
-        .map(member => member.displayName) : this.membersList.map(member => member.displayName);
+    const membersSelected = this.createVoteForm.get("assignedMemberUids").value && this.createVoteForm.get("assignedMemberUids").value.length > 0;
+    const membersAssigned = membersSelected || this.preAssignedMemberUids.length > 0; // since may not show box but may have prior assigned
+    
+    this.assignedMemberUids = [];
+    let assignedMemberNames = [];
+    
+    if (this.memberCount > environment.memberFetchCutOff) {
+      // means members selected via a bulk manage etc but not selected here, so, retain
+      this.assignedMemberUids = this.preAssignedMemberUids;
+      assignedMemberNames = this.preAssignedMemberNames;
+    } else if (membersSelected) {
+      this.assignedMemberUids = this.createVoteForm.get("assignedMemberUids").value;
+      assignedMemberNames = this.membersList.filter(member => this.assignedMemberUids.indexOf(member.userUid) != -1)
+        .map(member => member.displayName);
+    } else {
+      assignedMemberNames = this.membersList.map(member => member.displayName)
+    }
 
-    let nameText = assignedMemberNames.length > 10 ?
+    let nameText = !membersAssigned ? ' the whole group' : assignedMemberNames.length > 10 ?
       assignedMemberNames.slice(0, 10).join(", ") + " and " + (assignedMemberNames.length - 10) + " others" : assignedMemberNames.join(", ");
 
     let time = DateTimeUtils.momentFromNgbStruct(this.createVoteForm.get('date').value,
@@ -170,7 +214,8 @@ export class CreateVoteComponent implements OnInit {
     this.confirmParams = {
       subject: this.createVoteForm.get("title").value,
       time: time,
-      assignedNumber: membersAssigned ? assignedMemberUids.length : this.membersList.length,
+      membersAssigned: membersAssigned,
+      assignedNumber: membersAssigned ? this.assignedMemberUids.length : this.memberCount,
       memberNames: nameText
     };
 
@@ -221,17 +266,10 @@ export class CreateVoteComponent implements OnInit {
     let description: string = this.createVoteForm.get("description").value;
     let voteMilis: number = this.extractVoteDeadlineMillis();
 
-    let assignedMemberUids: string[] = [];
-    if(this.createVoteForm.get("assignedMemberUids").value != null){
-      for(let i=0; i < this.createVoteForm.get("assignedMemberUids").value.length; i++ ){
-        assignedMemberUids.push(this.createVoteForm.get("assignedMemberUids").value[i]);
-      }
-    }
-
     let specialForm = this.isGroupPaidFor ? this.createVoteForm.get('specialForm').value : 'ORDINARY';
 
     this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, this.imageKey, 
-      assignedMemberUids, specialForm, randomize).subscribe(task => {
+      this.assignedMemberUids, specialForm, randomize).subscribe(task => {
           console.log("Vote successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
           this.yesNoVote = true;
           this.shouldValidateVoteOptions();

@@ -71,10 +71,10 @@
                         [groups]="groupsToCopyMembersTo"  [members]="membersToManage" [modalId]="'bulk-copy-members-to-group'"
                         (membersAdded)="refreshGroupDetails()"></app-group-copy-members>
 
-<app-create-meeting [groupUid]="group?.groupUid" [preAssignedMemberUids]="filteredMemberUids"
+<app-create-meeting [groupUid]="group?.groupUid" [preAssignedMemberUids]="filteredMemberUids" [preAssignedMemberNames]="filteredMemberNames"
                     (meetingSaved)="taskCreated($event, 'MEETING')"></app-create-meeting>
 
-<app-create-vote [groupUid]="group?.groupUid" [preAssignedMemberUids]="filteredMemberUids"
+<app-create-vote [groupUid]="group?.groupUid" [preAssignedMemberUids]="filteredMemberUids" [preAssignedMemberNames]="filteredMemberNames"
                  (voteSaved)="taskCreated($event, 'VOTE')"></app-create-vote>
 
 <app-create-todo [groupUid]="group?.groupUid" [preAssignedMemberUids]="filteredMemberUids"
