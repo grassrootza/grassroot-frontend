@@ -104,6 +104,15 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
+  recycleJoinCodes() {
+    this.adminService.recycleGroupJoinCodes().subscribe(number => {
+      console.log('Succeeded! Tokens refreshed');
+      this.alertService.alert('Recycled ' + number + ' join tokens');
+    }, error => {
+      console.log('Error initiating recycle, error: ', error);
+    })
+  }
+
   searchGroups(groupName:string){
     this.searchTerm = groupName;
     this.adminService.findGroups(groupName).subscribe(resp => {

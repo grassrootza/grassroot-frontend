@@ -88,6 +88,19 @@ export class IntegrationsComponent implements OnInit {
     return false;
   }
 
+  removeAllFb() {
+    this.alertService.showLoading();
+    this.intService.removeProviderPage('facebook').subscribe(result => {
+      console.log('FB removed! Result: ', result);
+      this.alertService.hideLoading();
+      this.alertService.alert('Done. Your integration has been removed');
+    }, error => {
+      console.log('Failed to remove: ', error);
+      this.alertService.hideLoading();
+    })
+    return false;
+  }
+
   fetchAccessToken() {
     this.userService.fetchAccessToken().subscribe(token => this.accessToken = token);
   }

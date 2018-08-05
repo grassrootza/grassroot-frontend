@@ -60,7 +60,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
       this.hasCampaigns = this.campaigns && this.campaigns.length > 0;
       console.log('campaigns changed, setting up? :', this.hasCampaigns);
       if (this.hasCampaigns)
-        setTimeout(() => this.setUpCampaignsSelect(), 100);
+        setTimeout(() => this.setUpCampaignsSelect(), 200);
     }
   }
 

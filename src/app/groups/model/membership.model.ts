@@ -83,6 +83,9 @@ export class MembersPage {
               public size: number,
               public first: boolean,
               public last: boolean,
+              public numberSms: number,
+              public numberEmail: number,
+              public numberSmsAndEmail: number,
               public content: Membership[]) {
   }
 
@@ -101,6 +104,9 @@ export const transformMemberPage = (result: MembersPage): MembersPage => {
     result.size,
     result.first,
     result.last,
+    result.numberSms,
+    result.numberEmail,
+    result.numberSmsAndEmail,
     transformedContent
   )
 }

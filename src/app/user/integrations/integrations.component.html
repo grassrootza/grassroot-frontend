@@ -21,7 +21,8 @@
   <hr>
   <div class="row bottom-buffer" *ngIf="!fbFetched">
     <div class="col-12">
-      <p>Loading Facebook connection settings ...</p>
+      <p>Loading Facebook connection settings ... If this freezes, and you suspect an error, 
+        <a class="grassroot-link" (click)="removeAllFb()" href="#">click here to reset your settings</a></p>
     </div>
   </div>
   <div class="row bottom-buffer" *ngIf="fbFetched && !fbPages">
@@ -49,6 +50,8 @@
       <p class="small">We will only ask to publish to your Facebook page. We do not read or store any data about your Facebook account, aside from what we require to
         publish posts. Specifically, we store only your page names and their respective Facebook IDs, under the strict terms of our
         <a class="grassroot-link" [routerLink]="['/privacy']">privacy policy</a>.
+        <span *ngIf="fbPages?.length > 0">You can remove our integration with all of your accounts easily
+        by <a href="#" (click)="removeAllFb()" class="grassroot-link">clicking here.</a></span>
       </p>
     </div>
   </div>

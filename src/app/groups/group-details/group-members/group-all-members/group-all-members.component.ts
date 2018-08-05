@@ -22,7 +22,7 @@ export class GroupAllMembersComponent implements OnInit {
   @ViewChild('bulkMemberManageModal')
   private bulkTopicManage: MemberTopicsManageComponent;
 
-  public currentPage:MembersPage = new MembersPage(0,0, 0,0, true, false, []);
+  public currentPage:MembersPage = new MembersPage(0,0, 0, 0, true, false, 0, 0, 0, []);
   private groupUid: string = '';
   public group: Group = null;
 

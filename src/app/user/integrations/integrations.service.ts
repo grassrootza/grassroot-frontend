@@ -32,8 +32,10 @@ export class IntegrationsService {
     return this.httpClient.get(this.settingsUrlBase + "/connect/" + provider + "/complete", { params: returnedParams });
   }
 
-  removeProviderPage(provider: string, providerUserId: string) {
-    const params = new HttpParams().set("providerUserId", providerUserId);
+  removeProviderPage(provider: string, providerUserId?: string) {
+    let params = new HttpParams();
+    if (providerUserId)
+      params = params.set("providerUserId", providerUserId);
     return this.httpClient.post<IntegrationSettingsList>(this.settingsUrlBase + "/remove/" + provider, null, {params: params});
   }
 

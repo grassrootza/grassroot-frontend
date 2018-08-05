@@ -8,7 +8,7 @@ import {GroupService} from "../../../groups/group.service";
 import {Group} from "../../../groups/model/group.model";
 import {MembersFilter} from "../../../groups/member-filter/filter.model";
 import {AlertService} from "../../../utils/alert-service/alert.service";
-import {Membership, getMemberFromMembershipInfo} from "../../../groups/model/membership.model";
+import {Membership, getMemberFromMembershipInfo, MembersPage} from "../../../groups/model/membership.model";
 import { CampaignService } from '../../../campaigns/campaign.service';
 import { CampaignInfo } from '../../../campaigns/model/campaign-info';
 
@@ -91,8 +91,7 @@ export class BroadcastMembersComponent implements OnInit {
   setupGroup(groupId: string, useGroupForCounts: boolean = true) {
     this.groupService.loadGroupDetailsCached(groupId).subscribe(group => {
       this.group = group;
-      if (useGroupForCounts)
-        this.recalculateTotals(this.group.members.map(getMemberFromMembershipInfo));
+      this.membersFilterChanged(new MembersFilter());
     });
   }
 
@@ -104,7 +103,7 @@ export class BroadcastMembersComponent implements OnInit {
     this.countParams.emailNumber = this.types.shortMessage ? this.createParams.allMemberCount : 0;
     this.countParams.broadcastCost = (this.countParams.smsNumber * this.createParams.smsCostCents / 100).toFixed(2);
 
-    console.log('have set up default counts, total number: ', this.countParams.totalNumber);
+    // console.log('have set up default counts, total number: ', this.countParams.totalNumber);
   }
 
   recalculateTotals(members: Membership[] = []) {
@@ -113,7 +112,15 @@ export class BroadcastMembersComponent implements OnInit {
     this.countParams.smsNumber = members.reduce((total,m) => this.includeMemberInSms(m) ? total+1 : total, 0);
     this.countParams.emailNumber = members.reduce((total, m) => m.emailAddress ? total+1 : total, 0);
     this.countParams.broadcastCost = (this.countParams.smsNumber * this.createParams.smsCostCents / 100).toFixed(2);
-    console.log('fetched members, count params now: ', this.countParams);
+    // console.log('fetched members, count params now: ', this.countParams);
+  }
+
+  recalculateFromPage(members: MembersPage) {
+    this.skipSmsIfEmail = this.memberForm.controls['skipSmsIfEmail'].value;
+    this.countParams.totalNumber = members.totalElements;
+    this.countParams.smsNumber = members.numberSms - (this.skipSmsIfEmail ? members.numberSmsAndEmail : 0);
+    this.countParams.emailNumber = members.numberEmail;
+    this.countParams.broadcastCost = (this.countParams.smsNumber * this.createParams.smsCostCents / 100).toFixed(2);
   }
 
   setUpSelectChangeReaction() {
@@ -138,12 +145,11 @@ export class BroadcastMembersComponent implements OnInit {
   }
 
   membersFilterChanged(filter: MembersFilter) {
-    console.log("Members filter change, loading members... filter: ", filter);
     this.memberFilter = filter;
-    this.groupService.filterGroupMembers(this.group.groupUid, filter)
-      .subscribe(members => {
+    this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(members => {
+          console.log('from server: ', members);
           let filteredMembers = filter.role == 'ANY' ? members.content : members.content.filter(m => m.roleName == filter.role);
-          this.recalculateTotals(filteredMembers);
+          this.recalculateFromPage(members);
           if (filteredMembers && filteredMembers.length > 0 && filteredMembers.length < 10) {
             this.filteredMemberNames = members.content.map(member => member.displayName);
           } else {

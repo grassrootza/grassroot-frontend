@@ -16,6 +16,7 @@ export class AdminService {
   private deactivateGroupUrl = environment.backendAppUrl + "/api/admin/groups/deactivate";
   private activateGroupUrl = environment.backendAppUrl + "/api/admin/groups/activate";
   private addMemberToGroupUrl = environment.backendAppUrl + "/api/admin/groups/member/add";
+  private recycleGroupJoinTokensUrl = environment.backendAppUrl + "/api/admin/groups/tokens/recycle";
   
   private initiateMembershipsGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/memberships";
   private initiateTasksGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/tasks";
@@ -57,6 +58,10 @@ export class AdminService {
   activateGroup(groupUid:string):Observable<string>{
     let params = new HttpParams().set('groupUid',groupUid);
     return this.httpClient.post(this.activateGroupUrl,null,{responseType:'text',params:params});
+  }
+
+  recycleGroupJoinCodes():Observable<string> {
+    return this.httpClient.post(this.recycleGroupJoinTokensUrl, null, {responseType: 'text'});
   }
 
   addMember(phoneNumber:string,displayName:string,roleName:string,groupUid:string,email:string,province:string):Observable<any>{

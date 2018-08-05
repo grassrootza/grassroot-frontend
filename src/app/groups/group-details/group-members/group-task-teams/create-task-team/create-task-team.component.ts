@@ -21,7 +21,7 @@ export class CreateTaskTeamComponent implements OnInit {
   @Output()
   public taskTeamSaved: EventEmitter<any> = new EventEmitter();
 
-  public currentPage:MembersPage = new MembersPage(0,0, 0,0, true, false, []);
+  public currentPage:MembersPage = new MembersPage(0,0, 0,0, true, false, 0, 0, 0, []);
 
   private filteredMembers: Membership[] = [];
 
