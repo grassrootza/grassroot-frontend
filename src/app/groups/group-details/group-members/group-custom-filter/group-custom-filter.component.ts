@@ -182,10 +182,25 @@ export class GroupCustomFilterComponent implements OnInit {
   }
 
   downloadFilteredMembersExcel() {
-    this.filteredMemberUids = this.filteredMembers.map(member => member.userUid);
-    this.groupService.downloadFilteredGroupMembers(this.group.groupUid, this.filteredMemberUids).subscribe(data => {
+    if (this.currentPage.totalElements > 100) {
+      // this.alertService.showLoading();
+      console.log('filtering members ...');
+      this.groupService.filterGroupMembers(this.group.groupUid, this.currentFilter, this.currentPage.totalElements).subscribe(result => {
+        let filteredMemberUids = result.content.map(member => member.userUid);
+        console.log(`got ${filteredMemberUids.length} member UIDs to download`);
+        this.performDownload(filteredMemberUids);
+      })
+    } else {
+      this.filteredMemberUids = this.filteredMembers.map(member => member.userUid);
+      this.performDownload(this.filteredMemberUids);
+    }
+  }
+
+  performDownload(memberUids: string[]) {
+    console.log('downloading members ...');
+    this.groupService.downloadFilteredGroupMembers(this.group.groupUid, memberUids).subscribe(data => {
+      this.alertService.hideLoading();
       let blob = new Blob([data], { type: 'application/xls' });
-      console.log('got Excel back, saving it ...');
       saveAs(blob, 'filtered_members.xls');
     })
   }
