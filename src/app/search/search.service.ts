@@ -12,7 +12,9 @@ import {GroupRef} from "../groups/model/group-ref.model";
 export class SearchService {
 
   private joinCodeRegex = /^\*?[0-9]{4}#?$|\*134\*1994\*[0-9]{4}#/;
+  private joinCodeRegexFiveDigits = /^\*?[0-9]{5}#?$|\*134\*1994\*[0-9]{5}#/;
   private codeNumbersRegex = /[0-9]{4}/g;
+  private codeNumbersRegexFiveDigits = /[0-9]{5}/g;
 
   private allUserTasksUrl = environment.backendAppUrl + "/api/search/tasks/user";
   private allUserGroupsUrl = environment.backendAppUrl + "/api/search/groups/private";
@@ -65,6 +67,9 @@ export class SearchService {
     let code = null;
     if (this.joinCodeRegex.test(searchTerm)) {
       let numMatches = searchTerm.match(this.codeNumbersRegex);
+      return numMatches[numMatches.length - 1];
+    } else if(this.joinCodeRegexFiveDigits.test(searchTerm)){
+      let numMatches = searchTerm.match(this.codeNumbersRegexFiveDigits);
       return numMatches[numMatches.length - 1];
     }
     return code;
