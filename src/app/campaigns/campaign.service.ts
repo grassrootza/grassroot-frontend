@@ -42,6 +42,8 @@ export class CampaignService {
   clearCampaignWelcomeMsgUrl = environment.backendAppUrl + "/api/campaign/manage/update/welcome/clear";
   updateCampaignDefaultLangUrl = environment.backendAppUrl + "/api/campaign/manage/update/language";
 
+  exportCampaignResultsUrl = environment.backendAppUrl + '/api/campaign/stats/download';
+
   private _campaigns: CampaignInfo[] = [];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
   public campaignInfoList: Observable<CampaignInfo[]> = this.campaignInfoList_.asObservable();
@@ -256,6 +258,11 @@ export class CampaignService {
     console.log('setting new default language: ', languageTwoDigitCode);
     const params = new HttpParams().set('defaultLanguage', languageTwoDigitCode);
     return this.httpClient.post<CampaignInfo>(fullUrl, null, { params: params}).pipe(map(response => this.stashChangedCampaign(response)));
+  }
+
+  downloadCampaignStats(campaignUid: string) {
+    const params = new HttpParams().set('campaignUid', campaignUid);
+    return this.httpClient.get(this.exportCampaignResultsUrl, { params: params, responseType: 'blob' });
   }
 
 }

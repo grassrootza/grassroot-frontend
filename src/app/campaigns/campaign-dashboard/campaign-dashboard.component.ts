@@ -6,6 +6,8 @@ import {AlertService} from "../../utils/alert-service/alert.service";
 import {MediaService} from "../../media/media.service";
 import {MediaFunction} from "../../media/media-function.enum";
 
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-campaign-dashboard',
   templateUrl: './campaign-dashboard.component.html',
@@ -54,6 +56,16 @@ export class CampaignDashboardComponent implements OnInit {
       })
     });
 
+  }
+
+  exportToExcel() {
+    this.campaignService.downloadCampaignStats(this.campaign.campaignUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/xls' });
+      saveAs(blob, this.campaign.name + ".xlsx");
+    }, error => {
+      console.log("error getting the file: ", error);
+    });
+    return false;
   }
 
 }

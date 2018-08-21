@@ -33,6 +33,9 @@
                 {{ 'campaign.dashboard.groupLabel' | translate }}
                 <a [routerLink]="['/group', campaign.masterGroupUid]" class="grassroot-link">// {{ campaign.masterGroupName }}</a>
               </div>
+              <div class="campaign-info">
+                <a class="grassroot-link" href="#" (click)="exportToExcel()">Export to Excel</a>
+              </div>
             </div>
             <div class="col-md-5 text-right">
               <div class="campaign-info">
