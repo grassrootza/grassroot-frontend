@@ -221,8 +221,8 @@ export class GroupService {
 
   downloadFilteredGroupMembers(groupUid: string, filteredMemberUids: string[]) {
     const fullUrl = this.groupDownloadFilteredMembersUrl + "/" + groupUid;
-    let params = new HttpParams().set('filteredMemberUids', filteredMemberUids.join(','));
-    return this.httpClient.post(fullUrl, null, { params: params, responseType : 'blob' });
+    // let params = new HttpParams().set('filteredMemberUids', filteredMemberUids.join(','));
+    return this.httpClient.post(fullUrl, filteredMemberUids, { responseType : 'blob' });
   }
 
   fetchNewMembers(howRecentlyJoinedInDays: number, pageNo: number, pageSize: number) {

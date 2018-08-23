@@ -25,36 +25,30 @@
           </div>
           <div class="col-lg-6">
             <p class="mission-para">
-              Your donation will support our engagement with communities, product development, and infrastructure costs. Donations above $1,000 are acknowledged on our funders page, unless donors wishes to remain anonymous.
+              Your donation will support our engagement with communities, product development, and infrastructure costs. Donations above $1,000 are 
+              acknowledged on our funders page, unless donors wishes to remain anonymous. If you are in South Africa, you can donate via a transfer
+              to the bank account listed below. If abroad, we have been having technical difficulties with automated payment systems, so please email
+              us at <a href="mailto:donate@grassroot.org.za?subject=I want to contribute to Grassroot">donate@grassroot.org.za</a>. Thank you!
+            </p>
+            <p class="mission-para">
+              Bank: FNB<br>Account: Grassroot Nation NPC<br>Account: 62532765966<br>Branch: 251905
             </p>
             <p class="mission-para">
               All of our tools are built as open source code (licensed under BSD 3.0). Development is active and we will welcome any contributions. Please feel free to raise an issue or pull request.
             </p>
-
-            <!-- 1. initial donation form to set amount -->
-            <div class="donation-form donation-input" *ngIf="displayDonateInput">
-              <h3>Make a donation (in South African
-                <a target="_blank" href="http://www.x-rates.com/table/?from=ZAR&amount=1">Rand</a>)</h3>
-              <form action="#">
-                <div class="fields-wrap">
-                  <input type="number" value="1000" #donateAmount>
-                  <input type="button" value="Donate" (click)="initiateDonation(donateAmount.value)">
-                </div>
-              </form>
-            </div>
-
           </div>
         </div>
 
+        
         <!-- 2. Check out form placeholder -->
-        <div class="row" *ngIf="displayDonateForm">
+        <!-- <div class="row" *ngIf="displayDonateForm">
           <div class="col-12 text-center">
             <form [action]="paymentResultUrl" class="paymentWidgets" data-brands="VISA MASTER AMEX"></form>
           </div>
-        </div>
+        </div> -->
 
         <!-- 3. donation succeeded, share form -->
-        <div class="row" *ngIf="displayShareForm">
+        <!-- <div class="row" *ngIf="displayShareForm">
           <div class="col-lg-12 padded-card">
             <div class="share-form donation-form">
               <h3>Thank you! Share with someone else?</h3>
@@ -71,24 +65,24 @@
               </form>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- 4. Donation failed, show an error and exit -->
-        <div class="row" *ngIf="donateError">
+        <!-- <div class="row" *ngIf="donateError">
           <div class="col-lg-12 text-center">
             <h4>Sorry, there was an error processing your payment. Thanks for trying to support us! If this occurs
             again, please just email us at <a href="mailto:contact@grassroot.org.za?subject=Donating">contact@grassroot.org.za</a></h4>
           </div>
-        </div>
+        </div> -->
 
         <!-- 5. And the sharing email succeeded, so just show a thank you -->
-        <div class="row" *ngIf="showShareCompleted">
+        <!-- <div class="row" *ngIf="showShareCompleted">
           <div class="col-lg-12 padded-card">
             <div class="share-done">
               <h2>Thank you for your support! You're helping us build the tools of a people's democracy</h2>
             </div>
           </div>
-        </div>
+        </div> -->
 
       </div>
     </div>

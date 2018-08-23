@@ -1,6 +1,5 @@
 import {Component, Inject, OnInit, PLATFORM_ID} from "@angular/core";
 import {isPlatformBrowser} from "@angular/common";
-import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "environments/environment";
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -20,11 +19,7 @@ export class ContributeComponent implements OnInit {
   public displayDonateForm: boolean = false;
   public displayShareForm: boolean = false;
 
-  public paymentResultUrl: string = environment.frontendAppUrl + "/contribute/success";
-  // public paymentResultUrl: string = "http://localhost:4200/contribute/success";
-
   public showShareCompleted: boolean = false;
-
   public shareDonationForm: FormGroup;
 
   // breaking pattern of only services having http client, but this is _extremely_ specialized, so a whole service
