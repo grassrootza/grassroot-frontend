@@ -6,6 +6,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import { UserExtraAccount, getEntity } from './account/account.user.model';
 import { AccountSignupResponse } from './account/signup/signup.response.model';
 import { DataSetCounts, getCountsEntity } from './account/dataset.count.model';
+import { Group } from '../groups/model/group.model';
 
 @Injectable()
 export class AccountService {
@@ -16,6 +17,7 @@ export class AccountService {
 
   private accountFetchUrl = environment.backendAppUrl + "/api/account/fetch";
   private updateAccountUrl = environment.backendAppUrl + "/api/account/settings/update";
+  private getAccountGroupInfoUrl = environment.backendAppUrl + '/api/account/fetch/group/info';
   private getGroupNotificationsSinceLastBillUrl = environment.backendAppUrl + "/api/account/fetch/group/notification_count";
   private getCostSinceLastBillUrl = environment.backendAppUrl + "/api/account/last-cost";
   private closeAccountUrl = environment.backendAppUrl + "/api/account/close";
@@ -70,6 +72,11 @@ export class AccountService {
     } else {
       return this.httpClient.get<UserExtraAccount>(this.accountFetchUrl).pipe(map(getEntity));
     }
+  }
+
+  getInfoOfGroupOnAccount(groupUid: string): Observable<Group> {
+    let params = new HttpParams().set('groupUid', groupUid);
+    return this.httpClient.get<Group>(this.getAccountGroupInfoUrl, { params: params });
   }
 
   getGroupNotifications(accountUid: string, groupUid: string): Observable<number> {

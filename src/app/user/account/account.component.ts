@@ -113,7 +113,8 @@ export class AccountComponent implements OnInit {
   }
 
   viewGroup(groupUid: string) {
-    this.groupService.loadGroupDetailsFromServer(groupUid).subscribe(group => {
+    this.accountService.getInfoOfGroupOnAccount(groupUid).subscribe(group => {
+      console.log('Fetched group info, result: ', group);
       this.groupToView = group;
       this.fetchGroupNotifications(groupUid);
     });
