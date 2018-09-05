@@ -22,7 +22,10 @@ export const findByTwoDigitCode = (code: string, defaultLang?: Language): Langua
   if (!code)
     return defaultLang ? defaultLang : undefined;
   const index = MSG_LANGUAGES.findIndex(lang => lang.twoDigitCode == code);
-  console.log('index of language: ', index);
-  console.log('returning: ', MSG_LANGUAGES[index]);
   return index != -1 ? MSG_LANGUAGES[index] : (defaultLang ? defaultLang : undefined); 
+}
+
+export const findByThreeDigitCode = (code: string): Language => {
+  const index = MSG_LANGUAGES.findIndex(lang => lang.threeDigitCode == code);
+  return index != -1 ? MSG_LANGUAGES[index] : ENGLISH; 
 }

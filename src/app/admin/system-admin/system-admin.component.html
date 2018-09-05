@@ -90,7 +90,7 @@
       
       <div class="row" style="margin-top: 2%">
         <div class="col-6">
-          <h3>Subscriber Accounts</h3>
+          <h1>LiveWire Accounts</h1>
         </div>
         <div class="col-2">
           <button class="btn btn-primary" (click)="triggerCreateSubscriberModal()">New Subscriber</button>
@@ -118,9 +118,11 @@
         </div>
       </div>
 
-      <div class="row" style="margin-top: 2%">
+      <div class="row mt-3">
         <div class="col-12">
-          <button type="btn" class="btn btn-primary" (click)="initiateGraphAnnotationTransfer('members')">Reannotate members</button>
+          <h1>API keys</h1>
+          <p>Generate a new API key for serverless system calls to the backend: <a href="#" (click)="fetchApiToken()" class="grassroot-link">fetch</a></p>
+          <p *ngIf="accessToken"><code style="word-break: break-all">{{ accessToken }}</code></p>
         </div>
       </div>
 

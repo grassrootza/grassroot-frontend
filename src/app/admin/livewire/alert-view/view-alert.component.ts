@@ -49,7 +49,7 @@ export class ViewAlertComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params:Params)=>{
       this.alertUid = params['id'];
-      this.linkUrl = "www.grassroot.org/za/news/" + this.alertUid;
+      this.linkUrl = "www.grassroot.org.za/news/" + this.alertUid;
       this.loadAlert(this.alertUid);
     },error=>{
       console.log("Error getting params....",error);
@@ -171,8 +171,7 @@ export class ViewAlertComponent implements OnInit {
   }
 
   blockAlert(serverUid:string){
-    this.liveWireAlertService.blockAlert(this.alertUid).subscribe(resp =>{
-      console.log("Blocked alert...",resp);
+    this.liveWireAlertService.blockAlert(this.alertUid).subscribe(() =>{
       this.refreshComponent();
     },error =>{
       console.log("Error blocking alert.....",error);
@@ -180,9 +179,7 @@ export class ViewAlertComponent implements OnInit {
   }
 
   openReleaseModal(){
-    console.log("release..............................");
     this.liveWireAlertService.getSubscribers().subscribe(resp => {
-      console.log("Subscribers from server.....",resp);
       this.subscribers = resp;
     },error => {
       console.log("Error loading subscribers......",error);
@@ -192,8 +189,6 @@ export class ViewAlertComponent implements OnInit {
 
   selectedSubscribers(event:any,uid:string){
     event == true ? this.addSubscriberUid(uid) : this.removeSubscriberUid(uid);
-    console.log("Check event.............",event);
-    console.log("Subscriber id.............",uid);
     console.log("Subscriber uids...........",this.subscriberUids);
   }
 
@@ -208,17 +203,14 @@ export class ViewAlertComponent implements OnInit {
   }
 
   releaseAlert(){
-    console.log("Data subscriber list in release method.....",this.subscriberUids);
+    console.log("Data subscriber list in release method.....", this.subscriberUids);
     this.liveWireAlertService.releaseAlert(this.alertUid,this.subscriberUids).subscribe(resp => {
-      console.log("Alert released....",resp);
-
       this.alertService.alert('livewire.view-alert.released');
-
-      if(this.shareOnFB){
+      if( this.shareOnFB){
         this.shareAlertOnFacebook(this.liveWireAlert);
       }
 
-      if(this.shareOnTwitter){
+      if (this.shareOnTwitter){
         this.shareAlertOnTwitter(this.liveWireAlert);
       }
 

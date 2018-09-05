@@ -32,7 +32,8 @@ export class Group {
               public joinTopics: string[],
               public reminderMinutes: number,
               public profileImageUrl: string,
-              public hasInboundMessages: boolean) {
+              public hasInboundMessages: boolean,
+              public hidden: boolean) {
     this.formattedCreationTime = new DatePipe("en").transform(this.groupCreationTime, "dd MMM, y");
   }
 
@@ -51,6 +52,11 @@ export class Group {
 
   public isJoinTopic(topic: string): boolean {
     return this.joinTopics && this.joinTopics.length > 0 && this.joinTopics.indexOf(topic) != -1;
+  }
+
+  public canDeactivate(): boolean {
+    const monthAgo = new Date().getTime() - (1 * 24 * 60 * 60 * 1000);
+    return this.userRole === 'ROLE_GROUP_ORGANIZER' && (this.memberCount < 5 || this.groupCreationTimeMillis > monthAgo);
   }
 
 }
@@ -82,6 +88,7 @@ export const getGroupEntity = (gr: Group): Group => {
     gr.joinTopics,
     gr.reminderMinutes,
     gr.profileImageUrl,
-    gr.hasInboundMessages
+    gr.hasInboundMessages,
+    gr.hidden
   );
 };

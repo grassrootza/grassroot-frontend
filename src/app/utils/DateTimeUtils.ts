@@ -85,11 +85,15 @@ export const ngbDateFromMoment = (date: Moment): NgbDateStruct => {
 
 export const isDateTimeFuture = (dateFieldName: string = "date", timeFieldName: string = "time") => {
   return (form: FormGroup) => {
+    // console.log('triggered date time future validator, time field name = ', timeFieldName);
     let date = form.get(dateFieldName);
     let time = form.get(timeFieldName);
 
     if (date && time) {
       let derivedMoment = DateTimeUtils.momentFromNgbStruct(date.value, time.value);
+      // console.log('derived moment of date-time: ', derivedMoment);
+      // console.log('current moment? : ', moment());
+      // console.log('and is it after: ', derivedMoment.isAfter(moment()));
       return derivedMoment.isAfter(moment()) ? null : { dateTimePast: true };
     }
 

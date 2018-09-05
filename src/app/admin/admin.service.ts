@@ -17,10 +17,7 @@ export class AdminService {
   private activateGroupUrl = environment.backendAppUrl + "/api/admin/groups/activate";
   private addMemberToGroupUrl = environment.backendAppUrl + "/api/admin/groups/member/add";
   private recycleGroupJoinTokensUrl = environment.backendAppUrl + "/api/admin/groups/tokens/recycle";
-  
-  private initiateMembershipsGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/memberships";
-  private initiateTasksGraphUrl = environment.backendAppUrl + "/api/admin/graph/transfer/tasks";
-  private initiateGraphAnnotationUrl = environment.backendAppUrl + "/api/admin/graph/transfer/annotations";
+  private fetchApiCallTokenUrl = environment.backendAppUrl + "/api/admin/token/system/generate";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -81,11 +78,8 @@ export class AdminService {
     return this.httpClient.get(this.numberOfGroupsUserIsPartOfUrl,{params:params});
   }
 
-  initiateTasksGraphTransfer():Observable<any> {
-    return this.httpClient.get(this.initiateTasksGraphUrl);
+  fetchAccessToken(): Observable<string> {
+    return this.httpClient.post(this.fetchApiCallTokenUrl, null, { responseType: 'text'});
   }
-
-  initiateGraphAnnotation(lastSegment: string) {
-    return this.httpClient.get(this.initiateGraphAnnotationUrl + '/' + lastSegment);
-  }
+  
 }

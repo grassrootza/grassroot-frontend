@@ -41,8 +41,17 @@
                 <span class="my-role badge badge-success" [translate]="'enum.GroupRole.' + group.userRole">
                     User group role
                 </span>
-                <span *ngIf="group.userRole === 'ROLE_ORDINARY_MEMBER'">
-                  <a class="grassroot-link flyer-link" href="#" (click)="triggerUnsubscribeModal()">(Unsubscribe)</a>
+                <span *ngIf="group.userRole !== 'ROLE_GROUP_ORGANIZER'">&nbsp;
+                  <a class="grassroot-link flyer-link" href="#" (click)="triggerUnsubscribeModal()">(unsubscribe)</a>
+                </span>
+                <span *ngIf="group.userRole === 'ROLE_GROUP_ORGANIZER' && group.canDeactivate()">&nbsp;
+                  <a class="grassroot-link flyer-link" href="#" (click)="triggerDeactivateModal()">(deactivate)</a>
+                </span>
+                <span *ngIf="group.userRole === 'ROLE_GROUP_ORGANIZER' && !group.canDeactivate() && !group.hidden">&nbsp;
+                  <a class="grassroot-link flyer-link" href="#" (click)="hideGroup()">(hide)</a>
+                </span>
+                <span *ngIf="group.hidden">&nbsp;
+                  <a class="grassroot-link flyer-link" href="#" (click)="unhideGroup()">(unhide)</a>
                 </span>
               </div>
 
@@ -192,6 +201,31 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="changeName(alias.value)">
           Rename
+        </button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          {{ 'action.close' | translate }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="deactivate-modal" aria-hidden="true" 
+  *ngIf="group.userRole === 'ROLE_GROUP_ORGANIZER' && group.canDeactivate()">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Deactivate group</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>This will deactivate the group. It will no longer be available to you or to any of its members. Are you sure?</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-danger" (click)="deactivateGroup()">
+          Deactivate
         </button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">
           {{ 'action.close' | translate }}

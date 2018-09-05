@@ -46,6 +46,8 @@ export class CampaignMessagesComponent implements OnInit {
   public availableLanguages = MSG_LANGUAGES;
   public selectedLanguages: Language[];
   public defaultLanguage: Language;
+  public currentLanguage: Language = ENGLISH;
+
   public languageForm: FormGroup;
 
   private campaignUid: string;
@@ -128,9 +130,6 @@ export class CampaignMessagesComponent implements OnInit {
       });
     });
 
-    console.log("prior messages: ", this.priorMessages);
-    console.log('selected languages: ', this.selectedLanguages);
-
     // have to do a quick second loop because msg IDs may not have been set
     this._currentMessages
       .filter(msg => !!this.messageSequences[this.campaign.campaignType][msg.linkedActionType])
@@ -154,22 +153,29 @@ export class CampaignMessagesComponent implements OnInit {
   }
 
   updateLanguages() {
+    const priorLanguages = this.selectedLanguages;
     this.selectedLanguages = Object.keys(this.languageForm.value)
       .filter(key => key !== 'defaultLanguage')
       .filter(key => this.languageForm.value[key])
       .map(key => this.getLanguage(key));
-      console.log('after update, selected change: ', this.selectedLanguages);
     // here, check for altered language
+    let difference = this.selectedLanguages.filter(x => !priorLanguages.includes(x));
+    console.log('different between old and new: ', difference);
+    if (difference && difference.length == 1) {
+      console.log('added only one language, so opening it');
+      setTimeout(() => this.currentLanguage = difference[0], 300);
+      // console.log('current language now: ', this.currentLanguage);
+    }
+
     $('#select-language-modal').modal("hide");
     this.checkForUpdatedDefaultLang();
   }
 
   checkForUpdatedDefaultLang() {
-    console.log('default language control: ', this.languageForm.controls['defaultLanguage']);
-    if (this.languageForm.controls['defaultLanguage'] && this.languageForm.controls['defaultLanguage'].value != this.defaultLanguage) {
+    if (this.languageForm.controls['defaultLanguage'] && this.languageForm.controls['defaultLanguage'].value !== this.defaultLanguage.twoDigitCode) {
+      console.log('Default language changed, updating on server');
       this.alertService.showLoading();
       this.campaignService.updateCampaignDefaultLanguage(this.campaignUid, this.languageForm.controls['defaultLanguage'].value).subscribe(campaign => {
-        console.log('Updated, done');
         this.alertService.hideLoading();
         this.campaign = campaign;
         this.setupDefaultLanguage();
@@ -182,6 +188,10 @@ export class CampaignMessagesComponent implements OnInit {
 
   getLanguage(code: string) {
     return this.availableLanguages.find(lang => lang.threeDigitCode == code);
+  }
+
+  alterLanguage(event: object) {
+    this.currentLanguage = event as Language;
   }
 
   storeMessages(event: object, actionType: string) {

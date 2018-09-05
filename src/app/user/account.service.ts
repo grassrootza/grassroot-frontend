@@ -35,6 +35,8 @@ export class AccountService {
   private fetchAllDataSetDetailsUrl = environment.backendAppUrl + "/api/account/fetch/all/dataset";
   private fetchDataSetCountsUrl = environment.backendAppUrl + "/api/account/fetch/dataset";
 
+  private downloadActivityUrl = environment.backendAppUrl + '/api/account/fetch/group/download';
+
   constructor(private httpClient: HttpClient) {
   }
 
@@ -146,7 +148,7 @@ export class AccountService {
   }
 
   addAllGroups(accountUid: string): Observable<UserExtraAccount> {
-    const fullUrl = this.addGroupUrl + "/" + accountUid + "/all";;
+    const fullUrl = this.addGroupUrl + "/" + accountUid + "/all";
     return this.httpClient.post<UserExtraAccount>(fullUrl, null).pipe(map(getEntity));
   }
 
@@ -172,5 +174,10 @@ export class AccountService {
     const fullUrl = this.removeAccountAdminUrl + "/" + accountUid;
     let params = new HttpParams().set('adminUid', adminUid);
     return this.httpClient.post<UserExtraAccount>(fullUrl, null, {params: params}).pipe(map(getEntity));
+  }
+
+  downloadActivity(accountUid: string) {
+    const params = new HttpParams().set('accountUid', accountUid);
+    return this.httpClient.get(this.downloadActivityUrl, { params: params, responseType: 'blob' });
   }
 }

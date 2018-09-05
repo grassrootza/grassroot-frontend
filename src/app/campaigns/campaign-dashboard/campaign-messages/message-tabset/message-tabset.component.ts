@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {Language} from "../../../../utils/language";
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {Language, findByThreeDigitCode} from "../../../../utils/language";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { debounceTime } from 'rxjs/operators'
-import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
+import {NgbTabChangeEvent, NgbTabset} from "@ng-bootstrap/ng-bootstrap";
 
 
 @Component({
@@ -12,6 +12,9 @@ import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 })
 export class MessageTabsetComponent implements OnInit, OnChanges {
 
+  @ViewChild('t')
+  private t: NgbTabset;
+
   @Input() titleKey: string;
   @Input() blockIndex: number;
   @Input() placeHolderKey: string;
@@ -20,12 +23,15 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
   @Input() responseOptions: string[];
 
   @Input() languages: Language[];
+  @Input() openLanguage: Language;
+
   @Input() priorMessages: Map<string, string>;
 
   @Input() maxMessageLength: number = 160;
 
   private _campaignMsgs: Map<string, string>;
   @Output() messagesUpdated = new EventEmitter<Map<string, string>>();
+  @Output() languageChanged = new EventEmitter<Language>();
 
   formGroup: FormGroup;
   formGroupSetup: boolean = false;
@@ -63,11 +69,15 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
       // console.log('adding languages? : ', addedLanguages);
       addedLanguages.forEach(lang => this.formGroup.addControl(lang.threeDigitCode, this.fb.control('', Validators.required)));
       removedLanguages.forEach(lang => {
-        // console.log("removing control with name: ", lang.threeDigitCode);
-        // console.log("does this control exist?: ", this.formGroup.get(lang.threeDigitCode));
         this.formGroup.removeControl(lang.threeDigitCode);
         this._campaignMsgs.delete(lang.threeDigitCode);
       });
+    }
+
+    if (changes['openLanguage'] && !changes['openLanguage'].firstChange) {
+      this.currentTabId = 'tab-' + this.blockIndex + '-' + this.openLanguage.threeDigitCode;
+      const newTabId = this.blockIndex + this.openLanguage.threeDigitCode;
+      this.t.select(newTabId);
     }
 
     if (changes['priorMessages'] && !changes['priorMessages'].firstChange && this.formGroupSetup) {
@@ -76,8 +86,10 @@ export class MessageTabsetComponent implements OnInit, OnChanges {
   }
 
   tabChange($event: NgbTabChangeEvent) {
-    // console.log("changing tab to: ", $event.nextId);
     this.currentTabId = $event.nextId;
+    const langCode = this.currentTabId.substr(this.currentTabId.length - 3);
+    const newLang = findByThreeDigitCode(langCode);
+    this.languageChanged.emit(newLang);
   }
 
   private setMessages(messages: Map<string, string>) {

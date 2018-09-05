@@ -39,6 +39,8 @@ export class SystemAdminComponent implements OnInit {
 
   userProvince = UserProvince;
   provinceKeys: string[];
+
+  accessToken: string;
   
   constructor(private adminService:AdminService,
               private router:Router,
@@ -142,7 +144,6 @@ export class SystemAdminComponent implements OnInit {
   }
 
   confirmDeactivate(){
-
     this.adminService.deactivateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
       for(let grp of this.groups){
         if(grp.groupUid === this.groupToActivateOrDeactivateUid){
@@ -226,14 +227,21 @@ export class SystemAdminComponent implements OnInit {
         this.errorCreatingSubscriberMessage = "Error! Subscriber account not created. Please make sure all input fields are valid.";
         setTimeout(()=>{
           this.errorCreatingSubscriberMessage = "";
-        },2000);
+        }, 2000);
       }
     },error => {
       console.log("Error creating subscriber......",error);
     });
   }
 
-  initiateGraphAnnotationTransfer(endSegment: string) {
-    this.adminService.initiateGraphAnnotation(endSegment).subscribe(_ => this.alertService.alert('annotation.initiated'));
+  fetchApiToken() {
+    this.adminService.fetchAccessToken().subscribe(token => {
+      this.accessToken = token;
+    }, error => {
+      console.log('Error fetching token!: ', error);
+    });
+    return false;
   }
+
+
 }

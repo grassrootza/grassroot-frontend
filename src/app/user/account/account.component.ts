@@ -10,6 +10,8 @@ import { Group } from '../../groups/model/group.model';
 import { GroupService } from '../../groups/group.service';
 import { DataSetCounts } from './dataset.count.model';
 
+import { saveAs } from 'file-saver';
+
 declare var $: any;
 
 @Component({
@@ -245,6 +247,16 @@ export class AccountComponent implements OnInit {
         console.log('Error adding groups: ', error);
       })
     }
+  }
+
+  downloadAccountActivity() {
+    this.accountService.downloadActivity(this.account.uid).subscribe(data => {
+      const blob = new Blob([data], { type: 'application/xls' });
+      saveAs(blob, this.account.name + '.xlsx'); 
+    }, error => {
+      console.log('error downloading activity: ', error);
+    });
+    return false;
   }
 
   logout() {

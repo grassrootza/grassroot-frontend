@@ -74,7 +74,6 @@ export class CreateMeetingComponent implements OnInit {
         // since it will be down by definition (if in this modal)
         this.groupService.loadGroupDetailsCached(this.groupUid, false).subscribe(resp => {
           this.isGroupPaidFor = resp.paidFor;
-          console.log('fetching group members ...');
           this.memberCount = resp.memberCount;
           this.setUpMemberPicker();
         });
@@ -84,7 +83,6 @@ export class CreateMeetingComponent implements OnInit {
 
   setUpMemberPicker() {
     if (this.memberCount < environment.memberFetchCutOff) {
-      console.log('member count low enough, showing assigned members');
       this.fetchAssignedMembers();
     } else {
       console.log(`${this.memberCount} greater than ${environment.memberFetchCutOff} so not showing member assign`);

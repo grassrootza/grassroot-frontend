@@ -28,10 +28,12 @@
 
   <div *ngFor="let type of currentTypes; let i = index">
     <hr *ngIf="campaign.outboundSmsEnabled || i > 0" class="section-separator" />
-    <campaign-message-tabset [blockIndex]="i+1" [languages]="selectedLanguages" [responseOptions]="messageSequences[this.campaign.campaignType][type]"
-                             (messagesUpdated)="storeMessages($event, type)" [priorMessages]="priorMessages[type]?.messages"
-                             [titleKey]="'campaign.messages.titles.' + type" [maxMessageLength]="i > 0 ? 130 : 110"
-                             [placeHolderKey]="'campaign.messages.placeholders.' + type" [explanationKey]="'campaign.messages.explanations.' + type">
+    <campaign-message-tabset [blockIndex]="i+1" [languages]="selectedLanguages" [openLanguage]="currentLanguage" (languageChanged)="alterLanguage($event)"
+                            [responseOptions]="messageSequences[this.campaign.campaignType][type]"
+                            (messagesUpdated)="storeMessages($event, type)" [priorMessages]="priorMessages[type]?.messages"
+                            [titleKey]="'campaign.messages.titles.' + type" [maxMessageLength]="i > 0 ? 130 : 110"
+                            [placeHolderKey]="'campaign.messages.placeholders.' + type" 
+                            [explanationKey]="'campaign.messages.explanations.' + type">
     </campaign-message-tabset>
   </div>
 

@@ -170,4 +170,37 @@ export class GroupDetailsComponent implements OnInit {
     return false;
   }
 
+  triggerDeactivateModal() {
+    $('#deactivate-modal').modal('show');
+    return false;
+  }
+
+  deactivateGroup() {
+    this.groupService.deactivateGroup(this.group.groupUid).subscribe(() => {
+      this.alertService.alert('Done! This group has been deactivated, and will no longer appear after you leave this page');
+      $('#deactivate-modal').modal('hide');
+    }, error => {
+      console.log('Failed to deactivate: ', error);
+      this.alertService.alert('Sorry, group deactivation failed. The group may be too big or too old');
+      $('#deactivate-modal').modal('hide');
+    })
+    return false;
+  }
+
+  hideGroup() {
+    this.groupService.hideGroup(this.group.groupUid).subscribe(() => {
+      this.alertService.alert('Done, the group has been hidden. It will no longer appear on your main screen');
+      this.group.hidden = true;
+    })
+    return false;
+  }
+
+  unhideGroup() {
+    this.groupService.unhideGroup(this.group.groupUid).subscribe(() => {
+      this.alertService.alert('Done, the has been unhidden. It will now appear back on your main screen, menus, etc');
+      this.group.hidden = false;
+    })
+    return false;
+  }
+
 }

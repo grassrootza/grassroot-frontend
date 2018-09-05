@@ -8,7 +8,7 @@
 <div class="row" *ngIf="((languages))" [formGroup]="formGroup">
   <div class="col-md-7 col-sm-12">
     {{ 'campaign.messages.message' | translate }}
-    <ngb-tabset class="content-tabset" (tabChange)="tabChange($event)">
+    <ngb-tabset class="content-tabset" (tabChange)="tabChange($event)" #t="ngbTabset">
       <ngb-tab *ngFor="let language of languages" [id]="blockIndex + language.threeDigitCode">
         <ng-template ngbTabTitle>
           {{ language.shortName }}

@@ -90,6 +90,10 @@ export class GroupService {
 
   groupAddToUserAccountUrl = environment.backendAppUrl + "/api/account/add/group";
 
+  groupHideUrl = environment.backendAppUrl + "/api/group/modify/hide";
+  groupUnhideUrl = environment.backendAppUrl + "/api/group/modify/unhide";
+  groupDeactivateUrl = environment.backendAppUrl + "/api/group/modify/deactivate";
+
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
   private groupInfoListError_: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -134,8 +138,9 @@ export class GroupService {
     const fullUrl = this.groupListUrl;
     return this.httpClient.get<GroupInfo[]>(fullUrl).pipe(map(data => data.map(GroupInfo.createInstance))).subscribe(
         groups => {
-          this.groupInfoList_.next(groups);
-          this.localStorageService.setItem(STORE_KEYS.MY_GROUPS_DATA_CACHE, JSON.stringify(groups));
+          const visibleGroups = groups.filter(group => !group.hidden);
+          this.groupInfoList_.next(visibleGroups);
+          this.localStorageService.setItem(STORE_KEYS.MY_GROUPS_DATA_CACHE, JSON.stringify(visibleGroups));
         },
         error => {
           this.groupInfoListError_.next(error);
@@ -704,14 +709,27 @@ export class GroupService {
 
   downloadErrorReport(groupUid: string) {
     const fullUrl = this.groupDownloadMembersErrorReportUrl + '/' + groupUid + '/download';
-
     return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
 
   unsubscribeUser(groupUid: string):Observable<any>{
     let params = new HttpParams().set("groupUid",groupUid);
-
     return this.httpClient.post(this.groupMemberUnsubscribeUrl,null,{params:params,responseType:'text'});
+  }
+
+  hideGroup(groupUid: string) {
+    const fullUrl = this.groupHideUrl + '/' + groupUid;
+    return this.httpClient.post(fullUrl, null, { responseType: 'text' });
+  }
+
+  unhideGroup(groupUid: string) {
+    const fullUrl = this.groupUnhideUrl + '/' + groupUid;
+    return this.httpClient.post(fullUrl, null, { responseType: 'text' });
+  }
+
+  deactivateGroup(groupUid: string) {
+    const fullUrl = this.groupDeactivateUrl + '/' + groupUid;
+    return this.httpClient.post(fullUrl, null, { responseType: 'text' });
   }
 
   updateMemberAlias(grouoUid:string, alias:string):Observable<any>{
