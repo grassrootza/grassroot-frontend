@@ -191,6 +191,7 @@ export class GroupDetailsComponent implements OnInit {
     this.groupService.hideGroup(this.group.groupUid).subscribe(() => {
       this.alertService.alert('Done, the group has been hidden. It will no longer appear on your main screen');
       this.group.hidden = true;
+      this.groupService.removeGroupCached(this.group.groupUid);
     })
     return false;
   }
@@ -199,6 +200,7 @@ export class GroupDetailsComponent implements OnInit {
     this.groupService.unhideGroup(this.group.groupUid).subscribe(() => {
       this.alertService.alert('Done, the has been unhidden. It will now appear back on your main screen, menus, etc');
       this.group.hidden = false;
+      this.groupService.removeGroupCached(this.group.groupUid);
     })
     return false;
   }

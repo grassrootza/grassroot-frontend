@@ -115,10 +115,15 @@ export class AccountComponent implements OnInit {
   }
 
   viewGroup(groupUid: string) {
+    this.alertService.showLoading();
     this.accountService.getInfoOfGroupOnAccount(groupUid).subscribe(group => {
       console.log('Fetched group info, result: ', group);
       this.groupToView = group;
       this.fetchGroupNotifications(groupUid);
+    }, error => {
+      console.log('Error loading group: ', error);
+      this.alertService.hideLoading();
+      this.alertService.alert('Sorry, there was an error loading the group details');
     });
     return false;
   }
@@ -127,7 +132,12 @@ export class AccountComponent implements OnInit {
     this.accountService.getGroupNotifications(this.account.uid, groupUid).subscribe(count => {
       // console.log('count: ', count);
       this.groupToViewCount = count;
+      this.alertService.hideLoading();
       $('#account-group-modal').modal('show');
+    }, error => {
+      console.log('Error fetching group notificationc count: ', error);
+      this.alertService.hideLoading();
+      this.alertService.alert('Sorry, there was an error loading the group details');
     })
   }
 
@@ -250,11 +260,15 @@ export class AccountComponent implements OnInit {
   }
 
   downloadAccountActivity() {
+    this.alertService.showLoading();
     this.accountService.downloadActivity(this.account.uid).subscribe(data => {
+      this.alertService.hideLoading();
       const blob = new Blob([data], { type: 'application/xls' });
       saveAs(blob, this.account.name + '.xlsx'); 
     }, error => {
+      this.alertService.hideLoading();
       console.log('error downloading activity: ', error);
+      this.alertService.alert('Sorry, there was an error downloading the sheet');
     });
     return false;
   }

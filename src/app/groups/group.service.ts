@@ -124,10 +124,10 @@ export class GroupService {
     }
 
     let cachedNewMembers = this.localStorageService.getItem(STORE_KEYS.NEW_MEMBERS_DATA_CACHE);
-    console.log('cached new members: ', cachedNewMembers);
+    // console.log('cached new members: ', cachedNewMembers);
     if (cachedNewMembers) {
       let cachedNewMembersData = JSON.parse(cachedNewMembers);
-      console.log('cached new members data : ', cachedNewMembersData);
+      // console.log('cached new members data : ', cachedNewMembersData);
       cachedNewMembersData.content = (cachedNewMembers.content && cachedNewMembers.content.map === 'function') ?
         cachedNewMembersData.content.map(membership => Membership.createInstance(membership)) : [];
       this.newMembersInMyGroups_.next(cachedNewMembersData);
@@ -754,6 +754,20 @@ export class GroupService {
       }
     }));
   }
+
+  removeGroupCached(groupUid: string) {
+    const cachedMyGroups = this.localStorageService.getItem(STORE_KEYS.MY_GROUPS_DATA_CACHE);
+    if (cachedMyGroups) {
+      console.log('removing a cached group ...');
+      const remainingGroups = JSON.parse(this.localStorageService.getItem(STORE_KEYS.MY_GROUPS_DATA_CACHE))
+        .filter(group => group.uid !== groupUid);
+      console.log(`after filter, have ${remainingGroups.length} groups left`);
+      this.groupInfoList_.next(remainingGroups);
+      this.localStorageService.setItem(STORE_KEYS.MY_GROUPS_DATA_CACHE, JSON.stringify(remainingGroups));
+    }
+    this.loadGroups();
+  }
+
 }
 
 
