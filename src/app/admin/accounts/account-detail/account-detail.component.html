@@ -10,6 +10,7 @@
     <div class="col-12 pb-3" *ngIf="viewDetails">
       <div class="col-12">
           Notifications since last bill: {{ account.notificationsSinceLastBill }} // 
+          USSD sessions since last bill: {{ account.chargedUssdSinceLastBill }} // 
           Last billing date: {{ account.getLastBillingDate() }} <a href="#" (click)="changeAccountDate()" class="grassroot-link">(change)</a> //
           Number of groups: {{ numberGroups }} //
           Account admins: {{ accountAdmins }} // 

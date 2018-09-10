@@ -83,8 +83,8 @@
             <h4>Groups on this account</h4>
             <p class="small">
               Groups on this account have sent {{ notificationsSinceLastBill }} messages since its last billing date, on 
-              {{ dateOfLastBill }}. The following groups' messages are billed to this account, with access to extra 
-              features and no size limit:
+              {{ dateOfLastBill }}, and had {{ ussdSessionsSinceLastBill }} sessions since the last bill. The following groups' messages are billed to 
+              this account, with access to extra features and no size limit:
               <span *ngFor="let groupUid of paidForGroupUids; let last = last">
                 <a class="grassroot-link" href="#" (click)="viewGroup(groupUid)">{{account.paidForGroups[groupUid]}}</a><span *ngIf="!last">, </span><span *ngIf="last">. </span>
               </span>

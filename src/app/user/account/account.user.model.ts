@@ -43,5 +43,7 @@ export const getEntity = (account: UserExtraAccount): UserExtraAccount => {
     if (account.chargedUssdSinceLastBill)
         acc.chargedUssdSinceLastBill = account.chargedUssdSinceLastBill;
 
+    console.log('constructed account wrapper, charged USSD: ', acc.chargedUssdSinceLastBill);
+
     return acc;
 } 

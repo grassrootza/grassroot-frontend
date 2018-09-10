@@ -33,6 +33,7 @@ export class AccountComponent implements OnInit {
 
   dateOfLastBill: string;
   notificationsSinceLastBill: number = 0;
+  ussdSessionsSinceLastBill: number = 0;
 
   paidForGroupUids: string[];
   otherAdminUids: string[];
@@ -88,6 +89,9 @@ export class AccountComponent implements OnInit {
       this.otherAdminUids = Object.keys(account.otherAdmins);
 
       this.notificationsSinceLastBill = account.notificationsSinceLastBill;
+      this.ussdSessionsSinceLastBill = account.chargedUssdSinceLastBill;
+      console.log('ussd sessions: ', this.ussdSessionsSinceLastBill);
+      
       console.log('last billing date millis: ', account.lastBillingDateMillis);
       this.dateOfLastBill = account.getLastBillingDate();
       console.log(`${this.notificationsSinceLastBill} since ${this.dateOfLastBill}`);
