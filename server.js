@@ -14,7 +14,17 @@ const {
 } = require(`./dist-server/main`);
 
 const app = express();
+
 app.use(helmet());
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'", "app.grassroot.org.za"],
+    scriptSrc: ["'self'", "use.fontawesome.com"],
+    styleSrc: ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdn.quilljs.com"],
+    fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"]
+  }
+}));
+app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
 
 const { provideModuleMap } = require('@nguniversal/module-map-ngfactory-loader');
 const provider = provideModuleMap(LAZY_MODULE_MAP);
