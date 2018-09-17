@@ -1,0 +1,75 @@
+{
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/index.html",
+          "/*.css",
+          "/*.js"
+        ]
+      }
+    }, {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**"
+        ]
+      }
+    }
+  ],
+  "dataGroups":[
+    {
+      "name": "news",
+      "urls": [
+        "http://localhost:8080/v2/news"
+      ],
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "12h",
+        "timeOut": "20s",
+        "stratergy": "freshness"
+      }
+    },
+    {
+      "name": "newsList",
+      "urls": [
+        "http://localhost:8080/v2/api/news/list/full"
+      ],
+      "queryParameters": [
+        "10",
+        "creationTime,desc",
+        "0"
+      ],
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "12h",
+        "timeOut": "20s",
+        "stratergy": "freshness"
+      }
+    },
+    {
+      "name": "newsHeadlines",
+      "urls": [
+        "http://localhost:8080/v2/api/news/list/headlines"
+      ],
+      "queryParameters": [
+        "0",
+        "5",
+        "creationTime,desc",
+        "5"
+      ],
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "12h",
+        "timeOut": "20s",
+        "stratergy": "freshness"
+      }
+    }
+  ]
+}
