@@ -6,6 +6,8 @@ html {
 }
 
 body {
+  max-width: 100%;
+  overflow-x: hidden;
   padding: 0;
   background-color: #F5F6FA;
   color: #4A4A4A;
