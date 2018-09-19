@@ -70,42 +70,6 @@
         "timeOut": "20s",
         "stratergy": "freshness"
       }
-    },
-    {
-      "name": "home",
-      "urls": [
-        "http://localhost:8081/v2/home"
-      ],
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "timeOut": "20s",
-        "stratergy": "freshness"
-      }
-    },
-    {
-      "name": "groups",
-      "urls": [
-        "http://localhost:8081/v2/groups"
-      ],
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "timeOut": "20s",
-        "stratergy": "freshness"
-      }
-    },
-    {
-      "name": "campaigns",
-      "urls": [
-        "http://localhost:8081/v2/campaigns"
-      ],
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "timeOut": "20s",
-        "stratergy": "freshness"
-      }
     }
   ]
 }
