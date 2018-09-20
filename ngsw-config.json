@@ -27,7 +27,7 @@
     {
       "name": "news",
       "urls": [
-        "http://localhost:8080/v2/news"
+        "https://staging.grassroot.org.za/v2/news"
       ],
       "cacheConfig": {
         "maxSize": 5,
@@ -39,7 +39,7 @@
     {
       "name": "newsList",
       "urls": [
-        "http://localhost:8080/v2/api/news/list/full"
+        "https://staging.grassroot.org.za/v2/api/news/list/full"
       ],
       "queryParameters": [
         "10",
@@ -56,7 +56,7 @@
     {
       "name": "newsHeadlines",
       "urls": [
-        "http://localhost:8080/v2/api/news/list/headlines"
+        "https://staging.grassroot.org.za/v2/api/news/list/headlines"
       ],
       "queryParameters": [
         "0",
