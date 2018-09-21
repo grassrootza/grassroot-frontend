@@ -304,13 +304,43 @@ p {
 .call-to-action:hover {
   background-color: #2BA445;
 }
-
 #intro {
   border-radius: 0px;
   margin-bottom: 0px;
-  background: url(/assets/landing/banner_bg_prog.jpg) no-repeat;
+  /*background: url(/assets/landing/banner_bg1.jpg) no-repeat;*/
   background-size: cover;
-  position: relative; }
+  position: relative; 
+  width: 100%;
+
+ /* Progress banner loader css starts here */
+  filter: blur(15px);
+  background-size: cover;
+  animation: hd-quality 1s;
+  animation-delay: 3s;
+  animation-fill-mode: forwards;
+  }
+  #intro.demo::after {
+    animation: low-quality 1s;
+    animation-delay: 1s;
+  }
+  @keyframes 
+  low-quality {  0% {
+    background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
+    }
+  }
+
+  @keyframes 
+  hd-quality {  0% {
+    background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
+    filter: blur(15px);
+  }
+  100% {
+    background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
+    filter: blur(0px);
+  }
+}
+/* blur prograss loader css ends here */
+
 #intro .intro-content {
   /*max-width: 770px;*/
   width: 100%;
