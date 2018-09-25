@@ -313,10 +313,10 @@ p {
   width: 100%;
 
  /* Progress banner loader css starts here */
-  filter: blur(15px);
+  /* filter: blur(10px); */
   background-size: cover;
   animation: hd-quality 1s;
-  animation-delay: 3s;
+  animation-delay: 2s;
   animation-fill-mode: forwards;
   }
   #intro.demo::after {
@@ -326,13 +326,14 @@ p {
   @keyframes 
   low-quality {  0% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
+    filter: blur(12px);
     }
   }
 
   @keyframes 
-  hd-quality {  0% {
+  hd-quality {  50% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
-    filter: blur(15px);
+    filter: blur(6px);
   }
   100% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
