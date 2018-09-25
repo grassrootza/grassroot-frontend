@@ -85,10 +85,10 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const browserLang = translateService.getBrowserLang();
       translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+      this.updatesService.checkForUpdates();
     } else {
       translateService.use('en');
     }
-    this.updatesService.checkForUpdates();
   }
 
   ngOnInit(): void {

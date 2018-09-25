@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { interval } from 'rxjs';
 
@@ -7,8 +7,8 @@ import { interval } from 'rxjs';
 })
 export class UpdateService {
 
-  constructor(private updates:SwUpdate) {
-      if(updates.isEnabled){
+  constructor(@Optional() private updates:SwUpdate) {
+      if(updates && updates.isEnabled){
           interval(6 * 60 * 60)
           .subscribe(() => updates.checkForUpdate()
           .then(() => {
