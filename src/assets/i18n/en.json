@@ -874,8 +874,9 @@
       }
     },
     "dashboard": {
-      "analyze": "Campaign Dashboard",
-      "messages": "Response Messages",
+      "analyze": "Dashboard",
+      "ussd": "USSD",
+      "whatsapp": "WhatsApp",
       "broadcasts": "Broadcasts",
       "settings": "Settings",
       "code-title": "Campaign Code",

@@ -11,7 +11,7 @@ export const CAMPAIGN_DASHBOARD_ROUTES: Routes = [
     children: [
       {path: '', redirectTo:'analyze', pathMatch: 'full'},
       {path: 'analyze', component: CampaignStatsComponent, canActivate: [LoggedInGuard]},
-      {path: 'messages', component: CampaignMessagesComponent, canActivate: [LoggedInGuard]},
+      {path: 'messages/:channel', component: CampaignMessagesComponent, canActivate: [LoggedInGuard]},
       {path: 'broadcasts', component: CampaignBroadcastsComponent, canActivate: [LoggedInGuard]},
       {path: 'settings', component: CampaignSettingsComponent, canActivate: [LoggedInGuard]}
   ]}

@@ -84,10 +84,10 @@ export class CampaignService {
     return this.httpClient.post<CampaignInfo>(this.campaignCreateUrl, request);
   }
 
-  setCampaignMessages(campaignUid: string, messageRequests: CampaignMsgRequest[]): Observable<CampaignInfo> {
+  setCampaignMessages(campaignUid: string, messageRequests: CampaignMsgRequest[], channel: string): Observable<CampaignInfo> {
     let fullUrl = this.campaignMessageSetUrl + "/" + campaignUid;
     let serverMsgRequests: CampaignMsgServerDTO[] = messageRequests.map(req =>
-      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags));
+      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, channel, req.messages, req.nextMsgIds, req.tags));
     // console.log("message request, messages: ", messageRequests.map(mr => mr.messages));
     return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests).pipe(map(result => this.stashChangedCampaign(result)));
   }
@@ -228,7 +228,7 @@ export class CampaignService {
     const fullUrl = this.changeSmsSharingUrl + "/" + campaignUid;
     let params = new HttpParams().set("sharingEnabled", sharingEnabled.toString()).set("smsLimit", smsLimit.toString());
     let sharingMsgs:CampaignMsgServerDTO[] = sharingTemplates ? sharingTemplates.map(req =>
-      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags)) : null;
+      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, 'USSD', req.messages, req.nextMsgIds, req.tags)) : null;
     return this.httpClient.post<CampaignInfo>(fullUrl, sharingMsgs, { params: params }).pipe(map(getCampaignEntity));
   }
 

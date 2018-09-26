@@ -30,10 +30,9 @@ export class CampaignDashboardComponent implements OnInit {
       if (ev instanceof NavigationEnd) {
         if (this.campaign != null) {
           let uri = ev.urlAfterRedirects;
-          let startIndex = uri.indexOf(this.campaign.campaignUid) + this.campaign.campaignUid.length + 1;
-          this.currentTab = uri.substring(startIndex);
-          if (this.currentTab.indexOf("/") >= 0)
-            this.currentTab = this.currentTab.substring(0, this.currentTab.indexOf("/"));
+          // console.log('current uri: ', uri);
+          this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);
+          // console.log('current tab: ', this.currentTab);
         }
       }
     });
