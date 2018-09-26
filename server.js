@@ -21,7 +21,7 @@ app.use(helmet.contentSecurityPolicy({
     defaultSrc: ["'self'", "app.grassroot.org.za"],
     scriptSrc: ["'self'", "use.fontawesome.com", "www.google.com/recaptcha/", "www.gstatic.com/recaptcha/"],
     styleSrc: ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdn.quilljs.com"],
-    fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com", "data:", "chrom-extension:"],
+    fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com", "data:", "chrome-extension:"],
     frameSrc: ["www.google.com/recaptcha/"]
   }
 }));
