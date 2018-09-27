@@ -824,7 +824,7 @@
       "code": "USSD code (*134*1994*...)",
       "codePlace": "3 digits only",
       "description": "Description",
-      "descriptionPlace": "A longer description of the campaign. This will be shown to uses who click on a short link",
+      "descriptionPlace": "A longer description of the campaign (optional). This will be shown to uses who click on a short link",
       "image": "Campaign Image (optional)",
       "drag-drop": "Drag & drop",
       "click-file": "a file here or ",

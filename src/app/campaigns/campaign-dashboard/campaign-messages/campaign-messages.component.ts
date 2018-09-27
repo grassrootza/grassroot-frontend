@@ -109,7 +109,7 @@ export class CampaignMessagesComponent implements OnInit {
     this._currentMessages = []; // to reset, so we don't get weirdness if double click save
     this.existingMessages = this.campaign.campaignMessages && this.campaign.campaignMessages.some(msg => msg.isForChannel(this.channel));
     this.currentTypes = this.messageTypes[this.campaign.campaignType];
-    console.log('found error yet? existing messages: ', this.existingMessages);
+    // console.log('found error yet? existing messages: ', this.existingMessages);
 
     if (!this.campaign.outboundSmsEnabled) {
       this.sliceOutMessageType('SHARE_PROMPT');
@@ -208,7 +208,7 @@ export class CampaignMessagesComponent implements OnInit {
   storeMessages(event: object, actionType: string) {
     this.messagesChanged = true;
     this._currentMessages.find(msg => msg.linkedActionType == actionType).messages = event as Map<string, string>;
-    console.log(`stored messages, have ${this._currentMessages.length} of them`);
+    // console.log(`stored messages, have ${this._currentMessages.length} of them`);
     // console.log("current messages: ", this._currentMessages);
   }
 
