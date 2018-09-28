@@ -316,7 +316,7 @@ p {
   /* filter: blur(10px); */
   background-size: cover;
   animation: hd-quality 1s;
-  animation-delay: 2s;
+  animation-delay: 1s;
   animation-fill-mode: forwards;
   }
   #intro.demo::after {
@@ -326,14 +326,14 @@ p {
   @keyframes 
   low-quality {  0% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
-    filter: blur(12px);
+    filter: blur(10px);
     }
   }
 
   @keyframes 
   hd-quality {  50% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
-    filter: blur(6px);
+    filter: blur(7px);
   }
   100% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
