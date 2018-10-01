@@ -50,6 +50,10 @@ export class CampaignInfo {
   public hasMessageType(messageType: string) {
     return this.campaignMessages.findIndex(msg => msg.linkedActionType == messageType) != -1;
   }
+
+  public channelMessages(channel: string): CampaignMsgServerDTO[] {
+    return this.campaignMessages.filter(msg => msg.isForChannel(channel));
+  }
 }
 
 export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {

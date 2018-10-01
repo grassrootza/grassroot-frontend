@@ -40,7 +40,7 @@ export class BroadcastMembersComponent implements OnInit {
               private alertService: AlertService) {
     this.countParams = new BroadcastCost();
     this.createParams = this.broadcastService.getCreateParams();
-    console.log('broadcast create params: ', this.createParams);
+    // console.log('broadcast create params: ', this.createParams);
     this.memberForm = formBuilder.group({
       'selectionType': ['ALL_MEMBERS', Validators.required],
       'taskTeams': [],
@@ -59,7 +59,7 @@ export class BroadcastMembersComponent implements OnInit {
       this.memberFilter = storedEntity.memberFilter;
     }
 
-    console.log('broadcast type: ', this.broadcastService.currentType());
+    // console.log('broadcast type: ', this.broadcastService.currentType());
     if (this.broadcastService.currentType() == 'campaign') {
       this.campaignService.loadCampaign(this.broadcastService.parentId()).subscribe(cp => {
         this.campaign = cp;
@@ -147,7 +147,7 @@ export class BroadcastMembersComponent implements OnInit {
   membersFilterChanged(filter: MembersFilter) {
     this.memberFilter = filter;
     this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(members => {
-          console.log('from server: ', members);
+          // console.log('from server: ', members);
           let filteredMembers = filter.role == 'ANY' ? members.content : members.content.filter(m => m.roleName == filter.role);
           this.recalculateFromPage(members);
           if (filteredMembers && filteredMembers.length > 0 && filteredMembers.length < 10) {
@@ -177,11 +177,11 @@ export class BroadcastMembersComponent implements OnInit {
       return false;
     }
     let entity: BroadcastMembers = this.memberForm.value;
-    console.log("members entity: ", entity);
+    // console.log("members entity: ", entity);
     entity.memberFilter = this.memberFilter;
     this.broadcastService.setMembers(entity);
     this.broadcastService.setMessageCounts(this.countParams);
-    console.log("stored member selection, looks like: ", this.broadcastService.getMembers());
+    // console.log("stored member selection, looks like: ", this.broadcastService.getMembers());
     return true;
   }
 

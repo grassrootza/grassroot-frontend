@@ -8,6 +8,7 @@ import {NotificationService} from "./user/notification.service";
 import {Notification} from "./user/model/notification.model";
 import {LocalStorageService, STORE_KEYS} from "./utils/local-storage.service";
 import {isPlatformBrowser} from "@angular/common";
+import { UpdateService } from './utils/update.service';
 
 declare var $: any;
 
@@ -49,6 +50,7 @@ export class AppComponent implements OnInit {
               private alertService: AlertService,
               private notificationService: NotificationService,
               private localStorageService: LocalStorageService,
+              private updatesService: UpdateService,
               @Inject(PLATFORM_ID) protected platformId: Object) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
@@ -83,6 +85,7 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       const browserLang = translateService.getBrowserLang();
       translateService.use(browserLang.match(/en/) ? browserLang : 'en');
+      this.updatesService.checkForUpdates();
     } else {
       translateService.use('en');
     }

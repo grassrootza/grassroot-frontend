@@ -52,7 +52,7 @@ export class DateTimeUtils {
 
   public static futureTimeStruct(minutesToAdd: number = 0, hoursToaAdd: number = 0) {
     let date = moment().add(minutesToAdd, 'minutes').add(hoursToaAdd, 'hours');
-    console.log("altered date: ", date);
+    // console.log("altered date: ", date);
     return { hour: date.hour(), minute: date.minutes() }
   }
 

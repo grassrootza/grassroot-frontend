@@ -33,7 +33,9 @@ import {BrowserCookiesService} from "./utils/cookie-service/browser-cookies.serv
 import {CookieModule} from "ngx-cookie";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AdminService} from './admin/admin.service';
-import {HelpComponent} from "./help/help.component";
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { UpdateService } from './utils/update.service';
 
 export function getJwtToken(): string {
   return localStorage.getItem('token');
@@ -72,7 +74,8 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
     }),
     NgbModule.forRoot(),
     SharedModule.forRoot(),
-    CookieModule.forRoot()
+    CookieModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},
@@ -92,6 +95,7 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
     SearchService,
     MediaService,
     AdminService,
+    UpdateService,
     {provide: CookiesService, useClass: BrowserCookiesService}
   ],
   bootstrap: [AppComponent]

@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <div class="row mt-md-3" *ngIf="campaign.outboundSmsEnabled">
+  <div class="row mt-md-3" *ngIf="campaign.outboundSmsEnabled && channel == 'USSD'">
     <div class="col-12">
       <h3>Include a welcome SMS (optional, delete content to disable)</h3>
       <p>A welcome message is an SMS that will be sent to anyone who dials the campaign code (the USSD), to include information you want them to keep even if they do not 
@@ -30,8 +30,10 @@
     <hr *ngIf="campaign.outboundSmsEnabled || i > 0" class="section-separator" />
     <campaign-message-tabset [blockIndex]="i+1" [languages]="selectedLanguages" [openLanguage]="currentLanguage" (languageChanged)="alterLanguage($event)"
                             [responseOptions]="messageSequences[this.campaign.campaignType][type]"
-                            (messagesUpdated)="storeMessages($event, type)" [priorMessages]="priorMessages[type]?.messages"
-                            [titleKey]="'campaign.messages.titles.' + type" [maxMessageLength]="i > 0 ? 130 : 110"
+                            (messagesUpdated)="storeMessages($event, type)" 
+                            [priorMessages]="priorMessages[type]?.messages"
+                            [titleKey]="'campaign.messages.titles.' + type" 
+                            [maxMessageLength]="i > 0 || channel !== 'USSD' ? maxMsgLength : (maxMsgLength - 20)"
                             [placeHolderKey]="'campaign.messages.placeholders.' + type" 
                             [explanationKey]="'campaign.messages.explanations.' + type">
     </campaign-message-tabset>

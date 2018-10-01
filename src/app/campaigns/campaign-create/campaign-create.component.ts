@@ -45,7 +45,7 @@ export class CampaignCreateComponent implements OnInit {
 
     this.createCampaignForm = this.formBuilder.group({
       'name': ['', Validators.compose([Validators.required, Validators.minLength(3)])],
-      'description': ['', Validators.compose([Validators.required, Validators.minLength(10)])],
+      'description': [''],
       'code': ['', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(3),
         checkCodeIsNumber]), ValidateCodeNotTaken.createValidator(this.campaignService)],
       'startDate': [DateTimeUtils.nowAsDateStruct(), Validators.required],
@@ -71,13 +71,18 @@ export class CampaignCreateComponent implements OnInit {
     }, error => {
       console.log("error fetching codes: ", error);
     });
+    
+    this.groupService.loadGroups(); // to refresh this properly, else have issues
     this.groupService.groupInfoList.subscribe(result => this.loadGroupSelector(result));
+    
     this.alertService.hideLoadingDelayed();
     setTimeout(() => this.setUpTopicSelector(), 300); // else may not be initialized
   }
 
   loadGroupSelector(groups: GroupInfo[]) {
-    this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_CREATE_CAMPAIGN"));
+    // console.log('group list: ', groups);
+    this.availableGroups = groups.filter(group => group.hasPermission("GROUP_PERMISSION_CREATE_CAMPAIGN"))
+      .sort((g1, g2) => g1.name.localeCompare(g2.name));
     this.createCampaignForm.controls['groupUid'].valueChanges.subscribe(value => {
       console.log("selected this group: ", value);
       let selectedGroupTopics = this.availableGroups.find(grp => grp.groupUid === value).topics;
@@ -126,12 +131,13 @@ export class CampaignCreateComponent implements OnInit {
     console.log("constructed form: ", this.getRequestFromForm());
     this.alertService.showLoading();
     this.campaignService.createCampaign(this.getRequestFromForm()).subscribe(result => {
-      this.alertService.alert("campaign.create.complete.success");
+      this.alertService.alert("campaign.create.complete.success", true);
       this.alertService.hideLoading();
-      this.router.navigate(['/campaign/' + result.campaignUid + '/messages']);
+      this.router.navigate(['/campaign/' + result.campaignUid + '/messages/ussd']);
     }, error2 => {
       // todo : proper error messages
       console.log("error creating campaign! : ", error2);
+      this.alertService.alert('Sorry, there was an error creating the campaign');
       this.alertService.hideLoading();
     });
   }
