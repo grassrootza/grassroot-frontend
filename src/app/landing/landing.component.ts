@@ -33,7 +33,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('tasknote') carouselPlaceHolder: ElementRef;
   @ViewChild('activitiesRow') activitiesRow: ElementRef;
   @ViewChild('activitiesPlaceHolder') activitiesPlaceHolder: ElementRef;
-  @ViewChild('banner') bannerImage: ElementRef;
 
   public activitiesList: PublicActivity[] = [];
   public newsList: PublicLivewire[] = [];
@@ -105,7 +104,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
       setTimeout(() => {
         //console.log('about to alter banner image style');
         this.bannerImageStyle = 'url(/assets/landing/banner_bg.jpg)'; // Image progressive loader
-      }, 3000);
+      }, 1500);
       fromEvent(window, 'resize')
         .pipe(debounceTime(200))
         .subscribe(() => {
