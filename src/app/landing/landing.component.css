@@ -326,14 +326,14 @@ p {
   @keyframes 
   low-quality {  0% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
-    filter: blur(10px);
+    filter: blur(5px);
     }
   }
 
   @keyframes 
   hd-quality {  50% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
-    filter: blur(7px);
+    filter: blur(3px);
   }
   100% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
