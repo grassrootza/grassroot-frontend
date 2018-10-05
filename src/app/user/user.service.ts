@@ -213,4 +213,9 @@ export class UserService {
     return this.httpClient.get(this.fetchApiTokenUrl, { responseType: 'text' });
   }
 
+  subscribeToWhatsappNotification(subscribe:boolean): Observable<any>{
+    
+    return null;
+  }
+
 }

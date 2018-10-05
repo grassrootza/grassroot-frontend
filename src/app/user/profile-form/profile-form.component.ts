@@ -124,7 +124,7 @@ export class ProfileFormComponent implements OnInit {
   @HostListener('dragenter', ['$event']) onDragEnter(event) {
     this.dragAreaClass = "droparea";
     event.preventDefault();
-  }
+  }import
 
   @HostListener('dragend', ['$event']) onDragEnd(event) {
     this.dragAreaClass = this.dragClass();

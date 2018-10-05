@@ -82,11 +82,19 @@
             </p>
           </div>
         </div>
+
         <div class="form-row">
-          <div class="form-group col-sm-12"> <!-- [disabled]="!contentForm.valid"  -->
-            <button type="submit" class="btn btn-success float-right" [disabled]="profileForm.invalid">{{ 'action.save' | translate }}
-            </button>
-          </div>
+            <!-- Checkbox input below -->
+            <div class="form-group col-md-6 col-sm-12" >
+              <label for="form-group" >
+                 <input type="checkbox" value="false" name="form-group" formControlName="checkbox"/> subscribe for whatsapp notification
+              </label>
+            </div>
+
+            <div class="form-group col-md-6 col-sm-12"> <!-- [disabled]="!contentForm.valid"  -->
+              <button type="submit" class="btn btn-success float-right" [disabled]="profileForm.invalid">{{ 'action.save' | translate }}
+              </button>
+            </div>
         </div>
       </form>
     </div>
