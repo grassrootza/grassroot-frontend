@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
       this.pullNotifications();
       setInterval(() => {
         this.pullNotifications()
-      }, 10000);
+      }, 30000);
     }
   }
 

@@ -313,9 +313,8 @@ p {
   width: 100%;
 
  /* Progress banner loader css starts here */
-  /* filter: blur(10px); */
   background-size: cover;
-  animation: hd-quality 1s;
+  /* animation: hd-quality 1s;
   animation-delay: 1s;
   animation-fill-mode: forwards;
   }
@@ -338,7 +337,7 @@ p {
   100% {
     background-image:#929BAF url(/assets/landing/banner_bg1.jpg);
     filter: blur(0px);
-  }
+  } */
 }
 /* blur prograss loader css ends here */
 
