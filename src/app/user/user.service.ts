@@ -131,15 +131,19 @@ export class UserService {
   updateDetails(user: UserProfile, otp?: string) {
     let msisdn = (user.phone) ? PhoneNumberUtils.convertToSystem(user.phone) : "";
     let params = new HttpParams()
-      .set("name", user.name).set("phone", msisdn).set("email", user.email).set("province", user.province)
-      .set("language", user.language);
+      .set("name", user.name)
+      .set("phone", msisdn)
+      .set("email", user.email)
+      .set("province", user.province)
+      .set("language", user.language)
+      .set('whatsappOptIn',user.optInWhatsapp + "");
     if (otp) {
       params = params.set("validationOtp", otp);
     }
     return this.httpClient.post(this.updateProfileUrl, null, {params: params})
       .pipe(map(result => {
         let message = result['message'];
-        //console.log("here is the result: ", message);
+        console.log("here is the result: ", message);
         if (message == "UPDATED") {
           let updatedUser: AuthenticatedUser = getAuthUser(result['data']);
           this.storeAuthUser(updatedUser, updatedUser.token);
@@ -212,10 +216,4 @@ export class UserService {
   fetchAccessToken(): Observable<string> {
     return this.httpClient.get(this.fetchApiTokenUrl, { responseType: 'text' });
   }
-
-  subscribeToWhatsappNotification(subscribe:boolean): Observable<any>{
-    
-    return null;
-  }
-
 }

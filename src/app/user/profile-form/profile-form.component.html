@@ -84,10 +84,10 @@
         </div>
 
         <div class="form-row">
-            <!-- Checkbox input below -->
+            <!-- Checkbox input below for whatsapp subscribtion-->
             <div class="form-group col-md-6 col-sm-12" >
               <label for="form-group" >
-                 <input type="checkbox" value="false" name="form-group" formControlName="checkbox"/> subscribe for whatsapp notification
+                 <input formControlName="optInWhatsapp" type="checkbox" name="checkbox" (change)="subscribeWhatsapp($event.target.checked)" /> subscribe for whatsapp notification
               </label>
             </div>
 

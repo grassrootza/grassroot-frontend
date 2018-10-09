@@ -29,6 +29,7 @@ export class ProfileFormComponent implements OnInit {
   public currentImageUrl: string;
 
   public accessToken: string = "";
+  public optInWhatsapp: boolean = false;
 
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,
@@ -48,7 +49,8 @@ export class ProfileFormComponent implements OnInit {
         name:new FormControl('',Validators.required),
         phone:new FormControl('',[optionalPhoneValidator]),
         province:new FormControl('',Validators.required),
-        language:new FormControl('',Validators.required)
+        language:new FormControl('',Validators.required),
+        optInWhatsapp:new FormControl('',[])
     }, emailOrPhoneEntered("email", "phone"));
 
   }
@@ -144,4 +146,10 @@ export class ProfileFormComponent implements OnInit {
     this.onImageSelected(files[0]);
   }
 
+  subscribeWhatsapp(evt:any){
+    console.log("checked",evt);
+    this.optInWhatsapp = evt;
+    this.userProfile.optInWhatsapp = evt;
+    console.log("User profile logged on the checked event ",this.userProfile);
+  }
 }
