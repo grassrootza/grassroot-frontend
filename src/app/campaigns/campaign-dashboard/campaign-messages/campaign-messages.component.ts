@@ -60,10 +60,14 @@ export class CampaignMessagesComponent implements OnInit {
   private messagesChanged: boolean = false;
   private _currentMessages: CampaignMsgRequest[];
 
+  // only in USSD (no such thing if join via WhatsApp)
   public campaignWelcomeMsg: FormControl;
   public priorCampaignMsg: string = '';
   public welcomeCharsLeft: number;
   private maxMsgLength = 130;
+
+  // for whether or not to ask for media
+  public askForMediaToggle: FormControl;
 
   constructor(private campaignService: CampaignService,
               private alertService: AlertService,
@@ -77,6 +81,9 @@ export class CampaignMessagesComponent implements OnInit {
     this.languageForm = this.fb.group({});
     this.campaignWelcomeMsg = this.fb.control('');
 
+    this.askForMediaToggle = this.fb.control(false);
+    this.askForMediaToggle.valueChanges.subscribe(value => this.updateRequestMedia(value));
+
     this.availableLanguages.forEach(language => {
       this.languageForm.addControl(language.threeDigitCode,
         this.fb.control(!(this.selectedLanguages.indexOf(language))));
@@ -86,6 +93,7 @@ export class CampaignMessagesComponent implements OnInit {
       console.log('route params: ', params);
       this.campaignUid = params['id'];
       this.channel = params['channel'].toUpperCase();
+
       this.maxMsgLength = this.channel == 'WHATSAPP' ? 320 : 130;
 
       this.campaignService.loadCampaign(this.campaignUid).subscribe(campaign => {
@@ -97,6 +105,14 @@ export class CampaignMessagesComponent implements OnInit {
         }
       });
     });
+  }
+
+  updateRequestMedia(requestMediaState: boolean) {
+    console.log('Value changed, now: ', requestMediaState);
+    if (requestMediaState)
+      this.currentTypes.push('MEDIA_PROMPT');
+    else
+      this.currentTypes.pop();
   }
 
   setupDefaultLanguage() {

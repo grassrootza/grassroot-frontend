@@ -5,8 +5,8 @@
 
 export const environment = {
   production: false,
-  //backendAppUrl: "http://localhost:8080/v2",
-  backendAppUrl: "https://staging.grassroot.org.za/v2",
+  backendAppUrl: "http://localhost:8080/v2",
+  // backendAppUrl: "https://staging.grassroot.org.za/v2",
   // frontendAppUrl: "http://www.grassroot.org.za", // leave as this for testing (bitly doesn't like localhost)
   frontendAppUrl: "http://localhost:4200",
   ussdPrefix: `*134*1994*`,
