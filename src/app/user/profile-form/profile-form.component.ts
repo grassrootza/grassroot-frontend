@@ -29,7 +29,7 @@ export class ProfileFormComponent implements OnInit {
   public currentImageUrl: string;
 
   public accessToken: string = "";
-  public optInWhatsapp: boolean = false;
+  public whatsAppOptedIn: boolean = false;
 
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,
@@ -50,7 +50,7 @@ export class ProfileFormComponent implements OnInit {
         phone:new FormControl('',[optionalPhoneValidator]),
         province:new FormControl('',Validators.required),
         language:new FormControl('',Validators.required),
-        optInWhatsapp:new FormControl('',[])
+        whatsAppOptedIn:new FormControl('',[])
     }, emailOrPhoneEntered("email", "phone"));
 
   }
@@ -58,13 +58,15 @@ export class ProfileFormComponent implements OnInit {
   ngOnInit() {
     this.userProfile = new UserProfile(this.userService.getLoggedInUser());
     this.profileForm.setValue(this.userProfile);
+    console.log("User profile from the server", this.userProfile);
+    console.log("Testing data from server",this.userProfile.whatsAppOptedIn);
     this.currentImageUrl = this.userService.getProfileImageUrl(false);
     this.dragAreaClass = this.dragClass();
   }
 
   saveChanges() {
     console.log("saving changes! form looks like: ", this.profileForm.value);
-    console.log("User email......" + this.userProfile.email);
+    // console.log("User email......" + this.userProfile.email);
     this.userProfile = this.profileForm.value;
     this.userService.updateDetails(this.userProfile)
       .subscribe(message => {
@@ -148,8 +150,8 @@ export class ProfileFormComponent implements OnInit {
 
   subscribeWhatsapp(evt:any){
     console.log("checked",evt);
-    this.optInWhatsapp = evt;
-    this.userProfile.optInWhatsapp = evt;
+    this.whatsAppOptedIn = evt;
+    this.userProfile.whatsAppOptedIn = evt;
     console.log("User profile logged on the checked event ",this.userProfile);
   }
 }

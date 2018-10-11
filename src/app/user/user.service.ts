@@ -136,7 +136,7 @@ export class UserService {
       .set("email", user.email)
       .set("province", user.province)
       .set("language", user.language)
-      .set('whatsappOptIn',user.optInWhatsapp + "");
+      .set('whatsappOptIn',user.whatsAppOptedIn + "");
     if (otp) {
       params = params.set("validationOtp", otp);
     }

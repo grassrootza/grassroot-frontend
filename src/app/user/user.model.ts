@@ -11,7 +11,8 @@ export class User {
               public languageCode: string,
               public province: string,
               public hasPassword: boolean,
-              public contactError: boolean) {
+              public contactError: boolean,
+              public whatsAppOptedIn: boolean) {//Included whatsAppOptedIn field
   }
 }
 
@@ -30,7 +31,8 @@ export class AuthenticatedUser {
               public hasImage: boolean,
               public token: string,
               public systemRoles: string[],
-              public hasAccount: boolean) {
+              public hasAccount: boolean,
+              public whatsAppOptedIn: boolean) {//Included whatsAppOptedIn field
   }
 
   hasAccountAdmin() {
@@ -61,7 +63,8 @@ export const getAuthUser = (au: AuthenticatedUser): AuthenticatedUser => {
     au.hasImage,
     au.token,
     au.systemRoles,
-    au.hasAccount
+    au.hasAccount,
+    au.whatsAppOptedIn
   );
 };
 
@@ -71,7 +74,7 @@ export class UserProfile {
   email: string = "";
   province: string = 'ZA_GP';
   language: string = "en";
-  optInWhatsapp: boolean = false;//added whats app opt in parameter
+  whatsAppOptedIn: boolean;//added whats app opt in parameter
 
 
   constructor(user?: AuthenticatedUser) {
@@ -81,6 +84,7 @@ export class UserProfile {
       this.email = (user.email) ? user.email : "";
       this.province = (user.province) ? user.province : 'ZA_GP';
       this.language = (user.languageCode) ? user.languageCode : "en";
+      this.whatsAppOptedIn = (user.whatsAppOptedIn); //Included whatsAppOptedIn constructor field
     }
   }
 }
