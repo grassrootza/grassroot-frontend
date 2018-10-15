@@ -58,15 +58,14 @@ export class ProfileFormComponent implements OnInit {
   ngOnInit() {
     this.userProfile = new UserProfile(this.userService.getLoggedInUser());
     this.profileForm.setValue(this.userProfile);
-    console.log("User profile from the server", this.userProfile);
-    console.log("Testing data from server",this.userProfile.whatsAppOptedIn);
+    // console.log("User profile from the server", this.userProfile);
+    // console.log("Testing data from server",this.userProfile.whatsAppOptedIn);
     this.currentImageUrl = this.userService.getProfileImageUrl(false);
     this.dragAreaClass = this.dragClass();
   }
 
   saveChanges() {
     console.log("saving changes! form looks like: ", this.profileForm.value);
-    // console.log("User email......" + this.userProfile.email);
     this.userProfile = this.profileForm.value;
     this.userService.updateDetails(this.userProfile)
       .subscribe(message => {
@@ -128,7 +127,7 @@ export class ProfileFormComponent implements OnInit {
   @HostListener('dragenter', ['$event']) onDragEnter(event) {
     this.dragAreaClass = "droparea";
     event.preventDefault();
-  }import
+  }
 
   @HostListener('dragend', ['$event']) onDragEnd(event) {
     this.dragAreaClass = this.dragClass();
@@ -149,9 +148,7 @@ export class ProfileFormComponent implements OnInit {
   }
 
   subscribeWhatsapp(evt:any){
-    console.log("checked",evt);
     this.whatsAppOptedIn = evt;
     this.userProfile.whatsAppOptedIn = evt;
-    console.log("User profile logged on the checked event ",this.userProfile);
   }
 }

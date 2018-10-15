@@ -125,6 +125,15 @@
           <p *ngIf="accessToken"><code style="word-break: break-all">{{ accessToken }}</code></p>
         </div>
       </div>
+      <hr />
+
+      <!-- Added an export spreadsheet for whatsapp subscribers -->
+      <div class="row mt-3">
+        <div class="col-12">
+          <h1>Whats App subscription statistics</h1>
+          <p>Export a list of whatsapp subscribers <a href="#" (click)="exportWhatsAppOptIn()" class="grassroot-link">here</a> </p>
+        </div>
+      </div>
 
 		</div>
 	</div>
