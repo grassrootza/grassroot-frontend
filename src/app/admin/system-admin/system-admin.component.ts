@@ -242,6 +242,9 @@ export class SystemAdminComponent implements OnInit {
     });
     return false;
   }
-
+  exportWhatsAppOptIn(){
+    console.log("Calling method for exporting whatsapp spreadsheet");
+    return false;
+  }
 
 }
