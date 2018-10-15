@@ -37,9 +37,8 @@
         </div>
       </div>
 
-      <app-group-info *ngFor="let gr of pinnedGroups"
-                      [group]="gr"
-                      [extendedInfoVisible]="pinnedGroups.length == 1"
+      <app-group-info *ngFor="let gr of pinnedGroups; trackBy: trackByGroupId"
+                      [group]="gr" [extendedInfoVisible]="pinnedGroups.length == 1"
                       (onGroupClicked)="showGroup($event)"
                       (onTriggerCreateMeeting)="showCreateMeetingModal($event)"
                       (onTriggerCreateVote)="showCreateVoteModal($event)"

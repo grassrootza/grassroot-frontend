@@ -17,6 +17,8 @@ export class BroadcastTypeComponent implements OnInit {
   public createParams: BroadcastParams = new BroadcastParams();
   public costThisMonth: number = 0;
 
+  public finishedLoading: boolean = false;
+
   constructor(private router: Router, private formBuilder: FormBuilder, private broadcastService: BroadcastService,
               private alertService: AlertService) {
     this.typesForm = this.formBuilder.group(new BroadcastTypes(), {validator: Validators.compose([oneItemSelected, fbPageSelectedIfFb])});
@@ -25,10 +27,16 @@ export class BroadcastTypeComponent implements OnInit {
   ngOnInit() {
     this.typesForm.setValue(this.broadcastService.getTypes());
     this.alertService.showLoading();
+    console.log('subscribing to create params ...');
     this.broadcastService.createParams.subscribe(createParams => {
-      this.createParams = createParams;
       this.alertService.hideLoading();
+      console.log('alright, fetched create params, is it truthy: ', !!createParams);
+      if (!!createParams) {
+        this.createParams = createParams;
+        this.finishedLoading = true;
+      }
     }, error => {
+      this.alertService.hideLoading();
       console.log("failed, error: ", error);
     });
 

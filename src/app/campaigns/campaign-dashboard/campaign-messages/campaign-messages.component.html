@@ -39,6 +39,15 @@
     </campaign-message-tabset>
   </div>
 
+  <div class="row mt-md-3" *ngIf="channel == 'WHATSAPP'">
+    <div class="col-12">
+      <label for="request-media">
+        <input type="checkbox" class="form-check-input" id="request-media" [formControl]="askForMediaToggle">
+          Request media from users after they complete their journey? E.g., a voice note. If yes, you will need to write a prompt (below)
+      </label>
+    </div>
+  </div>
+
   <div class="row mt-md-3">
     <div class="col-sm-12">
       <button (click)="setMessages()" type="button" class="btn btn-primary save-button float-right">{{ 'action.save' | translate }}</button>

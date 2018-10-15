@@ -23,9 +23,12 @@ app.use(helmet.contentSecurityPolicy({
     scriptSrc: ["'self'", "use.fontawesome.com", "www.google.com/recaptcha/", "www.gstatic.com/recaptcha/"],
     styleSrc: ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdn.quilljs.com"],
     fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com", "data:", "chrome-extension:"],
-    frameSrc: ["www.google.com/recaptcha/"]
-  }
+    frameSrc: ["www.google.com/recaptcha/"],
+    reportUri: 'https://grassroot.report-uri.com/r/d/csp/reportOnly'
+  },
+  reportOnly: true
 }));
+
 app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
 
 const { provideModuleMap } = require('@nguniversal/module-map-ngfactory-loader');

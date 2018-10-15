@@ -77,11 +77,13 @@ export class GroupsComponent implements OnInit {
     this.groupService.loadGroups();
   }
 
-
   private resolvePinnedGroups() {
     this.pinnedGroups = this.groups.filter(gr => gr.pinned)
   }
 
+  trackByGroupId(index, group: GroupInfo) {
+    return group.groupUid;
+  }
 
   toggleGroupPin(gr: GroupInfo) {
     if (gr.pinned)

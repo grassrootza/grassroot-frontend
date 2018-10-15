@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ENGLISH, Language, MSG_LANGUAGES, findByTwoDigitCode} from "../../../utils/language";
-import {CampaignMsgRequest} from "../../campaign-create/campaign-request";
+import {CampaignMsgRequest, CampaignMsgServerDTO} from "../../campaign-create/campaign-request";
 import {FormBuilder, FormGroup, FormControl} from "@angular/forms";
 import {CampaignService} from "../../campaign.service";
 import {AlertService} from "../../../utils/alert-service/alert.service";
@@ -60,10 +60,14 @@ export class CampaignMessagesComponent implements OnInit {
   private messagesChanged: boolean = false;
   private _currentMessages: CampaignMsgRequest[];
 
+  // only in USSD (no such thing if join via WhatsApp)
   public campaignWelcomeMsg: FormControl;
   public priorCampaignMsg: string = '';
   public welcomeCharsLeft: number;
   private maxMsgLength = 130;
+
+  // for whether or not to ask for media
+  public askForMediaToggle: FormControl;
 
   constructor(private campaignService: CampaignService,
               private alertService: AlertService,
@@ -77,6 +81,9 @@ export class CampaignMessagesComponent implements OnInit {
     this.languageForm = this.fb.group({});
     this.campaignWelcomeMsg = this.fb.control('');
 
+    this.askForMediaToggle = this.fb.control(false);
+    this.askForMediaToggle.valueChanges.subscribe(value => this.updateRequestMedia(value));
+
     this.availableLanguages.forEach(language => {
       this.languageForm.addControl(language.threeDigitCode,
         this.fb.control(!(this.selectedLanguages.indexOf(language))));
@@ -86,6 +93,7 @@ export class CampaignMessagesComponent implements OnInit {
       console.log('route params: ', params);
       this.campaignUid = params['id'];
       this.channel = params['channel'].toUpperCase();
+
       this.maxMsgLength = this.channel == 'WHATSAPP' ? 320 : 130;
 
       this.campaignService.loadCampaign(this.campaignUid).subscribe(campaign => {
@@ -99,6 +107,18 @@ export class CampaignMessagesComponent implements OnInit {
     });
   }
 
+  updateRequestMedia(requestMediaState: boolean) {
+    console.log('Changing media request state to: ', requestMediaState);
+    if (requestMediaState) {
+      this.currentTypes.push('MEDIA_PROMPT');
+      if (this.findIndexOfType('MEDIA_PROMPT') == -1) {
+        this.addMessageOfType('MEDIA_PROMPT', this._currentMessages.length, this.campaign.channelMessages(this.channel));
+      }
+    } else {
+      this.sliceOutMessageType('MEDIA_PROMPT');
+    }
+  }
+
   setupDefaultLanguage() {
     let defaultLang = findByTwoDigitCode(this.campaign.defaultLanguage, ENGLISH);
     this.languageForm.addControl('defaultLanguage', this.fb.control(defaultLang.twoDigitCode));
@@ -108,6 +128,7 @@ export class CampaignMessagesComponent implements OnInit {
   setUpMessages() {
     this._currentMessages = []; // to reset, so we don't get weirdness if double click save
     this.existingMessages = this.campaign.campaignMessages && this.campaign.campaignMessages.some(msg => msg.isForChannel(this.channel));
+    
     this.currentTypes = this.messageTypes[this.campaign.campaignType];
     // console.log('found error yet? existing messages: ', this.existingMessages);
 
@@ -118,27 +139,15 @@ export class CampaignMessagesComponent implements OnInit {
     
     const channelMessages = this.campaign.channelMessages(this.channel);
     console.log('campaign messages from cache: ', channelMessages);
+
     this.currentTypes.forEach((type, index) => {
-      this.typeIndexes[type] = index;
-      // first, we find if the campaign already has a message for this type
-      let existingMsgIndex = this.existingMessages ? channelMessages.findIndex(msg => msg.linkedActionType === type) : -1;
-      
-      // second, we create an ID for the message group. the IDs are only unique within campaign, and only used in set up, so can use
-      // timestamp without worrying about matching values if two users doing this for two different campaigns at once
-      let msgId = existingMsgIndex != -1 ? channelMessages[existingMsgIndex].messageId : "message_" + moment().valueOf() + "_" + index;
-      let msgRequest = new CampaignMsgRequest(msgId, type, this.channel,
-        existingMsgIndex != -1 ? channelMessages[existingMsgIndex].getMessageMap() : new Map<string, string>());
-
-      this.typeMsgIds[type] = msgId;
-      this._currentMessages.push(msgRequest);
-      this.priorMessages[type] = msgRequest;
-
-      msgRequest.messages.forEach((value, key) => {
-        let lang = this.getLanguage(key);
-        if (lang && this.selectedLanguages.indexOf(lang) == -1)
-          this.selectedLanguages.push(lang);
-      });
+      this.addMessageOfType(type, index, channelMessages);
     });
+
+    if (this.existingMessages && this.channel == 'WHATSAPP') {
+      const isMediaRequestEnabled = this.campaign.campaignMessages.some(msg => msg.linkedActionType == 'MEDIA_PROMPT');
+      this.askForMediaToggle.setValue(isMediaRequestEnabled);
+    }
 
     // have to do a quick second loop because msg IDs may not have been set
     this._currentMessages
@@ -153,13 +162,43 @@ export class CampaignMessagesComponent implements OnInit {
     this.selectedLanguages
       .filter(lang => this.languageForm.controls[lang.threeDigitCode])
       .forEach(lang => this.languageForm.controls[lang.threeDigitCode].patchValue(true, {onlySelf: true}));
+  }
 
+  addMessageOfType(type: string, index: number, channelMessages: CampaignMsgServerDTO[]) {
+    console.log('Adding message of type: ', type);
+    this.typeIndexes[type] = index;
+    // first, we find if the campaign already has a message for this type
+    let existingMsgIndex = this.existingMessages ? channelMessages.findIndex(msg => msg.linkedActionType === type) : -1;
+    
+    // second, we create an ID for the message group. the IDs are only unique within campaign, and only used in set up, so can use
+    // timestamp without worrying about matching values if two users doing this for two different campaigns at once
+    let msgId = existingMsgIndex != -1 ? channelMessages[existingMsgIndex].messageId : "message_" + moment().valueOf() + "_" + index;
+    let msgRequest = new CampaignMsgRequest(msgId, type, this.channel,
+      existingMsgIndex != -1 ? channelMessages[existingMsgIndex].getMessageMap() : new Map<string, string>());
+
+    this.typeMsgIds[type] = msgId;
+    this._currentMessages.push(msgRequest);
+    this.priorMessages[type] = msgRequest;
+
+    msgRequest.messages.forEach((value, key) => {
+      let lang = this.getLanguage(key);
+      if (lang && this.selectedLanguages.indexOf(lang) == -1)
+        this.selectedLanguages.push(lang);
+    });
+  }
+
+  findIndexOfType(type: string) {
+    return !this._currentMessages ? -1 : this._currentMessages.findIndex(msg => msg.linkedActionType == type);
   }
 
   sliceOutMessageType(type: string) {
-    let index = this.currentTypes.indexOf(type);
-    if (index != -1) {
-      this.currentTypes.splice(index, 1);
+    const typeIndex = this.currentTypes.indexOf(type);
+    if (typeIndex != -1) {
+      this.currentTypes.splice(typeIndex, 1);
+    }
+    const msgIndex = this.findIndexOfType(type); 
+    if (msgIndex != -1) {
+      this._currentMessages.splice(msgIndex, 1);
     }
   }
 

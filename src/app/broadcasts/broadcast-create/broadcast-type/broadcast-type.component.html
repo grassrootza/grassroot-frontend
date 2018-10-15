@@ -6,9 +6,8 @@
   </div>
   <div class="row">
     <div class="col-12 text-left">
-      <form [formGroup]="typesForm"
-            (ngSubmit)="next()">
-
+      <h4 class="text-center" *ngIf="!finishedLoading">Loading broadcast options ...</h4>
+      <form [formGroup]="typesForm" (ngSubmit)="next()" *ngIf="finishedLoading">
         <div class="form-row">
 
           <div class="col-md-2 col-4">
