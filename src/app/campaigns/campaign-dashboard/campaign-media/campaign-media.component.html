@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <div class="d-flex col-12 justify-content-center">
+      <h2>Audio and other media received over WhatsApp</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <ng-container *ngFor="let record of mediaRecords">
+        <div class="row list-group-item">
+          <p>
+            {{ record.getFriendlyType() | titlecase }} file submitted by {{ record.createdByUserName }}, on {{ record.getMomentStored().format('D MMM YYYY, h:mm a') }}
+            <span class="badge badge-primary badge-pill float-right">
+              <a href="{{ record.getSrcLink() }}" target="_blank" class="download-link" download>Download</a>
+            </span>
+          </p>
+          <p *ngIf="record.isAudioFile()">
+            <audio controls style="width: 100%">
+              <source src="{{ record.getSrcLink() }}" type="{{ record.mimeType }}" />
+                There is an audio recording but your browser does not support it
+            </audio>
+          </p>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
