@@ -6,7 +6,8 @@ export class CampaignMediaRecord {
         public key: string,
         public mimeType: string,
         public storedTime: string,
-        public createdByUserName) {}
+        public createdByUserName: string,
+        public preSignedUrl: string) {}
 
     getMomentStored() {
         return moment(this.storedTime);
@@ -17,7 +18,7 @@ export class CampaignMediaRecord {
     }
 
     getSrcLink() {
-        return environment.s3publicUrl + '/' + this.bucket + '/' + this.key;
+        return this.preSignedUrl;
     }
 
     getFriendlyType() {
@@ -38,6 +39,7 @@ export const getRecord = (mr: CampaignMediaRecord): CampaignMediaRecord => {
         mr.key,
         mr.mimeType,
         mr.storedTime,
-        mr.createdByUserName
+        mr.createdByUserName,
+        mr.preSignedUrl
     );
 }
