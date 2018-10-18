@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from "rxjs";
 import {GroupAdmin} from "../groups/model/group-admin.model";
 import { map } from 'rxjs/operators';
+import { ConfigVariable } from './system-admin/config-variable.model';
 
 @Injectable()
 export class AdminService {
@@ -18,6 +19,16 @@ export class AdminService {
   private addMemberToGroupUrl = environment.backendAppUrl + "/api/admin/groups/member/add";
   private recycleGroupJoinTokensUrl = environment.backendAppUrl + "/api/admin/groups/tokens/recycle";
   private fetchApiCallTokenUrl = environment.backendAppUrl + "/api/admin/token/system/generate";
+
+  private createConfigVariableUrl = environment.backendAppUrl + "/api/admin/config/create";
+  private updateConfigVariableUrl = environment.backendAppUrl + "/api/admin/config/update";
+  private fetchConfigVarsUrl = environment.backendAppUrl + "/api/admin/config/fetch";
+  private deleteCVUrl = environment.backendAppUrl + "/api/admin/config/delete";
+
+  private numberGroupsAboveLimitUrl = environment.backendAppUrl + "/api/admin/config/fetch/above/limit";
+  private numberGroupsBelowLimitUrl = environment.backendAppUrl + "/api/admin/config/fetch/below/limit";
+
+  private listAllConfigVarialbeUrl = environment.backendAppUrl + "/api/admin/config/fetch/list";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -80,6 +91,47 @@ export class AdminService {
 
   fetchAccessToken(): Observable<string> {
     return this.httpClient.post(this.fetchApiCallTokenUrl, null, { responseType: 'text'});
+  }
+
+  createConfigVariable(key:string,value:string,description:string): Observable<any>{
+    let params = new HttpParams()
+      .set("key",key)
+      .set("value",value)
+      .set('description',description);
+    
+    return this.httpClient.post(this.createConfigVariableUrl,null,{params:params});
+  }
+
+  updateConfigVariable(key:string,value:string,description:string): Observable<any>{
+    let params = new HttpParams()
+      .set("key",key)
+      .set("value",value)
+      .set('description',description);
+
+    return this.httpClient.post(this.updateConfigVariableUrl,null,{params:params});
+  }
+
+  fetchConfigVariables(): Observable<Map<string,string>>{
+    return this.httpClient.get<Map<string,string>>(this.fetchConfigVarsUrl);
+  }
+
+  listAllConfigVariables(): Observable<ConfigVariable[]>{
+    return this.httpClient.get<ConfigVariable[]>(this.listAllConfigVarialbeUrl)
+      .pipe(map(resp => resp.map(configVar => ConfigVariable.createInstance(configVar))));
+  }
+
+  deleteCV(key:string): Observable<any> {
+    let params = new HttpParams()
+      .set("key",key);
+    return this.httpClient.post(this.deleteCVUrl,null,{params:params});
+  }
+
+  getNumberGroupsAboveFreeLimit(): Observable<any> {
+    return this.httpClient.get(this.numberGroupsAboveLimitUrl);
+  }
+
+  getNumberGroupsBelowFreeLimit(): Observable<any> {
+    return this.httpClient.get(this.numberGroupsBelowLimitUrl);
   }
   
 }

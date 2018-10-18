@@ -6,6 +6,7 @@ import { AlertService } from '../../utils/alert-service/alert.service';
 import { UserProvince } from '../../user/model/user-province.enum';
 import { LiveWireAdminService } from '../livewire/livewire-admin-service';
 import { DataSubscriber } from '../livewire/model/data-subscriber.model';
+import { ConfigVariable } from './config-variable.model';
 
 declare var $: any;
 
@@ -40,6 +41,13 @@ export class SystemAdminComponent implements OnInit {
   userProvince = UserProvince;
   provinceKeys: string[];
 
+  public configVariableList:ConfigVariable[] = [];
+  public updateConfigVarkey:string;
+  public deleteConfigVariableKey:string;
+
+  public numberBelow:number;
+  public numberAbove:number;
+
   accessToken: string;
   
   constructor(private adminService:AdminService,
@@ -57,6 +65,13 @@ export class SystemAdminComponent implements OnInit {
       this.livewireSubscribers = resp;
     },error => {
       console.log("Error loading subscribers...",error);
+    });
+
+    this.adminService.listAllConfigVariables().subscribe(resp => {
+      this.configVariableList = resp;
+      console.log("SERVER RESPONDED ...........",this.configVariableList);
+    },error => {
+      console.log("Error fecthing all variables .....................",error);
     });
   }
 
@@ -243,5 +258,64 @@ export class SystemAdminComponent implements OnInit {
     return false;
   }
 
+  openCreateConfigVarModal(){
+    $('#create-config-variable-modal').modal("show");
+  }
+
+
+  createConfigVariable(key:string,value:string,desc:string){
+    this.adminService.createConfigVariable(key,value,desc).subscribe(resp => {
+      $('#create-config-variable-modal').modal("hide");
+    },error => {
+      console.log("Error creating config variable................");
+    });
+  }
+
+  openUpdateConfigVarModal(updateConfigVarkey:string){
+    console.log("Updating config variable with key --->>>",updateConfigVarkey);
+    $('#update-config-variable-modal').modal("show");
+    this.updateConfigVarkey = updateConfigVarkey;
+  }
+
+  updateConfigVariable(newValue:string,newDesc:string){
+    this.adminService.updateConfigVariable(this.updateConfigVarkey,newValue,newDesc).subscribe(resp => {
+      console.log("SERVER RESPONDED ............",resp);
+      $('#update-config-variable-modal').modal("hide");
+    }, error => {
+      console.log("Error updating config variable.........",error);
+    });
+  }
+
+  fetchConfigVariables(){
+    this.adminService.listAllConfigVariables().subscribe(resp => {
+      this.configVariableList = resp;
+    },error => {
+      console.log("Error fecthing all variables .....................",error);
+    });
+  }
+
+  deleteCV(key:string){
+    this.adminService.deleteCV(key).subscribe(resp => {
+      console.log("Deleted config var ##############################");
+    }, error => {
+      console.log("Error deleting cv");
+    });
+  }
+
+  aboveCV(){
+    this.adminService.getNumberGroupsAboveFreeLimit().subscribe(resp => {
+      this.numberAbove = resp;
+    },error => {
+      console.log("Error getting number of groups above limit........",error);
+    });
+  }
+
+  belowCV(){
+    this.adminService.getNumberGroupsBelowFreeLimit().subscribe(resp => {
+      this.numberBelow = resp;
+    },error => {
+      console.log("Error getting number of groups below limit........",error);
+    });
+  }
 
 }
