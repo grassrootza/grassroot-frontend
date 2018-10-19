@@ -21,8 +21,6 @@ import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PublicLivewire} from "../livewire/public-livewire.model";
 
-
-
 declare var $: any;
 
 @Component({
@@ -42,7 +40,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   private activitiesPoller: Subscription;
   private newsPoller: Subscription;
 
-  public carouselContainerWidth: number = 0;
   public activitiesHeight: number = 0;
 
   public anchorPoint: string;
@@ -50,9 +47,9 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private player: AnimationPlayer;
 
-  public pseudonyms: string[] = [
+  public pseudonyms: string[] = [];
 
-  ];
+  public bannerImageStyle = 'url(/assets/landing/banner_bg1.jpg)'; //Low quality image for progressive loading
 
   constructor(private alertService: AlertService,
               private publicActivityService: PublicActivityService,
@@ -98,16 +95,13 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
-    console.log("carousel width: ", this.carouselContainerWidth);
     this.cdr.detectChanges();
 
     if (isPlatformBrowser(this.platformId)) {
-      fromEvent(window, 'resize')
-        .pipe(debounceTime(200))
-        .subscribe(() => {
-          this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
-        })
+      setTimeout(() => {
+        //console.log('about to alter banner image style');
+        this.bannerImageStyle = 'url(/assets/landing/banner_bg.jpg)'; // Image progressive loader
+      }, 1500);
     }
   }
 

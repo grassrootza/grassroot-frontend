@@ -824,7 +824,7 @@
       "code": "USSD code (*134*1994*...)",
       "codePlace": "3 digits only",
       "description": "Description",
-      "descriptionPlace": "A longer description of the campaign. This will be shown to uses who click on a short link",
+      "descriptionPlace": "A longer description of the campaign (optional). This will be shown to uses who click on a short link",
       "image": "Campaign Image (optional)",
       "drag-drop": "Drag & drop",
       "click-file": "a file here or ",
@@ -874,8 +874,10 @@
       }
     },
     "dashboard": {
-      "analyze": "Campaign Dashboard",
-      "messages": "Response Messages",
+      "analyze": "Dashboard",
+      "ussd": "USSD",
+      "whatsapp": "WhatsApp",
+      "media": "Comments",
       "broadcasts": "Broadcasts",
       "settings": "Settings",
       "code-title": "Campaign Code",
@@ -934,6 +936,7 @@
         "MORE_INFO": "More info",
         "EXIT_POSITIVE": "Exit",
         "EXIT_NEGATIVE": "Exit",
+        "MEDIA_PROMPT": "Send a commment",
         "info": "Information requested from user",
         "name": "Name",
         "province": "Province",
@@ -958,7 +961,8 @@
         "SHARE_PROMPT": "Share Screen",
         "SHARE_SEND": "Share Message",
         "EXIT_POSITIVE": "Positive Exit",
-        "EXIT_NEGATIVE": "Negative Exit"
+        "EXIT_NEGATIVE": "Negative Exit",
+        "MEDIA_PROMPT": "Comment Request"
       },
       "placeholders": {
         "OPENING": "The SA National Department of Health (NDOH) is establishing the National Health Insurance (NHI) to achieve universal access to quality health care for all who live in South Africa.",
@@ -969,7 +973,8 @@
         "SHARE_PROMPT": "Thank you for joining forces with us. If you want to share this with others please type their number",
         "SHARE_SEND": "Join us! {__name__} has just joined the campaign, {__entity_name__}, and wants to share it with you. Dial *134*1994*{__inbound__}# to join them!",
         "EXIT_POSITIVE": "Thank you for joining forces with us! We hope to see you soon at one of our events",
-        "EXIT_NEGATIVE": "Thank you for engaging our campaign, and we hope you will join us in the future"
+        "EXIT_NEGATIVE": "Thank you for engaging our campaign, and we hope you will join us in the future",
+        "MEDIA_PROMPT": "Thank you for joining forces with us! As a final step, can you share with us a voice note or image about this issue?"
       },
       "explanations": {
         "OPENING": "This is the first message that a user will see when they enter the code or text a campaign trigger word",
@@ -980,7 +985,8 @@
         "SHARE_PROMPT": "The screen that prompts a user to enter someone else's number in order for the campaign to be shared",
         "SHARE_SEND": "The template for the sharing SMS that goes out. You can leave this blank and we will use the default",
         "EXIT_POSITIVE": "The goodbye message after a user has signed or joined",
-        "EXIT_NEGATIVE": "The goodbye message after a user has declined to sign or join"
+        "EXIT_NEGATIVE": "The goodbye message after a user has declined to sign or join",
+        "MEDIA_PROMPT": "The final message, which asks the user to submit a media file if they want to do so"
       },
       "done": {
         "success": "Done! The messages have been set",

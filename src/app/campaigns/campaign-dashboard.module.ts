@@ -11,6 +11,7 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {MessageTabsetComponent} from "./campaign-dashboard/campaign-messages/message-tabset/message-tabset.component";
 import {RouterModule} from "@angular/router";
 import { LoggedInServicesModule } from '../logged-in-services.module';
+import { CampaignMediaComponent } from './campaign-dashboard/campaign-media/campaign-media.component';
 
 @NgModule({
   imports: [
@@ -24,6 +25,7 @@ import { LoggedInServicesModule } from '../logged-in-services.module';
     CampaignDashboardComponent,
     CampaignStatsComponent,
     CampaignMessagesComponent,
+    CampaignMediaComponent,
     CampaignBroadcastsComponent,
     CampaignSettingsComponent,
     MessageTabsetComponent

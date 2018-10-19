@@ -51,7 +51,7 @@ export const eitherEmailOrPhone = (control: AbstractControl) => {
   let inputStr = control.value;
   let isEmail = mailFormat.test(inputStr);
 
-  if (!isEmail) {
+  if (!!inputStr && !isEmail) {
     if (!isValidNumber({ phone: inputStr, country: 'ZA' })) {
       return { validEmailOrPhone: true }
     }

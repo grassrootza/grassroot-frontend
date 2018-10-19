@@ -16,14 +16,20 @@ const {
 const app = express();
 
 app.use(helmet());
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'", "app.grassroot.org.za"],
-    scriptSrc: ["'self'", "use.fontawesome.com"],
-    styleSrc: ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdn.quilljs.com"],
-    fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com"]
-  }
-}));
+
+// app.use(helmet.contentSecurityPolicy({
+//   directives: {
+//     defaultSrc: ["'self'", "app.grassroot.org.za"],
+//     connectSrc: ["'self'", "app.grassroot.org.za", "fonts.googleapis.com", "use.fontawesome.com"],
+//     scriptSrc: ["'self'", "use.fontawesome.com", "www.google.com/recaptcha/", "www.gstatic.com/recaptcha/"],
+//     styleSrc: ["'self'", "'unsafe-inline'", "fonts.googleapis.com", "cdn.quilljs.com"],
+//     fontSrc: ["'self'", "fonts.googleapis.com", "fonts.gstatic.com", "data:", "chrome-extension:"],
+//     frameSrc: ["www.google.com/recaptcha/"],
+//     reportUri: 'https://grassroot.report-uri.com/r/d/csp/reportOnly'
+//   },
+//   reportOnly: true
+// }));
+
 app.use(helmet.referrerPolicy({ policy: 'strict-origin-when-cross-origin' }))
 
 const { provideModuleMap } = require('@nguniversal/module-map-ngfactory-loader');

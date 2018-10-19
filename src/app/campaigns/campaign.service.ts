@@ -10,16 +10,18 @@ import {
   CampaignRequest,
   CampaignUpdateParams
 } from "./campaign-create/campaign-request";
+import { CampaignMediaRecord, getRecord } from './campaign-dashboard/campaign-media/campaign-media-record.model';
 
 @Injectable()
 export class CampaignService {
 
   campaignListUrl = environment.backendAppUrl + "/api/campaign/manage/list";
   groupCampaignListUrl = environment.backendAppUrl + "/api/campaign/manage/list/group";
-  campaignCreateUrl = environment.backendAppUrl + "/api/campaign/manage/create";
   campaignFetchUrl = environment.backendAppUrl + "/api/campaign/manage/fetch";
-  campaignActiveCodesUrl = environment.backendAppUrl + "/api/campaign/manage/codes/list/active";
-
+  fetchMediaUrl = environment.backendAppUrl + "/api/campaign/manage/fetch/media";
+  
+  campaignCreateUrl = environment.backendAppUrl + "/api/campaign/manage/create";
+  campaignActiveCodesUrl = environment.backendAppUrl + "/api/campaign/manage/codes/list/active";  
   checkCodeAvaliabilityUrl = environment.backendAppUrl + "/api/campaign/manage/codes/check";
   checkJoinWordAvailabilityUrl = environment.backendAppUrl + "/api/campaign/manage/words/check";
 
@@ -84,10 +86,10 @@ export class CampaignService {
     return this.httpClient.post<CampaignInfo>(this.campaignCreateUrl, request);
   }
 
-  setCampaignMessages(campaignUid: string, messageRequests: CampaignMsgRequest[]): Observable<CampaignInfo> {
+  setCampaignMessages(campaignUid: string, messageRequests: CampaignMsgRequest[], channel: string): Observable<CampaignInfo> {
     let fullUrl = this.campaignMessageSetUrl + "/" + campaignUid;
     let serverMsgRequests: CampaignMsgServerDTO[] = messageRequests.map(req =>
-      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags));
+      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, channel, req.messages, req.nextMsgIds, req.tags));
     // console.log("message request, messages: ", messageRequests.map(mr => mr.messages));
     return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests).pipe(map(result => this.stashChangedCampaign(result)));
   }
@@ -114,6 +116,11 @@ export class CampaignService {
       let fullUrl = this.campaignFetchUrl + "/" + campaignUid;
       return this.httpClient.get<CampaignInfo>(fullUrl).pipe(map(this.stashChangedCampaign));
     }
+  }
+
+  fetchCampaignMedia(campaignUid: string): Observable<CampaignMediaRecord[]> {
+    const fullUrl = this.fetchMediaUrl + "/" + campaignUid;
+    return this.httpClient.get<CampaignMediaRecord[]>(fullUrl).pipe(map(list => list.map(getRecord)));
   }
 
   fetchMemberGrowthStats(campaignUid: string, year: number, month: number): Observable<any> {
@@ -228,7 +235,7 @@ export class CampaignService {
     const fullUrl = this.changeSmsSharingUrl + "/" + campaignUid;
     let params = new HttpParams().set("sharingEnabled", sharingEnabled.toString()).set("smsLimit", smsLimit.toString());
     let sharingMsgs:CampaignMsgServerDTO[] = sharingTemplates ? sharingTemplates.map(req =>
-      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, req.messages, req.nextMsgIds, req.tags)) : null;
+      new CampaignMsgServerDTO(req.messageId, req.linkedActionType, 'USSD', req.messages, req.nextMsgIds, req.tags)) : null;
     return this.httpClient.post<CampaignInfo>(fullUrl, sharingMsgs, { params: params }).pipe(map(getCampaignEntity));
   }
 

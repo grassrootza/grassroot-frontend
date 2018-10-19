@@ -28,6 +28,7 @@ declare var $: any;
 export class HomeComponent implements OnInit {
 
   private myTasks: DayTasks[] = [];
+  
   public baseDateFilteredTasks: DayTasks[] = [];
   public pinnedGroups: GroupInfo[] = [];
   public activeCampaigns: CampaignInfo[] = [];
@@ -41,6 +42,7 @@ export class HomeComponent implements OnInit {
   private tasksLoadFinished = false;
   private newMembersLoadFinished = false;
   private groupsLoadFinished = false;
+  private campaignLoadFinished = false;
 
   public taskToView:Task;
 
@@ -126,7 +128,9 @@ export class HomeComponent implements OnInit {
     if (this.canManageCampaigns) {
       this.campaignService.campaignInfoList.subscribe(campaignList => {
         this.activeCampaigns = campaignList.filter(cp => cp.isActive());
+        this.campaignLoadFinished = true; // but this is triggered early, so, to revise later
       });
+      this.campaignService.loadCampaigns();
     }
 
     this.taskService.loadUpcomingUserTasks();
@@ -139,9 +143,6 @@ export class HomeComponent implements OnInit {
   private hideSpinnerIfAllLoaded() {
     if (this.tasksLoadFinished && this.newMembersLoadFinished && this.groupsLoadFinished) {
       this.alertService.hideLoadingDelayed();
-      if (this.canManageCampaigns) {
-        this.campaignService.loadCampaigns();
-      }
     }
   }
 
