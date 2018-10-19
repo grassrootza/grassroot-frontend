@@ -266,6 +266,7 @@ export class SystemAdminComponent implements OnInit {
   createConfigVariable(key:string,value:string,desc:string){
     this.adminService.createConfigVariable(key,value,desc).subscribe(resp => {
       $('#create-config-variable-modal').modal("hide");
+      this.fetchConfigVariables();
     },error => {
       console.log("Error creating config variable................");
     });
@@ -275,12 +276,17 @@ export class SystemAdminComponent implements OnInit {
     console.log("Updating config variable with key --->>>",updateConfigVarkey);
     $('#update-config-variable-modal').modal("show");
     this.updateConfigVarkey = updateConfigVarkey;
+    if(this.updateConfigVarkey == 'groups.size.freemax'){
+      this.aboveCV();
+      this.belowCV();
+    }
   }
 
   updateConfigVariable(newValue:string,newDesc:string){
     this.adminService.updateConfigVariable(this.updateConfigVarkey,newValue,newDesc).subscribe(resp => {
       console.log("SERVER RESPONDED ............",resp);
       $('#update-config-variable-modal').modal("hide");
+      this.fetchConfigVariables();
     }, error => {
       console.log("Error updating config variable.........",error);
     });
@@ -294,9 +300,19 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  deleteCV(key:string){
-    this.adminService.deleteCV(key).subscribe(resp => {
-      console.log("Deleted config var ##############################");
+  openRemoveConfigVariableConfirmModal(deleteConfigVariableKey:string){
+    this.deleteConfigVariableKey = deleteConfigVariableKey;
+    $('#delete-config-variable-modal').modal('show');
+    if(this.deleteConfigVariableKey == 'groups.size.freemax'){
+      this.aboveCV();
+      this.belowCV();
+    }
+  }
+
+  deleteCV(){
+    this.adminService.deleteCV(this.deleteConfigVariableKey).subscribe(resp => {
+      $('#delete-config-variable-modal').modal('hide');
+      this.fetchConfigVariables();
     }, error => {
       console.log("Error deleting cv");
     });

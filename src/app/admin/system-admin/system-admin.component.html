@@ -131,7 +131,7 @@
           <h1>Config variables</h1>
           <p>Create a new config variable: <button class="btn btn-link grassroot-link" (click)="openCreateConfigVarModal()">create</button></p>
           <hr>
-          <div class="row groups-header" style="margin-bottom: 2%">
+          <div *ngIf="configVariableList.length > 0" class="row groups-header" style="margin-bottom: 2%">
             <div class="col-4">Key</div>
             <div class="col-2">Value</div>
             <div class="col-4">Description</div>
@@ -144,12 +144,12 @@
             <div class="col-2">{{configVar.value}}</div>
             <div class="col-4">{{configVar.description}}</div>
             <div class="col-1"><button class="btn btn-primary btn-sm" (click)="openUpdateConfigVarModal(configVar.key)">update</button></div>
-            <div class="col-1"><button class="btn btn-danger btn-sm" (click)="deleteCV(configVar.key)">remove</button></div>
+            <div class="col-1"><button class="btn btn-danger btn-sm" (click)="openRemoveConfigVariableConfirmModal(configVar.key)">remove</button></div>
           </div>
 
           <hr>
           
-          <div class="row">
+          <!-- <div class="row">
             <div class="col-10">
               <p>View number of groups above free group limit config variable: <button class="btn btn-link grassroot-link" (click)="aboveCV()">how many above</button></p>
             </div>
@@ -164,7 +164,7 @@
             <div class="col-2">
               <p>{{numberBelow}}</p>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -424,11 +424,50 @@
             <input class="form-control" type="text" id="config-avr-value-text"
                    name="otp" #newDescription style="margin-top: 2%" placeholder="Please enter new description">    
           </div>
+
+          <div *ngIf="updateConfigVarkey == 'groups.size.freemax'">
+            <p>Number of groups below free limit is: {{numberBelow}}</p>
+            <p>Number of groups above free limit is: {{numberAbove}}</p>
+          </div>
         </div>
 
         <div class="modal-footer">
           <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
           <button class="btn btn-primary" (click)="updateConfigVariable(newValue.value,newDescription.value)">Update</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" tabindex="-1" role="dialog"
+       id="delete-config-variable-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm remove?</h5>
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <p>
+              Are you sure you want to remove this config variable?
+            </p>
+          </div>
+
+          <div *ngIf="deleteConfigVariableKey == 'groups.size.freemax'">
+            <p>Number of groups below free limit is: {{numberBelow}}</p>
+            <p>Number of groups above free limit is: {{numberAbove}}</p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" (click)="deleteCV()">Confirm</button>
         </div>
 
       </div>
