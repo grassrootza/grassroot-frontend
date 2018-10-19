@@ -66,5 +66,4 @@ export class CampaignDashboardComponent implements OnInit {
     });
     return false;
   }
-
 }
