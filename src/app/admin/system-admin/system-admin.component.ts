@@ -7,6 +7,8 @@ import { UserProvince } from '../../user/model/user-province.enum';
 import { LiveWireAdminService } from '../livewire/livewire-admin-service';
 import { DataSubscriber } from '../livewire/model/data-subscriber.model';
 
+import { saveAs } from 'file-saver';
+
 declare var $: any;
 
 @Component({
@@ -242,6 +244,14 @@ export class SystemAdminComponent implements OnInit {
     });
     return false;
   }
-
-
+  exportWhatsAppOptIn(){
+    console.log("Calling method for exporting whatsapp spreadsheet");
+      this.adminService.downloadSubscribedUsers().subscribe(data => {
+          let blob = new Blob([data], {type: 'application/xls'});
+          saveAs(blob,  "whats_app_users.xlsx");
+      } ,error => {
+        console.log("error getting a list of subscribed users ", error);
+      });
+    return false;
+  }
 }

@@ -131,8 +131,12 @@ export class UserService {
   updateDetails(user: UserProfile, otp?: string) {
     let msisdn = (user.phone) ? PhoneNumberUtils.convertToSystem(user.phone) : "";
     let params = new HttpParams()
-      .set("name", user.name).set("phone", msisdn).set("email", user.email).set("province", user.province)
-      .set("language", user.language);
+      .set("name", user.name)
+      .set("phone", msisdn)
+      .set("email", user.email)
+      .set("province", user.province)
+      .set("language", user.language)
+      .set('whatsappOptIn',user.whatsAppOptedIn + "");
     if (otp) {
       params = params.set("validationOtp", otp);
     }
@@ -212,5 +216,4 @@ export class UserService {
   fetchAccessToken(): Observable<string> {
     return this.httpClient.get(this.fetchApiTokenUrl, { responseType: 'text' });
   }
-
 }
