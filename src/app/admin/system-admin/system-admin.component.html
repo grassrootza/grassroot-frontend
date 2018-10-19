@@ -149,22 +149,6 @@
 
           <hr>
           
-          <!-- <div class="row">
-            <div class="col-10">
-              <p>View number of groups above free group limit config variable: <button class="btn btn-link grassroot-link" (click)="aboveCV()">how many above</button></p>
-            </div>
-            <div class="col-2">
-              <p>{{numberAbove}}</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-10">
-              <p>View number of groups below free group limit config variable: <button class="btn btn-link grassroot-link" (click)="belowCV()">how many below</button></p>
-            </div>
-            <div class="col-2">
-              <p>{{numberBelow}}</p>
-            </div>
-          </div> -->
         </div>
       </div>
 
@@ -419,7 +403,9 @@
           
           <div class="form-group">
             <input class="form-control" type="text" id="config-var-key-text"
-                   name="otp" #newValue style="margin-top: 2%" placeholder="Please enter new value">
+                   name="otp" #newValue style="margin-top: 2%" 
+                   placeholder="Please enter new value"
+                   [formControl]="newValueFormControl">
 
             <input class="form-control" type="text" id="config-avr-value-text"
                    name="otp" #newDescription style="margin-top: 2%" placeholder="Please enter new description">    

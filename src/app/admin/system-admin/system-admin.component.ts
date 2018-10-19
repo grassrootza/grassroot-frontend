@@ -7,6 +7,10 @@ import { UserProvince } from '../../user/model/user-province.enum';
 import { LiveWireAdminService } from '../livewire/livewire-admin-service';
 import { DataSubscriber } from '../livewire/model/data-subscriber.model';
 import { ConfigVariable } from './config-variable.model';
+import { debounceTime } from 'rxjs/operators'
+import { FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import 'rxjs/add/operator/debounceTime';
 
 declare var $: any;
 
@@ -31,6 +35,9 @@ export class SystemAdminComponent implements OnInit {
   public totalGroupsLoaded:number;
 
   public groups:GroupAdmin[] = [];
+
+  newValueFormControl = new FormControl();
+  formCtrlSub: Subscription;
 
   //Fields used in livewire subscriber account management
   public livewireSubscribers:DataSubscriber[] = [];
@@ -73,6 +80,10 @@ export class SystemAdminComponent implements OnInit {
     },error => {
       console.log("Error fecthing all variables .....................",error);
     });
+
+    this.formCtrlSub = this.newValueFormControl.valueChanges
+      .debounceTime(3000)
+      .subscribe(newValue => this.onSizeChange(newValue));
   }
 
   loadUsers(searchTerm:string){
@@ -331,6 +342,21 @@ export class SystemAdminComponent implements OnInit {
       this.numberBelow = resp;
     },error => {
       console.log("Error getting number of groups below limit........",error);
+    });
+  }
+
+  onSizeChange(size:number){
+    this.adminService.countGroupsBelowLimit(size).subscribe(resp => {
+      console.log("Number of groups below limit is >",resp);
+      this.numberBelow = resp;
+    },error => {
+      console.log("Error counting groups................")
+    });
+
+    this.adminService.countGroupsAboveLimit(size).subscribe(resp => {
+      this.numberAbove = resp;
+    },error => {
+      console.log("error counting groups................");
     });
   }
 

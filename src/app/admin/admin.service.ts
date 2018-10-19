@@ -28,6 +28,9 @@ export class AdminService {
   private numberGroupsAboveLimitUrl = environment.backendAppUrl + "/api/admin/config/fetch/above/limit";
   private numberGroupsBelowLimitUrl = environment.backendAppUrl + "/api/admin/config/fetch/below/limit";
 
+  private numberGroupsBelowLimitWithUserInputUrl = environment.backendAppUrl + "/api/admin/config/fetch/below/limit";
+  private numberGroupsAboveLimitWithUserInputUrl = environment.backendAppUrl + "/api/admin/config/fetch/above/limit";
+
   private listAllConfigVarialbeUrl = environment.backendAppUrl + "/api/admin/config/fetch/list";
 
   constructor(private httpClient: HttpClient) { }
@@ -132,6 +135,16 @@ export class AdminService {
 
   getNumberGroupsBelowFreeLimit(): Observable<any> {
     return this.httpClient.get(this.numberGroupsBelowLimitUrl);
+  }
+
+  countGroupsBelowLimit(limit:number):Observable<any> {
+    let fullUrl = this.numberGroupsBelowLimitWithUserInputUrl + "/" + limit;
+    return this.httpClient.get(fullUrl);
+  }
+
+  countGroupsAboveLimit(limit:number):Observable<any> {
+    let fullUrl = this.numberGroupsAboveLimitWithUserInputUrl + "/" + limit;
+    return this.httpClient.get(fullUrl);
   }
   
 }
