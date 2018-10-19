@@ -79,6 +79,9 @@
         <li class="nav-item" [ngClass]="{active: currentTab === 'whatsapp'}">
           <a class="nav-link" href="#" [routerLink]="['messages', 'whatsapp']" [translate]="'campaign.dashboard.whatsapp'"> WhatsApp </a>
         </li>
+        <li class="nav-item" [ngClass]="{active: currentTab === 'media'}" *ngIf="hasMedia">
+          <a class="nav-link" href="#" [routerLink]="['media']" [translate]="'campaign.dashboard.media'"> Received media </a>
+        </li>
         <li class="nav-item" [ngClass]="{active: currentTab === 'broadcasts'}">
           <a class="nav-link" href="#" [routerLink]="['broadcasts']" [translate]="'campaign.dashboard.broadcasts'"> Broadcasts </a>
         </li>

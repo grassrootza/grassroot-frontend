@@ -17,6 +17,7 @@ export class CampaignDashboardComponent implements OnInit {
 
   public campaign: CampaignInfo = null;
   public currentTab: string = "analyze";
+  public hasMedia: boolean = false;
 
   public campaignImageUrl: string;
 
@@ -49,12 +50,21 @@ export class CampaignDashboardComponent implements OnInit {
           this.campaignImageUrl = this.mediaService.getImageUrl(MediaFunction.CAMPAIGN_IMAGE, this.campaign.campaignImageKey);
         }
         this.alertService.hideLoadingDelayed();
+        this.checkForMediaRecords(campaignUid);
       }, error2 => {
         console.log("Error loading campaign", error2.status);
         this.alertService.hideLoadingDelayed();
-      })
+      });
     });
+  }
 
+  checkForMediaRecords(campaignUid: string) {
+    console.log('Fetching campaign media, for campaign: ', this.campaign.name);
+    this.campaignService.fetchCampaignMedia(campaignUid).subscribe(result => {
+      console.log('Result of media fetch: ', result);
+      this.hasMedia = !!result && result.length > 0;
+      return result;
+    }, error => console.log('Error fetching media list: ', error))
   }
 
   exportToExcel() {

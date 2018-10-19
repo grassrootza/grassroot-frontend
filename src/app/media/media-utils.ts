@@ -6,10 +6,10 @@ export const limitImageSizesInRichText = (emailHtml: string, maxWidth: number = 
   const foundImg = emailHtml.match(quillImgSrcReg);
   console.log('do we have a match? ', foundImg && foundImg.length > 0);
   console.log('found image length: ', foundImg && foundImg.length || 0);
+  // console.log('inbound content: ', emailHtml);
   quillImgSrcReg.lastIndex = 0;
-  const replacedHtml = emailHtml.replace(quillImgSrcReg, '<img style=\"max-width: ' + maxWidth + 'px !important\" src=');
-  // const replacedHtml = emailHtml.replace(quillImgSrcReg, 'HELLO!!!');
-  console.log('replaced email: ', replacedHtml);
+  const replacedHtml = emailHtml.replace(quillImgSrcReg, `<img style="max-width: ${maxWidth}px !important" src`);
+  // console.log('replaced email: ', replacedHtml);
   return foundImg ? emailStyleHeader + replacedHtml : emailHtml;
 };
 

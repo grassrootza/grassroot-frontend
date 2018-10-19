@@ -22,12 +22,12 @@ export class CampaignsComponent implements OnInit {
               private userService: UserService,
               private alertService: AlertService) { }
 
-  ngOnInit() {
-    this.canCreateCampaigns = this.userService.hasActivePaidAccount();
-    this.hasDisabledAccount = this.userService.hasDisabledAccount();
-    
+  ngOnInit() {    
     this.campaignService.campaignInfoList.subscribe(
       campaignList => {
+        this.canCreateCampaigns = this.userService.hasActivePaidAccount();
+        this.hasDisabledAccount = this.userService.hasDisabledAccount();
+
         // console.log('Retrieved campaign list ', campaignList);
         this.activeCampaigns = campaignList.filter(cp => cp.isActive());
         this.pastCampaigns = campaignList.filter(cp => !cp.isActive());

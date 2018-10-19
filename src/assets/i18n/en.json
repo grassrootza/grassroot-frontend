@@ -877,6 +877,7 @@
       "analyze": "Dashboard",
       "ussd": "USSD",
       "whatsapp": "WhatsApp",
+      "media": "Comments",
       "broadcasts": "Broadcasts",
       "settings": "Settings",
       "code-title": "Campaign Code",

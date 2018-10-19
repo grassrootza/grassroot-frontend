@@ -40,7 +40,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   private activitiesPoller: Subscription;
   private newsPoller: Subscription;
 
-  public carouselContainerWidth: number = 0;
   public activitiesHeight: number = 0;
 
   public anchorPoint: string;
@@ -96,8 +95,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
-    console.log("carousel width: ", this.carouselContainerWidth);
     this.cdr.detectChanges();
 
     if (isPlatformBrowser(this.platformId)) {
@@ -105,11 +102,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
         //console.log('about to alter banner image style');
         this.bannerImageStyle = 'url(/assets/landing/banner_bg.jpg)'; // Image progressive loader
       }, 1500);
-      fromEvent(window, 'resize')
-        .pipe(debounceTime(200))
-        .subscribe(() => {
-          this.carouselContainerWidth = this.carouselPlaceHolder.nativeElement.offsetWidth;
-        })
     }
   }
 

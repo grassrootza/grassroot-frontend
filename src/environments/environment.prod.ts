@@ -9,6 +9,6 @@ export const environment = {
   // some lambda endpoints
   recaptchaVerifyUrl: 'https://p21elfj42g.execute-api.eu-west-1.amazonaws.com/latest/validate_captcha',
   mediaFetchUrl: 'https://6waduader0.execute-api.eu-west-1.amazonaws.com/latest',
-
+  
   memberFetchCutOff: 100 // i.e., size of group above which we stop doing this like fetching all on modals
 };
