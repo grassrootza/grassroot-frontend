@@ -16,7 +16,6 @@ export const LANDING_ROUTE: Routes = [
     SharedModule,
     RouterModule.forChild(LANDING_ROUTE),
   ],
-  declarations: [],
   providers: [
     PublicActivityService,
     PublicNewsService

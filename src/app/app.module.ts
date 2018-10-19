@@ -41,6 +41,7 @@ import {ContributeComponent} from "./landing/static/contribute.component";
 import {TimeAgoPipe} from "time-ago-pipe";
 import { HelpComponent } from './help/help.component';
 import { PaymentsService } from './payments.service';
+import { BannerComponent } from './landing/banner/banner.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { PaymentsService } from './payments.service';
     PasswordResetComponent,
     HomeScreenRoutingComponent,
     LandingComponent,
+    BannerComponent,
     CarouselComponent,
     NewsComponent,
     UnsubscribeComponent,
