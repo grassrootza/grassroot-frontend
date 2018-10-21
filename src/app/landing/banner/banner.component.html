@@ -1,0 +1,34 @@
+<img class="bg-image bg-image--low-res"
+     [class.bg-image--shown]="showLowRes"
+     [src]="lowResImagePath"
+     alt="Header image - meet, vote, act"
+     (load)="lowResLoaded()"
+     *ngIf="loadLowRes">
+<img class="bg-image bg-image--high-res"
+     [class.bg-image--shown]="showHighRes"
+     [src]="highResImagePath"
+     alt="Header image - meet, vote, act"
+     (load)="highResLoaded()"
+     (transitionend)="highResTransitionEnd()"
+     *ngIf="loadHighRes">
+
+    
+<svg class="illustration"
+     width="843px"
+     height="360px"
+     preserveAspectRatio="xMaxYMax meet"
+     viewBox="0 0 843 360"
+     version="1.1"
+     aria-hidden="true"
+     xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <desc>Created with Sketch.</desc>
+  <defs></defs>
+  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+      <circle id="Oval" fill="#484848" cx="218" cy="40" r="40"></circle>
+      <path d="M549.754743,69.2087488 L843,359.570186 L239.622988,359.570186 L532.868245,69.2087488 C537.544759,64.5782238 545.078229,64.5782238 549.754743,69.2087488 Z" id="Triangle-Copy" fill="#474747"></path>
+      <path d="M181.442064,190.262273 L345,359.570186 L0.622987693,359.570186 L164.180924,190.262273 C168.785577,185.49574 176.382423,185.364511 181.148955,189.969164 C181.248338,190.065172 181.346056,190.162889 181.442064,190.262273 Z" id="Triangle-Copy-2" fill="#494949"></path>
+      <path d="M368.361024,144.693331 L580,359.574217 L139.622988,359.574217 L351.261964,144.693331 C355.912502,139.971556 363.510262,139.913807 368.232037,144.564344 C368.275358,144.607012 368.318355,144.650009 368.361024,144.693331 Z" id="Triangle" fill="#373737"></path>
+  </g>
+</svg>

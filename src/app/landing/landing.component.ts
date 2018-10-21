@@ -10,8 +10,7 @@ import {
   ViewChild,
   OnDestroy
 } from '@angular/core';
-import {Subscription, interval, fromEvent } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import {Subscription, interval } from 'rxjs';
 import {PublicActivityType} from './model/public-activity-type.enum';
 import {PublicActivity} from './model/public-activity.model';
 import {PublicActivityService} from './public-activity.service';
@@ -37,6 +36,9 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   public activitiesList: PublicActivity[] = [];
   public newsList: PublicLivewire[] = [];
 
+  public readonly lowResImagePath = '/assets/landing/banner_bg1.jpg';
+  public readonly highResImagePath = '/assets/landing/banner_bg.jpg';
+
   private activitiesPoller: Subscription;
   private newsPoller: Subscription;
 
@@ -49,7 +51,7 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public pseudonyms: string[] = [];
 
-  public bannerImageStyle = 'url(/assets/landing/banner_bg1.jpg)'; //Low quality image for progressive loading
+
 
   constructor(private alertService: AlertService,
               private publicActivityService: PublicActivityService,
@@ -96,13 +98,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.cdr.detectChanges();
-
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        //console.log('about to alter banner image style');
-        this.bannerImageStyle = 'url(/assets/landing/banner_bg.jpg)'; // Image progressive loader
-      }, 1500);
-    }
   }
 
   ngOnDestroy(): void {
