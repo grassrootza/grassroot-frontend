@@ -34,6 +34,7 @@ export class CarouselComponent implements OnChanges {
   moveCarousel: boolean;
 
   currentItemIdx: number = 0;
+  scrollTimeout: any;
 
   /**
    * Represents the current 2 items that are showcased in the carousel. The carousel will
@@ -53,7 +54,8 @@ export class CarouselComponent implements OnChanges {
       this.currentItemIdx = 0;
       if (isPlatformBrowser(this.platformId) &&
           this.currentItems &&
-          this.currentItems.length > 1) {
+          this.currentItems.length > 1 &&
+          !this.scrollTimeout) {
         this.scrollCarousel();
       }
     }
@@ -78,7 +80,7 @@ export class CarouselComponent implements OnChanges {
    */
   scrollCarousel() {
     if (this.currentItems.length > 1) {
-      setTimeout(() => {
+      this.scrollTimeout = setTimeout(() => {
         this.moveCarousel = true;
       }, this.durationBetweenScrolls);
     }
