@@ -1,5 +1,5 @@
 import {isPlatformBrowser} from "@angular/common";
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID, AfterViewChecked, ViewChild, ViewChildren, QueryList, AfterViewInit} from '@angular/core';
 import {ActivatedRoute, Params} from "@angular/router";
 import {PublicLivewire} from "./public-livewire.model";
 import {MediaFunction} from "../media/media-function.enum";
@@ -13,9 +13,11 @@ declare var $: any;
   templateUrl: './news.component.html',
   styleUrls: ['./news.component.css']
 })
-export class NewsComponent implements OnInit {
+export class NewsComponent implements OnInit, AfterViewInit {
 
-  public news:PublicLivewire[]=[];
+  @ViewChildren('alerts') alerts: QueryList<any>;
+
+  public news: PublicLivewire[]=[];
 
   public showLatest:boolean = true;
 
@@ -37,47 +39,41 @@ export class NewsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params:Params) => {
       this.alertUid = params['id'];
-      console.log("Alert uid",this.alertUid);
-      if (this.alertUid){
-        this.loadFromOutside = true;
-        this.loadAndScrollToAlert(this.alertUid);
-      } else {
-        this.loadNews(this.pageNumber);
-      }
+      if (this.alertUid)
+        this.newsService.findAlertPageNumber(this.alertUid).subscribe(pageNumber => this.loadNews(pageNumber));
+      else
+        this.loadNews();
     });
   }
 
-  loadAndScrollToAlert(alertUid:string){
-    this.newsService.findAlertPageNumber(alertUid).subscribe(resp => {
-      console.log("Page number....",resp);
-      this.outPageNumber = resp;
-      this.loadNews(this.outPageNumber, alertUid);
-    },error => {
-      console.log("Error finding alert page number",error);
-    });
-  }
-
-  loadNews(pageNumber: number = 0, alertUid?: string) {
+  loadNews(pageNumber: number = 0) {
     this.newsService.loadNews(pageNumber).subscribe(news => {
         this.news = news.content;
         this.totalPages = news.totalPages;
-        if (alertUid && isPlatformBrowser(this.platformId)) {
-          setTimeout(() => NewsComponent.scrollToAlert(alertUid), 100);
-        }
-    },error =>{
+        // setTimeout(() => this.finishedLoading(), 500);
+    }, error =>{
       console.log("Error loading news.....",error);
     });
   }
 
-  private static scrollToAlert(alertUid: string) {
-    console.log("Scrolling to alert");
-    const element = document.querySelector('#' + alertUid);
-    if (element) {
-      element.scrollIntoView();
-      window.scrollBy(0, -75); // for navbar
-    }
+  ngAfterViewInit() {
+    this.alerts.changes.subscribe(t => {
+      console.log('Changes triggered on alert view chilren!');
+      this.finishedLoading();
+    })
   }
 
+  finishedLoading() {
+    console.log('Should be finished loading, scrolling down ...');
+    if (this.alertUid && isPlatformBrowser(this.platformId)) {
+      console.log("Scrolling to alert");
+      const element = document.getElementById(this.alertUid);
+      if (element) {
+        element.scrollIntoView();
+        window.scrollBy(0, -75); // for navbar
+      }
+    } 
+  }
 
   loadImageUrl(imageKey:string):string{
     return this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
@@ -107,4 +103,9 @@ export class NewsComponent implements OnInit {
     this.imageUrl = this.mediaService.getImageUrl(MediaFunction.LIVEWIRE_MEDIA,imageKey);
     $('#open-image-modal').modal("show");
   }
+  
+  trackElement(index: number, element: PublicLivewire) {
+    return element ? element.serverUid : null;
+  }
+
 }

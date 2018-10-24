@@ -48,7 +48,7 @@
 			<hr />
 			<div class="row description">
 				<div class="col-md-2" style="font-weight: bold;">Description</div>
-				<div class="col-md-4">{{liveWireAlert.description}}</div>
+				<div class="col-md-4" [innerHtml]="liveWireAlert.description">Description</div>
 				<div class="col-md-4">
 					<button class="btn btn-primary"
 						(click)="openDescriptionModal(liveWireAlert.description)">Edit</button>
