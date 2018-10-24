@@ -1,3 +1,5 @@
+@import "https://cdn.quilljs.com/1.2.2/quill.snow.css";
+
 .headline{
 	margin-bottom: 1%;
 }
@@ -54,3 +56,6 @@
     transition: 0.3s;
 }
 
+.cancel-btn {
+  border-radius: 100px;
+}

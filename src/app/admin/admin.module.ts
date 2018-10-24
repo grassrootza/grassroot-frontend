@@ -16,6 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdminAccountsComponent } from './accounts/admin-accounts.component';
 import { AccountsAdminService } from './admin-accounts.service';
 import { AccountDetailComponent } from './accounts/account-detail/account-detail.component';
+import { QuillModule } from "ngx-quill";
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { AccountDetailComponent } from './accounts/account-detail/account-detail
     SharedModule,
     LoggedInServicesModule,
     NgbModule,
+    QuillModule,
     RouterModule.forChild(ADMIN_ROUTES)
   ],
   declarations: [

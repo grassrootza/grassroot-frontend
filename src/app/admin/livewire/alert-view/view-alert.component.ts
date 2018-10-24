@@ -30,9 +30,11 @@ export class ViewAlertComponent implements OnInit {
   public subscribers:DataSubscriber[] = [];
   public shareOnFB:boolean = false;
   public shareOnTwitter:boolean = false;
-
+  public showDescription = false;
+  public descriptionText: string = '';
   private linkUrl:string = "";
   private linkName:string = "grassroor news";
+  public quillConfig: any;
 
   constructor(private route:ActivatedRoute,
               private liveWireAlertService:LiveWireAdminService,
@@ -54,6 +56,19 @@ export class ViewAlertComponent implements OnInit {
     },error=>{
       console.log("Error getting params....",error);
     });
+    // basic Quill config for description (no media, no complex formatting)
+    this.quillConfig = {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+        ['clean'],                                         // remove formatting button
+      ]
+    };
+  }
+
+  cancelEditDescription() {
+    this.showDescription = false;
   }
 
   loadAlert(alertUid:string){
@@ -83,6 +98,17 @@ export class ViewAlertComponent implements OnInit {
   openDescriptionModal(description:string){
     this.desc = description;
     $('#change-description-modal').modal("show");
+  }
+
+  onEditDescriptionClick() {
+    if (this.showDescription) {
+      this.updateDescription(this.descriptionText);
+    }
+    this.showDescription = !this.showDescription;
+  }
+
+  getEditDescriptionText(): string {
+    return this.showDescription ? 'Save' : 'Edit';
   }
 
   updateHeadline(headline:string){
