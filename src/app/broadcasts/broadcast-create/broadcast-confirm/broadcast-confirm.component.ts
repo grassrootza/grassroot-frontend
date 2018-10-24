@@ -4,7 +4,7 @@ import {BroadcastService} from "../../broadcast.service";
 import {Router} from "@angular/router";
 import {BroadcastConfirmation, BroadcastContent} from "../../model/broadcast-request";
 import {AlertService} from "../../../utils/alert-service/alert.service";
-import {emailStyleHeader, limitImageSizesInRichText, replaceImagesInRichText} from "../../../media/media-utils";
+import {emailStyleHeader, replaceImagesInRichText} from "../../../media/media-utils";
 
 @Component({
   selector: 'app-broadcast-confirm',
