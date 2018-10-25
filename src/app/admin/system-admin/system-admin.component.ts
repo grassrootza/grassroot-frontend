@@ -53,7 +53,9 @@ export class SystemAdminComponent implements OnInit {
   provinceKeys: string[];
 
   public configVariableList:ConfigVariable[] = [];
-  public updateConfigVarkey:string;
+  
+  public configVarToUpdate: ConfigVariable;
+
   public deleteConfigVariableKey:string;
 
   public groupSizeLimitKey = 'groups.size.freemax';
@@ -85,8 +87,11 @@ export class SystemAdminComponent implements OnInit {
     });
 
     this.formCtrlSub = this.newValueFormControl.valueChanges
-      .debounceTime(3000)
-      .subscribe(newValue => this.onSizeChange(newValue));
+      .debounceTime(300)
+      .subscribe(newValue => {
+        if (this.configVarToUpdate && this.configVarToUpdate.key == this.groupSizeLimitKey)
+          this.onSizeChange(newValue)
+      });
   }
 
   loadUsers(searchTerm:string){
@@ -159,14 +164,11 @@ export class SystemAdminComponent implements OnInit {
   }
 
   triggerActivateOrDeactivateModal(active:boolean,groupUid:string){
-    
     this.groupToActivateOrDeactivateUid = groupUid;
-
-    if(active){
+    if(active)
       $('#deactivate-group-modal').modal("show");
-    }else{
+    else
       $('#activate-group-modal').modal("show");
-    }
   }
 
   confirmDeactivate(){
@@ -215,16 +217,14 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  showMore(){
-    if(this.totalGroupsLoaded > this.numberOfGroups){
+  showMoreGroups(){
+    if(this.totalGroupsLoaded > this.numberOfGroups)
       this.numberOfGroups += 10;
-    }
   }
 
-  showLess(){
-    if(this.numberOfGroups > 10){
+  showFewerGroups(){
+    if(this.numberOfGroups > 10)
       this.numberOfGroups -= 10;
-    }
   }
 
   triggerCreateSubscriberModal(){
@@ -233,26 +233,23 @@ export class SystemAdminComponent implements OnInit {
 
   createSubscriber(subscriberName:string,primaryEmail:string,otherEmails:string){
     this.livewireAdminService.createSubscriber(subscriberName,primaryEmail,this.addPrimaryEmail,otherEmails,this.makeAccountActive).subscribe(resp => {
-      if(resp == 'ACCOUNT_CREATED'){
+      if (resp == 'ACCOUNT_CREATED') {
         $('#create-subscriber-modal').modal("hide");
         this.alertService.alert("Done, subscriber created successfully.");
-      }else if(resp == 'ERROR'){
+      } else if(resp == 'ERROR') {
         this.errorCreatingSubscriberMessage = "Error! Subscriber account not created. Please make sure all input fields are valid.";
         setTimeout(()=>{
           this.errorCreatingSubscriberMessage = "";
         }, 2000);
       }
-    },error => {
+    }, error => {
       console.log("Error creating subscriber......",error);
     });
   }
 
   fetchApiToken() {
-    this.adminService.fetchAccessToken().subscribe(token => {
-      this.accessToken = token;
-    }, error => {
-      console.log('Error fetching token!: ', error);
-    });
+    this.adminService.fetchAccessToken().subscribe(token => this.accessToken = token, 
+      error => console.log('Error fetching token!: ', error));
     return false;
   }
 
@@ -285,16 +282,15 @@ export class SystemAdminComponent implements OnInit {
   openUpdateConfigVarModal(updateConfigVarkey:string) {
     console.log("Updating config variable with key --->>>",updateConfigVarkey);
     $('#update-config-variable-modal').modal("show");
-    this.updateConfigVarkey = updateConfigVarkey;
-    if(this.updateConfigVarkey == this.groupSizeLimitKey) {
-      let configVar = this.configVariableList.find(variable => variable.key == updateConfigVarkey);
-      console.log('Updating group size limit, existing var: ', configVar);
-      this.onSizeChange(parseInt(configVar.value));
+    this.configVarToUpdate = this.configVariableList.find(variable => variable.key == updateConfigVarkey);
+    if (updateConfigVarkey == this.groupSizeLimitKey) {
+      console.log('Updating group size limit, existing var: ', this.configVarToUpdate);
+      this.onSizeChange(parseInt(this.configVarToUpdate.value));
     }
   }
 
   updateConfigVariable(newValue:string,newDesc:string){
-    this.adminService.updateConfigVariable(this.updateConfigVarkey,newValue,newDesc).subscribe(resp => {
+    this.adminService.updateConfigVariable(this.configVarToUpdate.key, newValue, newDesc).subscribe(resp => {
       console.log("SERVER RESPONDED ............",resp);
       $('#update-config-variable-modal').modal("hide");
       this.fetchConfigVariables();

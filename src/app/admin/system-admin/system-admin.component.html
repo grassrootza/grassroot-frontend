@@ -363,29 +363,27 @@
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Config Variable</h5>
+        <h5 class="modal-title">Create a config variable</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
 
       <div class="modal-body">
-        <h5>Create config variable</h5>
+        <h5>Create config variable (note: if this variable is not already expected in the code, it will have to be added in the appropriate place)</h5>
         <div class="form-group">
-          <input class="form-control" type="text" id="config-var-key-text"
-                  name="otp" #configKey style="margin-top: 2%" placeholder="Please enter key">
-
-          <input class="form-control" type="text" id="config-avr-value-text"
-                  name="otp" #configValue style="margin-top: 2%" placeholder="Please enter value">
-
-          <input class="form-control" type="text" id="config-avr-value-text"
-                  name="otp" #desc style="margin-top: 2%" placeholder="Please enter description">     
+          <input class="form-control" type="text" id="config-var-key-text" name="create-var-key" #configKey placeholder="Please enter key">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" id="config-var-value-text" name="create-var-value" #configValue placeholder="Please enter value">
+        </div>
+        <div class="form-group">
+          <input class="form-control" type="text" id="config-var-value-text" name="create-var-desc" #desc placeholder="Please enter description">     
         </div>
       </div>
 
       <div class="modal-footer">
         <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" (click)="createConfigVariable(configKey.value,configValue.value,desc.value)">Create</button>
+        <button class="btn btn-primary" (click)="createConfigVariable(configKey.value, configValue.value, desc.value)">Create</button>
       </div>
-
     </div>
   </div>
 </div>
@@ -395,22 +393,24 @@
   <div class="modal-dialog modal-md" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Config Variable</h5>
+        <h5 class="modal-title">Update config variable</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
 
       <div class="modal-body">
-        <h5>Update</h5>
+        <h5>Update the value or description of config variable with key {{ configVarToUpdate?.key }}. 
+          Note: use with care! This will ramify throughout user experience</h5>
         
         <div class="form-group">
           <input class="form-control" #newValue [formControl]="newValueFormControl" type="text" id="config-var-key-text" name="var-value" 
-              style="margin-top: 2%" placeholder="Please enter new value">
-
+            value="{{ configVarToUpdate?.value }}">
+        </div>
+        <div class="form-group">
           <input class="form-control" #newDescription type="text" id="config-var-value-text" name="var-description" 
-            style="margin-top: 2%" placeholder="Please enter new description">    
+            value="{{ configVarToUpdate?.description }}">    
         </div>
 
-        <div *ngIf="updateConfigVarkey == groupSizeLimitKey">
+        <div *ngIf="configVarToUpdate?.key == groupSizeLimitKey">
           <p>Number of groups below free limit is: {{numberBelow}}</p>
           <p>Number of groups above free limit is: {{numberAbove}}</p>
         </div>
@@ -418,7 +418,7 @@
 
       <div class="modal-footer">
         <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button class="btn btn-primary" (click)="updateConfigVariable(newValue.value,newDescription.value)">Update</button>
+        <button class="btn btn-primary" (click)="updateConfigVariable(newValue.value, newDescription.value)">Update</button>
       </div>
 
     </div>
@@ -439,20 +439,14 @@
 
         <div class="modal-body">
           <div class="form-group">
-            <p>
-              Are you sure you want to remove this config variable?
-            </p>
+            <p>Are you sure you want to remove this config variable?</p>
           </div>
 
-          <div *ngIf="deleteConfigVariableKey == 'groups.size.freemax'">
-            <p>Number of groups below free limit is: {{numberBelow}}</p>
-            <p>Number of groups above free limit is: {{numberAbove}}</p>
-          </div>
         </div>
 
         <div class="modal-footer">
           <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button class="btn btn-danger" (click)="deleteCV()">Confirm</button>
+          <button class="btn btn-danger" (click)="deleteConfigVariable()">Confirm</button>
         </div>
 
       </div>
