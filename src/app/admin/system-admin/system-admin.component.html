@@ -135,6 +135,32 @@
         </div>
       </div>
 
+      <div class="row mt-3">
+        <div class="col-12">
+          <h1>Config variables</h1>
+          <p>Create a new config variable: <button class="btn btn-link grassroot-link" (click)="openCreateConfigVarModal()">create</button></p>
+          <hr>
+          <div *ngIf="configVariableList.length > 0" class="row groups-header" style="margin-bottom: 2%">
+            <div class="col-4">Key</div>
+            <div class="col-2">Value</div>
+            <div class="col-4">Description</div>
+            <div class="col-1"></div>
+            <div class="col-1"></div>
+          </div>
+
+          <div *ngFor="let configVar of configVariableList" class="row group-list" style="margin-bottom: 1%">
+            <div class="col-4">{{configVar.key}}</div>
+            <div class="col-2">{{configVar.value}}</div>
+            <div class="col-4">{{configVar.description}}</div>
+            <div class="col-1"><button class="btn btn-primary btn-sm" (click)="openUpdateConfigVarModal(configVar.key)">update</button></div>
+            <div class="col-1"><button class="btn btn-danger btn-sm" (click)="openRemoveConfigVariableConfirmModal(configVar.key)">remove</button></div>
+          </div>
+
+          <hr>
+          
+        </div>
+      </div>
+
 		</div>
 	</div>
 
@@ -332,5 +358,105 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="create-config-variable-modal" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Config Variable</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+
+      <div class="modal-body">
+        <h5>Create config variable</h5>
+        <div class="form-group">
+          <input class="form-control" type="text" id="config-var-key-text"
+                  name="otp" #configKey style="margin-top: 2%" placeholder="Please enter key">
+
+          <input class="form-control" type="text" id="config-avr-value-text"
+                  name="otp" #configValue style="margin-top: 2%" placeholder="Please enter value">
+
+          <input class="form-control" type="text" id="config-avr-value-text"
+                  name="otp" #desc style="margin-top: 2%" placeholder="Please enter description">     
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" (click)="createConfigVariable(configKey.value,configValue.value,desc.value)">Create</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog"
+      id="update-config-variable-modal" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Config Variable</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+
+      <div class="modal-body">
+        <h5>Update</h5>
+        
+        <div class="form-group">
+          <input class="form-control" #newValue [formControl]="newValueFormControl" type="text" id="config-var-key-text" name="var-value" 
+              style="margin-top: 2%" placeholder="Please enter new value">
+
+          <input class="form-control" #newDescription type="text" id="config-var-value-text" name="var-description" 
+            style="margin-top: 2%" placeholder="Please enter new description">    
+        </div>
+
+        <div *ngIf="updateConfigVarkey == groupSizeLimitKey">
+          <p>Number of groups below free limit is: {{numberBelow}}</p>
+          <p>Number of groups above free limit is: {{numberAbove}}</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" (click)="updateConfigVariable(newValue.value,newDescription.value)">Update</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  <div class="modal fade" tabindex="-1" role="dialog"
+       id="delete-config-variable-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm remove?</h5>
+          <button type="button" class="close" data-dismiss="modal"
+                  aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <p>
+              Are you sure you want to remove this config variable?
+            </p>
+          </div>
+
+          <div *ngIf="deleteConfigVariableKey == 'groups.size.freemax'">
+            <p>Number of groups below free limit is: {{numberBelow}}</p>
+            <p>Number of groups above free limit is: {{numberAbove}}</p>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger" (click)="deleteCV()">Confirm</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 
