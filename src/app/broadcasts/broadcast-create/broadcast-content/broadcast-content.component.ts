@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild, ElementRef} from '@angular/core';
 import {BroadcastContent, BroadcastTypes} from "../../model/broadcast-request";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
@@ -8,10 +8,11 @@ import {optionalUrlValidator} from "../../../validators/CustomValidators";
 import {environment} from "environments/environment";
 import {Ng2ImgMaxService} from "ng2-img-max";
 import {AlertService} from "../../../utils/alert-service/alert.service";
-import {limitImageSizesInRichText} from "../../../media/media-utils";
+import {createCustomImageEmbed, getCustomImageHandler} from "../../../media/media-utils";
 import {MediaService} from "../../../media/media.service";
 import {MediaFunction} from "../../../media/media-function.enum";
 
+declare var require: any;
 declare var $: any;
 
 @Component({
@@ -36,20 +37,20 @@ export class BroadcastContentComponent implements OnInit {
   public fbCharsLeft: number = this.MAX_FB_LENGTH;
   public twCharsLeft: number = this.MAX_TWITTER_LENGTH;
 
-  private emailAttachmentKeys: string[] = [];
+  public emailAttachmentKeys: string[] = [];
 
   private fbImageKey: string = "";
   public fbImageUrl: string = "";
   public fbLink: string = "";
-  private fbLinkCaption: string = "";
+  public fbLinkCaption: string = "";
 
   private twitterImageKey: string = "";
   public twitterImageUrl: string = "";
   public twitterLink: string = "";
-  private twitterLinkCaption: string = "";
+  public twitterLinkCaption: string = "";
 
-  private lastLinkInserted: string = "";
-  private lastLinkCaption: string = "";
+  public lastLinkInserted: string = "";
+  public lastLinkCaption: string = "";
 
   linkForm: FormGroup;
   insertingLinkType: string;
@@ -77,6 +78,26 @@ export class BroadcastContentComponent implements OnInit {
     this.contentForm.setValue(this.content);
     this.setUpValidation();
     this.restorePriorAttachments();
+    this.configureQuill();
+  }
+
+  configureQuill() {
+    // Quill uses 'document' directly so we do not 'import' it as it may face
+    // problems in an eventual SSR. We load it dynamically here to create the custom
+    // blots/embed class for our 'small-image' format.
+    const Quill = require('quill');
+    const embed = Quill.import('blots/embed');
+    const smallImageEmbed = createCustomImageEmbed(embed);
+    Quill.register({
+      'formats/small-image': smallImageEmbed
+    });
+  }
+
+  /**
+   * Method called when the Quill editor inits. Registers custom handlers.
+   */
+  onEditorCreated(editor: any) {
+    editor.getModule('toolbar').addHandler('image', getCustomImageHandler(editor));
   }
 
   restorePriorAttachments() {
@@ -147,7 +168,6 @@ export class BroadcastContentComponent implements OnInit {
   saveContent() {
     this.content = this.contentForm.value;
     if (this.types.email) {
-      this.content.emailContent = limitImageSizesInRichText(this.content.emailContent);
       this.content.emailAttachmentKeys = this.emailAttachmentKeys;
     }
 
