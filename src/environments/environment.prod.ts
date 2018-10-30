@@ -1,7 +1,6 @@
 export const environment = {
   production: true,
-  //backendAppUrl: "https://app.grassroot.org.za/v2",
-  backendAppUrl: "http://localhost:8080/v2",
+  backendAppUrl: "https://app.grassroot.org.za/v2",
   frontendAppUrl: "https://www.grassroot.org.za",
   ussdPrefix: `*134*1994*`,
   groupShortCode: '31660',

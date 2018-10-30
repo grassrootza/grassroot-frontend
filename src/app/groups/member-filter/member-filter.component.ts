@@ -12,6 +12,7 @@ import {BehaviorSubject} from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 import {AFRIKAANS, ENGLISH, Language, SOTHO, XHOSA, ZULU} from "../../utils/language";
 import {GroupRole} from "../model/group-role";
+import { Municilality } from '../model/municilality.model';
 
 declare var $: any;
 
@@ -34,6 +35,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   @Input() topics: string[] = [];
   @Input() affiliations: string[] = [];
   @Input() includeNameFilter: boolean = true;
+  @Input() provinceMunicipalities:Municilality[] = [];
 
   joinDateConditions: string[] = ["DAYS_AGO-EXACT", "DAYS_AGO-BEFORE", "DAYS_AGO-AFTER", "DATE-EXACT", "DATE-BEFORE", "DATE-AFTER"];
   joinDateConditionType = null;
@@ -51,6 +53,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
     this.userLanguages = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
     this.roleKeys = Object.keys(GroupRole);
     console.log('on filter set up, campaigns: ', this.campaigns);
+    console.log("Province municipalities in member filter -------->>>",this.provinceMunicipalities)
     // console.log(this.userLanguages);
   }
 
@@ -65,6 +68,8 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+
+    console.log("Province municipalities in member filter -------->>>",this.provinceMunicipalities)
 
     this.setupSelect2();
 
