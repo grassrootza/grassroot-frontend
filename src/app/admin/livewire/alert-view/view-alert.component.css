@@ -59,3 +59,7 @@
 .cancel-btn {
   border-radius: 100px;
 }
+
+.file-upload {
+  padding: 10px; 
+}
