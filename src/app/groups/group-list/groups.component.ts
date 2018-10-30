@@ -1,10 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import { SwUpdate } from '@angular/service-worker';
+import {Component, OnInit, Optional} from '@angular/core';
 import {GroupService} from "../group.service";
 import {GroupInfo} from "../model/group-info.model";
 import {GroupRef} from "../model/group-ref.model";
 import {Router} from "@angular/router";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {TranslateService} from "@ngx-translate/core";
+import { filter } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -34,11 +36,13 @@ export class GroupsComponent implements OnInit {
   private sortByUpNextAsc = true;
 
   public createTaskGroupUid: string = null;
+  updateAvailable = false;
 
   constructor(private groupService: GroupService,
               private alertService: AlertService,
               private router: Router,
-              private translateService: TranslateService) {
+              private translateService: TranslateService,
+              @Optional() private updates: SwUpdate) {
   }
 
   ngOnInit() {
@@ -75,6 +79,13 @@ export class GroupsComponent implements OnInit {
       );
 
     this.groupService.loadGroups();
+
+    this.updates.available.pipe(
+      filter(update => (<any> update.current.appData).dataGroup === 'groupList')
+    ).subscribe(() => {
+      console.log('data update!');
+      this.updateAvailable = true;
+    });
   }
 
   private resolvePinnedGroups() {

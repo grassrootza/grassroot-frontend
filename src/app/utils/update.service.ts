@@ -1,36 +1,38 @@
+import { switchMap, take, takeUntil, filter } from 'rxjs/operators';
 import { Injectable, Optional } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
-import { interval } from 'rxjs';
+import { interval, BehaviorSubject, never, Subject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UpdateService {
+  pauser: Subject<void> = new Subject();
+  private softwareUpdateSource: Subject<void> = new Subject<void>();
+  softwareUpdate$: Observable<void> = this.softwareUpdateSource.asObservable();
 
-  constructor(@Optional() private updates:SwUpdate) {
-      if(updates && updates.isEnabled){
-          interval(6 * 60 * 60)
-          .subscribe(() => updates.checkForUpdate()
-          .then(() => {
-            console.log('checking for updates.......................')
-            this.checkForUpdates();
-          }));
-      }
+  constructor(@Optional() private updates: SwUpdate) {
+    if(updates && updates.isEnabled){
+        interval(1000)
+          .pipe(takeUntil(this.pauser))
+          .subscribe(() => updates.checkForUpdate());
+        
+      this.updates.available.pipe(
+        filter(update => !(update.current.appData as {dataGroup: string}).dataGroup),
+        take(1)
+      ).subscribe(() => {
+        this.stopFetching();
+        this.updates.activateUpdate().then(() => this.softwareUpdateSource.next());
+      });
+    }
    }
   
   public checkForUpdates(): void {
-     console.log("CALLING CHECK FOR UPDATES")
-      //this.updates.available.subscribe(evt => {this.promptUser()});
-    this.updates.available.subscribe(evt => {
-      
-      if(confirm('New version available.. Load?')){
-        this.promptUser();
-      }
-    });
+    this.updates.checkForUpdate();
   }
 
-  private promptUser(): void {
-    console.log('updating to new version............................');
-    this.updates.activateUpdate().then(() => document.location.reload()); 
+  private stopFetching() {
+    this.pauser.next();
+    this.pauser.complete();
   }
 }

@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID, Renderer2} from '@angular/core';
 import {UserService} from "./user/user.service";
 import {Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
@@ -9,6 +9,7 @@ import {Notification} from "./user/model/notification.model";
 import {LocalStorageService, STORE_KEYS} from "./utils/local-storage.service";
 import {isPlatformBrowser} from "@angular/common";
 import { UpdateService } from './utils/update.service';
+import { DOCUMENT } from '@angular/common';
 
 declare var $: any;
 
@@ -30,6 +31,8 @@ export class AppComponent implements OnInit {
   popupNotification: Notification = null;
 
   loadingModule: boolean = false;
+  countdown: number = 5;
+  countdownActive: boolean = false;
 
   private newNotifications: Notification[] = [];
   private currentPopupNotificationIndex = 0;
@@ -51,7 +54,9 @@ export class AppComponent implements OnInit {
               private notificationService: NotificationService,
               private localStorageService: LocalStorageService,
               private updatesService: UpdateService,
-              @Inject(PLATFORM_ID) protected platformId: Object) {
+              @Inject(PLATFORM_ID) protected platformId: Object,
+              @Inject(DOCUMENT) private document: Document,
+              private renderer: Renderer2) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
     if (this.loggedInUser && this.loggedInUser.hasImage) {
@@ -99,6 +104,26 @@ export class AppComponent implements OnInit {
       setInterval(() => {
         this.pullNotifications()
       }, 30000);
+    }
+
+    this.updatesService.softwareUpdate$.subscribe(() => {
+      this.countdownActive = true;
+      if (isPlatformBrowser(this.platformId)) {
+        this.renderer.addClass(this.document.body, 'no-overflow');
+        const interval = setInterval(() => {
+          this.countdown--;
+          if (this.countdown === 0) {
+            clearInterval(interval);
+            this.document.location.reload();
+          }
+        }, 1000);
+      }
+    });
+  }
+
+  public refreshPage() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.location.reload();
     }
   }
 

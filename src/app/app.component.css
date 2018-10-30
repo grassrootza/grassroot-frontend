@@ -28,6 +28,67 @@
   max-height: 38px;
 }
 
+.restart-alert {
+  height: 60px;
+  background: #63c1a7;
+  color: white;
+  transition: transform 0.5s ease;
+  transform: translateY(-70px);
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.restart-alert__content {
+  flex: 1;
+  padding: 0 20px;
+}
+
+.refresh-loader {
+  height: 7px;
+  transition: transform 5s linear;
+  width: 100%;
+  background: #4b8673;
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.refresh-btn {    
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+  border-radius: 3px;
+  font-size: 0.9em;
+  cursor: pointer;
+  padding: 7px 17px;
+  transition: all ease 0.25s; 
+}
+
+.refresh-btn:hover {
+  background: #fff;
+  color: #63c1a7;
+}
+
+.restart-alert--enabled {
+  transform: translateY(0);
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.26);
+}
+
+.restart-alert--enabled .refresh-loader {
+  transform: scaleX(1);
+}
+
+.main-wrapper {
+  transition: opacity 0.5s ease;
+}
+
+.main-wrapper--disabled {
+  pointer-events: none;
+  opacity: 0.3; /* shades the whole screen when goes disabled */
+}
+
 .navbar-light .navbar-nav.main-nav .nav-link {
   margin-left: 2rem !important;
   padding-bottom: 1rem;

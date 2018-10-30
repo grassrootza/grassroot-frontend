@@ -61,19 +61,26 @@
     {
       "name": "newsHeadlines",
       "urls": [
-        "https://staging.grassroot.org.za/v2/api/news/list/headlines"
+        "https://reqres.in/api/users?page=2"
       ],
-      "queryParameters": [
-        "0",
-        "5",
-        "creationTime,desc",
-        "5"
-      ],
+      "version": 1,
       "cacheConfig": {
         "maxSize": 5,
         "maxAge": "12h",
-        "timeOut": "20s",
-        "strategy": "freshness"
+        "strategy": "performance"
+      }
+    },
+    {
+      "name": "groupList",
+      "urls": [
+        "http://localhost:3000/posts"
+      ],
+      "version": 1,
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "12h",
+        "strategy": "performance",
+        "timeOut": 5000
       }
     }
   ]

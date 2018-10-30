@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .bootstrapModule(AppBrowserModule)
     .then(() => {
       if('serviceWorker' in navigator && environment.production){
-        navigator.serviceWorker.register('ngsw-worker.js');
+        navigator.serviceWorker.register('sw-master.js');
       }
     })
     .catch(err => console.log(err));

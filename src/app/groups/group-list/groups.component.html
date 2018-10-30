@@ -4,6 +4,12 @@
   </button>
   <h1 class="main-title">{{ 'groups.title' | translate }}</h1>
 
+  <div class="d-flex align-items-center justify-content-between refresh-wrapper"
+        *ngIf="updateAvailable">
+    <span> Your groups have been updated </span>
+    <button class="refresh-btn">Refresh</button>
+  </div>
+
   <h2 *ngIf="pinnedGroups.length > 0">
     <img src="assets/star_black.png"/>
     {{ 'groups.pinnedGroups.title' | translate }}
@@ -88,7 +94,6 @@
 
     <button type="button" class="btn btn-success clear-filters mt-sm-1" (click)="clearAllFilters()">{{ 'groups.filter.clear' | translate }}</button>
   </div>
-
 
   <div *ngIf="groups.length > 0" class="card">
     <div class="card-body">
