@@ -4,7 +4,7 @@
 	<a [routerLink]="['/admin/livewire/list']" class="grassroot-breadcrumb"><i
 		class="fas fa-arrow-left"></i>BACK TO ALERTS</a>
 
-	<div class="row" *ngIf="!liveWireAlert.sent">
+	<div class="row" *ngIf="!liveWireAlert?.sent">
 		<div class="col-md-1">
 			<button class="btn btn-secondary" (click)="openReleaseModal()">Release</button>
 		</div>
@@ -48,11 +48,21 @@
 			<hr />
 			<div class="row description">
 				<div class="col-md-2" style="font-weight: bold;">Description</div>
-				<div class="col-md-4">{{liveWireAlert.description}}</div>
-				<div class="col-md-4">
+				<div class="col-md-4" [innerHtml]="liveWireAlert.description">Description</div>
+				<div class="col-md-6">
 					<button class="btn btn-primary"
-						(click)="openDescriptionModal(liveWireAlert.description)">Edit</button>
-				</div>
+            (click)="onEditDescriptionClick()">{{ getEditDescriptionText() }}</button>
+          <button class="btn btn-outline-secondary cancel-btn ml-3"
+            *ngIf="showDescription"
+            (click)="cancelEditDescription()">Cancel</button>
+        </div>
+        <div class="col-md-8 offset-md-2 mt-2">
+          <quill-editor *ngIf="showDescription"
+                        [style]="{height: '180px'}"
+                        [modules]="quillConfig"
+                        [ngModel]="liveWireAlert.description"
+                        (ngModelChange)="descriptionText = $event"></quill-editor>
+        </div>
 			</div>
 			<hr />
 			<div class="row group">
@@ -144,42 +154,6 @@
 				<div class="modal-footer">
 					<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
 					<button class="btn btn-danger" (click)="updateHeadline(headline)">Edit</button>
-				</div>
-
-			</div>
-		</div>
-	</div>
-
-	<div class="modal fade" tabindex="-1" role="dialog"
-		id="change-description-modal" aria-hidden="true">
-		<div class="modal-dialog modal-md" role="document">
-			<div class="modal-content">
-				<span class="alert-modal-image-close">&times;</span>
-				<div class="modal-header">
-					<h5 class="modal-title">{{'livewire.desc-modal.title' |
-						translate}}</h5>
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-
-				<div class="modal-body">
-					<div class="form-group">
-						<label for="description-text" class="control-label">{{'livewire.desc-modal.label'
-							| translate}}</label>
-
-						<textarea class="form-control" #description rows="" cols=""
-							id="description-text" name="description-text">
-        		{{desc}}
-        	</textarea>
-					</div>
-				</div>
-
-				<div class="modal-footer">
-					<button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-					<button class="btn btn-danger"
-						(click)="updateDescription(description.value)">Edit</button>
 				</div>
 
 			</div>

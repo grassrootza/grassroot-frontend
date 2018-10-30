@@ -29,6 +29,7 @@ export class ProfileFormComponent implements OnInit {
   public currentImageUrl: string;
 
   public accessToken: string = "";
+  public whatsAppOptedIn: boolean = false;
 
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,
@@ -48,7 +49,8 @@ export class ProfileFormComponent implements OnInit {
         name:new FormControl('',Validators.required),
         phone:new FormControl('',[optionalPhoneValidator]),
         province:new FormControl('',Validators.required),
-        language:new FormControl('',Validators.required)
+        language:new FormControl('',Validators.required),
+        whatsAppOptedIn:new FormControl('',[])
     }, emailOrPhoneEntered("email", "phone"));
 
   }
@@ -56,13 +58,14 @@ export class ProfileFormComponent implements OnInit {
   ngOnInit() {
     this.userProfile = new UserProfile(this.userService.getLoggedInUser());
     this.profileForm.setValue(this.userProfile);
+    // console.log("User profile from the server", this.userProfile);
+    // console.log("Testing data from server",this.userProfile.whatsAppOptedIn);
     this.currentImageUrl = this.userService.getProfileImageUrl(false);
     this.dragAreaClass = this.dragClass();
   }
 
   saveChanges() {
     console.log("saving changes! form looks like: ", this.profileForm.value);
-    console.log("User email......" + this.userProfile.email);
     this.userProfile = this.profileForm.value;
     this.userService.updateDetails(this.userProfile)
       .subscribe(message => {
@@ -144,4 +147,8 @@ export class ProfileFormComponent implements OnInit {
     this.onImageSelected(files[0]);
   }
 
+  subscribeWhatsapp(evt:any){
+    this.whatsAppOptedIn = evt;
+    this.userProfile.whatsAppOptedIn = evt;
+  }
 }

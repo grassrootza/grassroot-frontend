@@ -12,6 +12,8 @@ import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import 'rxjs/add/operator/debounceTime';
 
+import { saveAs } from 'file-saver';
+
 declare var $: any;
 
 @Component({
@@ -21,18 +23,20 @@ declare var $: any;
 })
 export class SystemAdminComponent implements OnInit {
 
-  public userUid:string;
-  public userNotFoundMessage:string;
-  public groupsNotFoundMessage:string;
-  public invalidOtpMessage:string;
-  public groupToActivateOrDeactivateUid:string;
-  public searchTerm:string;
-  public userRole:string = "ROLE_ORDINARY_MEMBER";
-  public groupUid:string;
-  public userGroups:number;
-  public province:string;
-  public numberOfGroups:number = 10;
-  public totalGroupsLoaded:number;
+  public userUid: string;
+  
+  public userNotFoundMessage: string;
+  public groupsNotFoundMessage: string;
+  
+  public invalidOtpMessage: string;
+  public groupToActivateOrDeactivateUid: string;
+  public searchTerm: string;
+  public userRole: string = "ROLE_ORDINARY_MEMBER";
+  public groupUid: string;
+  public userGroups: number;
+  public province: string;
+  public numberOfGroups: number = 10;
+  public totalGroupsLoaded: number;
 
   public groups:GroupAdmin[] = [];
 
@@ -49,16 +53,18 @@ export class SystemAdminComponent implements OnInit {
   provinceKeys: string[];
 
   public configVariableList:ConfigVariable[] = [];
-  public updateConfigVarkey:string;
+  
+  public configVarToUpdate: ConfigVariable;
+
   public deleteConfigVariableKey:string;
 
-  public numberBelow:number;
-  public numberAbove:number;
+  public groupSizeLimitKey = 'groups.size.freemax';
+  public numberBelow: number;
+  public numberAbove: number;
 
   accessToken: string;
   
   constructor(private adminService:AdminService,
-              private router:Router,
               private alertService:AlertService,
               private livewireAdminService:LiveWireAdminService) { 
     this.provinceKeys = Object.keys(this.userProvince);
@@ -68,7 +74,6 @@ export class SystemAdminComponent implements OnInit {
 
   ngOnInit() {
     this.livewireAdminService.allSubscribers().subscribe(resp => {
-      console.log("Subscribers........",resp);
       this.livewireSubscribers = resp;
     },error => {
       console.log("Error loading subscribers...",error);
@@ -76,26 +81,29 @@ export class SystemAdminComponent implements OnInit {
 
     this.adminService.listAllConfigVariables().subscribe(resp => {
       this.configVariableList = resp;
-      console.log("SERVER RESPONDED ...........",this.configVariableList);
+      console.log("Config variable list from server: ", this.configVariableList);
     },error => {
-      console.log("Error fecthing all variables .....................",error);
+      console.log("Error fecthing config variables:", error);
     });
 
     this.formCtrlSub = this.newValueFormControl.valueChanges
-      .debounceTime(3000)
-      .subscribe(newValue => this.onSizeChange(newValue));
+      .debounceTime(300)
+      .subscribe(newValue => {
+        if (this.configVarToUpdate && this.configVarToUpdate.key == this.groupSizeLimitKey)
+          this.onSizeChange(newValue)
+      });
   }
 
   loadUsers(searchTerm:string){
     this.adminService.loadUser(searchTerm).subscribe(resp => {
       if(resp === ""){
-        this.userNotFoundMessage = "User not found,type correct number or email";
+        this.userNotFoundMessage = "User not found, type correct number or email";
         setTimeout(() => {
           this.userNotFoundMessage = "";
         }, 2000)
       }else{
         this.userUid = resp;
-        this.numberOfUserGrooups(this.userUid);
+        this.numberOfUserGroups(this.userUid);
         $('#user-opt-out-modal').modal("show");
       }
 
@@ -104,7 +112,7 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  numberOfUserGrooups(userUid:string){
+  numberOfUserGroups(userUid:string){
     this.adminService.numberOfGroupsUserIsPartOf(userUid).subscribe(resp => {
       this.userGroups = resp;
     },error => {
@@ -113,20 +121,20 @@ export class SystemAdminComponent implements OnInit {
   }
   
   optOutUser(otp:string){
-    this.adminService.optOutUser(otp,this.userUid).subscribe(resp => {
+    this.adminService.optOutUser(otp,this.userUid).subscribe(_ => {
       $('#user-opt-out-modal').modal("hide");
+      this.alertService.alert('Done, user has been opted out of their groups');
     },error => {
       console.log("Error opting user out...",error);
       this.invalidOtpMessage = "Error! invalid OTP";
-      setTimeout(() => {
-        this.invalidOtpMessage = "";
-      },2000);
+      setTimeout(() => this.invalidOtpMessage = "", 2000);
     });
   }
   
   resetUserPwd(otp:string){
-    this.adminService.resetUserPassword(otp,this.userUid).subscribe(resp => {
+    this.adminService.resetUserPassword(otp,this.userUid).subscribe(_ => {
       $('#user-opt-out-modal').modal("hide");
+      this.alertService.alert('Done, user password reset and sent to them');
     },error => {
       console.log("Error updating password",error);
     });
@@ -144,14 +152,11 @@ export class SystemAdminComponent implements OnInit {
   searchGroups(groupName:string){
     this.searchTerm = groupName;
     this.adminService.findGroups(groupName).subscribe(resp => {
-      console.log("Response....",resp);
       this.groups = resp;
       this.totalGroupsLoaded = this.groups.length;
-      if(this.groups.length === 0){
+      if (this.groups.length === 0) {
         this.groupsNotFoundMessage = "No groups found!";
-        setTimeout(()=>{
-          this.groupsNotFoundMessage = "";
-        },2000);
+        setTimeout(()=> this.groupsNotFoundMessage = "", 2000);
       }
     },error => {
       console.log("Error loading goups",error);
@@ -159,23 +164,16 @@ export class SystemAdminComponent implements OnInit {
   }
 
   triggerActivateOrDeactivateModal(active:boolean,groupUid:string){
-    
     this.groupToActivateOrDeactivateUid = groupUid;
-
-    if(active){
+    if(active)
       $('#deactivate-group-modal').modal("show");
-    }else{
+    else
       $('#activate-group-modal').modal("show");
-    }
   }
 
   confirmDeactivate(){
     this.adminService.deactivateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
-      for(let grp of this.groups){
-        if(grp.groupUid === this.groupToActivateOrDeactivateUid){
-          grp.active = false;
-        }
-      }
+      this.groups.filter(grp => grp.groupUid == this.groupToActivateOrDeactivateUid).forEach(grp => grp.active = false);
       $('#deactivate-group-modal').modal("hide");
     },error => {
       console.log("Error deactivating group...",error);
@@ -184,11 +182,7 @@ export class SystemAdminComponent implements OnInit {
 
   confirmActivate(){
     this.adminService.activateGroup(this.groupToActivateOrDeactivateUid).subscribe(resp => {
-      for(let grp of this.groups){
-        if(grp.groupUid === this.groupToActivateOrDeactivateUid){
-          grp.active = true;
-        }
-      }
+      this.groups.filter(grp => grp.groupUid == this.groupToActivateOrDeactivateUid).forEach(grp => grp.active = true);
       $('#activate-group-modal').modal("hide");
     },error => {
       console.log("Error Activatin Group...",error);
@@ -214,30 +208,23 @@ export class SystemAdminComponent implements OnInit {
       $('#add-member-modal').modal("hide");
       if(resp == "UPLOADED"){
         this.alertService.alert("group.allMembers.addMember.complete");
-        for(let grp of this.groups){
-          if(grp.groupUid === this.groupUid){
-            grp.memberCount += 1;
-          }
-        }
-      }else if(resp == "UPDATED"){
+        this.groups.filter(grp => grp.groupUid == this.groupToActivateOrDeactivateUid).forEach(grp => grp.memberCount += 1);
+      } else if(resp == "UPDATED") {
         this.alertService.alert("group.allMembers.addMember.updated");
       }
-      
     },error => {
       console.log("Error adding member to group",error);
     });
   }
 
-  showMore(){
-    if(this.totalGroupsLoaded > this.numberOfGroups){
+  showMoreGroups(){
+    if(this.totalGroupsLoaded > this.numberOfGroups)
       this.numberOfGroups += 10;
-    }
   }
 
-  showLess(){
-    if(this.numberOfGroups > 10){
+  showFewerGroups(){
+    if(this.numberOfGroups > 10)
       this.numberOfGroups -= 10;
-    }
   }
 
   triggerCreateSubscriberModal(){
@@ -246,25 +233,34 @@ export class SystemAdminComponent implements OnInit {
 
   createSubscriber(subscriberName:string,primaryEmail:string,otherEmails:string){
     this.livewireAdminService.createSubscriber(subscriberName,primaryEmail,this.addPrimaryEmail,otherEmails,this.makeAccountActive).subscribe(resp => {
-      if(resp == 'ACCOUNT_CREATED'){
+      if (resp == 'ACCOUNT_CREATED') {
         $('#create-subscriber-modal').modal("hide");
         this.alertService.alert("Done, subscriber created successfully.");
-      }else if(resp == 'ERROR'){
+      } else if(resp == 'ERROR') {
         this.errorCreatingSubscriberMessage = "Error! Subscriber account not created. Please make sure all input fields are valid.";
         setTimeout(()=>{
           this.errorCreatingSubscriberMessage = "";
         }, 2000);
       }
-    },error => {
+    }, error => {
       console.log("Error creating subscriber......",error);
     });
   }
 
   fetchApiToken() {
-    this.adminService.fetchAccessToken().subscribe(token => {
-      this.accessToken = token;
+    this.adminService.fetchAccessToken().subscribe(token => this.accessToken = token, 
+      error => console.log('Error fetching token!: ', error));
+    return false;
+  }
+
+  exportWhatsAppOptIn(){
+    console.log("Calling method for exporting whatsapp spreadsheet");
+    this.adminService.downloadWhatsAppOptedInUsers().subscribe(data => {
+        let blob = new Blob([data], {type: 'application/xls'});
+        saveAs(blob,  "whats_app_users.xlsx");
     }, error => {
-      console.log('Error fetching token!: ', error);
+      console.log("error getting a list of subscribed users ", error);
+      this.alertService.alert('Sorry, there was an error downloading the opted in users, please see logs');
     });
     return false;
   }
@@ -273,28 +269,28 @@ export class SystemAdminComponent implements OnInit {
     $('#create-config-variable-modal').modal("show");
   }
 
-
   createConfigVariable(key:string,value:string,desc:string){
-    this.adminService.createConfigVariable(key,value,desc).subscribe(resp => {
+    this.adminService.createConfigVariable(key,value,desc).subscribe(_ => {
       $('#create-config-variable-modal').modal("hide");
+      this.alertService.alert('Done, alert created');
       this.fetchConfigVariables();
-    },error => {
-      console.log("Error creating config variable................");
+    }, error => {
+      console.log("Error creating config variable: ", error);
     });
   }
 
-  openUpdateConfigVarModal(updateConfigVarkey:string){
+  openUpdateConfigVarModal(updateConfigVarkey:string) {
     console.log("Updating config variable with key --->>>",updateConfigVarkey);
     $('#update-config-variable-modal').modal("show");
-    this.updateConfigVarkey = updateConfigVarkey;
-    if(this.updateConfigVarkey == 'groups.size.freemax'){
-      this.aboveCV();
-      this.belowCV();
+    this.configVarToUpdate = this.configVariableList.find(variable => variable.key == updateConfigVarkey);
+    if (updateConfigVarkey == this.groupSizeLimitKey) {
+      console.log('Updating group size limit, existing var: ', this.configVarToUpdate);
+      this.onSizeChange(parseInt(this.configVarToUpdate.value));
     }
   }
 
   updateConfigVariable(newValue:string,newDesc:string){
-    this.adminService.updateConfigVariable(this.updateConfigVarkey,newValue,newDesc).subscribe(resp => {
+    this.adminService.updateConfigVariable(this.configVarToUpdate.key, newValue, newDesc).subscribe(resp => {
       console.log("SERVER RESPONDED ............",resp);
       $('#update-config-variable-modal').modal("hide");
       this.fetchConfigVariables();
@@ -314,13 +310,13 @@ export class SystemAdminComponent implements OnInit {
   openRemoveConfigVariableConfirmModal(deleteConfigVariableKey:string){
     this.deleteConfigVariableKey = deleteConfigVariableKey;
     $('#delete-config-variable-modal').modal('show');
-    if(this.deleteConfigVariableKey == 'groups.size.freemax'){
-      this.aboveCV();
-      this.belowCV();
+    if(this.deleteConfigVariableKey == this.groupSizeLimitKey){
+      this.calculateGroupsAboveLimit();
+      this.calculateGroupsBelowLimit();
     }
   }
 
-  deleteCV(){
+  deleteConfigVariable() {
     this.adminService.deleteCV(this.deleteConfigVariableKey).subscribe(resp => {
       $('#delete-config-variable-modal').modal('hide');
       this.fetchConfigVariables();
@@ -329,7 +325,7 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  aboveCV(){
+  calculateGroupsAboveLimit() {
     this.adminService.getNumberGroupsAboveFreeLimit().subscribe(resp => {
       this.numberAbove = resp;
     },error => {
@@ -337,7 +333,7 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  belowCV(){
+  calculateGroupsBelowLimit(){
     this.adminService.getNumberGroupsBelowFreeLimit().subscribe(resp => {
       this.numberBelow = resp;
     },error => {
@@ -345,18 +341,18 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  onSizeChange(size:number){
+  onSizeChange(size:number) {
     this.adminService.countGroupsBelowLimit(size).subscribe(resp => {
       console.log("Number of groups below limit is >",resp);
       this.numberBelow = resp;
     },error => {
-      console.log("Error counting groups................")
+      console.log("Error counting groups: ", error)
     });
 
     this.adminService.countGroupsAboveLimit(size).subscribe(resp => {
       this.numberAbove = resp;
     },error => {
-      console.log("error counting groups................");
+      console.log("error counting groups: ", error)
     });
   }
 

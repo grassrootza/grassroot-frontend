@@ -19,6 +19,7 @@ export class AdminService {
   private addMemberToGroupUrl = environment.backendAppUrl + "/api/admin/groups/member/add";
   private recycleGroupJoinTokensUrl = environment.backendAppUrl + "/api/admin/groups/tokens/recycle";
   private fetchApiCallTokenUrl = environment.backendAppUrl + "/api/admin/token/system/generate";
+  private exportWhatsappOptedIn = environment.backendAppUrl + "/api/user/export/whatsapp/users";
 
   private createConfigVariableUrl = environment.backendAppUrl + "/api/admin/config/create";
   private updateConfigVariableUrl = environment.backendAppUrl + "/api/admin/config/update";
@@ -94,6 +95,11 @@ export class AdminService {
 
   fetchAccessToken(): Observable<string> {
     return this.httpClient.post(this.fetchApiCallTokenUrl, null, { responseType: 'text'});
+  }
+
+  downloadWhatsAppOptedInUsers(){
+      const params = new HttpParams();
+      return this.httpClient.get(this.exportWhatsappOptedIn, {params: params, responseType: 'blob'});
   }
 
   createConfigVariable(key:string,value:string,description:string): Observable<any>{

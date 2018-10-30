@@ -18,7 +18,8 @@
         <a href="javascript:void(0)" (click)="file.click()" >
           {{ 'group.import.file.browseFile'  | translate}}
         </a>
-        {{ 'group.import.file.dragAndDrop'  | translate}}
+        {{ 'group.import.file.dragAndDrop'  | translate}}<br />
+        {{ 'group.import.file.formatNote' | translate }}
         <input type="file"
                #file
                [multiple]="(maxFiles > 1)"

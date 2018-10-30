@@ -38,9 +38,7 @@
 
   .section-latest-news .latest-news h2 {
     margin: 0;
-    position: absolute;
     padding-right: 10px;
-    border-right: 1px solid #4a4a4a;
   }
 
   .section-latest-news .posted-on {
@@ -53,6 +51,11 @@
 }
 
 @media (min-width: 768px) {
+
+  .section-latest-news .latest-news h2 {
+    position: absolute;
+    border-right: 1px solid #4a4a4a;
+  }
 
   .section-latest-news .item {
     display: flex;
