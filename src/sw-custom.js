@@ -3,6 +3,15 @@
 
   const FETCHING_FREQUENCY = 60 * 1000; // fetch the data group every 60 seconds
 
+  /**
+   * Main function which runs on sw registration.
+   * 1. Fetch the ngsw.json configuration
+   * 2. Find all the dataGroups with 'performance' strategy
+   * 3. Periodically fetch each one of the URLs
+   * 4. Compare the response with the previously cached data
+   * 5. Notify if a change has been detected
+   * 6. Store the new value in the cache
+   */
   async function init() {
     const configuration = await fetchConfiguration();
 
