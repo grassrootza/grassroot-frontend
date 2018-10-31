@@ -15,9 +15,11 @@ export class UpdateService {
 
   constructor(@Optional() private updates: SwUpdate) {
     if(updates && updates.isEnabled){
-        interval(6 * 60 * 60)
-          .pipe(takeUntil(this.pauser))
-          .subscribe(() => updates.checkForUpdate());
+      // This interval is to check for software updates not for dataGroup updates.
+      // The interval that checks the dataGroups is set in sw-custom
+      interval(6 * 60 * 60)
+        .pipe(takeUntil(this.pauser))
+        .subscribe(() => updates.checkForUpdate());
       
       // updates might come in the form of software or dataGroup updates
       // in this pipeline we do the corresponding treatment for both by checking

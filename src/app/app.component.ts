@@ -109,6 +109,7 @@ export class AppComponent implements OnInit, OnDestroy {
       }, 30000);
     }
 
+    // subscribe to software updates and start a countdown to force a page refresh
     this.updatesService.softwareUpdate$
     .pipe(takeUntil(this.destroy$))
     .subscribe(() => {

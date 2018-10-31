@@ -85,6 +85,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
     this.groupService.loadGroups();
 
+    // subscribe to the changes of the dataGroup 'groupList' sent by the SW
     this.updateService.dataGroupUpdate$.pipe(
       filter(dataGroup => dataGroup === 'groupList'),
       takeUntil(this.destroy$)

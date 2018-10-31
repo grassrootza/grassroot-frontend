@@ -1,6 +1,8 @@
 (function () {
   'use strict';
 
+  const FETCHING_FREQUENCY = 60 * 1000; // fetch the data group every 60 seconds
+
   async function init() {
     const configuration = await fetchConfiguration();
 
@@ -11,7 +13,7 @@
     if (dataGroups) {
       dataGroups.forEach(dataGroup => {
         const name = dataGroup.name;
-        const frequency = 5000;
+        const frequency = FETCHING_FREQUENCY;
         const urls = dataGroup.patterns.map(pattern => pattern.replace(/\\/g, ''));
 
         // do a background fetch + cache for every URL in each one of the 'performance' dataGroups

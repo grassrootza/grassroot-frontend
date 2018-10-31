@@ -20,8 +20,7 @@ import {AlertService} from "../utils/alert-service/alert.service";
 import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PublicLivewire} from "../livewire/public-livewire.model";
-import { tap, filter } from 'rxjs/operators';
-import { SwUpdate } from '@angular/service-worker';
+import { filter } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -63,7 +62,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
               private builder: AnimationBuilder,
               private route: ActivatedRoute,
               private router: Router,
-              @Optional() private updates: SwUpdate,
               @Inject(PLATFORM_ID) protected platformId: Object) {
   }
 
@@ -97,12 +95,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
             this.loadNews();
           }
         );
-
-      this.updates.available.pipe(
-        filter(update => (update.current.appData as any).dataGroup === 'newsHeadLines')
-      ).subscribe(() => {
-        console.log('data update!');
-      });
     }
   }
 

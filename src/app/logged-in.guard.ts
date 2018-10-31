@@ -20,11 +20,11 @@ export class LoggedInGuard implements CanActivate {
     localStorage.setItem("afterLoginUrl", afterLoginUrl);
     localStorage.setItem("afterLoginParams", JSON.stringify(next.queryParams));
 
-    // if (!isLoggedIn) {
-    //   this.router.navigate(['login']);
-    // }
+    if (!isLoggedIn) {
+      this.router.navigate(['login']);
+    }
 
-    return true;
+    return isLoggedIn;
 
   }
 }
