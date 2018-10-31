@@ -1,12 +1,14 @@
-import { SwUpdate } from '@angular/service-worker';
-import {Component, OnInit, Optional} from '@angular/core';
+import {Component, OnInit, Inject, PLATFORM_ID, OnDestroy} from '@angular/core';
 import {GroupService} from "../group.service";
 import {GroupInfo} from "../model/group-info.model";
 import {GroupRef} from "../model/group-ref.model";
 import {Router} from "@angular/router";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {TranslateService} from "@ngx-translate/core";
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { Subject } from 'rxjs';
+import { UpdateService } from 'app/utils/update.service';
 
 declare var $: any;
 
@@ -15,7 +17,7 @@ declare var $: any;
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.css']
 })
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
 
   // aot build doesn't like these being private, wants them public
   public groups: GroupInfo[] = [];
@@ -37,12 +39,15 @@ export class GroupsComponent implements OnInit {
 
   public createTaskGroupUid: string = null;
   updateAvailable = false;
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(private groupService: GroupService,
               private alertService: AlertService,
               private router: Router,
               private translateService: TranslateService,
-              @Optional() private updates: SwUpdate) {
+              private updateService: UpdateService,
+              @Inject(PLATFORM_ID) protected platformId: Object,
+              @Inject(DOCUMENT) private document: Document,) {
   }
 
   ngOnInit() {
@@ -80,10 +85,10 @@ export class GroupsComponent implements OnInit {
 
     this.groupService.loadGroups();
 
-    this.updates.available.pipe(
-      filter(update => (<any> update.current.appData).dataGroup === 'groupList')
+    this.updateService.dataGroupUpdate$.pipe(
+      filter(dataGroup => dataGroup === 'groupList'),
+      takeUntil(this.destroy$)
     ).subscribe(() => {
-      console.log('data update!');
       this.updateAvailable = true;
     });
   }
@@ -121,7 +126,11 @@ export class GroupsComponent implements OnInit {
       });
   }
 
-
+  refreshPage() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.location.reload();
+    }
+  }
 
   generatePageList(numberOfPages: number){
     this.pagesList = [];
@@ -513,6 +522,11 @@ export class GroupsComponent implements OnInit {
 
   alertSaved(saveResponse){
     $("#create-livewire-alert-modal").modal("hide");
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }
