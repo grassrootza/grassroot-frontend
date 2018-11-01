@@ -12,7 +12,7 @@ import {getCreateModalId} from "../../../../task/task-type";
 import { AlertService } from '../../../../utils/alert-service/alert.service';
 
 import { saveAs } from 'file-saver';
-import { Municilality } from '../../../model/municilality.model';
+import { Municipality } from '../../../model/municipality.model';
 
 declare var $: any;
 
@@ -49,7 +49,7 @@ export class GroupCustomFilterComponent implements OnInit {
   public loadStart = 0;
 
   public provinces:string[] = [];
-  public municipalities:Municilality[] = [];
+  public municipalities:Municipality[] = [];
 
   constructor(private groupService: GroupService,
               private campaignService: CampaignService,

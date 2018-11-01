@@ -22,7 +22,7 @@ import {GroupLog, GroupLogPage} from "./model/group-log.model";
 import {Moment} from 'moment-mini-ts';
 import {STORE_KEYS, LocalStorageService} from "../utils/local-storage.service";
 import { UserExtraAccount } from '../user/account/account.user.model';
-import { Municilality } from './model/municilality.model';
+import { Municipality } from './model/municipality.model';
 
 
 @Injectable()
@@ -95,7 +95,7 @@ export class GroupService {
   groupUnhideUrl = environment.backendAppUrl + "/api/group/modify/unhide";
   groupDeactivateUrl = environment.backendAppUrl + "/api/group/modify/deactivate";
 
-  loadMunicipalitiesUrl = environment.backendAppUrl + "/api/group/modify/member/municipalities"
+  loadMunicipalitiesUrl = environment.backendAppUrl + "/api/group/fetch/province/municipalities";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -771,12 +771,12 @@ export class GroupService {
     this.loadGroups();
   }
 
-  loadMunicipalitiesForProvinces(provinces:string[]): Observable<Municilality[]> {
+  loadMunicipalitiesForProvinces(provinces:string[]): Observable<Municipality[]> {
     let params = new HttpParams()
       .set("province",provinces[0]);
 
-    return this.httpClient.get<Municilality[]>(this.loadMunicipalitiesUrl,{params:params})
-      .pipe(map(resp => resp.map(municipality => Municilality.createInstance(municipality))));
+    return this.httpClient.get<Municipality[]>(this.loadMunicipalitiesUrl,{params:params})
+      .pipe(map(resp => resp.map(municipality => Municipality.createInstance(municipality))));
   }
 
 }
