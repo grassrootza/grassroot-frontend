@@ -18,7 +18,7 @@ export class TranslateServerLoader implements TranslateLoader {
     console.log("getting a translation ... ");
 
     return Observable.create(observer => {
-      const jsonData = JSON.parse(fs.readFileSync(`dist-server/assets/i18n/${lang}${this.suffix}`, 'utf8'));
+      const jsonData = JSON.parse(fs.readFileSync(`dist/assets/i18n/${lang}${this.suffix}`, 'utf8'));
 
       // Here we save the translations in the transfer-state
       const key: StateKey<number> = makeStateKey<number>('transfer-translate-' + lang);

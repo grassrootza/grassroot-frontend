@@ -21,7 +21,6 @@
 .bg-image {
   position: absolute;
   top: 0;
-  left: 0;
   opacity: 0;
   transition: opacity ease 0.5s;
   min-width: 100%;
@@ -48,5 +47,11 @@
   100% {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .bg-image {
+    height: 100%;
   }
 }

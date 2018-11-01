@@ -38,7 +38,7 @@ export class PublicNewsService {
       ));
   }
 
-  loadNews(pageNumber:number):Observable<PublicLivewirePage>{
+  loadNews(pageNumber:number): Observable<PublicLivewirePage> {
     let params = new HttpParams()
       .set('size', 10 + "")
       .set('sort', 'creationTime,desc')

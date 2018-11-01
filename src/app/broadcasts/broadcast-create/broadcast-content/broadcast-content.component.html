@@ -1,3 +1,6 @@
+<!-- Dynamically load the style from assets only when rendering this component. This asset
+is cached by the service worker. -->
+<link rel="stylesheet" type="text/css" href='/assets/quill.snow.min.css'>
 <div class="card-body">
   <div class="row">
     <div class="col-md-12 text-center" >
@@ -64,7 +67,9 @@
         </div>
         <div class="form-row mb-md-3" *ngIf="types.email">
           <div class="form-group col-sm-12">
-            <quill-editor #emailEditor [style]="{height: '180px'}" [formControlName]="'emailContent'"></quill-editor>
+            <quill-editor (onEditorCreated)="onEditorCreated($event)"
+                          [style]="{height: '180px'}"
+                          [formControlName]="'emailContent'"></quill-editor>
           </div>
         </div>
         <div class="row" *ngIf="types.email">
