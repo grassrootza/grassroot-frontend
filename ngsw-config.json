@@ -103,7 +103,7 @@
     {
       "name": "newMembersList",
       "urls": [
-        "https://stating.grassroot.org.za/v2/api/group/fetch/members/new"
+        "https://staging.grassroot.org.za/v2/api/group/fetch/members/new"
       ],
       "version": 1,
       "cacheConfig": {
