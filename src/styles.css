@@ -53,6 +53,10 @@ h6 {
   line-height: 24px;
 }
 
+.no-overflow {
+  overflow: hidden;
+}
+
 .main-title {
   margin-bottom: 2rem;
 }
