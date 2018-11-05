@@ -14,6 +14,11 @@
       <img src="assets/icon_todo.png"/>
       {{'group.activity.actionItem' | translate}}</button>
   </div>
+  <div class="col-3">
+    <button class="btn btn-block btn-secondary hover-primary" (click)="showCreateLivewireAlertModal()">
+      Issue Livewire alert
+    </button>
+  </div>
 </div>
 
 <div *ngIf="upcomingTasks.length > 0" style="margin-top: 32px;">
@@ -122,3 +127,6 @@
 <app-view-vote [voteToView]="taskToView"></app-view-vote>
 
 <app-view-todo [todoTask]="taskToView"></app-view-todo>
+
+<app-create-livewire [groupUid]="createTaskGroupUid"
+                      (alertSaved)="alertSaved($event)"></app-create-livewire>

@@ -74,7 +74,7 @@ export class UserProfile {
   email: string = "";
   province: string = 'ZA_GP';
   language: string = "en";
-  whatsAppOptedIn: boolean;//added whats app opt in parameter
+  whatsAppOptedIn: boolean = false;//added whats app opt in parameter
 
 
   constructor(user?: AuthenticatedUser) {
