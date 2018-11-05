@@ -97,6 +97,8 @@ export class GroupService {
 
   loadMunicipalitiesUrl = environment.backendAppUrl + "/api/group/fetch/province/municipalities";
 
+  loadUsersWithLocationUrl = environment.backendAppUrl + "/api/group/fetch/members/location";
+
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
   private groupInfoListError_: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -777,6 +779,11 @@ export class GroupService {
 
     return this.httpClient.get<Municipality[]>(this.loadMunicipalitiesUrl,{params:params})
       .pipe(map(resp => resp.map(municipality => Municipality.createInstance(municipality))));
+  }
+
+  listMembersWithLocation(groupUid:string): Observable<any[]> {
+    let params = new HttpParams().set('groupUid',groupUid);
+    return this.httpClient.get<any[]>(this.loadUsersWithLocationUrl,{params:params});
   }
 
 }

@@ -47,8 +47,7 @@ export class GroupCustomFilterComponent implements OnInit {
 
   public loading = false;
   public loadStart = 0;
-
-  public provinces:string[] = [];
+  
   public municipalities:Municipality[] = [];
 
   constructor(private groupService: GroupService,
@@ -98,11 +97,9 @@ export class GroupCustomFilterComponent implements OnInit {
           this.currentFilter = copyFilter(filter); // otherwise change detection fails, because child is actually modifying same thing
           this.currentPage = members;
           this.setFilteredMembers(members.content);
-
-          this.provinces = filter.provinces;
           
-          if(this.provinces != null){
-            this.findMunicipalitiesForProvinces(this.provinces);
+          if(filter.provinces != null){
+            this.findMunicipalitiesForProvinces(filter.provinces);
           }
         },
         error => {
