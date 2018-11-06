@@ -107,4 +107,15 @@ export class GroupActivityComponent implements OnInit {
       console.log("error getting the file: ", error);
     });
   }
+
+  showCreateLivewireAlertModal(){
+    this.createTaskGroupUid = this.groupUid;
+    $("#create-livewire-alert-modal").modal("show");
+  }
+
+  alertSaved(alertSavedEvent){
+    $("#create-livewire-alert-modal").modal("hide");
+    if(alertSavedEvent)
+    this.loadAllGroupTasks();
+  }
 }

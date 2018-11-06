@@ -68,3 +68,19 @@ ul {
 .carousel-arrow{
   color: #2CBC4C;
 }
+
+@media (max-width: 767px) {
+  .carousel-text {
+    width: 100%;
+  }
+
+  .carousel-date-placeholder {
+    background: none;
+    width: 100%;
+  }
+
+  .carousel-date {
+    font-weight: 600;
+    opacity: 0.4;
+  }
+}

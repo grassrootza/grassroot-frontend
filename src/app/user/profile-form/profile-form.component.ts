@@ -31,6 +31,9 @@ export class ProfileFormComponent implements OnInit {
   public accessToken: string = "";
   public whatsAppOptedIn: boolean = false;
 
+  public latitude:number = 0;
+  public longitude: number = 0;
+
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,
               private alertService: AlertService,
@@ -40,6 +43,7 @@ export class ProfileFormComponent implements OnInit {
 
     console.log("empty profile looks like: ", new UserProfile());
     this.profileForm = this.formBuilder.group(new UserProfile());
+    
     this.otpForm = this.formBuilder.group({
       'otp': ['', Validators.compose([Validators.required, Validators.minLength(3)])]
     });
@@ -50,13 +54,13 @@ export class ProfileFormComponent implements OnInit {
         phone:new FormControl('',[optionalPhoneValidator]),
         province:new FormControl('',Validators.required),
         language:new FormControl('',Validators.required),
-        whatsAppOptedIn:new FormControl('',[])
+        whatsAppOptedIn:new FormControl()
     }, emailOrPhoneEntered("email", "phone"));
-
   }
 
   ngOnInit() {
     this.userProfile = new UserProfile(this.userService.getLoggedInUser());
+    
     this.profileForm.setValue(this.userProfile);
     // console.log("User profile from the server", this.userProfile);
     // console.log("Testing data from server",this.userProfile.whatsAppOptedIn);
@@ -67,6 +71,7 @@ export class ProfileFormComponent implements OnInit {
   saveChanges() {
     console.log("saving changes! form looks like: ", this.profileForm.value);
     this.userProfile = this.profileForm.value;
+    console.log("What does user profile look like ? ",this.userProfile);
     this.userService.updateDetails(this.userProfile)
       .subscribe(message => {
         if (message == 'OTP_REQUIRED') {
@@ -77,6 +82,15 @@ export class ProfileFormComponent implements OnInit {
     }, error => {
         console.log("that didn't work, error: ", error);
     })
+
+    if(this.latitude != 0 && this.longitude != 0){
+      this.userService.setUserLocation(this.latitude,this.longitude).subscribe(resp =>{
+        console.log("Created user location",resp);
+      },error => {
+        console.log("Error creating user location.............",error);
+      });
+    }
+
   }
 
   submitOtp() {
@@ -148,7 +162,17 @@ export class ProfileFormComponent implements OnInit {
   }
 
   subscribeWhatsapp(evt:any){
-    this.whatsAppOptedIn = evt;
+    console.log("What is event ?????",evt);
     this.userProfile.whatsAppOptedIn = evt;
+  }
+
+  setMyCurrentLocation(){
+    navigator.geolocation.getCurrentPosition((position)=>{
+      console.log("Current location is --------->",position.coords);
+      this.latitude = position.coords.latitude;
+      this.longitude = position.coords.longitude;
+    });
+
+    return false;
   }
 }

@@ -541,6 +541,7 @@
       "file": {
         "browseFile": "Click to browse",
         "dragAndDrop": "Or Drag & Drop to upload your files",
+        "formatNote": "Note: file must be in Excel format",
         "changeFile": "Change file to upload",
         "hasHeader": "Sheet has header row",
         "noHeader": "No header row",

@@ -22,6 +22,7 @@ import {GroupLog, GroupLogPage} from "./model/group-log.model";
 import {Moment} from 'moment-mini-ts';
 import {STORE_KEYS, LocalStorageService} from "../utils/local-storage.service";
 import { UserExtraAccount } from '../user/account/account.user.model';
+import { Municipality } from './model/municipality.model';
 
 
 @Injectable()
@@ -94,6 +95,10 @@ export class GroupService {
   groupHideUrl = environment.backendAppUrl + "/api/group/modify/hide";
   groupUnhideUrl = environment.backendAppUrl + "/api/group/modify/unhide";
   groupDeactivateUrl = environment.backendAppUrl + "/api/group/modify/deactivate";
+
+  loadMunicipalitiesUrl = environment.backendAppUrl + "/api/group/fetch/province/municipalities";
+
+  loadUsersWithLocationUrl = environment.backendAppUrl + "/api/group/fetch/members/location";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
@@ -775,4 +780,20 @@ export class GroupService {
     }
     this.loadGroups();
   }
+
+  loadMunicipalitiesForProvinces(provinces:string[]): Observable<Municipality[]> {
+    let params = new HttpParams()
+      .set("province",provinces[0]);
+
+    return this.httpClient.get<Municipality[]>(this.loadMunicipalitiesUrl,{params:params})
+      .pipe(map(resp => resp.map(municipality => Municipality.createInstance(municipality))));
+  }
+
+  listMembersWithLocation(groupUid:string): Observable<Map<any,Municipality>> {
+    let params = new HttpParams().set('groupUid',groupUid);
+    return this.httpClient.get<Map<any,Municipality>>(this.loadUsersWithLocationUrl,{params:params});
+  }
+
 }
+
+

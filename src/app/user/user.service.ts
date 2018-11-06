@@ -23,6 +23,7 @@ export class UserService {
 
   private deleteUserInitiate: string = environment.backendAppUrl + "/api/user/profile/delete/initiate";
   private deleteUserConfirm: string = environment.backendAppUrl + "/api/user/profile/delete/confirm";
+  private setUserLocationUrl = environment.backendAppUrl + "/api/user/profile/user/location";
 
   private _loggedInUser: AuthenticatedUser = null;
   public loggedInUser: EventEmitter<AuthenticatedUser> = new EventEmitter(null);
@@ -92,6 +93,7 @@ export class UserService {
     if (token) {
       this.localStorageService.setItem('token', token);
     }
+    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",user);
     this._loggedInUser = user;
     this.loggedInUser.emit(this._loggedInUser);
     this.localStorageService.setItem("loggedInUser", JSON.stringify(this._loggedInUser));
@@ -215,5 +217,14 @@ export class UserService {
 
   fetchAccessToken(): Observable<string> {
     return this.httpClient.get(this.fetchApiTokenUrl, { responseType: 'text' });
+  }
+
+  setUserLocation(latitude:any,longitude:any): Observable<any>{
+    let params = new HttpParams()
+      .set("lat",latitude)
+      .set("lon",longitude);
+
+    
+    return this.httpClient.post(this.setUserLocationUrl,null,{params:params, responseType: 'text'});
   }
 }

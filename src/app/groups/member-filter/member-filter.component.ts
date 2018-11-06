@@ -12,6 +12,7 @@ import {BehaviorSubject} from "rxjs";
 import { debounceTime } from 'rxjs/operators';
 import {AFRIKAANS, ENGLISH, Language, SOTHO, XHOSA, ZULU} from "../../utils/language";
 import {GroupRole} from "../model/group-role";
+import { Municipality } from '../model/municipality.model';
 
 declare var $: any;
 
@@ -34,6 +35,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   @Input() topics: string[] = [];
   @Input() affiliations: string[] = [];
   @Input() includeNameFilter: boolean = true;
+  @Input() provinceMunicipalities:Municipality[] = [];
 
   joinDateConditions: string[] = ["DAYS_AGO-EXACT", "DAYS_AGO-BEFORE", "DAYS_AGO-AFTER", "DATE-EXACT", "DATE-BEFORE", "DATE-AFTER"];
   joinDateConditionType = null;
@@ -65,7 +67,6 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-
     this.setupSelect2();
 
     this.filterForm = this.formBuilder.group({
