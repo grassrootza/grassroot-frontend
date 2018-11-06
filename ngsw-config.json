@@ -22,7 +22,6 @@
         ],
         "urls": [
           "https://fonts.googleapis.com/css?family=Nunito",
-          "https://cdn.quilljs.com/1.2.2/quill.snow.css",
           "https://use.fontawesome.com/releases/v5.0.2/js/all.js"
         ]
       }

@@ -1,16 +1,21 @@
 <div class="container primary-container">
-  <button type="button" class="btn btn-primary float-right create-button" data-toggle="modal" data-target="#create-group-modal">
-    {{ 'groups.create' | translate }}
-  </button>
-  <h1 class="main-title">{{ 'groups.title' | translate }}</h1>
+  <div class="row">
+    <div class="col-12">
+      <button class="btn btn-primary float-right create-button" data-toggle="modal" data-target="#create-group-modal">
+        {{ 'groups.create' | translate }}
+      </button>
+      <h1 class="main-title">{{ 'groups.title' | translate }}</h1>
+    </div>
+  </div>
 
   <h2 *ngIf="pinnedGroups.length > 0">
     <img src="assets/star_black.png"/>
     {{ 'groups.pinnedGroups.title' | translate }}
   </h2>
 
+  <!-- <div class="row"><div class="col-12"><a (click)="showCreateGroupDialog()" href="#">Hello</a></div></div> -->
   <div *ngIf="pinnedGroups.length > 0" class="card pinned-groups">
-
+      
     <div class="card-body">
 
       <div class="container group-info-header">

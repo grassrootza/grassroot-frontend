@@ -1,24 +1,11 @@
+<!-- Dynamically load the style from assets only when rendering this component. This asset
+is cached by the service worker. -->
+<link rel="stylesheet" type="text/css" href='/assets/quill.snow.min.css'>
+
 <div class="container primary-container">
-	<h1 class="main-title">{{'livewire.view-alert.title' | translate}}</h1>
-
-	<a [routerLink]="['/admin/livewire/list']" class="grassroot-breadcrumb"><i
-		class="fas fa-arrow-left"></i>BACK TO ALERTS</a>
-
-	<div class="row" *ngIf="!liveWireAlert?.sent">
-		<div class="col-md-1">
-			<button class="btn btn-secondary" (click)="openReleaseModal()">Release</button>
-		</div>
-		<div class="col-md-1">
-			<button class="btn btn-secondary"
-				(click)="blockAlert(liveWireAlert.serverUid)">Block</button>
-		</div>
-		<div class="col-md-1">
-			<button class="btn btn-secondary"
-				(click)="openTagsModal(liveWireAlert.serverUid)">Tags</button>
-		</div>
-	</div>
-	<div class="card">
-		<div *ngIf="liveWireAlert" class="card-body">
+	<a [routerLink]="['/admin/livewire/list']" class="grassroot-breadcrumb mb-5"><i class="fas fa-arrow-left"></i>BACK TO ALERTS</a>
+	<div class="card mt-5">
+		<div *ngIf="liveWireAlert" class="card-body">				
 			<div class="row headline">
 				<div class="col-md-2" style="font-weight: bold;">Headline</div>
 				<div class="col-md-4">{{liveWireAlert.headline}}</div>
@@ -36,8 +23,8 @@
 			<hr />
 			<div class="row contact">
 				<div class="col-md-2" style="font-weight: bold;">Contact</div>
-				<div class="col-md-4">{{liveWireAlert.contactUserName + "," +
-					liveWireAlert.contactUserPhone}}</div>
+				<div class="col-md-4">{{ liveWireAlert.contactUserName + ", contact number: " +
+					liveWireAlert.contactUserPhone }}</div>
 			</div>
 			<hr />
 			<div class="row created-time">
@@ -81,24 +68,20 @@
 					</div>
 					<div class="row">
 						<input type="file" class="form-control" multiple="multiple"
-							(change)="uploadImages($event,showFileNames)"> <input
-							#showFileNames type="hidden">
+							(change)="uploadImages($event,showFileNames)"> 
+						<input #showFileNames type="hidden">
 					</div>
 				</div>
 			</div>
 			<hr />
 			<div *ngIf="liveWireAlert.mediaFileUids.length > 0" class="row">
-				<div
-					*ngFor="let imageKey of liveWireAlert.mediaFileUids; let i = index"
-					class="col-md-3 col-sm-6 col">
+				<div *ngFor="let imageKey of liveWireAlert.mediaFileUids; let i = index" class="col-md-3 col-sm-6 col">
 					<div class="row">
 						<img (click)="openImage(imageKey)" class="alert-image" alt=""
 							src="{{loadImageUrl(liveWireAlert.mediaFileUids[i])}}" />
 					</div>
 					<div class="row" style="margin-top: 1%;">
-						<button class="btn btn-danger btn-sm"
-							(click)="deleteImage(imageKey)">
-							<i class="far fa-trash-alt"></i>
+						<button class="btn btn-danger btn-sm" (click)="deleteImage(imageKey)"><i class="far fa-trash-alt"></i>
 						</button>
 					</div>
 				</div>
@@ -108,6 +91,13 @@
 				<div class="col-md-2" style="font-weight: bold;">Tags</div>
 				<div class="col-md-8">
 					<div *ngIf="liveWireAlert.tags.length > 0">{{liveWireAlert.tags}}</div>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-12 text-right">
+					<button class="btn btn-secondary save-button mr-3" (click)="openReleaseModal()">Release</button>
+					<button class="btn btn-secondary save-button mr-3" (click)="blockAlert(liveWireAlert.serverUid)">Block</button>
+					<button class="btn btn-secondary save-button" (click)="openTagsModal(liveWireAlert.serverUid)">Tags</button>
 				</div>
 			</div>
 		</div>

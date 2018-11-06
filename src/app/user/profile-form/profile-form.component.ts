@@ -43,6 +43,7 @@ export class ProfileFormComponent implements OnInit {
 
     console.log("empty profile looks like: ", new UserProfile());
     this.profileForm = this.formBuilder.group(new UserProfile());
+    
     this.otpForm = this.formBuilder.group({
       'otp': ['', Validators.compose([Validators.required, Validators.minLength(3)])]
     });
@@ -56,11 +57,11 @@ export class ProfileFormComponent implements OnInit {
         whatsAppOptedIn:new FormControl('',[]),
         setMyLocation: new FormControl()
     }, emailOrPhoneEntered("email", "phone"));
-
   }
 
   ngOnInit() {
     this.userProfile = new UserProfile(this.userService.getLoggedInUser());
+    
     this.profileForm.setValue(this.userProfile);
     // console.log("User profile from the server", this.userProfile);
     // console.log("Testing data from server",this.userProfile.whatsAppOptedIn);
@@ -71,6 +72,7 @@ export class ProfileFormComponent implements OnInit {
   saveChanges() {
     console.log("saving changes! form looks like: ", this.profileForm.value);
     this.userProfile = this.profileForm.value;
+    console.log("What does user profile look like ? ",this.userProfile);
     this.userService.updateDetails(this.userProfile)
       .subscribe(message => {
         if (message == 'OTP_REQUIRED') {
@@ -161,7 +163,7 @@ export class ProfileFormComponent implements OnInit {
   }
 
   subscribeWhatsapp(evt:any){
-    this.whatsAppOptedIn = evt;
+    console.log("What is event ?????",evt);
     this.userProfile.whatsAppOptedIn = evt;
   }
 
