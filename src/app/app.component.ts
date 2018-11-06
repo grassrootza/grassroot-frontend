@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID, Renderer2, OnDestroy} from '@angular/core';
 import {UserService} from "./user/user.service";
 import {Router} from "@angular/router";
 import {AuthenticatedUser} from "./user/user.model";
@@ -9,6 +9,9 @@ import {Notification} from "./user/model/notification.model";
 import {LocalStorageService, STORE_KEYS} from "./utils/local-storage.service";
 import {isPlatformBrowser} from "@angular/common";
 import { UpdateService } from './utils/update.service';
+import { DOCUMENT } from '@angular/common';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 declare var $: any;
 
@@ -18,7 +21,7 @@ declare var $: any;
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
   isUserLoggedIn: boolean = false;
   loggedInUser: AuthenticatedUser = null;
@@ -30,6 +33,8 @@ export class AppComponent implements OnInit {
   popupNotification: Notification = null;
 
   loadingModule: boolean = false;
+  countdown: number = 5;
+  countdownActive: boolean = false;
 
   private newNotifications: Notification[] = [];
   private currentPopupNotificationIndex = 0;
@@ -43,6 +48,7 @@ export class AppComponent implements OnInit {
   public userHasNoImage: boolean; // seems redundant but Angular being insanely obtuse on chnages
 
   public showMenu: boolean = false;
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(private router: Router,
               private userService: UserService,
@@ -51,7 +57,9 @@ export class AppComponent implements OnInit {
               private notificationService: NotificationService,
               private localStorageService: LocalStorageService,
               private updatesService: UpdateService,
-              @Inject(PLATFORM_ID) protected platformId: Object) {
+              @Inject(PLATFORM_ID) protected platformId: Object,
+              @Inject(DOCUMENT) private document: Document,
+              private renderer: Renderer2) {
 
     this.loggedInUser = this.userService.getLoggedInUser();
     if (this.loggedInUser && this.loggedInUser.hasImage) {
@@ -99,6 +107,29 @@ export class AppComponent implements OnInit {
       setInterval(() => {
         this.pullNotifications()
       }, 30000);
+    }
+
+    // subscribe to software updates and start a countdown to force a page refresh
+    this.updatesService.softwareUpdate$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(() => {
+      this.countdownActive = true;
+      if (isPlatformBrowser(this.platformId)) {
+        this.renderer.addClass(this.document.body, 'no-overflow');
+        const interval = setInterval(() => {
+          this.countdown--;
+          if (this.countdown === 0) {
+            clearInterval(interval);
+            this.document.location.reload();
+          }
+        }, 1000);
+      }
+    });
+  }
+
+  public refreshPage() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.location.reload();
     }
   }
 
@@ -227,6 +258,10 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/news',0])
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }
 

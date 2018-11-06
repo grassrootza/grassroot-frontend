@@ -19,7 +19,9 @@
             "assets": [
               "src/assets",
               "src/favicon.ico",
-              "src/manifest.json"
+              "src/manifest.json",
+              "src/sw-master.js",
+              "src/sw-custom.js"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
