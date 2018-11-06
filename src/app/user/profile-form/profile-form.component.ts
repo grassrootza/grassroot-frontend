@@ -54,8 +54,7 @@ export class ProfileFormComponent implements OnInit {
         phone:new FormControl('',[optionalPhoneValidator]),
         province:new FormControl('',Validators.required),
         language:new FormControl('',Validators.required),
-        whatsAppOptedIn:new FormControl('',[]),
-        setMyLocation: new FormControl()
+        whatsAppOptedIn:new FormControl()
     }, emailOrPhoneEntered("email", "phone"));
   }
 

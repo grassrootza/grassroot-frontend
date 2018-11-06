@@ -210,6 +210,8 @@ export class GroupDetailsComponent implements OnInit {
   loadUsersWithLocation(groupUid:string){
     this.groupService.listMembersWithLocation(groupUid).subscribe(resp => {
       console.log("Memebers with locations --->",resp);
+      
+      console.log("Municipalities ",resp.values())
     },error => {
       console.log("Error loading members that have location");
     });

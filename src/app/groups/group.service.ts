@@ -781,9 +781,9 @@ export class GroupService {
       .pipe(map(resp => resp.map(municipality => Municipality.createInstance(municipality))));
   }
 
-  listMembersWithLocation(groupUid:string): Observable<any[]> {
+  listMembersWithLocation(groupUid:string): Observable<Map<any,Municipality>> {
     let params = new HttpParams().set('groupUid',groupUid);
-    return this.httpClient.get<any[]>(this.loadUsersWithLocationUrl,{params:params});
+    return this.httpClient.get<Map<any,Municipality>>(this.loadUsersWithLocationUrl,{params:params});
   }
 
 }
