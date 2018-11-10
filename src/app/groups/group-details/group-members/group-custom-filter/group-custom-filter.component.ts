@@ -97,6 +97,15 @@ export class GroupCustomFilterComponent implements OnInit {
           this.currentFilter = copyFilter(filter); // otherwise change detection fails, because child is actually modifying same thing
           this.currentPage = members;
           this.setFilteredMembers(members.content);
+
+          if(filter.municipalityId != null){
+            console.log("Municipality ---------------------------------------->",filter.municipalityId);
+            this.loadMembersInMunicipality(filter.municipalityId);
+          }
+
+          if(filter.provinces == null){
+            filter.municipalityId = null;
+          }
           
           if(filter.provinces != null){
             this.findMunicipalitiesForProvinces(filter.provinces);
@@ -219,6 +228,15 @@ export class GroupCustomFilterComponent implements OnInit {
       let blob = new Blob([data], { type: 'application/xls' });
       saveAs(blob, 'filtered_members.xls');
     })
+  }
+
+  loadMembersInMunicipality(municipalityId:any){
+    this.groupService.loadMembersInMunicipality(municipalityId,this.group.groupUid).subscribe(resp => {
+      console.log("Response from server =====",resp);
+      this.currentPage = resp;
+    },error => {
+      console.log("Error loading members in municipality ..............",error);
+    });
   }
 
 }

@@ -5,7 +5,7 @@ import {MembersFilter} from "./filter.model";
 import {GroupRef} from "../model/group-ref.model";
 import {GroupJoinMethod} from "../model/join-method";
 import {CampaignInfo} from "../../campaigns/model/campaign-info";
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, FormControl} from "@angular/forms";
 import {DateTimeUtils} from "../../utils/DateTimeUtils";
 import * as moment from 'moment-mini-ts';
 import {BehaviorSubject} from "rxjs";
@@ -103,13 +103,13 @@ export class MemberFilterComponent implements OnInit, OnChanges {
 
     $(".language-multi-select").select2({placeholder: "Select languages"});
 
-
     $(".provinces-multi-select").on('change.select2', function () {
       const data = $('.provinces-multi-select').select2('data');
       this.filter.provinces = data.length > 0 ? data.map(p => p.id).filter(p => p != 'UNKNOWN') : null;
       this.filter.noProvince = data.length > 0 ? data.map(p => p.id).filter(p => p == 'UNKNOWN') : null; // because is actually null on back end (and have decided not to introduce as existing entity)
       this.fireFilterChange();
     }.bind(this));
+
 
     $(".task-teams-multi-select").on('change.select2', function () {
       const data = $('.task-teams-multi-select').select2('data');
@@ -200,5 +200,12 @@ export class MemberFilterComponent implements OnInit, OnChanges {
     // console.log("Filter changed: ", this.filter);
     console.log(`firing observable inside inner component`);
     this.filterChanged.emit(this.filter);
+  }
+
+  selectedMunicipality(municipality:any){
+    console.log("Municipality selected from list is ------->>>>",municipality);
+    
+    this.filter.municipalityId = municipality;
+    this.fireFilterChange();
   }
 }

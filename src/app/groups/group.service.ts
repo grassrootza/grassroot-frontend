@@ -99,6 +99,8 @@ export class GroupService {
 
   loadUsersWithLocationUrl = environment.backendAppUrl + "/api/group/fetch/members/location";
 
+  loadMembersInMunicipalityUrl = environment.backendAppUrl + "/api/group/fetch/municipality/members";
+
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
   private groupInfoListError_: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -784,6 +786,18 @@ export class GroupService {
   listMembersWithLocation(groupUid:string): Observable<Map<any,Municipality>> {
     let params = new HttpParams().set('groupUid',groupUid);
     return this.httpClient.get<Map<any,Municipality>>(this.loadUsersWithLocationUrl,{params:params});
+  }
+
+  loadMembersInMunicipality(municipalityId:any,groupUid:string,maxSize?: number) :Observable<MembersPage>{
+    let maxEntities = maxSize ? maxSize : 100;
+    
+    let params = new HttpParams()
+      .set('municipalityId',municipalityId)
+      .set('groupUid',groupUid)
+      .set('maxEntities', '' + maxEntities);
+
+      return this.httpClient.get<MembersPage>(this.loadMembersInMunicipalityUrl,{params:params})
+        .pipe(map(transformMemberPage));
   }
 
 }
