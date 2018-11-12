@@ -12,6 +12,21 @@
   line-height: 16px;
 }
 
+.refresh-wrapper {
+  padding: 10px 20px;
+  background: #63c1a7;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.refresh-btn {
+  color: white;
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .group-info-row {
   font-size: 14px;
   line-height: 22px;

@@ -8,7 +8,8 @@ import {
   OnInit,
   PLATFORM_ID,
   ViewChild,
-  OnDestroy
+  OnDestroy,
+  Optional
 } from '@angular/core';
 import {Subscription, interval } from 'rxjs';
 import {PublicActivityType} from './model/public-activity-type.enum';
@@ -19,6 +20,7 @@ import {AlertService} from "../utils/alert-service/alert.service";
 import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PublicLivewire} from "../livewire/public-livewire.model";
+import { filter } from 'rxjs/operators';
 
 declare var $: any;
 

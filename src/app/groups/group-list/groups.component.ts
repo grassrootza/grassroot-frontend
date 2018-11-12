@@ -1,10 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Inject, PLATFORM_ID, OnDestroy} from '@angular/core';
 import {GroupService} from "../group.service";
 import {GroupInfo} from "../model/group-info.model";
 import {GroupRef} from "../model/group-ref.model";
 import {Router} from "@angular/router";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {TranslateService} from "@ngx-translate/core";
+import { filter, takeUntil } from 'rxjs/operators';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { Subject } from 'rxjs';
+import { UpdateService } from 'app/utils/update.service';
 
 declare var $: any;
 
@@ -13,7 +17,7 @@ declare var $: any;
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.css']
 })
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
 
   // aot build doesn't like these being private, wants them public
   public groups: GroupInfo[] = [];
@@ -34,11 +38,16 @@ export class GroupsComponent implements OnInit {
   private sortByUpNextAsc = true;
 
   public createTaskGroupUid: string = null;
+  updateAvailable = false;
+  destroy$: Subject<void> = new Subject<void>();
 
   constructor(private groupService: GroupService,
               private alertService: AlertService,
               private router: Router,
-              private translateService: TranslateService) {
+              private translateService: TranslateService,
+              private updateService: UpdateService,
+              @Inject(PLATFORM_ID) protected platformId: Object,
+              @Inject(DOCUMENT) private document: Document,) {
   }
 
   ngOnInit() {
@@ -75,6 +84,14 @@ export class GroupsComponent implements OnInit {
       );
 
     this.groupService.loadGroups();
+
+    // subscribe to the changes of the dataGroup 'groupList' sent by the SW
+    this.updateService.dataGroupUpdate$.pipe(
+      filter(dataGroup => dataGroup === 'groupList'),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.updateAvailable = true;
+    });
   }
 
   private resolvePinnedGroups() {
@@ -110,7 +127,11 @@ export class GroupsComponent implements OnInit {
       });
   }
 
-
+  refreshPage() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.location.reload();
+    }
+  }
 
   generatePageList(numberOfPages: number){
     this.pagesList = [];
@@ -502,6 +523,11 @@ export class GroupsComponent implements OnInit {
 
   alertSaved(saveResponse){
     $("#create-livewire-alert-modal").modal("hide");
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
 }

@@ -1,7 +1,19 @@
 <ngx-loading [show]="loadingModule"
              class="loading-spinner"
              [config]="{ backdropBackgroundColour: 'rgba(255,255,255,0.3)'}"></ngx-loading>
-<div class="container-fluid">
+<div class="restart-alert d-flex flex-column"
+     [class.restart-alert--enabled]="countdownActive">
+  <div class="restart-alert__content d-flex align-items-center justify-content-between">
+    <span>
+      New site update available! Refreshing the page in {{ countdown }}...
+    </span>
+    <button class="refresh-btn"
+            (click)="refreshPage()">Refresh now</button>
+  </div>
+  <span class="refresh-loader"></span>
+</div>
+<div class="container-fluid main-wrapper"
+     [class.main-wrapper--disabled]="countdownActive">
 
   <div class="container-fluid bg-white fixed-top">
 

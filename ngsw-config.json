@@ -74,6 +74,42 @@
         "timeOut": "20s",
         "strategy": "freshness"
       }
+    },
+    {
+      "name": "groupList",
+      "urls": [
+        "https://staging.grassroot.org.za/v2/api/group/fetch/list"
+      ],
+      "version": 1,
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "12h",
+        "strategy": "performance"
+      }
+    },
+    {
+      "name": "campaignList",
+      "urls": [
+        "https://staging.grassroot.org.za/v2/api/campaign/manage/list"
+      ],
+      "version": 1,
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "12h",
+        "strategy": "performance"
+      }
+    },
+    {
+      "name": "newMembersList",
+      "urls": [
+        "https://staging.grassroot.org.za/v2/api/group/fetch/members/new"
+      ],
+      "version": 1,
+      "cacheConfig": {
+        "maxSize": 5,
+        "maxAge": "12h",
+        "strategy": "performance"
+      }
     }
   ]
 }
