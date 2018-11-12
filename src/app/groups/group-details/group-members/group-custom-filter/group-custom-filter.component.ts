@@ -12,6 +12,7 @@ import {getCreateModalId} from "../../../../task/task-type";
 import { AlertService } from '../../../../utils/alert-service/alert.service';
 
 import { saveAs } from 'file-saver';
+import { Municipality } from '../../../model/municipality.model';
 
 declare var $: any;
 
@@ -46,6 +47,8 @@ export class GroupCustomFilterComponent implements OnInit {
 
   public loading = false;
   public loadStart = 0;
+  
+  public municipalities:Municipality[] = [];
 
   constructor(private groupService: GroupService,
               private campaignService: CampaignService,
@@ -94,6 +97,19 @@ export class GroupCustomFilterComponent implements OnInit {
           this.currentFilter = copyFilter(filter); // otherwise change detection fails, because child is actually modifying same thing
           this.currentPage = members;
           this.setFilteredMembers(members.content);
+
+          if(filter.municipalityId != null){
+            console.log("Municipality ---------------------------------------->",filter.municipalityId);
+            this.loadMembersInMunicipality(filter.municipalityId);
+          }
+
+          if(filter.provinces == null){
+            filter.municipalityId = null;
+          }
+          
+          if(filter.provinces != null){
+            this.findMunicipalitiesForProvinces(filter.provinces);
+          }
         },
         error => {
           this.loading = false;
@@ -105,6 +121,15 @@ export class GroupCustomFilterComponent implements OnInit {
       console.log(`must have been role change, to: ${this.currentFilter.role}`);
       this.setFilteredMembers(this.filteredMembers);
     }
+  }
+
+  findMunicipalitiesForProvinces(provinces:string[]){
+    this.groupService.loadMunicipalitiesForProvinces(provinces).subscribe(resp => {
+      this.municipalities = resp;
+      console.log("Municipalities for provinces supplied ",this.municipalities);
+    },error => {
+      console.log("Error loading municipalities")
+    });
   }
 
   setFilteredMembers(members: Membership[]) {
@@ -203,6 +228,15 @@ export class GroupCustomFilterComponent implements OnInit {
       let blob = new Blob([data], { type: 'application/xls' });
       saveAs(blob, 'filtered_members.xls');
     })
+  }
+
+  loadMembersInMunicipality(municipalityId:any){
+    this.groupService.loadMembersInMunicipality(municipalityId,this.group.groupUid).subscribe(resp => {
+      console.log("Response from server =====",resp);
+      this.currentPage = resp;
+    },error => {
+      console.log("Error loading members in municipality ..............",error);
+    });
   }
 
 }

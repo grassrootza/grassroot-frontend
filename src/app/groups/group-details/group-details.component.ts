@@ -76,6 +76,8 @@ export class GroupDetailsComponent implements OnInit {
             
             this.setupJoinParams();
 
+            this.loadUsersWithLocation(this.group.groupUid);
+
             this.alertService.hideLoading();
           },
           error => {
@@ -203,6 +205,15 @@ export class GroupDetailsComponent implements OnInit {
       this.groupService.removeGroupCached(this.group.groupUid);
     })
     return false;
+  }
+
+  loadUsersWithLocation(groupUid:string){
+    this.groupService.listMembersWithLocation(groupUid).subscribe(resp => {
+      console.log("Memebers with locations --->",resp);
+      
+    },error => {
+      console.log("Error loading members that have location");
+    });
   }
 
 }

@@ -1,5 +1,6 @@
 import {Moment} from 'moment-mini-ts';
 import {JoinDateCondition} from "./joindatecondition.enum";
+import { Municipality } from '../model/municipality.model';
 
 export class MembersFilter {
 
@@ -16,18 +17,19 @@ export class MembersFilter {
   namePhoneOrEmail: string = null;
   language: string[] = null;
   role: string = 'ANY';
+  municipalityId: number = null;
 
   hasContent(): boolean {
     return !!this.provinces || !!this.noProvince || !!this.taskTeams || !!this.topics || !!this.affiliations || !!this.joinSources || !!this.campaigns
       || !!this.joinDate || !!this.joinDaysAgo || !!this.joinDateCondition || !!this.namePhoneOrEmail || !this.language
-      || this.role !== 'ANY';
+      || this.role !== 'ANY' || !!this.municipalityId;
   }
 
   hasNonRoleChanged(other: MembersFilter): boolean {
     return this.provinces !== other.provinces || this.noProvince !== other.noProvince || this.taskTeams !== other.taskTeams || this.topics !== other.topics ||
       this.affiliations !== other.affiliations || this.joinSources !== other.joinSources || this.campaigns !== other.campaigns ||
       this.joinDate !== other.joinDate || this.joinDaysAgo !== other.joinDaysAgo || this.joinDateCondition !== other.joinDateCondition
-    || this.namePhoneOrEmail !== other.namePhoneOrEmail || this.language !== other.language;
+    || this.namePhoneOrEmail !== other.namePhoneOrEmail || this.language !== other.language || this.municipalityId !== other.municipalityId;
   }
 
 }
@@ -47,5 +49,6 @@ export const copyFilter = (filter: MembersFilter): MembersFilter => {
   newFilter.namePhoneOrEmail = filter.namePhoneOrEmail;
   newFilter.language = filter.language;
   newFilter.role = filter.role;
+  newFilter.municipalityId = filter.municipalityId;
   return newFilter;
 };
