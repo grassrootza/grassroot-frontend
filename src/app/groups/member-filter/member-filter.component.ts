@@ -13,6 +13,7 @@ import { debounceTime } from 'rxjs/operators';
 import {AFRIKAANS, ENGLISH, Language, SOTHO, XHOSA, ZULU} from "../../utils/language";
 import {GroupRole} from "../model/group-role";
 import { Municipality } from '../model/municipality.model';
+import { GroupService } from '../group.service';
 
 declare var $: any;
 
@@ -28,6 +29,8 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   userLanguages: Language[];
   roleKeys: string[];
 
+  public membersWithLocationMap: Map<string,Municipality> = new Map<string,Municipality>();
+
   private nameInputSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   @Input() taskTeams: GroupRef[] = [];
@@ -36,6 +39,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   @Input() affiliations: string[] = [];
   @Input() includeNameFilter: boolean = true;
   @Input() provinceMunicipalities:Municipality[] = [];
+  @Input() groupUid:string = "";
 
   joinDateConditions: string[] = ["DAYS_AGO-EXACT", "DAYS_AGO-BEFORE", "DAYS_AGO-AFTER", "DATE-EXACT", "DATE-BEFORE", "DATE-AFTER"];
   joinDateConditionType = null;
@@ -47,7 +51,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
 
   @Output() public filterChanged: EventEmitter<MembersFilter> = new EventEmitter();
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private groupService:GroupService,private formBuilder: FormBuilder) {
     this.provinceKeys = Object.keys(UserProvince);
     this.joinMethods = Object.keys(GroupJoinMethod);
     this.userLanguages = [ENGLISH, ZULU, XHOSA, SOTHO, AFRIKAANS];
@@ -72,12 +76,19 @@ export class MemberFilterComponent implements OnInit, OnChanges {
     this.filterForm = this.formBuilder.group({
       'role': 'ANY',
       'date': [DateTimeUtils.dateFromDate(new Date())],
-      'daysAgo': 1
+      'daysAgo': 1,
+      'municipality': 'CHOOSE'
     });
 
     this.filterForm.controls['role'].valueChanges.subscribe(value => {
       this.filter.role = value;
       this.fireFilterChange();
+    });
+
+    this.filterForm.controls['municipality'].valueChanges.subscribe(value => {
+        console.log("Municipality ID -------->>>>>",value);
+        this.filter.municipalityId = value;
+        this.fireFilterChange();
     });
 
     if (this.includeNameFilter) {
@@ -89,7 +100,25 @@ export class MemberFilterComponent implements OnInit, OnChanges {
           }
         )
     }
+    
+  }
 
+  loadMembersWithLocation(){
+    this.groupService.listMembersWithLocation(this.groupUid).subscribe(resp => {
+      this.membersWithLocationMap = resp;
+    })
+  }
+
+  countMembersInMunicipality(municipalityId:number):number{
+    let keys = Object.keys(this.membersWithLocationMap);
+    let count:number = 0;
+    keys.forEach(key => {
+      if(this.membersWithLocationMap[key].id == municipalityId){
+        count ++;
+      }
+    })
+
+    return count;
   }
 
   setupSelect2() {
@@ -107,6 +136,15 @@ export class MemberFilterComponent implements OnInit, OnChanges {
       const data = $('.provinces-multi-select').select2('data');
       this.filter.provinces = data.length > 0 ? data.map(p => p.id).filter(p => p != 'UNKNOWN') : null;
       this.filter.noProvince = data.length > 0 ? data.map(p => p.id).filter(p => p == 'UNKNOWN') : null; // because is actually null on back end (and have decided not to introduce as existing entity)
+      
+      if(data.length == 0){
+        this.provinceMunicipalities = [];
+        this.filter.municipalityId = null;
+        this.filterForm.controls['municipality'].value = 'CHOOSE';
+      }else {
+        this.loadMembersWithLocation();
+      }
+      
       this.fireFilterChange();
     }.bind(this));
 
@@ -200,12 +238,5 @@ export class MemberFilterComponent implements OnInit, OnChanges {
     // console.log("Filter changed: ", this.filter);
     console.log(`firing observable inside inner component`);
     this.filterChanged.emit(this.filter);
-  }
-
-  selectedMunicipality(municipality:any){
-    console.log("Municipality selected from list is ------->>>>",municipality);
-    
-    this.filter.municipalityId = municipality;
-    this.fireFilterChange();
   }
 }

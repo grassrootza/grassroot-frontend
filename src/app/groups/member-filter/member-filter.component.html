@@ -97,11 +97,10 @@
   </div>
   <div *ngIf="provinceMunicipalities.length > 0" class="col-sm-9 col-lg-4 filter-item">
     <select id="municipality" class="form-control form-control-em"  
-            
-            style="width: 100%"
-            (change)="selectedMunicipality($event.target.value)">
-      <option [value]="0">Select Municipality</option>
-      <option *ngFor="let municipality of provinceMunicipalities" [value]="municipality.id"> {{municipality.name}}</option>
+            [formControl]="filterForm?.controls['municipality']"
+            style="width: 100%">
+      <option value="CHOOSE">Select Municipality</option>
+      <option *ngFor="let municipality of provinceMunicipalities" [value]="municipality.id"> {{municipality.name}} ({{countMembersInMunicipality(municipality.id)}})</option>
     </select>
   </div>
 
