@@ -135,31 +135,6 @@
         </div>
       </div>
 
-      <div class="row mt-3">
-        <div class="col-12">
-          <h1>Config variables</h1>
-          <p>Create a new config variable: <button class="btn btn-link grassroot-link" (click)="openCreateConfigVarModal()">create</button></p>
-          <hr>
-          <div *ngIf="configVariableList.length > 0" class="row groups-header" style="margin-bottom: 2%">
-            <div class="col-4">Key</div>
-            <div class="col-2">Value</div>
-            <div class="col-4">Description</div>
-            <div class="col-1"></div>
-            <div class="col-1"></div>
-          </div>
-
-          <div *ngFor="let configVar of configVariableList" class="row group-list" style="margin-bottom: 1%">
-            <div class="col-4">{{configVar.key}}</div>
-            <div class="col-2">{{configVar.value}}</div>
-            <div class="col-4">{{configVar.description}}</div>
-            <div class="col-1"><button class="btn btn-primary btn-sm" (click)="openUpdateConfigVarModal(configVar.key)">update</button></div>
-            <div class="col-1"><button class="btn btn-danger btn-sm" (click)="openRemoveConfigVariableConfirmModal(configVar.key)">remove</button></div>
-          </div>
-
-          <hr>
-          
-        </div>
-      </div>
 
       <div class="row mt-3">
         <div class="col-12">
