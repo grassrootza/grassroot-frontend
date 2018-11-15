@@ -75,7 +75,7 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
     NgbModule.forRoot(),
     SharedModule.forRoot(),
     CookieModule.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('sw-master.js', { enabled: environment.production })
   ],
   providers: [
     {provide: LocationStrategy, useClass: PathLocationStrategy},

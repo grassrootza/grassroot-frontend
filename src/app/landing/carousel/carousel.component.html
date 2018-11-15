@@ -8,13 +8,14 @@
           <div class="col-sm-8 text-center text-md-left carousel-text">
             {{item.headline}}
           </div>
-          <div class="col-sm-3 carousel-date-placeholder text-center text-md-left">
+          <div class="col-sm-2 carousel-date-placeholder text-center text-md-left">
             <span class="carousel-date">{{item.creationTimeMillis | date}}</span>
+          </div>
+          <div class="col-sm-1 text-center text-md-right">
+            <a *ngIf="!!item.serverUid" [routerLink]="['/news', item.serverUid]"><i class="fas fa-arrow-right grassroot-link"></i></a>
           </div>
         </div>
       </div>
     </ng-container>
   </ul>
 </div>
-
-

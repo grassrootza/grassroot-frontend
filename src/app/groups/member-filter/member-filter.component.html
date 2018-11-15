@@ -93,11 +93,14 @@
   </div>
 
   <div *ngIf="provinceMunicipalities.length > 0" class="col-sm-3 col-lg-2 filter-item">
-    <label for="userLanguage" class="grassroot-label-em">Municipalities</label>
+    <label for="municipality" class="grassroot-label-em">Municipalities</label>
   </div>
-  <div *ngIf="provinceMunicipalities.length > 0" class=" col-sm-9 col-lg-4 filter-item">
-    <select id="municipality" class="form-control" style="width: 100%">
-      <option *ngFor="let municipality of provinceMunicipalities" [value]="municipality.name"> {{municipality.name}}</option>
+  <div *ngIf="provinceMunicipalities.length > 0" class="col-sm-9 col-lg-4 filter-item">
+    <select id="municipality" class="form-control form-control-em"  
+            [formControl]="filterForm?.controls['municipality']"
+            style="width: 100%">
+      <option value="CHOOSE">Select Municipality</option>
+      <option *ngFor="let municipality of provinceMunicipalities" [value]="municipality.id"> {{municipality.name}} ({{countMembersInMunicipality(municipality.id)}})</option>
     </select>
   </div>
 

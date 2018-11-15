@@ -93,7 +93,7 @@ export class UserService {
     if (token) {
       this.localStorageService.setItem('token', token);
     }
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",user);
+    
     this._loggedInUser = user;
     this.loggedInUser.emit(this._loggedInUser);
     this.localStorageService.setItem("loggedInUser", JSON.stringify(this._loggedInUser));

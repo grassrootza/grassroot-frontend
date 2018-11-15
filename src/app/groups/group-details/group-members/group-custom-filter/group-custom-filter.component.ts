@@ -50,6 +50,8 @@ export class GroupCustomFilterComponent implements OnInit {
   
   public municipalities:Municipality[] = [];
 
+  
+
   constructor(private groupService: GroupService,
               private campaignService: CampaignService,
               private route: ActivatedRoute,
@@ -220,5 +222,4 @@ export class GroupCustomFilterComponent implements OnInit {
       saveAs(blob, 'filtered_members.xls');
     })
   }
-
 }
