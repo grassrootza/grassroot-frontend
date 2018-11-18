@@ -185,6 +185,7 @@ export class CampaignSettingsComponent implements OnInit {
     this.campaignSettingsForm.controls['smsShare'].valueChanges.subscribe(value => {
       if (value == 'true' && !this.campaign.outboundSmsEnabled && !this.campaign.hasMessageType('SHARE_PROMPT')) {
         let messageIdBase = "message_" + moment().valueOf() + "_";
+        this.campaignSettingsForm.controls['smsLimit'].setValue(100, { onlySelf: true});
         this.sharingMessages.push(new CampaignMsgRequest(messageIdBase + "1", "SHARE_PROMPT"));
         this.sharingMessages.push(new CampaignMsgRequest(messageIdBase + "2", "SHARE_SEND"));
         $("#sharing-messages-modal").modal('show');
