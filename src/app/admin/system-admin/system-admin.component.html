@@ -134,7 +134,25 @@
           <p>Export a list of whatsapp subscribers <a href="#" (click)="exportWhatsAppOptIn()" class="grassroot-link">here</a> </p>
         </div>
       </div>
+      <hr />
+      <!-- Section for user with coordinates statistics -->
+      <div class="col-12">
+          <h1>User location statistics</h1>
+          <div class="row">
+            <div class="col-4">
+              <p>Users with location over a year : {{countUsersOverYear | number}}</p>
+            </div>
 
+            <div class="col-4">
+              <p>Users with location less than a year : {{countUsersWithinYear | number}} </p>
+            </div>
+
+            <div class="col-2">
+                <button class="btn btn-primary" (click)="refreshCache()">Refresh cache</button>
+            </div>
+         </div>
+      </div>
+      <hr />
 
       <div class="row mt-3">
         <div class="col-12">
@@ -150,11 +168,11 @@
           </div>
 
           <div *ngFor="let configVar of configVariableList" class="row group-list" style="margin-bottom: 1%">
-            <div class="col-4">{{configVar.key}}</div>
-            <div class="col-2">{{configVar.value}}</div>
-            <div class="col-4">{{configVar.description}}</div>
-            <div class="col-1"><button class="btn btn-primary btn-sm" (click)="openUpdateConfigVarModal(configVar.key)">update</button></div>
-            <div class="col-1"><button class="btn btn-danger btn-sm" (click)="openRemoveConfigVariableConfirmModal(configVar.key)">remove</button></div>
+            <div class="col-4" >{{configVar.key}}</div>
+            <div class="col-2" >{{configVar.value}}</div>
+            <div class="col-4" >{{configVar.description}}</div>
+            <div class="col-1" ><button class="btn btn-primary btn-sm" (click)="openUpdateConfigVarModal(configVar.key)">update</button></div>
+            <div class="col-1" ><button class="btn btn-danger btn-sm" (click)="openRemoveConfigVariableConfirmModal(configVar.key)">remove</button></div>
           </div>
 
           <hr>

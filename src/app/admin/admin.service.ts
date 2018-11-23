@@ -34,6 +34,10 @@ export class AdminService {
 
   private listAllConfigVarialbeUrl = environment.backendAppUrl + "/api/admin/config/fetch/list";
 
+  private refreshingUserLocationCache = environment.backendAppUrl + "/api/user/profile/user/location/refresh";
+  private getCountUsersWithinYear = environment.backendAppUrl + "/api/group/fetch/users/location/lessThanYear";
+  private getCountUsersOverAyear = environment.backendAppUrl + "/api/group/fetch/users/location/overAyear"
+
   constructor(private httpClient: HttpClient) { }
 
   loadUser(searchTerm:string):Observable<string>{
@@ -152,5 +156,16 @@ export class AdminService {
     let fullUrl = this.numberGroupsAboveLimitWithUserInputUrl + "/" + limit;
     return this.httpClient.get(fullUrl);
   }
-  
+  // loading users with gps coordinates
+  loadUsersWithLocation(): Observable<any>{
+    return this.httpClient.get(this.refreshingUserLocationCache);
+  }
+  // Loading users with gps location within a period of a year
+  loadUsersWithLocationInAyear(): Observable<any>{
+    return this.httpClient.get(this.getCountUsersWithinYear);
+  }
+  // Loading users with gps location over a period of a year
+  loadUsersWithLocationOverAyear(): Observable<any>{
+    return this.httpClient.get(this.getCountUsersOverAyear);
+  }
 }

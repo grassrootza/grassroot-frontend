@@ -62,6 +62,9 @@ export class SystemAdminComponent implements OnInit {
   public numberBelow: number;
   public numberAbove: number;
 
+  public countUsersWithinYear: number;
+  public countUsersOverYear: number;
+
   accessToken: string;
   
   constructor(private adminService:AdminService,
@@ -85,6 +88,22 @@ export class SystemAdminComponent implements OnInit {
     },error => {
       console.log("Error fecthing config variables:", error);
     });
+
+    // Counting all the users with coordinates in a year period
+    this.adminService.loadUsersWithLocationInAyear().subscribe(resp => {
+      this.countUsersWithinYear = resp;
+      // console.log("The number of users within a period of a year is " , this.countUsersWithinYear)
+    },error => {
+      console.log("Error getting the user integer number : " , error);
+    })
+
+     // Counting all the users with coordinates ove a year period
+     this.adminService.loadUsersWithLocationOverAyear().subscribe(resp => {
+       this.countUsersOverYear = resp;
+      //  console.log("The number of users over a period of a year is " , this.countUsersOverYear)
+     },error => {
+       console.log("Error getting the user count number : " , error);
+     })
 
     this.formCtrlSub = this.newValueFormControl.valueChanges
       .debounceTime(300)
@@ -146,6 +165,16 @@ export class SystemAdminComponent implements OnInit {
       this.alertService.alert('Recycled ' + number + ' join tokens');
     }, error => {
       console.log('Error initiating recycle, error: ', error);
+    })
+  }
+
+  // Refreshing the users cache 
+  refreshCache(){
+    this.adminService.loadUsersWithLocation().subscribe(resp => {
+      // this.userWithLocation = resp;
+      console.log("Testing the refresh button");
+    }, error => {
+      console.log("Error refreshing the user location log cache")
     })
   }
 
