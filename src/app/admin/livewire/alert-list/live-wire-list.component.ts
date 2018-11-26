@@ -25,7 +25,7 @@ export class LiveWireListComponent implements OnInit {
       this.alertList = resp.content;
       this.totalPages = resp.totalPages;
     },error =>{
-      console.log("Erro loading alerts.......",error);
+      console.log("Error loading alerts.......",error);
     });
   }
 
@@ -52,4 +52,5 @@ export class LiveWireListComponent implements OnInit {
     this.sort = value;
     this.loadAlerts(this.pageNumber,this.sort);
   }
+
 }

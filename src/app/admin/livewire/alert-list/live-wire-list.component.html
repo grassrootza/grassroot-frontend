@@ -29,8 +29,6 @@
         <div class="row">
           <div class="col-md-4 secondary-entity-link">
             <a [routerLink]="['/admin/livewire/alert', alert.serverUid]" class="grassroot-link">{{alert.headline}}</a>
-            <!-- <span *ngIf="!alert.reviewed" class="error-text">({{!alert.reviewed ? "Unreviewed"
-              : alert.sent ? "Sent" : "Blocked"}})</span> -->
               <span *ngIf="!alert.reviewed" style="color: red">(Unreviewed)</span>
               <span >{{alert.alertType === "INSTANT" ? "Instant" : "Meeting"}}</span>
           </div>
