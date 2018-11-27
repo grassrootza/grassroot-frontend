@@ -280,6 +280,12 @@ export class SystemAdminComponent implements OnInit {
     return false;
   }
 
+  fetchLiveWireApiToken(subscriberUid: string) {
+    this.livewireAdminService.fetchLiveWireApiToken(subscriberUid).subscribe(token => this.accessToken = token, 
+      error => console.log('Error fetching token!: ', error));
+    return false;
+  }
+
   exportWhatsAppOptIn(){
     console.log("Calling method for exporting whatsapp spreadsheet");
     this.adminService.downloadWhatsAppOptedInUsers().subscribe(data => {

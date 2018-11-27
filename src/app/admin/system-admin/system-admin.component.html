@@ -113,6 +113,9 @@
             <div class="col-2">
               {{subscriber.active ? 'Active' : 'Disabled'}}
             </div>
+            <div class="col-2">
+              <a href="" (click)="fetchLiveWireApiToken(subscriber.uid)" class="grassroot-link">Fetch token</a>
+            </div>
             
           </div>
         </div>
