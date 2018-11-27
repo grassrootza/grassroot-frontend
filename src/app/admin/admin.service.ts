@@ -35,8 +35,7 @@ export class AdminService {
   private listAllConfigVarialbeUrl = environment.backendAppUrl + "/api/admin/config/fetch/list";
 
   private refreshingUserLocationCache = environment.backendAppUrl + "/api/user/profile/user/location/refresh";
-  private getCountUsersWithinYear = environment.backendAppUrl + "/api/group/fetch/users/location/lessThanYear";
-  private getCountUsersOverAyear = environment.backendAppUrl + "/api/group/fetch/users/location/overAyear"
+  private fetchUsersWithLocation = environment.backendAppUrl + "/api/group/fetch/users/location/timeStamp/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -156,16 +155,22 @@ export class AdminService {
     let fullUrl = this.numberGroupsAboveLimitWithUserInputUrl + "/" + limit;
     return this.httpClient.get(fullUrl);
   }
-  // loading users with gps coordinates
+  // loading/refreshing users with gps coordinates (cache)
   loadUsersWithLocation(): Observable<any>{
     return this.httpClient.get(this.refreshingUserLocationCache);
   }
-  // Loading users with gps location within a period of a year
-  loadUsersWithLocationInAyear(): Observable<any>{
-    return this.httpClient.get(this.getCountUsersWithinYear);
+
+  // Fetching all users with the gps coordinates
+  countAllUsersWithLocation(countAll:boolean): Observable<any>{
+    let params = new HttpParams()
+       .set("countAll",true +"")
+        return this.httpClient.get(this.fetchUsersWithLocation,{params:params});
   }
-  // Loading users with gps location over a period of a year
-  loadUsersWithLocationOverAyear(): Observable<any>{
-    return this.httpClient.get(this.getCountUsersOverAyear);
-  }
+  
+  // Fetching users with the gps coordinates within a certain period 
+   countUsersWithLocationWithin(countAll:boolean): Observable<any>{
+     let params = new HttpParams()
+     .set("countAll",false + "")
+      return this.httpClient.get(this.fetchUsersWithLocation,{params:params});
+   }
 }

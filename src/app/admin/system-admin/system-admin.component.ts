@@ -62,8 +62,8 @@ export class SystemAdminComponent implements OnInit {
   public numberBelow: number;
   public numberAbove: number;
 
-  public countUsersWithinYear: number;
-  public countUsersOverYear: number;
+  public AllUsersWithCoordinates: number;
+  public usersCountWithinTimeStamp: number;
 
   accessToken: string;
   
@@ -82,28 +82,26 @@ export class SystemAdminComponent implements OnInit {
       console.log("Error loading subscribers...",error);
     });
 
+    //Fetching all the users with gps coordinates since the the beginning of the platform initiated
+    this.adminService.countAllUsersWithLocation(true).subscribe(resp => {
+      this.AllUsersWithCoordinates = resp;
+    },error => {
+      console.log("Error fetching count results for all users with coordinates: ", error);
+    })
+
+    // Fetching all the users with gps coordinates within a certain period
+    this.adminService.countUsersWithLocationWithin(false).subscribe(resp => {
+      this.usersCountWithinTimeStamp = resp;
+    },error => {
+      console.log("error fetching count for users with coordinates within a certain period ", error);
+    })
+
     this.adminService.listAllConfigVariables().subscribe(resp => {
       this.configVariableList = resp;
       console.log("Config variable list from server: ", this.configVariableList);
     },error => {
       console.log("Error fecthing config variables:", error);
     });
-
-    // Counting all the users with coordinates in a year period
-    this.adminService.loadUsersWithLocationInAyear().subscribe(resp => {
-      this.countUsersWithinYear = resp;
-      // console.log("The number of users within a period of a year is " , this.countUsersWithinYear)
-    },error => {
-      console.log("Error getting the user integer number : " , error);
-    })
-
-     // Counting all the users with coordinates ove a year period
-     this.adminService.loadUsersWithLocationOverAyear().subscribe(resp => {
-       this.countUsersOverYear = resp;
-      //  console.log("The number of users over a period of a year is " , this.countUsersOverYear)
-     },error => {
-       console.log("Error getting the user count number : " , error);
-     })
 
     this.formCtrlSub = this.newValueFormControl.valueChanges
       .debounceTime(300)
@@ -384,5 +382,4 @@ export class SystemAdminComponent implements OnInit {
       console.log("error counting groups: ", error)
     });
   }
-
 }

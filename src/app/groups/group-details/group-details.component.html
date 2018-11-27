@@ -63,9 +63,6 @@
               <div class="group-info">
                 <a class="grassroot-link flyer-link" target="_blank" href="{{ flyerUrlPDF }}">{{ 'group.flyer' | translate }}</a>
               </div>
-              <div class="group-info">
-                 <a class="grassroot-link flyer-link" href="#" (click)="fetchUsersWithCoordinates()">Fetch users with gps coordinates</a>
-              </div>
 
               <div class="group-info" *ngIf="!group.paidFor && canAddToAccount">
                 <a href="#" (click)="addToAccount()" class="grassroot-link flyer-link">Add to your Grassroot Extra account</a> 
