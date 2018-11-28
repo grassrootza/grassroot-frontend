@@ -37,6 +37,8 @@ export class AdminService {
   private refreshingUserLocationCache = environment.backendAppUrl + "/api/user/profile/user/location/refresh";
   private fetchUsersWithLocation = environment.backendAppUrl + "/api/group/fetch/users/location/timeStamp/";
 
+  private saveUserLocationLogsFromAddressUrl = environment.backendAppUrl + "/api/admin/update/location/address";
+
   constructor(private httpClient: HttpClient) { }
 
   loadUser(searchTerm:string):Observable<string>{
@@ -172,5 +174,9 @@ export class AdminService {
      let params = new HttpParams()
      .set("countAll",false + "")
       return this.httpClient.get(this.fetchUsersWithLocation,{params:params});
+   }
+
+   saveUserLocationsFromAddress(): Observable<any>{
+      return this.httpClient.get(this.saveUserLocationLogsFromAddressUrl);
    }
 }

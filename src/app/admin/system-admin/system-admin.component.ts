@@ -388,4 +388,13 @@ export class SystemAdminComponent implements OnInit {
       console.log("error counting groups: ", error)
     });
   }
+
+  saveLocationsFromAddress(){
+    this.adminService.saveUserLocationsFromAddress().subscribe(resp => {
+      console.log("Saved location logs from address --------->>>>>>>>>>>",resp);
+    },error => {
+      console.log("Error saving location logs from address", error);
+    });
+    return false;
+  }
 }
