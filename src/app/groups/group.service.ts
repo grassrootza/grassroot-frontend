@@ -46,6 +46,7 @@ export class GroupService {
   groupImportMembersAnalyzeUrl = environment.backendAppUrl + "/api/group/import/analyze";
   groupImportMembersConfirmUrl = environment.backendAppUrl + "/api/group/import/confirm";
   groupImportErrorsDownloadUrl = environment.backendAppUrl + "/api/group/import/errors/xls";
+  groupMembersWithLocationUrl = environment.backendAppUrl + "/api/group/fetch/group/members-location";
 
   groupUpdateSettingsUrl = environment.backendAppUrl + "/api/group/modify/settings";
   groupFetchPermissionsForRoleUrl = environment.backendAppUrl + "/api/group/fetch/permissions";
@@ -426,6 +427,13 @@ export class GroupService {
     let params = new HttpParams()
       .set("groupUid", groupUid);
     return this.httpClient.get<any>(fullUrl, {params: params});
+  }
+    // Fetching user with coordinates in the group
+  fetchUsers(groupUid: string): Observable<any>{
+    const fullUrl = this.groupMembersWithLocationUrl;
+    let params = new HttpParams()
+    .set('groupUid', groupUid)
+    return this.httpClient.get<any>(fullUrl, {params: params})
   }
 
   fetchTopicInterestsStats(groupUid: string): Observable<any> {

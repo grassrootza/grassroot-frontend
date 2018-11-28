@@ -62,6 +62,9 @@ export class SystemAdminComponent implements OnInit {
   public numberBelow: number;
   public numberAbove: number;
 
+  public AllUsersWithCoordinates: number;
+  public usersCountWithinTimeStamp: number;
+
   accessToken: string;
   
   constructor(private adminService:AdminService,
@@ -78,6 +81,20 @@ export class SystemAdminComponent implements OnInit {
     },error => {
       console.log("Error loading subscribers...",error);
     });
+
+    //Fetching all the users with gps coordinates since the the beginning of the platform initiated
+    this.adminService.countAllUsersWithLocation(true).subscribe(resp => {
+      this.AllUsersWithCoordinates = resp;
+    },error => {
+      console.log("Error fetching count results for all users with coordinates: ", error);
+    })
+
+    // Fetching all the users with gps coordinates within a certain period
+    this.adminService.countUsersWithLocationWithin(false).subscribe(resp => {
+      this.usersCountWithinTimeStamp = resp;
+    },error => {
+      console.log("error fetching count for users with coordinates within a certain period ", error);
+    })
 
     this.adminService.listAllConfigVariables().subscribe(resp => {
       this.configVariableList = resp;
@@ -146,6 +163,16 @@ export class SystemAdminComponent implements OnInit {
       this.alertService.alert('Recycled ' + number + ' join tokens');
     }, error => {
       console.log('Error initiating recycle, error: ', error);
+    })
+  }
+
+  // Refreshing the users cache 
+  refreshCache(){
+    this.adminService.loadUsersWithLocation().subscribe(resp => {
+      // this.userWithLocation = resp;
+      console.log("Testing the refresh button");
+    }, error => {
+      console.log("Error refreshing the user location log cache")
     })
   }
 
@@ -253,6 +280,12 @@ export class SystemAdminComponent implements OnInit {
     return false;
   }
 
+  fetchLiveWireApiToken(subscriberUid: string) {
+    this.livewireAdminService.fetchLiveWireApiToken(subscriberUid).subscribe(token => this.accessToken = token, 
+      error => console.log('Error fetching token!: ', error));
+    return false;
+  }
+
   exportWhatsAppOptIn(){
     console.log("Calling method for exporting whatsapp spreadsheet");
     this.adminService.downloadWhatsAppOptedInUsers().subscribe(data => {
@@ -355,5 +388,4 @@ export class SystemAdminComponent implements OnInit {
       console.log("error counting groups: ", error)
     });
   }
-
 }

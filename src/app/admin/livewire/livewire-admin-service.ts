@@ -38,6 +38,7 @@ export class LiveWireAdminService {
   private updateSubscriberTypeUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/type/change";
   private toggleOtpUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/active/otp";
   private changeSubscriberActiveStatusUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/active/status";
+  private fetchLiveWireSubscriberTokenUrl = environment.backendAppUrl + "/api/livewire/admin/subscriber/token";
 
   constructor(private httpClient:HttpClient) { }
 
@@ -52,6 +53,11 @@ export class LiveWireAdminService {
           return new LiveWireAlertPage(resp.number,resp.totalPages,resp.totalElements,
             resp.size,resp.first,resp.last,formatedLiveWireAlert)
         }))
+  }
+
+  fetchLiveWireApiToken(subscriberUid: string): Observable<string> {
+    let params = new HttpParams().set('subscriberUid', subscriberUid);
+    return this.httpClient.get(this.fetchLiveWireSubscriberTokenUrl, { params: params, responseType: 'text'});
   }
 
   loadAlert(serverUid:string):Observable<LiveWireAlert>{

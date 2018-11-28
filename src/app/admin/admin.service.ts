@@ -34,6 +34,9 @@ export class AdminService {
 
   private listAllConfigVarialbeUrl = environment.backendAppUrl + "/api/admin/config/fetch/list";
 
+  private refreshingUserLocationCache = environment.backendAppUrl + "/api/user/profile/user/location/refresh";
+  private fetchUsersWithLocation = environment.backendAppUrl + "/api/group/fetch/users/location/timeStamp/";
+
   constructor(private httpClient: HttpClient) { }
 
   loadUser(searchTerm:string):Observable<string>{
@@ -152,5 +155,22 @@ export class AdminService {
     let fullUrl = this.numberGroupsAboveLimitWithUserInputUrl + "/" + limit;
     return this.httpClient.get(fullUrl);
   }
+  // loading/refreshing users with gps coordinates (cache)
+  loadUsersWithLocation(): Observable<any>{
+    return this.httpClient.get(this.refreshingUserLocationCache);
+  }
+
+  // Fetching all users with the gps coordinates
+  countAllUsersWithLocation(countAll:boolean): Observable<any>{
+    let params = new HttpParams()
+       .set("countAll",true +"")
+        return this.httpClient.get(this.fetchUsersWithLocation,{params:params});
+  }
   
+  // Fetching users with the gps coordinates within a certain period 
+   countUsersWithLocationWithin(countAll:boolean): Observable<any>{
+     let params = new HttpParams()
+     .set("countAll",false + "")
+      return this.httpClient.get(this.fetchUsersWithLocation,{params:params});
+   }
 }
