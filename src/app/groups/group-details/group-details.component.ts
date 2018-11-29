@@ -97,13 +97,10 @@ export class GroupDetailsComponent implements OnInit {
   // Fetching users with gps coordinates
   fetchUsersWithCoordinates(){
     console.log("Group uid = ",this.group.groupUid)
-    this.groupService.fetchUsers(this.group.groupUid).subscribe(
-     results => {
+    this.groupService.fetchUsers(this.group.groupUid).subscribe(results => {
         if (results.length == 0){
             console.log("Ooops looks like there is nothing here ,enable your location ")
-        }
-        else
-        {
+        }else{
           console.log("Results are :" , results);
         }
     },error =>{

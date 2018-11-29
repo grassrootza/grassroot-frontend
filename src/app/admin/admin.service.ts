@@ -160,17 +160,10 @@ export class AdminService {
     return this.httpClient.get(this.refreshingUserLocationCache);
   }
 
-  // Fetching all users with the gps coordinates
+  // Fetching all users count with the gps coordinates
   countAllUsersWithLocation(countAll:boolean): Observable<any>{
     let params = new HttpParams()
-       .set("countAll",true +"")
+       .set("countAll",countAll +"")
         return this.httpClient.get(this.fetchUsersWithLocation,{params:params});
   }
-  
-  // Fetching users with the gps coordinates within a certain period 
-   countUsersWithLocationWithin(countAll:boolean): Observable<any>{
-     let params = new HttpParams()
-     .set("countAll",false + "")
-      return this.httpClient.get(this.fetchUsersWithLocation,{params:params});
-   }
 }
