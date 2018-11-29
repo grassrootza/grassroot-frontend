@@ -35,7 +35,7 @@ export class AdminService {
   private listAllConfigVarialbeUrl = environment.backendAppUrl + "/api/admin/config/fetch/list";
 
   private refreshingUserLocationCache = environment.backendAppUrl + "/api/user/profile/user/location/refresh";
-  private fetchUsersWithLocation = environment.backendAppUrl + "/api/group/fetch/users/location/timeStamp/";
+  private fetchUsersWithLocation = environment.backendAppUrl + "/api/group/fetch/users/location/timeStamp";
 
   private saveUserLocationLogsFromAddressUrl = environment.backendAppUrl + "/api/admin/update/location/address";
 
@@ -162,10 +162,13 @@ export class AdminService {
     return this.httpClient.get(this.refreshingUserLocationCache);
   }
 
-  // Fetching all users count with the gps coordinates
+  // Fetching all users counts that have the gps coordinates
   countAllUsersWithLocation(countAll:boolean): Observable<any>{
     let params = new HttpParams()
        .set("countAll",countAll +"")
         return this.httpClient.get(this.fetchUsersWithLocation,{params:params});
   }
+  saveUserLocationsFromAddress(): Observable<any>{
+    return this.httpClient.get(this.saveUserLocationLogsFromAddressUrl);
+ }
 }

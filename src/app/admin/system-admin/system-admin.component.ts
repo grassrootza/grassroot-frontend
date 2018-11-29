@@ -170,7 +170,6 @@ export class SystemAdminComponent implements OnInit {
   refreshCache(){
     this.adminService.loadUsersWithLocation().subscribe(resp => {
       this.alertService.alert("Cache have been refreshed ");
-      console.log("Testing the refresh button");
     }, error => {
       console.log("Error refreshing the user location log cache",error)
     })
@@ -391,7 +390,7 @@ export class SystemAdminComponent implements OnInit {
 
   saveLocationsFromAddress(){
     this.adminService.saveUserLocationsFromAddress().subscribe(resp => {
-      console.log("Saved location logs from address --------->>>>>>>>>>>",resp);
+      this.alertService.alert("Saved addresses to location logs");
     },error => {
       console.log("Error saving location logs from address", error);
     });
