@@ -23,6 +23,7 @@ import {Moment} from 'moment-mini-ts';
 import {STORE_KEYS, LocalStorageService} from "../utils/local-storage.service";
 import { UserExtraAccount } from '../user/account/account.user.model';
 import { Municipality } from './model/municipality.model';
+import { UserMunicipalities } from './model/user-municipalities.model';
 
 
 @Injectable()
@@ -794,9 +795,9 @@ export class GroupService {
       .pipe(map(resp => resp.map(municipality => Municipality.createInstance(municipality))));
   }
 
-  listMembersWithLocation(groupUid:string): Observable<Map<any,Municipality>> {
+  listMembersWithLocation(groupUid:string): Observable<UserMunicipalities> {
     let params = new HttpParams().set('groupUid',groupUid);
-    return this.httpClient.get<Map<string,Municipality>>(this.loadUsersWithLocationUrl,{params:params});
+    return this.httpClient.get<UserMunicipalities>(this.loadUsersWithLocationUrl,{params:params});
   }
 }
 

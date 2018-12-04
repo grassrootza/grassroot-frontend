@@ -31,6 +31,8 @@ export class MemberFilterComponent implements OnInit, OnChanges {
 
   public membersWithLocationMap: Map<string,Municipality> = new Map<string,Municipality>();
 
+  public notYetCachedUids: string[];
+
   private nameInputSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   @Input() taskTeams: GroupRef[] = [];
@@ -105,7 +107,9 @@ export class MemberFilterComponent implements OnInit, OnChanges {
 
   loadMembersWithLocation(){
     this.groupService.listMembersWithLocation(this.groupUid).subscribe(resp => {
-      this.membersWithLocationMap = resp;
+      console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",resp);
+      this.membersWithLocationMap = resp.municipaliiesMap;
+      this.notYetCachedUids = resp.notYetCachedUids;
     })
   }
 
