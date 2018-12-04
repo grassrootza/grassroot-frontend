@@ -62,7 +62,7 @@ export class SystemAdminComponent implements OnInit {
   public numberBelow: number;
   public numberAbove: number;
 
-  public AllUsersWithCoordinates: number;
+  public allUsersWithCoordinates: number;
   public usersCountWithinTimeStamp: number;
 
   accessToken: string;
@@ -84,17 +84,17 @@ export class SystemAdminComponent implements OnInit {
 
     //Fetching all the users with gps coordinates since the the beginning of the platform initiated
     this.adminService.countAllUsersWithLocation(true).subscribe(resp => {
-      this.AllUsersWithCoordinates = resp;
+      this.allUsersWithCoordinates = resp;
     },error => {
       console.log("Error fetching count results for all users with coordinates: ", error);
-    })
+    });
 
-    // Fetching all the users with gps coordinates within a certain period
-    this.adminService.countUsersWithLocationWithin(false).subscribe(resp => {
+    //Fetching all the users with gps coordinates since the the beginning of the platform initiated
+    this.adminService.countAllUsersWithLocation(false).subscribe(resp => {
       this.usersCountWithinTimeStamp = resp;
     },error => {
-      console.log("error fetching count for users with coordinates within a certain period ", error);
-    })
+      console.log("Error fetching count results for all users with coordinates: ", error);
+    });
 
     this.adminService.listAllConfigVariables().subscribe(resp => {
       this.configVariableList = resp;
@@ -169,10 +169,10 @@ export class SystemAdminComponent implements OnInit {
   // Refreshing the users cache 
   refreshCache(){
     this.adminService.loadUsersWithLocation().subscribe(resp => {
-      // this.userWithLocation = resp;
-      console.log("Testing the refresh button");
+      this.alertService.alert("Cache have been refreshed ");
     }, error => {
-      console.log("Error refreshing the user location log cache")
+      this.alertService.alert("Error refreshing the user location log cache");
+      console.log("Error refreshing the user location log cache",error)
     })
   }
 
@@ -391,7 +391,7 @@ export class SystemAdminComponent implements OnInit {
 
   saveLocationsFromAddress(){
     this.adminService.saveUserLocationsFromAddress().subscribe(resp => {
-      console.log("Saved location logs from address --------->>>>>>>>>>>",resp);
+      this.alertService.alert("Saved addresses to location logs");
     },error => {
       console.log("Error saving location logs from address", error);
     });
