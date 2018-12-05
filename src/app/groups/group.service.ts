@@ -94,6 +94,8 @@ export class GroupService {
   groupUnhideUrl = environment.backendAppUrl + "/api/group/modify/unhide";
   groupDeactivateUrl = environment.backendAppUrl + "/api/group/modify/deactivate";
 
+  canUserCreateLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/admin/user/blocked";
+
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
   private groupInfoListError_: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -766,6 +768,10 @@ export class GroupService {
       this.localStorageService.setItem(STORE_KEYS.MY_GROUPS_DATA_CACHE, JSON.stringify(remainingGroups));
     }
     this.loadGroups();
+  }
+
+  canUserCreateLiveWireAlert(): Observable<Boolean> {
+    return this.httpClient.get<Boolean>(this.canUserCreateLiveWireAlertUrl);
   }
 
 }
