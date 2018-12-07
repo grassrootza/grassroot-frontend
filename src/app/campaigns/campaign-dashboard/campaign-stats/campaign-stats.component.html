@@ -7,7 +7,8 @@
           <div class="container">
             <div class="row">
               <div class="col-md-8 col-sm-12">
-                <h5 *ngIf="campaign" [translate]="'campaign.statistics.members.title'" [translateParams]="{total: campaign.totalJoined}">Members growth</h5>
+                <h5 *ngIf="campaign" [translate]="'campaign.statistics.members.title'" 
+                [translateParams]="{total: campaign.totalSigned, opted: campaign.totalJoined }">Members growth</h5>
                 <canvas id="memberGrowthChart" height="200" width="400"></canvas>
               </div>
               <div class="col-md-4 col-sm-12">

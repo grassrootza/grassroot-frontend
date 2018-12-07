@@ -76,4 +76,15 @@ export class CampaignDashboardComponent implements OnInit {
     });
     return false;
   }
+
+  downloadBillingData() {
+    this.campaignService.downloadCampaignBillingData(this.campaign.campaignUid).subscribe(data => {
+      let blob = new Blob([data], { type: 'application/xls' });
+      saveAs(blob, this.campaign.name + "-BillingData.xls")
+    }, error => {
+      console.log("Error downloading campaign billing data: ", error);
+    });
+    return false;
+  }
+
 }

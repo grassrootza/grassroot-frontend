@@ -45,6 +45,7 @@ export class CampaignService {
   updateCampaignDefaultLangUrl = environment.backendAppUrl + "/api/campaign/manage/update/language";
 
   exportCampaignResultsUrl = environment.backendAppUrl + '/api/campaign/stats/download';
+  downloadCampaignBillingStatusUrl = environment.backendAppUrl + "/api/campaign/stats/billing";
 
   private _campaigns: CampaignInfo[] = [];
   private campaignInfoList_: BehaviorSubject<CampaignInfo[]> = new BehaviorSubject([]);
@@ -270,6 +271,11 @@ export class CampaignService {
   downloadCampaignStats(campaignUid: string) {
     const params = new HttpParams().set('campaignUid', campaignUid);
     return this.httpClient.get(this.exportCampaignResultsUrl, { params: params, responseType: 'blob' });
+  }
+
+  downloadCampaignBillingData(campaignUid: string) {
+    const params = new HttpParams().set('campaignUid', campaignUid);
+    return this.httpClient.get(this.downloadCampaignBillingStatusUrl, { params: params, responseType: 'blob' });
   }
 
 }
