@@ -89,7 +89,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
 
     this.filterForm.controls['municipality'].valueChanges.subscribe(value => {
         console.log("Municipality ID -------->>>>>",value);
-        this.filter.municipalityId = value;
+        this.filter.municipalityId = value == 'CHOOSE' ? null : value;
         this.fireFilterChange();
     });
 
@@ -106,22 +106,22 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   }
 
   loadMembersWithLocation(){
-    this.groupService.listMembersWithLocation(this.groupUid).subscribe(resp => {
+    this.groupService.fetchKnownMunicipalitiesForGroup(this.groupUid).subscribe(resp => {
       console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",resp);
       this.membersWithLocationMap = resp.municipaliiesMap;
       this.notYetCachedUids = resp.notYetCachedUids;
     })
   }
 
-  countMembersInMunicipality(municipalityId:number):number{
-    let keys = Object.keys(this.membersWithLocationMap);
-    let count:number = 0;
-    keys.forEach(key => {
-      if(this.membersWithLocationMap[key].id == municipalityId){
+  countMembersInMunicipality(municipalityId: number): number{
+    const memberUids = Object.keys(this.membersWithLocationMap);
+    let count: number = 0;
+    // can probably convert this into using map.reduce
+    memberUids.forEach(uid => {
+      if(this.membersWithLocationMap[uid].id == municipalityId){
         count ++;
       }
     })
-
     return count;
   }
 

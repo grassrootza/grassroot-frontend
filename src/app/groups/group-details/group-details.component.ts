@@ -94,20 +94,6 @@ export class GroupDetailsComponent implements OnInit {
     });
     return false;
   }
-  // Fetching users with gps coordinates
-  fetchUsersWithCoordinates(){
-    console.log("Group uid = ",this.group.groupUid)
-    this.groupService.fetchUsers(this.group.groupUid).subscribe(results => {
-        if (results.length == 0){
-            console.log("Ooops looks like there is nothing here ,enable your location ")
-        }else{
-          console.log("Results are :" , results);
-        }
-    },error =>{
-      console.log("There was an error while fetching user coordinates", error);
-    });
-  return false;
-  }
 
   setupJoinParams() {
     this.joinMethodParams = {

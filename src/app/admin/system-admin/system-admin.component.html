@@ -107,7 +107,7 @@
                 </a>
               </div>
               <div class="row">
-                Est.{{subscriber.creationTime | date: 'dd MMM yyyy'}}
+                Est. {{subscriber.creationTime | date: 'dd MMM yyyy'}}
               </div>
             </div>
             <div class="col-2">
@@ -138,24 +138,33 @@
         </div>
       </div>
       <hr />
+      
       <!-- Section for user with coordinates statistics -->
-      <div class="col-12">
-          <h1>User location statistics</h1>
-          <div class="row">
-            <div class="col-4">
-              <p>Users with location within a year : {{usersCountWithinTimeStamp | number}}</p>
-            </div>
+      <div class="row mt-3">
+        <div class="col-12">
+            <h1>User location statistics</h1>
+            <div class="row">
+              <div class="col-4">
+                <p>Users with location within a year : {{usersCountWithinTimeStamp | number}}</p>
+              </div>
 
-            <div class="col-4">
-              <p>Users with location over a year : {{allUsersWithCoordinates | number}} </p>
-            </div>
+              <div class="col-4">
+                <p>Users with location over a year : {{allUsersWithCoordinates | number}} </p>
+              </div>
 
-            <div class="col-2" class="col-md-4">
-                <button class="btn btn-primary" (click)="refreshCache()">Refresh cache</button>
-            </div>
-            <p>Click <a href="#" class="grassroot-link" (click)="saveLocationsFromAddress()">here</a> to save location logs from address</p>
-         </div>
+              <div class="col-2" class="col-md-4">
+                  <button class="btn btn-primary" (click)="triggerBatchMunicipalityFetch()">Trigger batch of municipality fetches</button>
+              </div>
+
+              <!-- <div class="row"> -->
+                <div class="col-12">
+                  <p>Click <a href="#" class="grassroot-link" (click)="saveLocationsFromAddress()">here</a> to save location logs from address</p>
+                </div>
+              <!-- </div> -->
+          </div>
+        </div>
       </div>
+      
       <hr />
 
       <div class="row mt-3">
@@ -172,9 +181,9 @@
           </div>
 
           <div *ngFor="let configVar of configVariableList" class="row group-list" style="margin-bottom: 1%">
-            <div class="col-4" >{{configVar.key}}</div>
-            <div class="col-2" >{{configVar.value}}</div>
-            <div class="col-4" >{{configVar.description}}</div>
+            <div class="col-4">{{configVar.key}}</div>
+            <div class="col-2">{{configVar.value}}</div>
+            <div class="col-4">{{configVar.description}}</div>
             <div class="col-1"><button class="btn btn-primary btn-sm" (click)="openUpdateConfigVarModal(configVar.key)">update</button></div>
             <div class="col-1"><button class="btn btn-danger btn-sm" (click)="openRemoveConfigVariableConfirmModal(configVar.key)">remove</button></div>
           </div>

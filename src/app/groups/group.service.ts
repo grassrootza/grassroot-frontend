@@ -429,13 +429,6 @@ export class GroupService {
       .set("groupUid", groupUid);
     return this.httpClient.get<any>(fullUrl, {params: params});
   }
-    // Fetching user with coordinates in the group
-  fetchUsers(groupUid: string): Observable<any>{
-    const fullUrl = this.groupMembersWithLocationUrl;
-    let params = new HttpParams()
-    .set('groupUid', groupUid)
-    return this.httpClient.get<any>(fullUrl, {params: params})
-  }
 
   fetchTopicInterestsStats(groupUid: string): Observable<any> {
 
@@ -795,7 +788,7 @@ export class GroupService {
       .pipe(map(resp => resp.map(municipality => Municipality.createInstance(municipality))));
   }
 
-  listMembersWithLocation(groupUid:string): Observable<UserMunicipalities> {
+  fetchKnownMunicipalitiesForGroup(groupUid:string): Observable<UserMunicipalities> {
     let params = new HttpParams().set('groupUid',groupUid);
     return this.httpClient.get<UserMunicipalities>(this.loadUsersWithLocationUrl,{params:params});
   }

@@ -167,9 +167,9 @@ export class SystemAdminComponent implements OnInit {
   }
 
   // Refreshing the users cache 
-  refreshCache(){
-    this.adminService.loadUsersWithLocation().subscribe(resp => {
-      this.alertService.alert("Cache have been refreshed ");
+  triggerBatchMunicipalityFetch(){
+    this.adminService.triggerMunicipalityFetch().subscribe(resp => {
+      this.alertService.alert("Fetch / refresh triggered");
     }, error => {
       this.alertService.alert("Error refreshing the user location log cache");
       console.log("Error refreshing the user location log cache",error)
