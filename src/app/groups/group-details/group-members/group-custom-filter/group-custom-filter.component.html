@@ -13,6 +13,8 @@
                              [topics]="group.topics"
                              [campaigns]="groupCampaigns"
                              [affiliations]="group.affiliations"
+                             [provinceMunicipalities]="municipalities"
+                             [groupUid]="group.groupUid"
                              (filterChanged)="membersFilterChanged($event)">
           </app-member-filter>
         </div>

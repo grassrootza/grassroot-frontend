@@ -34,6 +34,11 @@ export class AdminService {
 
   private listAllConfigVarialbeUrl = environment.backendAppUrl + "/api/admin/config/fetch/list";
 
+  private triggerMunicipalityFetchBatchUrl = environment.backendAppUrl + "/api/admin/municipalities/trigger";
+  private countUsersWithLocationLogs = environment.backendAppUrl + "/api/group/fetch/users/location/timeStamp";
+
+  private saveUserLocationLogsFromAddressUrl = environment.backendAppUrl + "/api/admin/update/location/address";
+
   constructor(private httpClient: HttpClient) { }
 
   loadUser(searchTerm:string):Observable<string>{
@@ -152,5 +157,19 @@ export class AdminService {
     let fullUrl = this.numberGroupsAboveLimitWithUserInputUrl + "/" + limit;
     return this.httpClient.get(fullUrl);
   }
-  
+  // loading/refreshing users with gps coordinates (cache)
+  triggerMunicipalityFetch(): Observable<any>{
+    return this.httpClient.get(this.triggerMunicipalityFetchBatchUrl);
+  }
+
+  // Fetching all users counts that have the gps coordinates
+  countAllUsersWithLocation(countAll:boolean): Observable<any>{
+    let params = new HttpParams().set("countAll",countAll +"")
+    return this.httpClient.get(this.countUsersWithLocationLogs,{params:params});
+  }
+
+  // filles in locations for users who have an address entity but not coordinates related to themselves
+  saveUserLocationsFromAddress(): Observable<any>{
+    return this.httpClient.get(this.saveUserLocationLogsFromAddressUrl);
+ }
 }

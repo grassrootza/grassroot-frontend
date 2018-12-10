@@ -62,6 +62,9 @@ export class SystemAdminComponent implements OnInit {
   public numberBelow: number;
   public numberAbove: number;
 
+  public allUsersWithCoordinates: number;
+  public usersCountWithinTimeStamp: number;
+
   accessToken: string;
   
   constructor(private adminService:AdminService,
@@ -77,6 +80,20 @@ export class SystemAdminComponent implements OnInit {
       this.livewireSubscribers = resp;
     },error => {
       console.log("Error loading subscribers...",error);
+    });
+
+    //Fetching all the users with gps coordinates since the the beginning of the platform initiated
+    this.adminService.countAllUsersWithLocation(true).subscribe(resp => {
+      this.allUsersWithCoordinates = resp;
+    },error => {
+      console.log("Error fetching count results for all users with coordinates: ", error);
+    });
+
+    //Fetching all the users with gps coordinates since the the beginning of the platform initiated
+    this.adminService.countAllUsersWithLocation(false).subscribe(resp => {
+      this.usersCountWithinTimeStamp = resp;
+    },error => {
+      console.log("Error fetching count results for all users with coordinates: ", error);
     });
 
     this.adminService.listAllConfigVariables().subscribe(resp => {
@@ -146,6 +163,16 @@ export class SystemAdminComponent implements OnInit {
       this.alertService.alert('Recycled ' + number + ' join tokens');
     }, error => {
       console.log('Error initiating recycle, error: ', error);
+    })
+  }
+
+  // Refreshing the users cache 
+  triggerBatchMunicipalityFetch(){
+    this.adminService.triggerMunicipalityFetch().subscribe(resp => {
+      this.alertService.alert("Fetch / refresh triggered");
+    }, error => {
+      this.alertService.alert("Error refreshing the user location log cache");
+      console.log("Error refreshing the user location log cache",error)
     })
   }
 
@@ -362,4 +389,12 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
+  saveLocationsFromAddress(){
+    this.adminService.saveUserLocationsFromAddress().subscribe(resp => {
+      this.alertService.alert("Saved addresses to location logs");
+    },error => {
+      console.log("Error saving location logs from address", error);
+    });
+    return false;
+  }
 }

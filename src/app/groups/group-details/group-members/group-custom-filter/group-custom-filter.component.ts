@@ -12,6 +12,7 @@ import {getCreateModalId} from "../../../../task/task-type";
 import { AlertService } from '../../../../utils/alert-service/alert.service';
 
 import { saveAs } from 'file-saver';
+import { Municipality } from '../../../model/municipality.model';
 
 declare var $: any;
 
@@ -46,6 +47,10 @@ export class GroupCustomFilterComponent implements OnInit {
 
   public loading = false;
   public loadStart = 0;
+  
+  public municipalities:Municipality[] = [];
+
+  
 
   constructor(private groupService: GroupService,
               private campaignService: CampaignService,
@@ -94,6 +99,10 @@ export class GroupCustomFilterComponent implements OnInit {
           this.currentFilter = copyFilter(filter); // otherwise change detection fails, because child is actually modifying same thing
           this.currentPage = members;
           this.setFilteredMembers(members.content);
+          
+          if(filter.provinces != null){
+            this.findMunicipalitiesForProvinces(filter.provinces);
+          }
         },
         error => {
           this.loading = false;
@@ -105,6 +114,15 @@ export class GroupCustomFilterComponent implements OnInit {
       console.log(`must have been role change, to: ${this.currentFilter.role}`);
       this.setFilteredMembers(this.filteredMembers);
     }
+  }
+
+  findMunicipalitiesForProvinces(provinces:string[]){
+    this.groupService.loadMunicipalitiesForProvinces(provinces).subscribe(resp => {
+      this.municipalities = resp;
+      console.log("Municipalities for provinces supplied ",this.municipalities);
+    },error => {
+      console.log("Error loading municipalities")
+    });
   }
 
   setFilteredMembers(members: Membership[]) {
@@ -204,5 +222,4 @@ export class GroupCustomFilterComponent implements OnInit {
       saveAs(blob, 'filtered_members.xls');
     })
   }
-
 }
