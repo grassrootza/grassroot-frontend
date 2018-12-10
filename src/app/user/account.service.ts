@@ -7,6 +7,7 @@ import { UserExtraAccount, getEntity } from './account/account.user.model';
 import { AccountSignupResponse } from './account/signup/signup.response.model';
 import { DataSetCounts, getCountsEntity } from './account/dataset.count.model';
 import { Group } from '../groups/model/group.model';
+import { getCampaignEntity, CampaignInfo } from 'app/campaigns/model/campaign-info';
 
 @Injectable()
 export class AccountService {
@@ -34,6 +35,9 @@ export class AccountService {
 
   private fetchAllDataSetDetailsUrl = environment.backendAppUrl + "/api/account/fetch/all/dataset";
   private fetchDataSetCountsUrl = environment.backendAppUrl + "/api/account/fetch/dataset";
+
+  private fetchAccountCampaignsUrl = environment.backendAppUrl + "/api/account/fetch/campaign/list";
+  private fetchCampaignStatsUrl = environment.backendAppUrl + "/api/account/fetch/campaign/stats";
 
   private downloadActivityUrl = environment.backendAppUrl + '/api/account/fetch/group/download';
 
@@ -114,6 +118,17 @@ export class AccountService {
       params = params.set('accountUid', accountUid);
     
     return this.httpClient.get<DataSetCounts>(fullUrl, { params: params }).pipe(map(getCountsEntity));
+  }
+
+  getCampaigns(accountUid: string): Observable<CampaignInfo[]> {
+    const params = new HttpParams().set('accountUid', accountUid);
+    return this.httpClient.get<CampaignInfo[]>(this.fetchAccountCampaignsUrl, { params: params })
+      .pipe(map(campaigns => campaigns.map(getCampaignEntity)));
+  }
+
+  getCampaignBillingStats(accountUid: string, campaignUid: string): Observable<any> {
+    const params = new HttpParams().set('accountUid', accountUid).set('campaignUid', campaignUid);
+    return this.httpClient.get(this.fetchCampaignStatsUrl, { params: params});
   }
 
   closeAccount(accountUid: string): Observable<any> {

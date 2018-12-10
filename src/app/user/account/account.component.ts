@@ -7,10 +7,10 @@ import {AccountService} from "../account.service";
 import { UserExtraAccount } from './account.user.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Group } from '../../groups/model/group.model';
-import { GroupService } from '../../groups/group.service';
 import { DataSetCounts } from './dataset.count.model';
 
 import { saveAs } from 'file-saver';
+import { CampaignInfo } from 'app/campaigns/model/campaign-info';
 
 declare var $: any;
 
@@ -48,16 +48,17 @@ export class AccountComponent implements OnInit {
   groupToView: Group;
   groupToViewCount: number;
 
+  accountCampaigns: CampaignInfo[];
+  campaignBillingStats: any;
+
   dataSetCounts: DataSetCounts[];
 
   constructor(private userService: UserService,
               private accountService: AccountService,
-              private groupService: GroupService,
               private formBuilder: FormBuilder,
               private alertService: AlertService,
               private route: ActivatedRoute,
               private router: Router) {
-
     this.accountForm = this.formBuilder.group({
       name:['',Validators.required],
       adminPhoneOrEmail: ['']
@@ -102,9 +103,10 @@ export class AccountComponent implements OnInit {
       }
 
       if (account.geoDataSets) {
-        this.fetchDataSetDetails(accountUid);
+        this.fetchDataSetDetails(account.uid);
       }
 
+      this.fetchCampaigns(account.uid);
       this.fetchCandidateGroupsToAdd(account.uid);
     });
   }
@@ -116,6 +118,28 @@ export class AccountComponent implements OnInit {
     }, error => {
       console.log('error fetching counts: ', error);
     })
+  }
+
+  fetchCampaigns(accountUid: string) {
+    this.accountService.getCampaigns(accountUid).subscribe(campaigns => {
+      console.log('Fetched campaigns for account : ', campaigns);
+      this.accountCampaigns = campaigns;
+    })
+  }
+
+  viewCampaign(campaignUid: string) {
+    console.log('Campaign UID passed from component: ', campaignUid);
+    this.accountService.getCampaignBillingStats(this.account.uid, campaignUid).subscribe(stats => {
+      console.log('Campaign billing stats: ', stats);
+      this.campaignBillingStats = stats;
+      $('#account-campaign-modal').modal('show');
+    });
+    return false;
+  }
+
+  goToCampaign(campaignUid: string) {
+    $('#account-campaign-modal').modal('hide');
+    this.router.navigate(['/campaign', campaignUid]);
   }
 
   viewGroup(groupUid: string) {

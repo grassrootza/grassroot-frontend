@@ -59,6 +59,8 @@
         </div>
 
         <ng-container *ngIf="account.enabled">
+
+        <!-- Dataset section -->
         <div class="form-row" *ngIf="account.geoDataSets">
           <div class="col-12" *ngIf="!dataSetCounts">
             <h4>Loading datasets ...</h4>
@@ -78,6 +80,7 @@
 
         <hr *ngIf="account.geoDataSets" />
 
+        <!-- Groups section -->
         <div class="form-row">
           <div class="col-12">
             <h4>Groups on this account</h4>
@@ -112,6 +115,21 @@
         </div>
         
         <hr />
+
+        <!-- Campaigns section -->
+        <div class="form-row" *ngIf="accountCampaigns">
+          <div class="col-12">
+            <h4>Campaigns on this account</h4>
+            <p class="small">
+              The following campaigns are running attached to this account: 
+              <span *ngFor="let campaign of accountCampaigns; let last = last">
+                  <a class="grassroot-link" href="#" (click)="viewCampaign(campaign.campaignUid)">{{campaign.name}}</a><span *ngIf="!last">, </span><span *ngIf="last">. </span>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <hr *ngIf="accountCampaigns" />
 
         <div class="form-row" *ngIf="account.enabled">
           <div class="form-group col-12">
@@ -208,6 +226,27 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary hover-danger" (click)="removeGroupFromAccount(groupToView?.groupUid)">Remove from account</button>
         <button type="button" class="btn btn-secondary hover-primary" (click)="goToGroupDashboard(groupToView?.groupUid)">View group dashboard</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.close' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="account-campaign-modal" aria-hidden="true" *ngIf="account">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Campaign billing stats</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="campaignBillingStats">
+        Since your last bill, the campaign, {{ campaignBillingStats['campaign_name'] }}, has had {{ campaignBillingStats['total_sessions'] }} 
+        USSD sessions, {{ campaignBillingStats['total_shares'] }} sharing SMSs, and {{ campaignBillingStats['total_welcomes']}} welcome SMSs.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary hover-primary" (click)="goToCampaign(campaignBillingStats['campaign_uid'])">View campaign</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ 'action.close' | translate }}</button>
       </div>
     </div>
