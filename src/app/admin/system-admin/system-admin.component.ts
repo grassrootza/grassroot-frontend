@@ -61,6 +61,7 @@ export class SystemAdminComponent implements OnInit {
   public groupSizeLimitKey = 'groups.size.freemax';
   public numberBelow: number;
   public numberAbove: number;
+  geoBatchSize: number = 10;
 
   public allUsersWithCoordinates: number;
   public usersCountWithinTimeStamp: number;
@@ -163,16 +164,6 @@ export class SystemAdminComponent implements OnInit {
       this.alertService.alert('Recycled ' + number + ' join tokens');
     }, error => {
       console.log('Error initiating recycle, error: ', error);
-    })
-  }
-
-  // Refreshing the users cache 
-  triggerBatchMunicipalityFetch(){
-    this.adminService.triggerMunicipalityFetch().subscribe(resp => {
-      this.alertService.alert("Fetch / refresh triggered");
-    }, error => {
-      this.alertService.alert("Error refreshing the user location log cache");
-      console.log("Error refreshing the user location log cache",error)
     })
   }
 
@@ -389,8 +380,19 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
-  saveLocationsFromAddress(){
-    this.adminService.saveUserLocationsFromAddress().subscribe(resp => {
+  // Refreshing the users cache 
+  triggerBatchMunicipalityFetch(){
+    this.adminService.triggerMunicipalityFetch(this.geoBatchSize).subscribe(resp => {
+      this.alertService.alert("Fetch / refresh triggered");
+    }, error => {
+      this.alertService.alert("Error refreshing the user location log cache");
+      console.log("Error refreshing the user location log cache",error)
+    })
+  }
+
+  saveLocationsFromAddress() {
+    console.log('batch size: ', this.geoBatchSize);
+    this.adminService.saveUserLocationsFromAddress(this.geoBatchSize).subscribe(resp => {
       this.alertService.alert("Saved addresses to location logs");
     },error => {
       console.log("Error saving location logs from address", error);

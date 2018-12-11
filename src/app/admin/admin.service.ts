@@ -158,8 +158,9 @@ export class AdminService {
     return this.httpClient.get(fullUrl);
   }
   // loading/refreshing users with gps coordinates (cache)
-  triggerMunicipalityFetch(): Observable<any>{
-    return this.httpClient.get(this.triggerMunicipalityFetchBatchUrl);
+  triggerMunicipalityFetch(batchSize: number): Observable<any>{
+    const params = new HttpParams().set('pageSize', '' + batchSize);
+    return this.httpClient.get(this.triggerMunicipalityFetchBatchUrl, {params: params});
   }
 
   // Fetching all users counts that have the gps coordinates
@@ -169,7 +170,8 @@ export class AdminService {
   }
 
   // filles in locations for users who have an address entity but not coordinates related to themselves
-  saveUserLocationsFromAddress(): Observable<any>{
-    return this.httpClient.get(this.saveUserLocationLogsFromAddressUrl);
+  saveUserLocationsFromAddress(batchSize: number): Observable<any>{
+    const params = new HttpParams().set('pageSize', '' + batchSize);
+    return this.httpClient.get(this.saveUserLocationLogsFromAddressUrl, {params: params});
  }
 }
