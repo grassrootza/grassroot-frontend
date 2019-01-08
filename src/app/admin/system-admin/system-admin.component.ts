@@ -61,6 +61,10 @@ export class SystemAdminComponent implements OnInit {
   public groupSizeLimitKey = 'groups.size.freemax';
   public numberBelow: number;
   public numberAbove: number;
+  geoBatchSize: number = 10;
+
+  public allUsersWithCoordinates: number;
+  public usersCountWithinTimeStamp: number;
 
   accessToken: string;
   
@@ -77,6 +81,20 @@ export class SystemAdminComponent implements OnInit {
       this.livewireSubscribers = resp;
     },error => {
       console.log("Error loading subscribers...",error);
+    });
+
+    //Fetching all the users with gps coordinates since the the beginning of the platform initiated
+    this.adminService.countAllUsersWithLocation(true).subscribe(resp => {
+      this.allUsersWithCoordinates = resp;
+    },error => {
+      console.log("Error fetching count results for all users with coordinates: ", error);
+    });
+
+    //Fetching all the users with gps coordinates since the the beginning of the platform initiated
+    this.adminService.countAllUsersWithLocation(false).subscribe(resp => {
+      this.usersCountWithinTimeStamp = resp;
+    },error => {
+      console.log("Error fetching count results for all users with coordinates: ", error);
     });
 
     this.adminService.listAllConfigVariables().subscribe(resp => {
@@ -362,4 +380,23 @@ export class SystemAdminComponent implements OnInit {
     });
   }
 
+  // Refreshing the users cache 
+  triggerBatchMunicipalityFetch(){
+    this.adminService.triggerMunicipalityFetch(this.geoBatchSize).subscribe(resp => {
+      this.alertService.alert("Fetch / refresh triggered");
+    }, error => {
+      this.alertService.alert("Error refreshing the user location log cache");
+      console.log("Error refreshing the user location log cache",error)
+    })
+  }
+
+  saveLocationsFromAddress() {
+    console.log('batch size: ', this.geoBatchSize);
+    this.adminService.saveUserLocationsFromAddress(this.geoBatchSize).subscribe(resp => {
+      this.alertService.alert("Saved addresses to location logs");
+    },error => {
+      console.log("Error saving location logs from address", error);
+    });
+    return false;
+  }
 }

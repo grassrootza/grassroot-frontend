@@ -31,6 +31,9 @@ export class ProfileFormComponent implements OnInit {
   public accessToken: string = "";
   public whatsAppOptedIn: boolean = false;
 
+  public latitude:number = 0;
+  public longitude: number = 0;
+
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,
               private alertService: AlertService,
@@ -51,7 +54,7 @@ export class ProfileFormComponent implements OnInit {
         phone:new FormControl('',[optionalPhoneValidator]),
         province:new FormControl('',Validators.required),
         language:new FormControl('',Validators.required),
-        whatsAppOptedIn: new FormControl()
+        whatsAppOptedIn:new FormControl()
     }, emailOrPhoneEntered("email", "phone"));
   }
 
@@ -79,6 +82,15 @@ export class ProfileFormComponent implements OnInit {
     }, error => {
         console.log("that didn't work, error: ", error);
     })
+
+    if(this.latitude != 0 && this.longitude != 0){
+      this.userService.setUserLocation(this.latitude,this.longitude).subscribe(resp =>{
+        console.log("Created user location",resp);
+      },error => {
+        console.log("Error creating user location.............",error);
+      });
+    }
+
   }
 
   submitOtp() {
@@ -152,5 +164,15 @@ export class ProfileFormComponent implements OnInit {
   subscribeWhatsapp(evt:any){
     console.log("What is event ?????",evt);
     this.userProfile.whatsAppOptedIn = evt;
+  }
+
+  setMyCurrentLocation(){
+    navigator.geolocation.getCurrentPosition((position)=>{
+      console.log("Current location is --------->",position.coords);
+      this.latitude = position.coords.latitude;
+      this.longitude = position.coords.longitude;
+    });
+
+    return false;
   }
 }

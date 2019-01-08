@@ -14,6 +14,7 @@ export class CampaignInfo {
               public campaignStartDate: any,
               public campaignEndDate: any, // this is a moment
               public totalEngaged: number,
+              public totalSigned: number,
               public totalJoined: number,
               public creatingUserName: string,
               public creatingUserUid: string,
@@ -54,6 +55,7 @@ export class CampaignInfo {
   public channelMessages(channel: string): CampaignMsgServerDTO[] {
     return this.campaignMessages.filter(msg => msg.isForChannel(channel));
   }
+  
 }
 
 export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
@@ -67,6 +69,7 @@ export const getCampaignEntity = (cp: CampaignInfo): CampaignInfo => {
     moment(cp.campaignStartDate),
     moment(cp.campaignEndDate),
     cp.totalEngaged,
+    cp.totalSigned,
     cp.totalJoined,
     cp.creatingUserName,
     cp.creatingUserUid,

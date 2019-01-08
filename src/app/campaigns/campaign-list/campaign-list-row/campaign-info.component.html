@@ -34,7 +34,13 @@
           <span class="desc">{{ 'campaigns.row.joined' | translate }}</span>
         </div>
       </div>
-      <div class="row mt-3">
+      <div class="row mt-1">
+        <div class="col campaign-stats">
+          <span class="count">{{ campaign.totalSigned != null ? campaign.totalSigned : "0" }}</span>
+          <span class="desc">{{ 'campaigns.row.signed' | translate }}</span>
+        </div>
+      </div>
+      <div class="row mt-1">
         <div class="col campaign-stats">
           <span class="count">{{ campaign.totalEngaged  != null ? campaign.totalEngaged : "0" }}</span>
           <span class="desc">{{ 'campaigns.row.engaged' | translate }}</span>

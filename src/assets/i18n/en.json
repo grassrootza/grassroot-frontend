@@ -806,7 +806,8 @@
     "row": {
       "ends": "Ends:",
       "masterGroup": "Master Group: ",
-      "engaged": "engaged with this campaign",
+      "engaged": "dialed in",
+      "signed": "signed petition",
       "joined": "joined group",
       "viewCampaign": "View Campaign"
     }
@@ -890,7 +891,7 @@
     },
     "statistics": {
       "members": {
-        "title": "{{ total }} people have joined the campaign",
+        "title": "{{ total }} people have signed the petition, {{ opted }} have opted in to the group",
         "prior": "Prior members",
         "opted_out": "Opted out of joining",
         "joined": "Joined",
