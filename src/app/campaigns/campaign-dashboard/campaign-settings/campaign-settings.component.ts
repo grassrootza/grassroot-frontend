@@ -73,7 +73,7 @@ export class CampaignSettingsComponent implements OnInit {
     // this.setUpTopicSelector();
     this.route.parent.params.subscribe(params => {
       let campaignUid = params['id'];
-      this.campaignService.loadCampaign(campaignUid).subscribe(campaign => {
+      this.campaignService.loadCampaign(campaignUid, true).subscribe(campaign => {
         this.campaign = campaign;
         if (this.campaign.campaignImageKey) {
           this.campaignImageUrl = this.mediaService.getImageUrl(MediaFunction.CAMPAIGN_IMAGE, this.campaign.campaignImageKey);
@@ -95,6 +95,8 @@ export class CampaignSettingsComponent implements OnInit {
   }
 
   setUpForm() {
+    console.log('Campaign settings, campaign: ', this.campaign);
+
     this.campaignSettingsForm = this.fb.group({
       'name': [this.campaign.name, Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': [this.campaign.description, Validators.compose([Validators.required, Validators.minLength(10)])],
@@ -106,7 +108,7 @@ export class CampaignSettingsComponent implements OnInit {
       'masterGroup': [''],
       'smsShare': [{value: this.campaign.outboundSmsEnabled.toString(), disabled: true}],
       'smsLimit': [this.campaign.outboundSmsLimit, smsLimitAboveZero],
-      'amandlaUrl': ['', optionalUrlValidator],
+      'amandlaUrl': [this.campaign.petitionUrl, optionalUrlValidator],
       'landingPage': [this.landingPageType()],
       'landingUrl': [this.campaign.campaignUrl, hasValidLandingUrlIfNeeded]
     }, { validate: 'onBlur' });

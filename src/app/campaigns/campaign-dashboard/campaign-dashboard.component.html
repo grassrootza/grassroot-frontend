@@ -29,7 +29,7 @@
               <div class="campaign-info">
                 {{ 'campaign.dashboard.typeLabel' | translate }}{{ 'campaign.types.' + campaign.campaignType | translate }}
               </div>
-              <div class="campaign-info">
+              <div class="campaign-info" *ngIf="campaign.masterGroupUid">
                 {{ 'campaign.dashboard.groupLabel' | translate }}
                 <a [routerLink]="['/group', campaign.masterGroupUid]" class="grassroot-link">// {{ campaign.masterGroupName }}</a>
               </div>
