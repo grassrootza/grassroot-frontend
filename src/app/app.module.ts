@@ -3,7 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
-import {ANIMATION_TYPES, LoadingModule} from 'ngx-loading';
+import {ngxLoadingAnimationTypes, NgxLoadingModule} from 'ngx-loading';
 import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {UserService} from './user/user.service';
 import {AlertService} from './utils/alert-service/alert.service';
@@ -72,8 +72,8 @@ import { BannerComponent } from './landing/banner/banner.component';
   imports: [
     BrowserModule,
     HttpClientModule,
-    LoadingModule.forRoot({
-      animationType: ANIMATION_TYPES.circleSwish, backdropBackgroundColour: 'rgba(0,0,0,0.2)',
+    NgxLoadingModule.forRoot({
+      animationType: ngxLoadingAnimationTypes.circleSwish, backdropBackgroundColour: 'rgba(0,0,0,0.2)',
       backdropBorderRadius: '4px', primaryColour: '#26A041', secondaryColour: '#2CBC4C'}
     ),
     RouterModule,

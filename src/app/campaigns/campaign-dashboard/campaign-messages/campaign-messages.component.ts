@@ -96,7 +96,7 @@ export class CampaignMessagesComponent implements OnInit {
 
       this.maxMsgLength = this.channel == 'WHATSAPP' ? 320 : 130;
 
-      this.campaignService.loadCampaign(this.campaignUid).subscribe(campaign => {
+      this.campaignService.loadCampaign(this.campaignUid, true).subscribe(campaign => {
         this.campaign = campaign;
         this.setupDefaultLanguage();
         this.setUpMessages();

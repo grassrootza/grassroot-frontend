@@ -1,4 +1,4 @@
-import {isValidNumber} from "libphonenumber-js";
+import {isValidNumber, parsePhoneNumberFromString} from "libphonenumber-js";
 import {AbstractControl, FormGroup, Validators} from "@angular/forms";
 
 export const optionalPhoneValidator = (control: AbstractControl) => {
@@ -7,9 +7,16 @@ export const optionalPhoneValidator = (control: AbstractControl) => {
   if (!inputStr) {
     return null;
   }
+  
+  if (inputStr.length < 10) {
+    return { validZaPhone: true };
+  }
 
-  if (inputStr.length < 10 || !isValidNumber({ phone: inputStr, country: 'ZA' })) {
-    return { validZaPhone: true }
+  const parsedNumber = parsePhoneNumberFromString(inputStr, 'ZA');
+  console.log('Parsed number: ', parsedNumber);
+  if (inputStr.length < 10 || !parsedNumber || !parsedNumber.isValid()) {
+    // console.log('Invalid number!');
+    return { validZaPhone: true };    
   }
 
   return null;
@@ -44,6 +51,7 @@ export const eitherEmailOrPhoneValid = (control: AbstractControl) => {
     return null;
   }
 
+  // console.log('Checking phone or email, NaN test: ', isNaN(inputStr));
   if (!isNaN(inputStr)) {
     return optionalPhoneValidator(control);
   } else {

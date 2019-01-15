@@ -49,7 +49,7 @@ export class CarouselComponent implements OnChanges {
     const change = changes['items'];
     if (change) {
       let items = change.currentValue as PublicLivewire[];
-      console.log('LiveWire items: ', items);
+      // console.log('LiveWire items: ', items);
       this.currentItems = items.slice(0, 2);
       this.currentItemIdx = 0;
       if (isPlatformBrowser(this.platformId) &&

@@ -30,6 +30,7 @@ export class CampaignDashboardComponent implements OnInit {
     this.router.events.subscribe(ev => {
       if (ev instanceof NavigationEnd) {
         if (this.campaign != null) {
+          console.log('Campaign: ', this.campaign);
           let uri = ev.urlAfterRedirects;
           // console.log('current uri: ', uri);
           this.currentTab = uri.substring(uri.lastIndexOf("/") + 1);

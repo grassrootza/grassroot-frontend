@@ -97,5 +97,5 @@ export const getCampaignMsg = (cm: CampaignMsgServerDTO): CampaignMsgServerDTO =
 export interface CampaignUpdateParams {
   name?: string, description?: string, mediaFileUid?: string, removeImage?: boolean, campaignType?: string,
   endDateMillis?: number, newCode?: string, textWord?: string, newMasterGroupUid?: string, joinTopics?: string[],
-  landingUrl?: string, petitionApi?: string
+  landingUrl?: string, amandlaUrl?: string
 }

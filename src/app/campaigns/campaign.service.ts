@@ -108,10 +108,9 @@ export class CampaignService {
     return getCampaignEntity(result);
   }
 
-  loadCampaign(campaignUid: string): Observable<CampaignInfo> {
+  loadCampaign(campaignUid: string, fullRequired: boolean = false): Observable<CampaignInfo> {
     // should probably chain these better, but will clean up later
-    let index = this._campaigns.findIndex(c => c.campaignUid == campaignUid);
-    if (this._campaigns && this._campaigns.find(c => c.campaignUid == campaignUid)) {
+    if (!fullRequired && this._campaigns && this._campaigns.find(c => c.campaignUid == campaignUid)) {
       return this.campaignInfoList.pipe(map(campaigns => campaigns.find(c => c.campaignUid == campaignUid)));
     } else {
       let fullUrl = this.campaignFetchUrl + "/" + campaignUid;
@@ -219,8 +218,8 @@ export class CampaignService {
     if (updateParams.landingUrl)
       params = params.set("landingUrl", updateParams.landingUrl);
 
-    if (updateParams.petitionApi)
-      params = params.set("petitionApi", updateParams.petitionApi);
+    if (updateParams.amandlaUrl)
+      params = params.set("petitionApi", updateParams.amandlaUrl);
 
     if (updateParams.removeImage)
       params = params.set("removeImage", updateParams.removeImage.toString());
