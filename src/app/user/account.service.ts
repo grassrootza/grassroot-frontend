@@ -41,6 +41,8 @@ export class AccountService {
 
   private downloadActivityUrl = environment.backendAppUrl + '/api/account/fetch/group/download';
 
+  private downloadAllBillingDataUrl = environment.backendAppUrl + "/api/account/fetch/campaign/billing/download";
+
   constructor(private httpClient: HttpClient) {
   }
 
@@ -194,5 +196,14 @@ export class AccountService {
   downloadActivity(accountUid: string) {
     const params = new HttpParams().set('accountUid', accountUid);
     return this.httpClient.get(this.downloadActivityUrl, { params: params, responseType: 'blob' });
+  }
+
+  downloadAllBillingData(accountUid:string,dateFromMillis:number,dateToMillis:number) {
+    let params = new HttpParams()
+      .set("startDateMillis",dateFromMillis + "")
+      .set("endDateMillis",dateToMillis + "")
+      .set("accountUid",accountUid);
+    
+      return this.httpClient.get(this.downloadAllBillingDataUrl, { params: params, responseType: 'blob' });
   }
 }

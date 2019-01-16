@@ -126,6 +126,41 @@
                   <a class="grassroot-link" href="#" (click)="viewCampaign(campaign.campaignUid)">{{campaign.name}}</a><span *ngIf="!last">, </span><span *ngIf="last">. </span>
               </span>
             </p>
+            <div class="form-row">
+                <div class="col-md-2 col-sm-6"><label class="grassroot-label-em">From</label></div>
+                <div class="col-md-4 col-sm-6">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input class="form-control" placeholder="yyyy-mm-dd" id="billing-start-date"
+                      [formControl]="accountForm.controls['startDate']" name="sdp" ngbDatepicker #dpFrom="ngbDatepicker">
+                      <div class="input-group-append">
+                        <button class="btn calendar-button" (click)="dpFrom.toggle()" type="button">
+                          <i class="far fa-calendar"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2 pl-md-3 col-sm-6">
+                  <label class="grassroot-label-em">To</label>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="form-group">
+                      <div class="input-group">
+                        <input class="form-control" placeholder="yyyy-mm-dd" id="campaign-end-date"
+                               [formControl]="accountForm.controls['endDate']" name="edp" ngbDatepicker #dpTo="ngbDatepicker">
+                        <div class="input-group-append">
+                          <button class="btn calendar-button" (click)="dpTo.toggle()" type="button">
+                            <i class="far fa-calendar"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            <p>
+              <a href="#" class="grassroot-link" (click)="downloadAllBillingData()">Download</a> all billing data
+            </p>
           </div>
         </div>
 
@@ -252,3 +287,23 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="select-billing-dates-modal" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Select dates</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+  
+        <div class="modal-body">
+            
+        </div>
+  
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" (click)="createConfigVariable(configKey.value, configValue.value, desc.value)">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -101,6 +101,8 @@ export class GroupService {
 
   loadUsersWithLocationUrl = environment.backendAppUrl + "/api/group/fetch/members/location";
 
+  canUserCreateLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/admin/user/blocked";
+
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
   private groupInfoListError_: BehaviorSubject<any> = new BehaviorSubject(null);
@@ -791,6 +793,10 @@ export class GroupService {
   fetchKnownMunicipalitiesForGroup(groupUid:string): Observable<UserMunicipalities> {
     let params = new HttpParams().set('groupUid',groupUid);
     return this.httpClient.get<UserMunicipalities>(this.loadUsersWithLocationUrl,{params:params});
+  }
+
+  canUserCreateLiveWireAlert(): Observable<Boolean> {
+    return this.httpClient.get<Boolean>(this.canUserCreateLiveWireAlertUrl);
   }
 }
 
