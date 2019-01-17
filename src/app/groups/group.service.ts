@@ -101,7 +101,7 @@ export class GroupService {
 
   loadUsersWithLocationUrl = environment.backendAppUrl + "/api/group/fetch/members/location";
 
-  canUserCreateLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/admin/user/blocked";
+  canUserCreateLiveWireAlertUrl = environment.backendAppUrl + "/api/livewire/user/blocked";
 
   private groupInfoList_: BehaviorSubject<GroupInfo[]> = new BehaviorSubject(null);
   public groupInfoList: Observable<GroupInfo[]> = this.groupInfoList_.asObservable();
