@@ -313,14 +313,11 @@ export class AccountComponent implements OnInit {
     let startDateMills = epochMillisFromDate(this.accountForm.controls.startDate.value);
     let endDateMills = epochMillisFromDate(this.accountForm.controls.endDate.value);
 
-    console.log("start Date millis ........",startDateMills);
-    console.log("end Date millis ........",endDateMills);
-
     this.accountService.downloadAllBillingData(this.account.uid,startDateMills,endDateMills).subscribe(data =>{
       let blob = new Blob([data], { type: 'application/xls' });
       saveAs(blob, this.account.name + "-All Campaigns BillingData.xls")
     },error => {
-      console.log("Error download all billing data @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+      console.log("Error download all billing data");
     });
 
     return false;
