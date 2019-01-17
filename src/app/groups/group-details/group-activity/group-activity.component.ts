@@ -6,6 +6,7 @@ import {ActivatedRoute, Params, Router} from '@angular/router';
 import {TaskService} from '../../../task/task.service';
 import {Task} from '../../../task/task.model';
 import {TaskType} from '../../../task/task-type';
+import { AlertService } from 'app/utils/alert-service/alert.service';
 
 declare var $: any;
 
@@ -29,7 +30,9 @@ export class GroupActivityComponent implements OnInit {
   public taskToView: Task;
 
   constructor(private route: ActivatedRoute,
-              private taskService: TaskService) {
+              private taskService: TaskService,
+              private groupService: GroupService,
+              private alertService: AlertService) {
   }
 
   ngOnInit() {
@@ -110,7 +113,14 @@ export class GroupActivityComponent implements OnInit {
 
   showCreateLivewireAlertModal(){
     this.createTaskGroupUid = this.groupUid;
-    $("#create-livewire-alert-modal").modal("show");
+    this.groupService.canUserCreateLiveWireAlert().subscribe(canCreate => {
+      if(canCreate){
+        $("#create-livewire-alert-modal").modal("show");
+      }else{
+        this.alertService.alert("You have been blocked!");
+      }
+    })
+    
   }
 
   alertSaved(alertSavedEvent){

@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {GroupInfo} from "../model/group-info.model";
+import { GroupService } from '../group.service';
+import { AlertService } from 'app/utils/alert-service/alert.service';
 
 declare var $:any;
 
@@ -35,7 +37,8 @@ export class GroupInfoComponent implements OnInit {
   @Input()
   public extendedInfoVisible = false;
 
-  constructor() {
+  constructor(private groupService: GroupService,
+              private alertService: AlertService) {
   }
 
   ngOnInit() {
@@ -68,7 +71,16 @@ export class GroupInfoComponent implements OnInit {
   }
 
   triggerCreateLivewireAlert(){
-    this.onTriggerCreateLivewireAlert.emit(this.group);
+    this.groupService.canUserCreateLiveWireAlert().subscribe(canCreate => {
+      console.log("Can user create????????????????????????????????????",canCreate);
+      if(canCreate){
+        this.onTriggerCreateLivewireAlert.emit(this.group);
+      }else{
+        this.alertService.alert("You have been blocked!");
+      }
+    },error => {
+      console.log("Error checking if user can create alert or not", error);
+    });
   }
 
 }
