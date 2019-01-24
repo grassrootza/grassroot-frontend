@@ -11,6 +11,7 @@ import { DataSetCounts } from './dataset.count.model';
 
 import { saveAs } from 'file-saver';
 import { CampaignInfo } from 'app/campaigns/model/campaign-info';
+import { DateTimeUtils,epochMillisFromDate } from 'app/utils/DateTimeUtils';
 
 declare var $: any;
 
@@ -61,7 +62,9 @@ export class AccountComponent implements OnInit {
               private router: Router) {
     this.accountForm = this.formBuilder.group({
       name:['',Validators.required],
-      adminPhoneOrEmail: ['']
+      adminPhoneOrEmail: [''],
+      'startDate': [DateTimeUtils.nowAsDateStruct(), Validators.required],
+      'endDate': [DateTimeUtils.futureDateStruct(3, 0), Validators.required]
     });
   }
 
@@ -306,5 +309,17 @@ export class AccountComponent implements OnInit {
     return false;
   }
 
+  downloadAllBillingData(){
+    let startDateMills = epochMillisFromDate(this.accountForm.controls.startDate.value);
+    let endDateMills = epochMillisFromDate(this.accountForm.controls.endDate.value);
 
+    this.accountService.downloadAllBillingData(this.account.uid,startDateMills,endDateMills).subscribe(data =>{
+      let blob = new Blob([data], { type: 'application/xls' });
+      saveAs(blob, this.account.name + "-All Campaigns BillingData.xls")
+    },error => {
+      console.log("Error download all billing data");
+    });
+
+    return false;
+  }
 }
