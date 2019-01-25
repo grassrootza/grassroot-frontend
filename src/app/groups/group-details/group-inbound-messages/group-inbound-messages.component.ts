@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
 import {Group} from "../../model/group.model";
 import {ActivatedRoute, Params} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
@@ -7,6 +7,9 @@ import {GroupLogPage} from "../../model/group-log.model";
 import * as moment from 'moment-mini-ts';
 import {DateTimeUtils} from "../../../utils/DateTimeUtils";
 import { saveAs } from 'file-saver';
+import { MemberTopicsManageComponent } from '../group-members/member-topics-manage/member-topics-manage.component';
+
+declare var $: any;
 
 
 @Component({
@@ -32,9 +35,21 @@ export class GroupInboundMessagesComponent implements OnInit {
   private direction = "";
   private fieldToFilter = "";
 
+  public userToTagUids:string[] = [];
+
+  @Output() shouldReloadList: EventEmitter<boolean>;
+  @Output() toggleSelectAll: EventEmitter<boolean>;
+
+  @ViewChild('singleMemberTopicModal')
+  private memberTopicManage: MemberTopicsManageComponent;
+
   constructor(private route: ActivatedRoute,
               private groupService: GroupService,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder) { 
+
+    this.shouldReloadList = new EventEmitter<boolean>();
+    this.toggleSelectAll = new EventEmitter<boolean>();          
+  }
 
   ngOnInit() {
     this.route.parent.params.subscribe((params: Params) => {
@@ -114,6 +129,7 @@ export class GroupInboundMessagesComponent implements OnInit {
     this.filterInboundMessagesForm.get('dateFrom').setValue(this.dateFrom);
     this.filterInboundMessagesForm.get('dateTo').setValue(this.dateTo);
     this.filterInboundMessagesForm.get('keyword').setValue(this.keyword);
+    this.userToTagUids = [];
 
     this.goToPage(0);
 
@@ -142,5 +158,30 @@ export class GroupInboundMessagesComponent implements OnInit {
     this.goToPage(0);
   }
 
+
+  selectUserToTag(e:any,userUid:string){
+    e == true ? this.addTagUserUids(userUid) : this.removeUserToTagUid(userUid);
+  }
+
+  addTagUserUids(userUid:string){
+    this.userToTagUids.push(userUid);
+  }
+
+  removeUserToTagUid(userUid:string){
+    if(this.userToTagUids.indexOf(userUid) !== -1){
+      this.userToTagUids.splice(this.userToTagUids.indexOf(userUid),1);
+    }
+  }
+
+  tagSelectedUsers(){
+    let topics:string[] = [];
+    this.memberTopicManage.setupTopicSelect(topics);
+    $('#member-assign-topics').modal('show');
+  }
+
+  refreshGroupAndList() {
+    this.groupService.loadGroupDetailsFromServer(this.group.groupUid).subscribe(group => this.group = group);
+    this.shouldReloadList.emit();
+  }
 
 }
