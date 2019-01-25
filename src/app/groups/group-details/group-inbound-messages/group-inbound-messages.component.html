@@ -74,7 +74,7 @@
 
       <div class="container group-info-header d-none d-md-block">
         <div class="row">
-          <div class="col-9" (click)="orderData('targetUser')"> {{'group.inboundMessages.from' | translate}}
+          <div class="col-7" (click)="orderData('targetUser')"> {{'group.inboundMessages.from' | translate}}
             <span *ngIf="showFromFilter == 0">
               <i class="fas fa-sort"></i>
             </span>
@@ -96,13 +96,16 @@
                 <i class="fas fa-sort-up"></i>
             </span>
           </div>
+          <div class="col-2">
+            <button class="btn btn-secondary btn-sm" (click)="tagSelectedUsers()">Tag selected</button>
+          </div>
         </div>
       </div>
 
       <div *ngFor="let inboundMessage of currentPage.content">
         <div class="container group-info-row">
           <div class="row flex flex-wrap">
-            <div class="col-md-9">
+            <div class="col-md-7">
               <h4>
                 <i class="fas fa-mobile-alt"></i> {{inboundMessage.targetUser.displayName}} ({{inboundMessage.targetUser.phoneNumber}})
               </h4>
@@ -110,6 +113,11 @@
 
             <div class="col-md-3">
               {{inboundMessage.getFormattedEventTime()}}
+            </div>
+
+            <div class="col-md-2">
+              <input type="checkbox"
+                 (change)="selectUserToTag($event.target.checked,inboundMessage.targetUser.id)" />
             </div>
           </div>
           <div class="row">
@@ -121,7 +129,9 @@
       </div>
 
       <app-pagination [totalPages]="currentPage.totalPages" (onPageSelected)="goToPage($event)"></app-pagination>
-
+      
+      <app-member-topics-manage #singleMemberTopicModal *ngIf="group?.hasPermission('GROUP_PERMISSION_UPDATE_GROUP_DETAILS')"
+            [group]="group" [memberUids]="userToTagUids" (topicsAssigned)="refreshGroupAndList()"></app-member-topics-manage>
 
 
     </div>
