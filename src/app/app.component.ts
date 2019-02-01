@@ -104,9 +104,9 @@ export class AppComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId) && this.userService.isLoggedIn()) {
       $(".ntf-popup").hide();
       this.pullNotifications();
-      setInterval(() => {
-        this.pullNotifications()
-      }, 30000);
+      // setInterval(() => {
+      //   this.pullNotifications()
+      // }, 30000);
     }
 
     // subscribe to software updates and start a countdown to force a page refresh

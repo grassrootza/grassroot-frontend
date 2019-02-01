@@ -100,7 +100,7 @@ export class CampaignSettingsComponent implements OnInit {
     this.campaignSettingsForm = this.fb.group({
       'name': [this.campaign.name, Validators.compose([Validators.required, Validators.minLength(3)])],
       'description': [this.campaign.description, Validators.compose([Validators.required, Validators.minLength(10)])],
-      'code': [this.campaign.campaignCode, [], ValidateCodeNotTaken.createValidator(this.campaignService, this.campaign.campaignUid),
+      'newCode': [this.campaign.campaignCode, [], ValidateCodeNotTaken.createValidator(this.campaignService, this.campaign.campaignUid),
         Validators.minLength(3), Validators.maxLength(3), checkCodeIsNumber],
       'textWord': [this.campaign.textJoinWord, [], ValidateWordNotTaken.createValidator(this.campaignService, this.campaign.campaignUid)],
       'endDate': [{value: ngbDateFromMoment(this.campaign.campaignEndDate), disabled: true}, Validators.required],
@@ -204,7 +204,7 @@ export class CampaignSettingsComponent implements OnInit {
   updateCampaign() {
     let params: CampaignUpdateParams = {};
 
-    let textFields = ['name', 'code', 'textWord', 'description', 'amandlaUrl', 'landingUrl'];
+    let textFields = ['name', 'newCode', 'textWord', 'description', 'amandlaUrl', 'landingUrl'];
     textFields.filter(field => this.campaignSettingsForm.controls[field].dirty)
       .forEach(field => params[field] = this.campaignSettingsForm.controls[field].value);
 

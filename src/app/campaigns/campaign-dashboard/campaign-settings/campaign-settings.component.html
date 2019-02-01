@@ -19,20 +19,21 @@
           <div class="form-group col-md-3 col-sm-12">
             <label class="form-label grassroot-label-em" for="code">{{ 'campaign.settings.code' | translate }}</label>
             <input type = "text" class="form-control form-control-em" id="code" [disabled]="campaign?.isActive() || extendingCampaign"
-                   [formControl]="campaignSettingsForm.controls['code']"/>
+                   [formControl]="campaignSettingsForm.controls['newCode']"/>
             <div class="alert alert-danger alert-inline mt-1" role="alert"
-                 *ngIf="campaignSettingsForm.controls.code?.errors?.codeTaken">
+                 *ngIf="campaignSettingsForm.controls.newCode?.errors?.codeTaken">
               {{ 'campaign.create.errors.codeTaken' | translate }}
             </div>
             <div class="alert alert-danger alert-inline mt-1" role="alert"
-                 *ngIf="campaignSettingsForm.controls.code?.errors?.required && (campaignSettingsForm.controls.code?.touched || campaignSettingsForm.controls.code?.dirty)">
+                 *ngIf="campaignSettingsForm.controls.newCode?.errors?.required && (campaignSettingsForm.controls.newCode?.touched 
+                 || campaignSettingsForm.controls.newCode?.dirty)">
               {{ 'campaign.create.errors.fieldRequired' | translate }}</div>
             <div class="alert alert-danger alert-inline mt-1" role="alert"
-                 *ngIf="campaignSettingsForm.controls.code?.errors?.codeNumber">
+                 *ngIf="campaignSettingsForm.controls.newCode?.errors?.codeNumber">
               {{ 'campaign.create.errors.codeFormat' | translate }}</div>
             <div class="alert alert-danger alert-inline mt-1" role="alert"
-                 *ngIf="!campaignSettingsForm.controls.code?.errors?.codeNumber &&
-                   (campaignSettingsForm.controls.code?.errors?.minlength || campaignSettingsForm.controls.code?.errors?.maxlength)">
+                 *ngIf="!campaignSettingsForm.controls.newCode?.errors?.codeNumber &&
+                   (campaignSettingsForm.controls.newCode?.errors?.minlength || campaignSettingsForm.controls.newCode?.errors?.maxlength)">
               {{ 'campaign.create.errors.codeLength' | translate }}</div>
           </div>
           <div class="form-group col-md-3 col-sm-12">
