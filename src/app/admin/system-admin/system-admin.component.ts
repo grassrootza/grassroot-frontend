@@ -232,6 +232,7 @@ export class SystemAdminComponent implements OnInit {
       }
     },error => {
       console.log("Error adding member to group",error);
+      this.alertService.alert("Error adding member!");
     });
   }
 

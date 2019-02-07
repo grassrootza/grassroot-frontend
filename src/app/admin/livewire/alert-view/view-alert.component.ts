@@ -40,7 +40,6 @@ export class ViewAlertComponent implements OnInit {
               private liveWireAlertService:LiveWireAdminService,
               private mediaService:MediaService,
               private router:Router,
-              private integrationService:IntegrationsService,
               private userService:UserService,
               private alertService:AlertService) {
     this.router.routeReuseStrategy.shouldReuseRoute = function(){
@@ -266,7 +265,7 @@ export class ViewAlertComponent implements OnInit {
 
   shareAlertOnFacebook(alert:LiveWireAlert){
     let post = new FacebookPost(this.userService.getLoggedInUser().userUid,
-                                "",alert.description,this.linkUrl,this.linkName,alert.mediaFileUids[0],MediaFunction.LIVEWIRE_MEDIA,alert.mediaFileUids[0]);
+                                "",alert.description,this.linkUrl,this.linkName,alert.mediaFileKeys[0],MediaFunction.LIVEWIRE_MEDIA,alert.mediaFileKeys[0]);
     let posts:FacebookPost[] = [];
     posts.push(post);
     this.liveWireAlertService.postOnFB(post).subscribe(resp => {
@@ -277,7 +276,7 @@ export class ViewAlertComponent implements OnInit {
   }
 
   shareAlertOnTwitter(alert:LiveWireAlert){
-    let tweet = new TwitterPost(this.userService.getLoggedInUser().userUid,alert.description,MediaFunction.LIVEWIRE_MEDIA,alert.mediaFileUids[0]);
+    let tweet = new TwitterPost(this.userService.getLoggedInUser().userUid,alert.description,MediaFunction.LIVEWIRE_MEDIA,alert.mediaFileKeys[0]);
     this.liveWireAlertService.postOnTwitter(tweet).subscribe(resp => {
       console.log("Posted on twitter......",resp);
     },error => {

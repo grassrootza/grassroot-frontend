@@ -71,12 +71,11 @@ export class GroupInfoComponent implements OnInit {
   }
 
   triggerCreateLivewireAlert(){
-    this.groupService.canUserCreateLiveWireAlert().subscribe(canCreate => {
-      console.log("Can user create????????????????????????????????????",canCreate);
-      if(canCreate){
+    this.groupService.isUserBlockedFromLiveWire().subscribe(isBlocked => {
+      if (!isBlocked) {
         this.onTriggerCreateLivewireAlert.emit(this.group);
-      }else{
-        this.alertService.alert("You have been blocked!");
+      } else {
+        this.alertService.alert("Sorry, you have been blocked for issuing too many false alerts");
       }
     },error => {
       console.log("Error checking if user can create alert or not", error);

@@ -63,7 +63,7 @@ is cached by the service worker. -->
 				<div class="col-md-2" style="font-weight: bold;">Images or
 					videos</div>
 				<div class="col-md-10">
-					<div *ngIf="liveWireAlert.mediaFileUids.length == 0">
+					<div *ngIf="liveWireAlert.mediaFileKeys.length == 0">
 						<div class="row">None</div>
 					</div>
 					<div class="row">
@@ -74,11 +74,11 @@ is cached by the service worker. -->
 				</div>
 			</div>
 			<hr />
-			<div *ngIf="liveWireAlert.mediaFileUids.length > 0" class="row">
-				<div *ngFor="let imageKey of liveWireAlert.mediaFileUids; let i = index" class="col-md-3 col-sm-6 col">
+			<div *ngIf="liveWireAlert.mediaFileKeys.length > 0" class="row">
+				<div *ngFor="let imageKey of liveWireAlert.mediaFileKeys; let i = index" class="col-md-3 col-sm-6 col">
 					<div class="row">
 						<img (click)="openImage(imageKey)" class="alert-image" alt=""
-							src="{{loadImageUrl(liveWireAlert.mediaFileUids[i])}}" />
+							src="{{loadImageUrl(imageKey)}}" />
 					</div>
 					<div class="row" style="margin-top: 1%;">
 						<button class="btn btn-danger btn-sm" (click)="deleteImage(imageKey)"><i class="far fa-trash-alt"></i>

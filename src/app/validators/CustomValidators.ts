@@ -12,8 +12,13 @@ export const optionalPhoneValidator = (control: AbstractControl) => {
     return { validZaPhone: true };
   }
 
+  if (inputStr.startsWith('27')) { // latest version of libphonenumber has become dumber, so it needs this to validate properly
+    inputStr = "+" + inputStr;
+  }
+
   const parsedNumber = parsePhoneNumberFromString(inputStr, 'ZA');
-  console.log('Parsed number: ', parsedNumber);
+  // console.log('Parsed number: ', parsedNumber);
+  // console.log('Is parsed number valid? : ', parsedNumber.isValid());
   if (inputStr.length < 10 || !parsedNumber || !parsedNumber.isValid()) {
     // console.log('Invalid number!');
     return { validZaPhone: true };    

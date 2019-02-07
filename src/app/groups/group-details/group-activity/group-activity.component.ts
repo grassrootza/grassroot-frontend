@@ -113,10 +113,10 @@ export class GroupActivityComponent implements OnInit {
 
   showCreateLivewireAlertModal(){
     this.createTaskGroupUid = this.groupUid;
-    this.groupService.canUserCreateLiveWireAlert().subscribe(canCreate => {
-      if(canCreate){
+    this.groupService.isUserBlockedFromLiveWire().subscribe(isBlocked => {
+      if (!isBlocked) {
         $("#create-livewire-alert-modal").modal("show");
-      }else{
+      } else {
         this.alertService.alert("You have been blocked!");
       }
     })

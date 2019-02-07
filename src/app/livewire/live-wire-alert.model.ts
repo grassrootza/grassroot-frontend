@@ -26,7 +26,7 @@ export class LiveWireAlert {
               public longitude:number,
               public latitude:number,
               public destType:LiveWireAlertDestType,
-              public mediaFileUids:string[]){}
+              public mediaFileKeys:string[]){}
   
   public static createInstance(liveWireAlert:LiveWireAlert):LiveWireAlert{
     return new LiveWireAlert(liveWireAlert.serverUid,
@@ -51,7 +51,7 @@ export class LiveWireAlert {
                             liveWireAlert.longitude,
                             liveWireAlert.latitude,
                             liveWireAlert.destType,
-                            liveWireAlert.mediaFileUids);
+                            liveWireAlert.mediaFileKeys);
   }
 }
 

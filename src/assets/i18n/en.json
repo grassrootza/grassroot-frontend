@@ -124,7 +124,7 @@
     "logout": "Logout",
     "delete": "Delete account",
     "landing": {
-      "news": "NEWS",
+      "stories": "STORIES",
       "livewire": "LIVEWIRE",
       "about": "ABOUT",
       "contribute": "CONTRIBUTE",
@@ -134,7 +134,7 @@
   },
   "footer": {
     "aboutUs": "About Us",
-    "news": "News",
+    "stories": "Stories",
     "contribute": "Contribute",
     "contactUs": "Contact Us",
     "info": "contact@grassroot.org.za<br/>Call us: (+27) 87 094 1731",

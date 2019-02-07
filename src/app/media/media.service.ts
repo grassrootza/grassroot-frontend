@@ -35,7 +35,7 @@ export class MediaService {
   }
 
   getImageUrl(mediaFunction: MediaFunction, imageKey: string): string {
-    return this.fetchImageUrl + "/" + mediaFunction + "/" + imageKey;
+    return this.fetchImageUrl + "/" + mediaFunction + "?imageKey=" + imageKey;
   }
 
   public isValidImage(image, checkFileSize: boolean, fileMax?: number): string[] {
