@@ -107,24 +107,6 @@
 
           <div class="form-group row">
             <div class="col-sm-4 col-form-label text-md-right text-sm-left">
-              <label [translate]="'group.activity.meetingModal.image'"></label>
-            </div>
-            <div class="col-sm-8">
-              <a *ngIf="!imageKey" class="grassroot-link" href="javascript:void(0)" (click)="file.click()" [translate]="'action.upload'"></a>
-              <span *ngIf="imageName">{{ imageName }}</span>
-              <a *ngIf="imageKey" class="grassroot-link" href="javascript:void(0)" (click)="clearImage()"
-              >(<i class="far fa-trash-alt"></i>{{ 'action.remove' | translate | lowercase }})</a>
-              <p [translate]="'group.activity.meetingModal.image-note'"></p>
-            </div>
-            <input type="file" #file
-                   [multiple]="false"
-                   accept="image/*"
-                   (change) = "addVoteImage($event)"
-                   style="display:none" />
-          </div>
-
-          <div class="form-group row">
-            <div class="col-sm-4 col-form-label text-md-right text-sm-left">
               <label for="vote-description">{{ 'group.activity.voteModal.description-label' | translate }}</label>
             </div>
             <div class="col-sm-8">
@@ -146,20 +128,58 @@
             </div>
           </div>
 
-          <div class="form-group row" *ngIf="showMemberAssignment">
+          <div *ngIf="isGroupPaidFor && isMassVote" class="form-group row">
             <div class="col-sm-4 col-form-label text-md-right text-sm-left">
-              <label for="todo-confirming-members">{{ 'group.activity.meetingModal.assignedMembers' | translate }}</label>
-              <br/><a href="#" (click)="toggleAssignedMembers()" class="grassroot-link">// hide</a>
-            </div>
-            <div class="col-sm-8">
-              <select class="form-control" id="todo-confirming-members"
-                      [formControl]="createVoteForm.controls['assignedMemberUids']"
-                      name="name-select" multiple>
-                <option *ngFor="let member of membersList" [ngValue]="member.userUid">
-                  {{member.displayName}}
-                </option>
-              </select>
-            </div>
+                <label for="vote-special-form">Extra language prompts (optional)</label>
+              </div>
+              <div class="col-sm-8">
+                <ngb-tabset class="content-tabset" #t="ngbTabset">
+                  <ngb-tab *ngFor="let language of languages" [id]="'opening-' + language.threeDigitCode">
+                    <ng-template ngbTabTitle>
+                      {{ language.shortName }}
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                      <textarea class="form-control boxsizingBorder" rows="2" formControlName="opening-{{ language.threeDigitCode }}"></textarea>
+                    </ng-template>
+                  </ngb-tab>
+                </ngb-tabset>
+              </div>
+          </div>
+
+          <div *ngIf="isGroupPaidFor && isMassVote" class="form-group row">
+              <div class="col-sm-4 col-form-label text-md-right text-sm-left">
+                  <label for="vote-special-form">Post vote prompts (optional)</label>
+                </div>
+              <div class="col-sm-8">
+                <ngb-tabset class="content-tabset" (tabChange)="tabChange($event)" #t="ngbTabset">
+                  <ngb-tab *ngFor="let language of languages" [id]="'post-' + language.threeDigitCode">
+                    <ng-template ngbTabTitle>
+                      {{ language.shortName }}
+                    </ng-template>
+                    <ng-template ngbTabContent>
+                      <textarea class="form-control boxsizingBorder" rows="2" formControlName="post-{{ language.threeDigitCode }}"></textarea>
+                    </ng-template>
+                  </ngb-tab>
+                </ngb-tabset>
+              </div>
+          </div>
+
+          <div *ngIf="isGroupPaidFor && isMassVote" class="form-group row">
+              <div class="col-sm-4 col-form-label text-md-right text-sm-left">
+                  <label for="vote-special-form">Final tweaks</label>
+                </div>
+              <div class="col-sm-8">
+                  <label for="exclude-abstain">
+                      <input type="checkbox" class="form-check-input" id="exclude-abstain"
+                             formControlName="excludeAbstain">
+                      Leave out abstain
+                  </label>
+                  <label for="exclude-notifications">
+                      <input type="checkbox" class="form-check-input" id="exclude-notifications"
+                             formControlName="excludeNotifications">
+                      Leave out SMSs
+                  </label>
+              </div>
           </div>
 
         </form>

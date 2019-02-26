@@ -8,6 +8,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {MediaFunction} from "../media/media-function.enum";
 import {LocalStorageService, STORE_KEYS} from "../utils/local-storage.service";
 import { TaskPreview } from './task-preview.model';
+import { group } from '@angular/animations';
 
 @Injectable()
 export class TaskService {
@@ -167,6 +168,11 @@ export class TaskService {
       params = params.set('meetingImportance', meetingImportance);
 
     return this.httpClient.post<Task>(fullUrl, null, {params: params});
+  }
+
+  createVoteNew(groupUid: string, voteParams: any): Observable<Task> {
+    const fullUrl = this.groupCreateVoteUrl + '/GROUP/' + groupUid;
+    return this.httpClient.post<Task>(fullUrl, voteParams);
   }
 
   createVote(parentType: string, parentUid: string, title: string, voteOptions: string[], description: string, time: number, 

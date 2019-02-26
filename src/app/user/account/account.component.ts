@@ -64,7 +64,8 @@ export class AccountComponent implements OnInit {
       name:['',Validators.required],
       adminPhoneOrEmail: [''],
       'startDate': [DateTimeUtils.nowAsDateStruct(), Validators.required],
-      'endDate': [DateTimeUtils.futureDateStruct(3, 0), Validators.required]
+      'endDate': [DateTimeUtils.futureDateStruct(3, 0), Validators.required],
+      'spendingLimit': [100]
     });
   }
 
@@ -108,6 +109,8 @@ export class AccountComponent implements OnInit {
       if (account.geoDataSets) {
         this.fetchDataSetDetails(account.uid);
       }
+
+      this.accountForm.get('spendingLimit').setValue(account.spendingLimit / 100);
 
       this.fetchCampaigns(account.uid);
       this.fetchCandidateGroupsToAdd(account.uid);
@@ -321,5 +324,14 @@ export class AccountComponent implements OnInit {
     });
 
     return false;
+  }
+
+  updateAccountSpendingLimit() {
+    const limitInRand = this.accountForm.controls.spendingLimit.value;
+    const limitInCents = limitInRand * 100;
+    this.accountService.updateSpendingLimit(this.account.uid, limitInCents).subscribe(account => {
+      this.alertService.alert('Done! Spending limit updated');
+      this.account = account;
+    })
   }
 }

@@ -43,6 +43,8 @@ export class AccountService {
 
   private downloadAllBillingDataUrl = environment.backendAppUrl + "/api/account/fetch/campaign/billing/download";
 
+  private updateSpendingLimitUrl = environment.backendAppUrl + "/api/account/settings/spending/limit";
+
   constructor(private httpClient: HttpClient) {
   }
 
@@ -205,5 +207,10 @@ export class AccountService {
       .set("accountUid",accountUid);
     
       return this.httpClient.get(this.downloadAllBillingDataUrl, { params: params, responseType: 'blob' });
+  }
+
+  updateSpendingLimit(accountUid: string, newSpendingLimit: number): Observable<UserExtraAccount> { 
+    const params = new HttpParams().set('accountUid', accountUid).set('newSpendingLimit', '' + newSpendingLimit);
+    return this.httpClient.post(this.updateSpendingLimitUrl, null, {params: params}).pipe(map(getEntity));
   }
 }

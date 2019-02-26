@@ -166,7 +166,7 @@
 
         <hr *ngIf="accountCampaigns" />
 
-        <div class="form-row" *ngIf="account.enabled">
+        <div class="form-row">
           <div class="form-group col-12">
             <h4>Account administrators</h4>
             <p *ngIf="otherAdminUids && otherAdminUids.length > 0" class="small">
@@ -174,25 +174,47 @@
               <span *ngFor="let adminUid of otherAdminUids; let last = last">
                 {{account.otherAdmins[adminUid]}} (<a class="grassroot-link" href="#" (click)="removeAdminMember(adminUid)">remove</a>)<span *ngIf="!last">, </span><span *ngIf="last">.</span>
               </span> They can also add groups to it, and create broadcasts and campaigns (for groups where they are also organizers).
-              <label class="form-label">Add another admin (enter their mobile number or email):</label>
-            </p>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-12">
-            <p *ngIf="!otherAdminUids || otherAdminUids.length == 0" class="small">
-              You are the only administrator on this account. Add another account admin by entering their phone number or email:
             </p>
           </div>
         </div>
         <div class="form-row">
           <div class="col-lg-9 col-md-12">
+            <label class="form-label">Add another admin (enter their mobile number or email):</label>
             <input type="text" class="form-control" formControlName="adminPhoneOrEmail" />
           </div>
           <div class="col-lg-3 col-md-12 text-lg-right text-md-center">
             <button type="button" class="btn btn-primary save-button float-right" (click)="addAdminMember()">Add</button>
           </div>
         </div>
+
+        <hr />
+        <div class="form-row">
+            <div class="col-12">
+              <h4>Monthly spending limit</h4>
+              <p class="small">
+                You can set a limit for monthly spending on the account. When the account reaches 80% of the limit, administrators will receive 
+                a warning email. When the account crosses the limit, all groups on it will revert to free limits, welcome and sharing SMSs will
+                be turned off across campaigns, and broadcast SMSs will be halted. Campaign responses on USSD will continue to run.
+              </p>
+            </div>
+            <div class="form-row">
+              <div class="col-lg-12 col-md-12">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">R</span>
+                  </div>
+                  <input type="number" class="form-control form-control-em" aria-label="Amount (to the nearest rand)" formControlName="spendingLimit">
+                  <div class="input-group-append">
+                    <button type="button" class="btn btn-secondary-outline" (click)="updateAccountSpendingLimit()">Update</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <p>So far this month you have spent R{{ account.totalSpentThisMonth }}.</p>
+            </div>
+        </div>
+
         </ng-container>
 
         <div class="form-row mt-md-3">

@@ -14,6 +14,8 @@ export class UserExtraAccount {
         public otherAccounts: any,
         public lastBillingDateMillis: number,
         public geoDataSets: string[],
+        public totalSpentThisMonth: number,
+        public spendingLimit: number,
         public notificationsSinceLastBill?: number,
         public chargedUssdSinceLastBill?: number) { }
 
@@ -35,7 +37,9 @@ export const getEntity = (account: UserExtraAccount): UserExtraAccount => {
         account.primary,
         account.otherAccounts,
         account.lastBillingDateMillis,
-        account.geoDataSets);
+        account.geoDataSets,
+        account.totalSpentThisMonth,
+        account.spendingLimit);
 
     if (account.notificationsSinceLastBill)
         acc.notificationsSinceLastBill = account.notificationsSinceLastBill;

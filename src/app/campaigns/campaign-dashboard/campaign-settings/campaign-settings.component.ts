@@ -108,7 +108,7 @@ export class CampaignSettingsComponent implements OnInit {
       'masterGroup': [''],
       'smsShare': [{value: this.campaign.outboundSmsEnabled.toString(), disabled: true}],
       'smsLimit': [this.campaign.outboundSmsLimit, smsLimitAboveZero],
-      'amandlaUrl': [this.campaign.petitionUrl, optionalUrlValidator],
+      'amandlaUrl': [this.campaign.petitionUrl],
       'landingPage': [this.landingPageType()],
       'landingUrl': [this.campaign.campaignUrl, hasValidLandingUrlIfNeeded]
     }, { validate: 'onBlur' });

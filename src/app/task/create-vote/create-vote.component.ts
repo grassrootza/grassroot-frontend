@@ -11,6 +11,7 @@ import {DateTimeUtils, isDateTimeFuture} from "../../utils/DateTimeUtils";
 import { TaskPreview } from '../task-preview.model';
 import { TaskType } from '../task-type';
 import { environment } from 'environments/environment';
+import { Language, MSG_LANGUAGES } from 'app/utils/language';
 
 declare var $: any;
 
@@ -44,6 +45,9 @@ export class CreateVoteComponent implements OnInit {
 
   public isGroupPaidFor = false;
   public canRandomize = false;
+  public isMassVote = false;
+
+  public languages = MSG_LANGUAGES;
 
   constructor(private taskService: TaskService,
               private formBuilder: FormBuilder,
@@ -79,8 +83,15 @@ export class CreateVoteComponent implements OnInit {
       'specialForm': ['ORDINARY'],
       'parentType': 'GROUP',
       'assignedMemberUids': [],
-      'randomize': ['']
+      'randomize': [''],
+      'excludeAbstain': false,
+      'excludeNotifications': false
     }, { validator: isDateTimeFuture("date", "time") });
+
+    this.createVoteForm.controls['specialForm'].valueChanges.subscribe(value => {
+      this.isMassVote = value == 'MASS_VOTE';
+      if (this.isMassVote) this.initMassVoteOptions();
+    })
 
   }
 
@@ -104,7 +115,7 @@ export class CreateVoteComponent implements OnInit {
     this.groupService.fetchGroupMembers(this.groupUid, 0, 100000, []).subscribe(members => {
       this.membersList = members.content;
       this.showMemberAssignment = true;
-      console.log('member list: ', this.membersList);
+      // console.log('member list: ', this.membersList);
       this.setAssignedMembers();
     });
   }
@@ -176,6 +187,35 @@ export class CreateVoteComponent implements OnInit {
     }
   }
 
+  initMassVoteOptions() {
+    if (!this.createVoteForm.get('opening-eng')) {
+      console.log('No language prompt controls present, adding them');
+      this.initLanguagePrompts('opening-');
+    }
+
+    if (!this.createVoteForm.get('post-eng')) {
+      console.log('No post-vote prompt controls present, adding them');
+      this.initLanguagePrompts('post-');
+    }
+
+    console.log('English control : ', this.createVoteForm.get('prompt-eng'));
+  }
+
+  initLanguagePrompts(prefix: string) {
+    this.languages.forEach(language => {
+      this.createVoteForm.addControl(prefix + language.threeDigitCode, this.formBuilder.control(''));
+    });
+  }
+
+  extractLanguagePrompts(prefix: string) {
+    let prompts = {};
+    this.languages.filter(lang => !!this.createVoteForm.get(prefix + lang.threeDigitCode).value)
+      .forEach(language => {
+        prompts[language.twoDigitCode] = this.createVoteForm.get(prefix + language.threeDigitCode).value;
+      });
+    return prompts;
+  }
+
   next() {
     if (this.createVoteForm.valid) {
       if (this.confirmingSend) {
@@ -245,31 +285,44 @@ export class CreateVoteComponent implements OnInit {
 
   createVote() {
 
-    let parentType: string = this.createVoteForm.get("parentType").value;
-    let title: string = this.createVoteForm.get("title").value;
+    let params = {};
+
+    params['title'] = this.createVoteForm.get("title").value;
+    params['time'] =  DateTimeUtils.momentFromNgbStruct(this.createVoteForm.get('date').value, 
+      this.createVoteForm.get('time').value).valueOf();
+
 
     let voteOptions: string[] = [];
     let randomize = false;
     
-    if( this.createVoteForm.get("voteOptions") != null){
+    if (this.createVoteForm.get("voteOptions") != null) {
       let voteOptionsObjects = this.createVoteForm.get("voteOptions").value;
       if(voteOptionsObjects.length > 0){
         for(let i = 0; i < voteOptionsObjects.length; i++){
           voteOptions.push(voteOptionsObjects[i].option)
         }
       }
-      randomize = this.createVoteForm.get('randomize').value;
+      params['voteOptions'] = voteOptions;
+      params['randomize'] = this.createVoteForm.get('randomize').value;
     }
 
     console.log('randomize: ', randomize);
 
-    let description: string = this.createVoteForm.get("description").value;
-    let voteMilis: number = this.extractVoteDeadlineMillis();
+    params['description'] = this.createVoteForm.get("description").value;
+    params['voteMilis'] = this.extractVoteDeadlineMillis();
 
-    let specialForm = this.isGroupPaidFor ? this.createVoteForm.get('specialForm').value : 'ORDINARY';
+    params['specialForm'] = this.isGroupPaidFor ? this.createVoteForm.get('specialForm').value : 'ORDINARY';
+    
+    if (this.isMassVote) {
+      console.log('Mass vote, setting boolean flags');
+      params['sendNotifications'] = !this.createVoteForm.get('excludeNotifications').value;
+      params['excludeAbstain'] = this.createVoteForm.get('excludeAbstain').value;
+      params['multiLanguagePrompts'] = this.extractLanguagePrompts('opening-');
+      params['postVotePrompts'] = this.extractLanguagePrompts('post-');
+      console.log('Setting params as: ', params);
+    }
 
-    this.taskService.createVote(parentType, this.groupUid, title, voteOptions, description, voteMilis, this.imageKey, 
-      this.assignedMemberUids, specialForm, randomize).subscribe(task => {
+    this.taskService.createVoteNew(this.groupUid, params).subscribe(task => {
           console.log("Vote successfully created, groupUid: " + this.groupUid + ", taskUid: " + task.taskUid);
           this.yesNoVote = true;
           this.shouldValidateVoteOptions();

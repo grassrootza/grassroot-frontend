@@ -94,4 +94,10 @@ export class ViewVoteComponent implements OnInit, OnChanges {
       console.log("error getting the file: ", error);
     });
   }
+
+  closeVote() {
+    this.taskService.changeTaskTime(this.voteToView.taskUid, TaskType.VOTE, (new Date).getTime()).subscribe(data => {
+      this.voteToView = data;
+    })
+  }
 }
