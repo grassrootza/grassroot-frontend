@@ -329,6 +329,7 @@ export class CreateVoteComponent implements OnInit {
           this.initCreateVoteForm();
           this.confirmingSend = false;
           this.voteSaved.emit(true);
+          console.log("Completed internally after vote creation");
         },
         error => {
           console.log("Error creating task: ", error);

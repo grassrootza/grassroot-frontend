@@ -151,7 +151,7 @@
                   <label for="vote-special-form">Post vote prompts (optional)</label>
                 </div>
               <div class="col-sm-8">
-                <ngb-tabset class="content-tabset" (tabChange)="tabChange($event)" #t="ngbTabset">
+                <ngb-tabset class="content-tabset" #t="ngbTabset">
                   <ngb-tab *ngFor="let language of languages" [id]="'post-' + language.threeDigitCode">
                     <ng-template ngbTabTitle>
                       {{ language.shortName }}
