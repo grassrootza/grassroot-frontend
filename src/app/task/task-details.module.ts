@@ -7,10 +7,12 @@ import {TodoDetailsComponent} from "./todo-details/todo-details.component";
 import {LoggedInServicesModule} from "../logged-in-services.module";
 import {SharedModule} from "../shared.module";
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EditVoteComponent } from './edit-vote/edit-vote.component';
 
 export const TASK_DETAILS_ROUTES: Routes = [
   {path:'meeting/:id', component: MeetingDetailsComponent,canActivate:[LoggedInGuard]},
-  {path:'todo/:id', component: TodoDetailsComponent, canActivate:[LoggedInGuard]}
+  {path:'todo/:id', component: TodoDetailsComponent, canActivate:[LoggedInGuard]},
+  {path:'vote/:id', component: EditVoteComponent, canActivate:[LoggedInGuard]}
 ];
 
 @NgModule({
@@ -23,7 +25,8 @@ export const TASK_DETAILS_ROUTES: Routes = [
   ],
   declarations: [
     MeetingDetailsComponent,
-    TodoDetailsComponent
+    TodoDetailsComponent,
+    EditVoteComponent
   ]
 })
 export class TaskDetailsModule { }

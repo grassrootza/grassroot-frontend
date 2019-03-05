@@ -164,16 +164,38 @@
               </div>
           </div>
 
+          <div *ngIf="isGroupPaidFor && isMassVote && !yesNoVote" class="form-group row">
+            <div class="col-sm-4 col-form-label text-md-right text-sm-left">
+                <label for="vote-special-form">Multi-language options (optional) <b>Note:</b> all options must be in the same order and separated by a new line (enter)</label>
+              </div>
+            <div class="col-sm-8">
+              <ngb-tabset class="content-tabset" #t="ngbTabset">
+                <ngb-tab *ngFor="let language of languages" [id]="'post-' + language.threeDigitCode">
+                  <ng-template ngbTabTitle>
+                    {{ language.shortName }}
+                  </ng-template>
+                  <ng-template ngbTabContent>
+                    <textarea class="form-control boxsizingBorder" rows="2" formControlName="langoptions-{{ language.threeDigitCode }}"></textarea>
+                  </ng-template>
+                </ngb-tab>
+              </ngb-tabset>
+            </div>
+          </div>
+
+          
+
           <div *ngIf="isGroupPaidFor && isMassVote" class="form-group row">
               <div class="col-sm-4 col-form-label text-md-right text-sm-left">
-                  <label for="vote-special-form">Final tweaks</label>
+                  <label for="vote-special-form">Final options</label>
                 </div>
-              <div class="col-sm-8">
+              <div class="col-sm-4">
                   <label for="exclude-abstain">
                       <input type="checkbox" class="form-check-input" id="exclude-abstain"
                              formControlName="excludeAbstain">
                       Leave out abstain
                   </label>
+              </div>
+              <div class="col-sm-4">
                   <label for="exclude-notifications">
                       <input type="checkbox" class="form-check-input" id="exclude-notifications"
                              formControlName="excludeNotifications">

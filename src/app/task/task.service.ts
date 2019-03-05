@@ -48,6 +48,9 @@ export class TaskService {
   private cancelTaskUrl = environment.backendAppUrl + "/api/task/modify/cancel";
   private changeTaskDateUrl = environment.backendAppUrl + "/api/task/modify/change/date";
 
+  private fetchVoteSpecialDetailsUrl = environment.backendAppUrl + "/api/task/modify/vote/details";
+  private clearPostVotePromptsUrl = environment.backendAppUrl + "/api/task/modify/vote/details/postvote/clear";
+
   private downloadErrorReportUrl = environment.backendAppUrl + "/api/task/fetch/error-report";
 
   constructor(private httpClient: HttpClient, private localStorageService: LocalStorageService) {
@@ -326,5 +329,24 @@ export class TaskService {
     return this.httpClient.get(fullUrl, { responseType: 'blob' });
   }
 
+  fetchVoteSpecialDetails(voteUid: string) {
+    const fullUrl = this.fetchVoteSpecialDetailsUrl + '/' + voteUid;
+    return this.httpClient.get(fullUrl);
+  }
+
+  updateVoteDetails(voteUid: string, updatedOpeningPrompts?: any, updatedPostVotePrompts?: any): Observable<Task> {
+    const fullUrl = this.fetchVoteSpecialDetailsUrl + '/' + voteUid;
+    let updateRequest = {};
+    if (!!updatedOpeningPrompts)
+      updateRequest['multiLanguagePrompts'] = updatedOpeningPrompts;
+    if (!!updatedPostVotePrompts)
+      updateRequest['postVotePrompts'] = updatedPostVotePrompts;
+    return this.httpClient.post<Task>(fullUrl, updateRequest); 
+  }
+
+  clearPostVotePrompts(voteUid: string) {
+    const fullUrl = this.clearPostVotePromptsUrl + '/' + voteUid;
+    return this.httpClient.post(fullUrl, null);
+  }
 
 }

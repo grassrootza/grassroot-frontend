@@ -1,13 +1,13 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { saveAs } from 'file-saver';
 import {Task} from "../task.model";
-import {UserService} from "../../user/user.service";
 import {TaskService} from "../task.service";
 import {ItemPercentage} from "../../groups/group-details/group-dashboard/member-detail-percent.model";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {MediaFunction} from "../../media/media-function.enum";
 import {TaskType} from "../task-type";
 import {MediaService} from "../../media/media.service";
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -30,10 +30,10 @@ export class ViewVoteComponent implements OnInit, OnChanges {
   public imageUrl;
   public imageLoading = false;
 
-  constructor(private userService:UserService,
-              private alertService:AlertService,
+  constructor(private alertService:AlertService,
               private taskService:TaskService,
-              private mediaService: MediaService) { }
+              private mediaService: MediaService,
+              private router: Router) { }
 
   ngOnInit() { }
 
@@ -100,4 +100,11 @@ export class ViewVoteComponent implements OnInit, OnChanges {
       this.voteToView = data;
     })
   }
+
+  editVote() {
+    $("#view-vote-modal").modal("hide");
+    this.router.navigate(['/task', 'vote', this.voteToView.taskUid]);
+    return false;
+  }
+
 }

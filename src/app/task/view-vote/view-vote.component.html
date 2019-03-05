@@ -99,6 +99,8 @@
 
       <div class="modal-footer">
         <button *ngIf="voteToView?.canEdit" type="button" class="btn btn-secondary hover-primary footer-button float-left"
+          (click)="editVote()">Edit vote</button>
+        <button *ngIf="voteToView?.canEdit" type="button" class="btn btn-secondary hover-primary footer-button float-left"
           (click)="closeVote()">Close vote</button>
         <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
           {{ 'action.close' | translate }}

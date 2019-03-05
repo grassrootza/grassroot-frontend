@@ -198,7 +198,12 @@ export class CreateVoteComponent implements OnInit {
       this.initLanguagePrompts('post-');
     }
 
-    console.log('English control : ', this.createVoteForm.get('prompt-eng'));
+    if (!this.createVoteForm.get('langoptions-en')) {
+      console.log('No multi-language options controls present, adding them');
+      this.initLanguagePrompts('langoptions-');
+    }
+
+    // console.log('English control : ', this.createVoteForm.get('prompt-eng'));
   }
 
   initLanguagePrompts(prefix: string) {
@@ -209,11 +214,24 @@ export class CreateVoteComponent implements OnInit {
 
   extractLanguagePrompts(prefix: string) {
     let prompts = {};
-    this.languages.filter(lang => !!this.createVoteForm.get(prefix + lang.threeDigitCode).value)
+    this.languages
+      .filter(lang => !!this.createVoteForm.get(prefix + lang.threeDigitCode) && !!this.createVoteForm.get(prefix + lang.threeDigitCode).value)
       .forEach(language => {
         prompts[language.twoDigitCode] = this.createVoteForm.get(prefix + language.threeDigitCode).value;
       });
     return prompts;
+  }
+
+  extractMultiLanguageOptions() {
+    let optionsMap = {};
+    const rawTexts = this.extractLanguagePrompts('langoptions-');
+    Object.keys(rawTexts).forEach(lang => {
+      const splitList = rawTexts[lang].split(/\r?\n/);
+      console.log('Split list: ', splitList);
+      optionsMap[lang] = splitList;
+    });
+    console.log('Assembled options map: ', optionsMap);
+    return optionsMap;
   }
 
   next() {
@@ -303,7 +321,7 @@ export class CreateVoteComponent implements OnInit {
         }
       }
       params['voteOptions'] = voteOptions;
-      params['randomize'] = this.createVoteForm.get('randomize').value;
+      params['randomizeOptions'] = this.createVoteForm.get('randomize').value;
     }
 
     console.log('randomize: ', randomize);
@@ -319,6 +337,7 @@ export class CreateVoteComponent implements OnInit {
       params['excludeAbstain'] = this.createVoteForm.get('excludeAbstain').value;
       params['multiLanguagePrompts'] = this.extractLanguagePrompts('opening-');
       params['postVotePrompts'] = this.extractLanguagePrompts('post-');
+      params['multiLanguageOptions'] = this.extractMultiLanguageOptions();
       console.log('Setting params as: ', params);
     }
 
