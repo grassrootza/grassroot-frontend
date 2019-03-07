@@ -34,3 +34,10 @@
 .download-error-report:hover{
   cursor: pointer;
 }
+
+.responses-title {
+  color: #4A4A4A;
+  font-weight: 500;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}

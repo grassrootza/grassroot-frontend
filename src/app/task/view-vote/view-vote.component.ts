@@ -30,6 +30,8 @@ export class ViewVoteComponent implements OnInit, OnChanges {
   public imageUrl;
   public imageLoading = false;
 
+  public refreshing = false;
+
   constructor(private alertService:AlertService,
               private taskService:TaskService,
               private mediaService: MediaService,
@@ -48,6 +50,16 @@ export class ViewVoteComponent implements OnInit, OnChanges {
         console.log("error fetching task: ", error);
       });
     }
+  }
+
+  refreshResults() {
+    this.refreshing = true;
+    this.taskService.loadTask(this.voteToView.taskUid, TaskType.VOTE).subscribe(result => {
+      this.voteToView = result;
+      this.setupResults();
+      this.refreshing = false;
+    })
+    return false;
   }
 
   setupResults() {

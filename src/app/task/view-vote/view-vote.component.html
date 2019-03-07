@@ -67,32 +67,34 @@
         <div class="col-sm-12">
           <div class="card-header responses-header">
             <div class="row">
-              <div class="col-sm-3">
-                <span class="responses-title">Vote results</span>
+              <div class="col-sm-4">
+                <p class="responses-title">Vote results (<a *ngIf="!refreshing" class="grassroot-link" href="#" (click)="refreshResults()">refresh</a><span *ngIf="refreshing">refreshing&hellip;</span>)</p>
               </div>
-              <div class="col-sm-7"></div>
+              <div class="col-sm-6"></div>
               <div class="col-sm-2 text-right">
                 <i class="fas fa-users"></i> {{ totalMembers }}</div>
             </div>
           </div>
           <div class="card-body">
-            <div class="row" *ngFor="let option of results">
-              <div class="col-sm-3">
-                {{ option.name }}
-              </div>
-              <div class="col-sm-7">
-                <div class="progress">
-                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
-                       [style.width]="option.percent + '%'"
-                       [attr.aria-valuenow]="option.percent" aria-valuemin="0" aria-valuemax="100">
-                    {{ option.percent}}%
+            <ng-container *ngIf="!refreshing">
+              <div class="row" *ngFor="let option of results">
+                <div class="col-sm-3">
+                  {{ option.name }}
+                </div>
+                <div class="col-sm-7">
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
+                        [style.width]="option.percent + '%'"
+                        [attr.aria-valuenow]="option.percent" aria-valuemin="0" aria-valuemax="100">
+                      {{ option.percent}}%
+                    </div>
                   </div>
                 </div>
+                <div class="col-sm-2 text-right">
+                  {{ option.rawCount }}
+                </div>
               </div>
-              <div class="col-sm-2 text-right">
-                {{ option.rawCount }}
-              </div>
-            </div>
+            </ng-container>
           </div>
         </div>
       </div>
