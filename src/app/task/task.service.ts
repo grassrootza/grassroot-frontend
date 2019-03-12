@@ -334,13 +334,8 @@ export class TaskService {
     return this.httpClient.get(fullUrl);
   }
 
-  updateVoteDetails(voteUid: string, updatedOpeningPrompts?: any, updatedPostVotePrompts?: any): Observable<Task> {
+  updateVoteDetails(voteUid: string, updateRequest: any): Observable<Task> {
     const fullUrl = this.fetchVoteSpecialDetailsUrl + '/' + voteUid;
-    let updateRequest = {};
-    if (!!updatedOpeningPrompts)
-      updateRequest['multiLanguagePrompts'] = updatedOpeningPrompts;
-    if (!!updatedPostVotePrompts)
-      updateRequest['postVotePrompts'] = updatedPostVotePrompts;
     return this.httpClient.post<Task>(fullUrl, updateRequest); 
   }
 

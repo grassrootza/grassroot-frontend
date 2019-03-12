@@ -72,7 +72,7 @@
               </div>
               <div class="col-sm-6"></div>
               <div class="col-sm-2 text-right">
-                <i class="fas fa-users"></i> {{ totalMembers }}</div>
+                <i class="fas fa-users"></i> {{ totalVotes }}</div>
             </div>
           </div>
           <div class="card-body">
@@ -102,8 +102,8 @@
       <div class="modal-footer">
         <button *ngIf="voteToView?.canEdit" type="button" class="btn btn-secondary hover-primary footer-button float-left"
           (click)="editVote()">Edit vote</button>
-        <button *ngIf="voteToView?.canEdit" type="button" class="btn btn-secondary hover-primary footer-button float-left"
-          (click)="closeVote()">Close vote</button>
+        <button *ngIf="voteToView?.canEdit && voteToView?.isActive" type="button" class="btn btn-secondary hover-primary footer-button float-left"
+          (click)="closeVote()">End vote</button>
         <button type="button" class="btn btn-secondary cancel-button" data-dismiss="modal">
           {{ 'action.close' | translate }}
         </button>

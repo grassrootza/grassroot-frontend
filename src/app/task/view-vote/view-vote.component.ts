@@ -24,6 +24,8 @@ export class ViewVoteComponent implements OnInit, OnChanges {
   public response:string = "";
 
   public totalMembers: number;
+  public totalVotes: number;
+
   public options: string[];
   public results: ItemPercentage[] = [];
 
@@ -66,10 +68,10 @@ export class ViewVoteComponent implements OnInit, OnChanges {
     this.totalMembers = this.voteToView.voteResults['TOTAL_VOTE_MEMBERS'];
 
     this.options = Object.keys(this.voteToView.voteResults).filter(key => key != 'TOTAL_VOTE_MEMBERS');
-    let totalVotes = this.options.map(key => this.voteToView.voteResults[key]).reduce((total, num) => total + num);
+    this.totalVotes = this.options.map(key => this.voteToView.voteResults[key]).reduce((total, num) => total + num);
 
     this.results = this.options.map(option => new ItemPercentage(option,
-      totalVotes > 0 ? Math.round((this.voteToView.voteResults[option] / totalVotes) * 100) : 0,
+      this.totalVotes > 0 ? Math.round((this.voteToView.voteResults[option] / this.totalVotes) * 100) : 0,
       this.voteToView.voteResults[option]));
   }
 
@@ -110,6 +112,7 @@ export class ViewVoteComponent implements OnInit, OnChanges {
   closeVote() {
     this.taskService.changeTaskTime(this.voteToView.taskUid, TaskType.VOTE, (new Date).getTime()).subscribe(data => {
       this.voteToView = data;
+      console.log('Is the vote now active or not? : ', this.voteToView.isActive);
     })
   }
 

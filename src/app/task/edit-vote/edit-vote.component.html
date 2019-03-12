@@ -33,6 +33,39 @@
             </p>
           </div>
         </div>
+
+        <div class="row mb-3">
+          <div class="col-md-3 col-sm-12">Vote end date:</div>
+          <div class="col-md-3 col-sm-12">
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd" id="vote-end-date"
+                     formControlName="date" name="edp" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button type="button" [ngClass]="{'btn': true, 'calendar-disabled': !changingDate, 'calendar-button': changingDate}"
+                        (click)="d.toggle()" type="button">
+                  <i class="far fa-calendar"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <ngb-timepicker formControlName="time" [spinners]="false"></ngb-timepicker>
+          </div>
+          <div class="col-md-3">
+            <button type="button" *ngIf="!changingDate" (click)="toggleChangingDate()" class="btn btn-lg btn-secondary float-right">Change</button>
+            <button type="button" *ngIf="changingDate" (click)="setUpClosingDateTime()" class="btn btn-lg btn-secondary float-right">Revert</button>
+          </div>
+        </div>
+        
+        <div class="row mb-3" *ngIf="options">
+          <div class="col-md-3 col-sm-12">
+            <span class="task-field-name">Primary options</span> (separate with new line):
+          </div>
+          <div class="col-md-9 col-sm-12">
+            <textarea class="form-control" formControlName="primary-options" rows="{{ options.length }}">{{ options.join('\n') }}</textarea>
+          </div>
+        </div>
+
         <div class="row" *ngIf="vote.voteResults">
             <div class="col-sm-12">
               <div class="card-header responses-header">
@@ -66,6 +99,7 @@
               </div>
             </div>
         </div>
+
         <div *ngIf="massVote && promptLanguagesLoaded" class="form-group row mt-3">
           <div class="col-sm-2 col-form-label text-md-right text-sm-left">
               <label for="vote-special-form">Extra language prompts (optional)</label>
@@ -102,6 +136,48 @@
           </div>
           <div class="col-sm-2">
             <button type="button" (click)="clearPostVotePrompts()" class="btn btn-lg btn-secondary float-right">Clear</button>
+          </div>
+        </div>
+
+        <div *ngIf="massVote && multiLanguageOptionsLoaded" class="form-group row">
+          <div class="col-sm-2 col-form-label text-md-right text-sm-left">
+              <label for="vote-special-form">Multilingual options (optional, separate options with new line)</label>
+            </div>
+          <div class="col-sm-8">
+            <ngb-tabset class="content-tabset" #t="ngbTabset">
+              <ngb-tab *ngFor="let language of languages" [id]="'options-' + language.threeDigitCode">
+                <ng-template ngbTabTitle>
+                  {{ language.shortName }}
+                </ng-template>
+                <ng-template ngbTabContent>
+                  <textarea class="form-control boxsizingBorder" rows="{{ options.length }}" formControlName="options-{{ language.twoDigitCode }}"></textarea>
+                </ng-template>
+              </ngb-tab>
+            </ngb-tabset>
+          </div>
+
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-lg btn-secondary float-right">Clear</button>
+          </div>
+        </div>
+
+        <div *ngIf="massVote" class="form-group row">
+          <div class="col-sm-4 col-form-label text-md-right text-sm-left">
+              <label for="vote-special-form">Final options</label>
+            </div>
+          <div class="col-sm-4">
+              <label for="exclude-abstain">
+                  <input type="checkbox" class="form-check-input" id="randomize"
+                         formControlName="randomize">
+                  Randomize options
+              </label>
+          </div>
+          <div class="col-sm-4">
+              <label for="exclude-notifications">
+                  <input type="checkbox" class="form-check-input" id="preClosed"
+                         formControlName="preClosed">
+                  Stop taking votes
+              </label>
           </div>
         </div>
 
