@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const FETCHING_FREQUENCY = 60 * 1000; // fetch the data group every 60 seconds
+  const FETCHING_FREQUENCY = 180 * 1000; // fetch the data group every 180 seconds (three minutes)
 
   /**
    * Main function which runs on sw registration.

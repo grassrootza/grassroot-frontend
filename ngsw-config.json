@@ -29,68 +29,9 @@
   ],
   "dataGroups":[
     {
-      "name": "news",
-      "urls": [
-        "https://staging.grassroot.org.za/v2/news"
-      ],
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "timeOut": "20s",
-        "strategy": "freshness"
-      }
-    },
-    {
-      "name": "newsList",
-      "urls": [
-        "https://staging.grassroot.org.za/v2/api/news/list/full"
-      ],
-      "queryParameters": [
-        "10",
-        "creationTime,desc",
-        "0"
-      ],
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "timeOut": "20s",
-        "strategy": "freshness"
-      }
-    },
-    {
-      "name": "newsHeadlines",
-      "urls": [
-        "https://staging.grassroot.org.za/v2/api/news/list/headlines"
-      ],
-      "queryParameters": [
-        "0",
-        "5",
-        "creationTime,desc",
-        "5"
-      ],
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "timeOut": "20s",
-        "strategy": "freshness"
-      }
-    },
-    {
       "name": "groupList",
       "urls": [
-        "https://staging.grassroot.org.za/v2/api/group/fetch/list"
-      ],
-      "version": 1,
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "strategy": "performance"
-      }
-    },
-    {
-      "name": "campaignList",
-      "urls": [
-        "https://staging.grassroot.org.za/v2/api/campaign/manage/list"
+        "https://app.grassroot.org.za/v2/api/group/fetch/list"
       ],
       "version": 1,
       "cacheConfig": {
@@ -102,7 +43,7 @@
     {
       "name": "newMembersList",
       "urls": [
-        "https://staging.grassroot.org.za/v2/api/group/fetch/members/new"
+        "https://app.grassroot.org.za/v2/api/group/fetch/members/new"
       ],
       "version": 1,
       "cacheConfig": {
