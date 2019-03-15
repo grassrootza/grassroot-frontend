@@ -211,7 +211,8 @@
               </div>
             </div>
             <div class="form-row">
-              <p>So far this month you have spent R{{ account.totalSpentThisMonth }}.</p>
+              <p>So far this month you have spent {{ (account.totalSpentThisMonth / 100) | currency: 'ZAR':'symbol-narrow' }} 
+                (<a class="grassroot-link" href="#" (click)="recalculateSpendingThisMonth()">update</a>).</p>
             </div>
         </div>
 

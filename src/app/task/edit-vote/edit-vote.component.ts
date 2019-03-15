@@ -45,7 +45,7 @@ export class EditVoteComponent implements OnInit {
     this.route.params.subscribe((params: Params)=>{
       const voteId = params['id'];
       this.taskService.loadTask(voteId, TaskType.VOTE).subscribe(vote => {
-        console.log('Received vote: ', vote);
+        // console.log('Received vote: ', vote);
         this.vote = vote;
         this.setUpClosingDateTime();
         this.setupResults();
@@ -57,7 +57,7 @@ export class EditVoteComponent implements OnInit {
   setUpClosingDateTime() {
     this.editVoteForm.get('date').setValue(DateTimeUtils.dateFromDate(this.vote.deadlineDate));
     this.editVoteForm.get('date').disable();
-    console.log('After setting, control value: ', this.editVoteForm.get('date'));
+    // console.log('After setting, control value: ', this.editVoteForm.get('date'));
     this.editVoteForm.get('time').setValue(DateTimeUtils.timeFromDate(this.vote.deadlineDate));
     this.editVoteForm.get('time').disable();
     this.changingDate = false;
@@ -95,21 +95,20 @@ export class EditVoteComponent implements OnInit {
     })
   }
 
-  setUpLanguagePrompts(prefix, messages) {
-    if (!!messages) {
-      Object.keys(messages).forEach(lang => {
-        // console.log(`Adding control for language: ${lang}, and value: ${messages[lang]}`);
-        this.editVoteForm.addControl(prefix + '-' + lang, this.fb.control(messages[lang]));
-      });
-    }
+  setUpLanguagePrompts(prefix: string, messages: { [x: string]: any; }) {
+    this.languages.forEach(lang => {
+      const controlName = prefix + '-' + lang.twoDigitCode;
+      const controlContent = !!messages && !!messages[lang.twoDigitCode] ? messages[lang.twoDigitCode] : '';
+      this.editVoteForm.addControl(controlName, this.fb.control(controlContent));
+    });
   }
 
-  setUpLanguageOptions(multiLingualOptions) {
-    if (!!multiLingualOptions) {
-      Object.keys(multiLingualOptions).forEach(lang => {
-        this.editVoteForm.addControl('options-' + lang, this.fb.control(multiLingualOptions[lang].join('\n')));
-      })
-    }
+  setUpLanguageOptions(multiLingualOptions: { [x: string]: { join: (arg0: string) => void; }; }) {
+    const optionsToShow = !!multiLingualOptions ? multiLingualOptions : { };
+    this.languages.forEach(lang => {
+      const optionsList = !!optionsToShow[lang.twoDigitCode] ? optionsToShow[lang.twoDigitCode].join('\n') : '';
+      this.editVoteForm.addControl('options-' + lang.twoDigitCode, this.fb.control(optionsList));
+    })
   }
 
   toggleChangingDate() {

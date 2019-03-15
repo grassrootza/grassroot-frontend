@@ -334,4 +334,13 @@ export class AccountComponent implements OnInit {
       this.account = account;
     })
   }
+
+  recalculateSpendingThisMonth() {
+    this.accountService.calculateSpendingThisMonth(this.account.uid).subscribe(data => {
+      this.alertService.alert('Done! Spending recalculated');
+      this.account = data;
+    })
+    return false;
+  }
+
 }
