@@ -7,6 +7,7 @@ import { ItemPercentage } from 'app/groups/group-details/group-dashboard/member-
 import { MSG_LANGUAGES, ENGLISH, ZULU } from 'app/utils/language';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateTimeUtils, epochMillisFromDate, epochMillisFromDateTime } from 'app/utils/DateTimeUtils';
+import { AlertService } from 'app/utils/alert-service/alert.service';
 
 @Component({
   selector: 'app-edit-vote',
@@ -31,13 +32,14 @@ export class EditVoteComponent implements OnInit {
 
   public changingDate = false;
 
-  constructor(private taskService: TaskService, private route: ActivatedRoute, private fb: FormBuilder) { 
+  constructor(private taskService: TaskService, private alertService: AlertService, private route: ActivatedRoute, private fb: FormBuilder) { 
     this.editVoteForm = this.fb.group({
       'date': [DateTimeUtils.nowAsDateStruct()], 
       'time': [DateTimeUtils.timeFromDate(new Date())],
       'primary-options': [''],
       'randomize': [false],
-      'preClosed': [false]
+      'preClosed': [false],
+      'noChange': [false]
     });
   }
 
@@ -83,6 +85,7 @@ export class EditVoteComponent implements OnInit {
       this.massVote = details['specialForm'] == 'MASS_VOTE';
       this.editVoteForm.get('randomize').setValue(details['randomizeOptions']);
       this.editVoteForm.get('preClosed').setValue(details['preClosed']);
+      this.editVoteForm.get('noChange').setValue(details['noChangeVote']);
 
       this.setUpLanguagePrompts('opening', details['multiLanguagePrompts']);
       this.promptLanguagesLoaded = true;
@@ -129,6 +132,7 @@ export class EditVoteComponent implements OnInit {
 
     const randomizeChanged = this.editVoteForm.get('randomize').dirty;
     const preClosedChanged = this.editVoteForm.get('preClosed').dirty;
+    const noChangeChanged = this.editVoteForm.get('noChange').dirty;
 
     console.log(`What changed? primary options: ${optionsChanged}, multiLangOptions: ${multiLangOptionsChanged}, 
       openingPrompts: ${openingPromptsChanged}, postPrompts: ${postPromptsChanged}`);
@@ -154,11 +158,15 @@ export class EditVoteComponent implements OnInit {
     if (preClosedChanged)
       updateRequest['preCloseVote'] = this.editVoteForm.get('preClosed').value;
 
+    if (noChangeChanged)
+      updateRequest['noChangeVote'] = this.editVoteForm.get('noChange').value;
+
     console.log('Corresponding update request: ', updateRequest);
 
     this.taskService.updateVoteDetails(this.vote.taskUid, updateRequest).subscribe(vote => {
       console.log('Updated vote! Altered vote = ', vote);
       this.vote = vote;
+      this.alertService.alert('Done! Vote has been updated');
     });
   }
 

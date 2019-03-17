@@ -32,6 +32,11 @@ export class MembersFilter {
     || this.namePhoneOrEmail !== other.namePhoneOrEmail || this.language !== other.language || this.municipalityId !== other.municipalityId;
   }
 
+  hasAnythingChanged(other: MembersFilter): boolean {
+    console.log(`Prior join date condition:  ${this.joinDateCondition} and new: ${other.joinDateCondition}`);
+    return this.role !== other.role || this.hasNonRoleChanged(other);
+  }
+
 }
 
 export const copyFilter = (filter: MembersFilter): MembersFilter => {

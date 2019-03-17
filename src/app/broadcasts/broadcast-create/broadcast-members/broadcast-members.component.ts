@@ -6,7 +6,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BroadcastParams} from "../../model/broadcast-params";
 import {GroupService} from "../../../groups/group.service";
 import {Group} from "../../../groups/model/group.model";
-import {MembersFilter} from "../../../groups/member-filter/filter.model";
+import {MembersFilter, copyFilter} from "../../../groups/member-filter/filter.model";
 import {AlertService} from "../../../utils/alert-service/alert.service";
 import {Membership, getMemberFromMembershipInfo, MembersPage} from "../../../groups/model/membership.model";
 import { CampaignService } from '../../../campaigns/campaign.service';
@@ -31,7 +31,9 @@ export class BroadcastMembersComponent implements OnInit {
 
   public group: Group;
   public campaign: CampaignInfo;
+
   private memberFilter = new MembersFilter();
+  private priorStoredFilter = new MembersFilter();
 
   constructor(private router: Router, private formBuilder: FormBuilder,
               private broadcastService: BroadcastService,
@@ -145,7 +147,17 @@ export class BroadcastMembersComponent implements OnInit {
   }
 
   membersFilterChanged(filter: MembersFilter) {
+    console.log('Existing filter: ', this.priorStoredFilter);
+    console.log('Received filter: ', filter);
+    if (!this.priorStoredFilter.hasAnythingChanged(filter)) {
+      console.log('Nothing changed, dont fire to server');
+      this.memberFilter = filter;
+      return;
+    }
+
     this.memberFilter = filter;
+    this.priorStoredFilter = copyFilter(this.memberFilter);
+    
     this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(members => {
           // console.log('from server: ', members);
           let filteredMembers = filter.role == 'ANY' ? members.content : members.content.filter(m => m.roleName == filter.role);

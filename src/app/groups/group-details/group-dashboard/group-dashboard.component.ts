@@ -66,7 +66,6 @@ export class GroupDashboardComponent implements OnInit {
       this.loadMemberGrowthStats(moment().year(), moment().month() + 1);
       this.loadProvinceStats();
       this.loadSourcesStats();
-      this.loadOrganisationsStats();
       this.loadMemberDetailsStats();
       this.loadTopicInterestsStats();
     });
@@ -309,55 +308,11 @@ export class GroupDashboardComponent implements OnInit {
       );
   }
 
-
-  public loadOrganisationsStats() {
+  public loadMemberDetailsStats() {
     if (!this.groupUid)
       return;
 
-    this.groupService.fetchOrganisationsStats(this.groupUid)
-      .subscribe(
-        results => {
-
-          // console.log("member organisations stats: ", results);
-
-          let organisations = Object.keys(results);
-          let counts: number[] = [];
-          let colors: string[] = [];
-          let i = 0;
-          organisations.forEach(
-            so => {
-              counts.push(results[so]);
-              colors.push(this.chartColors[i % this.chartColors.length]);
-              i++;
-            }
-          );
-
-          const chart = new Chart('organisationsChart', {
-            type: 'doughnut',
-
-            data: {
-              labels: organisations,
-              datasets: [
-                {
-                  data: counts,
-                  backgroundColor: colors,
-                }
-              ]
-            },
-            options: {
-              legend: {
-                position: 'bottom',
-                display: true
-              }
-            }
-          });
-        }
-      );
-  }
-
-
-  public loadMemberDetailsStats() {
-    if (!this.groupUid)
+    if (!!this.memberDetailsStats)
       return;
 
     this.groupService.fetchMemberDetailsStats(this.groupUid)
@@ -379,6 +334,9 @@ export class GroupDashboardComponent implements OnInit {
 
   public loadTopicInterestsStats() {
     if (!this.groupUid)
+      return;
+
+    if (!!this.topicInterestsStats)
       return;
 
     this.groupService.fetchTopicInterestsStats(this.groupUid)

@@ -162,22 +162,29 @@
         </div>
 
         <div *ngIf="massVote" class="form-group row">
-          <div class="col-sm-4 col-form-label text-md-right text-sm-left">
+          <div class="col-sm-3 col-form-label text-md-right text-sm-left">
               <label for="vote-special-form">Final options</label>
             </div>
-          <div class="col-sm-4">
-              <label for="exclude-abstain">
+          <div class="col-sm-3">
+              <label for="randomize">
                   <input type="checkbox" class="form-check-input" id="randomize"
                          formControlName="randomize">
                   Randomize options
               </label>
           </div>
-          <div class="col-sm-4">
-              <label for="exclude-notifications">
+          <div class="col-sm-3">
+              <label for="preClosed">
                   <input type="checkbox" class="form-check-input" id="preClosed"
                          formControlName="preClosed">
                   Stop taking votes
               </label>
+          </div>
+          <div class="col-sm-3">
+            <label for="noChange">
+                <input type="checkbox" class="form-check-input" id="noChanged"
+                       formControlName="noChange">
+                User can't change vote
+            </label>
           </div>
         </div>
 
