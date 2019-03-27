@@ -191,7 +191,7 @@ export class MemberListComponent implements OnInit {
         case 1: this.showNameFilter = 2; direction = "desc"; break;
         case 2: this.showNameFilter = 0; direction = ""; break;
       }
-    }else if(fieldToSort === "roleName"){
+    }else if(fieldToSort === "role"){
       this.showNameFilter = 0;
       this.showProvinceFilter = 0;
       this.showPhoneFilter = 0;
