@@ -239,8 +239,7 @@ export class MemberFilterComponent implements OnInit, OnChanges {
   }
 
   private fireFilterChange() {
-    // console.log("Filter changed: ", this.filter);
-    console.log(`firing observable inside inner component`);
+    // console.log(`Firing observable inside inner component`);
     this.filterChanged.emit(this.filter);
   }
 }

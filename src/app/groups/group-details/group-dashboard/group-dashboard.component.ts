@@ -61,7 +61,6 @@ export class GroupDashboardComponent implements OnInit {
           }
         );
 
-      console.log("Tasks Group id: ", this.groupUid);
       this.loadTasks();
       this.loadMemberGrowthStats(moment().year(), moment().month() + 1);
       this.loadProvinceStats();

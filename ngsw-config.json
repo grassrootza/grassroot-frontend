@@ -27,30 +27,5 @@
       }
     }
   ],
-  "dataGroups":[
-    {
-      "name": "groupList",
-      "urls": [
-        "https://app.grassroot.org.za/v2/api/group/fetch/list"
-      ],
-      "version": 1,
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "strategy": "performance"
-      }
-    },
-    {
-      "name": "newMembersList",
-      "urls": [
-        "https://app.grassroot.org.za/v2/api/group/fetch/members/new"
-      ],
-      "version": 1,
-      "cacheConfig": {
-        "maxSize": 5,
-        "maxAge": "12h",
-        "strategy": "performance"
-      }
-    }
-  ]
+  "dataGroups":[ ]
 }

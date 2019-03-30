@@ -73,7 +73,6 @@ export class CreateVoteComponent implements OnInit {
 
   initCreateVoteForm() {
     let timeStruct = DateTimeUtils.futureTimeStruct(5);
-    console.log("time structure: ", timeStruct);
     this.createVoteForm = this.formBuilder.group({
       'voteType': 'YES_NO',
       'title': ['', Validators.compose([Validators.required, Validators.minLength(3)])],

@@ -248,12 +248,12 @@ export class BroadcastService {
   loadBroadcast() {
     this.createRequest = new BroadcastRequest();
     let storedString = this.localStorageService.getItem('broadcastCreateRequest');
-    console.log("stored string: ", storedString);
+    console.log("Broadcast service loaded, checking if old one in cache: ", storedString);
     if (storedString) {
       let cachedRequest = JSON.parse(storedString);
       this.createRequest.copyFields(cachedRequest);
     } else {
-      console.log("nothing in cache, just return new empty");
+      // console.log("nothing in cache, just return new empty");
       this.createRequest = new BroadcastRequest();
     }
     let storedStep = this.localStorageService.getItem('broadcastCreateStep');

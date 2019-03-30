@@ -33,7 +33,7 @@ export class MembersFilter {
   }
 
   hasAnythingChanged(other: MembersFilter): boolean {
-    console.log(`Prior join date condition:  ${this.joinDateCondition} and new: ${other.joinDateCondition}`);
+    // console.log(`Prior join date condition:  ${this.joinDateCondition} and new: ${other.joinDateCondition}`);
     return this.role !== other.role || this.hasNonRoleChanged(other);
   }
 

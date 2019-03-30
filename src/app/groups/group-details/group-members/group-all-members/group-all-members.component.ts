@@ -42,7 +42,6 @@ export class GroupAllMembersComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("initiating all members component");
     this.route.parent.parent.params.subscribe((params: Params) => {
       this.groupUid = params['id'];
       this.groupService.loadGroupDetailsCached(this.groupUid, false)

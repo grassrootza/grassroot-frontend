@@ -89,12 +89,13 @@ export class GroupCustomFilterComponent implements OnInit {
   }
 
   membersFilterChanged(filter: MembersFilter, forceFetch: boolean = false) {
-    // console.log(`filter fired, has change: ${filter.hasNonRoleChanged(this.currentFilter)}`)
-    if (forceFetch || filter.hasNonRoleChanged(this.currentFilter)) {
+    // console.log(`Filter fired, has non role changeed ?: ${filter.hasNonRoleChanged(this.currentFilter)}, and with role: 
+    //   ${filter.hasAnythingChanged(this.currentFilter)}`);
+    if (forceFetch || filter.hasAnythingChanged(this.currentFilter)) {
       this.loading = true;
       this.groupService.filterGroupMembers(this.group.groupUid, filter).subscribe(
         members => {
-          console.log('resulting member page: ', members);
+          console.log('Finished filter fetch, resulting member page: ', members);
           this.loading = false;
           this.currentFilter = copyFilter(filter); // otherwise change detection fails, because child is actually modifying same thing
           this.currentPage = members;
@@ -179,7 +180,7 @@ export class GroupCustomFilterComponent implements OnInit {
 
   showBulkCopyToGroupModal(){
     this.setMembersToManage();
-    console.log("copy members to group: " + this.membersToManage.length);
+    console.log("Copy members to group: " + this.membersToManage.length);
     this.groupService.groupInfoList.subscribe(groups => {
       this.groupsToCopyMembersTo = groups.filter(g => g.hasPermission("GROUP_PERMISSION_ADD_GROUP_MEMBER")
         && g.groupUid !== this.group.groupUid);

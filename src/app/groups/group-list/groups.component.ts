@@ -480,7 +480,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   showGroup(group: GroupInfo) {
-    console.log("showing spinner");
     this.alertService.showLoading();
     this.router.navigate(["/group", group.groupUid]);
   }

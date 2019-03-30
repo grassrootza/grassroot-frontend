@@ -568,6 +568,10 @@ export class GroupService {
       params = params.set("provinces", filter.provinces.join(","));
     }
 
+    if (!!filter.role && filter.role != 'ANY') {
+      params = params.set('groupRole', filter.role);
+    }
+
     if (filter.noProvince == 'UNKNOWN') {
       params = params.set('noProvince', 'true');
     }
