@@ -88,11 +88,13 @@ export class CampaignService {
   }
 
   setCampaignMessages(campaignUid: string, messageRequests: CampaignMsgRequest[], channel: string): Observable<CampaignInfo> {
-    let fullUrl = this.campaignMessageSetUrl + "/" + campaignUid;
+    const fullUrl = this.campaignMessageSetUrl + "/" + campaignUid;
+    const params = new HttpParams().set('channel', channel);
     let serverMsgRequests: CampaignMsgServerDTO[] = messageRequests.map(req =>
       new CampaignMsgServerDTO(req.messageId, req.linkedActionType, channel, req.messages, req.nextMsgIds, req.tags));
     // console.log("message request, messages: ", messageRequests.map(mr => mr.messages));
-    return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests).pipe(map(result => this.stashChangedCampaign(result)));
+    return this.httpClient.post<CampaignInfo>(fullUrl, serverMsgRequests, { params: params })
+      .pipe(map(result => this.stashChangedCampaign(result)));
   }
 
   stashChangedCampaign(result): CampaignInfo {
