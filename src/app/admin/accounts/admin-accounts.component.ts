@@ -19,6 +19,9 @@ export class AdminAccountsComponent implements OnInit {
   public accountDateToChange: UserExtraAccount;
   public accountDateChangeForm: FormGroup;
 
+  public accountCostsToChange: UserExtraAccount;
+  public accountCostsChangeForm: FormGroup;
+
   public accountDataSetsToChange: UserExtraAccount;
   public accountDataSetChangeForm: FormGroup;
   
@@ -35,6 +38,12 @@ export class AdminAccountsComponent implements OnInit {
     this.accountDateChangeForm = this.fb.group({
       'date': [DateTimeUtils.dateFromDate(new Date()), Validators.required],
       'time': [DateTimeUtils.timeFromDate(new Date()), Validators.required],
+    });
+
+    this.accountCostsChangeForm = this.fb.group({
+      'costPerMessage': [''],
+      'costPerUSSD': [''],
+      'monthlyCost': ['']
     });
 
     this.accountDataSetChangeForm = this.fb.group({
@@ -88,7 +97,7 @@ export class AdminAccountsComponent implements OnInit {
 
   initiateDataSetChange(account: UserExtraAccount) {
     this.accountDataSetsToChange = account;
-    $('#change-datasets-modal').modal('show');
+    setTimeout(() => $('#change-datasets-modal').modal('show'), 300);
   }
 
   completeDataSetChange() {
@@ -103,6 +112,37 @@ export class AdminAccountsComponent implements OnInit {
       console.log('that failed, error: ', error);
       $('#change-datasets-modal').modal('hide');
     })
+  }
+
+  initiateCostChange(account: UserExtraAccount) {
+    this.accountCostsToChange = account;
+    this.accountCostsChangeForm.setValue({ 'costPerMessage': account.costPerMessage, 'costPerUSSD': account.costPerUssdSession, 'monthlyCost': 0 });
+    setTimeout(() => $('#change-account-costs-modal').modal('show'), 300);
+  }
+
+  completeCostsChange() {
+    let changedParams = { }
+    console.log("Form keys: ", Object.keys(this.accountCostsChangeForm.controls));
+    Object.keys(this.accountCostsChangeForm.controls)
+      .filter(control => this.accountCostsChangeForm.get(control).dirty)
+      .forEach(control => changedParams[control] = this.accountCostsChangeForm.get(control).value);
+    
+    console.log('Changed cost values: ', changedParams);
+
+    if (!changedParams) {
+      console.log('Nothing changed!');
+      $('#change-account-costs-modal').modal('hide')
+      this.alertService.alert('Nothing changed!')
+    } else {
+      this.accountsService.updateAccountCosts(this.accountCostsToChange.uid, changedParams).subscribe(account => {
+        this.accountCostsToChange = account;
+        let index = this.accounts.findIndex(acc => acc.uid == account.uid);
+        this.accounts[index] = account;
+        $('#change-account-costs-modal').modal('hide')
+        this.alertService.alert('Updated unit costs!');
+      })
+    }
+
   }
 
   viewDisabledAccount(accountUid: string) {

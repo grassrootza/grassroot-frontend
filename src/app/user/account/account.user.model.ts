@@ -17,7 +17,10 @@ export class UserExtraAccount {
         public totalSpentThisMonth: number,
         public spendingLimit: number,
         public notificationsSinceLastBill?: number,
-        public chargedUssdSinceLastBill?: number) { }
+        public chargedUssdSinceLastBill?: number,
+        public costPerMessage?: number,
+        public costPerUssdSession?: number,
+        public monthlyFlatFee?: number) { }
 
     getLastBillingDate(): string {
         return moment(this.lastBillingDateMillis).format('Do MMMM YYYY');
@@ -41,11 +44,11 @@ export const getEntity = (account: UserExtraAccount): UserExtraAccount => {
         account.totalSpentThisMonth,
         account.spendingLimit);
 
-    if (account.notificationsSinceLastBill)
-        acc.notificationsSinceLastBill = account.notificationsSinceLastBill;
-
-    if (account.chargedUssdSinceLastBill)
-        acc.chargedUssdSinceLastBill = account.chargedUssdSinceLastBill;
+    acc.notificationsSinceLastBill = account.notificationsSinceLastBill;
+    acc.chargedUssdSinceLastBill = account.chargedUssdSinceLastBill;
+    acc.costPerMessage = account.costPerMessage;
+    acc.costPerUssdSession = account.costPerUssdSession;
+    acc.monthlyFlatFee = account.monthlyFlatFee;
 
     console.log('constructed account wrapper, charged USSD: ', acc.chargedUssdSinceLastBill);
 

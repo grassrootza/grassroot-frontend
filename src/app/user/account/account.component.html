@@ -60,6 +60,17 @@
 
         <ng-container *ngIf="account.enabled">
 
+        <ng-container  *ngIf="account.totalSpentThisMonth > account.spendingLimit">
+            <div class="form-row">
+                <div class="col-12 alert alert-danger">
+                  Your account has exceeded its monthly spending limit! Either increase your spending limit in the billing section at the bottom
+                  of this page, or notify your group organizers know that their groups will be subject to limitations until the end of the month
+                </div>
+            </div>
+
+            <hr />
+        </ng-container>
+
         <!-- Dataset section -->
         <div class="form-row" *ngIf="account.geoDataSets">
           <div class="col-12" *ngIf="!dataSetCounts">
@@ -205,14 +216,18 @@
                   </div>
                   <input type="number" class="form-control form-control-em" aria-label="Amount (to the nearest rand)" formControlName="spendingLimit">
                   <div class="input-group-append">
-                    <button type="button" class="btn btn-secondary-outline" (click)="updateAccountSpendingLimit()">Update</button>
+                    <button type="button" class="btn btn-secondary" (click)="updateAccountSpendingLimit()">Update</button>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="form-row">
+            <div class="form-row mt-3">
               <p>So far this month you have spent {{ (account.totalSpentThisMonth / 100) | currency: 'ZAR':'symbol-narrow' }} 
-                (<a class="grassroot-link" href="#" (click)="recalculateSpendingThisMonth()">update</a>).</p>
+                (<a class="grassroot-link" href="#" (click)="recalculateSpendingThisMonth()">recalculate</a>).
+                Your account is charged a monthly subscription of {{ (account.monthlyFlatFee / 100) | currency: 'ZAR':'symbol-narrow' }}, then
+                {{ account.costPerMessage }}c per message and {{ account.costPerUssdSession }}c per USSD session. All of these costs are included
+                in the calculation and count towards the limit.
+              </p>
             </div>
         </div>
 

@@ -12,7 +12,8 @@ export class AccountDetailComponent implements OnInit {
   @Input() public account: UserExtraAccount;
   @Output() public onChangeBillingDateClicked: EventEmitter<UserExtraAccount> = new EventEmitter();
   @Output() public onChangeDatasetsClicked: EventEmitter<UserExtraAccount> = new EventEmitter();
-  
+  @Output() public onChangeAccountCostsClicked: EventEmitter<UserExtraAccount> = new EventEmitter();
+
   public viewDetails: boolean = false;
   public numberGroups: number;
   public accountAdmins: string;
@@ -47,6 +48,11 @@ export class AccountDetailComponent implements OnInit {
 
   public changeDataSets() {
     this.onChangeDatasetsClicked.emit(this.account);
+    return false;
+  }
+
+  public changeUnitCosts() {
+    this.onChangeAccountCostsClicked.emit(this.account);
     return false;
   }
 

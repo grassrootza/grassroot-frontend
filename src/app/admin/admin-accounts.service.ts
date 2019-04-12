@@ -23,6 +23,8 @@ export class AccountsAdminService {
 
   private listBillingAccountsUrl: string = environment.backendAppUrl + '/api/admin/accounts/list/billing';
 
+  private updateAccountCostsUrl: string = environment.backendAppUrl + '/api/admin/accounts/update/costs/units';
+
   constructor(private httpClient: HttpClient) { }
 
   public listCurrentAccounts(): Observable<UserExtraAccount[]> {
@@ -72,6 +74,18 @@ export class AccountsAdminService {
       .set('geoDataSets', dataSetLabels)
       .set('updateDynamoReference', '' + updateRefs);
     return this.httpClient.post<UserExtraAccount>(this.updateDatasetRefUrl, null, { params: params }).pipe(map(getEntity));
+  }
+
+  public updateAccountCosts(accountUid: string, costParams: any) {
+    let params = new HttpParams().set('accountUid', accountUid);
+    if (!!costParams['costPerMessage'])
+      params = params.set('costPerMessage', '' + costParams['costPerMessage']);
+    if (!!costParams['costPerUSSD'])
+      params = params.set('costPerUSSD', '' + costParams['costPerUSSD']);
+    if (!!costParams['monthlyCost'])
+      params = params.set('monthlyCost', '' + costParams['monthlyCost']);
+
+      return this.httpClient.post<UserExtraAccount>(this.updateAccountCostsUrl, null, { params: params }).pipe(map(getEntity));
   }
 
 }
