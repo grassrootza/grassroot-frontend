@@ -25,6 +25,8 @@ export class AccountsAdminService {
 
   private updateAccountCostsUrl: string = environment.backendAppUrl + '/api/admin/accounts/update/costs/units';
 
+  private fetchAllAccountedCostsUrl: string = environment.backendAppUrl + '/api/admin/accounts/fetch/costs/all';
+
   constructor(private httpClient: HttpClient) { }
 
   public listCurrentAccounts(): Observable<UserExtraAccount[]> {
@@ -86,6 +88,10 @@ export class AccountsAdminService {
       params = params.set('monthlyCost', '' + costParams['monthlyCost']);
 
       return this.httpClient.post<UserExtraAccount>(this.updateAccountCostsUrl, null, { params: params }).pipe(map(getEntity));
+  }
+
+  public fetchAllAccountCosts(): Observable<any> {
+    return this.httpClient.get(this.fetchAllAccountedCostsUrl);
   }
 
 }

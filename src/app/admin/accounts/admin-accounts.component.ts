@@ -29,11 +29,14 @@ export class AdminAccountsComponent implements OnInit {
   public disabledUids: string[];
   public disabledAccountToView: UserExtraAccount;
 
+  public monthAccountBillings: any;
+
   constructor(private accountsService: AccountsAdminService, private alertService: AlertService, private fb: FormBuilder) { }
 
   ngOnInit() {
     this.fetchEnabledAccounts();
     this.fetchDisabledAccounts();
+    this.fetchAccountedCosts();
 
     this.accountDateChangeForm = this.fb.group({
       'date': [DateTimeUtils.dateFromDate(new Date()), Validators.required],
@@ -67,6 +70,13 @@ export class AdminAccountsComponent implements OnInit {
     this.accountsService.fetchDisabledAccounts().subscribe(disabledMap => {
       this.disabledMap = disabledMap;
       this.disabledUids = Object.keys(disabledMap);
+    });
+  }
+
+  fetchAccountedCosts() {
+    this.accountsService.fetchAllAccountCosts().subscribe(costMap => {
+      console.log('Fetched these costs from server: ', costMap);
+      this.monthAccountBillings = costMap;
     });
   }
 

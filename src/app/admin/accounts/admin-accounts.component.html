@@ -6,6 +6,16 @@
       </div>
     </div>
     <div class="card-body" *ngIf="accounts">
+      <div class="row" *ngIf="monthAccountBillings">
+          <div class="col-12"><p>
+            This month, across all Grassroot Extra accounts, {{ monthAccountBillings['SMS_COUNT'] }} SMSs and 
+            {{ monthAccountBillings['USSD_COUNT'] }} USSD sessions have been accounted. 
+            That implies {{ (monthAccountBillings['SMS_CHARGE'] / 100) | currency: 'ZAR':'symbol-narrow' }}c in SMS charges, 
+            and {{ (monthAccountBillings['USSD_COUNT'] / 100) | currency: 'ZAR':'symbol-narrow' }}c in USSD charges.
+            Overall, {{ (monthAccountBillings['SMS_COUNT'] / monthAccountBillings['SYSTEM_SMS_COUNT']) | percent }} of SMSs are being charged,
+            and {{ (monthAccountBillings['USSD_COUNT'] / monthAccountBillings['SYSTEM_USSD_COUNT']) | percent}} of USSD sessions.
+          </p></div>
+      </div>
       <app-account-detail  *ngFor="let account of accounts" [account]="account" 
         (onChangeBillingDateClicked)="initiateDateChange(account)"
         (onChangeDatasetsClicked)="initiateDataSetChange(account)"
