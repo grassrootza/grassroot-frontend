@@ -34,7 +34,7 @@ is cached by the service worker. -->
         <div class="form-row" *ngIf="types.shortMessage">
           <div class="form-group col-sm-12">
             <textarea (keyup)="keyUpShortMessage($event)" formControlName="shortMessage"
-                      class="form-control" maxlength="160"></textarea>
+                      class="form-control" maxlength="1000"></textarea>
           </div>
         </div>
         <div class="row" *ngIf="types.shortMessage">
