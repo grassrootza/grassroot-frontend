@@ -92,6 +92,13 @@ export class GroupBroadcastComponent implements OnInit {
     $('#broadcast-view-modal').modal('show');
   }
 
+  cancelBroadcast(broadcast: Broadcast) {
+    this.broadcastService.cancelBroadcast(broadcast.broadcastUid).subscribe(data => {
+      console.log('Cancelled broadcast:', broadcast);
+      this.alertService.alert('Done. Broadcast has been cancelled. When you refresh it will show as cancelled');
+    });
+  }
+
   downloadBroadcastAllReport(broadcast: Broadcast) {
     this.broadcastService.downloadBroadcastMsgsReport(broadcast.broadcastUid).subscribe(data => {
       let blob = new Blob([data], { type: 'application/vnd.ms-excel' });

@@ -30,6 +30,7 @@ export class BroadcastService {
   downloadMsgsReportUrl = environment.backendAppUrl + "/api/broadcast/sending-report";
   downloadErrorReportUrl = environment.backendAppUrl + "/api/broadcast/error-report";
   resendUrl = environment.backendAppUrl + "/api/broadcast/resend";
+  cancelUrl = environment.backendAppUrl + "/api/broadcast/cancel";
 
   public createRequest: BroadcastRequest = new BroadcastRequest();
   private createCounts: BroadcastCost = new BroadcastCost();
@@ -344,6 +345,11 @@ export class BroadcastService {
     let params = new HttpParams().set('resendText', resendParams['resendText']).set('resendEmail', resendParams['resendEmail'])
       .set('resendFb', resendParams['resendFb']).set('resendTwitter', resendParams['resendTwitter']);
     return this.httpClient.post(fullUrl, null, {params: params});
+  }
+
+  cancelBroadcast(broadcastId: string) {
+    const fullUrl = this.cancelUrl + '/' + broadcastId;
+    return this.httpClient.post(fullUrl, null);
   }
 
 }

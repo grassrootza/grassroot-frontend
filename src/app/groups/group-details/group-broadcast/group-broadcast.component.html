@@ -70,7 +70,7 @@
                     <div class="dropdown-menu" aria-labelledby="sentActionsDropdown">
                       <a class="dropdown-item" (click)="showViewModal(broadcast)">{{'group.broadcast.table.scheduledActions.view' | translate}}</a>
                       <a class="dropdown-item">{{'group.broadcast.table.scheduledActions.edit' | translate}}</a>
-                      <a class="dropdown-item">{{'group.broadcast.table.scheduledActions.cancel' | translate}}</a>
+                      <a class="dropdown-item" (click)="cancelBroadcast(broadcast)">{{'group.broadcast.table.scheduledActions.cancel' | translate}}</a>
                     </div>
                   </div>
                 </div>
