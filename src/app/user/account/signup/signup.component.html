@@ -3,7 +3,10 @@
     <div class="card-body">
         <div class="row" *ngIf="currentStage == 'SELECT_METHOD'">
           <div class="col-12">
-            <h2 class="text-center">Set up a Grassroot Extra account</h2>
+            <h2>We're sorry</h2>
+            <p>Due to capacity and budget constraints, Grassroot is currently unable to accept new Grassroot Extra accounts. Please check back again 
+              in a few months. Thank you for your interest!</p>
+            <!-- <h2 class="text-center">Set up a Grassroot Extra account</h2>
             <p>Grassroot is free for groups of up to 250 people and 3 meetings, votes and actions per month. For larger and more active groups,
               and to run campaigns or create movements, you will need to set up a Grassroot Extra account. An account will unlock larger groups,
               more frequent activity, campaigns, movements, and a wide range of other features.
@@ -13,12 +16,9 @@
               can create an account here, but you will need to pay by EFT and send the proof of payment to
               <a href="mailto:accounts@grassroot.org.za">accounts@grassroot.org.za</a> to enable it.
             </p>
-          </div>
-        </div>
-        <div class="row" *ngIf="currentStage == 'SELECT_METHOD'">
-          <!-- <div class="col-6 text-center">
-            <button type="button" class="btn btn-primary save-button" (click)="initiateAccountCreation(true)">Pay by Credit Card</button>
           </div> -->
+        </div>
+        <!-- <div class="row" *ngIf="currentStage == 'SELECT_METHOD'">
           <div class="col-12 text-center">
             <button type="button" class="btn btn-primary save-button" (click)="initiateAccountCreation(false)">Create account</button>
           </div>
@@ -94,7 +94,7 @@
         </div>
         <div class="row" *ngIf="currentStage == 'LOADING'">
           Loading ...
-        </div>
+        </div> -->
     </div>
   </div>
 </div>
