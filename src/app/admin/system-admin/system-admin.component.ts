@@ -66,6 +66,8 @@ export class SystemAdminComponent implements OnInit {
   public allUsersWithCoordinates: number;
   public usersCountWithinTimeStamp: number;
 
+  public numberGroupOrganizerMessages: number;
+
   accessToken: string;
   
   constructor(private adminService:AdminService,
@@ -397,6 +399,16 @@ export class SystemAdminComponent implements OnInit {
       this.alertService.alert("Saved addresses to location logs");
     },error => {
       console.log("Error saving location logs from address", error);
+    });
+    return false;
+  }
+
+  sendGroupOrganizerMessage(messageToSend) {
+    this.adminService.sendMessageToGroupOrganizers(messageToSend, true).subscribe(resp => {
+      console.log("Successfully sent: ", resp);
+      this.numberGroupOrganizerMessages = resp;
+    }, error => {
+      console.log("Error sending messages: ", error);
     });
     return false;
   }

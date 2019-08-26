@@ -39,6 +39,8 @@ export class AdminService {
 
   private saveUserLocationLogsFromAddressUrl = environment.backendAppUrl + "/api/admin/update/location/address";
 
+  private sendMessageToGroupOrganizersUrl = environment.backendAppUrl + "/api/admin/message/organizers";
+
   constructor(private httpClient: HttpClient) { }
 
   loadUser(searchTerm:string):Observable<string>{
@@ -179,4 +181,9 @@ export class AdminService {
     const params = new HttpParams().set('pageSize', '' + batchSize);
     return this.httpClient.get(this.saveUserLocationLogsFromAddressUrl, {params: params});
  }
+
+  sendMessageToGroupOrganizers(messageText: string, dryRun = true): Observable<any> {
+    const params = new HttpParams().set('message', messageText).set('dryRun', '' + dryRun);
+    return this.httpClient.post(this.sendMessageToGroupOrganizersUrl, null, { params: params });
+  }
 }
