@@ -182,8 +182,8 @@ export class AdminService {
     return this.httpClient.get(this.saveUserLocationLogsFromAddressUrl, {params: params});
  }
 
-  sendMessageToGroupOrganizers(messageText: string, dryRun = true): Observable<any> {
-    const params = new HttpParams().set('message', messageText).set('dryRun', '' + dryRun);
+  sendMessageToGroupOrganizers(messageText: string, notDryRun = false): Observable<any> {
+    const params = new HttpParams().set('message', messageText).set('notDryRun', '' + notDryRun);
     return this.httpClient.post(this.sendMessageToGroupOrganizersUrl, null, { params: params });
   }
 }

@@ -177,8 +177,11 @@
             <input type="text" id="organizerMessage" placeholder="Message to send" class="form-control" name="organizerMessage" #organizerMessage/>
           </p>
           <p>
-            <button class="btn btn-primary" (click)="sendGroupOrganizerMessage(organizerMessage.value)">Send</button>
+            <label><input type="checkbox" id="notDryRun" name="notDryRun" #notDryRun />Not dry run</label>
           </p>
+          <p>
+              <button class="btn btn-primary" (click)="sendGroupOrganizerMessage(organizerMessage.value, notDryRun.checked)">Send</button>
+          </p>  
           <p *ngIf="numberGroupOrganizerMessages">
             Message queued for {{ numberGroupOrganizerMessages }}
           </p>

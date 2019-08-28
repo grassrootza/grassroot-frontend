@@ -403,8 +403,12 @@ export class SystemAdminComponent implements OnInit {
     return false;
   }
 
-  sendGroupOrganizerMessage(messageToSend) {
-    this.adminService.sendMessageToGroupOrganizers(messageToSend, true).subscribe(resp => {
+  // public lousyAngularCheckboxDryRun = false;
+
+  sendGroupOrganizerMessage(messageToSend, notDryRun) {
+    console.log('Not dry run: ? ', notDryRun);
+    console.log('As boolean: ', !!notDryRun);
+    this.adminService.sendMessageToGroupOrganizers(messageToSend, !!notDryRun).subscribe(resp => {
       console.log("Successfully sent: ", resp);
       this.numberGroupOrganizerMessages = resp;
     }, error => {
