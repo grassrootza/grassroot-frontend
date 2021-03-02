@@ -31,11 +31,11 @@ export class GroupDetailsComponent implements OnInit {
   public groupMinimal: GroupMinimal = null;
   public joinMethodParams: any;
   public isAccountAdmin: boolean = false;
-  
+
   public membership:MembershipInfo;
 
   public displayName:string;
-  
+
   public canAddToAccount: boolean;
 
   constructor(private router: Router,
@@ -73,7 +73,7 @@ export class GroupDetailsComponent implements OnInit {
             const imageBaseUrl = this.baseUrl.replace('/v2', '') + '/image/flyer/';
             this.flyerUrlJpg = imageBaseUrl + groupUid + "?typeOfFile=JPEG&color=true&language=en";
             this.flyerUrlPDF = imageBaseUrl + groupUid + "?typeOfFile=PDF&color=true&language=en";
-            
+
             this.setupJoinParams();
 
             this.alertService.hideLoading();
@@ -87,8 +87,8 @@ export class GroupDetailsComponent implements OnInit {
 
   exportGroupMembers() {
     this.groupService.downloadGroupMembers(this.group.groupUid).subscribe(data => {
-      let blob = new Blob([data], { type: 'application/xls' });
-      saveAs(blob, this.group.name + ".xlsx");
+      let blob = new Blob([data], { type: 'application/csv' });
+      saveAs(blob, this.group.name + ".csv");
     }, error => {
       console.log("error getting the file: ", error);
     });
