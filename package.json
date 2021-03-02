@@ -36,7 +36,7 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "blueimp-canvas-to-blob": "^3.14.0",
-    "bootstrap": "4.2.1",
+    "bootstrap": "4.3.1",
     "chart.js": "^2.7.3",
     "core-js": "^2.6.2",
     "express": "^4.16.4",
