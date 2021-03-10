@@ -60,13 +60,13 @@ jobs:
           keys:
           - v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           - v1-dist-
-        - setup_remote_docker:
-            docker_layer_caching: false
-        - run:
-          name: Build Docker image
-          command: |
-            export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
-            docker build -f Dockerfile -t grassroot-frontend:${VERSION} .
+      - setup_remote_docker:
+          docker_layer_caching: false
+      - run:
+        name: Build Docker image
+        command: |
+          export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
+          docker build -f Dockerfile -t grassroot-frontend:${VERSION} .
       - *fetch-aws-cli
       - run:
           name: Tag and upload image to ECR          
