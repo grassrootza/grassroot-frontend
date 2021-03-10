@@ -60,8 +60,6 @@ jobs:
           keys:
           - v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           - v1-dist-
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run:
           name: Build Docker image
           command: |
