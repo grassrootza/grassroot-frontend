@@ -60,7 +60,9 @@ jobs:
           keys:
           - v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
           - v1-dist-
-      - run:
+        - setup_remote_docker:
+            docker_layer_caching: false
+        - run:
           name: Build Docker image
           command: |
             export VERSION=${CIRCLE_BRANCH}-${CIRCLE_SHA1}
