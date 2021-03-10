@@ -3,7 +3,7 @@ import {isValidNumber, parseNumber, formatNumber, ParsedNumber} from "libphonenu
 
 export function validatePhoneNumber(control:AbstractControl){
     let phoneNumber = control.value;
-    const parsed_number: ParsedNumber = parseNumber(phoneNumber,'SA');
+    const parsed_number: ParsedNumber = parseNumber(phoneNumber,'SA') as ParsedNumber;
 
     formatNumber(parsed_number.phone,'International');
     if(!isValidNumber(parsed_number)){
