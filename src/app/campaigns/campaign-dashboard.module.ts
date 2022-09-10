@@ -5,7 +5,6 @@ import {CAMPAIGN_DASHBOARD_ROUTES} from "./campaign-dashboard/campaign-dashboard
 import {CampaignStatsComponent} from './campaign-dashboard/campaign-stats/campaign-stats.component';
 import {CampaignDashboardComponent} from './campaign-dashboard/campaign-dashboard.component';
 import {CampaignMessagesComponent} from './campaign-dashboard/campaign-messages/campaign-messages.component';
-import {CampaignBroadcastsComponent} from './campaign-dashboard/campaign-broadcasts/campaign-broadcasts.component';
 import {CampaignSettingsComponent} from './campaign-dashboard/campaign-settings/campaign-settings.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import {MessageTabsetComponent} from "./campaign-dashboard/campaign-messages/message-tabset/message-tabset.component";
@@ -26,7 +25,6 @@ import { CampaignMediaComponent } from './campaign-dashboard/campaign-media/camp
     CampaignStatsComponent,
     CampaignMessagesComponent,
     CampaignMediaComponent,
-    CampaignBroadcastsComponent,
     CampaignSettingsComponent,
     MessageTabsetComponent
   ],

@@ -17,7 +17,7 @@ export class PhoneNumberUtils {
       return phone;
     }
     let parsed = parse('+' + phone, country);
-    let result = format(parsed, 'National');
+    let result = format(parsed, 'NATIONAL');
     // in case it didn't work, rather than undefined, pass back what we got
     if (result) {
       return result;

@@ -3,7 +3,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {TranslateModule} from '@ngx-translate/core';
-import {ngxLoadingAnimationTypes, NgxLoadingModule} from 'ngx-loading';
+// import {ngxLoadingAnimationTypes, NgxLoadingModule} from 'ngx-loading';
 import {APP_BASE_HREF, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {UserService} from './user/user.service';
 import {AlertService} from './utils/alert-service/alert.service';
@@ -26,9 +26,6 @@ import {IntegrationConnectComponent} from "./user/integrations/integration-conne
 import {RecaptchaDirective} from "./utils/recaptcha.directive";
 import {LandingComponent} from "./landing/landing.component";
 import {PublicActivityService} from "./landing/public-activity.service";
-import {CarouselComponent} from "./landing/carousel/carousel.component";
-import {NewsComponent} from "./livewire/news.component";
-import {PublicNewsService} from "./landing/public-news.service";
 import {MediaService} from "./media/media.service";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 import {IncomingResponseService} from "./landing/incoming-response.service";
@@ -58,8 +55,6 @@ import { BannerComponent } from './landing/banner/banner.component';
     HomeScreenRoutingComponent,
     LandingComponent,
     BannerComponent,
-    CarouselComponent,
-    NewsComponent,
     UnsubscribeComponent,
     FrontPageRespondComponent,
     PrivacyPolicyComponent,
@@ -72,10 +67,10 @@ import { BannerComponent } from './landing/banner/banner.component';
   imports: [
     BrowserModule,
     HttpClientModule,
-    NgxLoadingModule.forRoot({
-      animationType: ngxLoadingAnimationTypes.circleSwish, backdropBackgroundColour: 'rgba(0,0,0,0.2)',
-      backdropBorderRadius: '4px', primaryColour: '#26A041', secondaryColour: '#2CBC4C'}
-    ),
+    // NgxLoadingModule.forRoot({
+    //   animationType: ngxLoadingAnimationTypes.circleSwish, backdropBackgroundColour: 'rgba(0,0,0,0.2)',
+    //   backdropBorderRadius: '4px', primaryColour: '#26A041', secondaryColour: '#2CBC4C'}
+    // ),
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
@@ -93,7 +88,6 @@ import { BannerComponent } from './landing/banner/banner.component';
     LocalStorageService,
     NotificationService,
     PublicActivityService,
-    PublicNewsService,
     MediaService,
     IncomingResponseService,
     PaymentsService

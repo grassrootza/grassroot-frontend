@@ -20,7 +20,6 @@ import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import {HttpClient} from "@angular/common/http";
 import {NotificationService} from "./user/notification.service";
 import {CampaignService} from "./campaigns/campaign.service";
-import {BroadcastService} from "./broadcasts/broadcast.service";
 import {AccountService} from "./user/account.service";
 import {SearchService} from "./search/search.service";
 import {LoggedInServicesModule} from "./logged-in-services.module";
@@ -84,7 +83,6 @@ export function exportTranslateStaticLoader(http: HttpClient, transferState: Tra
     AlertService,
     GroupService,
     CampaignService,
-    BroadcastService,
     UserService,
     NotificationService,
     JoinService,

@@ -1,6 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Task} from "../task.model";
-import {BroadcastService} from "../../broadcasts/broadcast.service";
 import {AlertService} from "../../utils/alert-service/alert.service";
 import {MembershipInfo} from "../../groups/model/membership.model";
 import {Router} from "@angular/router";
@@ -33,8 +32,7 @@ export class ViewMeetingComponent implements OnInit, OnChanges {
   public imageUrl;
   public imageLoading = false;
 
-  constructor(private broadcastService: BroadcastService,
-              private taskService: TaskService,
+  constructor(private taskService: TaskService,
               private alertService: AlertService,
               private mediaService: MediaService,
               private router: Router) {
@@ -72,16 +70,6 @@ export class ViewMeetingComponent implements OnInit, OnChanges {
     this.taskService.respondToMeeting(this.taskToView.taskUid, this.response).subscribe(updatedResponses => {
       this.responses = updatedResponses;
     })
-  }
-
-  sendBroadcastMessage() {
-    this.broadcastService.sendMeetingBroadcast(this.taskToView.taskUid, this.broadcastMessage, this.sendToOnlyYes).subscribe(result => {
-      this.alertService.alert("task.meeting.broadcast.done");
-      this.sendingBroadcast = false;
-      this.sendToOnlyYes = true;
-      this.broadcastMessage = null;
-      $('#view-meeting-modal').modal('hide');
-    });
   }
 
   viewAllAttendees(){

@@ -4,7 +4,6 @@ import {LoadingScreenComponent} from './utils/loading-screen/loading-screen.comp
 import {NgModule} from '@angular/core';
 import {JoinComponent} from './landing/join/join.component';
 import {RegistrationComponent} from './registration/registration.component';
-import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
 import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.component";
@@ -19,8 +18,6 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
-  {path: 'news', component: NewsComponent},
-  {path: 'news/:id', component: NewsComponent},
   {path: 'unsubscribe/:groupId/:userId/:token', component: UnsubscribeComponent},
   {path: 'respond/:taskType/:taskId/:userId/:token', component: FrontPageRespondComponent},
 

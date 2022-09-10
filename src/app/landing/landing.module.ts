@@ -4,7 +4,6 @@ import {LandingComponent} from './landing.component';
 import {RouterModule, Routes} from "@angular/router";
 import {SharedModule} from "../shared.module";
 import {PublicActivityService} from "./public-activity.service";
-import {PublicNewsService} from "./public-news.service";
 
 export const LANDING_ROUTE: Routes = [
   {path: '', component: LandingComponent}
@@ -17,8 +16,7 @@ export const LANDING_ROUTE: Routes = [
     RouterModule.forChild(LANDING_ROUTE),
   ],
   providers: [
-    PublicActivityService,
-    PublicNewsService
+    PublicActivityService
   ]
 })
 export class LandingModule { }

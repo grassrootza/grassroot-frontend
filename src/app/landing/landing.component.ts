@@ -15,12 +15,9 @@ import {Subscription, interval } from 'rxjs';
 import {PublicActivityType} from './model/public-activity-type.enum';
 import {PublicActivity} from './model/public-activity.model';
 import {PublicActivityService} from './public-activity.service';
-import {PublicNewsService} from './public-news.service';
 import {AlertService} from "../utils/alert-service/alert.service";
 import {isPlatformBrowser} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
-import {PublicLivewire} from "../livewire/public-livewire.model";
-import { filter } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -36,7 +33,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('activitiesPlaceHolder') activitiesPlaceHolder: ElementRef;
 
   public activitiesList: PublicActivity[] = [];
-  public newsList: PublicLivewire[] = [];
 
   public readonly lowResImagePath = '/assets/landing/banner_bg1.jpg';
   public readonly highResImagePath = '/assets/landing/banner_bg.jpg';
@@ -57,7 +53,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private alertService: AlertService,
               private publicActivityService: PublicActivityService,
-              private publicNewsService: PublicNewsService,
               private cdr: ChangeDetectorRef,
               private builder: AnimationBuilder,
               private route: ActivatedRoute,
@@ -85,16 +80,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
           console.log("fetching new public activity ...");
           this.loadPublicActivity();
         });
-
-      //load news first time component is initialized.
-      this.loadNews();
-
-      //load news every 2 mins after that (120000 ms = 2min), remove this if we dont need to update news when user is on page.
-      this.newsPoller = interval(120000)
-        .subscribe(() => {
-            this.loadNews();
-          }
-        );
     }
   }
 
@@ -203,13 +188,6 @@ export class LandingComponent implements OnInit, AfterViewInit, OnDestroy {
     } else if (type === PublicActivityType.CREATED_TODO) {
       return 'far fa-check-square';
     }
-  }
-
-  loadNews() {
-    this.publicNewsService.loadLastFiveNews()
-      .subscribe(news => {
-        this.newsList = news.content;
-      });
   }
 
 }

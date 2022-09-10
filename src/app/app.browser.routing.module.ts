@@ -11,7 +11,6 @@ import {LoggedInGuard} from "./logged-in.guard";
 import {PwdResetNewComponent} from "./login/password-reset/pwd-reset-new/pwd-reset-new.component";
 import {FileImportComponent} from "./groups/group-details/group-members/group-members-import/file-import/file-import.component";
 import {IntegrationConnectComponent} from "./user/integrations/integration-connect/integration-connect.component";
-import {NewsComponent} from "./livewire/news.component";
 import {HomeScreenRoutingComponent} from "./landing/home-screen-routing.component";
 import {UnsubscribeComponent} from "./landing/unsubscribe/unsubscribe.component";
 import {FrontPageRespondComponent} from "./landing/respond/front-page-respond.component";
@@ -24,8 +23,6 @@ import {HelpComponent} from "./help/help.component";
 const routes: Routes = [
 
   {path: '', component: HomeScreenRoutingComponent},
-  {path: 'news', component: NewsComponent},
-  {path: 'news/:id', component: NewsComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegistrationComponent},
   {path: 'join/group/:groupId', component: JoinComponent},
@@ -55,10 +52,6 @@ const routes: Routes = [
   },
   {
     path: 'campaign/:id', loadChildren: './campaigns/campaign-dashboard.module#CampaignDashboardModule', canActivate: [LoggedInGuard]
-  },
-  {
-    path: 'broadcast/create/:type/:parentId',
-    loadChildren: './broadcasts/broadcasts.module#BroadcastsModule', canActivate: [LoggedInGuard]
   },
   {
     path: 'user', loadChildren: './user/user-profile.module#UserProfileModule', canActivate: [LoggedInGuard]

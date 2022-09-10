@@ -4,7 +4,6 @@ import {UserService} from "../user.service";
 import {UserProfile} from "../user.model";
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {AlertService} from "../../utils/alert-service/alert.service";
-import {Ng2ImgMaxService} from "ng2-img-max";
 import {MediaService} from "../../media/media.service";
 import {emailOrPhoneEntered, optionalEmailValidator, optionalPhoneValidator} from "../../validators/CustomValidators";
 
@@ -37,8 +36,7 @@ export class ProfileFormComponent implements OnInit {
   constructor(private userService: UserService,
               private formBuilder: FormBuilder,
               private alertService: AlertService,
-              private mediaService: MediaService,
-              private ng2ImgMax: Ng2ImgMaxService) {
+              private mediaService: MediaService) {
     this.provinceKeys = Object.keys(this.provinces);
 
     console.log("empty profile looks like: ", new UserProfile());
@@ -116,17 +114,17 @@ export class ProfileFormComponent implements OnInit {
     }
 
     this.alertService.showLoading();
-    this.ng2ImgMax.resizeImage(image, 200, 200, true).subscribe(result => {
-      let resizedImage = new File([result], image.name);
-      this.userService.updateImage(resizedImage).subscribe(result => {
-        console.log("done! result: ", result);
-        this.alertService.hideLoading();
-        this.currentImageUrl = this.userService.getProfileImageUrl(true);
-      }, error => {
-        console.log("Error! Could not change user image", error);
-        this.alertService.hideLoading();
-      })
-    });
+    // this.ng2ImgMax.resizeImage(image, 200, 200, true).subscribe(result => {
+    //   let resizedImage = new File([result], image.name);
+    //   this.userService.updateImage(resizedImage).subscribe(result => {
+    //     console.log("done! result: ", result);
+    //     this.alertService.hideLoading();
+    //     this.currentImageUrl = this.userService.getProfileImageUrl(true);
+    //   }, error => {
+    //     console.log("Error! Could not change user image", error);
+    //     this.alertService.hideLoading();
+    //   })
+    // });
   }
 
   dragClass(): string {

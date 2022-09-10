@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
-import { Router } from '@angular/router';
 import { GroupAdmin } from '../../groups/model/group-admin.model';
 import { AlertService } from '../../utils/alert-service/alert.service';
 import { UserProvince } from '../../user/model/user-province.enum';
-import { LiveWireAdminService } from '../livewire/livewire-admin-service';
-import { DataSubscriber } from '../livewire/model/data-subscriber.model';
 import { ConfigVariable } from './config-variable.model';
-import { debounceTime } from 'rxjs/operators'
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import 'rxjs/add/operator/debounceTime';
@@ -44,7 +40,6 @@ export class SystemAdminComponent implements OnInit {
   formCtrlSub: Subscription;
 
   //Fields used in livewire subscriber account management
-  public livewireSubscribers:DataSubscriber[] = [];
   public addPrimaryEmail:boolean;
   public makeAccountActive:boolean;
   public errorCreatingSubscriberMessage:string;
@@ -71,20 +66,13 @@ export class SystemAdminComponent implements OnInit {
   accessToken: string;
   
   constructor(private adminService:AdminService,
-              private alertService:AlertService,
-              private livewireAdminService:LiveWireAdminService) { 
+              private alertService:AlertService) { 
     this.provinceKeys = Object.keys(this.userProvince);
     this.addPrimaryEmail = false;
     this.makeAccountActive = false;
   }
 
   ngOnInit() {
-    this.livewireAdminService.allSubscribers().subscribe(resp => {
-      this.livewireSubscribers = resp;
-    },error => {
-      console.log("Error loading subscribers...",error);
-    });
-
     //Fetching all the users with gps coordinates since the the beginning of the platform initiated
     this.adminService.countAllUsersWithLocation(true).subscribe(resp => {
       this.allUsersWithCoordinates = resp;
@@ -252,30 +240,8 @@ export class SystemAdminComponent implements OnInit {
     $('#create-subscriber-modal').modal("show");
   }
 
-  createSubscriber(subscriberName:string,primaryEmail:string,otherEmails:string){
-    this.livewireAdminService.createSubscriber(subscriberName,primaryEmail,this.addPrimaryEmail,otherEmails,this.makeAccountActive).subscribe(resp => {
-      if (resp == 'ACCOUNT_CREATED') {
-        $('#create-subscriber-modal').modal("hide");
-        this.alertService.alert("Done, subscriber created successfully.");
-      } else if(resp == 'ERROR') {
-        this.errorCreatingSubscriberMessage = "Error! Subscriber account not created. Please make sure all input fields are valid.";
-        setTimeout(()=>{
-          this.errorCreatingSubscriberMessage = "";
-        }, 2000);
-      }
-    }, error => {
-      console.log("Error creating subscriber......",error);
-    });
-  }
-
   fetchApiToken() {
     this.adminService.fetchAccessToken().subscribe(token => this.accessToken = token, 
-      error => console.log('Error fetching token!: ', error));
-    return false;
-  }
-
-  fetchLiveWireApiToken(subscriberUid: string) {
-    this.livewireAdminService.fetchLiveWireApiToken(subscriberUid).subscribe(token => this.accessToken = token, 
       error => console.log('Error fetching token!: ', error));
     return false;
   }

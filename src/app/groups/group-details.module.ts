@@ -13,7 +13,6 @@ import {GroupTaskTeamsComponent} from "./group-details/group-members/group-task-
 import {GroupDetailsComponent} from "./group-details/group-details.component";
 import {GroupAddMemberComponent} from "./group-details/group-members/group-add-member/group-add-member.component";
 import {MemberListComponent} from "./group-details/group-members/member-list/member-list.component";
-import {GroupBroadcastComponent} from "./group-details/group-broadcast/group-broadcast.component";
 import {CreateTaskTeamComponent} from "./group-details/group-members/group-task-teams/create-task-team/create-task-team.component";
 import {AddToTaskTeamComponent} from "./group-details/group-members/group-task-teams/add-to-task-team/add-to-task-team.component";
 import {RouterModule} from "@angular/router";
@@ -39,7 +38,6 @@ import { GroupJoinWordRowComponent } from './group-details/group-join-methods/jo
     GroupDetailsComponent,
     GroupDashboardComponent,
     GroupActivityComponent,
-    GroupBroadcastComponent,
     MemberListComponent,
     GroupMembersComponent,
     GroupAllMembersComponent,

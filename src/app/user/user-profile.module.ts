@@ -9,7 +9,6 @@ import {USER_PROFILE_ROUTES} from "./user-profile-routes";
 import {RouterModule} from "@angular/router";
 import {LoggedInServicesModule} from "../logged-in-services.module";
 import {SharedModule} from "../shared.module";
-import {Ng2ImgMaxModule} from "ng2-img-max";
 import {UserDeleteComponent} from "./delete/user-delete.component";
 import { SignupComponent } from './account/signup/signup.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
@@ -19,7 +18,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     CommonModule,
     SharedModule,
     LoggedInServicesModule,
-    Ng2ImgMaxModule,
     RouterModule.forChild(USER_PROFILE_ROUTES),
     NgbModule
   ],
